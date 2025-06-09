@@ -2,58 +2,39 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/** This endpoint is used to fetch an [`Invoice`](/core-concepts#invoice) given an identifier. */
 class InvoiceFetchParams
-constructor(
-    private val invoiceId: String,
+private constructor(
+    private val invoiceId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun invoiceId(): String = invoiceId
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> invoiceId
-            else -> ""
-        }
-    }
+    fun invoiceId(): Optional<String> = Optional.ofNullable(invoiceId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is InvoiceFetchParams && invoiceId == other.invoiceId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(invoiceId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "InvoiceFetchParams{invoiceId=$invoiceId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): InvoiceFetchParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [InvoiceFetchParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [InvoiceFetchParams]. */
+    class Builder internal constructor() {
 
         private var invoiceId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -61,12 +42,15 @@ constructor(
 
         @JvmSynthetic
         internal fun from(invoiceFetchParams: InvoiceFetchParams) = apply {
-            this.invoiceId = invoiceFetchParams.invoiceId
-            additionalHeaders(invoiceFetchParams.additionalHeaders)
-            additionalQueryParams(invoiceFetchParams.additionalQueryParams)
+            invoiceId = invoiceFetchParams.invoiceId
+            additionalHeaders = invoiceFetchParams.additionalHeaders.toBuilder()
+            additionalQueryParams = invoiceFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun invoiceId(invoiceId: String) = apply { this.invoiceId = invoiceId }
+        fun invoiceId(invoiceId: String?) = apply { this.invoiceId = invoiceId }
+
+        /** Alias for calling [Builder.invoiceId] with `invoiceId.orElse(null)`. */
+        fun invoiceId(invoiceId: Optional<String>) = invoiceId(invoiceId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,11 +150,35 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [InvoiceFetchParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): InvoiceFetchParams =
-            InvoiceFetchParams(
-                checkNotNull(invoiceId) { "`invoiceId` is required but was not set" },
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            InvoiceFetchParams(invoiceId, additionalHeaders.build(), additionalQueryParams.build())
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> invoiceId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is InvoiceFetchParams && invoiceId == other.invoiceId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(invoiceId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "InvoiceFetchParams{invoiceId=$invoiceId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

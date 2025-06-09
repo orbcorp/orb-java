@@ -6,214 +6,187 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.Enum
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
+import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
-import com.withorb.api.models.*
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Creates an immutable balance transaction that updates the customer's balance and returns back the
+ * newly created transaction.
+ */
 class CustomerBalanceTransactionCreateParams
-constructor(
-    private val customerId: String,
-    private val amount: String,
-    private val type: Type,
-    private val description: String?,
+private constructor(
+    private val customerId: String?,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
-) {
+) : Params {
 
-    fun customerId(): String = customerId
+    fun customerId(): Optional<String> = Optional.ofNullable(customerId)
 
-    fun amount(): String = amount
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun amount(): String = body.amount()
 
-    fun type(): Type = type
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun type(): Type = body.type()
 
-    fun description(): Optional<String> = Optional.ofNullable(description)
+    /**
+     * An optional description that can be specified around this entry.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun description(): Optional<String> = body.description()
 
-    @JvmSynthetic
-    internal fun getBody(): CustomerBalanceTransactionCreateBody {
-        return CustomerBalanceTransactionCreateBody(
-            amount,
-            type,
-            description,
-            additionalBodyProperties,
-        )
-    }
+    /**
+     * Returns the raw JSON value of [amount].
+     *
+     * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _amount(): JsonField<String> = body._amount()
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
+    /**
+     * Returns the raw JSON value of [type].
+     *
+     * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _type(): JsonField<Type> = body._type()
 
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
+    /**
+     * Returns the raw JSON value of [description].
+     *
+     * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _description(): JsonField<String> = body._description()
 
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> customerId
-            else -> ""
-        }
-    }
-
-    @JsonDeserialize(builder = CustomerBalanceTransactionCreateBody.Builder::class)
-    @NoAutoDetect
-    class CustomerBalanceTransactionCreateBody
-    internal constructor(
-        private val amount: String?,
-        private val type: Type?,
-        private val description: String?,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        @JsonProperty("amount") fun amount(): String? = amount
-
-        @JsonProperty("type") fun type(): Type? = type
-
-        /** An optional description that can be specified around this entry. */
-        @JsonProperty("description") fun description(): String? = description
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var amount: String? = null
-            private var type: Type? = null
-            private var description: String? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(
-                customerBalanceTransactionCreateBody: CustomerBalanceTransactionCreateBody
-            ) = apply {
-                this.amount = customerBalanceTransactionCreateBody.amount
-                this.type = customerBalanceTransactionCreateBody.type
-                this.description = customerBalanceTransactionCreateBody.description
-                additionalProperties(customerBalanceTransactionCreateBody.additionalProperties)
-            }
-
-            @JsonProperty("amount") fun amount(amount: String) = apply { this.amount = amount }
-
-            @JsonProperty("type") fun type(type: Type) = apply { this.type = type }
-
-            /** An optional description that can be specified around this entry. */
-            @JsonProperty("description")
-            fun description(description: String) = apply { this.description = description }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun build(): CustomerBalanceTransactionCreateBody =
-                CustomerBalanceTransactionCreateBody(
-                    checkNotNull(amount) { "`amount` is required but was not set" },
-                    checkNotNull(type) { "`type` is required but was not set" },
-                    description,
-                    additionalProperties.toImmutable(),
-                )
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is CustomerBalanceTransactionCreateBody && amount == other.amount && type == other.type && description == other.description && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(amount, type, description, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "CustomerBalanceTransactionCreateBody{amount=$amount, type=$type, description=$description, additionalProperties=$additionalProperties}"
-    }
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerBalanceTransactionCreateParams && customerId == other.customerId && amount == other.amount && type == other.type && description == other.description && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, amount, type, description, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomerBalanceTransactionCreateParams{customerId=$customerId, amount=$amount, type=$type, description=$description, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [CustomerBalanceTransactionCreateParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .amount()
+         * .type()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [CustomerBalanceTransactionCreateParams]. */
+    class Builder internal constructor() {
 
         private var customerId: String? = null
-        private var amount: String? = null
-        private var type: Type? = null
-        private var description: String? = null
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(
             customerBalanceTransactionCreateParams: CustomerBalanceTransactionCreateParams
         ) = apply {
-            this.customerId = customerBalanceTransactionCreateParams.customerId
-            this.amount = customerBalanceTransactionCreateParams.amount
-            this.type = customerBalanceTransactionCreateParams.type
-            this.description = customerBalanceTransactionCreateParams.description
-            additionalHeaders(customerBalanceTransactionCreateParams.additionalHeaders)
-            additionalQueryParams(customerBalanceTransactionCreateParams.additionalQueryParams)
-            additionalBodyProperties(
-                customerBalanceTransactionCreateParams.additionalBodyProperties
-            )
+            customerId = customerBalanceTransactionCreateParams.customerId
+            body = customerBalanceTransactionCreateParams.body.toBuilder()
+            additionalHeaders = customerBalanceTransactionCreateParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
+                customerBalanceTransactionCreateParams.additionalQueryParams.toBuilder()
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String?) = apply { this.customerId = customerId }
 
-        fun amount(amount: String) = apply { this.amount = amount }
+        /** Alias for calling [Builder.customerId] with `customerId.orElse(null)`. */
+        fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
-        fun type(type: Type) = apply { this.type = type }
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [amount]
+         * - [type]
+         * - [description]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        fun amount(amount: String) = apply { body.amount(amount) }
+
+        /**
+         * Sets [Builder.amount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.amount] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun amount(amount: JsonField<String>) = apply { body.amount(amount) }
+
+        fun type(type: Type) = apply { body.type(type) }
+
+        /**
+         * Sets [Builder.type] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.type] with a well-typed [Type] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun type(type: JsonField<Type>) = apply { body.type(type) }
 
         /** An optional description that can be specified around this entry. */
-        fun description(description: String) = apply { this.description = description }
+        fun description(description: String?) = apply { body.description(description) }
+
+        /** Alias for calling [Builder.description] with `description.orElse(null)`. */
+        fun description(description: Optional<String>) = description(description.getOrNull())
+
+        /**
+         * Sets [Builder.description] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.description] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun description(description: JsonField<String>) = apply { body.description(description) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -313,47 +286,383 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
-        }
-
+        /**
+         * Returns an immutable instance of [CustomerBalanceTransactionCreateParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .amount()
+         * .type()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): CustomerBalanceTransactionCreateParams =
             CustomerBalanceTransactionCreateParams(
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
-                checkNotNull(amount) { "`amount` is required but was not set" },
-                checkNotNull(type) { "`type` is required but was not set" },
-                description,
+                customerId,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
-    class Type
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    fun _body(): Body = body
 
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> customerId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    class Body
+    private constructor(
+        private val amount: JsonField<String>,
+        private val type: JsonField<Type>,
+        private val description: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("amount") @ExcludeMissing amount: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+            @JsonProperty("description")
+            @ExcludeMissing
+            description: JsonField<String> = JsonMissing.of(),
+        ) : this(amount, type, description, mutableMapOf())
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun amount(): String = amount.getRequired("amount")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun type(): Type = type.getRequired("type")
+
+        /**
+         * An optional description that can be specified around this entry.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun description(): Optional<String> = description.getOptional("description")
+
+        /**
+         * Returns the raw JSON value of [amount].
+         *
+         * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
+
+        /**
+         * Returns the raw JSON value of [type].
+         *
+         * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+
+        /**
+         * Returns the raw JSON value of [description].
+         *
+         * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("description")
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```java
+             * .amount()
+             * .type()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Body]. */
+        class Builder internal constructor() {
+
+            private var amount: JsonField<String>? = null
+            private var type: JsonField<Type>? = null
+            private var description: JsonField<String> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(body: Body) = apply {
+                amount = body.amount
+                type = body.type
+                description = body.description
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            fun amount(amount: String) = amount(JsonField.of(amount))
+
+            /**
+             * Sets [Builder.amount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.amount] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun amount(amount: JsonField<String>) = apply { this.amount = amount }
+
+            fun type(type: Type) = type(JsonField.of(type))
+
+            /**
+             * Sets [Builder.type] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.type] with a well-typed [Type] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun type(type: JsonField<Type>) = apply { this.type = type }
+
+            /** An optional description that can be specified around this entry. */
+            fun description(description: String?) = description(JsonField.ofNullable(description))
+
+            /** Alias for calling [Builder.description] with `description.orElse(null)`. */
+            fun description(description: Optional<String>) = description(description.getOrNull())
+
+            /**
+             * Sets [Builder.description] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.description] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .amount()
+             * .type()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Body =
+                Body(
+                    checkRequired("amount", amount),
+                    checkRequired("type", type),
+                    description,
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
+            }
+
+            amount()
+            type().validate()
+            description()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (amount.asKnown().isPresent) 1 else 0) +
+                (type.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (description.asKnown().isPresent) 1 else 0)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Body && amount == other.amount && type == other.type && description == other.description && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(amount, type, description, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Body{amount=$amount, type=$type, description=$description, additionalProperties=$additionalProperties}"
+    }
+
+    class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
         @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val INCREMENT = of("increment")
+
+            @JvmField val DECREMENT = of("decrement")
+
+            @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+        }
+
+        /** An enum containing [Type]'s known values. */
+        enum class Known {
+            INCREMENT,
+            DECREMENT,
+        }
+
+        /**
+         * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Type] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            INCREMENT,
+            DECREMENT,
+            /** An enum member indicating that [Type] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                INCREMENT -> Value.INCREMENT
+                DECREMENT -> Value.DECREMENT
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws OrbInvalidDataException if this class instance's value is a not a known member.
+         */
+        fun known(): Known =
+            when (this) {
+                INCREMENT -> Known.INCREMENT
+                DECREMENT -> Known.DECREMENT
+                else -> throw OrbInvalidDataException("Unknown Type: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws OrbInvalidDataException if this class instance's value does not have the expected
+         *   primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        fun validate(): Type = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -366,41 +675,18 @@ constructor(
         override fun hashCode() = value.hashCode()
 
         override fun toString() = value.toString()
-
-        companion object {
-
-            @JvmField val INCREMENT = Type(JsonField.of("increment"))
-
-            @JvmField val DECREMENT = Type(JsonField.of("decrement"))
-
-            @JvmStatic fun of(value: String) = Type(JsonField.of(value))
-        }
-
-        enum class Known {
-            INCREMENT,
-            DECREMENT,
-        }
-
-        enum class Value {
-            INCREMENT,
-            DECREMENT,
-            _UNKNOWN,
-        }
-
-        fun value(): Value =
-            when (this) {
-                INCREMENT -> Value.INCREMENT
-                DECREMENT -> Value.DECREMENT
-                else -> Value._UNKNOWN
-            }
-
-        fun known(): Known =
-            when (this) {
-                INCREMENT -> Known.INCREMENT
-                DECREMENT -> Known.DECREMENT
-                else -> throw OrbInvalidDataException("Unknown Type: $value")
-            }
-
-        fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerBalanceTransactionCreateParams && customerId == other.customerId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CustomerBalanceTransactionCreateParams{customerId=$customerId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -2,58 +2,46 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint returns a price given an external price id. See the
+ * [price creation API](/api-reference/price/create-price) for more information about external price
+ * aliases.
+ */
 class PriceExternalPriceIdFetchParams
-constructor(
-    private val externalPriceId: String,
+private constructor(
+    private val externalPriceId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun externalPriceId(): String = externalPriceId
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> externalPriceId
-            else -> ""
-        }
-    }
+    fun externalPriceId(): Optional<String> = Optional.ofNullable(externalPriceId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is PriceExternalPriceIdFetchParams && externalPriceId == other.externalPriceId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalPriceId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "PriceExternalPriceIdFetchParams{externalPriceId=$externalPriceId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): PriceExternalPriceIdFetchParams = builder().build()
+
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [PriceExternalPriceIdFetchParams].
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [PriceExternalPriceIdFetchParams]. */
+    class Builder internal constructor() {
 
         private var externalPriceId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -62,14 +50,19 @@ constructor(
         @JvmSynthetic
         internal fun from(priceExternalPriceIdFetchParams: PriceExternalPriceIdFetchParams) =
             apply {
-                this.externalPriceId = priceExternalPriceIdFetchParams.externalPriceId
-                additionalHeaders(priceExternalPriceIdFetchParams.additionalHeaders)
-                additionalQueryParams(priceExternalPriceIdFetchParams.additionalQueryParams)
+                externalPriceId = priceExternalPriceIdFetchParams.externalPriceId
+                additionalHeaders = priceExternalPriceIdFetchParams.additionalHeaders.toBuilder()
+                additionalQueryParams =
+                    priceExternalPriceIdFetchParams.additionalQueryParams.toBuilder()
             }
 
-        fun externalPriceId(externalPriceId: String) = apply {
+        fun externalPriceId(externalPriceId: String?) = apply {
             this.externalPriceId = externalPriceId
         }
+
+        /** Alias for calling [Builder.externalPriceId] with `externalPriceId.orElse(null)`. */
+        fun externalPriceId(externalPriceId: Optional<String>) =
+            externalPriceId(externalPriceId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -169,11 +162,39 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [PriceExternalPriceIdFetchParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): PriceExternalPriceIdFetchParams =
             PriceExternalPriceIdFetchParams(
-                checkNotNull(externalPriceId) { "`externalPriceId` is required but was not set" },
+                externalPriceId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> externalPriceId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is PriceExternalPriceIdFetchParams && externalPriceId == other.externalPriceId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalPriceId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "PriceExternalPriceIdFetchParams{externalPriceId=$externalPriceId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

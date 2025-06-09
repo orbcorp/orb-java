@@ -2,14 +2,14 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
+import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CustomerCreditTopUpCreateByExternalIdParamsTest {
+internal class CustomerCreditTopUpCreateByExternalIdParamsTest {
 
     @Test
-    fun createCustomerCreditTopUpCreateByExternalIdParams() {
+    fun create() {
         CustomerCreditTopUpCreateByExternalIdParams.builder()
             .externalCustomerId("external_customer_id")
             .amount("amount")
@@ -17,20 +17,21 @@ class CustomerCreditTopUpCreateByExternalIdParamsTest {
             .invoiceSettings(
                 CustomerCreditTopUpCreateByExternalIdParams.InvoiceSettings.builder()
                     .autoCollection(true)
-                    .netTerms(123L)
+                    .netTerms(0L)
                     .memo("memo")
                     .requireSuccessfulPayment(true)
                     .build()
             )
             .perUnitCostBasis("per_unit_cost_basis")
             .threshold("threshold")
-            .expiresAfter(123L)
+            .activeFrom(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+            .expiresAfter(0L)
             .expiresAfterUnit(CustomerCreditTopUpCreateByExternalIdParams.ExpiresAfterUnit.DAY)
             .build()
     }
 
     @Test
-    fun getBody() {
+    fun pathParams() {
         val params =
             CustomerCreditTopUpCreateByExternalIdParams.builder()
                 .externalCustomerId("external_customer_id")
@@ -39,38 +40,63 @@ class CustomerCreditTopUpCreateByExternalIdParamsTest {
                 .invoiceSettings(
                     CustomerCreditTopUpCreateByExternalIdParams.InvoiceSettings.builder()
                         .autoCollection(true)
-                        .netTerms(123L)
+                        .netTerms(0L)
+                        .build()
+                )
+                .perUnitCostBasis("per_unit_cost_basis")
+                .threshold("threshold")
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("external_customer_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
+    fun body() {
+        val params =
+            CustomerCreditTopUpCreateByExternalIdParams.builder()
+                .externalCustomerId("external_customer_id")
+                .amount("amount")
+                .currency("currency")
+                .invoiceSettings(
+                    CustomerCreditTopUpCreateByExternalIdParams.InvoiceSettings.builder()
+                        .autoCollection(true)
+                        .netTerms(0L)
                         .memo("memo")
                         .requireSuccessfulPayment(true)
                         .build()
                 )
                 .perUnitCostBasis("per_unit_cost_basis")
                 .threshold("threshold")
-                .expiresAfter(123L)
+                .activeFrom(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .expiresAfter(0L)
                 .expiresAfterUnit(CustomerCreditTopUpCreateByExternalIdParams.ExpiresAfterUnit.DAY)
                 .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
+
+        val body = params._body()
+
         assertThat(body.amount()).isEqualTo("amount")
         assertThat(body.currency()).isEqualTo("currency")
         assertThat(body.invoiceSettings())
             .isEqualTo(
                 CustomerCreditTopUpCreateByExternalIdParams.InvoiceSettings.builder()
                     .autoCollection(true)
-                    .netTerms(123L)
+                    .netTerms(0L)
                     .memo("memo")
                     .requireSuccessfulPayment(true)
                     .build()
             )
         assertThat(body.perUnitCostBasis()).isEqualTo("per_unit_cost_basis")
         assertThat(body.threshold()).isEqualTo("threshold")
-        assertThat(body.expiresAfter()).isEqualTo(123L)
+        assertThat(body.activeFrom()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.expiresAfter()).contains(0L)
         assertThat(body.expiresAfterUnit())
-            .isEqualTo(CustomerCreditTopUpCreateByExternalIdParams.ExpiresAfterUnit.DAY)
+            .contains(CustomerCreditTopUpCreateByExternalIdParams.ExpiresAfterUnit.DAY)
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             CustomerCreditTopUpCreateByExternalIdParams.builder()
                 .externalCustomerId("external_customer_id")
@@ -79,47 +105,25 @@ class CustomerCreditTopUpCreateByExternalIdParamsTest {
                 .invoiceSettings(
                     CustomerCreditTopUpCreateByExternalIdParams.InvoiceSettings.builder()
                         .autoCollection(true)
-                        .netTerms(123L)
+                        .netTerms(0L)
                         .build()
                 )
                 .perUnitCostBasis("per_unit_cost_basis")
                 .threshold("threshold")
                 .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
+
+        val body = params._body()
+
         assertThat(body.amount()).isEqualTo("amount")
         assertThat(body.currency()).isEqualTo("currency")
         assertThat(body.invoiceSettings())
             .isEqualTo(
                 CustomerCreditTopUpCreateByExternalIdParams.InvoiceSettings.builder()
                     .autoCollection(true)
-                    .netTerms(123L)
+                    .netTerms(0L)
                     .build()
             )
         assertThat(body.perUnitCostBasis()).isEqualTo("per_unit_cost_basis")
         assertThat(body.threshold()).isEqualTo("threshold")
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            CustomerCreditTopUpCreateByExternalIdParams.builder()
-                .externalCustomerId("external_customer_id")
-                .amount("amount")
-                .currency("currency")
-                .invoiceSettings(
-                    CustomerCreditTopUpCreateByExternalIdParams.InvoiceSettings.builder()
-                        .autoCollection(true)
-                        .netTerms(123L)
-                        .build()
-                )
-                .perUnitCostBasis("per_unit_cost_basis")
-                .threshold("threshold")
-                .build()
-        assertThat(params).isNotNull
-        // path param "externalCustomerId"
-        assertThat(params.getPathParam(0)).isEqualTo("external_customer_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

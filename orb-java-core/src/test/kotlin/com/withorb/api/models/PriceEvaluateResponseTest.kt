@@ -2,35 +2,56 @@
 
 package com.withorb.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.withorb.api.core.jsonMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class PriceEvaluateResponseTest {
+internal class PriceEvaluateResponseTest {
 
     @Test
-    fun createPriceEvaluateResponse() {
+    fun create() {
         val priceEvaluateResponse =
             PriceEvaluateResponse.builder()
-                .data(
-                    listOf(
-                        EvaluatePriceGroup.builder()
-                            .amount("amount")
-                            .groupingValues(
-                                listOf(EvaluatePriceGroup.GroupingValue.ofString("string"))
-                            )
-                            .quantity(42.23)
-                            .build()
-                    )
+                .addData(
+                    EvaluatePriceGroup.builder()
+                        .amount("amount")
+                        .addGroupingValue("string")
+                        .quantity(0.0)
+                        .build()
                 )
                 .build()
-        assertThat(priceEvaluateResponse).isNotNull
+
         assertThat(priceEvaluateResponse.data())
             .containsExactly(
                 EvaluatePriceGroup.builder()
                     .amount("amount")
-                    .groupingValues(listOf(EvaluatePriceGroup.GroupingValue.ofString("string")))
-                    .quantity(42.23)
+                    .addGroupingValue("string")
+                    .quantity(0.0)
                     .build()
             )
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val priceEvaluateResponse =
+            PriceEvaluateResponse.builder()
+                .addData(
+                    EvaluatePriceGroup.builder()
+                        .amount("amount")
+                        .addGroupingValue("string")
+                        .quantity(0.0)
+                        .build()
+                )
+                .build()
+
+        val roundtrippedPriceEvaluateResponse =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(priceEvaluateResponse),
+                jacksonTypeRef<PriceEvaluateResponse>(),
+            )
+
+        assertThat(roundtrippedPriceEvaluateResponse).isEqualTo(priceEvaluateResponse)
     }
 }

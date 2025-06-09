@@ -3,15 +3,19 @@
 package com.withorb.api.services.async
 
 import com.withorb.api.core.ClientOptions
+import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
 import com.withorb.api.core.http.HttpResponse.Handler
-import com.withorb.api.core.json
-import com.withorb.api.errors.OrbError
+import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.core.http.json
+import com.withorb.api.core.http.parseable
+import com.withorb.api.core.prepareAsync
 import com.withorb.api.models.Invoice
 import com.withorb.api.models.InvoiceCreateParams
 import com.withorb.api.models.InvoiceFetchParams
@@ -19,328 +23,383 @@ import com.withorb.api.models.InvoiceFetchUpcomingParams
 import com.withorb.api.models.InvoiceFetchUpcomingResponse
 import com.withorb.api.models.InvoiceIssueParams
 import com.withorb.api.models.InvoiceListPageAsync
+import com.withorb.api.models.InvoiceListPageResponse
 import com.withorb.api.models.InvoiceListParams
 import com.withorb.api.models.InvoiceMarkPaidParams
 import com.withorb.api.models.InvoicePayParams
 import com.withorb.api.models.InvoiceUpdateParams
 import com.withorb.api.models.InvoiceVoidInvoiceParams
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
-class InvoiceServiceAsyncImpl
-constructor(
-    private val clientOptions: ClientOptions,
-) : InvoiceServiceAsync {
+class InvoiceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    InvoiceServiceAsync {
 
-    private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
+    private val withRawResponse: InvoiceServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
-    private val createHandler: Handler<Invoice> =
-        jsonHandler<Invoice>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+    override fun withRawResponse(): InvoiceServiceAsync.WithRawResponse = withRawResponse
 
-    /** This endpoint is used to create a one-off invoice for a customer. */
     override fun create(
         params: InvoiceCreateParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<Invoice> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.POST)
-                .addPathSegments("invoices")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .body(json(clientOptions.jsonMapper, params.getBody()))
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { createHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
-                }
-        }
-    }
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Invoice> =
+        // post /invoices
+        withRawResponse().create(params, requestOptions).thenApply { it.parse() }
 
-    private val updateHandler: Handler<Invoice> =
-        jsonHandler<Invoice>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-    /**
-     * This endpoint allows you to update the `metadata` property on an invoice. If you pass null
-     * for the metadata value, it will clear any existing metadata for that invoice.
-     *
-     * `metadata` can be modified regardless of invoice state.
-     */
     override fun update(
         params: InvoiceUpdateParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<Invoice> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.PUT)
-                .addPathSegments("invoices", params.getPathParam(0))
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .body(json(clientOptions.jsonMapper, params.getBody()))
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { updateHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
-                }
-        }
-    }
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Invoice> =
+        // put /invoices/{invoice_id}
+        withRawResponse().update(params, requestOptions).thenApply { it.parse() }
 
-    private val listHandler: Handler<InvoiceListPageAsync.Response> =
-        jsonHandler<InvoiceListPageAsync.Response>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
-
-    /**
-     * This endpoint returns a list of all [`Invoice`](../guides/concepts#invoice)s for an account
-     * in a list format.
-     *
-     * The list of invoices is ordered starting from the most recently issued invoice date. The
-     * response also includes [`pagination_metadata`](../reference/pagination), which lets the
-     * caller retrieve the next page of results if they exist.
-     *
-     * By default, this only returns invoices that are `issued`, `paid`, or `synced`.
-     *
-     * When fetching any `draft` invoices, this returns the last-computed invoice values for each
-     * draft invoice, which may not always be up-to-date since Orb regularly refreshes invoices
-     * asynchronously.
-     */
     override fun list(
         params: InvoiceListParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<InvoiceListPageAsync> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("invoices")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { listHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
-                }
-                .let { InvoiceListPageAsync.of(this, params, it) }
-        }
-    }
+        requestOptions: RequestOptions,
+    ): CompletableFuture<InvoiceListPageAsync> =
+        // get /invoices
+        withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
-    private val fetchHandler: Handler<Invoice> =
-        jsonHandler<Invoice>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-    /**
-     * This endpoint is used to fetch an [`Invoice`](../guides/concepts#invoice) given an
-     * identifier.
-     */
     override fun fetch(
         params: InvoiceFetchParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<Invoice> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("invoices", params.getPathParam(0))
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { fetchHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
-                }
-        }
-    }
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Invoice> =
+        // get /invoices/{invoice_id}
+        withRawResponse().fetch(params, requestOptions).thenApply { it.parse() }
 
-    private val fetchUpcomingHandler: Handler<InvoiceFetchUpcomingResponse> =
-        jsonHandler<InvoiceFetchUpcomingResponse>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
-
-    /**
-     * This endpoint can be used to fetch the upcoming [invoice](../guides/concepts#invoice) for the
-     * current billing period given a subscription.
-     */
     override fun fetchUpcoming(
         params: InvoiceFetchUpcomingParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<InvoiceFetchUpcomingResponse> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("invoices", "upcoming")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { fetchUpcomingHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
-                }
-        }
-    }
+        requestOptions: RequestOptions,
+    ): CompletableFuture<InvoiceFetchUpcomingResponse> =
+        // get /invoices/upcoming
+        withRawResponse().fetchUpcoming(params, requestOptions).thenApply { it.parse() }
 
-    private val issueHandler: Handler<Invoice> =
-        jsonHandler<Invoice>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-    /**
-     * This endpoint allows an eligible invoice to be issued manually. This is only possible with
-     * invoices where status is `draft`, `will_auto_issue` is false, and an `eligible_to_issue_at`
-     * is a time in the past. Issuing an invoice could possibly trigger side effects, some of which
-     * could be customer-visible (e.g. sending emails, auto-collecting payment, syncing the invoice
-     * to external providers, etc).
-     */
     override fun issue(
         params: InvoiceIssueParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<Invoice> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.POST)
-                .addPathSegments("invoices", params.getPathParam(0), "issue")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .body(json(clientOptions.jsonMapper, params.getBody()))
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { issueHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
-                }
-        }
-    }
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Invoice> =
+        // post /invoices/{invoice_id}/issue
+        withRawResponse().issue(params, requestOptions).thenApply { it.parse() }
 
-    private val markPaidHandler: Handler<Invoice> =
-        jsonHandler<Invoice>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-    /**
-     * This endpoint allows an invoice's status to be set the `paid` status. This can only be done
-     * to invoices that are in the `issued` status.
-     */
     override fun markPaid(
         params: InvoiceMarkPaidParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<Invoice> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.POST)
-                .addPathSegments("invoices", params.getPathParam(0), "mark_paid")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .body(json(clientOptions.jsonMapper, params.getBody()))
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { markPaidHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
-                }
-        }
-    }
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Invoice> =
+        // post /invoices/{invoice_id}/mark_paid
+        withRawResponse().markPaid(params, requestOptions).thenApply { it.parse() }
 
-    private val payHandler: Handler<Invoice> =
-        jsonHandler<Invoice>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-    /**
-     * This endpoint collects payment for an invoice using the customer's default payment method.
-     * This action can only be taken on invoices with status "issued".
-     */
     override fun pay(
         params: InvoicePayParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<Invoice> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.POST)
-                .addPathSegments("invoices", params.getPathParam(0), "pay")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .apply { params.getBody().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { payHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Invoice> =
+        // post /invoices/{invoice_id}/pay
+        withRawResponse().pay(params, requestOptions).thenApply { it.parse() }
+
+    override fun voidInvoice(
+        params: InvoiceVoidInvoiceParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Invoice> =
+        // post /invoices/{invoice_id}/void
+        withRawResponse().voidInvoice(params, requestOptions).thenApply { it.parse() }
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        InvoiceServiceAsync.WithRawResponse {
+
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        private val createHandler: Handler<Invoice> =
+            jsonHandler<Invoice>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun create(
+            params: InvoiceCreateParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Invoice>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("invoices")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { createHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }
-    }
 
-    private val voidInvoiceHandler: Handler<Invoice> =
-        jsonHandler<Invoice>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val updateHandler: Handler<Invoice> =
+            jsonHandler<Invoice>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-    /**
-     * This endpoint allows an invoice's status to be set the `void` status. This can only be done
-     * to invoices that are in the `issued` status.
-     *
-     * If the associated invoice has used the customer balance to change the amount due, the
-     * customer balance operation will be reverted. For example, if the invoice used $10 of customer
-     * balance, that amount will be added back to the customer balance upon voiding.
-     */
-    override fun voidInvoice(
-        params: InvoiceVoidInvoiceParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<Invoice> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.POST)
-                .addPathSegments("invoices", params.getPathParam(0), "void")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .apply { params.getBody().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { voidInvoiceHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
+        override fun update(
+            params: InvoiceUpdateParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Invoice>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("invoiceId", params.invoiceId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .addPathSegments("invoices", params._pathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { updateHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val listHandler: Handler<InvoiceListPageResponse> =
+            jsonHandler<InvoiceListPageResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun list(
+            params: InvoiceListParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<InvoiceListPageAsync>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("invoices")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { listHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                            .let {
+                                InvoiceListPageAsync.builder()
+                                    .service(InvoiceServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
+                                    .params(params)
+                                    .response(it)
+                                    .build()
+                            }
+                    }
+                }
+        }
+
+        private val fetchHandler: Handler<Invoice> =
+            jsonHandler<Invoice>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun fetch(
+            params: InvoiceFetchParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Invoice>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("invoiceId", params.invoiceId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("invoices", params._pathParam(0))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { fetchHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val fetchUpcomingHandler: Handler<InvoiceFetchUpcomingResponse> =
+            jsonHandler<InvoiceFetchUpcomingResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun fetchUpcoming(
+            params: InvoiceFetchUpcomingParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<InvoiceFetchUpcomingResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("invoices", "upcoming")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { fetchUpcomingHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val issueHandler: Handler<Invoice> =
+            jsonHandler<Invoice>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun issue(
+            params: InvoiceIssueParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Invoice>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("invoiceId", params.invoiceId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("invoices", params._pathParam(0), "issue")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { issueHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val markPaidHandler: Handler<Invoice> =
+            jsonHandler<Invoice>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun markPaid(
+            params: InvoiceMarkPaidParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Invoice>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("invoiceId", params.invoiceId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("invoices", params._pathParam(0), "mark_paid")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { markPaidHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val payHandler: Handler<Invoice> =
+            jsonHandler<Invoice>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun pay(
+            params: InvoicePayParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Invoice>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("invoiceId", params.invoiceId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("invoices", params._pathParam(0), "pay")
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { payHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val voidInvoiceHandler: Handler<Invoice> =
+            jsonHandler<Invoice>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun voidInvoice(
+            params: InvoiceVoidInvoiceParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Invoice>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("invoiceId", params.invoiceId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("invoices", params._pathParam(0), "void")
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { voidInvoiceHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }

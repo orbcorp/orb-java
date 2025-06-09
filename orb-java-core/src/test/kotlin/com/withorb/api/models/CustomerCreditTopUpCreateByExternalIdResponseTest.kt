@@ -2,13 +2,15 @@
 
 package com.withorb.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.withorb.api.core.jsonMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CustomerCreditTopUpCreateByExternalIdResponseTest {
+internal class CustomerCreditTopUpCreateByExternalIdResponseTest {
 
     @Test
-    fun createCustomerCreditTopUpCreateByExternalIdResponse() {
+    fun create() {
         val customerCreditTopUpCreateByExternalIdResponse =
             CustomerCreditTopUpCreateByExternalIdResponse.builder()
                 .id("id")
@@ -17,19 +19,19 @@ class CustomerCreditTopUpCreateByExternalIdResponseTest {
                 .invoiceSettings(
                     CustomerCreditTopUpCreateByExternalIdResponse.InvoiceSettings.builder()
                         .autoCollection(true)
-                        .netTerms(123L)
+                        .netTerms(0L)
                         .memo("memo")
                         .requireSuccessfulPayment(true)
                         .build()
                 )
                 .perUnitCostBasis("per_unit_cost_basis")
                 .threshold("threshold")
-                .expiresAfter(123L)
+                .expiresAfter(0L)
                 .expiresAfterUnit(
                     CustomerCreditTopUpCreateByExternalIdResponse.ExpiresAfterUnit.DAY
                 )
                 .build()
-        assertThat(customerCreditTopUpCreateByExternalIdResponse).isNotNull
+
         assertThat(customerCreditTopUpCreateByExternalIdResponse.id()).isEqualTo("id")
         assertThat(customerCreditTopUpCreateByExternalIdResponse.amount()).isEqualTo("amount")
         assertThat(customerCreditTopUpCreateByExternalIdResponse.currency()).isEqualTo("currency")
@@ -37,7 +39,7 @@ class CustomerCreditTopUpCreateByExternalIdResponseTest {
             .isEqualTo(
                 CustomerCreditTopUpCreateByExternalIdResponse.InvoiceSettings.builder()
                     .autoCollection(true)
-                    .netTerms(123L)
+                    .netTerms(0L)
                     .memo("memo")
                     .requireSuccessfulPayment(true)
                     .build()
@@ -45,8 +47,42 @@ class CustomerCreditTopUpCreateByExternalIdResponseTest {
         assertThat(customerCreditTopUpCreateByExternalIdResponse.perUnitCostBasis())
             .isEqualTo("per_unit_cost_basis")
         assertThat(customerCreditTopUpCreateByExternalIdResponse.threshold()).isEqualTo("threshold")
-        assertThat(customerCreditTopUpCreateByExternalIdResponse.expiresAfter()).contains(123L)
+        assertThat(customerCreditTopUpCreateByExternalIdResponse.expiresAfter()).contains(0L)
         assertThat(customerCreditTopUpCreateByExternalIdResponse.expiresAfterUnit())
             .contains(CustomerCreditTopUpCreateByExternalIdResponse.ExpiresAfterUnit.DAY)
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val customerCreditTopUpCreateByExternalIdResponse =
+            CustomerCreditTopUpCreateByExternalIdResponse.builder()
+                .id("id")
+                .amount("amount")
+                .currency("currency")
+                .invoiceSettings(
+                    CustomerCreditTopUpCreateByExternalIdResponse.InvoiceSettings.builder()
+                        .autoCollection(true)
+                        .netTerms(0L)
+                        .memo("memo")
+                        .requireSuccessfulPayment(true)
+                        .build()
+                )
+                .perUnitCostBasis("per_unit_cost_basis")
+                .threshold("threshold")
+                .expiresAfter(0L)
+                .expiresAfterUnit(
+                    CustomerCreditTopUpCreateByExternalIdResponse.ExpiresAfterUnit.DAY
+                )
+                .build()
+
+        val roundtrippedCustomerCreditTopUpCreateByExternalIdResponse =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(customerCreditTopUpCreateByExternalIdResponse),
+                jacksonTypeRef<CustomerCreditTopUpCreateByExternalIdResponse>(),
+            )
+
+        assertThat(roundtrippedCustomerCreditTopUpCreateByExternalIdResponse)
+            .isEqualTo(customerCreditTopUpCreateByExternalIdResponse)
     }
 }

@@ -2,14 +2,13 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class SubscriptionUnscheduleFixedFeeQuantityUpdatesParamsTest {
+internal class SubscriptionUnscheduleFixedFeeQuantityUpdatesParamsTest {
 
     @Test
-    fun createSubscriptionUnscheduleFixedFeeQuantityUpdatesParams() {
+    fun create() {
         SubscriptionUnscheduleFixedFeeQuantityUpdatesParams.builder()
             .subscriptionId("subscription_id")
             .priceId("price_id")
@@ -17,40 +16,28 @@ class SubscriptionUnscheduleFixedFeeQuantityUpdatesParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun pathParams() {
         val params =
             SubscriptionUnscheduleFixedFeeQuantityUpdatesParams.builder()
                 .subscriptionId("subscription_id")
                 .priceId("price_id")
                 .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-        assertThat(body.priceId()).isEqualTo("price_id")
-    }
 
-    @Test
-    fun getBodyWithoutOptionalFields() {
-        val params =
-            SubscriptionUnscheduleFixedFeeQuantityUpdatesParams.builder()
-                .subscriptionId("subscription_id")
-                .priceId("price_id")
-                .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-        assertThat(body.priceId()).isEqualTo("price_id")
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            SubscriptionUnscheduleFixedFeeQuantityUpdatesParams.builder()
-                .subscriptionId("subscription_id")
-                .priceId("price_id")
-                .build()
-        assertThat(params).isNotNull
-        // path param "subscriptionId"
-        assertThat(params.getPathParam(0)).isEqualTo("subscription_id")
+        assertThat(params._pathParam(0)).isEqualTo("subscription_id")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
+    fun body() {
+        val params =
+            SubscriptionUnscheduleFixedFeeQuantityUpdatesParams.builder()
+                .subscriptionId("subscription_id")
+                .priceId("price_id")
+                .build()
+
+        val body = params._body()
+
+        assertThat(body.priceId()).isEqualTo("price_id")
     }
 }

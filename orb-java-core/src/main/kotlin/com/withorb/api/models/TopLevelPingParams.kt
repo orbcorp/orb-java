@@ -2,56 +2,48 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
 
+/**
+ * This endpoint allows you to test your connection to the Orb API and check the validity of your
+ * API key, passed in the Authorization header. This is particularly useful for checking that your
+ * environment is set up properly, and is a great choice for connectors and integrations.
+ *
+ * This API does not have any side-effects or return any Orb resources.
+ */
 class TopLevelPingParams
-constructor(
+private constructor(
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
+) : Params {
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is TopLevelPingParams && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "TopLevelPingParams{additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): TopLevelPingParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [TopLevelPingParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [TopLevelPingParams]. */
+    class Builder internal constructor() {
 
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(topLevelPingParams: TopLevelPingParams) = apply {
-            additionalHeaders(topLevelPingParams.additionalHeaders)
-            additionalQueryParams(topLevelPingParams.additionalQueryParams)
+            additionalHeaders = topLevelPingParams.additionalHeaders.toBuilder()
+            additionalQueryParams = topLevelPingParams.additionalQueryParams.toBuilder()
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -152,7 +144,29 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [TopLevelPingParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): TopLevelPingParams =
             TopLevelPingParams(additionalHeaders.build(), additionalQueryParams.build())
     }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is TopLevelPingParams && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "TopLevelPingParams{additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

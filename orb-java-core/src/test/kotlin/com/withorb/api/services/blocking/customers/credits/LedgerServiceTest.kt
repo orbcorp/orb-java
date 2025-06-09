@@ -4,75 +4,63 @@ package com.withorb.api.services.blocking.customers.credits
 
 import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClient
-import com.withorb.api.models.*
-import com.withorb.api.models.CustomerCreditLedgerListByExternalIdParams
-import com.withorb.api.models.CustomerCreditLedgerListParams
+import com.withorb.api.core.JsonValue
+import com.withorb.api.models.CustomerCreditLedgerCreateEntryByExternalIdParams
+import com.withorb.api.models.CustomerCreditLedgerCreateEntryParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class LedgerServiceTest {
+internal class LedgerServiceTest {
 
     @Test
-    fun callList() {
+    fun list() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val ledgerService = client.customers().credits().ledger()
-        val creditLedgerEntries =
-            ledgerService.list(
-                CustomerCreditLedgerListParams.builder().customerId("customer_id").build()
-            )
-        println(creditLedgerEntries)
-        creditLedgerEntries.data().forEach { it.validate() }
+
+        val page = ledgerService.list("customer_id")
+
+        page.response().validate()
     }
 
     @Test
-    fun callCreateEntry() {
+    fun createEntry() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val ledgerService = client.customers().credits().ledger()
-        val customerCreditLedgerCreateEntryResponse =
+
+        val response =
             ledgerService.createEntry(
                 CustomerCreditLedgerCreateEntryParams.builder()
                     .customerId("customer_id")
-                    .forAddIncrementCreditLedgerEntryRequestParams(
-                        CustomerCreditLedgerCreateEntryParams
-                            .AddIncrementCreditLedgerEntryRequestParams
-                            .builder()
-                            .amount(42.23)
-                            .entryType(
-                                CustomerCreditLedgerCreateEntryParams
-                                    .AddIncrementCreditLedgerEntryRequestParams
-                                    .EntryType
-                                    .INCREMENT
-                            )
+                    .body(
+                        CustomerCreditLedgerCreateEntryParams.Body.Increment.builder()
+                            .amount(0.0)
                             .currency("currency")
                             .description("description")
                             .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .invoiceSettings(
-                                CustomerCreditLedgerCreateEntryParams
-                                    .AddIncrementCreditLedgerEntryRequestParams
-                                    .InvoiceSettings
+                                CustomerCreditLedgerCreateEntryParams.Body.Increment.InvoiceSettings
                                     .builder()
                                     .autoCollection(true)
-                                    .netTerms(123L)
+                                    .netTerms(0L)
                                     .memo("memo")
                                     .requireSuccessfulPayment(true)
                                     .build()
                             )
                             .metadata(
-                                CustomerCreditLedgerCreateEntryParams
-                                    .AddIncrementCreditLedgerEntryRequestParams
-                                    .Metadata
+                                CustomerCreditLedgerCreateEntryParams.Body.Increment.Metadata
                                     .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .perUnitCostBasis("per_unit_cost_basis")
@@ -80,52 +68,45 @@ class LedgerServiceTest {
                     )
                     .build()
             )
-        println(customerCreditLedgerCreateEntryResponse)
+
+        response.validate()
     }
 
     @Test
-    fun callCreateEntryByExternalId() {
+    fun createEntryByExternalId() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val ledgerService = client.customers().credits().ledger()
-        val customerCreditLedgerCreateEntryByExternalIdResponse =
+
+        val response =
             ledgerService.createEntryByExternalId(
                 CustomerCreditLedgerCreateEntryByExternalIdParams.builder()
                     .externalCustomerId("external_customer_id")
-                    .forAddIncrementCreditLedgerEntryRequestParams(
-                        CustomerCreditLedgerCreateEntryByExternalIdParams
-                            .AddIncrementCreditLedgerEntryRequestParams
-                            .builder()
-                            .amount(42.23)
-                            .entryType(
-                                CustomerCreditLedgerCreateEntryByExternalIdParams
-                                    .AddIncrementCreditLedgerEntryRequestParams
-                                    .EntryType
-                                    .INCREMENT
-                            )
+                    .body(
+                        CustomerCreditLedgerCreateEntryByExternalIdParams.Body.Increment.builder()
+                            .amount(0.0)
                             .currency("currency")
                             .description("description")
                             .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .invoiceSettings(
-                                CustomerCreditLedgerCreateEntryByExternalIdParams
-                                    .AddIncrementCreditLedgerEntryRequestParams
+                                CustomerCreditLedgerCreateEntryByExternalIdParams.Body.Increment
                                     .InvoiceSettings
                                     .builder()
                                     .autoCollection(true)
-                                    .netTerms(123L)
+                                    .netTerms(0L)
                                     .memo("memo")
                                     .requireSuccessfulPayment(true)
                                     .build()
                             )
                             .metadata(
-                                CustomerCreditLedgerCreateEntryByExternalIdParams
-                                    .AddIncrementCreditLedgerEntryRequestParams
+                                CustomerCreditLedgerCreateEntryByExternalIdParams.Body.Increment
                                     .Metadata
                                     .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
                             .perUnitCostBasis("per_unit_cost_basis")
@@ -133,24 +114,21 @@ class LedgerServiceTest {
                     )
                     .build()
             )
-        println(customerCreditLedgerCreateEntryByExternalIdResponse)
+
+        response.validate()
     }
 
     @Test
-    fun callListByExternalId() {
+    fun listByExternalId() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val ledgerService = client.customers().credits().ledger()
-        val creditLedgerEntries =
-            ledgerService.listByExternalId(
-                CustomerCreditLedgerListByExternalIdParams.builder()
-                    .externalCustomerId("external_customer_id")
-                    .build()
-            )
-        println(creditLedgerEntries)
-        creditLedgerEntries.data().forEach { it.validate() }
+
+        val page = ledgerService.listByExternalId("external_customer_id")
+
+        page.response().validate()
     }
 }

@@ -2,30 +2,53 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
+import com.withorb.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ItemCreateParamsTest {
+internal class ItemCreateParamsTest {
 
     @Test
-    fun createItemCreateParams() {
-        ItemCreateParams.builder().name("API requests").build()
+    fun create() {
+        ItemCreateParams.builder()
+            .name("API requests")
+            .metadata(
+                ItemCreateParams.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
+            .build()
     }
 
     @Test
-    fun getBody() {
-        val params = ItemCreateParams.builder().name("API requests").build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
+    fun body() {
+        val params =
+            ItemCreateParams.builder()
+                .name("API requests")
+                .metadata(
+                    ItemCreateParams.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
+                .build()
+
+        val body = params._body()
+
         assertThat(body.name()).isEqualTo("API requests")
+        assertThat(body.metadata())
+            .contains(
+                ItemCreateParams.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params = ItemCreateParams.builder().name("API requests").build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
+
+        val body = params._body()
+
         assertThat(body.name()).isEqualTo("API requests")
     }
 }

@@ -2,47 +2,36 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
+import com.withorb.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CustomerCreditLedgerCreateEntryParamsTest {
+internal class CustomerCreditLedgerCreateEntryParamsTest {
 
     @Test
-    fun createCustomerCreditLedgerCreateEntryParams() {
+    fun create() {
         CustomerCreditLedgerCreateEntryParams.builder()
             .customerId("customer_id")
-            .forAddIncrementCreditLedgerEntryRequestParams(
-                CustomerCreditLedgerCreateEntryParams.AddIncrementCreditLedgerEntryRequestParams
-                    .builder()
-                    .amount(42.23)
-                    .entryType(
-                        CustomerCreditLedgerCreateEntryParams
-                            .AddIncrementCreditLedgerEntryRequestParams
-                            .EntryType
-                            .INCREMENT
-                    )
+            .body(
+                CustomerCreditLedgerCreateEntryParams.Body.Increment.builder()
+                    .amount(0.0)
                     .currency("currency")
                     .description("description")
                     .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .invoiceSettings(
-                        CustomerCreditLedgerCreateEntryParams
-                            .AddIncrementCreditLedgerEntryRequestParams
-                            .InvoiceSettings
+                        CustomerCreditLedgerCreateEntryParams.Body.Increment.InvoiceSettings
                             .builder()
                             .autoCollection(true)
-                            .netTerms(123L)
+                            .netTerms(0L)
                             .memo("memo")
                             .requireSuccessfulPayment(true)
                             .build()
                     )
                     .metadata(
-                        CustomerCreditLedgerCreateEntryParams
-                            .AddIncrementCreditLedgerEntryRequestParams
-                            .Metadata
-                            .builder()
+                        CustomerCreditLedgerCreateEntryParams.Body.Increment.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
                     .perUnitCostBasis("per_unit_cost_basis")
@@ -52,13 +41,97 @@ class CustomerCreditLedgerCreateEntryParamsTest {
     }
 
     @Test
-    fun getPathParam() {
+    fun pathParams() {
         val params =
-            CustomerCreditLedgerCreateEntryParams.builder().customerId("customer_id").build()
-        assertThat(params).isNotNull
-        // path param "customerId"
-        assertThat(params.getPathParam(0)).isEqualTo("customer_id")
+            CustomerCreditLedgerCreateEntryParams.builder()
+                .customerId("customer_id")
+                .incrementBody(0.0)
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("customer_id")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
+    fun body() {
+        val params =
+            CustomerCreditLedgerCreateEntryParams.builder()
+                .customerId("customer_id")
+                .body(
+                    CustomerCreditLedgerCreateEntryParams.Body.Increment.builder()
+                        .amount(0.0)
+                        .currency("currency")
+                        .description("description")
+                        .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .invoiceSettings(
+                            CustomerCreditLedgerCreateEntryParams.Body.Increment.InvoiceSettings
+                                .builder()
+                                .autoCollection(true)
+                                .netTerms(0L)
+                                .memo("memo")
+                                .requireSuccessfulPayment(true)
+                                .build()
+                        )
+                        .metadata(
+                            CustomerCreditLedgerCreateEntryParams.Body.Increment.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .perUnitCostBasis("per_unit_cost_basis")
+                        .build()
+                )
+                .build()
+
+        val body = params._body()
+
+        assertThat(body)
+            .isEqualTo(
+                CustomerCreditLedgerCreateEntryParams.Body.ofIncrement(
+                    CustomerCreditLedgerCreateEntryParams.Body.Increment.builder()
+                        .amount(0.0)
+                        .currency("currency")
+                        .description("description")
+                        .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .invoiceSettings(
+                            CustomerCreditLedgerCreateEntryParams.Body.Increment.InvoiceSettings
+                                .builder()
+                                .autoCollection(true)
+                                .netTerms(0L)
+                                .memo("memo")
+                                .requireSuccessfulPayment(true)
+                                .build()
+                        )
+                        .metadata(
+                            CustomerCreditLedgerCreateEntryParams.Body.Increment.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .perUnitCostBasis("per_unit_cost_basis")
+                        .build()
+                )
+            )
+    }
+
+    @Test
+    fun bodyWithoutOptionalFields() {
+        val params =
+            CustomerCreditLedgerCreateEntryParams.builder()
+                .customerId("customer_id")
+                .incrementBody(0.0)
+                .build()
+
+        val body = params._body()
+
+        assertThat(body)
+            .isEqualTo(
+                CustomerCreditLedgerCreateEntryParams.Body.ofIncrement(
+                    CustomerCreditLedgerCreateEntryParams.Body.Increment.builder()
+                        .amount(0.0)
+                        .build()
+                )
+            )
     }
 }

@@ -2,71 +2,66 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class AlertCreateForCustomerParamsTest {
+internal class AlertCreateForCustomerParamsTest {
 
     @Test
-    fun createAlertCreateForCustomerParams() {
+    fun create() {
         AlertCreateForCustomerParams.builder()
             .customerId("customer_id")
             .currency("currency")
-            .type(AlertCreateForCustomerParams.Type.USAGE_EXCEEDED)
-            .thresholds(
-                listOf(AlertCreateForCustomerParams.Threshold.builder().value(42.23).build())
-            )
+            .type(AlertCreateForCustomerParams.Type.CREDIT_BALANCE_DEPLETED)
+            .addThreshold(AlertCreateForCustomerParams.Threshold.builder().value(0.0).build())
             .build()
     }
 
     @Test
-    fun getBody() {
+    fun pathParams() {
         val params =
             AlertCreateForCustomerParams.builder()
                 .customerId("customer_id")
                 .currency("currency")
-                .type(AlertCreateForCustomerParams.Type.USAGE_EXCEEDED)
-                .thresholds(
-                    listOf(AlertCreateForCustomerParams.Threshold.builder().value(42.23).build())
-                )
+                .type(AlertCreateForCustomerParams.Type.CREDIT_BALANCE_DEPLETED)
                 .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-        assertThat(body.currency()).isEqualTo("currency")
-        assertThat(body.type()).isEqualTo(AlertCreateForCustomerParams.Type.USAGE_EXCEEDED)
-        assertThat(body.thresholds())
-            .isEqualTo(
-                listOf(AlertCreateForCustomerParams.Threshold.builder().value(42.23).build())
-            )
-    }
 
-    @Test
-    fun getBodyWithoutOptionalFields() {
-        val params =
-            AlertCreateForCustomerParams.builder()
-                .customerId("customer_id")
-                .currency("currency")
-                .type(AlertCreateForCustomerParams.Type.USAGE_EXCEEDED)
-                .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-        assertThat(body.currency()).isEqualTo("currency")
-        assertThat(body.type()).isEqualTo(AlertCreateForCustomerParams.Type.USAGE_EXCEEDED)
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            AlertCreateForCustomerParams.builder()
-                .customerId("customer_id")
-                .currency("currency")
-                .type(AlertCreateForCustomerParams.Type.USAGE_EXCEEDED)
-                .build()
-        assertThat(params).isNotNull
-        // path param "customerId"
-        assertThat(params.getPathParam(0)).isEqualTo("customer_id")
+        assertThat(params._pathParam(0)).isEqualTo("customer_id")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
+    fun body() {
+        val params =
+            AlertCreateForCustomerParams.builder()
+                .customerId("customer_id")
+                .currency("currency")
+                .type(AlertCreateForCustomerParams.Type.CREDIT_BALANCE_DEPLETED)
+                .addThreshold(AlertCreateForCustomerParams.Threshold.builder().value(0.0).build())
+                .build()
+
+        val body = params._body()
+
+        assertThat(body.currency()).isEqualTo("currency")
+        assertThat(body.type()).isEqualTo(AlertCreateForCustomerParams.Type.CREDIT_BALANCE_DEPLETED)
+        assertThat(body.thresholds().getOrNull())
+            .containsExactly(AlertCreateForCustomerParams.Threshold.builder().value(0.0).build())
+    }
+
+    @Test
+    fun bodyWithoutOptionalFields() {
+        val params =
+            AlertCreateForCustomerParams.builder()
+                .customerId("customer_id")
+                .currency("currency")
+                .type(AlertCreateForCustomerParams.Type.CREDIT_BALANCE_DEPLETED)
+                .build()
+
+        val body = params._body()
+
+        assertThat(body.currency()).isEqualTo("currency")
+        assertThat(body.type()).isEqualTo(AlertCreateForCustomerParams.Type.CREDIT_BALANCE_DEPLETED)
     }
 }

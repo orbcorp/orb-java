@@ -2,209 +2,143 @@
 
 package com.withorb.api.models
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.withorb.api.core.ExcludeMissing
-import com.withorb.api.core.JsonField
-import com.withorb.api.core.JsonMissing
-import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toImmutable
+import com.withorb.api.core.AutoPagerAsync
+import com.withorb.api.core.PageAsync
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.async.PlanServiceAsync
 import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
 
+/** @see [PlanServiceAsync.list] */
 class PlanListPageAsync
 private constructor(
-    private val plansService: PlanServiceAsync,
+    private val service: PlanServiceAsync,
+    private val streamHandlerExecutor: Executor,
     private val params: PlanListParams,
-    private val response: Response,
-) {
+    private val response: PlanListPageResponse,
+) : PageAsync<Plan> {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [PlanListPageResponse], but gracefully handles missing data.
+     *
+     * @see [PlanListPageResponse.data]
+     */
+    fun data(): List<Plan> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
-    fun data(): List<Plan> = response().data()
+    /**
+     * Delegates to [PlanListPageResponse], but gracefully handles missing data.
+     *
+     * @see [PlanListPageResponse.paginationMetadata]
+     */
+    fun paginationMetadata(): Optional<PaginationMetadata> =
+        response._paginationMetadata().getOptional("pagination_metadata")
 
-    fun paginationMetadata(): PaginationMetadata = response().paginationMetadata()
+    override fun items(): List<Plan> = data()
+
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() &&
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.isPresent
+
+    fun nextPageParams(): PlanListParams {
+        val nextCursor =
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().cursor(nextCursor).build()
+    }
+
+    override fun nextPage(): CompletableFuture<PlanListPageAsync> = service.list(nextPageParams())
+
+    fun autoPager(): AutoPagerAsync<Plan> = AutoPagerAsync.from(this, streamHandlerExecutor)
+
+    /** The parameters that were used to request this page. */
+    fun params(): PlanListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): PlanListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
+    companion object {
+
+        /**
+         * Returns a mutable builder for constructing an instance of [PlanListPageAsync].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .streamHandlerExecutor()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [PlanListPageAsync]. */
+    class Builder internal constructor() {
+
+        private var service: PlanServiceAsync? = null
+        private var streamHandlerExecutor: Executor? = null
+        private var params: PlanListParams? = null
+        private var response: PlanListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(planListPageAsync: PlanListPageAsync) = apply {
+            service = planListPageAsync.service
+            streamHandlerExecutor = planListPageAsync.streamHandlerExecutor
+            params = planListPageAsync.params
+            response = planListPageAsync.response
+        }
+
+        fun service(service: PlanServiceAsync) = apply { this.service = service }
+
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
+            this.streamHandlerExecutor = streamHandlerExecutor
+        }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: PlanListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: PlanListPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [PlanListPageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .streamHandlerExecutor()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): PlanListPageAsync =
+            PlanListPageAsync(
+                checkRequired("service", service),
+                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is PlanListPageAsync && plansService == other.plansService && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is PlanListPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(plansService, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, streamHandlerExecutor, params, response) /* spotless:on */
 
     override fun toString() =
-        "PlanListPageAsync{plansService=$plansService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        if (data().isEmpty()) {
-            return false
-        }
-
-        return paginationMetadata().nextCursor().isPresent
-    }
-
-    fun getNextPageParams(): Optional<PlanListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
-
-        return Optional.of(
-            PlanListParams.builder()
-                .from(params)
-                .apply { paginationMetadata().nextCursor().ifPresent { this.cursor(it) } }
-                .build()
-        )
-    }
-
-    fun getNextPage(): CompletableFuture<Optional<PlanListPageAsync>> {
-        return getNextPageParams()
-            .map { plansService.list(it).thenApply { Optional.of(it) } }
-            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
-    }
-
-    fun autoPager(): AutoPager = AutoPager(this)
-
-    companion object {
-
-        @JvmStatic
-        fun of(plansService: PlanServiceAsync, params: PlanListParams, response: Response) =
-            PlanListPageAsync(
-                plansService,
-                params,
-                response,
-            )
-    }
-
-    @JsonDeserialize(builder = Response.Builder::class)
-    @NoAutoDetect
-    class Response
-    constructor(
-        private val data: JsonField<List<Plan>>,
-        private val paginationMetadata: JsonField<PaginationMetadata>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        private var validated: Boolean = false
-
-        fun data(): List<Plan> = data.getNullable("data") ?: listOf()
-
-        fun paginationMetadata(): PaginationMetadata =
-            paginationMetadata.getRequired("pagination_metadata")
-
-        @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<Plan>>> = Optional.ofNullable(data)
-
-        @JsonProperty("pagination_metadata")
-        fun _paginationMetadata(): Optional<JsonField<PaginationMetadata>> =
-            Optional.ofNullable(paginationMetadata)
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): Response = apply {
-            if (!validated) {
-                data().map { it.validate() }
-                paginationMetadata().validate()
-                validated = true
-            }
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && data == other.data && paginationMetadata == other.paginationMetadata && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(data, paginationMetadata, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{data=$data, paginationMetadata=$paginationMetadata, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var data: JsonField<List<Plan>> = JsonMissing.of()
-            private var paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.data = page.data
-                this.paginationMetadata = page.paginationMetadata
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun data(data: List<Plan>) = data(JsonField.of(data))
-
-            @JsonProperty("data") fun data(data: JsonField<List<Plan>>) = apply { this.data = data }
-
-            fun paginationMetadata(paginationMetadata: PaginationMetadata) =
-                paginationMetadata(JsonField.of(paginationMetadata))
-
-            @JsonProperty("pagination_metadata")
-            fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply {
-                this.paginationMetadata = paginationMetadata
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
-        }
-    }
-
-    class AutoPager
-    constructor(
-        private val firstPage: PlanListPageAsync,
-    ) {
-
-        fun forEach(action: Predicate<Plan>, executor: Executor): CompletableFuture<Void> {
-            fun CompletableFuture<Optional<PlanListPageAsync>>.forEach(
-                action: (Plan) -> Boolean,
-                executor: Executor
-            ): CompletableFuture<Void> =
-                thenComposeAsync(
-                    { page ->
-                        page
-                            .filter { it.data().all(action) }
-                            .map { it.getNextPage().forEach(action, executor) }
-                            .orElseGet { CompletableFuture.completedFuture(null) }
-                    },
-                    executor
-                )
-            return CompletableFuture.completedFuture(Optional.of(firstPage))
-                .forEach(action::test, executor)
-        }
-
-        fun toList(executor: Executor): CompletableFuture<List<Plan>> {
-            val values = mutableListOf<Plan>()
-            return forEach(values::add, executor).thenApply { values }
-        }
-    }
+        "PlanListPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

@@ -3,85 +3,84 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
-import com.withorb.api.models.*
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint allows you to enable an alert. To enable a plan-level alert for a specific
+ * subscription, you must include the `subscription_id`. The `subscription_id` is not required for
+ * customer or subscription level alerts.
+ */
 class AlertEnableParams
-constructor(
-    private val alertConfigurationId: String,
+private constructor(
+    private val alertConfigurationId: String?,
+    private val subscriptionId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
-) {
+) : Params {
 
-    fun alertConfigurationId(): String = alertConfigurationId
+    fun alertConfigurationId(): Optional<String> = Optional.ofNullable(alertConfigurationId)
 
-    @JvmSynthetic
-    internal fun getBody(): Optional<Map<String, JsonValue>> {
-        return Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
-    }
+    /** Used to update the status of a plan alert scoped to this subscription_id */
+    fun subscriptionId(): Optional<String> = Optional.ofNullable(subscriptionId)
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> alertConfigurationId
-            else -> ""
-        }
-    }
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is AlertEnableParams && alertConfigurationId == other.alertConfigurationId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(alertConfigurationId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "AlertEnableParams{alertConfigurationId=$alertConfigurationId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): AlertEnableParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [AlertEnableParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [AlertEnableParams]. */
+    class Builder internal constructor() {
 
         private var alertConfigurationId: String? = null
+        private var subscriptionId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
         private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(alertEnableParams: AlertEnableParams) = apply {
-            this.alertConfigurationId = alertEnableParams.alertConfigurationId
-            additionalHeaders(alertEnableParams.additionalHeaders)
-            additionalQueryParams(alertEnableParams.additionalQueryParams)
-            additionalBodyProperties(alertEnableParams.additionalBodyProperties)
+            alertConfigurationId = alertEnableParams.alertConfigurationId
+            subscriptionId = alertEnableParams.subscriptionId
+            additionalHeaders = alertEnableParams.additionalHeaders.toBuilder()
+            additionalQueryParams = alertEnableParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = alertEnableParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun alertConfigurationId(alertConfigurationId: String) = apply {
+        fun alertConfigurationId(alertConfigurationId: String?) = apply {
             this.alertConfigurationId = alertConfigurationId
         }
+
+        /**
+         * Alias for calling [Builder.alertConfigurationId] with
+         * `alertConfigurationId.orElse(null)`.
+         */
+        fun alertConfigurationId(alertConfigurationId: Optional<String>) =
+            alertConfigurationId(alertConfigurationId.getOrNull())
+
+        /** Used to update the status of a plan alert scoped to this subscription_id */
+        fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
+
+        /** Alias for calling [Builder.subscriptionId] with `subscriptionId.orElse(null)`. */
+        fun subscriptionId(subscriptionId: Optional<String>) =
+            subscriptionId(subscriptionId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -203,14 +202,50 @@ constructor(
             keys.forEach(::removeAdditionalBodyProperty)
         }
 
+        /**
+         * Returns an immutable instance of [AlertEnableParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): AlertEnableParams =
             AlertEnableParams(
-                checkNotNull(alertConfigurationId) {
-                    "`alertConfigurationId` is required but was not set"
-                },
+                alertConfigurationId,
+                subscriptionId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    fun _body(): Optional<Map<String, JsonValue>> =
+        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> alertConfigurationId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                subscriptionId?.let { put("subscription_id", it) }
+                putAll(additionalQueryParams)
+            }
+            .build()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is AlertEnableParams && alertConfigurationId == other.alertConfigurationId && subscriptionId == other.subscriptionId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(alertConfigurationId, subscriptionId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "AlertEnableParams{alertConfigurationId=$alertConfigurationId, subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

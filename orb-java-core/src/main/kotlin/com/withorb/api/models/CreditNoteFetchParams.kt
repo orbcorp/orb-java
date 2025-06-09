@@ -2,58 +2,42 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint is used to fetch a single [`Credit Note`](/invoicing/credit-notes) given an
+ * identifier.
+ */
 class CreditNoteFetchParams
-constructor(
-    private val creditNoteId: String,
+private constructor(
+    private val creditNoteId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun creditNoteId(): String = creditNoteId
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> creditNoteId
-            else -> ""
-        }
-    }
+    fun creditNoteId(): Optional<String> = Optional.ofNullable(creditNoteId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CreditNoteFetchParams && creditNoteId == other.creditNoteId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(creditNoteId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CreditNoteFetchParams{creditNoteId=$creditNoteId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): CreditNoteFetchParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [CreditNoteFetchParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [CreditNoteFetchParams]. */
+    class Builder internal constructor() {
 
         private var creditNoteId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -61,12 +45,15 @@ constructor(
 
         @JvmSynthetic
         internal fun from(creditNoteFetchParams: CreditNoteFetchParams) = apply {
-            this.creditNoteId = creditNoteFetchParams.creditNoteId
-            additionalHeaders(creditNoteFetchParams.additionalHeaders)
-            additionalQueryParams(creditNoteFetchParams.additionalQueryParams)
+            creditNoteId = creditNoteFetchParams.creditNoteId
+            additionalHeaders = creditNoteFetchParams.additionalHeaders.toBuilder()
+            additionalQueryParams = creditNoteFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun creditNoteId(creditNoteId: String) = apply { this.creditNoteId = creditNoteId }
+        fun creditNoteId(creditNoteId: String?) = apply { this.creditNoteId = creditNoteId }
+
+        /** Alias for calling [Builder.creditNoteId] with `creditNoteId.orElse(null)`. */
+        fun creditNoteId(creditNoteId: Optional<String>) = creditNoteId(creditNoteId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,11 +153,39 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [CreditNoteFetchParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): CreditNoteFetchParams =
             CreditNoteFetchParams(
-                checkNotNull(creditNoteId) { "`creditNoteId` is required but was not set" },
+                creditNoteId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> creditNoteId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CreditNoteFetchParams && creditNoteId == other.creditNoteId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(creditNoteId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CreditNoteFetchParams{creditNoteId=$creditNoteId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

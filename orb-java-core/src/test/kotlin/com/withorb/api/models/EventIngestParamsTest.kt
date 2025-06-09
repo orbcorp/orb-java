@@ -4,140 +4,160 @@ package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class EventIngestParamsTest {
+internal class EventIngestParamsTest {
 
     @Test
-    fun createEventIngestParams() {
+    fun create() {
         EventIngestParams.builder()
-            .events(
-                listOf(
-                    EventIngestParams.Event.builder()
-                        .eventName("event_name")
-                        .idempotencyKey("idempotency_key")
-                        .properties(JsonValue.from(mapOf<String, Any>()))
-                        .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
-                        .customerId("customer_id")
-                        .externalCustomerId("external_customer_id")
-                        .build()
-                )
-            )
             .backfillId("backfill_id")
             .debug(true)
+            .addEvent(
+                EventIngestParams.Event.builder()
+                    .eventName("event_name")
+                    .idempotencyKey("idempotency_key")
+                    .properties(
+                        EventIngestParams.Event.Properties.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
+                    .customerId("customer_id")
+                    .externalCustomerId("external_customer_id")
+                    .build()
+            )
             .build()
     }
 
     @Test
-    fun getQueryParams() {
+    fun queryParams() {
         val params =
             EventIngestParams.builder()
-                .events(
-                    listOf(
-                        EventIngestParams.Event.builder()
-                            .eventName("event_name")
-                            .idempotencyKey("idempotency_key")
-                            .properties(JsonValue.from(mapOf<String, Any>()))
-                            .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
-                            .customerId("customer_id")
-                            .externalCustomerId("external_customer_id")
-                            .build()
-                    )
-                )
                 .backfillId("backfill_id")
                 .debug(true)
-                .build()
-        val expected = QueryParams.builder()
-        expected.put("backfill_id", "backfill_id")
-        expected.put("debug", "true")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
-    }
-
-    @Test
-    fun getQueryParamsWithoutOptionalFields() {
-        val params =
-            EventIngestParams.builder()
-                .events(
-                    listOf(
-                        EventIngestParams.Event.builder()
-                            .eventName("event_name")
-                            .idempotencyKey("idempotency_key")
-                            .properties(JsonValue.from(mapOf<String, Any>()))
-                            .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
-                            .build()
-                    )
-                )
-                .build()
-        val expected = QueryParams.builder()
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
-    }
-
-    @Test
-    fun getBody() {
-        val params =
-            EventIngestParams.builder()
-                .events(
-                    listOf(
-                        EventIngestParams.Event.builder()
-                            .eventName("event_name")
-                            .idempotencyKey("idempotency_key")
-                            .properties(JsonValue.from(mapOf<String, Any>()))
-                            .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
-                            .customerId("customer_id")
-                            .externalCustomerId("external_customer_id")
-                            .build()
-                    )
-                )
-                .backfillId("backfill_id")
-                .debug(true)
-                .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-        assertThat(body.events())
-            .isEqualTo(
-                listOf(
+                .addEvent(
                     EventIngestParams.Event.builder()
                         .eventName("event_name")
                         .idempotencyKey("idempotency_key")
-                        .properties(JsonValue.from(mapOf<String, Any>()))
+                        .properties(
+                            EventIngestParams.Event.Properties.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
                         .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
                         .customerId("customer_id")
                         .externalCustomerId("external_customer_id")
                         .build()
                 )
+                .build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder().put("backfill_id", "backfill_id").put("debug", "true").build()
             )
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun queryParamsWithoutOptionalFields() {
         val params =
             EventIngestParams.builder()
-                .events(
-                    listOf(
-                        EventIngestParams.Event.builder()
-                            .eventName("event_name")
-                            .idempotencyKey("idempotency_key")
-                            .properties(JsonValue.from(mapOf<String, Any>()))
-                            .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
-                            .build()
-                    )
-                )
-                .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-        assertThat(body.events())
-            .isEqualTo(
-                listOf(
+                .addEvent(
                     EventIngestParams.Event.builder()
                         .eventName("event_name")
                         .idempotencyKey("idempotency_key")
-                        .properties(JsonValue.from(mapOf<String, Any>()))
+                        .properties(
+                            EventIngestParams.Event.Properties.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
                         .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
                         .build()
                 )
+                .build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
+    }
+
+    @Test
+    fun body() {
+        val params =
+            EventIngestParams.builder()
+                .backfillId("backfill_id")
+                .debug(true)
+                .addEvent(
+                    EventIngestParams.Event.builder()
+                        .eventName("event_name")
+                        .idempotencyKey("idempotency_key")
+                        .properties(
+                            EventIngestParams.Event.Properties.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
+                        .customerId("customer_id")
+                        .externalCustomerId("external_customer_id")
+                        .build()
+                )
+                .build()
+
+        val body = params._body()
+
+        assertThat(body.events())
+            .containsExactly(
+                EventIngestParams.Event.builder()
+                    .eventName("event_name")
+                    .idempotencyKey("idempotency_key")
+                    .properties(
+                        EventIngestParams.Event.Properties.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
+                    .customerId("customer_id")
+                    .externalCustomerId("external_customer_id")
+                    .build()
+            )
+    }
+
+    @Test
+    fun bodyWithoutOptionalFields() {
+        val params =
+            EventIngestParams.builder()
+                .addEvent(
+                    EventIngestParams.Event.builder()
+                        .eventName("event_name")
+                        .idempotencyKey("idempotency_key")
+                        .properties(
+                            EventIngestParams.Event.Properties.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
+                        .build()
+                )
+                .build()
+
+        val body = params._body()
+
+        assertThat(body.events())
+            .containsExactly(
+                EventIngestParams.Event.builder()
+                    .eventName("event_name")
+                    .idempotencyKey("idempotency_key")
+                    .properties(
+                        EventIngestParams.Event.Properties.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
+                    .build()
             )
     }
 }

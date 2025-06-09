@@ -2,82 +2,84 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint returns the event volume for an account in a
+ * [paginated list format](/api-reference/pagination).
+ *
+ * The event volume is aggregated by the hour and the
+ * [timestamp](/api-reference/event/ingest-events) field is used to determine which hour an event is
+ * associated with. Note, this means that late-arriving events increment the volume count for the
+ * hour window the timestamp is in, not the latest hour window.
+ *
+ * Each item in the response contains the count of events aggregated by the hour where the start and
+ * end time are hour-aligned and in UTC. When a specific timestamp is passed in for either start or
+ * end time, the response includes the hours the timestamp falls in.
+ */
 class EventVolumeListParams
-constructor(
+private constructor(
     private val timeframeStart: OffsetDateTime,
     private val cursor: String?,
     private val limit: Long?,
     private val timeframeEnd: OffsetDateTime?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
+    /**
+     * The start of the timeframe, inclusive, in which to return event volume. All datetime values
+     * are converted to UTC time. If the specified time isn't hour-aligned, the response includes
+     * the event volume count for the hour the time falls in.
+     */
     fun timeframeStart(): OffsetDateTime = timeframeStart
 
+    /**
+     * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+     * initial request.
+     */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
+    /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /**
+     * The end of the timeframe, exclusive, in which to return event volume. If not specified, the
+     * current time is used. All datetime values are converted to UTC time.If the specified time
+     * isn't hour-aligned, the response includes the event volumecount for the hour the time falls
+     * in.
+     */
     fun timeframeEnd(): Optional<OffsetDateTime> = Optional.ofNullable(timeframeEnd)
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic
-    internal fun getQueryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.timeframeStart.let {
-            queryParams.put(
-                "timeframe_start",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
-            )
-        }
-        this.cursor?.let { queryParams.put("cursor", listOf(it.toString())) }
-        this.limit?.let { queryParams.put("limit", listOf(it.toString())) }
-        this.timeframeEnd?.let {
-            queryParams.put(
-                "timeframe_end",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
-            )
-        }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is EventVolumeListParams && timeframeStart == other.timeframeStart && cursor == other.cursor && limit == other.limit && timeframeEnd == other.timeframeEnd && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(timeframeStart, cursor, limit, timeframeEnd, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "EventVolumeListParams{timeframeStart=$timeframeStart, cursor=$cursor, limit=$limit, timeframeEnd=$timeframeEnd, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [EventVolumeListParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .timeframeStart()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [EventVolumeListParams]. */
+    class Builder internal constructor() {
 
         private var timeframeStart: OffsetDateTime? = null
         private var cursor: String? = null
@@ -88,12 +90,12 @@ constructor(
 
         @JvmSynthetic
         internal fun from(eventVolumeListParams: EventVolumeListParams) = apply {
-            this.timeframeStart = eventVolumeListParams.timeframeStart
-            this.cursor = eventVolumeListParams.cursor
-            this.limit = eventVolumeListParams.limit
-            this.timeframeEnd = eventVolumeListParams.timeframeEnd
-            additionalHeaders(eventVolumeListParams.additionalHeaders)
-            additionalQueryParams(eventVolumeListParams.additionalQueryParams)
+            timeframeStart = eventVolumeListParams.timeframeStart
+            cursor = eventVolumeListParams.cursor
+            limit = eventVolumeListParams.limit
+            timeframeEnd = eventVolumeListParams.timeframeEnd
+            additionalHeaders = eventVolumeListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = eventVolumeListParams.additionalQueryParams.toBuilder()
         }
 
         /**
@@ -109,10 +111,23 @@ constructor(
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: String) = apply { this.cursor = cursor }
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         /**
          * The end of the timeframe, exclusive, in which to return event volume. If not specified,
@@ -120,7 +135,11 @@ constructor(
          * time isn't hour-aligned, the response includes the event volumecount for the hour the
          * time falls in.
          */
-        fun timeframeEnd(timeframeEnd: OffsetDateTime) = apply { this.timeframeEnd = timeframeEnd }
+        fun timeframeEnd(timeframeEnd: OffsetDateTime?) = apply { this.timeframeEnd = timeframeEnd }
+
+        /** Alias for calling [Builder.timeframeEnd] with `timeframeEnd.orElse(null)`. */
+        fun timeframeEnd(timeframeEnd: Optional<OffsetDateTime>) =
+            timeframeEnd(timeframeEnd.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -220,9 +239,21 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [EventVolumeListParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .timeframeStart()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): EventVolumeListParams =
             EventVolumeListParams(
-                checkNotNull(timeframeStart) { "`timeframeStart` is required but was not set" },
+                checkRequired("timeframeStart", timeframeStart),
                 cursor,
                 limit,
                 timeframeEnd,
@@ -230,4 +261,35 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                put(
+                    "timeframe_start",
+                    DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(timeframeStart),
+                )
+                cursor?.let { put("cursor", it) }
+                limit?.let { put("limit", it.toString()) }
+                timeframeEnd?.let {
+                    put("timeframe_end", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                putAll(additionalQueryParams)
+            }
+            .build()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is EventVolumeListParams && timeframeStart == other.timeframeStart && cursor == other.cursor && limit == other.limit && timeframeEnd == other.timeframeEnd && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(timeframeStart, cursor, limit, timeframeEnd, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "EventVolumeListParams{timeframeStart=$timeframeStart, cursor=$cursor, limit=$limit, timeframeEnd=$timeframeEnd, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

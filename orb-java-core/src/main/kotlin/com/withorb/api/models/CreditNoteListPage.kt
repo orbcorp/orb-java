@@ -2,204 +2,131 @@
 
 package com.withorb.api.models
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.withorb.api.core.ExcludeMissing
-import com.withorb.api.core.JsonField
-import com.withorb.api.core.JsonMissing
-import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toImmutable
+import com.withorb.api.core.AutoPager
+import com.withorb.api.core.Page
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.blocking.CreditNoteService
 import java.util.Objects
 import java.util.Optional
-import java.util.stream.Stream
-import java.util.stream.StreamSupport
+import kotlin.jvm.optionals.getOrNull
 
+/** @see [CreditNoteService.list] */
 class CreditNoteListPage
 private constructor(
-    private val creditNotesService: CreditNoteService,
+    private val service: CreditNoteService,
     private val params: CreditNoteListParams,
-    private val response: Response,
-) {
+    private val response: CreditNoteListPageResponse,
+) : Page<CreditNote> {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [CreditNoteListPageResponse], but gracefully handles missing data.
+     *
+     * @see [CreditNoteListPageResponse.data]
+     */
+    fun data(): List<CreditNote> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
-    fun data(): List<CreditNote> = response().data()
+    /**
+     * Delegates to [CreditNoteListPageResponse], but gracefully handles missing data.
+     *
+     * @see [CreditNoteListPageResponse.paginationMetadata]
+     */
+    fun paginationMetadata(): Optional<PaginationMetadata> =
+        response._paginationMetadata().getOptional("pagination_metadata")
 
-    fun paginationMetadata(): PaginationMetadata = response().paginationMetadata()
+    override fun items(): List<CreditNote> = data()
+
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() &&
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.isPresent
+
+    fun nextPageParams(): CreditNoteListParams {
+        val nextCursor =
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().cursor(nextCursor).build()
+    }
+
+    override fun nextPage(): CreditNoteListPage = service.list(nextPageParams())
+
+    fun autoPager(): AutoPager<CreditNote> = AutoPager.from(this)
+
+    /** The parameters that were used to request this page. */
+    fun params(): CreditNoteListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): CreditNoteListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
+    companion object {
+
+        /**
+         * Returns a mutable builder for constructing an instance of [CreditNoteListPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [CreditNoteListPage]. */
+    class Builder internal constructor() {
+
+        private var service: CreditNoteService? = null
+        private var params: CreditNoteListParams? = null
+        private var response: CreditNoteListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(creditNoteListPage: CreditNoteListPage) = apply {
+            service = creditNoteListPage.service
+            params = creditNoteListPage.params
+            response = creditNoteListPage.response
+        }
+
+        fun service(service: CreditNoteService) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: CreditNoteListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: CreditNoteListPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [CreditNoteListPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): CreditNoteListPage =
+            CreditNoteListPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is CreditNoteListPage && creditNotesService == other.creditNotesService && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is CreditNoteListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(creditNotesService, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
 
     override fun toString() =
-        "CreditNoteListPage{creditNotesService=$creditNotesService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        if (data().isEmpty()) {
-            return false
-        }
-
-        return paginationMetadata().nextCursor().isPresent
-    }
-
-    fun getNextPageParams(): Optional<CreditNoteListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
-
-        return Optional.of(
-            CreditNoteListParams.builder()
-                .from(params)
-                .apply { paginationMetadata().nextCursor().ifPresent { this.cursor(it) } }
-                .build()
-        )
-    }
-
-    fun getNextPage(): Optional<CreditNoteListPage> {
-        return getNextPageParams().map { creditNotesService.list(it) }
-    }
-
-    fun autoPager(): AutoPager = AutoPager(this)
-
-    companion object {
-
-        @JvmStatic
-        fun of(
-            creditNotesService: CreditNoteService,
-            params: CreditNoteListParams,
-            response: Response
-        ) =
-            CreditNoteListPage(
-                creditNotesService,
-                params,
-                response,
-            )
-    }
-
-    @JsonDeserialize(builder = Response.Builder::class)
-    @NoAutoDetect
-    class Response
-    constructor(
-        private val data: JsonField<List<CreditNote>>,
-        private val paginationMetadata: JsonField<PaginationMetadata>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        private var validated: Boolean = false
-
-        fun data(): List<CreditNote> = data.getNullable("data") ?: listOf()
-
-        fun paginationMetadata(): PaginationMetadata =
-            paginationMetadata.getRequired("pagination_metadata")
-
-        @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<CreditNote>>> = Optional.ofNullable(data)
-
-        @JsonProperty("pagination_metadata")
-        fun _paginationMetadata(): Optional<JsonField<PaginationMetadata>> =
-            Optional.ofNullable(paginationMetadata)
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): Response = apply {
-            if (!validated) {
-                data().map { it.validate() }
-                paginationMetadata().validate()
-                validated = true
-            }
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && data == other.data && paginationMetadata == other.paginationMetadata && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(data, paginationMetadata, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{data=$data, paginationMetadata=$paginationMetadata, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var data: JsonField<List<CreditNote>> = JsonMissing.of()
-            private var paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.data = page.data
-                this.paginationMetadata = page.paginationMetadata
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun data(data: List<CreditNote>) = data(JsonField.of(data))
-
-            @JsonProperty("data")
-            fun data(data: JsonField<List<CreditNote>>) = apply { this.data = data }
-
-            fun paginationMetadata(paginationMetadata: PaginationMetadata) =
-                paginationMetadata(JsonField.of(paginationMetadata))
-
-            @JsonProperty("pagination_metadata")
-            fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply {
-                this.paginationMetadata = paginationMetadata
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
-        }
-    }
-
-    class AutoPager
-    constructor(
-        private val firstPage: CreditNoteListPage,
-    ) : Iterable<CreditNote> {
-
-        override fun iterator(): Iterator<CreditNote> = iterator {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.data().size) {
-                    yield(page.data()[index++])
-                }
-                page = page.getNextPage().orElse(null) ?: break
-                index = 0
-            }
-        }
-
-        fun stream(): Stream<CreditNote> {
-            return StreamSupport.stream(spliterator(), false)
-        }
-    }
+        "CreditNoteListPage{service=$service, params=$params, response=$response}"
 }

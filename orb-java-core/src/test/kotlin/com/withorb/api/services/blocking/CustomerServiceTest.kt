@@ -4,43 +4,43 @@ package com.withorb.api.services.blocking
 
 import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClient
-import com.withorb.api.models.*
-import com.withorb.api.models.CustomerListParams
+import com.withorb.api.core.JsonValue
+import com.withorb.api.models.CustomerCreateParams
+import com.withorb.api.models.CustomerUpdateByExternalIdParams
+import com.withorb.api.models.CustomerUpdateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class CustomerServiceTest {
+internal class CustomerServiceTest {
 
     @Test
-    fun callCreate() {
+    fun create() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val customerService = client.customers()
+
         val customer =
             customerService.create(
                 CustomerCreateParams.builder()
-                    .email("dev@stainlessapi.com")
+                    .email("dev@stainless.com")
                     .name("x")
                     .accountingSyncConfiguration(
                         CustomerCreateParams.AccountingSyncConfiguration.builder()
-                            .accountingProviders(
-                                listOf(
-                                    CustomerCreateParams.AccountingSyncConfiguration
-                                        .AccountingProvider
-                                        .builder()
-                                        .externalProviderId("external_provider_id")
-                                        .providerType("provider_type")
-                                        .build()
-                                )
+                            .addAccountingProvider(
+                                CustomerCreateParams.AccountingSyncConfiguration.AccountingProvider
+                                    .builder()
+                                    .externalProviderId("external_provider_id")
+                                    .providerType("provider_type")
+                                    .build()
                             )
                             .excluded(true)
                             .build()
                     )
-                    .additionalEmails(listOf("string"))
+                    .addAdditionalEmail("dev@stainless.com")
                     .autoCollection(true)
                     .billingAddress(
                         CustomerCreateParams.BillingAddress.builder()
@@ -55,7 +55,17 @@ class CustomerServiceTest {
                     .currency("currency")
                     .emailDelivery(true)
                     .externalCustomerId("external_customer_id")
-                    .metadata(CustomerCreateParams.Metadata.builder().build())
+                    .hierarchy(
+                        CustomerCreateParams.Hierarchy.builder()
+                            .addChildCustomerId("string")
+                            .parentCustomerId("parent_customer_id")
+                            .build()
+                    )
+                    .metadata(
+                        CustomerCreateParams.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .paymentProvider(CustomerCreateParams.PaymentProvider.QUICKBOOKS)
                     .paymentProviderId("payment_provider_id")
                     .reportingConfiguration(
@@ -72,18 +82,10 @@ class CustomerServiceTest {
                             .build()
                     )
                     .taxConfiguration(
-                        CustomerCreateParams.TaxConfiguration.ofNewAvalaraTaxConfiguration(
-                            CustomerCreateParams.TaxConfiguration.NewAvalaraTaxConfiguration
-                                .builder()
-                                .taxExempt(true)
-                                .taxProvider(
-                                    CustomerCreateParams.TaxConfiguration.NewAvalaraTaxConfiguration
-                                        .TaxProvider
-                                        .AVALARA
-                                )
-                                .taxExemptionCode("tax_exemption_code")
-                                .build()
-                        )
+                        CustomerCreateParams.TaxConfiguration.Avalara.builder()
+                            .taxExempt(true)
+                            .taxExemptionCode("tax_exemption_code")
+                            .build()
                     )
                     .taxId(
                         CustomerCreateParams.TaxId.builder()
@@ -95,38 +97,36 @@ class CustomerServiceTest {
                     .timezone("timezone")
                     .build()
             )
-        println(customer)
+
         customer.validate()
     }
 
     @Test
-    fun callUpdate() {
+    fun update() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val customerService = client.customers()
+
         val customer =
             customerService.update(
                 CustomerUpdateParams.builder()
                     .customerId("customer_id")
                     .accountingSyncConfiguration(
                         CustomerUpdateParams.AccountingSyncConfiguration.builder()
-                            .accountingProviders(
-                                listOf(
-                                    CustomerUpdateParams.AccountingSyncConfiguration
-                                        .AccountingProvider
-                                        .builder()
-                                        .externalProviderId("external_provider_id")
-                                        .providerType("provider_type")
-                                        .build()
-                                )
+                            .addAccountingProvider(
+                                CustomerUpdateParams.AccountingSyncConfiguration.AccountingProvider
+                                    .builder()
+                                    .externalProviderId("external_provider_id")
+                                    .providerType("provider_type")
+                                    .build()
                             )
                             .excluded(true)
                             .build()
                     )
-                    .additionalEmails(listOf("string"))
+                    .addAdditionalEmail("string")
                     .autoCollection(true)
                     .billingAddress(
                         CustomerUpdateParams.BillingAddress.builder()
@@ -139,10 +139,20 @@ class CustomerServiceTest {
                             .build()
                     )
                     .currency("currency")
-                    .email("dev@stainlessapi.com")
+                    .email("dev@stainless.com")
                     .emailDelivery(true)
                     .externalCustomerId("external_customer_id")
-                    .metadata(CustomerUpdateParams.Metadata.builder().build())
+                    .hierarchy(
+                        CustomerUpdateParams.Hierarchy.builder()
+                            .addChildCustomerId("string")
+                            .parentCustomerId("parent_customer_id")
+                            .build()
+                    )
+                    .metadata(
+                        CustomerUpdateParams.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .name("name")
                     .paymentProvider(CustomerUpdateParams.PaymentProvider.QUICKBOOKS)
                     .paymentProviderId("payment_provider_id")
@@ -160,18 +170,10 @@ class CustomerServiceTest {
                             .build()
                     )
                     .taxConfiguration(
-                        CustomerUpdateParams.TaxConfiguration.ofNewAvalaraTaxConfiguration(
-                            CustomerUpdateParams.TaxConfiguration.NewAvalaraTaxConfiguration
-                                .builder()
-                                .taxExempt(true)
-                                .taxProvider(
-                                    CustomerUpdateParams.TaxConfiguration.NewAvalaraTaxConfiguration
-                                        .TaxProvider
-                                        .AVALARA
-                                )
-                                .taxExemptionCode("tax_exemption_code")
-                                .build()
-                        )
+                        CustomerUpdateParams.TaxConfiguration.Avalara.builder()
+                            .taxExempt(true)
+                            .taxExemptionCode("tax_exemption_code")
+                            .build()
                     )
                     .taxId(
                         CustomerUpdateParams.TaxId.builder()
@@ -182,94 +184,115 @@ class CustomerServiceTest {
                     )
                     .build()
             )
-        println(customer)
+
         customer.validate()
     }
 
     @Test
-    fun callList() {
+    fun list() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val customerService = client.customers()
-        val customers = customerService.list(CustomerListParams.builder().build())
-        println(customers)
-        customers.data().forEach { it.validate() }
+
+        val page = customerService.list()
+
+        page.response().validate()
     }
 
     @Test
-    fun callDelete() {
+    fun delete() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val customerService = client.customers()
-        customerService.delete(CustomerDeleteParams.builder().customerId("customer_id").build())
+
+        customerService.delete("customer_id")
     }
 
     @Test
-    fun callFetch() {
+    fun fetch() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val customerService = client.customers()
-        val customer =
-            customerService.fetch(CustomerFetchParams.builder().customerId("customer_id").build())
-        println(customer)
+
+        val customer = customerService.fetch("customer_id")
+
         customer.validate()
     }
 
     @Test
-    fun callFetchByExternalId() {
+    fun fetchByExternalId() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val customerService = client.customers()
-        val customer =
-            customerService.fetchByExternalId(
-                CustomerFetchByExternalIdParams.builder()
-                    .externalCustomerId("external_customer_id")
-                    .build()
-            )
-        println(customer)
+
+        val customer = customerService.fetchByExternalId("external_customer_id")
+
         customer.validate()
     }
 
     @Test
-    fun callUpdateByExternalId() {
+    fun syncPaymentMethodsFromGateway() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val customerService = client.customers()
+
+        customerService.syncPaymentMethodsFromGateway("customer_id")
+    }
+
+    @Test
+    fun syncPaymentMethodsFromGatewayByExternalCustomerId() {
+        val client =
+            OrbOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val customerService = client.customers()
+
+        customerService.syncPaymentMethodsFromGatewayByExternalCustomerId("external_customer_id")
+    }
+
+    @Test
+    fun updateByExternalId() {
+        val client =
+            OrbOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val customerService = client.customers()
+
         val customer =
             customerService.updateByExternalId(
                 CustomerUpdateByExternalIdParams.builder()
                     .id("external_customer_id")
                     .accountingSyncConfiguration(
                         CustomerUpdateByExternalIdParams.AccountingSyncConfiguration.builder()
-                            .accountingProviders(
-                                listOf(
-                                    CustomerUpdateByExternalIdParams.AccountingSyncConfiguration
-                                        .AccountingProvider
-                                        .builder()
-                                        .externalProviderId("external_provider_id")
-                                        .providerType("provider_type")
-                                        .build()
-                                )
+                            .addAccountingProvider(
+                                CustomerUpdateByExternalIdParams.AccountingSyncConfiguration
+                                    .AccountingProvider
+                                    .builder()
+                                    .externalProviderId("external_provider_id")
+                                    .providerType("provider_type")
+                                    .build()
                             )
                             .excluded(true)
                             .build()
                     )
-                    .additionalEmails(listOf("string"))
+                    .addAdditionalEmail("string")
                     .autoCollection(true)
                     .billingAddress(
                         CustomerUpdateByExternalIdParams.BillingAddress.builder()
@@ -282,10 +305,20 @@ class CustomerServiceTest {
                             .build()
                     )
                     .currency("currency")
-                    .email("dev@stainlessapi.com")
+                    .email("dev@stainless.com")
                     .emailDelivery(true)
                     .externalCustomerId("external_customer_id")
-                    .metadata(CustomerUpdateByExternalIdParams.Metadata.builder().build())
+                    .hierarchy(
+                        CustomerUpdateByExternalIdParams.Hierarchy.builder()
+                            .addChildCustomerId("string")
+                            .parentCustomerId("parent_customer_id")
+                            .build()
+                    )
+                    .metadata(
+                        CustomerUpdateByExternalIdParams.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .name("name")
                     .paymentProvider(CustomerUpdateByExternalIdParams.PaymentProvider.QUICKBOOKS)
                     .paymentProviderId("payment_provider_id")
@@ -305,21 +338,10 @@ class CustomerServiceTest {
                             .build()
                     )
                     .taxConfiguration(
-                        CustomerUpdateByExternalIdParams.TaxConfiguration
-                            .ofNewAvalaraTaxConfiguration(
-                                CustomerUpdateByExternalIdParams.TaxConfiguration
-                                    .NewAvalaraTaxConfiguration
-                                    .builder()
-                                    .taxExempt(true)
-                                    .taxProvider(
-                                        CustomerUpdateByExternalIdParams.TaxConfiguration
-                                            .NewAvalaraTaxConfiguration
-                                            .TaxProvider
-                                            .AVALARA
-                                    )
-                                    .taxExemptionCode("tax_exemption_code")
-                                    .build()
-                            )
+                        CustomerUpdateByExternalIdParams.TaxConfiguration.Avalara.builder()
+                            .taxExempt(true)
+                            .taxExemptionCode("tax_exemption_code")
+                            .build()
                     )
                     .taxId(
                         CustomerUpdateByExternalIdParams.TaxId.builder()
@@ -330,7 +352,7 @@ class CustomerServiceTest {
                     )
                     .build()
             )
-        println(customer)
+
         customer.validate()
     }
 }

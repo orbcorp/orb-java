@@ -2,58 +2,39 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/** This endpoint returns a price given an identifier. */
 class PriceFetchParams
-constructor(
-    private val priceId: String,
+private constructor(
+    private val priceId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun priceId(): String = priceId
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> priceId
-            else -> ""
-        }
-    }
+    fun priceId(): Optional<String> = Optional.ofNullable(priceId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is PriceFetchParams && priceId == other.priceId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(priceId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "PriceFetchParams{priceId=$priceId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): PriceFetchParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [PriceFetchParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [PriceFetchParams]. */
+    class Builder internal constructor() {
 
         private var priceId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -61,12 +42,15 @@ constructor(
 
         @JvmSynthetic
         internal fun from(priceFetchParams: PriceFetchParams) = apply {
-            this.priceId = priceFetchParams.priceId
-            additionalHeaders(priceFetchParams.additionalHeaders)
-            additionalQueryParams(priceFetchParams.additionalQueryParams)
+            priceId = priceFetchParams.priceId
+            additionalHeaders = priceFetchParams.additionalHeaders.toBuilder()
+            additionalQueryParams = priceFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun priceId(priceId: String) = apply { this.priceId = priceId }
+        fun priceId(priceId: String?) = apply { this.priceId = priceId }
+
+        /** Alias for calling [Builder.priceId] with `priceId.orElse(null)`. */
+        fun priceId(priceId: Optional<String>) = priceId(priceId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,11 +150,35 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [PriceFetchParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): PriceFetchParams =
-            PriceFetchParams(
-                checkNotNull(priceId) { "`priceId` is required but was not set" },
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            PriceFetchParams(priceId, additionalHeaders.build(), additionalQueryParams.build())
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> priceId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is PriceFetchParams && priceId == other.priceId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(priceId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "PriceFetchParams{priceId=$priceId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

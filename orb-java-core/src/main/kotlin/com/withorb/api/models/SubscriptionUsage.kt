@@ -20,80 +20,109 @@ import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.allMaxBy
+import com.withorb.api.core.checkKnown
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.getOrThrow
 import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @JsonDeserialize(using = SubscriptionUsage.Deserializer::class)
 @JsonSerialize(using = SubscriptionUsage.Serializer::class)
 class SubscriptionUsage
 private constructor(
-    private val ungroupedSubscriptionUsage: UngroupedSubscriptionUsage? = null,
-    private val groupedSubscriptionUsage: GroupedSubscriptionUsage? = null,
+    private val ungrouped: UngroupedSubscriptionUsage? = null,
+    private val grouped: GroupedSubscriptionUsage? = null,
     private val _json: JsonValue? = null,
 ) {
 
-    private var validated: Boolean = false
+    fun ungrouped(): Optional<UngroupedSubscriptionUsage> = Optional.ofNullable(ungrouped)
 
-    fun ungroupedSubscriptionUsage(): Optional<UngroupedSubscriptionUsage> =
-        Optional.ofNullable(ungroupedSubscriptionUsage)
+    fun grouped(): Optional<GroupedSubscriptionUsage> = Optional.ofNullable(grouped)
 
-    fun groupedSubscriptionUsage(): Optional<GroupedSubscriptionUsage> =
-        Optional.ofNullable(groupedSubscriptionUsage)
+    fun isUngrouped(): Boolean = ungrouped != null
 
-    fun isUngroupedSubscriptionUsage(): Boolean = ungroupedSubscriptionUsage != null
+    fun isGrouped(): Boolean = grouped != null
 
-    fun isGroupedSubscriptionUsage(): Boolean = groupedSubscriptionUsage != null
+    fun asUngrouped(): UngroupedSubscriptionUsage = ungrouped.getOrThrow("ungrouped")
 
-    fun asUngroupedSubscriptionUsage(): UngroupedSubscriptionUsage =
-        ungroupedSubscriptionUsage.getOrThrow("ungroupedSubscriptionUsage")
-
-    fun asGroupedSubscriptionUsage(): GroupedSubscriptionUsage =
-        groupedSubscriptionUsage.getOrThrow("groupedSubscriptionUsage")
+    fun asGrouped(): GroupedSubscriptionUsage = grouped.getOrThrow("grouped")
 
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
-    fun <T> accept(visitor: Visitor<T>): T {
-        return when {
-            ungroupedSubscriptionUsage != null ->
-                visitor.visitUngroupedSubscriptionUsage(ungroupedSubscriptionUsage)
-            groupedSubscriptionUsage != null ->
-                visitor.visitGroupedSubscriptionUsage(groupedSubscriptionUsage)
+    fun <T> accept(visitor: Visitor<T>): T =
+        when {
+            ungrouped != null -> visitor.visitUngrouped(ungrouped)
+            grouped != null -> visitor.visitGrouped(grouped)
             else -> visitor.unknown(_json)
         }
-    }
+
+    private var validated: Boolean = false
 
     fun validate(): SubscriptionUsage = apply {
-        if (!validated) {
-            if (ungroupedSubscriptionUsage == null && groupedSubscriptionUsage == null) {
-                throw OrbInvalidDataException("Unknown SubscriptionUsage: $_json")
-            }
-            ungroupedSubscriptionUsage?.validate()
-            groupedSubscriptionUsage?.validate()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        accept(
+            object : Visitor<Unit> {
+                override fun visitUngrouped(ungrouped: UngroupedSubscriptionUsage) {
+                    ungrouped.validate()
+                }
+
+                override fun visitGrouped(grouped: GroupedSubscriptionUsage) {
+                    grouped.validate()
+                }
+            }
+        )
+        validated = true
     }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: OrbInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        accept(
+            object : Visitor<Int> {
+                override fun visitUngrouped(ungrouped: UngroupedSubscriptionUsage) =
+                    ungrouped.validity()
+
+                override fun visitGrouped(grouped: GroupedSubscriptionUsage) = grouped.validity()
+
+                override fun unknown(json: JsonValue?) = 0
+            }
+        )
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionUsage && ungroupedSubscriptionUsage == other.ungroupedSubscriptionUsage && groupedSubscriptionUsage == other.groupedSubscriptionUsage /* spotless:on */
+        return /* spotless:off */ other is SubscriptionUsage && ungrouped == other.ungrouped && grouped == other.grouped /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(ungroupedSubscriptionUsage, groupedSubscriptionUsage) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(ungrouped, grouped) /* spotless:on */
 
     override fun toString(): String =
         when {
-            ungroupedSubscriptionUsage != null ->
-                "SubscriptionUsage{ungroupedSubscriptionUsage=$ungroupedSubscriptionUsage}"
-            groupedSubscriptionUsage != null ->
-                "SubscriptionUsage{groupedSubscriptionUsage=$groupedSubscriptionUsage}"
+            ungrouped != null -> "SubscriptionUsage{ungrouped=$ungrouped}"
+            grouped != null -> "SubscriptionUsage{grouped=$grouped}"
             _json != null -> "SubscriptionUsage{_unknown=$_json}"
             else -> throw IllegalStateException("Invalid SubscriptionUsage")
         }
@@ -101,221 +130,407 @@ private constructor(
     companion object {
 
         @JvmStatic
-        fun ofUngroupedSubscriptionUsage(ungroupedSubscriptionUsage: UngroupedSubscriptionUsage) =
-            SubscriptionUsage(ungroupedSubscriptionUsage = ungroupedSubscriptionUsage)
+        fun ofUngrouped(ungrouped: UngroupedSubscriptionUsage) =
+            SubscriptionUsage(ungrouped = ungrouped)
 
         @JvmStatic
-        fun ofGroupedSubscriptionUsage(groupedSubscriptionUsage: GroupedSubscriptionUsage) =
-            SubscriptionUsage(groupedSubscriptionUsage = groupedSubscriptionUsage)
+        fun ofGrouped(grouped: GroupedSubscriptionUsage) = SubscriptionUsage(grouped = grouped)
     }
 
+    /**
+     * An interface that defines how to map each variant of [SubscriptionUsage] to a value of type
+     * [T].
+     */
     interface Visitor<out T> {
 
-        fun visitUngroupedSubscriptionUsage(
-            ungroupedSubscriptionUsage: UngroupedSubscriptionUsage
-        ): T
+        fun visitUngrouped(ungrouped: UngroupedSubscriptionUsage): T
 
-        fun visitGroupedSubscriptionUsage(groupedSubscriptionUsage: GroupedSubscriptionUsage): T
+        fun visitGrouped(grouped: GroupedSubscriptionUsage): T
 
+        /**
+         * Maps an unknown variant of [SubscriptionUsage] to a value of type [T].
+         *
+         * An instance of [SubscriptionUsage] can contain an unknown variant if it was deserialized
+         * from data that doesn't match any known variant. For example, if the SDK is on an older
+         * version than the API, then the API may respond with new variants that the SDK is unaware
+         * of.
+         *
+         * @throws OrbInvalidDataException in the default implementation.
+         */
         fun unknown(json: JsonValue?): T {
             throw OrbInvalidDataException("Unknown SubscriptionUsage: $json")
         }
     }
 
-    class Deserializer : BaseDeserializer<SubscriptionUsage>(SubscriptionUsage::class) {
+    internal class Deserializer : BaseDeserializer<SubscriptionUsage>(SubscriptionUsage::class) {
 
         override fun ObjectCodec.deserialize(node: JsonNode): SubscriptionUsage {
             val json = JsonValue.fromJsonNode(node)
 
-            tryDeserialize(node, jacksonTypeRef<UngroupedSubscriptionUsage>()) { it.validate() }
-                ?.let {
-                    return SubscriptionUsage(ungroupedSubscriptionUsage = it, _json = json)
-                }
-            tryDeserialize(node, jacksonTypeRef<GroupedSubscriptionUsage>()) { it.validate() }
-                ?.let {
-                    return SubscriptionUsage(groupedSubscriptionUsage = it, _json = json)
-                }
-
-            return SubscriptionUsage(_json = json)
+            val bestMatches =
+                sequenceOf(
+                        tryDeserialize(node, jacksonTypeRef<UngroupedSubscriptionUsage>())?.let {
+                            SubscriptionUsage(ungrouped = it, _json = json)
+                        },
+                        tryDeserialize(node, jacksonTypeRef<GroupedSubscriptionUsage>())?.let {
+                            SubscriptionUsage(grouped = it, _json = json)
+                        },
+                    )
+                    .filterNotNull()
+                    .allMaxBy { it.validity() }
+                    .toList()
+            return when (bestMatches.size) {
+                // This can happen if what we're deserializing is completely incompatible with all
+                // the possible variants (e.g. deserializing from boolean).
+                0 -> SubscriptionUsage(_json = json)
+                1 -> bestMatches.single()
+                // If there's more than one match with the highest validity, then use the first
+                // completely valid match, or simply the first match if none are completely valid.
+                else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+            }
         }
     }
 
-    class Serializer : BaseSerializer<SubscriptionUsage>(SubscriptionUsage::class) {
+    internal class Serializer : BaseSerializer<SubscriptionUsage>(SubscriptionUsage::class) {
 
         override fun serialize(
             value: SubscriptionUsage,
             generator: JsonGenerator,
-            provider: SerializerProvider
+            provider: SerializerProvider,
         ) {
             when {
-                value.ungroupedSubscriptionUsage != null ->
-                    generator.writeObject(value.ungroupedSubscriptionUsage)
-                value.groupedSubscriptionUsage != null ->
-                    generator.writeObject(value.groupedSubscriptionUsage)
+                value.ungrouped != null -> generator.writeObject(value.ungrouped)
+                value.grouped != null -> generator.writeObject(value.grouped)
                 value._json != null -> generator.writeObject(value._json)
                 else -> throw IllegalStateException("Invalid SubscriptionUsage")
             }
         }
     }
 
-    @JsonDeserialize(builder = UngroupedSubscriptionUsage.Builder::class)
-    @NoAutoDetect
     class UngroupedSubscriptionUsage
     private constructor(
         private val data: JsonField<List<Data>>,
-        private val additionalProperties: Map<String, JsonValue>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
+        @JsonCreator
+        private constructor(
+            @JsonProperty("data") @ExcludeMissing data: JsonField<List<Data>> = JsonMissing.of()
+        ) : this(data, mutableMapOf())
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun data(): List<Data> = data.getRequired("data")
 
-        @JsonProperty("data") @ExcludeMissing fun _data() = data
+        /**
+         * Returns the raw JSON value of [data].
+         *
+         * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Data>> = data
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): UngroupedSubscriptionUsage = apply {
-            if (!validated) {
-                data().forEach { it.validate() }
-                validated = true
-            }
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of
+             * [UngroupedSubscriptionUsage].
+             *
+             * The following fields are required:
+             * ```java
+             * .data()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [UngroupedSubscriptionUsage]. */
+        class Builder internal constructor() {
 
-            private var data: JsonField<List<Data>> = JsonMissing.of()
+            private var data: JsonField<MutableList<Data>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(ungroupedSubscriptionUsage: UngroupedSubscriptionUsage) = apply {
-                this.data = ungroupedSubscriptionUsage.data
-                additionalProperties(ungroupedSubscriptionUsage.additionalProperties)
+                data = ungroupedSubscriptionUsage.data.map { it.toMutableList() }
+                additionalProperties =
+                    ungroupedSubscriptionUsage.additionalProperties.toMutableMap()
             }
 
             fun data(data: List<Data>) = data(JsonField.of(data))
 
-            @JsonProperty("data")
-            @ExcludeMissing
-            fun data(data: JsonField<List<Data>>) = apply { this.data = data }
+            /**
+             * Sets [Builder.data] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.data] with a well-typed `List<Data>` value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun data(data: JsonField<List<Data>>) = apply {
+                this.data = data.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [Data] to [Builder.data].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addData(data: Data) = apply {
+                this.data =
+                    (this.data ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("data", it).add(data)
+                    }
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
             }
 
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [UngroupedSubscriptionUsage].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .data()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): UngroupedSubscriptionUsage =
                 UngroupedSubscriptionUsage(
-                    data.map { it.toImmutable() },
-                    additionalProperties.toImmutable()
+                    checkRequired("data", data).map { it.toImmutable() },
+                    additionalProperties.toMutableMap(),
                 )
         }
 
-        @JsonDeserialize(builder = Data.Builder::class)
-        @NoAutoDetect
+        private var validated: Boolean = false
+
+        fun validate(): UngroupedSubscriptionUsage = apply {
+            if (validated) {
+                return@apply
+            }
+
+            data().forEach { it.validate() }
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+
         class Data
         private constructor(
-            private val usage: JsonField<List<Usage>>,
             private val billableMetric: JsonField<BillableMetric>,
+            private val usage: JsonField<List<Usage>>,
             private val viewMode: JsonField<ViewMode>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("billable_metric")
+                @ExcludeMissing
+                billableMetric: JsonField<BillableMetric> = JsonMissing.of(),
+                @JsonProperty("usage")
+                @ExcludeMissing
+                usage: JsonField<List<Usage>> = JsonMissing.of(),
+                @JsonProperty("view_mode")
+                @ExcludeMissing
+                viewMode: JsonField<ViewMode> = JsonMissing.of(),
+            ) : this(billableMetric, usage, viewMode, mutableMapOf())
 
-            fun usage(): List<Usage> = usage.getRequired("usage")
-
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun billableMetric(): BillableMetric = billableMetric.getRequired("billable_metric")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun usage(): List<Usage> = usage.getRequired("usage")
+
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun viewMode(): ViewMode = viewMode.getRequired("view_mode")
 
-            @JsonProperty("usage") @ExcludeMissing fun _usage() = usage
+            /**
+             * Returns the raw JSON value of [billableMetric].
+             *
+             * Unlike [billableMetric], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("billable_metric")
+            @ExcludeMissing
+            fun _billableMetric(): JsonField<BillableMetric> = billableMetric
 
-            @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
+            /**
+             * Returns the raw JSON value of [usage].
+             *
+             * Unlike [usage], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("usage") @ExcludeMissing fun _usage(): JsonField<List<Usage>> = usage
 
-            @JsonProperty("view_mode") @ExcludeMissing fun _viewMode() = viewMode
+            /**
+             * Returns the raw JSON value of [viewMode].
+             *
+             * Unlike [viewMode], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("view_mode")
+            @ExcludeMissing
+            fun _viewMode(): JsonField<ViewMode> = viewMode
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): Data = apply {
-                if (!validated) {
-                    usage().forEach { it.validate() }
-                    billableMetric().validate()
-                    viewMode()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Data].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .billableMetric()
+                 * .usage()
+                 * .viewMode()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [Data]. */
+            class Builder internal constructor() {
 
-                private var usage: JsonField<List<Usage>> = JsonMissing.of()
-                private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
-                private var viewMode: JsonField<ViewMode> = JsonMissing.of()
+                private var billableMetric: JsonField<BillableMetric>? = null
+                private var usage: JsonField<MutableList<Usage>>? = null
+                private var viewMode: JsonField<ViewMode>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(data: Data) = apply {
-                    this.usage = data.usage
-                    this.billableMetric = data.billableMetric
-                    this.viewMode = data.viewMode
-                    additionalProperties(data.additionalProperties)
+                    billableMetric = data.billableMetric
+                    usage = data.usage.map { it.toMutableList() }
+                    viewMode = data.viewMode
+                    additionalProperties = data.additionalProperties.toMutableMap()
                 }
-
-                fun usage(usage: List<Usage>) = usage(JsonField.of(usage))
-
-                @JsonProperty("usage")
-                @ExcludeMissing
-                fun usage(usage: JsonField<List<Usage>>) = apply { this.usage = usage }
 
                 fun billableMetric(billableMetric: BillableMetric) =
                     billableMetric(JsonField.of(billableMetric))
 
-                @JsonProperty("billable_metric")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.billableMetric] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.billableMetric] with a well-typed
+                 * [BillableMetric] value instead. This method is primarily for setting the field to
+                 * an undocumented or not yet supported value.
+                 */
                 fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                     this.billableMetric = billableMetric
                 }
 
+                fun usage(usage: List<Usage>) = usage(JsonField.of(usage))
+
+                /**
+                 * Sets [Builder.usage] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.usage] with a well-typed `List<Usage>` value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun usage(usage: JsonField<List<Usage>>) = apply {
+                    this.usage = usage.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Usage] to [Builder.usage].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addUsage(usage: Usage) = apply {
+                    this.usage =
+                        (this.usage ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("usage", it).add(usage)
+                        }
+                }
+
                 fun viewMode(viewMode: ViewMode) = viewMode(JsonField.of(viewMode))
 
-                @JsonProperty("view_mode")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.viewMode] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.viewMode] with a well-typed [ViewMode] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun viewMode(viewMode: JsonField<ViewMode>) = apply { this.viewMode = viewMode }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -323,86 +538,181 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Data].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .billableMetric()
+                 * .usage()
+                 * .viewMode()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Data =
                     Data(
-                        usage.map { it.toImmutable() },
-                        billableMetric,
-                        viewMode,
-                        additionalProperties.toImmutable(),
+                        checkRequired("billableMetric", billableMetric),
+                        checkRequired("usage", usage).map { it.toImmutable() },
+                        checkRequired("viewMode", viewMode),
+                        additionalProperties.toMutableMap(),
                     )
             }
 
-            @JsonDeserialize(builder = BillableMetric.Builder::class)
-            @NoAutoDetect
+            private var validated: Boolean = false
+
+            fun validate(): Data = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                billableMetric().validate()
+                usage().forEach { it.validate() }
+                viewMode().validate()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
+                    (usage.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (viewMode.asKnown().getOrNull()?.validity() ?: 0)
+
             class BillableMetric
             private constructor(
                 private val id: JsonField<String>,
                 private val name: JsonField<String>,
-                private val additionalProperties: Map<String, JsonValue>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
             ) {
 
-                private var validated: Boolean = false
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+                ) : this(id, name, mutableMapOf())
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun id(): String = id.getRequired("id")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun name(): String = name.getRequired("name")
 
-                @JsonProperty("id") @ExcludeMissing fun _id() = id
+                /**
+                 * Returns the raw JSON value of [id].
+                 *
+                 * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+                 */
+                @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-                @JsonProperty("name") @ExcludeMissing fun _name() = name
+                /**
+                 * Returns the raw JSON value of [name].
+                 *
+                 * Unlike [name], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
 
                 @JsonAnyGetter
                 @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-                fun validate(): BillableMetric = apply {
-                    if (!validated) {
-                        id()
-                        name()
-                        validated = true
-                    }
-                }
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
 
                 fun toBuilder() = Builder().from(this)
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [BillableMetric].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .id()
+                     * .name()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
-                class Builder {
+                /** A builder for [BillableMetric]. */
+                class Builder internal constructor() {
 
-                    private var id: JsonField<String> = JsonMissing.of()
-                    private var name: JsonField<String> = JsonMissing.of()
+                    private var id: JsonField<String>? = null
+                    private var name: JsonField<String>? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(billableMetric: BillableMetric) = apply {
-                        this.id = billableMetric.id
-                        this.name = billableMetric.name
-                        additionalProperties(billableMetric.additionalProperties)
+                        id = billableMetric.id
+                        name = billableMetric.name
+                        additionalProperties = billableMetric.additionalProperties.toMutableMap()
                     }
 
                     fun id(id: String) = id(JsonField.of(id))
 
-                    @JsonProperty("id")
-                    @ExcludeMissing
+                    /**
+                     * Sets [Builder.id] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.id] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun id(id: JsonField<String>) = apply { this.id = id }
 
                     fun name(name: String) = name(JsonField.of(name))
 
-                    @JsonProperty("name")
-                    @ExcludeMissing
+                    /**
+                     * Sets [Builder.name] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.name] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun name(name: JsonField<String>) = apply { this.name = name }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
-                        this.additionalProperties.putAll(additionalProperties)
+                        putAllAdditionalProperties(additionalProperties)
                     }
 
-                    @JsonAnySetter
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        this.additionalProperties.put(key, value)
+                        additionalProperties.put(key, value)
                     }
 
                     fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -410,13 +720,65 @@ private constructor(
                             this.additionalProperties.putAll(additionalProperties)
                         }
 
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [BillableMetric].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .id()
+                     * .name()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): BillableMetric =
                         BillableMetric(
-                            id,
-                            name,
-                            additionalProperties.toImmutable(),
+                            checkRequired("id", id),
+                            checkRequired("name", name),
+                            additionalProperties.toMutableMap(),
                         )
                 }
+
+                private var validated: Boolean = false
+
+                fun validate(): BillableMetric = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    id()
+                    name()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (if (id.asKnown().isPresent) 1 else 0) +
+                        (if (name.asKnown().isPresent) 1 else 0)
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -436,99 +798,167 @@ private constructor(
                     "BillableMetric{id=$id, name=$name, additionalProperties=$additionalProperties}"
             }
 
-            @JsonDeserialize(builder = Usage.Builder::class)
-            @NoAutoDetect
             class Usage
             private constructor(
                 private val quantity: JsonField<Double>,
-                private val timeframeStart: JsonField<OffsetDateTime>,
                 private val timeframeEnd: JsonField<OffsetDateTime>,
-                private val additionalProperties: Map<String, JsonValue>,
+                private val timeframeStart: JsonField<OffsetDateTime>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
             ) {
 
-                private var validated: Boolean = false
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("quantity")
+                    @ExcludeMissing
+                    quantity: JsonField<Double> = JsonMissing.of(),
+                    @JsonProperty("timeframe_end")
+                    @ExcludeMissing
+                    timeframeEnd: JsonField<OffsetDateTime> = JsonMissing.of(),
+                    @JsonProperty("timeframe_start")
+                    @ExcludeMissing
+                    timeframeStart: JsonField<OffsetDateTime> = JsonMissing.of(),
+                ) : this(quantity, timeframeEnd, timeframeStart, mutableMapOf())
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun quantity(): Double = quantity.getRequired("quantity")
 
-                fun timeframeStart(): OffsetDateTime = timeframeStart.getRequired("timeframe_start")
-
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun timeframeEnd(): OffsetDateTime = timeframeEnd.getRequired("timeframe_end")
 
-                @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
+                fun timeframeStart(): OffsetDateTime = timeframeStart.getRequired("timeframe_start")
 
+                /**
+                 * Returns the raw JSON value of [quantity].
+                 *
+                 * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("quantity")
+                @ExcludeMissing
+                fun _quantity(): JsonField<Double> = quantity
+
+                /**
+                 * Returns the raw JSON value of [timeframeEnd].
+                 *
+                 * Unlike [timeframeEnd], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("timeframe_end")
+                @ExcludeMissing
+                fun _timeframeEnd(): JsonField<OffsetDateTime> = timeframeEnd
+
+                /**
+                 * Returns the raw JSON value of [timeframeStart].
+                 *
+                 * Unlike [timeframeStart], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("timeframe_start")
                 @ExcludeMissing
-                fun _timeframeStart() = timeframeStart
+                fun _timeframeStart(): JsonField<OffsetDateTime> = timeframeStart
 
-                @JsonProperty("timeframe_end") @ExcludeMissing fun _timeframeEnd() = timeframeEnd
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
 
                 @JsonAnyGetter
                 @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-                fun validate(): Usage = apply {
-                    if (!validated) {
-                        quantity()
-                        timeframeStart()
-                        timeframeEnd()
-                        validated = true
-                    }
-                }
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
 
                 fun toBuilder() = Builder().from(this)
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [Usage].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .quantity()
+                     * .timeframeEnd()
+                     * .timeframeStart()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
-                class Builder {
+                /** A builder for [Usage]. */
+                class Builder internal constructor() {
 
-                    private var quantity: JsonField<Double> = JsonMissing.of()
-                    private var timeframeStart: JsonField<OffsetDateTime> = JsonMissing.of()
-                    private var timeframeEnd: JsonField<OffsetDateTime> = JsonMissing.of()
+                    private var quantity: JsonField<Double>? = null
+                    private var timeframeEnd: JsonField<OffsetDateTime>? = null
+                    private var timeframeStart: JsonField<OffsetDateTime>? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(usage: Usage) = apply {
-                        this.quantity = usage.quantity
-                        this.timeframeStart = usage.timeframeStart
-                        this.timeframeEnd = usage.timeframeEnd
-                        additionalProperties(usage.additionalProperties)
+                        quantity = usage.quantity
+                        timeframeEnd = usage.timeframeEnd
+                        timeframeStart = usage.timeframeStart
+                        additionalProperties = usage.additionalProperties.toMutableMap()
                     }
 
                     fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
-                    @JsonProperty("quantity")
-                    @ExcludeMissing
+                    /**
+                     * Sets [Builder.quantity] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.quantity] with a well-typed [Double] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
-
-                    fun timeframeStart(timeframeStart: OffsetDateTime) =
-                        timeframeStart(JsonField.of(timeframeStart))
-
-                    @JsonProperty("timeframe_start")
-                    @ExcludeMissing
-                    fun timeframeStart(timeframeStart: JsonField<OffsetDateTime>) = apply {
-                        this.timeframeStart = timeframeStart
-                    }
 
                     fun timeframeEnd(timeframeEnd: OffsetDateTime) =
                         timeframeEnd(JsonField.of(timeframeEnd))
 
-                    @JsonProperty("timeframe_end")
-                    @ExcludeMissing
+                    /**
+                     * Sets [Builder.timeframeEnd] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.timeframeEnd] with a well-typed
+                     * [OffsetDateTime] value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
                     fun timeframeEnd(timeframeEnd: JsonField<OffsetDateTime>) = apply {
                         this.timeframeEnd = timeframeEnd
                     }
 
-                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.clear()
-                        this.additionalProperties.putAll(additionalProperties)
+                    fun timeframeStart(timeframeStart: OffsetDateTime) =
+                        timeframeStart(JsonField.of(timeframeStart))
+
+                    /**
+                     * Sets [Builder.timeframeStart] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.timeframeStart] with a well-typed
+                     * [OffsetDateTime] value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
+                    fun timeframeStart(timeframeStart: JsonField<OffsetDateTime>) = apply {
+                        this.timeframeStart = timeframeStart
                     }
 
-                    @JsonAnySetter
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        this.additionalProperties.put(key, value)
+                        additionalProperties.put(key, value)
                     }
 
                     fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -536,40 +966,205 @@ private constructor(
                             this.additionalProperties.putAll(additionalProperties)
                         }
 
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [Usage].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .quantity()
+                     * .timeframeEnd()
+                     * .timeframeStart()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): Usage =
                         Usage(
-                            quantity,
-                            timeframeStart,
-                            timeframeEnd,
-                            additionalProperties.toImmutable(),
+                            checkRequired("quantity", quantity),
+                            checkRequired("timeframeEnd", timeframeEnd),
+                            checkRequired("timeframeStart", timeframeStart),
+                            additionalProperties.toMutableMap(),
                         )
                 }
+
+                private var validated: Boolean = false
+
+                fun validate(): Usage = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    quantity()
+                    timeframeEnd()
+                    timeframeStart()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (if (quantity.asKnown().isPresent) 1 else 0) +
+                        (if (timeframeEnd.asKnown().isPresent) 1 else 0) +
+                        (if (timeframeStart.asKnown().isPresent) 1 else 0)
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
                         return true
                     }
 
-                    return /* spotless:off */ other is Usage && quantity == other.quantity && timeframeStart == other.timeframeStart && timeframeEnd == other.timeframeEnd && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is Usage && quantity == other.quantity && timeframeEnd == other.timeframeEnd && timeframeStart == other.timeframeStart && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(quantity, timeframeStart, timeframeEnd, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(quantity, timeframeEnd, timeframeStart, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "Usage{quantity=$quantity, timeframeStart=$timeframeStart, timeframeEnd=$timeframeEnd, additionalProperties=$additionalProperties}"
+                    "Usage{quantity=$quantity, timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, additionalProperties=$additionalProperties}"
             }
 
-            class ViewMode
-            @JsonCreator
-            private constructor(
-                private val value: JsonField<String>,
-            ) : Enum {
+            class ViewMode @JsonCreator private constructor(private val value: JsonField<String>) :
+                Enum {
 
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
                 @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    @JvmField val PERIODIC = of("periodic")
+
+                    @JvmField val CUMULATIVE = of("cumulative")
+
+                    @JvmStatic fun of(value: String) = ViewMode(JsonField.of(value))
+                }
+
+                /** An enum containing [ViewMode]'s known values. */
+                enum class Known {
+                    PERIODIC,
+                    CUMULATIVE,
+                }
+
+                /**
+                 * An enum containing [ViewMode]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [ViewMode] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    PERIODIC,
+                    CUMULATIVE,
+                    /**
+                     * An enum member indicating that [ViewMode] was instantiated with an unknown
+                     * value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        PERIODIC -> Value.PERIODIC
+                        CUMULATIVE -> Value.CUMULATIVE
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws OrbInvalidDataException if this class instance's value is a not a known
+                 *   member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        PERIODIC -> Known.PERIODIC
+                        CUMULATIVE -> Known.CUMULATIVE
+                        else -> throw OrbInvalidDataException("Unknown ViewMode: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws OrbInvalidDataException if this class instance's value does not have the
+                 *   expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        OrbInvalidDataException("Value is not a String")
+                    }
+
+                private var validated: Boolean = false
+
+                fun validate(): ViewMode = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -582,42 +1177,6 @@ private constructor(
                 override fun hashCode() = value.hashCode()
 
                 override fun toString() = value.toString()
-
-                companion object {
-
-                    @JvmField val PERIODIC = ViewMode(JsonField.of("periodic"))
-
-                    @JvmField val CUMULATIVE = ViewMode(JsonField.of("cumulative"))
-
-                    @JvmStatic fun of(value: String) = ViewMode(JsonField.of(value))
-                }
-
-                enum class Known {
-                    PERIODIC,
-                    CUMULATIVE,
-                }
-
-                enum class Value {
-                    PERIODIC,
-                    CUMULATIVE,
-                    _UNKNOWN,
-                }
-
-                fun value(): Value =
-                    when (this) {
-                        PERIODIC -> Value.PERIODIC
-                        CUMULATIVE -> Value.CUMULATIVE
-                        else -> Value._UNKNOWN
-                    }
-
-                fun known(): Known =
-                    when (this) {
-                        PERIODIC -> Known.PERIODIC
-                        CUMULATIVE -> Known.CUMULATIVE
-                        else -> throw OrbInvalidDataException("Unknown ViewMode: $value")
-                    }
-
-                fun asString(): String = _value().asStringOrThrow()
             }
 
             override fun equals(other: Any?): Boolean {
@@ -625,17 +1184,17 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Data && usage == other.usage && billableMetric == other.billableMetric && viewMode == other.viewMode && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Data && billableMetric == other.billableMetric && usage == other.usage && viewMode == other.viewMode && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(usage, billableMetric, viewMode, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(billableMetric, usage, viewMode, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Data{usage=$usage, billableMetric=$billableMetric, viewMode=$viewMode, additionalProperties=$additionalProperties}"
+                "Data{billableMetric=$billableMetric, usage=$usage, viewMode=$viewMode, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -656,201 +1215,412 @@ private constructor(
             "UngroupedSubscriptionUsage{data=$data, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = GroupedSubscriptionUsage.Builder::class)
-    @NoAutoDetect
     class GroupedSubscriptionUsage
     private constructor(
         private val data: JsonField<List<Data>>,
         private val paginationMetadata: JsonField<PaginationMetadata>,
-        private val additionalProperties: Map<String, JsonValue>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
+        @JsonCreator
+        private constructor(
+            @JsonProperty("data") @ExcludeMissing data: JsonField<List<Data>> = JsonMissing.of(),
+            @JsonProperty("pagination_metadata")
+            @ExcludeMissing
+            paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of(),
+        ) : this(data, paginationMetadata, mutableMapOf())
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun data(): List<Data> = data.getRequired("data")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun paginationMetadata(): Optional<PaginationMetadata> =
-            Optional.ofNullable(paginationMetadata.getNullable("pagination_metadata"))
+            paginationMetadata.getOptional("pagination_metadata")
 
-        @JsonProperty("data") @ExcludeMissing fun _data() = data
+        /**
+         * Returns the raw JSON value of [data].
+         *
+         * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Data>> = data
 
+        /**
+         * Returns the raw JSON value of [paginationMetadata].
+         *
+         * Unlike [paginationMetadata], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("pagination_metadata")
         @ExcludeMissing
-        fun _paginationMetadata() = paginationMetadata
+        fun _paginationMetadata(): JsonField<PaginationMetadata> = paginationMetadata
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): GroupedSubscriptionUsage = apply {
-            if (!validated) {
-                data().forEach { it.validate() }
-                paginationMetadata().map { it.validate() }
-                validated = true
-            }
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [GroupedSubscriptionUsage].
+             *
+             * The following fields are required:
+             * ```java
+             * .data()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [GroupedSubscriptionUsage]. */
+        class Builder internal constructor() {
 
-            private var data: JsonField<List<Data>> = JsonMissing.of()
+            private var data: JsonField<MutableList<Data>>? = null
             private var paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(groupedSubscriptionUsage: GroupedSubscriptionUsage) = apply {
-                this.data = groupedSubscriptionUsage.data
-                this.paginationMetadata = groupedSubscriptionUsage.paginationMetadata
-                additionalProperties(groupedSubscriptionUsage.additionalProperties)
+                data = groupedSubscriptionUsage.data.map { it.toMutableList() }
+                paginationMetadata = groupedSubscriptionUsage.paginationMetadata
+                additionalProperties = groupedSubscriptionUsage.additionalProperties.toMutableMap()
             }
 
             fun data(data: List<Data>) = data(JsonField.of(data))
 
-            @JsonProperty("data")
-            @ExcludeMissing
-            fun data(data: JsonField<List<Data>>) = apply { this.data = data }
+            /**
+             * Sets [Builder.data] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.data] with a well-typed `List<Data>` value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun data(data: JsonField<List<Data>>) = apply {
+                this.data = data.map { it.toMutableList() }
+            }
 
-            fun paginationMetadata(paginationMetadata: PaginationMetadata) =
-                paginationMetadata(JsonField.of(paginationMetadata))
+            /**
+             * Adds a single [Data] to [Builder.data].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addData(data: Data) = apply {
+                this.data =
+                    (this.data ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("data", it).add(data)
+                    }
+            }
 
-            @JsonProperty("pagination_metadata")
-            @ExcludeMissing
+            fun paginationMetadata(paginationMetadata: PaginationMetadata?) =
+                paginationMetadata(JsonField.ofNullable(paginationMetadata))
+
+            /**
+             * Alias for calling [Builder.paginationMetadata] with
+             * `paginationMetadata.orElse(null)`.
+             */
+            fun paginationMetadata(paginationMetadata: Optional<PaginationMetadata>) =
+                paginationMetadata(paginationMetadata.getOrNull())
+
+            /**
+             * Sets [Builder.paginationMetadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.paginationMetadata] with a well-typed
+             * [PaginationMetadata] value instead. This method is primarily for setting the field to
+             * an undocumented or not yet supported value.
+             */
             fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply {
                 this.paginationMetadata = paginationMetadata
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
             }
 
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [GroupedSubscriptionUsage].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .data()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): GroupedSubscriptionUsage =
                 GroupedSubscriptionUsage(
-                    data.map { it.toImmutable() },
+                    checkRequired("data", data).map { it.toImmutable() },
                     paginationMetadata,
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
         }
 
-        @JsonDeserialize(builder = Data.Builder::class)
-        @NoAutoDetect
+        private var validated: Boolean = false
+
+        fun validate(): GroupedSubscriptionUsage = apply {
+            if (validated) {
+                return@apply
+            }
+
+            data().forEach { it.validate() }
+            paginationMetadata().ifPresent { it.validate() }
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (paginationMetadata.asKnown().getOrNull()?.validity() ?: 0)
+
         class Data
         private constructor(
-            private val usage: JsonField<List<Usage>>,
             private val billableMetric: JsonField<BillableMetric>,
             private val metricGroup: JsonField<MetricGroup>,
+            private val usage: JsonField<List<Usage>>,
             private val viewMode: JsonField<ViewMode>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("billable_metric")
+                @ExcludeMissing
+                billableMetric: JsonField<BillableMetric> = JsonMissing.of(),
+                @JsonProperty("metric_group")
+                @ExcludeMissing
+                metricGroup: JsonField<MetricGroup> = JsonMissing.of(),
+                @JsonProperty("usage")
+                @ExcludeMissing
+                usage: JsonField<List<Usage>> = JsonMissing.of(),
+                @JsonProperty("view_mode")
+                @ExcludeMissing
+                viewMode: JsonField<ViewMode> = JsonMissing.of(),
+            ) : this(billableMetric, metricGroup, usage, viewMode, mutableMapOf())
 
-            fun usage(): List<Usage> = usage.getRequired("usage")
-
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun billableMetric(): BillableMetric = billableMetric.getRequired("billable_metric")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun metricGroup(): MetricGroup = metricGroup.getRequired("metric_group")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun usage(): List<Usage> = usage.getRequired("usage")
+
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun viewMode(): ViewMode = viewMode.getRequired("view_mode")
 
-            @JsonProperty("usage") @ExcludeMissing fun _usage() = usage
+            /**
+             * Returns the raw JSON value of [billableMetric].
+             *
+             * Unlike [billableMetric], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("billable_metric")
+            @ExcludeMissing
+            fun _billableMetric(): JsonField<BillableMetric> = billableMetric
 
-            @JsonProperty("billable_metric") @ExcludeMissing fun _billableMetric() = billableMetric
+            /**
+             * Returns the raw JSON value of [metricGroup].
+             *
+             * Unlike [metricGroup], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("metric_group")
+            @ExcludeMissing
+            fun _metricGroup(): JsonField<MetricGroup> = metricGroup
 
-            @JsonProperty("metric_group") @ExcludeMissing fun _metricGroup() = metricGroup
+            /**
+             * Returns the raw JSON value of [usage].
+             *
+             * Unlike [usage], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("usage") @ExcludeMissing fun _usage(): JsonField<List<Usage>> = usage
 
-            @JsonProperty("view_mode") @ExcludeMissing fun _viewMode() = viewMode
+            /**
+             * Returns the raw JSON value of [viewMode].
+             *
+             * Unlike [viewMode], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("view_mode")
+            @ExcludeMissing
+            fun _viewMode(): JsonField<ViewMode> = viewMode
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): Data = apply {
-                if (!validated) {
-                    usage().forEach { it.validate() }
-                    billableMetric().validate()
-                    metricGroup().validate()
-                    viewMode()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Data].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .billableMetric()
+                 * .metricGroup()
+                 * .usage()
+                 * .viewMode()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [Data]. */
+            class Builder internal constructor() {
 
-                private var usage: JsonField<List<Usage>> = JsonMissing.of()
-                private var billableMetric: JsonField<BillableMetric> = JsonMissing.of()
-                private var metricGroup: JsonField<MetricGroup> = JsonMissing.of()
-                private var viewMode: JsonField<ViewMode> = JsonMissing.of()
+                private var billableMetric: JsonField<BillableMetric>? = null
+                private var metricGroup: JsonField<MetricGroup>? = null
+                private var usage: JsonField<MutableList<Usage>>? = null
+                private var viewMode: JsonField<ViewMode>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(data: Data) = apply {
-                    this.usage = data.usage
-                    this.billableMetric = data.billableMetric
-                    this.metricGroup = data.metricGroup
-                    this.viewMode = data.viewMode
-                    additionalProperties(data.additionalProperties)
+                    billableMetric = data.billableMetric
+                    metricGroup = data.metricGroup
+                    usage = data.usage.map { it.toMutableList() }
+                    viewMode = data.viewMode
+                    additionalProperties = data.additionalProperties.toMutableMap()
                 }
-
-                fun usage(usage: List<Usage>) = usage(JsonField.of(usage))
-
-                @JsonProperty("usage")
-                @ExcludeMissing
-                fun usage(usage: JsonField<List<Usage>>) = apply { this.usage = usage }
 
                 fun billableMetric(billableMetric: BillableMetric) =
                     billableMetric(JsonField.of(billableMetric))
 
-                @JsonProperty("billable_metric")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.billableMetric] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.billableMetric] with a well-typed
+                 * [BillableMetric] value instead. This method is primarily for setting the field to
+                 * an undocumented or not yet supported value.
+                 */
                 fun billableMetric(billableMetric: JsonField<BillableMetric>) = apply {
                     this.billableMetric = billableMetric
                 }
 
                 fun metricGroup(metricGroup: MetricGroup) = metricGroup(JsonField.of(metricGroup))
 
-                @JsonProperty("metric_group")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.metricGroup] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.metricGroup] with a well-typed [MetricGroup]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun metricGroup(metricGroup: JsonField<MetricGroup>) = apply {
                     this.metricGroup = metricGroup
                 }
 
+                fun usage(usage: List<Usage>) = usage(JsonField.of(usage))
+
+                /**
+                 * Sets [Builder.usage] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.usage] with a well-typed `List<Usage>` value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun usage(usage: JsonField<List<Usage>>) = apply {
+                    this.usage = usage.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Usage] to [Builder.usage].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addUsage(usage: Usage) = apply {
+                    this.usage =
+                        (this.usage ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("usage", it).add(usage)
+                        }
+                }
+
                 fun viewMode(viewMode: ViewMode) = viewMode(JsonField.of(viewMode))
 
-                @JsonProperty("view_mode")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.viewMode] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.viewMode] with a well-typed [ViewMode] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun viewMode(viewMode: JsonField<ViewMode>) = apply { this.viewMode = viewMode }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -858,87 +1628,185 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Data].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .billableMetric()
+                 * .metricGroup()
+                 * .usage()
+                 * .viewMode()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Data =
                     Data(
-                        usage.map { it.toImmutable() },
-                        billableMetric,
-                        metricGroup,
-                        viewMode,
-                        additionalProperties.toImmutable(),
+                        checkRequired("billableMetric", billableMetric),
+                        checkRequired("metricGroup", metricGroup),
+                        checkRequired("usage", usage).map { it.toImmutable() },
+                        checkRequired("viewMode", viewMode),
+                        additionalProperties.toMutableMap(),
                     )
             }
 
-            @JsonDeserialize(builder = BillableMetric.Builder::class)
-            @NoAutoDetect
+            private var validated: Boolean = false
+
+            fun validate(): Data = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                billableMetric().validate()
+                metricGroup().validate()
+                usage().forEach { it.validate() }
+                viewMode().validate()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
+                    (metricGroup.asKnown().getOrNull()?.validity() ?: 0) +
+                    (usage.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (viewMode.asKnown().getOrNull()?.validity() ?: 0)
+
             class BillableMetric
             private constructor(
                 private val id: JsonField<String>,
                 private val name: JsonField<String>,
-                private val additionalProperties: Map<String, JsonValue>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
             ) {
 
-                private var validated: Boolean = false
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+                ) : this(id, name, mutableMapOf())
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun id(): String = id.getRequired("id")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun name(): String = name.getRequired("name")
 
-                @JsonProperty("id") @ExcludeMissing fun _id() = id
+                /**
+                 * Returns the raw JSON value of [id].
+                 *
+                 * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+                 */
+                @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-                @JsonProperty("name") @ExcludeMissing fun _name() = name
+                /**
+                 * Returns the raw JSON value of [name].
+                 *
+                 * Unlike [name], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
 
                 @JsonAnyGetter
                 @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-                fun validate(): BillableMetric = apply {
-                    if (!validated) {
-                        id()
-                        name()
-                        validated = true
-                    }
-                }
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
 
                 fun toBuilder() = Builder().from(this)
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [BillableMetric].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .id()
+                     * .name()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
-                class Builder {
+                /** A builder for [BillableMetric]. */
+                class Builder internal constructor() {
 
-                    private var id: JsonField<String> = JsonMissing.of()
-                    private var name: JsonField<String> = JsonMissing.of()
+                    private var id: JsonField<String>? = null
+                    private var name: JsonField<String>? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(billableMetric: BillableMetric) = apply {
-                        this.id = billableMetric.id
-                        this.name = billableMetric.name
-                        additionalProperties(billableMetric.additionalProperties)
+                        id = billableMetric.id
+                        name = billableMetric.name
+                        additionalProperties = billableMetric.additionalProperties.toMutableMap()
                     }
 
                     fun id(id: String) = id(JsonField.of(id))
 
-                    @JsonProperty("id")
-                    @ExcludeMissing
+                    /**
+                     * Sets [Builder.id] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.id] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun id(id: JsonField<String>) = apply { this.id = id }
 
                     fun name(name: String) = name(JsonField.of(name))
 
-                    @JsonProperty("name")
-                    @ExcludeMissing
+                    /**
+                     * Sets [Builder.name] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.name] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun name(name: JsonField<String>) = apply { this.name = name }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
-                        this.additionalProperties.putAll(additionalProperties)
+                        putAllAdditionalProperties(additionalProperties)
                     }
 
-                    @JsonAnySetter
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        this.additionalProperties.put(key, value)
+                        additionalProperties.put(key, value)
                     }
 
                     fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -946,13 +1814,65 @@ private constructor(
                             this.additionalProperties.putAll(additionalProperties)
                         }
 
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [BillableMetric].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .id()
+                     * .name()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): BillableMetric =
                         BillableMetric(
-                            id,
-                            name,
-                            additionalProperties.toImmutable(),
+                            checkRequired("id", id),
+                            checkRequired("name", name),
+                            additionalProperties.toMutableMap(),
                         )
                 }
+
+                private var validated: Boolean = false
+
+                fun validate(): BillableMetric = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    id()
+                    name()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (if (id.asKnown().isPresent) 1 else 0) +
+                        (if (name.asKnown().isPresent) 1 else 0)
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -972,61 +1892,106 @@ private constructor(
                     "BillableMetric{id=$id, name=$name, additionalProperties=$additionalProperties}"
             }
 
-            @JsonDeserialize(builder = MetricGroup.Builder::class)
-            @NoAutoDetect
             class MetricGroup
             private constructor(
                 private val propertyKey: JsonField<String>,
                 private val propertyValue: JsonField<String>,
-                private val additionalProperties: Map<String, JsonValue>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
             ) {
 
-                private var validated: Boolean = false
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("property_key")
+                    @ExcludeMissing
+                    propertyKey: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("property_value")
+                    @ExcludeMissing
+                    propertyValue: JsonField<String> = JsonMissing.of(),
+                ) : this(propertyKey, propertyValue, mutableMapOf())
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun propertyKey(): String = propertyKey.getRequired("property_key")
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun propertyValue(): String = propertyValue.getRequired("property_value")
 
-                @JsonProperty("property_key") @ExcludeMissing fun _propertyKey() = propertyKey
+                /**
+                 * Returns the raw JSON value of [propertyKey].
+                 *
+                 * Unlike [propertyKey], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("property_key")
+                @ExcludeMissing
+                fun _propertyKey(): JsonField<String> = propertyKey
 
-                @JsonProperty("property_value") @ExcludeMissing fun _propertyValue() = propertyValue
+                /**
+                 * Returns the raw JSON value of [propertyValue].
+                 *
+                 * Unlike [propertyValue], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("property_value")
+                @ExcludeMissing
+                fun _propertyValue(): JsonField<String> = propertyValue
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
 
                 @JsonAnyGetter
                 @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-                fun validate(): MetricGroup = apply {
-                    if (!validated) {
-                        propertyKey()
-                        propertyValue()
-                        validated = true
-                    }
-                }
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
 
                 fun toBuilder() = Builder().from(this)
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [MetricGroup].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .propertyKey()
+                     * .propertyValue()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
-                class Builder {
+                /** A builder for [MetricGroup]. */
+                class Builder internal constructor() {
 
-                    private var propertyKey: JsonField<String> = JsonMissing.of()
-                    private var propertyValue: JsonField<String> = JsonMissing.of()
+                    private var propertyKey: JsonField<String>? = null
+                    private var propertyValue: JsonField<String>? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(metricGroup: MetricGroup) = apply {
-                        this.propertyKey = metricGroup.propertyKey
-                        this.propertyValue = metricGroup.propertyValue
-                        additionalProperties(metricGroup.additionalProperties)
+                        propertyKey = metricGroup.propertyKey
+                        propertyValue = metricGroup.propertyValue
+                        additionalProperties = metricGroup.additionalProperties.toMutableMap()
                     }
 
                     fun propertyKey(propertyKey: String) = propertyKey(JsonField.of(propertyKey))
 
-                    @JsonProperty("property_key")
-                    @ExcludeMissing
+                    /**
+                     * Sets [Builder.propertyKey] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.propertyKey] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
                     fun propertyKey(propertyKey: JsonField<String>) = apply {
                         this.propertyKey = propertyKey
                     }
@@ -1034,20 +1999,24 @@ private constructor(
                     fun propertyValue(propertyValue: String) =
                         propertyValue(JsonField.of(propertyValue))
 
-                    @JsonProperty("property_value")
-                    @ExcludeMissing
+                    /**
+                     * Sets [Builder.propertyValue] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.propertyValue] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
                     fun propertyValue(propertyValue: JsonField<String>) = apply {
                         this.propertyValue = propertyValue
                     }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
-                        this.additionalProperties.putAll(additionalProperties)
+                        putAllAdditionalProperties(additionalProperties)
                     }
 
-                    @JsonAnySetter
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        this.additionalProperties.put(key, value)
+                        additionalProperties.put(key, value)
                     }
 
                     fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -1055,13 +2024,65 @@ private constructor(
                             this.additionalProperties.putAll(additionalProperties)
                         }
 
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [MetricGroup].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .propertyKey()
+                     * .propertyValue()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): MetricGroup =
                         MetricGroup(
-                            propertyKey,
-                            propertyValue,
-                            additionalProperties.toImmutable(),
+                            checkRequired("propertyKey", propertyKey),
+                            checkRequired("propertyValue", propertyValue),
+                            additionalProperties.toMutableMap(),
                         )
                 }
+
+                private var validated: Boolean = false
+
+                fun validate(): MetricGroup = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    propertyKey()
+                    propertyValue()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (if (propertyKey.asKnown().isPresent) 1 else 0) +
+                        (if (propertyValue.asKnown().isPresent) 1 else 0)
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -1081,99 +2102,167 @@ private constructor(
                     "MetricGroup{propertyKey=$propertyKey, propertyValue=$propertyValue, additionalProperties=$additionalProperties}"
             }
 
-            @JsonDeserialize(builder = Usage.Builder::class)
-            @NoAutoDetect
             class Usage
             private constructor(
                 private val quantity: JsonField<Double>,
-                private val timeframeStart: JsonField<OffsetDateTime>,
                 private val timeframeEnd: JsonField<OffsetDateTime>,
-                private val additionalProperties: Map<String, JsonValue>,
+                private val timeframeStart: JsonField<OffsetDateTime>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
             ) {
 
-                private var validated: Boolean = false
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("quantity")
+                    @ExcludeMissing
+                    quantity: JsonField<Double> = JsonMissing.of(),
+                    @JsonProperty("timeframe_end")
+                    @ExcludeMissing
+                    timeframeEnd: JsonField<OffsetDateTime> = JsonMissing.of(),
+                    @JsonProperty("timeframe_start")
+                    @ExcludeMissing
+                    timeframeStart: JsonField<OffsetDateTime> = JsonMissing.of(),
+                ) : this(quantity, timeframeEnd, timeframeStart, mutableMapOf())
 
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun quantity(): Double = quantity.getRequired("quantity")
 
-                fun timeframeStart(): OffsetDateTime = timeframeStart.getRequired("timeframe_start")
-
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun timeframeEnd(): OffsetDateTime = timeframeEnd.getRequired("timeframe_end")
 
-                @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+                /**
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
+                fun timeframeStart(): OffsetDateTime = timeframeStart.getRequired("timeframe_start")
 
+                /**
+                 * Returns the raw JSON value of [quantity].
+                 *
+                 * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("quantity")
+                @ExcludeMissing
+                fun _quantity(): JsonField<Double> = quantity
+
+                /**
+                 * Returns the raw JSON value of [timeframeEnd].
+                 *
+                 * Unlike [timeframeEnd], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("timeframe_end")
+                @ExcludeMissing
+                fun _timeframeEnd(): JsonField<OffsetDateTime> = timeframeEnd
+
+                /**
+                 * Returns the raw JSON value of [timeframeStart].
+                 *
+                 * Unlike [timeframeStart], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("timeframe_start")
                 @ExcludeMissing
-                fun _timeframeStart() = timeframeStart
+                fun _timeframeStart(): JsonField<OffsetDateTime> = timeframeStart
 
-                @JsonProperty("timeframe_end") @ExcludeMissing fun _timeframeEnd() = timeframeEnd
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
 
                 @JsonAnyGetter
                 @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-                fun validate(): Usage = apply {
-                    if (!validated) {
-                        quantity()
-                        timeframeStart()
-                        timeframeEnd()
-                        validated = true
-                    }
-                }
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
 
                 fun toBuilder() = Builder().from(this)
 
                 companion object {
 
+                    /**
+                     * Returns a mutable builder for constructing an instance of [Usage].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .quantity()
+                     * .timeframeEnd()
+                     * .timeframeStart()
+                     * ```
+                     */
                     @JvmStatic fun builder() = Builder()
                 }
 
-                class Builder {
+                /** A builder for [Usage]. */
+                class Builder internal constructor() {
 
-                    private var quantity: JsonField<Double> = JsonMissing.of()
-                    private var timeframeStart: JsonField<OffsetDateTime> = JsonMissing.of()
-                    private var timeframeEnd: JsonField<OffsetDateTime> = JsonMissing.of()
+                    private var quantity: JsonField<Double>? = null
+                    private var timeframeEnd: JsonField<OffsetDateTime>? = null
+                    private var timeframeStart: JsonField<OffsetDateTime>? = null
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(usage: Usage) = apply {
-                        this.quantity = usage.quantity
-                        this.timeframeStart = usage.timeframeStart
-                        this.timeframeEnd = usage.timeframeEnd
-                        additionalProperties(usage.additionalProperties)
+                        quantity = usage.quantity
+                        timeframeEnd = usage.timeframeEnd
+                        timeframeStart = usage.timeframeStart
+                        additionalProperties = usage.additionalProperties.toMutableMap()
                     }
 
                     fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
-                    @JsonProperty("quantity")
-                    @ExcludeMissing
+                    /**
+                     * Sets [Builder.quantity] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.quantity] with a well-typed [Double] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
-
-                    fun timeframeStart(timeframeStart: OffsetDateTime) =
-                        timeframeStart(JsonField.of(timeframeStart))
-
-                    @JsonProperty("timeframe_start")
-                    @ExcludeMissing
-                    fun timeframeStart(timeframeStart: JsonField<OffsetDateTime>) = apply {
-                        this.timeframeStart = timeframeStart
-                    }
 
                     fun timeframeEnd(timeframeEnd: OffsetDateTime) =
                         timeframeEnd(JsonField.of(timeframeEnd))
 
-                    @JsonProperty("timeframe_end")
-                    @ExcludeMissing
+                    /**
+                     * Sets [Builder.timeframeEnd] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.timeframeEnd] with a well-typed
+                     * [OffsetDateTime] value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
                     fun timeframeEnd(timeframeEnd: JsonField<OffsetDateTime>) = apply {
                         this.timeframeEnd = timeframeEnd
                     }
 
-                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.clear()
-                        this.additionalProperties.putAll(additionalProperties)
+                    fun timeframeStart(timeframeStart: OffsetDateTime) =
+                        timeframeStart(JsonField.of(timeframeStart))
+
+                    /**
+                     * Sets [Builder.timeframeStart] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.timeframeStart] with a well-typed
+                     * [OffsetDateTime] value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
+                    fun timeframeStart(timeframeStart: JsonField<OffsetDateTime>) = apply {
+                        this.timeframeStart = timeframeStart
                     }
 
-                    @JsonAnySetter
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
                     fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        this.additionalProperties.put(key, value)
+                        additionalProperties.put(key, value)
                     }
 
                     fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -1181,40 +2270,205 @@ private constructor(
                             this.additionalProperties.putAll(additionalProperties)
                         }
 
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [Usage].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .quantity()
+                     * .timeframeEnd()
+                     * .timeframeStart()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): Usage =
                         Usage(
-                            quantity,
-                            timeframeStart,
-                            timeframeEnd,
-                            additionalProperties.toImmutable(),
+                            checkRequired("quantity", quantity),
+                            checkRequired("timeframeEnd", timeframeEnd),
+                            checkRequired("timeframeStart", timeframeStart),
+                            additionalProperties.toMutableMap(),
                         )
                 }
+
+                private var validated: Boolean = false
+
+                fun validate(): Usage = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    quantity()
+                    timeframeEnd()
+                    timeframeStart()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (if (quantity.asKnown().isPresent) 1 else 0) +
+                        (if (timeframeEnd.asKnown().isPresent) 1 else 0) +
+                        (if (timeframeStart.asKnown().isPresent) 1 else 0)
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
                         return true
                     }
 
-                    return /* spotless:off */ other is Usage && quantity == other.quantity && timeframeStart == other.timeframeStart && timeframeEnd == other.timeframeEnd && additionalProperties == other.additionalProperties /* spotless:on */
+                    return /* spotless:off */ other is Usage && quantity == other.quantity && timeframeEnd == other.timeframeEnd && timeframeStart == other.timeframeStart && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
-                private val hashCode: Int by lazy { Objects.hash(quantity, timeframeStart, timeframeEnd, additionalProperties) }
+                private val hashCode: Int by lazy { Objects.hash(quantity, timeframeEnd, timeframeStart, additionalProperties) }
                 /* spotless:on */
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "Usage{quantity=$quantity, timeframeStart=$timeframeStart, timeframeEnd=$timeframeEnd, additionalProperties=$additionalProperties}"
+                    "Usage{quantity=$quantity, timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, additionalProperties=$additionalProperties}"
             }
 
-            class ViewMode
-            @JsonCreator
-            private constructor(
-                private val value: JsonField<String>,
-            ) : Enum {
+            class ViewMode @JsonCreator private constructor(private val value: JsonField<String>) :
+                Enum {
 
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
                 @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    @JvmField val PERIODIC = of("periodic")
+
+                    @JvmField val CUMULATIVE = of("cumulative")
+
+                    @JvmStatic fun of(value: String) = ViewMode(JsonField.of(value))
+                }
+
+                /** An enum containing [ViewMode]'s known values. */
+                enum class Known {
+                    PERIODIC,
+                    CUMULATIVE,
+                }
+
+                /**
+                 * An enum containing [ViewMode]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [ViewMode] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    PERIODIC,
+                    CUMULATIVE,
+                    /**
+                     * An enum member indicating that [ViewMode] was instantiated with an unknown
+                     * value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        PERIODIC -> Value.PERIODIC
+                        CUMULATIVE -> Value.CUMULATIVE
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws OrbInvalidDataException if this class instance's value is a not a known
+                 *   member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        PERIODIC -> Known.PERIODIC
+                        CUMULATIVE -> Known.CUMULATIVE
+                        else -> throw OrbInvalidDataException("Unknown ViewMode: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws OrbInvalidDataException if this class instance's value does not have the
+                 *   expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        OrbInvalidDataException("Value is not a String")
+                    }
+
+                private var validated: Boolean = false
+
+                fun validate(): ViewMode = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -1227,42 +2481,6 @@ private constructor(
                 override fun hashCode() = value.hashCode()
 
                 override fun toString() = value.toString()
-
-                companion object {
-
-                    @JvmField val PERIODIC = ViewMode(JsonField.of("periodic"))
-
-                    @JvmField val CUMULATIVE = ViewMode(JsonField.of("cumulative"))
-
-                    @JvmStatic fun of(value: String) = ViewMode(JsonField.of(value))
-                }
-
-                enum class Known {
-                    PERIODIC,
-                    CUMULATIVE,
-                }
-
-                enum class Value {
-                    PERIODIC,
-                    CUMULATIVE,
-                    _UNKNOWN,
-                }
-
-                fun value(): Value =
-                    when (this) {
-                        PERIODIC -> Value.PERIODIC
-                        CUMULATIVE -> Value.CUMULATIVE
-                        else -> Value._UNKNOWN
-                    }
-
-                fun known(): Known =
-                    when (this) {
-                        PERIODIC -> Known.PERIODIC
-                        CUMULATIVE -> Known.CUMULATIVE
-                        else -> throw OrbInvalidDataException("Unknown ViewMode: $value")
-                    }
-
-                fun asString(): String = _value().asStringOrThrow()
             }
 
             override fun equals(other: Any?): Boolean {
@@ -1270,17 +2488,17 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Data && usage == other.usage && billableMetric == other.billableMetric && metricGroup == other.metricGroup && viewMode == other.viewMode && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Data && billableMetric == other.billableMetric && metricGroup == other.metricGroup && usage == other.usage && viewMode == other.viewMode && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(usage, billableMetric, metricGroup, viewMode, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(billableMetric, metricGroup, usage, viewMode, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Data{usage=$usage, billableMetric=$billableMetric, metricGroup=$metricGroup, viewMode=$viewMode, additionalProperties=$additionalProperties}"
+                "Data{billableMetric=$billableMetric, metricGroup=$metricGroup, usage=$usage, viewMode=$viewMode, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {

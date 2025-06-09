@@ -2,58 +2,42 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint retrieves a coupon by its ID. To fetch coupons by their redemption code, use the
+ * [List coupons](list-coupons) endpoint with the redemption_code parameter.
+ */
 class CouponFetchParams
-constructor(
-    private val couponId: String,
+private constructor(
+    private val couponId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun couponId(): String = couponId
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> couponId
-            else -> ""
-        }
-    }
+    fun couponId(): Optional<String> = Optional.ofNullable(couponId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CouponFetchParams && couponId == other.couponId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(couponId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CouponFetchParams{couponId=$couponId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): CouponFetchParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [CouponFetchParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [CouponFetchParams]. */
+    class Builder internal constructor() {
 
         private var couponId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -61,12 +45,15 @@ constructor(
 
         @JvmSynthetic
         internal fun from(couponFetchParams: CouponFetchParams) = apply {
-            this.couponId = couponFetchParams.couponId
-            additionalHeaders(couponFetchParams.additionalHeaders)
-            additionalQueryParams(couponFetchParams.additionalQueryParams)
+            couponId = couponFetchParams.couponId
+            additionalHeaders = couponFetchParams.additionalHeaders.toBuilder()
+            additionalQueryParams = couponFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun couponId(couponId: String) = apply { this.couponId = couponId }
+        fun couponId(couponId: String?) = apply { this.couponId = couponId }
+
+        /** Alias for calling [Builder.couponId] with `couponId.orElse(null)`. */
+        fun couponId(couponId: Optional<String>) = couponId(couponId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,11 +153,35 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [CouponFetchParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): CouponFetchParams =
-            CouponFetchParams(
-                checkNotNull(couponId) { "`couponId` is required but was not set" },
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            CouponFetchParams(couponId, additionalHeaders.build(), additionalQueryParams.build())
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> couponId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CouponFetchParams && couponId == other.couponId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(couponId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CouponFetchParams{couponId=$couponId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

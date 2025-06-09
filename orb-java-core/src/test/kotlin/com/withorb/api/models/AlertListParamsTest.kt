@@ -3,15 +3,14 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class AlertListParamsTest {
+internal class AlertListParamsTest {
 
     @Test
-    fun createAlertListParams() {
+    fun create() {
         AlertListParams.builder()
             .createdAtGt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .createdAtGte(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -20,13 +19,13 @@ class AlertListParamsTest {
             .cursor("cursor")
             .customerId("customer_id")
             .externalCustomerId("external_customer_id")
-            .limit(123L)
+            .limit(1L)
             .subscriptionId("subscription_id")
             .build()
     }
 
     @Test
-    fun getQueryParams() {
+    fun queryParams() {
         val params =
             AlertListParams.builder()
                 .createdAtGt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -36,26 +35,34 @@ class AlertListParamsTest {
                 .cursor("cursor")
                 .customerId("customer_id")
                 .externalCustomerId("external_customer_id")
-                .limit(123L)
+                .limit(1L)
                 .subscriptionId("subscription_id")
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("created_at[gt]", "2019-12-27T18:11:19.117Z")
-        expected.put("created_at[gte]", "2019-12-27T18:11:19.117Z")
-        expected.put("created_at[lt]", "2019-12-27T18:11:19.117Z")
-        expected.put("created_at[lte]", "2019-12-27T18:11:19.117Z")
-        expected.put("cursor", "cursor")
-        expected.put("customer_id", "customer_id")
-        expected.put("external_customer_id", "external_customer_id")
-        expected.put("limit", "123")
-        expected.put("subscription_id", "subscription_id")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("created_at[gt]", "2019-12-27T18:11:19.117Z")
+                    .put("created_at[gte]", "2019-12-27T18:11:19.117Z")
+                    .put("created_at[lt]", "2019-12-27T18:11:19.117Z")
+                    .put("created_at[lte]", "2019-12-27T18:11:19.117Z")
+                    .put("cursor", "cursor")
+                    .put("customer_id", "customer_id")
+                    .put("external_customer_id", "external_customer_id")
+                    .put("limit", "1")
+                    .put("subscription_id", "subscription_id")
+                    .build()
+            )
     }
 
     @Test
-    fun getQueryParamsWithoutOptionalFields() {
+    fun queryParamsWithoutOptionalFields() {
         val params = AlertListParams.builder().build()
-        val expected = QueryParams.builder()
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }

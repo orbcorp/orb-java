@@ -2,81 +2,74 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CreditNoteCreateParamsTest {
+internal class CreditNoteCreateParamsTest {
 
     @Test
-    fun createCreditNoteCreateParams() {
+    fun create() {
         CreditNoteCreateParams.builder()
-            .lineItems(
-                listOf(
-                    CreditNoteCreateParams.LineItem.builder()
-                        .amount("amount")
-                        .invoiceLineItemId("4khy3nwzktxv7")
-                        .build()
-                )
+            .addLineItem(
+                CreditNoteCreateParams.LineItem.builder()
+                    .amount("amount")
+                    .invoiceLineItemId("4khy3nwzktxv7")
+                    .build()
             )
-            .memo("An optional memo for my credit note.")
             .reason(CreditNoteCreateParams.Reason.DUPLICATE)
+            .memo("An optional memo for my credit note.")
             .build()
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CreditNoteCreateParams.builder()
-                .lineItems(
-                    listOf(
-                        CreditNoteCreateParams.LineItem.builder()
-                            .amount("amount")
-                            .invoiceLineItemId("4khy3nwzktxv7")
-                            .build()
-                    )
-                )
-                .memo("An optional memo for my credit note.")
-                .reason(CreditNoteCreateParams.Reason.DUPLICATE)
-                .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-        assertThat(body.lineItems())
-            .isEqualTo(
-                listOf(
+                .addLineItem(
                     CreditNoteCreateParams.LineItem.builder()
                         .amount("amount")
                         .invoiceLineItemId("4khy3nwzktxv7")
                         .build()
                 )
+                .reason(CreditNoteCreateParams.Reason.DUPLICATE)
+                .memo("An optional memo for my credit note.")
+                .build()
+
+        val body = params._body()
+
+        assertThat(body.lineItems())
+            .containsExactly(
+                CreditNoteCreateParams.LineItem.builder()
+                    .amount("amount")
+                    .invoiceLineItemId("4khy3nwzktxv7")
+                    .build()
             )
-        assertThat(body.memo()).isEqualTo("An optional memo for my credit note.")
         assertThat(body.reason()).isEqualTo(CreditNoteCreateParams.Reason.DUPLICATE)
+        assertThat(body.memo()).contains("An optional memo for my credit note.")
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             CreditNoteCreateParams.builder()
-                .lineItems(
-                    listOf(
-                        CreditNoteCreateParams.LineItem.builder()
-                            .amount("amount")
-                            .invoiceLineItemId("4khy3nwzktxv7")
-                            .build()
-                    )
-                )
-                .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-        assertThat(body.lineItems())
-            .isEqualTo(
-                listOf(
+                .addLineItem(
                     CreditNoteCreateParams.LineItem.builder()
                         .amount("amount")
                         .invoiceLineItemId("4khy3nwzktxv7")
                         .build()
                 )
+                .reason(CreditNoteCreateParams.Reason.DUPLICATE)
+                .build()
+
+        val body = params._body()
+
+        assertThat(body.lineItems())
+            .containsExactly(
+                CreditNoteCreateParams.LineItem.builder()
+                    .amount("amount")
+                    .invoiceLineItemId("4khy3nwzktxv7")
+                    .build()
             )
+        assertThat(body.reason()).isEqualTo(CreditNoteCreateParams.Reason.DUPLICATE)
     }
 }

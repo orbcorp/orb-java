@@ -2,13 +2,12 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
 import org.junit.jupiter.api.Test
 
-class TopLevelPingParamsTest {
+internal class TopLevelPingParamsTest {
 
     @Test
-    fun createTopLevelPingParams() {
+    fun create() {
         TopLevelPingParams.builder().build()
     }
 }

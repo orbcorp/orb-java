@@ -2,58 +2,39 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/** This endpoint retrieves an alert by its ID. */
 class AlertRetrieveParams
-constructor(
-    private val alertId: String,
+private constructor(
+    private val alertId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun alertId(): String = alertId
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> alertId
-            else -> ""
-        }
-    }
+    fun alertId(): Optional<String> = Optional.ofNullable(alertId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is AlertRetrieveParams && alertId == other.alertId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(alertId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "AlertRetrieveParams{alertId=$alertId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): AlertRetrieveParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [AlertRetrieveParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [AlertRetrieveParams]. */
+    class Builder internal constructor() {
 
         private var alertId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -61,12 +42,15 @@ constructor(
 
         @JvmSynthetic
         internal fun from(alertRetrieveParams: AlertRetrieveParams) = apply {
-            this.alertId = alertRetrieveParams.alertId
-            additionalHeaders(alertRetrieveParams.additionalHeaders)
-            additionalQueryParams(alertRetrieveParams.additionalQueryParams)
+            alertId = alertRetrieveParams.alertId
+            additionalHeaders = alertRetrieveParams.additionalHeaders.toBuilder()
+            additionalQueryParams = alertRetrieveParams.additionalQueryParams.toBuilder()
         }
 
-        fun alertId(alertId: String) = apply { this.alertId = alertId }
+        fun alertId(alertId: String?) = apply { this.alertId = alertId }
+
+        /** Alias for calling [Builder.alertId] with `alertId.orElse(null)`. */
+        fun alertId(alertId: Optional<String>) = alertId(alertId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,11 +150,35 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [AlertRetrieveParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): AlertRetrieveParams =
-            AlertRetrieveParams(
-                checkNotNull(alertId) { "`alertId` is required but was not set" },
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            AlertRetrieveParams(alertId, additionalHeaders.build(), additionalQueryParams.build())
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> alertId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is AlertRetrieveParams && alertId == other.alertId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(alertId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "AlertRetrieveParams{alertId=$alertId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

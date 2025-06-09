@@ -2,63 +2,70 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Get a paginated list of CreditNotes. Users can also filter by customer_id, subscription_id, or
+ * external_customer_id. The credit notes will be returned in reverse chronological order by
+ * `creation_time`.
+ */
 class CreditNoteListParams
-constructor(
+private constructor(
+    private val createdAtGt: OffsetDateTime?,
+    private val createdAtGte: OffsetDateTime?,
+    private val createdAtLt: OffsetDateTime?,
+    private val createdAtLte: OffsetDateTime?,
     private val cursor: String?,
     private val limit: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
+    fun createdAtGt(): Optional<OffsetDateTime> = Optional.ofNullable(createdAtGt)
+
+    fun createdAtGte(): Optional<OffsetDateTime> = Optional.ofNullable(createdAtGte)
+
+    fun createdAtLt(): Optional<OffsetDateTime> = Optional.ofNullable(createdAtLt)
+
+    fun createdAtLte(): Optional<OffsetDateTime> = Optional.ofNullable(createdAtLte)
+
+    /**
+     * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+     * initial request.
+     */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
+    /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic
-    internal fun getQueryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.cursor?.let { queryParams.put("cursor", listOf(it.toString())) }
-        this.limit?.let { queryParams.put("limit", listOf(it.toString())) }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CreditNoteListParams && cursor == other.cursor && limit == other.limit && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(cursor, limit, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CreditNoteListParams{cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): CreditNoteListParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [CreditNoteListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [CreditNoteListParams]. */
+    class Builder internal constructor() {
 
+        private var createdAtGt: OffsetDateTime? = null
+        private var createdAtGte: OffsetDateTime? = null
+        private var createdAtLt: OffsetDateTime? = null
+        private var createdAtLte: OffsetDateTime? = null
         private var cursor: String? = null
         private var limit: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -66,20 +73,61 @@ constructor(
 
         @JvmSynthetic
         internal fun from(creditNoteListParams: CreditNoteListParams) = apply {
-            this.cursor = creditNoteListParams.cursor
-            this.limit = creditNoteListParams.limit
-            additionalHeaders(creditNoteListParams.additionalHeaders)
-            additionalQueryParams(creditNoteListParams.additionalQueryParams)
+            createdAtGt = creditNoteListParams.createdAtGt
+            createdAtGte = creditNoteListParams.createdAtGte
+            createdAtLt = creditNoteListParams.createdAtLt
+            createdAtLte = creditNoteListParams.createdAtLte
+            cursor = creditNoteListParams.cursor
+            limit = creditNoteListParams.limit
+            additionalHeaders = creditNoteListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = creditNoteListParams.additionalQueryParams.toBuilder()
         }
+
+        fun createdAtGt(createdAtGt: OffsetDateTime?) = apply { this.createdAtGt = createdAtGt }
+
+        /** Alias for calling [Builder.createdAtGt] with `createdAtGt.orElse(null)`. */
+        fun createdAtGt(createdAtGt: Optional<OffsetDateTime>) =
+            createdAtGt(createdAtGt.getOrNull())
+
+        fun createdAtGte(createdAtGte: OffsetDateTime?) = apply { this.createdAtGte = createdAtGte }
+
+        /** Alias for calling [Builder.createdAtGte] with `createdAtGte.orElse(null)`. */
+        fun createdAtGte(createdAtGte: Optional<OffsetDateTime>) =
+            createdAtGte(createdAtGte.getOrNull())
+
+        fun createdAtLt(createdAtLt: OffsetDateTime?) = apply { this.createdAtLt = createdAtLt }
+
+        /** Alias for calling [Builder.createdAtLt] with `createdAtLt.orElse(null)`. */
+        fun createdAtLt(createdAtLt: Optional<OffsetDateTime>) =
+            createdAtLt(createdAtLt.getOrNull())
+
+        fun createdAtLte(createdAtLte: OffsetDateTime?) = apply { this.createdAtLte = createdAtLte }
+
+        /** Alias for calling [Builder.createdAtLte] with `createdAtLte.orElse(null)`. */
+        fun createdAtLte(createdAtLte: Optional<OffsetDateTime>) =
+            createdAtLte(createdAtLte.getOrNull())
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: String) = apply { this.cursor = cursor }
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -179,12 +227,57 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [CreditNoteListParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): CreditNoteListParams =
             CreditNoteListParams(
+                createdAtGt,
+                createdAtGte,
+                createdAtLt,
+                createdAtLte,
                 cursor,
                 limit,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                createdAtGt?.let {
+                    put("created_at[gt]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                createdAtGte?.let {
+                    put("created_at[gte]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                createdAtLt?.let {
+                    put("created_at[lt]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                createdAtLte?.let {
+                    put("created_at[lte]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                cursor?.let { put("cursor", it) }
+                limit?.let { put("limit", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CreditNoteListParams && createdAtGt == other.createdAtGt && createdAtGte == other.createdAtGte && createdAtLt == other.createdAtLt && createdAtLte == other.createdAtLte && cursor == other.cursor && limit == other.limit && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(createdAtGt, createdAtGte, createdAtLt, createdAtLte, cursor, limit, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CreditNoteListParams{createdAtGt=$createdAtGt, createdAtGte=$createdAtGte, createdAtLt=$createdAtLt, createdAtLte=$createdAtLte, cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

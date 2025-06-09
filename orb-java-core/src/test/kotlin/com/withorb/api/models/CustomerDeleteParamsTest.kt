@@ -2,24 +2,22 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CustomerDeleteParamsTest {
+internal class CustomerDeleteParamsTest {
 
     @Test
-    fun createCustomerDeleteParams() {
+    fun create() {
         CustomerDeleteParams.builder().customerId("customer_id").build()
     }
 
     @Test
-    fun getPathParam() {
+    fun pathParams() {
         val params = CustomerDeleteParams.builder().customerId("customer_id").build()
-        assertThat(params).isNotNull
-        // path param "customerId"
-        assertThat(params.getPathParam(0)).isEqualTo("customer_id")
+
+        assertThat(params._pathParam(0)).isEqualTo("customer_id")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 }

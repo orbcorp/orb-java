@@ -2,69 +2,72 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
 import java.time.LocalDate
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class SubscriptionUpdateFixedFeeQuantityParamsTest {
+internal class SubscriptionUpdateFixedFeeQuantityParamsTest {
 
     @Test
-    fun createSubscriptionUpdateFixedFeeQuantityParams() {
+    fun create() {
         SubscriptionUpdateFixedFeeQuantityParams.builder()
             .subscriptionId("subscription_id")
             .priceId("price_id")
-            .quantity(42.23)
+            .quantity(0.0)
+            .allowInvoiceCreditOrVoid(true)
             .changeOption(SubscriptionUpdateFixedFeeQuantityParams.ChangeOption.IMMEDIATE)
             .effectiveDate(LocalDate.parse("2022-12-21"))
             .build()
     }
 
     @Test
-    fun getBody() {
+    fun pathParams() {
         val params =
             SubscriptionUpdateFixedFeeQuantityParams.builder()
                 .subscriptionId("subscription_id")
                 .priceId("price_id")
-                .quantity(42.23)
+                .quantity(0.0)
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("subscription_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
+    fun body() {
+        val params =
+            SubscriptionUpdateFixedFeeQuantityParams.builder()
+                .subscriptionId("subscription_id")
+                .priceId("price_id")
+                .quantity(0.0)
+                .allowInvoiceCreditOrVoid(true)
                 .changeOption(SubscriptionUpdateFixedFeeQuantityParams.ChangeOption.IMMEDIATE)
                 .effectiveDate(LocalDate.parse("2022-12-21"))
                 .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
+
+        val body = params._body()
+
         assertThat(body.priceId()).isEqualTo("price_id")
-        assertThat(body.quantity()).isEqualTo(42.23)
+        assertThat(body.quantity()).isEqualTo(0.0)
+        assertThat(body.allowInvoiceCreditOrVoid()).contains(true)
         assertThat(body.changeOption())
-            .isEqualTo(SubscriptionUpdateFixedFeeQuantityParams.ChangeOption.IMMEDIATE)
-        assertThat(body.effectiveDate()).isEqualTo(LocalDate.parse("2022-12-21"))
+            .contains(SubscriptionUpdateFixedFeeQuantityParams.ChangeOption.IMMEDIATE)
+        assertThat(body.effectiveDate()).contains(LocalDate.parse("2022-12-21"))
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             SubscriptionUpdateFixedFeeQuantityParams.builder()
                 .subscriptionId("subscription_id")
                 .priceId("price_id")
-                .quantity(42.23)
+                .quantity(0.0)
                 .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
+
+        val body = params._body()
+
         assertThat(body.priceId()).isEqualTo("price_id")
-        assertThat(body.quantity()).isEqualTo(42.23)
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            SubscriptionUpdateFixedFeeQuantityParams.builder()
-                .subscriptionId("subscription_id")
-                .priceId("price_id")
-                .quantity(42.23)
-                .build()
-        assertThat(params).isNotNull
-        // path param "subscriptionId"
-        assertThat(params.getPathParam(0)).isEqualTo("subscription_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(body.quantity()).isEqualTo(0.0)
     }
 }

@@ -2,200 +2,130 @@
 
 package com.withorb.api.models
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.withorb.api.core.ExcludeMissing
-import com.withorb.api.core.JsonField
-import com.withorb.api.core.JsonMissing
-import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toImmutable
+import com.withorb.api.core.AutoPager
+import com.withorb.api.core.Page
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.blocking.CouponService
 import java.util.Objects
 import java.util.Optional
-import java.util.stream.Stream
-import java.util.stream.StreamSupport
+import kotlin.jvm.optionals.getOrNull
 
+/** @see [CouponService.list] */
 class CouponListPage
 private constructor(
-    private val couponsService: CouponService,
+    private val service: CouponService,
     private val params: CouponListParams,
-    private val response: Response,
-) {
+    private val response: CouponListPageResponse,
+) : Page<Coupon> {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [CouponListPageResponse], but gracefully handles missing data.
+     *
+     * @see [CouponListPageResponse.data]
+     */
+    fun data(): List<Coupon> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
-    fun data(): List<Coupon> = response().data()
+    /**
+     * Delegates to [CouponListPageResponse], but gracefully handles missing data.
+     *
+     * @see [CouponListPageResponse.paginationMetadata]
+     */
+    fun paginationMetadata(): Optional<PaginationMetadata> =
+        response._paginationMetadata().getOptional("pagination_metadata")
 
-    fun paginationMetadata(): PaginationMetadata = response().paginationMetadata()
+    override fun items(): List<Coupon> = data()
+
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() &&
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.isPresent
+
+    fun nextPageParams(): CouponListParams {
+        val nextCursor =
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().cursor(nextCursor).build()
+    }
+
+    override fun nextPage(): CouponListPage = service.list(nextPageParams())
+
+    fun autoPager(): AutoPager<Coupon> = AutoPager.from(this)
+
+    /** The parameters that were used to request this page. */
+    fun params(): CouponListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): CouponListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
+    companion object {
+
+        /**
+         * Returns a mutable builder for constructing an instance of [CouponListPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [CouponListPage]. */
+    class Builder internal constructor() {
+
+        private var service: CouponService? = null
+        private var params: CouponListParams? = null
+        private var response: CouponListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(couponListPage: CouponListPage) = apply {
+            service = couponListPage.service
+            params = couponListPage.params
+            response = couponListPage.response
+        }
+
+        fun service(service: CouponService) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: CouponListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: CouponListPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [CouponListPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): CouponListPage =
+            CouponListPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is CouponListPage && couponsService == other.couponsService && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is CouponListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(couponsService, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
 
-    override fun toString() =
-        "CouponListPage{couponsService=$couponsService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        if (data().isEmpty()) {
-            return false
-        }
-
-        return paginationMetadata().nextCursor().isPresent
-    }
-
-    fun getNextPageParams(): Optional<CouponListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
-
-        return Optional.of(
-            CouponListParams.builder()
-                .from(params)
-                .apply { paginationMetadata().nextCursor().ifPresent { this.cursor(it) } }
-                .build()
-        )
-    }
-
-    fun getNextPage(): Optional<CouponListPage> {
-        return getNextPageParams().map { couponsService.list(it) }
-    }
-
-    fun autoPager(): AutoPager = AutoPager(this)
-
-    companion object {
-
-        @JvmStatic
-        fun of(couponsService: CouponService, params: CouponListParams, response: Response) =
-            CouponListPage(
-                couponsService,
-                params,
-                response,
-            )
-    }
-
-    @JsonDeserialize(builder = Response.Builder::class)
-    @NoAutoDetect
-    class Response
-    constructor(
-        private val data: JsonField<List<Coupon>>,
-        private val paginationMetadata: JsonField<PaginationMetadata>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        private var validated: Boolean = false
-
-        fun data(): List<Coupon> = data.getNullable("data") ?: listOf()
-
-        fun paginationMetadata(): PaginationMetadata =
-            paginationMetadata.getRequired("pagination_metadata")
-
-        @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<Coupon>>> = Optional.ofNullable(data)
-
-        @JsonProperty("pagination_metadata")
-        fun _paginationMetadata(): Optional<JsonField<PaginationMetadata>> =
-            Optional.ofNullable(paginationMetadata)
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): Response = apply {
-            if (!validated) {
-                data().map { it.validate() }
-                paginationMetadata().validate()
-                validated = true
-            }
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && data == other.data && paginationMetadata == other.paginationMetadata && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(data, paginationMetadata, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{data=$data, paginationMetadata=$paginationMetadata, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var data: JsonField<List<Coupon>> = JsonMissing.of()
-            private var paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.data = page.data
-                this.paginationMetadata = page.paginationMetadata
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun data(data: List<Coupon>) = data(JsonField.of(data))
-
-            @JsonProperty("data")
-            fun data(data: JsonField<List<Coupon>>) = apply { this.data = data }
-
-            fun paginationMetadata(paginationMetadata: PaginationMetadata) =
-                paginationMetadata(JsonField.of(paginationMetadata))
-
-            @JsonProperty("pagination_metadata")
-            fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply {
-                this.paginationMetadata = paginationMetadata
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
-        }
-    }
-
-    class AutoPager
-    constructor(
-        private val firstPage: CouponListPage,
-    ) : Iterable<Coupon> {
-
-        override fun iterator(): Iterator<Coupon> = iterator {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.data().size) {
-                    yield(page.data()[index++])
-                }
-                page = page.getNextPage().orElse(null) ?: break
-                index = 0
-            }
-        }
-
-        fun stream(): Stream<Coupon> {
-            return StreamSupport.stream(spliterator(), false)
-        }
-    }
+    override fun toString() = "CouponListPage{service=$service, params=$params, response=$response}"
 }

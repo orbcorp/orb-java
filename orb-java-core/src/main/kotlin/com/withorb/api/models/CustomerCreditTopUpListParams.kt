@@ -2,72 +2,53 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/** List top-ups */
 class CustomerCreditTopUpListParams
-constructor(
-    private val customerId: String,
+private constructor(
+    private val customerId: String?,
     private val cursor: String?,
     private val limit: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun customerId(): String = customerId
+    fun customerId(): Optional<String> = Optional.ofNullable(customerId)
 
+    /**
+     * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+     * initial request.
+     */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
+    /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic
-    internal fun getQueryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.cursor?.let { queryParams.put("cursor", listOf(it.toString())) }
-        this.limit?.let { queryParams.put("limit", listOf(it.toString())) }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> customerId
-            else -> ""
-        }
-    }
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerCreditTopUpListParams && customerId == other.customerId && cursor == other.cursor && limit == other.limit && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, cursor, limit, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CustomerCreditTopUpListParams{customerId=$customerId, cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): CustomerCreditTopUpListParams = builder().build()
+
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [CustomerCreditTopUpListParams].
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [CustomerCreditTopUpListParams]. */
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var cursor: String? = null
@@ -77,23 +58,39 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerCreditTopUpListParams: CustomerCreditTopUpListParams) = apply {
-            this.customerId = customerCreditTopUpListParams.customerId
-            this.cursor = customerCreditTopUpListParams.cursor
-            this.limit = customerCreditTopUpListParams.limit
-            additionalHeaders(customerCreditTopUpListParams.additionalHeaders)
-            additionalQueryParams(customerCreditTopUpListParams.additionalQueryParams)
+            customerId = customerCreditTopUpListParams.customerId
+            cursor = customerCreditTopUpListParams.cursor
+            limit = customerCreditTopUpListParams.limit
+            additionalHeaders = customerCreditTopUpListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerCreditTopUpListParams.additionalQueryParams.toBuilder()
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+        /** Alias for calling [Builder.customerId] with `customerId.orElse(null)`. */
+        fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: String) = apply { this.cursor = cursor }
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -193,13 +190,48 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [CustomerCreditTopUpListParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): CustomerCreditTopUpListParams =
             CustomerCreditTopUpListParams(
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
+                customerId,
                 cursor,
                 limit,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> customerId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                cursor?.let { put("cursor", it) }
+                limit?.let { put("limit", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerCreditTopUpListParams && customerId == other.customerId && cursor == other.cursor && limit == other.limit && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, cursor, limit, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CustomerCreditTopUpListParams{customerId=$customerId, cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

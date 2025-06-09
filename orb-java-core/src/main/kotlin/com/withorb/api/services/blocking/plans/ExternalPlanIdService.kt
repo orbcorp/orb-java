@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking.plans
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Plan
 import com.withorb.api.models.PlanExternalPlanIdFetchParams
 import com.withorb.api.models.PlanExternalPlanIdUpdateParams
@@ -12,19 +12,48 @@ import com.withorb.api.models.PlanExternalPlanIdUpdateParams
 interface ExternalPlanIdService {
 
     /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
      * This endpoint can be used to update the `external_plan_id`, and `metadata` of an existing
      * plan.
      *
-     * Other fields on a customer are currently immutable.
+     * Other fields on a plan are currently immutable.
      */
-    @JvmOverloads
+    fun update(otherExternalPlanId: String): Plan =
+        update(otherExternalPlanId, PlanExternalPlanIdUpdateParams.none())
+
+    /** @see [update] */
+    fun update(
+        otherExternalPlanId: String,
+        params: PlanExternalPlanIdUpdateParams = PlanExternalPlanIdUpdateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Plan =
+        update(params.toBuilder().otherExternalPlanId(otherExternalPlanId).build(), requestOptions)
+
+    /** @see [update] */
+    fun update(
+        otherExternalPlanId: String,
+        params: PlanExternalPlanIdUpdateParams = PlanExternalPlanIdUpdateParams.none(),
+    ): Plan = update(otherExternalPlanId, params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: PlanExternalPlanIdUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Plan
 
+    /** @see [update] */
+    fun update(params: PlanExternalPlanIdUpdateParams): Plan = update(params, RequestOptions.none())
+
+    /** @see [update] */
+    fun update(otherExternalPlanId: String, requestOptions: RequestOptions): Plan =
+        update(otherExternalPlanId, PlanExternalPlanIdUpdateParams.none(), requestOptions)
+
     /**
-     * This endpoint is used to fetch [plan](../guides/concepts##plan-and-price) details given an
+     * This endpoint is used to fetch [plan](/core-concepts##plan-and-price) details given an
      * external_plan_id identifier. It returns information about the prices included in the plan and
      * their configuration, as well as the product that the plan is attached to.
      *
@@ -35,14 +64,131 @@ interface ExternalPlanIdService {
      * ## Serialized prices
      *
      * Orb supports a few different pricing models out of the box. Each of these models is
-     * serialized differently in a given [Price](../guides/concepts#plan-and-price) object. The
+     * serialized differently in a given [Price](/core-concepts#plan-and-price) object. The
      * `model_type` field determines the key for the configuration object that is present. A
      * detailed explanation of price types can be found in the
-     * [Price schema](../guides/concepts#plan-and-price). "
+     * [Price schema](/core-concepts#plan-and-price). "
      */
-    @JvmOverloads
+    fun fetch(externalPlanId: String): Plan =
+        fetch(externalPlanId, PlanExternalPlanIdFetchParams.none())
+
+    /** @see [fetch] */
+    fun fetch(
+        externalPlanId: String,
+        params: PlanExternalPlanIdFetchParams = PlanExternalPlanIdFetchParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Plan = fetch(params.toBuilder().externalPlanId(externalPlanId).build(), requestOptions)
+
+    /** @see [fetch] */
+    fun fetch(
+        externalPlanId: String,
+        params: PlanExternalPlanIdFetchParams = PlanExternalPlanIdFetchParams.none(),
+    ): Plan = fetch(externalPlanId, params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(
         params: PlanExternalPlanIdFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Plan
+
+    /** @see [fetch] */
+    fun fetch(params: PlanExternalPlanIdFetchParams): Plan = fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
+    fun fetch(externalPlanId: String, requestOptions: RequestOptions): Plan =
+        fetch(externalPlanId, PlanExternalPlanIdFetchParams.none(), requestOptions)
+
+    /**
+     * A view of [ExternalPlanIdService] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `put /plans/external_plan_id/{external_plan_id}`, but is
+         * otherwise the same as [ExternalPlanIdService.update].
+         */
+        @MustBeClosed
+        fun update(otherExternalPlanId: String): HttpResponseFor<Plan> =
+            update(otherExternalPlanId, PlanExternalPlanIdUpdateParams.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            otherExternalPlanId: String,
+            params: PlanExternalPlanIdUpdateParams = PlanExternalPlanIdUpdateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Plan> =
+            update(
+                params.toBuilder().otherExternalPlanId(otherExternalPlanId).build(),
+                requestOptions,
+            )
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            otherExternalPlanId: String,
+            params: PlanExternalPlanIdUpdateParams = PlanExternalPlanIdUpdateParams.none(),
+        ): HttpResponseFor<Plan> = update(otherExternalPlanId, params, RequestOptions.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            params: PlanExternalPlanIdUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Plan>
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(params: PlanExternalPlanIdUpdateParams): HttpResponseFor<Plan> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            otherExternalPlanId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Plan> =
+            update(otherExternalPlanId, PlanExternalPlanIdUpdateParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /plans/external_plan_id/{external_plan_id}`, but is
+         * otherwise the same as [ExternalPlanIdService.fetch].
+         */
+        @MustBeClosed
+        fun fetch(externalPlanId: String): HttpResponseFor<Plan> =
+            fetch(externalPlanId, PlanExternalPlanIdFetchParams.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            externalPlanId: String,
+            params: PlanExternalPlanIdFetchParams = PlanExternalPlanIdFetchParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Plan> =
+            fetch(params.toBuilder().externalPlanId(externalPlanId).build(), requestOptions)
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            externalPlanId: String,
+            params: PlanExternalPlanIdFetchParams = PlanExternalPlanIdFetchParams.none(),
+        ): HttpResponseFor<Plan> = fetch(externalPlanId, params, RequestOptions.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            params: PlanExternalPlanIdFetchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Plan>
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(params: PlanExternalPlanIdFetchParams): HttpResponseFor<Plan> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(externalPlanId: String, requestOptions: RequestOptions): HttpResponseFor<Plan> =
+            fetch(externalPlanId, PlanExternalPlanIdFetchParams.none(), requestOptions)
+    }
 }

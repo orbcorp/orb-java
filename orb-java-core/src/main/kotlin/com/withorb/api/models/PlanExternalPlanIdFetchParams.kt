@@ -2,58 +2,57 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint is used to fetch [plan](/core-concepts##plan-and-price) details given an
+ * external_plan_id identifier. It returns information about the prices included in the plan and
+ * their configuration, as well as the product that the plan is attached to.
+ *
+ * If multiple plans are found to contain the specified external_plan_id, the active plans will take
+ * priority over archived ones, and among those, the endpoint will return the most recently created
+ * plan.
+ *
+ * ## Serialized prices
+ *
+ * Orb supports a few different pricing models out of the box. Each of these models is serialized
+ * differently in a given [Price](/core-concepts#plan-and-price) object. The `model_type` field
+ * determines the key for the configuration object that is present. A detailed explanation of price
+ * types can be found in the [Price schema](/core-concepts#plan-and-price). "
+ */
 class PlanExternalPlanIdFetchParams
-constructor(
-    private val externalPlanId: String,
+private constructor(
+    private val externalPlanId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun externalPlanId(): String = externalPlanId
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> externalPlanId
-            else -> ""
-        }
-    }
+    fun externalPlanId(): Optional<String> = Optional.ofNullable(externalPlanId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is PlanExternalPlanIdFetchParams && externalPlanId == other.externalPlanId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalPlanId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "PlanExternalPlanIdFetchParams{externalPlanId=$externalPlanId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): PlanExternalPlanIdFetchParams = builder().build()
+
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [PlanExternalPlanIdFetchParams].
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [PlanExternalPlanIdFetchParams]. */
+    class Builder internal constructor() {
 
         private var externalPlanId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -61,12 +60,16 @@ constructor(
 
         @JvmSynthetic
         internal fun from(planExternalPlanIdFetchParams: PlanExternalPlanIdFetchParams) = apply {
-            this.externalPlanId = planExternalPlanIdFetchParams.externalPlanId
-            additionalHeaders(planExternalPlanIdFetchParams.additionalHeaders)
-            additionalQueryParams(planExternalPlanIdFetchParams.additionalQueryParams)
+            externalPlanId = planExternalPlanIdFetchParams.externalPlanId
+            additionalHeaders = planExternalPlanIdFetchParams.additionalHeaders.toBuilder()
+            additionalQueryParams = planExternalPlanIdFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun externalPlanId(externalPlanId: String) = apply { this.externalPlanId = externalPlanId }
+        fun externalPlanId(externalPlanId: String?) = apply { this.externalPlanId = externalPlanId }
+
+        /** Alias for calling [Builder.externalPlanId] with `externalPlanId.orElse(null)`. */
+        fun externalPlanId(externalPlanId: Optional<String>) =
+            externalPlanId(externalPlanId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,11 +169,39 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [PlanExternalPlanIdFetchParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): PlanExternalPlanIdFetchParams =
             PlanExternalPlanIdFetchParams(
-                checkNotNull(externalPlanId) { "`externalPlanId` is required but was not set" },
+                externalPlanId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> externalPlanId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is PlanExternalPlanIdFetchParams && externalPlanId == other.externalPlanId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalPlanId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "PlanExternalPlanIdFetchParams{externalPlanId=$externalPlanId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

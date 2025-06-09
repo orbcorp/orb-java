@@ -4,106 +4,215 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.checkKnown
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.toImmutable
+import com.withorb.api.errors.OrbInvalidDataException
+import java.util.Collections
 import java.util.Objects
+import kotlin.jvm.optionals.getOrNull
 
-@JsonDeserialize(builder = Subscriptions.Builder::class)
-@NoAutoDetect
 class Subscriptions
 private constructor(
     private val data: JsonField<List<Subscription>>,
     private val paginationMetadata: JsonField<PaginationMetadata>,
-    private val additionalProperties: Map<String, JsonValue>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
+    @JsonCreator
+    private constructor(
+        @JsonProperty("data")
+        @ExcludeMissing
+        data: JsonField<List<Subscription>> = JsonMissing.of(),
+        @JsonProperty("pagination_metadata")
+        @ExcludeMissing
+        paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of(),
+    ) : this(data, paginationMetadata, mutableMapOf())
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun data(): List<Subscription> = data.getRequired("data")
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun paginationMetadata(): PaginationMetadata =
         paginationMetadata.getRequired("pagination_metadata")
 
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Subscription>> = data
 
+    /**
+     * Returns the raw JSON value of [paginationMetadata].
+     *
+     * Unlike [paginationMetadata], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
     @JsonProperty("pagination_metadata")
     @ExcludeMissing
-    fun _paginationMetadata() = paginationMetadata
+    fun _paginationMetadata(): JsonField<PaginationMetadata> = paginationMetadata
+
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    fun validate(): Subscriptions = apply {
-        if (!validated) {
-            data().forEach { it.validate() }
-            paginationMetadata().validate()
-            validated = true
-        }
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [Subscriptions].
+         *
+         * The following fields are required:
+         * ```java
+         * .data()
+         * .paginationMetadata()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    /** A builder for [Subscriptions]. */
+    class Builder internal constructor() {
 
-        private var data: JsonField<List<Subscription>> = JsonMissing.of()
-        private var paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of()
+        private var data: JsonField<MutableList<Subscription>>? = null
+        private var paginationMetadata: JsonField<PaginationMetadata>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(subscriptions: Subscriptions) = apply {
-            this.data = subscriptions.data
-            this.paginationMetadata = subscriptions.paginationMetadata
-            additionalProperties(subscriptions.additionalProperties)
+            data = subscriptions.data.map { it.toMutableList() }
+            paginationMetadata = subscriptions.paginationMetadata
+            additionalProperties = subscriptions.additionalProperties.toMutableMap()
         }
 
         fun data(data: List<Subscription>) = data(JsonField.of(data))
 
-        @JsonProperty("data")
-        @ExcludeMissing
-        fun data(data: JsonField<List<Subscription>>) = apply { this.data = data }
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed `List<Subscription>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun data(data: JsonField<List<Subscription>>) = apply {
+            this.data = data.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [Subscription] to [Builder.data].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addData(data: Subscription) = apply {
+            this.data =
+                (this.data ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("data", it).add(data)
+                }
+        }
 
         fun paginationMetadata(paginationMetadata: PaginationMetadata) =
             paginationMetadata(JsonField.of(paginationMetadata))
 
-        @JsonProperty("pagination_metadata")
-        @ExcludeMissing
+        /**
+         * Sets [Builder.paginationMetadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.paginationMetadata] with a well-typed
+         * [PaginationMetadata] value instead. This method is primarily for setting the field to an
+         * undocumented or not yet supported value.
+         */
         fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply {
             this.paginationMetadata = paginationMetadata
         }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
         }
 
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
+        /**
+         * Returns an immutable instance of [Subscriptions].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .data()
+         * .paginationMetadata()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): Subscriptions =
             Subscriptions(
-                data.map { it.toImmutable() },
-                paginationMetadata,
-                additionalProperties.toImmutable(),
+                checkRequired("data", data).map { it.toImmutable() },
+                checkRequired("paginationMetadata", paginationMetadata),
+                additionalProperties.toMutableMap(),
             )
     }
+
+    private var validated: Boolean = false
+
+    fun validate(): Subscriptions = apply {
+        if (validated) {
+            return@apply
+        }
+
+        data().forEach { it.validate() }
+        paginationMetadata().validate()
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: OrbInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (paginationMetadata.asKnown().getOrNull()?.validity() ?: 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

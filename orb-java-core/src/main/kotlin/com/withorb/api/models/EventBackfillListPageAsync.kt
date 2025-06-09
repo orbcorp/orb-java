@@ -2,218 +2,146 @@
 
 package com.withorb.api.models
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.withorb.api.core.ExcludeMissing
-import com.withorb.api.core.JsonField
-import com.withorb.api.core.JsonMissing
-import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toImmutable
+import com.withorb.api.core.AutoPagerAsync
+import com.withorb.api.core.PageAsync
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.async.events.BackfillServiceAsync
 import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
 
+/** @see [BackfillServiceAsync.list] */
 class EventBackfillListPageAsync
 private constructor(
-    private val backfillsService: BackfillServiceAsync,
+    private val service: BackfillServiceAsync,
+    private val streamHandlerExecutor: Executor,
     private val params: EventBackfillListParams,
-    private val response: Response,
-) {
+    private val response: EventBackfillListPageResponse,
+) : PageAsync<EventBackfillListResponse> {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [EventBackfillListPageResponse], but gracefully handles missing data.
+     *
+     * @see [EventBackfillListPageResponse.data]
+     */
+    fun data(): List<EventBackfillListResponse> =
+        response._data().getOptional("data").getOrNull() ?: emptyList()
 
-    fun data(): List<EventBackfillListResponse> = response().data()
+    /**
+     * Delegates to [EventBackfillListPageResponse], but gracefully handles missing data.
+     *
+     * @see [EventBackfillListPageResponse.paginationMetadata]
+     */
+    fun paginationMetadata(): Optional<PaginationMetadata> =
+        response._paginationMetadata().getOptional("pagination_metadata")
 
-    fun paginationMetadata(): PaginationMetadata = response().paginationMetadata()
+    override fun items(): List<EventBackfillListResponse> = data()
+
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() &&
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.isPresent
+
+    fun nextPageParams(): EventBackfillListParams {
+        val nextCursor =
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().cursor(nextCursor).build()
+    }
+
+    override fun nextPage(): CompletableFuture<EventBackfillListPageAsync> =
+        service.list(nextPageParams())
+
+    fun autoPager(): AutoPagerAsync<EventBackfillListResponse> =
+        AutoPagerAsync.from(this, streamHandlerExecutor)
+
+    /** The parameters that were used to request this page. */
+    fun params(): EventBackfillListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): EventBackfillListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
+    companion object {
+
+        /**
+         * Returns a mutable builder for constructing an instance of [EventBackfillListPageAsync].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .streamHandlerExecutor()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [EventBackfillListPageAsync]. */
+    class Builder internal constructor() {
+
+        private var service: BackfillServiceAsync? = null
+        private var streamHandlerExecutor: Executor? = null
+        private var params: EventBackfillListParams? = null
+        private var response: EventBackfillListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(eventBackfillListPageAsync: EventBackfillListPageAsync) = apply {
+            service = eventBackfillListPageAsync.service
+            streamHandlerExecutor = eventBackfillListPageAsync.streamHandlerExecutor
+            params = eventBackfillListPageAsync.params
+            response = eventBackfillListPageAsync.response
+        }
+
+        fun service(service: BackfillServiceAsync) = apply { this.service = service }
+
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
+            this.streamHandlerExecutor = streamHandlerExecutor
+        }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: EventBackfillListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: EventBackfillListPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [EventBackfillListPageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .streamHandlerExecutor()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): EventBackfillListPageAsync =
+            EventBackfillListPageAsync(
+                checkRequired("service", service),
+                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is EventBackfillListPageAsync && backfillsService == other.backfillsService && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is EventBackfillListPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(backfillsService, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, streamHandlerExecutor, params, response) /* spotless:on */
 
     override fun toString() =
-        "EventBackfillListPageAsync{backfillsService=$backfillsService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        if (data().isEmpty()) {
-            return false
-        }
-
-        return paginationMetadata().nextCursor().isPresent
-    }
-
-    fun getNextPageParams(): Optional<EventBackfillListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
-
-        return Optional.of(
-            EventBackfillListParams.builder()
-                .from(params)
-                .apply { paginationMetadata().nextCursor().ifPresent { this.cursor(it) } }
-                .build()
-        )
-    }
-
-    fun getNextPage(): CompletableFuture<Optional<EventBackfillListPageAsync>> {
-        return getNextPageParams()
-            .map { backfillsService.list(it).thenApply { Optional.of(it) } }
-            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
-    }
-
-    fun autoPager(): AutoPager = AutoPager(this)
-
-    companion object {
-
-        @JvmStatic
-        fun of(
-            backfillsService: BackfillServiceAsync,
-            params: EventBackfillListParams,
-            response: Response
-        ) =
-            EventBackfillListPageAsync(
-                backfillsService,
-                params,
-                response,
-            )
-    }
-
-    @JsonDeserialize(builder = Response.Builder::class)
-    @NoAutoDetect
-    class Response
-    constructor(
-        private val data: JsonField<List<EventBackfillListResponse>>,
-        private val paginationMetadata: JsonField<PaginationMetadata>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        private var validated: Boolean = false
-
-        fun data(): List<EventBackfillListResponse> = data.getNullable("data") ?: listOf()
-
-        fun paginationMetadata(): PaginationMetadata =
-            paginationMetadata.getRequired("pagination_metadata")
-
-        @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<EventBackfillListResponse>>> =
-            Optional.ofNullable(data)
-
-        @JsonProperty("pagination_metadata")
-        fun _paginationMetadata(): Optional<JsonField<PaginationMetadata>> =
-            Optional.ofNullable(paginationMetadata)
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): Response = apply {
-            if (!validated) {
-                data().map { it.validate() }
-                paginationMetadata().validate()
-                validated = true
-            }
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && data == other.data && paginationMetadata == other.paginationMetadata && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(data, paginationMetadata, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{data=$data, paginationMetadata=$paginationMetadata, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var data: JsonField<List<EventBackfillListResponse>> = JsonMissing.of()
-            private var paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.data = page.data
-                this.paginationMetadata = page.paginationMetadata
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun data(data: List<EventBackfillListResponse>) = data(JsonField.of(data))
-
-            @JsonProperty("data")
-            fun data(data: JsonField<List<EventBackfillListResponse>>) = apply { this.data = data }
-
-            fun paginationMetadata(paginationMetadata: PaginationMetadata) =
-                paginationMetadata(JsonField.of(paginationMetadata))
-
-            @JsonProperty("pagination_metadata")
-            fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply {
-                this.paginationMetadata = paginationMetadata
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
-        }
-    }
-
-    class AutoPager
-    constructor(
-        private val firstPage: EventBackfillListPageAsync,
-    ) {
-
-        fun forEach(
-            action: Predicate<EventBackfillListResponse>,
-            executor: Executor
-        ): CompletableFuture<Void> {
-            fun CompletableFuture<Optional<EventBackfillListPageAsync>>.forEach(
-                action: (EventBackfillListResponse) -> Boolean,
-                executor: Executor
-            ): CompletableFuture<Void> =
-                thenComposeAsync(
-                    { page ->
-                        page
-                            .filter { it.data().all(action) }
-                            .map { it.getNextPage().forEach(action, executor) }
-                            .orElseGet { CompletableFuture.completedFuture(null) }
-                    },
-                    executor
-                )
-            return CompletableFuture.completedFuture(Optional.of(firstPage))
-                .forEach(action::test, executor)
-        }
-
-        fun toList(executor: Executor): CompletableFuture<List<EventBackfillListResponse>> {
-            val values = mutableListOf<EventBackfillListResponse>()
-            return forEach(values::add, executor).thenApply { values }
-        }
-    }
+        "EventBackfillListPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

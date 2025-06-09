@@ -2,13 +2,15 @@
 
 package com.withorb.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.withorb.api.core.jsonMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CustomerCreditTopUpCreateResponseTest {
+internal class CustomerCreditTopUpCreateResponseTest {
 
     @Test
-    fun createCustomerCreditTopUpCreateResponse() {
+    fun create() {
         val customerCreditTopUpCreateResponse =
             CustomerCreditTopUpCreateResponse.builder()
                 .id("id")
@@ -17,17 +19,17 @@ class CustomerCreditTopUpCreateResponseTest {
                 .invoiceSettings(
                     CustomerCreditTopUpCreateResponse.InvoiceSettings.builder()
                         .autoCollection(true)
-                        .netTerms(123L)
+                        .netTerms(0L)
                         .memo("memo")
                         .requireSuccessfulPayment(true)
                         .build()
                 )
                 .perUnitCostBasis("per_unit_cost_basis")
                 .threshold("threshold")
-                .expiresAfter(123L)
+                .expiresAfter(0L)
                 .expiresAfterUnit(CustomerCreditTopUpCreateResponse.ExpiresAfterUnit.DAY)
                 .build()
-        assertThat(customerCreditTopUpCreateResponse).isNotNull
+
         assertThat(customerCreditTopUpCreateResponse.id()).isEqualTo("id")
         assertThat(customerCreditTopUpCreateResponse.amount()).isEqualTo("amount")
         assertThat(customerCreditTopUpCreateResponse.currency()).isEqualTo("currency")
@@ -35,7 +37,7 @@ class CustomerCreditTopUpCreateResponseTest {
             .isEqualTo(
                 CustomerCreditTopUpCreateResponse.InvoiceSettings.builder()
                     .autoCollection(true)
-                    .netTerms(123L)
+                    .netTerms(0L)
                     .memo("memo")
                     .requireSuccessfulPayment(true)
                     .build()
@@ -43,8 +45,40 @@ class CustomerCreditTopUpCreateResponseTest {
         assertThat(customerCreditTopUpCreateResponse.perUnitCostBasis())
             .isEqualTo("per_unit_cost_basis")
         assertThat(customerCreditTopUpCreateResponse.threshold()).isEqualTo("threshold")
-        assertThat(customerCreditTopUpCreateResponse.expiresAfter()).contains(123L)
+        assertThat(customerCreditTopUpCreateResponse.expiresAfter()).contains(0L)
         assertThat(customerCreditTopUpCreateResponse.expiresAfterUnit())
             .contains(CustomerCreditTopUpCreateResponse.ExpiresAfterUnit.DAY)
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val customerCreditTopUpCreateResponse =
+            CustomerCreditTopUpCreateResponse.builder()
+                .id("id")
+                .amount("amount")
+                .currency("currency")
+                .invoiceSettings(
+                    CustomerCreditTopUpCreateResponse.InvoiceSettings.builder()
+                        .autoCollection(true)
+                        .netTerms(0L)
+                        .memo("memo")
+                        .requireSuccessfulPayment(true)
+                        .build()
+                )
+                .perUnitCostBasis("per_unit_cost_basis")
+                .threshold("threshold")
+                .expiresAfter(0L)
+                .expiresAfterUnit(CustomerCreditTopUpCreateResponse.ExpiresAfterUnit.DAY)
+                .build()
+
+        val roundtrippedCustomerCreditTopUpCreateResponse =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(customerCreditTopUpCreateResponse),
+                jacksonTypeRef<CustomerCreditTopUpCreateResponse>(),
+            )
+
+        assertThat(roundtrippedCustomerCreditTopUpCreateResponse)
+            .isEqualTo(customerCreditTopUpCreateResponse)
     }
 }

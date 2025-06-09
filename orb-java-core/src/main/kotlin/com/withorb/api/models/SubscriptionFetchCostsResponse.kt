@@ -4,771 +4,818 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.checkKnown
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.toImmutable
+import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
-@JsonDeserialize(builder = SubscriptionFetchCostsResponse.Builder::class)
-@NoAutoDetect
 class SubscriptionFetchCostsResponse
 private constructor(
     private val data: JsonField<List<Data>>,
-    private val additionalProperties: Map<String, JsonValue>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
+    @JsonCreator
+    private constructor(
+        @JsonProperty("data") @ExcludeMissing data: JsonField<List<Data>> = JsonMissing.of()
+    ) : this(data, mutableMapOf())
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun data(): List<Data> = data.getRequired("data")
 
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Data>> = data
+
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    fun validate(): SubscriptionFetchCostsResponse = apply {
-        if (!validated) {
-            data().forEach { it.validate() }
-            validated = true
-        }
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [SubscriptionFetchCostsResponse].
+         *
+         * The following fields are required:
+         * ```java
+         * .data()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    /** A builder for [SubscriptionFetchCostsResponse]. */
+    class Builder internal constructor() {
 
-        private var data: JsonField<List<Data>> = JsonMissing.of()
+        private var data: JsonField<MutableList<Data>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(subscriptionFetchCostsResponse: SubscriptionFetchCostsResponse) = apply {
-            this.data = subscriptionFetchCostsResponse.data
-            additionalProperties(subscriptionFetchCostsResponse.additionalProperties)
+            data = subscriptionFetchCostsResponse.data.map { it.toMutableList() }
+            additionalProperties =
+                subscriptionFetchCostsResponse.additionalProperties.toMutableMap()
         }
 
         fun data(data: List<Data>) = data(JsonField.of(data))
 
-        @JsonProperty("data")
-        @ExcludeMissing
-        fun data(data: JsonField<List<Data>>) = apply { this.data = data }
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed `List<Data>` value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun data(data: JsonField<List<Data>>) = apply {
+            this.data = data.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [Data] to [Builder.data].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addData(data: Data) = apply {
+            this.data =
+                (this.data ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("data", it).add(data)
+                }
+        }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
         }
 
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
+        /**
+         * Returns an immutable instance of [SubscriptionFetchCostsResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .data()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): SubscriptionFetchCostsResponse =
             SubscriptionFetchCostsResponse(
-                data.map { it.toImmutable() },
-                additionalProperties.toImmutable()
+                checkRequired("data", data).map { it.toImmutable() },
+                additionalProperties.toMutableMap(),
             )
     }
 
-    @JsonDeserialize(builder = Data.Builder::class)
-    @NoAutoDetect
+    private var validated: Boolean = false
+
+    fun validate(): SubscriptionFetchCostsResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        data().forEach { it.validate() }
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: OrbInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+
     class Data
     private constructor(
-        private val subtotal: JsonField<String>,
-        private val total: JsonField<String>,
-        private val timeframeStart: JsonField<OffsetDateTime>,
-        private val timeframeEnd: JsonField<OffsetDateTime>,
         private val perPriceCosts: JsonField<List<PerPriceCost>>,
-        private val additionalProperties: Map<String, JsonValue>,
+        private val subtotal: JsonField<String>,
+        private val timeframeEnd: JsonField<OffsetDateTime>,
+        private val timeframeStart: JsonField<OffsetDateTime>,
+        private val total: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
+        @JsonCreator
+        private constructor(
+            @JsonProperty("per_price_costs")
+            @ExcludeMissing
+            perPriceCosts: JsonField<List<PerPriceCost>> = JsonMissing.of(),
+            @JsonProperty("subtotal")
+            @ExcludeMissing
+            subtotal: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("timeframe_end")
+            @ExcludeMissing
+            timeframeEnd: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("timeframe_start")
+            @ExcludeMissing
+            timeframeStart: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("total") @ExcludeMissing total: JsonField<String> = JsonMissing.of(),
+        ) : this(perPriceCosts, subtotal, timeframeEnd, timeframeStart, total, mutableMapOf())
 
-        /** Total costs for the timeframe, excluding any minimums and discounts. */
-        fun subtotal(): String = subtotal.getRequired("subtotal")
-
-        /** Total costs for the timeframe, including any minimums and discounts. */
-        fun total(): String = total.getRequired("total")
-
-        fun timeframeStart(): OffsetDateTime = timeframeStart.getRequired("timeframe_start")
-
-        fun timeframeEnd(): OffsetDateTime = timeframeEnd.getRequired("timeframe_end")
-
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun perPriceCosts(): List<PerPriceCost> = perPriceCosts.getRequired("per_price_costs")
 
-        /** Total costs for the timeframe, excluding any minimums and discounts. */
-        @JsonProperty("subtotal") @ExcludeMissing fun _subtotal() = subtotal
+        /**
+         * Total costs for the timeframe, excluding any minimums and discounts.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun subtotal(): String = subtotal.getRequired("subtotal")
 
-        /** Total costs for the timeframe, including any minimums and discounts. */
-        @JsonProperty("total") @ExcludeMissing fun _total() = total
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun timeframeEnd(): OffsetDateTime = timeframeEnd.getRequired("timeframe_end")
 
-        @JsonProperty("timeframe_start") @ExcludeMissing fun _timeframeStart() = timeframeStart
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun timeframeStart(): OffsetDateTime = timeframeStart.getRequired("timeframe_start")
 
-        @JsonProperty("timeframe_end") @ExcludeMissing fun _timeframeEnd() = timeframeEnd
+        /**
+         * Total costs for the timeframe, including any minimums and discounts.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun total(): String = total.getRequired("total")
 
-        @JsonProperty("per_price_costs") @ExcludeMissing fun _perPriceCosts() = perPriceCosts
+        /**
+         * Returns the raw JSON value of [perPriceCosts].
+         *
+         * Unlike [perPriceCosts], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("per_price_costs")
+        @ExcludeMissing
+        fun _perPriceCosts(): JsonField<List<PerPriceCost>> = perPriceCosts
+
+        /**
+         * Returns the raw JSON value of [subtotal].
+         *
+         * Unlike [subtotal], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("subtotal") @ExcludeMissing fun _subtotal(): JsonField<String> = subtotal
+
+        /**
+         * Returns the raw JSON value of [timeframeEnd].
+         *
+         * Unlike [timeframeEnd], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("timeframe_end")
+        @ExcludeMissing
+        fun _timeframeEnd(): JsonField<OffsetDateTime> = timeframeEnd
+
+        /**
+         * Returns the raw JSON value of [timeframeStart].
+         *
+         * Unlike [timeframeStart], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("timeframe_start")
+        @ExcludeMissing
+        fun _timeframeStart(): JsonField<OffsetDateTime> = timeframeStart
+
+        /**
+         * Returns the raw JSON value of [total].
+         *
+         * Unlike [total], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("total") @ExcludeMissing fun _total(): JsonField<String> = total
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): Data = apply {
-            if (!validated) {
-                subtotal()
-                total()
-                timeframeStart()
-                timeframeEnd()
-                perPriceCosts().forEach { it.validate() }
-                validated = true
-            }
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Data].
+             *
+             * The following fields are required:
+             * ```java
+             * .perPriceCosts()
+             * .subtotal()
+             * .timeframeEnd()
+             * .timeframeStart()
+             * .total()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [Data]. */
+        class Builder internal constructor() {
 
-            private var subtotal: JsonField<String> = JsonMissing.of()
-            private var total: JsonField<String> = JsonMissing.of()
-            private var timeframeStart: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var timeframeEnd: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var perPriceCosts: JsonField<List<PerPriceCost>> = JsonMissing.of()
+            private var perPriceCosts: JsonField<MutableList<PerPriceCost>>? = null
+            private var subtotal: JsonField<String>? = null
+            private var timeframeEnd: JsonField<OffsetDateTime>? = null
+            private var timeframeStart: JsonField<OffsetDateTime>? = null
+            private var total: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(data: Data) = apply {
-                this.subtotal = data.subtotal
-                this.total = data.total
-                this.timeframeStart = data.timeframeStart
-                this.timeframeEnd = data.timeframeEnd
-                this.perPriceCosts = data.perPriceCosts
-                additionalProperties(data.additionalProperties)
-            }
-
-            /** Total costs for the timeframe, excluding any minimums and discounts. */
-            fun subtotal(subtotal: String) = subtotal(JsonField.of(subtotal))
-
-            /** Total costs for the timeframe, excluding any minimums and discounts. */
-            @JsonProperty("subtotal")
-            @ExcludeMissing
-            fun subtotal(subtotal: JsonField<String>) = apply { this.subtotal = subtotal }
-
-            /** Total costs for the timeframe, including any minimums and discounts. */
-            fun total(total: String) = total(JsonField.of(total))
-
-            /** Total costs for the timeframe, including any minimums and discounts. */
-            @JsonProperty("total")
-            @ExcludeMissing
-            fun total(total: JsonField<String>) = apply { this.total = total }
-
-            fun timeframeStart(timeframeStart: OffsetDateTime) =
-                timeframeStart(JsonField.of(timeframeStart))
-
-            @JsonProperty("timeframe_start")
-            @ExcludeMissing
-            fun timeframeStart(timeframeStart: JsonField<OffsetDateTime>) = apply {
-                this.timeframeStart = timeframeStart
-            }
-
-            fun timeframeEnd(timeframeEnd: OffsetDateTime) =
-                timeframeEnd(JsonField.of(timeframeEnd))
-
-            @JsonProperty("timeframe_end")
-            @ExcludeMissing
-            fun timeframeEnd(timeframeEnd: JsonField<OffsetDateTime>) = apply {
-                this.timeframeEnd = timeframeEnd
+                perPriceCosts = data.perPriceCosts.map { it.toMutableList() }
+                subtotal = data.subtotal
+                timeframeEnd = data.timeframeEnd
+                timeframeStart = data.timeframeStart
+                total = data.total
+                additionalProperties = data.additionalProperties.toMutableMap()
             }
 
             fun perPriceCosts(perPriceCosts: List<PerPriceCost>) =
                 perPriceCosts(JsonField.of(perPriceCosts))
 
-            @JsonProperty("per_price_costs")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.perPriceCosts] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.perPriceCosts] with a well-typed
+             * `List<PerPriceCost>` value instead. This method is primarily for setting the field to
+             * an undocumented or not yet supported value.
+             */
             fun perPriceCosts(perPriceCosts: JsonField<List<PerPriceCost>>) = apply {
-                this.perPriceCosts = perPriceCosts
+                this.perPriceCosts = perPriceCosts.map { it.toMutableList() }
             }
+
+            /**
+             * Adds a single [PerPriceCost] to [perPriceCosts].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addPerPriceCost(perPriceCost: PerPriceCost) = apply {
+                perPriceCosts =
+                    (perPriceCosts ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("perPriceCosts", it).add(perPriceCost)
+                    }
+            }
+
+            /** Total costs for the timeframe, excluding any minimums and discounts. */
+            fun subtotal(subtotal: String) = subtotal(JsonField.of(subtotal))
+
+            /**
+             * Sets [Builder.subtotal] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.subtotal] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun subtotal(subtotal: JsonField<String>) = apply { this.subtotal = subtotal }
+
+            fun timeframeEnd(timeframeEnd: OffsetDateTime) =
+                timeframeEnd(JsonField.of(timeframeEnd))
+
+            /**
+             * Sets [Builder.timeframeEnd] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.timeframeEnd] with a well-typed [OffsetDateTime]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun timeframeEnd(timeframeEnd: JsonField<OffsetDateTime>) = apply {
+                this.timeframeEnd = timeframeEnd
+            }
+
+            fun timeframeStart(timeframeStart: OffsetDateTime) =
+                timeframeStart(JsonField.of(timeframeStart))
+
+            /**
+             * Sets [Builder.timeframeStart] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.timeframeStart] with a well-typed [OffsetDateTime]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun timeframeStart(timeframeStart: JsonField<OffsetDateTime>) = apply {
+                this.timeframeStart = timeframeStart
+            }
+
+            /** Total costs for the timeframe, including any minimums and discounts. */
+            fun total(total: String) = total(JsonField.of(total))
+
+            /**
+             * Sets [Builder.total] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.total] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun total(total: JsonField<String>) = apply { this.total = total }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
             }
 
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Data].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .perPriceCosts()
+             * .subtotal()
+             * .timeframeEnd()
+             * .timeframeStart()
+             * .total()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Data =
                 Data(
-                    subtotal,
-                    total,
-                    timeframeStart,
-                    timeframeEnd,
-                    perPriceCosts.map { it.toImmutable() },
-                    additionalProperties.toImmutable(),
+                    checkRequired("perPriceCosts", perPriceCosts).map { it.toImmutable() },
+                    checkRequired("subtotal", subtotal),
+                    checkRequired("timeframeEnd", timeframeEnd),
+                    checkRequired("timeframeStart", timeframeStart),
+                    checkRequired("total", total),
+                    additionalProperties.toMutableMap(),
                 )
         }
 
-        @JsonDeserialize(builder = PerPriceCost.Builder::class)
-        @NoAutoDetect
+        private var validated: Boolean = false
+
+        fun validate(): Data = apply {
+            if (validated) {
+                return@apply
+            }
+
+            perPriceCosts().forEach { it.validate() }
+            subtotal()
+            timeframeEnd()
+            timeframeStart()
+            total()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (perPriceCosts.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (if (subtotal.asKnown().isPresent) 1 else 0) +
+                (if (timeframeEnd.asKnown().isPresent) 1 else 0) +
+                (if (timeframeStart.asKnown().isPresent) 1 else 0) +
+                (if (total.asKnown().isPresent) 1 else 0)
+
         class PerPriceCost
         private constructor(
-            private val quantity: JsonField<Double>,
+            private val price: JsonField<Price>,
+            private val priceId: JsonField<String>,
             private val subtotal: JsonField<String>,
             private val total: JsonField<String>,
-            private val price: JsonField<Price>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val quantity: JsonField<Double>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
-
-            /** The price's quantity for the timeframe */
-            fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
-
-            /** Price's contributions for the timeframe, excluding any minimums and discounts. */
-            fun subtotal(): String = subtotal.getRequired("subtotal")
-
-            /** Price's contributions for the timeframe, including minimums and discounts. */
-            fun total(): String = total.getRequired("total")
+            @JsonCreator
+            private constructor(
+                @JsonProperty("price") @ExcludeMissing price: JsonField<Price> = JsonMissing.of(),
+                @JsonProperty("price_id")
+                @ExcludeMissing
+                priceId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("subtotal")
+                @ExcludeMissing
+                subtotal: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("total") @ExcludeMissing total: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("quantity")
+                @ExcludeMissing
+                quantity: JsonField<Double> = JsonMissing.of(),
+            ) : this(price, priceId, subtotal, total, quantity, mutableMapOf())
 
             /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
+             * The price object
              *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * ## Unit pricing
-             *
-             * With unit pricing, each unit costs a fixed amount.
-             *
-             * ```json
-             * {
-             *     ...
-             *     "model_type": "unit",
-             *     "unit_config": {
-             *         "unit_amount": "0.50"
-             *     }
-             *     ...
-             * }
-             * ```
-             *
-             * ## Tiered pricing
-             *
-             * In tiered pricing, the cost of a given unit depends on the tier range that it falls
-             * into, where each tier range is defined by an upper and lower bound. For example, the
-             * first ten units may cost $0.50 each and all units thereafter may cost $0.10 each.
-             *
-             * ```json
-             * {
-             *     ...
-             *     "model_type": "tiered",
-             *     "tiered_config": {
-             *         "tiers": [
-             *             {
-             *                 "first_unit": 1,
-             *                 "last_unit": 10,
-             *                 "unit_amount": "0.50"
-             *             },
-             *             {
-             *                 "first_unit": 11,
-             *                 "last_unit": null,
-             *                 "unit_amount": "0.10"
-             *             }
-             *         ]
-             *     }
-             *     ...
-             * ```
-             *
-             * ## Bulk pricing
-             *
-             * Bulk pricing applies when the number of units determine the cost of all units. For
-             * example, if you've bought less than 10 units, they may each be $0.50 for a total of
-             * $5.00. Once you've bought more than 10 units, all units may now be priced at $0.40
-             * (i.e. 101 units total would be $40.40).
-             *
-             * ```json
-             * {
-             *     ...
-             *     "model_type": "bulk",
-             *     "bulk_config": {
-             *         "tiers": [
-             *             {
-             *                 "maximum_units": 10,
-             *                 "unit_amount": "0.50"
-             *             },
-             *             {
-             *                 "maximum_units": 1000,
-             *                 "unit_amount": "0.40"
-             *             }
-             *         ]
-             *     }
-             *     ...
-             * }
-             * ```
-             *
-             * ## Package pricing
-             *
-             * Package pricing defines the size or granularity of a unit for billing purposes. For
-             * example, if the package size is set to 5, then 4 units will be billed as 5 and 6
-             * units will be billed at 10.
-             *
-             * ```json
-             * {
-             *     ...
-             *     "model_type": "package",
-             *     "package_config": {
-             *         "package_amount": "0.80",
-             *         "package_size": 10
-             *     }
-             *     ...
-             * }
-             * ```
-             *
-             * ## BPS pricing
-             *
-             * BPS pricing specifies a per-event (e.g. per-payment) rate in one hundredth of a
-             * percent (the number of basis points to charge), as well as a cap per event to assess.
-             * For example, this would allow you to assess a fee of 0.25% on every payment you
-             * process, with a maximum charge of $25 per payment.
-             *
-             * ```json
-             * {
-             *     ...
-             *     "model_type": "bps",
-             *     "bps_config": {
-             *        "bps": 125,
-             *        "per_unit_maximum": "11.00"
-             *     }
-             *     ...
-             *  }
-             * ```
-             *
-             * ## Bulk BPS pricing
-             *
-             * Bulk BPS pricing specifies BPS parameters in a tiered manner, dependent on the total
-             * quantity across all events. Similar to bulk pricing, the BPS parameters of a given
-             * event depends on the tier range that the billing period falls into. Each tier range
-             * is defined by an upper bound. For example, after $1.5M of payment volume is reached,
-             * each individual payment may have a lower cap or a smaller take-rate.
-             *
-             * ```json
-             *     ...
-             *     "model_type": "bulk_bps",
-             *     "bulk_bps_config": {
-             *         "tiers": [
-             *            {
-             *                 "maximum_amount": "1000000.00",
-             *                 "bps": 125,
-             *                 "per_unit_maximum": "19.00"
-             *            },
-             *           {
-             *                 "maximum_amount": null,
-             *                 "bps": 115,
-             *                 "per_unit_maximum": "4.00"
-             *             }
-             *         ]
-             *     }
-             *     ...
-             * }
-             * ```
-             *
-             * ## Tiered BPS pricing
-             *
-             * Tiered BPS pricing specifies BPS parameters in a graduated manner, where an event's
-             * applicable parameter is a function of its marginal addition to the period total.
-             * Similar to tiered pricing, the BPS parameters of a given event depends on the tier
-             * range that it falls into, where each tier range is defined by an upper and lower
-             * bound. For example, the first few payments may have a 0.8 BPS take-rate and all
-             * payments after a specific volume may incur a take-rate of 0.5 BPS each.
-             *
-             * ```json
-             *     ...
-             *     "model_type": "tiered_bps",
-             *     "tiered_bps_config": {
-             *         "tiers": [
-             *            {
-             *                 "minimum_amount": "0",
-             *                 "maximum_amount": "1000000.00",
-             *                 "bps": 125,
-             *                 "per_unit_maximum": "19.00"
-             *            },
-             *           {
-             *                 "minimum_amount": "1000000.00",
-             *                 "maximum_amount": null,
-             *                 "bps": 115,
-             *                 "per_unit_maximum": "4.00"
-             *             }
-             *         ]
-             *     }
-             *     ...
-             * }
-             * ```
-             *
-             * ## Matrix pricing
-             *
-             * Matrix pricing defines a set of unit prices in a one or two-dimensional matrix.
-             * `dimensions` defines the two event property values evaluated in this pricing model.
-             * In a one-dimensional matrix, the second value is `null`. Every configuration has a
-             * list of `matrix_values` which give the unit prices for specified property values. In
-             * a one-dimensional matrix, the matrix values will have `dimension_values` where the
-             * second value of the pair is null. If an event does not match any of the dimension
-             * values in the matrix, it will resort to the `default_unit_amount`.
-             *
-             * ```json
-             * {
-             *     "model_type": "matrix"
-             *     "matrix_config": {
-             *         "default_unit_amount": "3.00",
-             *         "dimensions": [
-             *             "cluster_name",
-             *             "region"
-             *         ],
-             *         "matrix_values": [
-             *             {
-             *                 "dimension_values": [
-             *                     "alpha",
-             *                     "west"
-             *                 ],
-             *                 "unit_amount": "2.00"
-             *             },
-             *             ...
-             *         ]
-             *     }
-             * }
-             * ```
-             *
-             * ## Fixed fees
-             *
-             * Fixed fees are prices that are applied independent of usage quantities, and follow
-             * unit pricing. They also have an additional parameter `fixed_price_quantity`. If the
-             * Price represents a fixed cost, this represents the quantity of units applied.
-             *
-             * ```json
-             * {
-             *     ...
-             *     "id": "price_id",
-             *     "model_type": "unit",
-             *     "unit_config": {
-             *        "unit_amount": "2.00"
-             *     },
-             *     "fixed_price_quantity": 3.0
-             *     ...
-             * }
-             * ```
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
              */
             fun price(): Price = price.getRequired("price")
 
-            /** The price's quantity for the timeframe */
-            @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
-
-            /** Price's contributions for the timeframe, excluding any minimums and discounts. */
-            @JsonProperty("subtotal") @ExcludeMissing fun _subtotal() = subtotal
-
-            /** Price's contributions for the timeframe, including minimums and discounts. */
-            @JsonProperty("total") @ExcludeMissing fun _total() = total
+            /**
+             * The price the cost is associated with
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun priceId(): String = priceId.getRequired("price_id")
 
             /**
-             * The Price resource represents a price that can be billed on a subscription, resulting
-             * in a charge on an invoice in the form of an invoice line item. Prices take a quantity
-             * and determine an amount to bill.
+             * Price's contributions for the timeframe, excluding any minimums and discounts.
              *
-             * Orb supports a few different pricing models out of the box. Each of these models is
-             * serialized differently in a given Price object. The model_type field determines the
-             * key for the configuration object that is present.
-             *
-             * ## Unit pricing
-             *
-             * With unit pricing, each unit costs a fixed amount.
-             *
-             * ```json
-             * {
-             *     ...
-             *     "model_type": "unit",
-             *     "unit_config": {
-             *         "unit_amount": "0.50"
-             *     }
-             *     ...
-             * }
-             * ```
-             *
-             * ## Tiered pricing
-             *
-             * In tiered pricing, the cost of a given unit depends on the tier range that it falls
-             * into, where each tier range is defined by an upper and lower bound. For example, the
-             * first ten units may cost $0.50 each and all units thereafter may cost $0.10 each.
-             *
-             * ```json
-             * {
-             *     ...
-             *     "model_type": "tiered",
-             *     "tiered_config": {
-             *         "tiers": [
-             *             {
-             *                 "first_unit": 1,
-             *                 "last_unit": 10,
-             *                 "unit_amount": "0.50"
-             *             },
-             *             {
-             *                 "first_unit": 11,
-             *                 "last_unit": null,
-             *                 "unit_amount": "0.10"
-             *             }
-             *         ]
-             *     }
-             *     ...
-             * ```
-             *
-             * ## Bulk pricing
-             *
-             * Bulk pricing applies when the number of units determine the cost of all units. For
-             * example, if you've bought less than 10 units, they may each be $0.50 for a total of
-             * $5.00. Once you've bought more than 10 units, all units may now be priced at $0.40
-             * (i.e. 101 units total would be $40.40).
-             *
-             * ```json
-             * {
-             *     ...
-             *     "model_type": "bulk",
-             *     "bulk_config": {
-             *         "tiers": [
-             *             {
-             *                 "maximum_units": 10,
-             *                 "unit_amount": "0.50"
-             *             },
-             *             {
-             *                 "maximum_units": 1000,
-             *                 "unit_amount": "0.40"
-             *             }
-             *         ]
-             *     }
-             *     ...
-             * }
-             * ```
-             *
-             * ## Package pricing
-             *
-             * Package pricing defines the size or granularity of a unit for billing purposes. For
-             * example, if the package size is set to 5, then 4 units will be billed as 5 and 6
-             * units will be billed at 10.
-             *
-             * ```json
-             * {
-             *     ...
-             *     "model_type": "package",
-             *     "package_config": {
-             *         "package_amount": "0.80",
-             *         "package_size": 10
-             *     }
-             *     ...
-             * }
-             * ```
-             *
-             * ## BPS pricing
-             *
-             * BPS pricing specifies a per-event (e.g. per-payment) rate in one hundredth of a
-             * percent (the number of basis points to charge), as well as a cap per event to assess.
-             * For example, this would allow you to assess a fee of 0.25% on every payment you
-             * process, with a maximum charge of $25 per payment.
-             *
-             * ```json
-             * {
-             *     ...
-             *     "model_type": "bps",
-             *     "bps_config": {
-             *        "bps": 125,
-             *        "per_unit_maximum": "11.00"
-             *     }
-             *     ...
-             *  }
-             * ```
-             *
-             * ## Bulk BPS pricing
-             *
-             * Bulk BPS pricing specifies BPS parameters in a tiered manner, dependent on the total
-             * quantity across all events. Similar to bulk pricing, the BPS parameters of a given
-             * event depends on the tier range that the billing period falls into. Each tier range
-             * is defined by an upper bound. For example, after $1.5M of payment volume is reached,
-             * each individual payment may have a lower cap or a smaller take-rate.
-             *
-             * ```json
-             *     ...
-             *     "model_type": "bulk_bps",
-             *     "bulk_bps_config": {
-             *         "tiers": [
-             *            {
-             *                 "maximum_amount": "1000000.00",
-             *                 "bps": 125,
-             *                 "per_unit_maximum": "19.00"
-             *            },
-             *           {
-             *                 "maximum_amount": null,
-             *                 "bps": 115,
-             *                 "per_unit_maximum": "4.00"
-             *             }
-             *         ]
-             *     }
-             *     ...
-             * }
-             * ```
-             *
-             * ## Tiered BPS pricing
-             *
-             * Tiered BPS pricing specifies BPS parameters in a graduated manner, where an event's
-             * applicable parameter is a function of its marginal addition to the period total.
-             * Similar to tiered pricing, the BPS parameters of a given event depends on the tier
-             * range that it falls into, where each tier range is defined by an upper and lower
-             * bound. For example, the first few payments may have a 0.8 BPS take-rate and all
-             * payments after a specific volume may incur a take-rate of 0.5 BPS each.
-             *
-             * ```json
-             *     ...
-             *     "model_type": "tiered_bps",
-             *     "tiered_bps_config": {
-             *         "tiers": [
-             *            {
-             *                 "minimum_amount": "0",
-             *                 "maximum_amount": "1000000.00",
-             *                 "bps": 125,
-             *                 "per_unit_maximum": "19.00"
-             *            },
-             *           {
-             *                 "minimum_amount": "1000000.00",
-             *                 "maximum_amount": null,
-             *                 "bps": 115,
-             *                 "per_unit_maximum": "4.00"
-             *             }
-             *         ]
-             *     }
-             *     ...
-             * }
-             * ```
-             *
-             * ## Matrix pricing
-             *
-             * Matrix pricing defines a set of unit prices in a one or two-dimensional matrix.
-             * `dimensions` defines the two event property values evaluated in this pricing model.
-             * In a one-dimensional matrix, the second value is `null`. Every configuration has a
-             * list of `matrix_values` which give the unit prices for specified property values. In
-             * a one-dimensional matrix, the matrix values will have `dimension_values` where the
-             * second value of the pair is null. If an event does not match any of the dimension
-             * values in the matrix, it will resort to the `default_unit_amount`.
-             *
-             * ```json
-             * {
-             *     "model_type": "matrix"
-             *     "matrix_config": {
-             *         "default_unit_amount": "3.00",
-             *         "dimensions": [
-             *             "cluster_name",
-             *             "region"
-             *         ],
-             *         "matrix_values": [
-             *             {
-             *                 "dimension_values": [
-             *                     "alpha",
-             *                     "west"
-             *                 ],
-             *                 "unit_amount": "2.00"
-             *             },
-             *             ...
-             *         ]
-             *     }
-             * }
-             * ```
-             *
-             * ## Fixed fees
-             *
-             * Fixed fees are prices that are applied independent of usage quantities, and follow
-             * unit pricing. They also have an additional parameter `fixed_price_quantity`. If the
-             * Price represents a fixed cost, this represents the quantity of units applied.
-             *
-             * ```json
-             * {
-             *     ...
-             *     "id": "price_id",
-             *     "model_type": "unit",
-             *     "unit_config": {
-             *        "unit_amount": "2.00"
-             *     },
-             *     "fixed_price_quantity": 3.0
-             *     ...
-             * }
-             * ```
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
              */
-            @JsonProperty("price") @ExcludeMissing fun _price() = price
+            fun subtotal(): String = subtotal.getRequired("subtotal")
+
+            /**
+             * Price's contributions for the timeframe, including minimums and discounts.
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun total(): String = total.getRequired("total")
+
+            /**
+             * The price's quantity for the timeframe
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
+            fun quantity(): Optional<Double> = quantity.getOptional("quantity")
+
+            /**
+             * Returns the raw JSON value of [price].
+             *
+             * Unlike [price], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Price> = price
+
+            /**
+             * Returns the raw JSON value of [priceId].
+             *
+             * Unlike [priceId], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("price_id") @ExcludeMissing fun _priceId(): JsonField<String> = priceId
+
+            /**
+             * Returns the raw JSON value of [subtotal].
+             *
+             * Unlike [subtotal], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("subtotal") @ExcludeMissing fun _subtotal(): JsonField<String> = subtotal
+
+            /**
+             * Returns the raw JSON value of [total].
+             *
+             * Unlike [total], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("total") @ExcludeMissing fun _total(): JsonField<String> = total
+
+            /**
+             * Returns the raw JSON value of [quantity].
+             *
+             * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): PerPriceCost = apply {
-                if (!validated) {
-                    quantity()
-                    subtotal()
-                    total()
-                    price()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [PerPriceCost].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .price()
+                 * .priceId()
+                 * .subtotal()
+                 * .total()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [PerPriceCost]. */
+            class Builder internal constructor() {
 
+                private var price: JsonField<Price>? = null
+                private var priceId: JsonField<String>? = null
+                private var subtotal: JsonField<String>? = null
+                private var total: JsonField<String>? = null
                 private var quantity: JsonField<Double> = JsonMissing.of()
-                private var subtotal: JsonField<String> = JsonMissing.of()
-                private var total: JsonField<String> = JsonMissing.of()
-                private var price: JsonField<Price> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(perPriceCost: PerPriceCost) = apply {
-                    this.quantity = perPriceCost.quantity
-                    this.subtotal = perPriceCost.subtotal
-                    this.total = perPriceCost.total
-                    this.price = perPriceCost.price
-                    additionalProperties(perPriceCost.additionalProperties)
+                    price = perPriceCost.price
+                    priceId = perPriceCost.priceId
+                    subtotal = perPriceCost.subtotal
+                    total = perPriceCost.total
+                    quantity = perPriceCost.quantity
+                    additionalProperties = perPriceCost.additionalProperties.toMutableMap()
                 }
 
-                /** The price's quantity for the timeframe */
-                fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
+                /** The price object */
+                fun price(price: Price) = price(JsonField.of(price))
 
-                /** The price's quantity for the timeframe */
-                @JsonProperty("quantity")
-                @ExcludeMissing
-                fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
+                /**
+                 * Sets [Builder.price] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.price] with a well-typed [Price] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun price(price: JsonField<Price>) = apply { this.price = price }
+
+                /** Alias for calling [price] with `Price.ofUnit(unit)`. */
+                fun price(unit: Price.Unit) = price(Price.ofUnit(unit))
+
+                /** Alias for calling [price] with `Price.ofPackage(package_)`. */
+                fun price(package_: Price.Package) = price(Price.ofPackage(package_))
+
+                /** Alias for calling [price] with `Price.ofMatrix(matrix)`. */
+                fun price(matrix: Price.Matrix) = price(Price.ofMatrix(matrix))
+
+                /** Alias for calling [price] with `Price.ofTiered(tiered)`. */
+                fun price(tiered: Price.Tiered) = price(Price.ofTiered(tiered))
+
+                /** Alias for calling [price] with `Price.ofTieredBps(tieredBps)`. */
+                fun price(tieredBps: Price.TieredBps) = price(Price.ofTieredBps(tieredBps))
+
+                /** Alias for calling [price] with `Price.ofBps(bps)`. */
+                fun price(bps: Price.Bps) = price(Price.ofBps(bps))
+
+                /** Alias for calling [price] with `Price.ofBulkBps(bulkBps)`. */
+                fun price(bulkBps: Price.BulkBps) = price(Price.ofBulkBps(bulkBps))
+
+                /** Alias for calling [price] with `Price.ofBulk(bulk)`. */
+                fun price(bulk: Price.Bulk) = price(Price.ofBulk(bulk))
+
+                /**
+                 * Alias for calling [price] with
+                 * `Price.ofThresholdTotalAmount(thresholdTotalAmount)`.
+                 */
+                fun price(thresholdTotalAmount: Price.ThresholdTotalAmount) =
+                    price(Price.ofThresholdTotalAmount(thresholdTotalAmount))
+
+                /** Alias for calling [price] with `Price.ofTieredPackage(tieredPackage)`. */
+                fun price(tieredPackage: Price.TieredPackage) =
+                    price(Price.ofTieredPackage(tieredPackage))
+
+                /** Alias for calling [price] with `Price.ofGroupedTiered(groupedTiered)`. */
+                fun price(groupedTiered: Price.GroupedTiered) =
+                    price(Price.ofGroupedTiered(groupedTiered))
+
+                /**
+                 * Alias for calling [price] with `Price.ofTieredWithMinimum(tieredWithMinimum)`.
+                 */
+                fun price(tieredWithMinimum: Price.TieredWithMinimum) =
+                    price(Price.ofTieredWithMinimum(tieredWithMinimum))
+
+                /**
+                 * Alias for calling [price] with
+                 * `Price.ofTieredPackageWithMinimum(tieredPackageWithMinimum)`.
+                 */
+                fun price(tieredPackageWithMinimum: Price.TieredPackageWithMinimum) =
+                    price(Price.ofTieredPackageWithMinimum(tieredPackageWithMinimum))
+
+                /**
+                 * Alias for calling [price] with
+                 * `Price.ofPackageWithAllocation(packageWithAllocation)`.
+                 */
+                fun price(packageWithAllocation: Price.PackageWithAllocation) =
+                    price(Price.ofPackageWithAllocation(packageWithAllocation))
+
+                /** Alias for calling [price] with `Price.ofUnitWithPercent(unitWithPercent)`. */
+                fun price(unitWithPercent: Price.UnitWithPercent) =
+                    price(Price.ofUnitWithPercent(unitWithPercent))
+
+                /**
+                 * Alias for calling [price] with
+                 * `Price.ofMatrixWithAllocation(matrixWithAllocation)`.
+                 */
+                fun price(matrixWithAllocation: Price.MatrixWithAllocation) =
+                    price(Price.ofMatrixWithAllocation(matrixWithAllocation))
+
+                /**
+                 * Alias for calling [price] with
+                 * `Price.ofTieredWithProration(tieredWithProration)`.
+                 */
+                fun price(tieredWithProration: Price.TieredWithProration) =
+                    price(Price.ofTieredWithProration(tieredWithProration))
+
+                /**
+                 * Alias for calling [price] with `Price.ofUnitWithProration(unitWithProration)`.
+                 */
+                fun price(unitWithProration: Price.UnitWithProration) =
+                    price(Price.ofUnitWithProration(unitWithProration))
+
+                /**
+                 * Alias for calling [price] with `Price.ofGroupedAllocation(groupedAllocation)`.
+                 */
+                fun price(groupedAllocation: Price.GroupedAllocation) =
+                    price(Price.ofGroupedAllocation(groupedAllocation))
+
+                /**
+                 * Alias for calling [price] with
+                 * `Price.ofGroupedWithProratedMinimum(groupedWithProratedMinimum)`.
+                 */
+                fun price(groupedWithProratedMinimum: Price.GroupedWithProratedMinimum) =
+                    price(Price.ofGroupedWithProratedMinimum(groupedWithProratedMinimum))
+
+                /**
+                 * Alias for calling [price] with
+                 * `Price.ofGroupedWithMeteredMinimum(groupedWithMeteredMinimum)`.
+                 */
+                fun price(groupedWithMeteredMinimum: Price.GroupedWithMeteredMinimum) =
+                    price(Price.ofGroupedWithMeteredMinimum(groupedWithMeteredMinimum))
+
+                /**
+                 * Alias for calling [price] with
+                 * `Price.ofMatrixWithDisplayName(matrixWithDisplayName)`.
+                 */
+                fun price(matrixWithDisplayName: Price.MatrixWithDisplayName) =
+                    price(Price.ofMatrixWithDisplayName(matrixWithDisplayName))
+
+                /**
+                 * Alias for calling [price] with `Price.ofBulkWithProration(bulkWithProration)`.
+                 */
+                fun price(bulkWithProration: Price.BulkWithProration) =
+                    price(Price.ofBulkWithProration(bulkWithProration))
+
+                /**
+                 * Alias for calling [price] with
+                 * `Price.ofGroupedTieredPackage(groupedTieredPackage)`.
+                 */
+                fun price(groupedTieredPackage: Price.GroupedTieredPackage) =
+                    price(Price.ofGroupedTieredPackage(groupedTieredPackage))
+
+                /**
+                 * Alias for calling [price] with
+                 * `Price.ofMaxGroupTieredPackage(maxGroupTieredPackage)`.
+                 */
+                fun price(maxGroupTieredPackage: Price.MaxGroupTieredPackage) =
+                    price(Price.ofMaxGroupTieredPackage(maxGroupTieredPackage))
+
+                /**
+                 * Alias for calling [price] with
+                 * `Price.ofScalableMatrixWithUnitPricing(scalableMatrixWithUnitPricing)`.
+                 */
+                fun price(scalableMatrixWithUnitPricing: Price.ScalableMatrixWithUnitPricing) =
+                    price(Price.ofScalableMatrixWithUnitPricing(scalableMatrixWithUnitPricing))
+
+                /**
+                 * Alias for calling [price] with
+                 * `Price.ofScalableMatrixWithTieredPricing(scalableMatrixWithTieredPricing)`.
+                 */
+                fun price(scalableMatrixWithTieredPricing: Price.ScalableMatrixWithTieredPricing) =
+                    price(Price.ofScalableMatrixWithTieredPricing(scalableMatrixWithTieredPricing))
+
+                /**
+                 * Alias for calling [price] with
+                 * `Price.ofCumulativeGroupedBulk(cumulativeGroupedBulk)`.
+                 */
+                fun price(cumulativeGroupedBulk: Price.CumulativeGroupedBulk) =
+                    price(Price.ofCumulativeGroupedBulk(cumulativeGroupedBulk))
+
+                /** The price the cost is associated with */
+                fun priceId(priceId: String) = priceId(JsonField.of(priceId))
+
+                /**
+                 * Sets [Builder.priceId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.priceId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun priceId(priceId: JsonField<String>) = apply { this.priceId = priceId }
 
                 /**
                  * Price's contributions for the timeframe, excluding any minimums and discounts.
@@ -776,498 +823,55 @@ private constructor(
                 fun subtotal(subtotal: String) = subtotal(JsonField.of(subtotal))
 
                 /**
-                 * Price's contributions for the timeframe, excluding any minimums and discounts.
+                 * Sets [Builder.subtotal] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.subtotal] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
                  */
-                @JsonProperty("subtotal")
-                @ExcludeMissing
                 fun subtotal(subtotal: JsonField<String>) = apply { this.subtotal = subtotal }
 
                 /** Price's contributions for the timeframe, including minimums and discounts. */
                 fun total(total: String) = total(JsonField.of(total))
 
-                /** Price's contributions for the timeframe, including minimums and discounts. */
-                @JsonProperty("total")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.total] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.total] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun total(total: JsonField<String>) = apply { this.total = total }
 
-                /**
-                 * The Price resource represents a price that can be billed on a subscription,
-                 * resulting in a charge on an invoice in the form of an invoice line item. Prices
-                 * take a quantity and determine an amount to bill.
-                 *
-                 * Orb supports a few different pricing models out of the box. Each of these models
-                 * is serialized differently in a given Price object. The model_type field
-                 * determines the key for the configuration object that is present.
-                 *
-                 * ## Unit pricing
-                 *
-                 * With unit pricing, each unit costs a fixed amount.
-                 *
-                 * ```json
-                 * {
-                 *     ...
-                 *     "model_type": "unit",
-                 *     "unit_config": {
-                 *         "unit_amount": "0.50"
-                 *     }
-                 *     ...
-                 * }
-                 * ```
-                 *
-                 * ## Tiered pricing
-                 *
-                 * In tiered pricing, the cost of a given unit depends on the tier range that it
-                 * falls into, where each tier range is defined by an upper and lower bound. For
-                 * example, the first ten units may cost $0.50 each and all units thereafter may
-                 * cost $0.10 each.
-                 *
-                 * ```json
-                 * {
-                 *     ...
-                 *     "model_type": "tiered",
-                 *     "tiered_config": {
-                 *         "tiers": [
-                 *             {
-                 *                 "first_unit": 1,
-                 *                 "last_unit": 10,
-                 *                 "unit_amount": "0.50"
-                 *             },
-                 *             {
-                 *                 "first_unit": 11,
-                 *                 "last_unit": null,
-                 *                 "unit_amount": "0.10"
-                 *             }
-                 *         ]
-                 *     }
-                 *     ...
-                 * ```
-                 *
-                 * ## Bulk pricing
-                 *
-                 * Bulk pricing applies when the number of units determine the cost of all units.
-                 * For example, if you've bought less than 10 units, they may each be $0.50 for a
-                 * total of $5.00. Once you've bought more than 10 units, all units may now be
-                 * priced at $0.40 (i.e. 101 units total would be $40.40).
-                 *
-                 * ```json
-                 * {
-                 *     ...
-                 *     "model_type": "bulk",
-                 *     "bulk_config": {
-                 *         "tiers": [
-                 *             {
-                 *                 "maximum_units": 10,
-                 *                 "unit_amount": "0.50"
-                 *             },
-                 *             {
-                 *                 "maximum_units": 1000,
-                 *                 "unit_amount": "0.40"
-                 *             }
-                 *         ]
-                 *     }
-                 *     ...
-                 * }
-                 * ```
-                 *
-                 * ## Package pricing
-                 *
-                 * Package pricing defines the size or granularity of a unit for billing purposes.
-                 * For example, if the package size is set to 5, then 4 units will be billed as 5
-                 * and 6 units will be billed at 10.
-                 *
-                 * ```json
-                 * {
-                 *     ...
-                 *     "model_type": "package",
-                 *     "package_config": {
-                 *         "package_amount": "0.80",
-                 *         "package_size": 10
-                 *     }
-                 *     ...
-                 * }
-                 * ```
-                 *
-                 * ## BPS pricing
-                 *
-                 * BPS pricing specifies a per-event (e.g. per-payment) rate in one hundredth of a
-                 * percent (the number of basis points to charge), as well as a cap per event to
-                 * assess. For example, this would allow you to assess a fee of 0.25% on every
-                 * payment you process, with a maximum charge of $25 per payment.
-                 *
-                 * ```json
-                 * {
-                 *     ...
-                 *     "model_type": "bps",
-                 *     "bps_config": {
-                 *        "bps": 125,
-                 *        "per_unit_maximum": "11.00"
-                 *     }
-                 *     ...
-                 *  }
-                 * ```
-                 *
-                 * ## Bulk BPS pricing
-                 *
-                 * Bulk BPS pricing specifies BPS parameters in a tiered manner, dependent on the
-                 * total quantity across all events. Similar to bulk pricing, the BPS parameters of
-                 * a given event depends on the tier range that the billing period falls into. Each
-                 * tier range is defined by an upper bound. For example, after $1.5M of payment
-                 * volume is reached, each individual payment may have a lower cap or a smaller
-                 * take-rate.
-                 *
-                 * ```json
-                 *     ...
-                 *     "model_type": "bulk_bps",
-                 *     "bulk_bps_config": {
-                 *         "tiers": [
-                 *            {
-                 *                 "maximum_amount": "1000000.00",
-                 *                 "bps": 125,
-                 *                 "per_unit_maximum": "19.00"
-                 *            },
-                 *           {
-                 *                 "maximum_amount": null,
-                 *                 "bps": 115,
-                 *                 "per_unit_maximum": "4.00"
-                 *             }
-                 *         ]
-                 *     }
-                 *     ...
-                 * }
-                 * ```
-                 *
-                 * ## Tiered BPS pricing
-                 *
-                 * Tiered BPS pricing specifies BPS parameters in a graduated manner, where an
-                 * event's applicable parameter is a function of its marginal addition to the period
-                 * total. Similar to tiered pricing, the BPS parameters of a given event depends on
-                 * the tier range that it falls into, where each tier range is defined by an upper
-                 * and lower bound. For example, the first few payments may have a 0.8 BPS take-rate
-                 * and all payments after a specific volume may incur a take-rate of 0.5 BPS each.
-                 *
-                 * ```json
-                 *     ...
-                 *     "model_type": "tiered_bps",
-                 *     "tiered_bps_config": {
-                 *         "tiers": [
-                 *            {
-                 *                 "minimum_amount": "0",
-                 *                 "maximum_amount": "1000000.00",
-                 *                 "bps": 125,
-                 *                 "per_unit_maximum": "19.00"
-                 *            },
-                 *           {
-                 *                 "minimum_amount": "1000000.00",
-                 *                 "maximum_amount": null,
-                 *                 "bps": 115,
-                 *                 "per_unit_maximum": "4.00"
-                 *             }
-                 *         ]
-                 *     }
-                 *     ...
-                 * }
-                 * ```
-                 *
-                 * ## Matrix pricing
-                 *
-                 * Matrix pricing defines a set of unit prices in a one or two-dimensional matrix.
-                 * `dimensions` defines the two event property values evaluated in this pricing
-                 * model. In a one-dimensional matrix, the second value is `null`. Every
-                 * configuration has a list of `matrix_values` which give the unit prices for
-                 * specified property values. In a one-dimensional matrix, the matrix values will
-                 * have `dimension_values` where the second value of the pair is null. If an event
-                 * does not match any of the dimension values in the matrix, it will resort to the
-                 * `default_unit_amount`.
-                 *
-                 * ```json
-                 * {
-                 *     "model_type": "matrix"
-                 *     "matrix_config": {
-                 *         "default_unit_amount": "3.00",
-                 *         "dimensions": [
-                 *             "cluster_name",
-                 *             "region"
-                 *         ],
-                 *         "matrix_values": [
-                 *             {
-                 *                 "dimension_values": [
-                 *                     "alpha",
-                 *                     "west"
-                 *                 ],
-                 *                 "unit_amount": "2.00"
-                 *             },
-                 *             ...
-                 *         ]
-                 *     }
-                 * }
-                 * ```
-                 *
-                 * ## Fixed fees
-                 *
-                 * Fixed fees are prices that are applied independent of usage quantities, and
-                 * follow unit pricing. They also have an additional parameter
-                 * `fixed_price_quantity`. If the Price represents a fixed cost, this represents the
-                 * quantity of units applied.
-                 *
-                 * ```json
-                 * {
-                 *     ...
-                 *     "id": "price_id",
-                 *     "model_type": "unit",
-                 *     "unit_config": {
-                 *        "unit_amount": "2.00"
-                 *     },
-                 *     "fixed_price_quantity": 3.0
-                 *     ...
-                 * }
-                 * ```
-                 */
-                fun price(price: Price) = price(JsonField.of(price))
+                /** The price's quantity for the timeframe */
+                fun quantity(quantity: Double?) = quantity(JsonField.ofNullable(quantity))
 
                 /**
-                 * The Price resource represents a price that can be billed on a subscription,
-                 * resulting in a charge on an invoice in the form of an invoice line item. Prices
-                 * take a quantity and determine an amount to bill.
+                 * Alias for [Builder.quantity].
                  *
-                 * Orb supports a few different pricing models out of the box. Each of these models
-                 * is serialized differently in a given Price object. The model_type field
-                 * determines the key for the configuration object that is present.
-                 *
-                 * ## Unit pricing
-                 *
-                 * With unit pricing, each unit costs a fixed amount.
-                 *
-                 * ```json
-                 * {
-                 *     ...
-                 *     "model_type": "unit",
-                 *     "unit_config": {
-                 *         "unit_amount": "0.50"
-                 *     }
-                 *     ...
-                 * }
-                 * ```
-                 *
-                 * ## Tiered pricing
-                 *
-                 * In tiered pricing, the cost of a given unit depends on the tier range that it
-                 * falls into, where each tier range is defined by an upper and lower bound. For
-                 * example, the first ten units may cost $0.50 each and all units thereafter may
-                 * cost $0.10 each.
-                 *
-                 * ```json
-                 * {
-                 *     ...
-                 *     "model_type": "tiered",
-                 *     "tiered_config": {
-                 *         "tiers": [
-                 *             {
-                 *                 "first_unit": 1,
-                 *                 "last_unit": 10,
-                 *                 "unit_amount": "0.50"
-                 *             },
-                 *             {
-                 *                 "first_unit": 11,
-                 *                 "last_unit": null,
-                 *                 "unit_amount": "0.10"
-                 *             }
-                 *         ]
-                 *     }
-                 *     ...
-                 * ```
-                 *
-                 * ## Bulk pricing
-                 *
-                 * Bulk pricing applies when the number of units determine the cost of all units.
-                 * For example, if you've bought less than 10 units, they may each be $0.50 for a
-                 * total of $5.00. Once you've bought more than 10 units, all units may now be
-                 * priced at $0.40 (i.e. 101 units total would be $40.40).
-                 *
-                 * ```json
-                 * {
-                 *     ...
-                 *     "model_type": "bulk",
-                 *     "bulk_config": {
-                 *         "tiers": [
-                 *             {
-                 *                 "maximum_units": 10,
-                 *                 "unit_amount": "0.50"
-                 *             },
-                 *             {
-                 *                 "maximum_units": 1000,
-                 *                 "unit_amount": "0.40"
-                 *             }
-                 *         ]
-                 *     }
-                 *     ...
-                 * }
-                 * ```
-                 *
-                 * ## Package pricing
-                 *
-                 * Package pricing defines the size or granularity of a unit for billing purposes.
-                 * For example, if the package size is set to 5, then 4 units will be billed as 5
-                 * and 6 units will be billed at 10.
-                 *
-                 * ```json
-                 * {
-                 *     ...
-                 *     "model_type": "package",
-                 *     "package_config": {
-                 *         "package_amount": "0.80",
-                 *         "package_size": 10
-                 *     }
-                 *     ...
-                 * }
-                 * ```
-                 *
-                 * ## BPS pricing
-                 *
-                 * BPS pricing specifies a per-event (e.g. per-payment) rate in one hundredth of a
-                 * percent (the number of basis points to charge), as well as a cap per event to
-                 * assess. For example, this would allow you to assess a fee of 0.25% on every
-                 * payment you process, with a maximum charge of $25 per payment.
-                 *
-                 * ```json
-                 * {
-                 *     ...
-                 *     "model_type": "bps",
-                 *     "bps_config": {
-                 *        "bps": 125,
-                 *        "per_unit_maximum": "11.00"
-                 *     }
-                 *     ...
-                 *  }
-                 * ```
-                 *
-                 * ## Bulk BPS pricing
-                 *
-                 * Bulk BPS pricing specifies BPS parameters in a tiered manner, dependent on the
-                 * total quantity across all events. Similar to bulk pricing, the BPS parameters of
-                 * a given event depends on the tier range that the billing period falls into. Each
-                 * tier range is defined by an upper bound. For example, after $1.5M of payment
-                 * volume is reached, each individual payment may have a lower cap or a smaller
-                 * take-rate.
-                 *
-                 * ```json
-                 *     ...
-                 *     "model_type": "bulk_bps",
-                 *     "bulk_bps_config": {
-                 *         "tiers": [
-                 *            {
-                 *                 "maximum_amount": "1000000.00",
-                 *                 "bps": 125,
-                 *                 "per_unit_maximum": "19.00"
-                 *            },
-                 *           {
-                 *                 "maximum_amount": null,
-                 *                 "bps": 115,
-                 *                 "per_unit_maximum": "4.00"
-                 *             }
-                 *         ]
-                 *     }
-                 *     ...
-                 * }
-                 * ```
-                 *
-                 * ## Tiered BPS pricing
-                 *
-                 * Tiered BPS pricing specifies BPS parameters in a graduated manner, where an
-                 * event's applicable parameter is a function of its marginal addition to the period
-                 * total. Similar to tiered pricing, the BPS parameters of a given event depends on
-                 * the tier range that it falls into, where each tier range is defined by an upper
-                 * and lower bound. For example, the first few payments may have a 0.8 BPS take-rate
-                 * and all payments after a specific volume may incur a take-rate of 0.5 BPS each.
-                 *
-                 * ```json
-                 *     ...
-                 *     "model_type": "tiered_bps",
-                 *     "tiered_bps_config": {
-                 *         "tiers": [
-                 *            {
-                 *                 "minimum_amount": "0",
-                 *                 "maximum_amount": "1000000.00",
-                 *                 "bps": 125,
-                 *                 "per_unit_maximum": "19.00"
-                 *            },
-                 *           {
-                 *                 "minimum_amount": "1000000.00",
-                 *                 "maximum_amount": null,
-                 *                 "bps": 115,
-                 *                 "per_unit_maximum": "4.00"
-                 *             }
-                 *         ]
-                 *     }
-                 *     ...
-                 * }
-                 * ```
-                 *
-                 * ## Matrix pricing
-                 *
-                 * Matrix pricing defines a set of unit prices in a one or two-dimensional matrix.
-                 * `dimensions` defines the two event property values evaluated in this pricing
-                 * model. In a one-dimensional matrix, the second value is `null`. Every
-                 * configuration has a list of `matrix_values` which give the unit prices for
-                 * specified property values. In a one-dimensional matrix, the matrix values will
-                 * have `dimension_values` where the second value of the pair is null. If an event
-                 * does not match any of the dimension values in the matrix, it will resort to the
-                 * `default_unit_amount`.
-                 *
-                 * ```json
-                 * {
-                 *     "model_type": "matrix"
-                 *     "matrix_config": {
-                 *         "default_unit_amount": "3.00",
-                 *         "dimensions": [
-                 *             "cluster_name",
-                 *             "region"
-                 *         ],
-                 *         "matrix_values": [
-                 *             {
-                 *                 "dimension_values": [
-                 *                     "alpha",
-                 *                     "west"
-                 *                 ],
-                 *                 "unit_amount": "2.00"
-                 *             },
-                 *             ...
-                 *         ]
-                 *     }
-                 * }
-                 * ```
-                 *
-                 * ## Fixed fees
-                 *
-                 * Fixed fees are prices that are applied independent of usage quantities, and
-                 * follow unit pricing. They also have an additional parameter
-                 * `fixed_price_quantity`. If the Price represents a fixed cost, this represents the
-                 * quantity of units applied.
-                 *
-                 * ```json
-                 * {
-                 *     ...
-                 *     "id": "price_id",
-                 *     "model_type": "unit",
-                 *     "unit_config": {
-                 *        "unit_amount": "2.00"
-                 *     },
-                 *     "fixed_price_quantity": 3.0
-                 *     ...
-                 * }
-                 * ```
+                 * This unboxed primitive overload exists for backwards compatibility.
                  */
-                @JsonProperty("price")
-                @ExcludeMissing
-                fun price(price: JsonField<Price>) = apply { this.price = price }
+                fun quantity(quantity: Double) = quantity(quantity as Double?)
+
+                /** Alias for calling [Builder.quantity] with `quantity.orElse(null)`. */
+                fun quantity(quantity: Optional<Double>) = quantity(quantity.getOrNull())
+
+                /**
+                 * Sets [Builder.quantity] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.quantity] with a well-typed [Double] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -1275,32 +879,93 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [PerPriceCost].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .price()
+                 * .priceId()
+                 * .subtotal()
+                 * .total()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): PerPriceCost =
                     PerPriceCost(
+                        checkRequired("price", price),
+                        checkRequired("priceId", priceId),
+                        checkRequired("subtotal", subtotal),
+                        checkRequired("total", total),
                         quantity,
-                        subtotal,
-                        total,
-                        price,
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): PerPriceCost = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                price().validate()
+                priceId()
+                subtotal()
+                total()
+                quantity()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (price.asKnown().getOrNull()?.validity() ?: 0) +
+                    (if (priceId.asKnown().isPresent) 1 else 0) +
+                    (if (subtotal.asKnown().isPresent) 1 else 0) +
+                    (if (total.asKnown().isPresent) 1 else 0) +
+                    (if (quantity.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return /* spotless:off */ other is PerPriceCost && quantity == other.quantity && subtotal == other.subtotal && total == other.total && price == other.price && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is PerPriceCost && price == other.price && priceId == other.priceId && subtotal == other.subtotal && total == other.total && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(quantity, subtotal, total, price, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(price, priceId, subtotal, total, quantity, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "PerPriceCost{quantity=$quantity, subtotal=$subtotal, total=$total, price=$price, additionalProperties=$additionalProperties}"
+                "PerPriceCost{price=$price, priceId=$priceId, subtotal=$subtotal, total=$total, quantity=$quantity, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -1308,17 +973,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && subtotal == other.subtotal && total == other.total && timeframeStart == other.timeframeStart && timeframeEnd == other.timeframeEnd && perPriceCosts == other.perPriceCosts && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && perPriceCosts == other.perPriceCosts && subtotal == other.subtotal && timeframeEnd == other.timeframeEnd && timeframeStart == other.timeframeStart && total == other.total && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(subtotal, total, timeframeStart, timeframeEnd, perPriceCosts, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(perPriceCosts, subtotal, timeframeEnd, timeframeStart, total, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Data{subtotal=$subtotal, total=$total, timeframeStart=$timeframeStart, timeframeEnd=$timeframeEnd, perPriceCosts=$perPriceCosts, additionalProperties=$additionalProperties}"
+            "Data{perPriceCosts=$perPriceCosts, subtotal=$subtotal, timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, total=$total, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

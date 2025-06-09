@@ -3,30 +3,23 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class InvoiceFetchUpcomingParamsTest {
+internal class InvoiceFetchUpcomingParamsTest {
 
     @Test
-    fun createInvoiceFetchUpcomingParams() {
+    fun create() {
         InvoiceFetchUpcomingParams.builder().subscriptionId("subscription_id").build()
     }
 
     @Test
-    fun getQueryParams() {
+    fun queryParams() {
         val params = InvoiceFetchUpcomingParams.builder().subscriptionId("subscription_id").build()
-        val expected = QueryParams.builder()
-        expected.put("subscription_id", "subscription_id")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
-    }
 
-    @Test
-    fun getQueryParamsWithoutOptionalFields() {
-        val params = InvoiceFetchUpcomingParams.builder().subscriptionId("subscription_id").build()
-        val expected = QueryParams.builder()
-        expected.put("subscription_id", "subscription_id")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(QueryParams.builder().put("subscription_id", "subscription_id").build())
     }
 }

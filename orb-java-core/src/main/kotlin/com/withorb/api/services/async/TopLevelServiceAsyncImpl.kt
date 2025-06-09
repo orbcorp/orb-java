@@ -3,6 +3,7 @@
 package com.withorb.api.services.async
 
 import com.withorb.api.core.ClientOptions
+import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
@@ -10,49 +11,60 @@ import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
 import com.withorb.api.core.http.HttpResponse.Handler
-import com.withorb.api.errors.OrbError
+import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.core.http.parseable
+import com.withorb.api.core.prepareAsync
 import com.withorb.api.models.TopLevelPingParams
 import com.withorb.api.models.TopLevelPingResponse
 import java.util.concurrent.CompletableFuture
 
-class TopLevelServiceAsyncImpl
-constructor(
-    private val clientOptions: ClientOptions,
-) : TopLevelServiceAsync {
+class TopLevelServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    TopLevelServiceAsync {
 
-    private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
+    private val withRawResponse: TopLevelServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
-    private val pingHandler: Handler<TopLevelPingResponse> =
-        jsonHandler<TopLevelPingResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+    override fun withRawResponse(): TopLevelServiceAsync.WithRawResponse = withRawResponse
 
-    /**
-     * This endpoint allows you to test your connection to the Orb API and check the validity of
-     * your API key, passed in the Authorization header. This is particularly useful for checking
-     * that your environment is set up properly, and is a great choice for connectors and
-     * integrations.
-     *
-     * This API does not have any side-effects or return any Orb resources.
-     */
     override fun ping(
         params: TopLevelPingParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<TopLevelPingResponse> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("ping")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { pingHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
+        requestOptions: RequestOptions,
+    ): CompletableFuture<TopLevelPingResponse> =
+        // get /ping
+        withRawResponse().ping(params, requestOptions).thenApply { it.parse() }
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        TopLevelServiceAsync.WithRawResponse {
+
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        private val pingHandler: Handler<TopLevelPingResponse> =
+            jsonHandler<TopLevelPingResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun ping(
+            params: TopLevelPingParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<TopLevelPingResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("ping")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { pingHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }

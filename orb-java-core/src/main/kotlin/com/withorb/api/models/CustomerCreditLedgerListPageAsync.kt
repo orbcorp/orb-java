@@ -2,220 +2,150 @@
 
 package com.withorb.api.models
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.withorb.api.core.ExcludeMissing
-import com.withorb.api.core.JsonField
-import com.withorb.api.core.JsonMissing
-import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toImmutable
+import com.withorb.api.core.AutoPagerAsync
+import com.withorb.api.core.PageAsync
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.async.customers.credits.LedgerServiceAsync
 import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
 
+/** @see [LedgerServiceAsync.list] */
 class CustomerCreditLedgerListPageAsync
 private constructor(
-    private val ledgerService: LedgerServiceAsync,
+    private val service: LedgerServiceAsync,
+    private val streamHandlerExecutor: Executor,
     private val params: CustomerCreditLedgerListParams,
-    private val response: Response,
-) {
+    private val response: CustomerCreditLedgerListPageResponse,
+) : PageAsync<CustomerCreditLedgerListResponse> {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [CustomerCreditLedgerListPageResponse], but gracefully handles missing data.
+     *
+     * @see [CustomerCreditLedgerListPageResponse.data]
+     */
+    fun data(): List<CustomerCreditLedgerListResponse> =
+        response._data().getOptional("data").getOrNull() ?: emptyList()
 
-    fun data(): List<CustomerCreditLedgerListResponse> = response().data()
+    /**
+     * Delegates to [CustomerCreditLedgerListPageResponse], but gracefully handles missing data.
+     *
+     * @see [CustomerCreditLedgerListPageResponse.paginationMetadata]
+     */
+    fun paginationMetadata(): Optional<PaginationMetadata> =
+        response._paginationMetadata().getOptional("pagination_metadata")
 
-    fun paginationMetadata(): PaginationMetadata = response().paginationMetadata()
+    override fun items(): List<CustomerCreditLedgerListResponse> = data()
+
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() &&
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.isPresent
+
+    fun nextPageParams(): CustomerCreditLedgerListParams {
+        val nextCursor =
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().cursor(nextCursor).build()
+    }
+
+    override fun nextPage(): CompletableFuture<CustomerCreditLedgerListPageAsync> =
+        service.list(nextPageParams())
+
+    fun autoPager(): AutoPagerAsync<CustomerCreditLedgerListResponse> =
+        AutoPagerAsync.from(this, streamHandlerExecutor)
+
+    /** The parameters that were used to request this page. */
+    fun params(): CustomerCreditLedgerListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): CustomerCreditLedgerListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
+    companion object {
+
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [CustomerCreditLedgerListPageAsync].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .streamHandlerExecutor()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [CustomerCreditLedgerListPageAsync]. */
+    class Builder internal constructor() {
+
+        private var service: LedgerServiceAsync? = null
+        private var streamHandlerExecutor: Executor? = null
+        private var params: CustomerCreditLedgerListParams? = null
+        private var response: CustomerCreditLedgerListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(customerCreditLedgerListPageAsync: CustomerCreditLedgerListPageAsync) =
+            apply {
+                service = customerCreditLedgerListPageAsync.service
+                streamHandlerExecutor = customerCreditLedgerListPageAsync.streamHandlerExecutor
+                params = customerCreditLedgerListPageAsync.params
+                response = customerCreditLedgerListPageAsync.response
+            }
+
+        fun service(service: LedgerServiceAsync) = apply { this.service = service }
+
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
+            this.streamHandlerExecutor = streamHandlerExecutor
+        }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: CustomerCreditLedgerListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: CustomerCreditLedgerListPageResponse) = apply {
+            this.response = response
+        }
+
+        /**
+         * Returns an immutable instance of [CustomerCreditLedgerListPageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .streamHandlerExecutor()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): CustomerCreditLedgerListPageAsync =
+            CustomerCreditLedgerListPageAsync(
+                checkRequired("service", service),
+                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is CustomerCreditLedgerListPageAsync && ledgerService == other.ledgerService && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is CustomerCreditLedgerListPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(ledgerService, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, streamHandlerExecutor, params, response) /* spotless:on */
 
     override fun toString() =
-        "CustomerCreditLedgerListPageAsync{ledgerService=$ledgerService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        if (data().isEmpty()) {
-            return false
-        }
-
-        return paginationMetadata().nextCursor().isPresent
-    }
-
-    fun getNextPageParams(): Optional<CustomerCreditLedgerListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
-
-        return Optional.of(
-            CustomerCreditLedgerListParams.builder()
-                .from(params)
-                .apply { paginationMetadata().nextCursor().ifPresent { this.cursor(it) } }
-                .build()
-        )
-    }
-
-    fun getNextPage(): CompletableFuture<Optional<CustomerCreditLedgerListPageAsync>> {
-        return getNextPageParams()
-            .map { ledgerService.list(it).thenApply { Optional.of(it) } }
-            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
-    }
-
-    fun autoPager(): AutoPager = AutoPager(this)
-
-    companion object {
-
-        @JvmStatic
-        fun of(
-            ledgerService: LedgerServiceAsync,
-            params: CustomerCreditLedgerListParams,
-            response: Response
-        ) =
-            CustomerCreditLedgerListPageAsync(
-                ledgerService,
-                params,
-                response,
-            )
-    }
-
-    @JsonDeserialize(builder = Response.Builder::class)
-    @NoAutoDetect
-    class Response
-    constructor(
-        private val data: JsonField<List<CustomerCreditLedgerListResponse>>,
-        private val paginationMetadata: JsonField<PaginationMetadata>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        private var validated: Boolean = false
-
-        fun data(): List<CustomerCreditLedgerListResponse> = data.getNullable("data") ?: listOf()
-
-        fun paginationMetadata(): PaginationMetadata =
-            paginationMetadata.getRequired("pagination_metadata")
-
-        @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<CustomerCreditLedgerListResponse>>> =
-            Optional.ofNullable(data)
-
-        @JsonProperty("pagination_metadata")
-        fun _paginationMetadata(): Optional<JsonField<PaginationMetadata>> =
-            Optional.ofNullable(paginationMetadata)
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): Response = apply {
-            if (!validated) {
-                data().map { it.validate() }
-                paginationMetadata().validate()
-                validated = true
-            }
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && data == other.data && paginationMetadata == other.paginationMetadata && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(data, paginationMetadata, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{data=$data, paginationMetadata=$paginationMetadata, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var data: JsonField<List<CustomerCreditLedgerListResponse>> = JsonMissing.of()
-            private var paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.data = page.data
-                this.paginationMetadata = page.paginationMetadata
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun data(data: List<CustomerCreditLedgerListResponse>) = data(JsonField.of(data))
-
-            @JsonProperty("data")
-            fun data(data: JsonField<List<CustomerCreditLedgerListResponse>>) = apply {
-                this.data = data
-            }
-
-            fun paginationMetadata(paginationMetadata: PaginationMetadata) =
-                paginationMetadata(JsonField.of(paginationMetadata))
-
-            @JsonProperty("pagination_metadata")
-            fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply {
-                this.paginationMetadata = paginationMetadata
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
-        }
-    }
-
-    class AutoPager
-    constructor(
-        private val firstPage: CustomerCreditLedgerListPageAsync,
-    ) {
-
-        fun forEach(
-            action: Predicate<CustomerCreditLedgerListResponse>,
-            executor: Executor
-        ): CompletableFuture<Void> {
-            fun CompletableFuture<Optional<CustomerCreditLedgerListPageAsync>>.forEach(
-                action: (CustomerCreditLedgerListResponse) -> Boolean,
-                executor: Executor
-            ): CompletableFuture<Void> =
-                thenComposeAsync(
-                    { page ->
-                        page
-                            .filter { it.data().all(action) }
-                            .map { it.getNextPage().forEach(action, executor) }
-                            .orElseGet { CompletableFuture.completedFuture(null) }
-                    },
-                    executor
-                )
-            return CompletableFuture.completedFuture(Optional.of(firstPage))
-                .forEach(action::test, executor)
-        }
-
-        fun toList(executor: Executor): CompletableFuture<List<CustomerCreditLedgerListResponse>> {
-            val values = mutableListOf<CustomerCreditLedgerListResponse>()
-            return forEach(values::add, executor).thenApply { values }
-        }
-    }
+        "CustomerCreditLedgerListPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

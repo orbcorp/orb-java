@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking.prices
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Price
 import com.withorb.api.models.PriceExternalPriceIdFetchParams
 import com.withorb.api.models.PriceExternalPriceIdUpdateParams
@@ -12,23 +12,167 @@ import com.withorb.api.models.PriceExternalPriceIdUpdateParams
 interface ExternalPriceIdService {
 
     /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
      * This endpoint allows you to update the `metadata` property on a price. If you pass null for
      * the metadata value, it will clear any existing metadata for that price.
      */
-    @JvmOverloads
+    fun update(externalPriceId: String): Price =
+        update(externalPriceId, PriceExternalPriceIdUpdateParams.none())
+
+    /** @see [update] */
+    fun update(
+        externalPriceId: String,
+        params: PriceExternalPriceIdUpdateParams = PriceExternalPriceIdUpdateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Price = update(params.toBuilder().externalPriceId(externalPriceId).build(), requestOptions)
+
+    /** @see [update] */
+    fun update(
+        externalPriceId: String,
+        params: PriceExternalPriceIdUpdateParams = PriceExternalPriceIdUpdateParams.none(),
+    ): Price = update(externalPriceId, params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: PriceExternalPriceIdUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Price
+
+    /** @see [update] */
+    fun update(params: PriceExternalPriceIdUpdateParams): Price =
+        update(params, RequestOptions.none())
+
+    /** @see [update] */
+    fun update(externalPriceId: String, requestOptions: RequestOptions): Price =
+        update(externalPriceId, PriceExternalPriceIdUpdateParams.none(), requestOptions)
 
     /**
      * This endpoint returns a price given an external price id. See the
-     * [price creation API](../reference/create-price) for more information about external price
-     * aliases.
+     * [price creation API](/api-reference/price/create-price) for more information about external
+     * price aliases.
      */
-    @JvmOverloads
+    fun fetch(externalPriceId: String): Price =
+        fetch(externalPriceId, PriceExternalPriceIdFetchParams.none())
+
+    /** @see [fetch] */
+    fun fetch(
+        externalPriceId: String,
+        params: PriceExternalPriceIdFetchParams = PriceExternalPriceIdFetchParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Price = fetch(params.toBuilder().externalPriceId(externalPriceId).build(), requestOptions)
+
+    /** @see [fetch] */
+    fun fetch(
+        externalPriceId: String,
+        params: PriceExternalPriceIdFetchParams = PriceExternalPriceIdFetchParams.none(),
+    ): Price = fetch(externalPriceId, params, RequestOptions.none())
+
+    /** @see [fetch] */
     fun fetch(
         params: PriceExternalPriceIdFetchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Price
+
+    /** @see [fetch] */
+    fun fetch(params: PriceExternalPriceIdFetchParams): Price = fetch(params, RequestOptions.none())
+
+    /** @see [fetch] */
+    fun fetch(externalPriceId: String, requestOptions: RequestOptions): Price =
+        fetch(externalPriceId, PriceExternalPriceIdFetchParams.none(), requestOptions)
+
+    /**
+     * A view of [ExternalPriceIdService] that provides access to raw HTTP responses for each
+     * method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `put /prices/external_price_id/{external_price_id}`, but
+         * is otherwise the same as [ExternalPriceIdService.update].
+         */
+        @MustBeClosed
+        fun update(externalPriceId: String): HttpResponseFor<Price> =
+            update(externalPriceId, PriceExternalPriceIdUpdateParams.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            externalPriceId: String,
+            params: PriceExternalPriceIdUpdateParams = PriceExternalPriceIdUpdateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Price> =
+            update(params.toBuilder().externalPriceId(externalPriceId).build(), requestOptions)
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            externalPriceId: String,
+            params: PriceExternalPriceIdUpdateParams = PriceExternalPriceIdUpdateParams.none(),
+        ): HttpResponseFor<Price> = update(externalPriceId, params, RequestOptions.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            params: PriceExternalPriceIdUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Price>
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(params: PriceExternalPriceIdUpdateParams): HttpResponseFor<Price> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            externalPriceId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Price> =
+            update(externalPriceId, PriceExternalPriceIdUpdateParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /prices/external_price_id/{external_price_id}`, but
+         * is otherwise the same as [ExternalPriceIdService.fetch].
+         */
+        @MustBeClosed
+        fun fetch(externalPriceId: String): HttpResponseFor<Price> =
+            fetch(externalPriceId, PriceExternalPriceIdFetchParams.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            externalPriceId: String,
+            params: PriceExternalPriceIdFetchParams = PriceExternalPriceIdFetchParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Price> =
+            fetch(params.toBuilder().externalPriceId(externalPriceId).build(), requestOptions)
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            externalPriceId: String,
+            params: PriceExternalPriceIdFetchParams = PriceExternalPriceIdFetchParams.none(),
+        ): HttpResponseFor<Price> = fetch(externalPriceId, params, RequestOptions.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(
+            params: PriceExternalPriceIdFetchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Price>
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(params: PriceExternalPriceIdFetchParams): HttpResponseFor<Price> =
+            fetch(params, RequestOptions.none())
+
+        /** @see [fetch] */
+        @MustBeClosed
+        fun fetch(externalPriceId: String, requestOptions: RequestOptions): HttpResponseFor<Price> =
+            fetch(externalPriceId, PriceExternalPriceIdFetchParams.none(), requestOptions)
+    }
 }

@@ -3,15 +3,14 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CustomerCostListParamsTest {
+internal class CustomerCostListParamsTest {
 
     @Test
-    fun createCustomerCostListParams() {
+    fun create() {
         CustomerCostListParams.builder()
             .customerId("customer_id")
             .currency("currency")
@@ -22,7 +21,16 @@ class CustomerCostListParamsTest {
     }
 
     @Test
-    fun getQueryParams() {
+    fun pathParams() {
+        val params = CustomerCostListParams.builder().customerId("customer_id").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("customer_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
+    fun queryParams() {
         val params =
             CustomerCostListParams.builder()
                 .customerId("customer_id")
@@ -31,28 +39,26 @@ class CustomerCostListParamsTest {
                 .timeframeStart(OffsetDateTime.parse("2022-02-01T05:00:00Z"))
                 .viewMode(CustomerCostListParams.ViewMode.PERIODIC)
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("currency", "currency")
-        expected.put("timeframe_end", "2022-03-01T05:00:00Z")
-        expected.put("timeframe_start", "2022-02-01T05:00:00Z")
-        expected.put("view_mode", CustomerCostListParams.ViewMode.PERIODIC.toString())
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("currency", "currency")
+                    .put("timeframe_end", "2022-03-01T05:00:00Z")
+                    .put("timeframe_start", "2022-02-01T05:00:00Z")
+                    .put("view_mode", "periodic")
+                    .build()
+            )
     }
 
     @Test
-    fun getQueryParamsWithoutOptionalFields() {
+    fun queryParamsWithoutOptionalFields() {
         val params = CustomerCostListParams.builder().customerId("customer_id").build()
-        val expected = QueryParams.builder()
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
-    }
 
-    @Test
-    fun getPathParam() {
-        val params = CustomerCostListParams.builder().customerId("customer_id").build()
-        assertThat(params).isNotNull
-        // path param "customerId"
-        assertThat(params.getPathParam(0)).isEqualTo("customer_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }

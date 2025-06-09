@@ -3,72 +3,56 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
-import com.withorb.api.models.*
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This deactivates the top-up and voids any invoices associated with pending credit blocks
+ * purchased through the top-up.
+ */
 class CustomerCreditTopUpDeleteByExternalIdParams
-constructor(
+private constructor(
     private val externalCustomerId: String,
-    private val topUpId: String,
+    private val topUpId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
-) {
+) : Params {
 
     fun externalCustomerId(): String = externalCustomerId
 
-    fun topUpId(): String = topUpId
+    fun topUpId(): Optional<String> = Optional.ofNullable(topUpId)
 
-    @JvmSynthetic
-    internal fun getBody(): Optional<Map<String, JsonValue>> {
-        return Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
-    }
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> externalCustomerId
-            1 -> topUpId
-            else -> ""
-        }
-    }
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerCreditTopUpDeleteByExternalIdParams && externalCustomerId == other.externalCustomerId && topUpId == other.topUpId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalCustomerId, topUpId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CustomerCreditTopUpDeleteByExternalIdParams{externalCustomerId=$externalCustomerId, topUpId=$topUpId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [CustomerCreditTopUpDeleteByExternalIdParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .externalCustomerId()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [CustomerCreditTopUpDeleteByExternalIdParams]. */
+    class Builder internal constructor() {
 
         private var externalCustomerId: String? = null
         private var topUpId: String? = null
@@ -80,20 +64,24 @@ constructor(
         internal fun from(
             customerCreditTopUpDeleteByExternalIdParams: CustomerCreditTopUpDeleteByExternalIdParams
         ) = apply {
-            this.externalCustomerId = customerCreditTopUpDeleteByExternalIdParams.externalCustomerId
-            this.topUpId = customerCreditTopUpDeleteByExternalIdParams.topUpId
-            additionalHeaders(customerCreditTopUpDeleteByExternalIdParams.additionalHeaders)
-            additionalQueryParams(customerCreditTopUpDeleteByExternalIdParams.additionalQueryParams)
-            additionalBodyProperties(
-                customerCreditTopUpDeleteByExternalIdParams.additionalBodyProperties
-            )
+            externalCustomerId = customerCreditTopUpDeleteByExternalIdParams.externalCustomerId
+            topUpId = customerCreditTopUpDeleteByExternalIdParams.topUpId
+            additionalHeaders =
+                customerCreditTopUpDeleteByExternalIdParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
+                customerCreditTopUpDeleteByExternalIdParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                customerCreditTopUpDeleteByExternalIdParams.additionalBodyProperties.toMutableMap()
         }
 
         fun externalCustomerId(externalCustomerId: String) = apply {
             this.externalCustomerId = externalCustomerId
         }
 
-        fun topUpId(topUpId: String) = apply { this.topUpId = topUpId }
+        fun topUpId(topUpId: String?) = apply { this.topUpId = topUpId }
+
+        /** Alias for calling [Builder.topUpId] with `topUpId.orElse(null)`. */
+        fun topUpId(topUpId: Optional<String>) = topUpId(topUpId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -215,15 +203,52 @@ constructor(
             keys.forEach(::removeAdditionalBodyProperty)
         }
 
+        /**
+         * Returns an immutable instance of [CustomerCreditTopUpDeleteByExternalIdParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .externalCustomerId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): CustomerCreditTopUpDeleteByExternalIdParams =
             CustomerCreditTopUpDeleteByExternalIdParams(
-                checkNotNull(externalCustomerId) {
-                    "`externalCustomerId` is required but was not set"
-                },
-                checkNotNull(topUpId) { "`topUpId` is required but was not set" },
+                checkRequired("externalCustomerId", externalCustomerId),
+                topUpId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    fun _body(): Optional<Map<String, JsonValue>> =
+        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> externalCustomerId
+            1 -> topUpId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerCreditTopUpDeleteByExternalIdParams && externalCustomerId == other.externalCustomerId && topUpId == other.topUpId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalCustomerId, topUpId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CustomerCreditTopUpDeleteByExternalIdParams{externalCustomerId=$externalCustomerId, topUpId=$topUpId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

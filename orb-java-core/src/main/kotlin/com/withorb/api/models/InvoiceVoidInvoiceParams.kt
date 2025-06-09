@@ -3,68 +3,53 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
-import com.withorb.api.models.*
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint allows an invoice's status to be set the `void` status. This can only be done to
+ * invoices that are in the `issued` status.
+ *
+ * If the associated invoice has used the customer balance to change the amount due, the customer
+ * balance operation will be reverted. For example, if the invoice used $10 of customer balance,
+ * that amount will be added back to the customer balance upon voiding.
+ *
+ * If the invoice was used to purchase a credit block, but the invoice is not yet paid, the credit
+ * block will be voided. If the invoice was created due to a top-up, the top-up will be disabled.
+ */
 class InvoiceVoidInvoiceParams
-constructor(
-    private val invoiceId: String,
+private constructor(
+    private val invoiceId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
-) {
+) : Params {
 
-    fun invoiceId(): String = invoiceId
+    fun invoiceId(): Optional<String> = Optional.ofNullable(invoiceId)
 
-    @JvmSynthetic
-    internal fun getBody(): Optional<Map<String, JsonValue>> {
-        return Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
-    }
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> invoiceId
-            else -> ""
-        }
-    }
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is InvoiceVoidInvoiceParams && invoiceId == other.invoiceId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(invoiceId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "InvoiceVoidInvoiceParams{invoiceId=$invoiceId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): InvoiceVoidInvoiceParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [InvoiceVoidInvoiceParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [InvoiceVoidInvoiceParams]. */
+    class Builder internal constructor() {
 
         private var invoiceId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -73,13 +58,17 @@ constructor(
 
         @JvmSynthetic
         internal fun from(invoiceVoidInvoiceParams: InvoiceVoidInvoiceParams) = apply {
-            this.invoiceId = invoiceVoidInvoiceParams.invoiceId
-            additionalHeaders(invoiceVoidInvoiceParams.additionalHeaders)
-            additionalQueryParams(invoiceVoidInvoiceParams.additionalQueryParams)
-            additionalBodyProperties(invoiceVoidInvoiceParams.additionalBodyProperties)
+            invoiceId = invoiceVoidInvoiceParams.invoiceId
+            additionalHeaders = invoiceVoidInvoiceParams.additionalHeaders.toBuilder()
+            additionalQueryParams = invoiceVoidInvoiceParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                invoiceVoidInvoiceParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun invoiceId(invoiceId: String) = apply { this.invoiceId = invoiceId }
+        fun invoiceId(invoiceId: String?) = apply { this.invoiceId = invoiceId }
+
+        /** Alias for calling [Builder.invoiceId] with `invoiceId.orElse(null)`. */
+        fun invoiceId(invoiceId: Optional<String>) = invoiceId(invoiceId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -201,12 +190,43 @@ constructor(
             keys.forEach(::removeAdditionalBodyProperty)
         }
 
+        /**
+         * Returns an immutable instance of [InvoiceVoidInvoiceParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): InvoiceVoidInvoiceParams =
             InvoiceVoidInvoiceParams(
-                checkNotNull(invoiceId) { "`invoiceId` is required but was not set" },
+                invoiceId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    fun _body(): Optional<Map<String, JsonValue>> =
+        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> invoiceId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is InvoiceVoidInvoiceParams && invoiceId == other.invoiceId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(invoiceId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "InvoiceVoidInvoiceParams{invoiceId=$invoiceId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

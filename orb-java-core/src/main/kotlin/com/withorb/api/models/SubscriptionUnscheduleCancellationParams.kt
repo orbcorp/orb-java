@@ -3,68 +3,52 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
-import com.withorb.api.models.*
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint can be used to unschedule any pending cancellations for a subscription.
+ *
+ * To be eligible, the subscription must currently be active and have a future cancellation. This
+ * operation will turn on auto-renew, ensuring that the subscription does not end at the currently
+ * scheduled cancellation time.
+ */
 class SubscriptionUnscheduleCancellationParams
-constructor(
-    private val subscriptionId: String,
+private constructor(
+    private val subscriptionId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
-) {
+) : Params {
 
-    fun subscriptionId(): String = subscriptionId
+    fun subscriptionId(): Optional<String> = Optional.ofNullable(subscriptionId)
 
-    @JvmSynthetic
-    internal fun getBody(): Optional<Map<String, JsonValue>> {
-        return Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
-    }
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> subscriptionId
-            else -> ""
-        }
-    }
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is SubscriptionUnscheduleCancellationParams && subscriptionId == other.subscriptionId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "SubscriptionUnscheduleCancellationParams{subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): SubscriptionUnscheduleCancellationParams = builder().build()
+
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [SubscriptionUnscheduleCancellationParams].
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [SubscriptionUnscheduleCancellationParams]. */
+    class Builder internal constructor() {
 
         private var subscriptionId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -75,15 +59,20 @@ constructor(
         internal fun from(
             subscriptionUnscheduleCancellationParams: SubscriptionUnscheduleCancellationParams
         ) = apply {
-            this.subscriptionId = subscriptionUnscheduleCancellationParams.subscriptionId
-            additionalHeaders(subscriptionUnscheduleCancellationParams.additionalHeaders)
-            additionalQueryParams(subscriptionUnscheduleCancellationParams.additionalQueryParams)
-            additionalBodyProperties(
-                subscriptionUnscheduleCancellationParams.additionalBodyProperties
-            )
+            subscriptionId = subscriptionUnscheduleCancellationParams.subscriptionId
+            additionalHeaders =
+                subscriptionUnscheduleCancellationParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
+                subscriptionUnscheduleCancellationParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                subscriptionUnscheduleCancellationParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
+        fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
+
+        /** Alias for calling [Builder.subscriptionId] with `subscriptionId.orElse(null)`. */
+        fun subscriptionId(subscriptionId: Optional<String>) =
+            subscriptionId(subscriptionId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -205,12 +194,43 @@ constructor(
             keys.forEach(::removeAdditionalBodyProperty)
         }
 
+        /**
+         * Returns an immutable instance of [SubscriptionUnscheduleCancellationParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): SubscriptionUnscheduleCancellationParams =
             SubscriptionUnscheduleCancellationParams(
-                checkNotNull(subscriptionId) { "`subscriptionId` is required but was not set" },
+                subscriptionId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    fun _body(): Optional<Map<String, JsonValue>> =
+        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> subscriptionId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is SubscriptionUnscheduleCancellationParams && subscriptionId == other.subscriptionId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "SubscriptionUnscheduleCancellationParams{subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

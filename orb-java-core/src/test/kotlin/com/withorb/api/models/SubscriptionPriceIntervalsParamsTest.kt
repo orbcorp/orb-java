@@ -2,680 +2,598 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
+import com.withorb.api.core.JsonValue
 import java.time.OffsetDateTime
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class SubscriptionPriceIntervalsParamsTest {
+internal class SubscriptionPriceIntervalsParamsTest {
 
     @Test
-    fun createSubscriptionPriceIntervalsParams() {
+    fun create() {
         SubscriptionPriceIntervalsParams.builder()
             .subscriptionId("subscription_id")
-            .add(
-                listOf(
-                    SubscriptionPriceIntervalsParams.Add.builder()
-                        .startDate(
-                            SubscriptionPriceIntervalsParams.Add.StartDate.ofDateTime(
-                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+            .addAdd(
+                SubscriptionPriceIntervalsParams.Add.builder()
+                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .allocationPrice(
+                        SubscriptionPriceIntervalsParams.Add.AllocationPrice.builder()
+                            .amount("10.00")
+                            .cadence(
+                                SubscriptionPriceIntervalsParams.Add.AllocationPrice.Cadence.MONTHLY
                             )
-                        )
-                        .allocationPrice(
-                            SubscriptionPriceIntervalsParams.Add.AllocationPrice.builder()
-                                .amount("10.00")
-                                .cadence(
-                                    SubscriptionPriceIntervalsParams.Add.AllocationPrice.Cadence
-                                        .ONE_TIME
-                                )
-                                .currency("USD")
-                                .expiresAtEndOfCadence(true)
-                                .build()
-                        )
-                        .discounts(
-                            listOf(
-                                SubscriptionPriceIntervalsParams.Add.Discount
-                                    .ofAmountDiscountCreationParams(
-                                        SubscriptionPriceIntervalsParams.Add.Discount
-                                            .AmountDiscountCreationParams
-                                            .builder()
-                                            .amountDiscount(42.23)
-                                            .discountType(
-                                                SubscriptionPriceIntervalsParams.Add.Discount
-                                                    .AmountDiscountCreationParams
-                                                    .DiscountType
-                                                    .AMOUNT
-                                            )
-                                            .build()
-                                    )
-                            )
-                        )
-                        .endDate(
-                            SubscriptionPriceIntervalsParams.Add.EndDate.ofDateTime(
-                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                            )
-                        )
-                        .externalPriceId("external_price_id")
-                        .fixedFeeQuantityTransitions(
-                            listOf(
-                                SubscriptionPriceIntervalsParams.Add.FixedFeeQuantityTransition
+                            .currency("USD")
+                            .customExpiration(
+                                SubscriptionPriceIntervalsParams.Add.AllocationPrice
+                                    .CustomExpiration
                                     .builder()
-                                    .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .quantity(123L)
+                                    .duration(0L)
+                                    .durationUnit(
+                                        SubscriptionPriceIntervalsParams.Add.AllocationPrice
+                                            .CustomExpiration
+                                            .DurationUnit
+                                            .DAY
+                                    )
                                     .build()
                             )
-                        )
-                        .maximumAmount(42.23)
-                        .minimumAmount(42.23)
-                        .price(
-                            SubscriptionPriceIntervalsParams.Add.Price.ofNewFloatingUnitPrice(
-                                SubscriptionPriceIntervalsParams.Add.Price.NewFloatingUnitPrice
+                            .expiresAtEndOfCadence(true)
+                            .build()
+                    )
+                    .addAmountDiscount(0.0)
+                    .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .externalPriceId("external_price_id")
+                    .filter("my_property > 100 AND my_other_property = 'bar'")
+                    .addFixedFeeQuantityTransition(
+                        SubscriptionPriceIntervalsParams.Add.FixedFeeQuantityTransition.builder()
+                            .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .quantity(5L)
+                            .build()
+                    )
+                    .maximumAmount(0.0)
+                    .minimumAmount(0.0)
+                    .price(
+                        SubscriptionPriceIntervalsParams.Add.Price.Unit.builder()
+                            .cadence(SubscriptionPriceIntervalsParams.Add.Price.Unit.Cadence.ANNUAL)
+                            .currency("currency")
+                            .itemId("item_id")
+                            .name("Annual fee")
+                            .unitConfig(
+                                SubscriptionPriceIntervalsParams.Add.Price.Unit.UnitConfig.builder()
+                                    .unitAmount("unit_amount")
+                                    .build()
+                            )
+                            .billableMetricId("billable_metric_id")
+                            .billedInAdvance(true)
+                            .billingCycleConfiguration(
+                                SubscriptionPriceIntervalsParams.Add.Price.Unit
+                                    .BillingCycleConfiguration
                                     .builder()
-                                    .cadence(
-                                        SubscriptionPriceIntervalsParams.Add.Price
-                                            .NewFloatingUnitPrice
-                                            .Cadence
-                                            .ANNUAL
-                                    )
-                                    .currency("currency")
-                                    .itemId("item_id")
-                                    .modelType(
-                                        SubscriptionPriceIntervalsParams.Add.Price
-                                            .NewFloatingUnitPrice
-                                            .ModelType
-                                            .UNIT
-                                    )
-                                    .name("Annual fee")
-                                    .unitConfig(
-                                        SubscriptionPriceIntervalsParams.Add.Price
-                                            .NewFloatingUnitPrice
-                                            .UnitConfig
-                                            .builder()
-                                            .unitAmount("unit_amount")
-                                            .build()
-                                    )
-                                    .billableMetricId("billable_metric_id")
-                                    .billedInAdvance(true)
-                                    .billingCycleConfiguration(
-                                        SubscriptionPriceIntervalsParams.Add.Price
-                                            .NewFloatingUnitPrice
+                                    .duration(0L)
+                                    .durationUnit(
+                                        SubscriptionPriceIntervalsParams.Add.Price.Unit
                                             .BillingCycleConfiguration
-                                            .builder()
-                                            .duration(123L)
-                                            .durationUnit(
-                                                SubscriptionPriceIntervalsParams.Add.Price
-                                                    .NewFloatingUnitPrice
-                                                    .BillingCycleConfiguration
-                                                    .DurationUnit
-                                                    .DAY
-                                            )
-                                            .build()
-                                    )
-                                    .conversionRate(42.23)
-                                    .externalPriceId("external_price_id")
-                                    .fixedPriceQuantity(42.23)
-                                    .invoiceGroupingKey("invoice_grouping_key")
-                                    .invoicingCycleConfiguration(
-                                        SubscriptionPriceIntervalsParams.Add.Price
-                                            .NewFloatingUnitPrice
-                                            .InvoicingCycleConfiguration
-                                            .builder()
-                                            .duration(123L)
-                                            .durationUnit(
-                                                SubscriptionPriceIntervalsParams.Add.Price
-                                                    .NewFloatingUnitPrice
-                                                    .InvoicingCycleConfiguration
-                                                    .DurationUnit
-                                                    .DAY
-                                            )
-                                            .build()
-                                    )
-                                    .metadata(
-                                        SubscriptionPriceIntervalsParams.Add.Price
-                                            .NewFloatingUnitPrice
-                                            .Metadata
-                                            .builder()
-                                            .build()
+                                            .DurationUnit
+                                            .DAY
                                     )
                                     .build()
                             )
-                        )
-                        .priceId("h74gfhdjvn7ujokd")
-                        .build()
-                )
-            )
-            .addAdjustments(
-                listOf(
-                    SubscriptionPriceIntervalsParams.AddAdjustment.builder()
-                        .adjustment(
-                            SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
-                                .ofNewPercentageDiscount(
-                                    SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
-                                        .NewPercentageDiscount
-                                        .builder()
-                                        .adjustmentType(
-                                            SubscriptionPriceIntervalsParams.AddAdjustment
-                                                .Adjustment
-                                                .NewPercentageDiscount
-                                                .AdjustmentType
-                                                .PERCENTAGE_DISCOUNT
-                                        )
-                                        .appliesToPriceIds(listOf("string"))
-                                        .percentageDiscount(42.23)
-                                        .build()
-                                )
-                        )
-                        .startDate(
-                            SubscriptionPriceIntervalsParams.AddAdjustment.StartDate.ofDateTime(
-                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                            )
-                        )
-                        .endDate(
-                            SubscriptionPriceIntervalsParams.AddAdjustment.EndDate.ofDateTime(
-                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                            )
-                        )
-                        .build()
-                )
-            )
-            .edit(
-                listOf(
-                    SubscriptionPriceIntervalsParams.Edit.builder()
-                        .priceIntervalId("sdfs6wdjvn7ujokd")
-                        .billingCycleDay(123L)
-                        .endDate(
-                            SubscriptionPriceIntervalsParams.Edit.EndDate.ofDateTime(
-                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                            )
-                        )
-                        .fixedFeeQuantityTransitions(
-                            listOf(
-                                SubscriptionPriceIntervalsParams.Edit.FixedFeeQuantityTransition
+                            .conversionRate(0.0)
+                            .dimensionalPriceConfiguration(
+                                SubscriptionPriceIntervalsParams.Add.Price.Unit
+                                    .DimensionalPriceConfiguration
                                     .builder()
-                                    .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .quantity(123L)
+                                    .addDimensionValue("string")
+                                    .dimensionalPriceGroupId("dimensional_price_group_id")
+                                    .externalDimensionalPriceGroupId(
+                                        "external_dimensional_price_group_id"
+                                    )
                                     .build()
                             )
-                        )
-                        .startDate(
-                            SubscriptionPriceIntervalsParams.Edit.StartDate.ofDateTime(
-                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                            .externalPriceId("external_price_id")
+                            .fixedPriceQuantity(0.0)
+                            .invoiceGroupingKey("x")
+                            .invoicingCycleConfiguration(
+                                SubscriptionPriceIntervalsParams.Add.Price.Unit
+                                    .InvoicingCycleConfiguration
+                                    .builder()
+                                    .duration(0L)
+                                    .durationUnit(
+                                        SubscriptionPriceIntervalsParams.Add.Price.Unit
+                                            .InvoicingCycleConfiguration
+                                            .DurationUnit
+                                            .DAY
+                                    )
+                                    .build()
                             )
-                        )
-                        .build()
-                )
+                            .metadata(
+                                SubscriptionPriceIntervalsParams.Add.Price.Unit.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .priceId("h74gfhdjvn7ujokd")
+                    .addUsageCustomerId("string")
+                    .build()
             )
-            .editAdjustments(
-                listOf(
-                    SubscriptionPriceIntervalsParams.EditAdjustment.builder()
-                        .adjustmentIntervalId("sdfs6wdjvn7ujokd")
-                        .endDate(
-                            SubscriptionPriceIntervalsParams.EditAdjustment.EndDate.ofDateTime(
-                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+            .addAddAdjustment(
+                SubscriptionPriceIntervalsParams.AddAdjustment.builder()
+                    .adjustment(
+                        SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment.PercentageDiscount
+                            .builder()
+                            .percentageDiscount(0.0)
+                            .appliesToAll(
+                                SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .AppliesToAll
+                                    .TRUE
                             )
-                        )
-                        .startDate(
-                            SubscriptionPriceIntervalsParams.EditAdjustment.StartDate.ofDateTime(
-                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                            .addAppliesToItemId("item_1")
+                            .addAppliesToItemId("item_2")
+                            .addAppliesToPriceId("price_1")
+                            .addAppliesToPriceId("price_2")
+                            .currency("currency")
+                            .addFilter(
+                                SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .Filter
+                                    .builder()
+                                    .field(
+                                        SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Field
+                                            .PRICE_ID
+                                    )
+                                    .operator(
+                                        SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Operator
+                                            .INCLUDES
+                                    )
+                                    .addValue("string")
+                                    .build()
                             )
-                        )
-                        .build()
-                )
+                            .isInvoiceLevel(true)
+                            .priceType(
+                                SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .PriceType
+                                    .USAGE
+                            )
+                            .build()
+                    )
+                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .build()
+            )
+            .allowInvoiceCreditOrVoid(true)
+            .addEdit(
+                SubscriptionPriceIntervalsParams.Edit.builder()
+                    .priceIntervalId("sdfs6wdjvn7ujokd")
+                    .billingCycleDay(0L)
+                    .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .filter("my_property > 100 AND my_other_property = 'bar'")
+                    .addFixedFeeQuantityTransition(
+                        SubscriptionPriceIntervalsParams.Edit.FixedFeeQuantityTransition.builder()
+                            .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .quantity(5L)
+                            .build()
+                    )
+                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .addUsageCustomerId("string")
+                    .build()
+            )
+            .addEditAdjustment(
+                SubscriptionPriceIntervalsParams.EditAdjustment.builder()
+                    .adjustmentIntervalId("sdfs6wdjvn7ujokd")
+                    .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .build()
             )
             .build()
     }
 
     @Test
-    fun getBody() {
+    fun pathParams() {
+        val params =
+            SubscriptionPriceIntervalsParams.builder().subscriptionId("subscription_id").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("subscription_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
+    fun body() {
         val params =
             SubscriptionPriceIntervalsParams.builder()
                 .subscriptionId("subscription_id")
-                .add(
-                    listOf(
-                        SubscriptionPriceIntervalsParams.Add.builder()
-                            .startDate(
-                                SubscriptionPriceIntervalsParams.Add.StartDate.ofDateTime(
-                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                )
-                            )
-                            .allocationPrice(
-                                SubscriptionPriceIntervalsParams.Add.AllocationPrice.builder()
-                                    .amount("10.00")
-                                    .cadence(
-                                        SubscriptionPriceIntervalsParams.Add.AllocationPrice.Cadence
-                                            .ONE_TIME
-                                    )
-                                    .currency("USD")
-                                    .expiresAtEndOfCadence(true)
-                                    .build()
-                            )
-                            .discounts(
-                                listOf(
-                                    SubscriptionPriceIntervalsParams.Add.Discount
-                                        .ofAmountDiscountCreationParams(
-                                            SubscriptionPriceIntervalsParams.Add.Discount
-                                                .AmountDiscountCreationParams
-                                                .builder()
-                                                .amountDiscount(42.23)
-                                                .discountType(
-                                                    SubscriptionPriceIntervalsParams.Add.Discount
-                                                        .AmountDiscountCreationParams
-                                                        .DiscountType
-                                                        .AMOUNT
-                                                )
-                                                .build()
-                                        )
-                                )
-                            )
-                            .endDate(
-                                SubscriptionPriceIntervalsParams.Add.EndDate.ofDateTime(
-                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                )
-                            )
-                            .externalPriceId("external_price_id")
-                            .fixedFeeQuantityTransitions(
-                                listOf(
-                                    SubscriptionPriceIntervalsParams.Add.FixedFeeQuantityTransition
-                                        .builder()
-                                        .effectiveDate(
-                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                        )
-                                        .quantity(123L)
-                                        .build()
-                                )
-                            )
-                            .maximumAmount(42.23)
-                            .minimumAmount(42.23)
-                            .price(
-                                SubscriptionPriceIntervalsParams.Add.Price.ofNewFloatingUnitPrice(
-                                    SubscriptionPriceIntervalsParams.Add.Price.NewFloatingUnitPrice
-                                        .builder()
-                                        .cadence(
-                                            SubscriptionPriceIntervalsParams.Add.Price
-                                                .NewFloatingUnitPrice
-                                                .Cadence
-                                                .ANNUAL
-                                        )
-                                        .currency("currency")
-                                        .itemId("item_id")
-                                        .modelType(
-                                            SubscriptionPriceIntervalsParams.Add.Price
-                                                .NewFloatingUnitPrice
-                                                .ModelType
-                                                .UNIT
-                                        )
-                                        .name("Annual fee")
-                                        .unitConfig(
-                                            SubscriptionPriceIntervalsParams.Add.Price
-                                                .NewFloatingUnitPrice
-                                                .UnitConfig
-                                                .builder()
-                                                .unitAmount("unit_amount")
-                                                .build()
-                                        )
-                                        .billableMetricId("billable_metric_id")
-                                        .billedInAdvance(true)
-                                        .billingCycleConfiguration(
-                                            SubscriptionPriceIntervalsParams.Add.Price
-                                                .NewFloatingUnitPrice
-                                                .BillingCycleConfiguration
-                                                .builder()
-                                                .duration(123L)
-                                                .durationUnit(
-                                                    SubscriptionPriceIntervalsParams.Add.Price
-                                                        .NewFloatingUnitPrice
-                                                        .BillingCycleConfiguration
-                                                        .DurationUnit
-                                                        .DAY
-                                                )
-                                                .build()
-                                        )
-                                        .conversionRate(42.23)
-                                        .externalPriceId("external_price_id")
-                                        .fixedPriceQuantity(42.23)
-                                        .invoiceGroupingKey("invoice_grouping_key")
-                                        .invoicingCycleConfiguration(
-                                            SubscriptionPriceIntervalsParams.Add.Price
-                                                .NewFloatingUnitPrice
-                                                .InvoicingCycleConfiguration
-                                                .builder()
-                                                .duration(123L)
-                                                .durationUnit(
-                                                    SubscriptionPriceIntervalsParams.Add.Price
-                                                        .NewFloatingUnitPrice
-                                                        .InvoicingCycleConfiguration
-                                                        .DurationUnit
-                                                        .DAY
-                                                )
-                                                .build()
-                                        )
-                                        .metadata(
-                                            SubscriptionPriceIntervalsParams.Add.Price
-                                                .NewFloatingUnitPrice
-                                                .Metadata
-                                                .builder()
-                                                .build()
-                                        )
-                                        .build()
-                                )
-                            )
-                            .priceId("h74gfhdjvn7ujokd")
-                            .build()
-                    )
-                )
-                .addAdjustments(
-                    listOf(
-                        SubscriptionPriceIntervalsParams.AddAdjustment.builder()
-                            .adjustment(
-                                SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
-                                    .ofNewPercentageDiscount(
-                                        SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
-                                            .NewPercentageDiscount
-                                            .builder()
-                                            .adjustmentType(
-                                                SubscriptionPriceIntervalsParams.AddAdjustment
-                                                    .Adjustment
-                                                    .NewPercentageDiscount
-                                                    .AdjustmentType
-                                                    .PERCENTAGE_DISCOUNT
-                                            )
-                                            .appliesToPriceIds(listOf("string"))
-                                            .percentageDiscount(42.23)
-                                            .build()
-                                    )
-                            )
-                            .startDate(
-                                SubscriptionPriceIntervalsParams.AddAdjustment.StartDate.ofDateTime(
-                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                )
-                            )
-                            .endDate(
-                                SubscriptionPriceIntervalsParams.AddAdjustment.EndDate.ofDateTime(
-                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                )
-                            )
-                            .build()
-                    )
-                )
-                .edit(
-                    listOf(
-                        SubscriptionPriceIntervalsParams.Edit.builder()
-                            .priceIntervalId("sdfs6wdjvn7ujokd")
-                            .billingCycleDay(123L)
-                            .endDate(
-                                SubscriptionPriceIntervalsParams.Edit.EndDate.ofDateTime(
-                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                )
-                            )
-                            .fixedFeeQuantityTransitions(
-                                listOf(
-                                    SubscriptionPriceIntervalsParams.Edit.FixedFeeQuantityTransition
-                                        .builder()
-                                        .effectiveDate(
-                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                        )
-                                        .quantity(123L)
-                                        .build()
-                                )
-                            )
-                            .startDate(
-                                SubscriptionPriceIntervalsParams.Edit.StartDate.ofDateTime(
-                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                )
-                            )
-                            .build()
-                    )
-                )
-                .editAdjustments(
-                    listOf(
-                        SubscriptionPriceIntervalsParams.EditAdjustment.builder()
-                            .adjustmentIntervalId("sdfs6wdjvn7ujokd")
-                            .endDate(
-                                SubscriptionPriceIntervalsParams.EditAdjustment.EndDate.ofDateTime(
-                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                )
-                            )
-                            .startDate(
-                                SubscriptionPriceIntervalsParams.EditAdjustment.StartDate
-                                    .ofDateTime(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            )
-                            .build()
-                    )
-                )
-                .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-        assertThat(body.add())
-            .isEqualTo(
-                listOf(
+                .addAdd(
                     SubscriptionPriceIntervalsParams.Add.builder()
-                        .startDate(
-                            SubscriptionPriceIntervalsParams.Add.StartDate.ofDateTime(
-                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                            )
-                        )
+                        .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .allocationPrice(
                             SubscriptionPriceIntervalsParams.Add.AllocationPrice.builder()
                                 .amount("10.00")
                                 .cadence(
                                     SubscriptionPriceIntervalsParams.Add.AllocationPrice.Cadence
-                                        .ONE_TIME
+                                        .MONTHLY
                                 )
                                 .currency("USD")
+                                .customExpiration(
+                                    SubscriptionPriceIntervalsParams.Add.AllocationPrice
+                                        .CustomExpiration
+                                        .builder()
+                                        .duration(0L)
+                                        .durationUnit(
+                                            SubscriptionPriceIntervalsParams.Add.AllocationPrice
+                                                .CustomExpiration
+                                                .DurationUnit
+                                                .DAY
+                                        )
+                                        .build()
+                                )
                                 .expiresAtEndOfCadence(true)
                                 .build()
                         )
-                        .discounts(
-                            listOf(
-                                SubscriptionPriceIntervalsParams.Add.Discount
-                                    .ofAmountDiscountCreationParams(
-                                        SubscriptionPriceIntervalsParams.Add.Discount
-                                            .AmountDiscountCreationParams
-                                            .builder()
-                                            .amountDiscount(42.23)
-                                            .discountType(
-                                                SubscriptionPriceIntervalsParams.Add.Discount
-                                                    .AmountDiscountCreationParams
-                                                    .DiscountType
-                                                    .AMOUNT
-                                            )
-                                            .build()
-                                    )
-                            )
-                        )
-                        .endDate(
-                            SubscriptionPriceIntervalsParams.Add.EndDate.ofDateTime(
-                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                            )
-                        )
+                        .addAmountDiscount(0.0)
+                        .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .externalPriceId("external_price_id")
-                        .fixedFeeQuantityTransitions(
-                            listOf(
-                                SubscriptionPriceIntervalsParams.Add.FixedFeeQuantityTransition
-                                    .builder()
-                                    .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .quantity(123L)
-                                    .build()
-                            )
+                        .filter("my_property > 100 AND my_other_property = 'bar'")
+                        .addFixedFeeQuantityTransition(
+                            SubscriptionPriceIntervalsParams.Add.FixedFeeQuantityTransition
+                                .builder()
+                                .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .quantity(5L)
+                                .build()
                         )
-                        .maximumAmount(42.23)
-                        .minimumAmount(42.23)
+                        .maximumAmount(0.0)
+                        .minimumAmount(0.0)
                         .price(
-                            SubscriptionPriceIntervalsParams.Add.Price.ofNewFloatingUnitPrice(
-                                SubscriptionPriceIntervalsParams.Add.Price.NewFloatingUnitPrice
-                                    .builder()
-                                    .cadence(
-                                        SubscriptionPriceIntervalsParams.Add.Price
-                                            .NewFloatingUnitPrice
-                                            .Cadence
-                                            .ANNUAL
-                                    )
-                                    .currency("currency")
-                                    .itemId("item_id")
-                                    .modelType(
-                                        SubscriptionPriceIntervalsParams.Add.Price
-                                            .NewFloatingUnitPrice
-                                            .ModelType
-                                            .UNIT
-                                    )
-                                    .name("Annual fee")
-                                    .unitConfig(
-                                        SubscriptionPriceIntervalsParams.Add.Price
-                                            .NewFloatingUnitPrice
-                                            .UnitConfig
-                                            .builder()
-                                            .unitAmount("unit_amount")
-                                            .build()
-                                    )
-                                    .billableMetricId("billable_metric_id")
-                                    .billedInAdvance(true)
-                                    .billingCycleConfiguration(
-                                        SubscriptionPriceIntervalsParams.Add.Price
-                                            .NewFloatingUnitPrice
-                                            .BillingCycleConfiguration
-                                            .builder()
-                                            .duration(123L)
-                                            .durationUnit(
-                                                SubscriptionPriceIntervalsParams.Add.Price
-                                                    .NewFloatingUnitPrice
-                                                    .BillingCycleConfiguration
-                                                    .DurationUnit
-                                                    .DAY
-                                            )
-                                            .build()
-                                    )
-                                    .conversionRate(42.23)
-                                    .externalPriceId("external_price_id")
-                                    .fixedPriceQuantity(42.23)
-                                    .invoiceGroupingKey("invoice_grouping_key")
-                                    .invoicingCycleConfiguration(
-                                        SubscriptionPriceIntervalsParams.Add.Price
-                                            .NewFloatingUnitPrice
-                                            .InvoicingCycleConfiguration
-                                            .builder()
-                                            .duration(123L)
-                                            .durationUnit(
-                                                SubscriptionPriceIntervalsParams.Add.Price
-                                                    .NewFloatingUnitPrice
-                                                    .InvoicingCycleConfiguration
-                                                    .DurationUnit
-                                                    .DAY
-                                            )
-                                            .build()
-                                    )
-                                    .metadata(
-                                        SubscriptionPriceIntervalsParams.Add.Price
-                                            .NewFloatingUnitPrice
-                                            .Metadata
-                                            .builder()
-                                            .build()
-                                    )
-                                    .build()
-                            )
+                            SubscriptionPriceIntervalsParams.Add.Price.Unit.builder()
+                                .cadence(
+                                    SubscriptionPriceIntervalsParams.Add.Price.Unit.Cadence.ANNUAL
+                                )
+                                .currency("currency")
+                                .itemId("item_id")
+                                .name("Annual fee")
+                                .unitConfig(
+                                    SubscriptionPriceIntervalsParams.Add.Price.Unit.UnitConfig
+                                        .builder()
+                                        .unitAmount("unit_amount")
+                                        .build()
+                                )
+                                .billableMetricId("billable_metric_id")
+                                .billedInAdvance(true)
+                                .billingCycleConfiguration(
+                                    SubscriptionPriceIntervalsParams.Add.Price.Unit
+                                        .BillingCycleConfiguration
+                                        .builder()
+                                        .duration(0L)
+                                        .durationUnit(
+                                            SubscriptionPriceIntervalsParams.Add.Price.Unit
+                                                .BillingCycleConfiguration
+                                                .DurationUnit
+                                                .DAY
+                                        )
+                                        .build()
+                                )
+                                .conversionRate(0.0)
+                                .dimensionalPriceConfiguration(
+                                    SubscriptionPriceIntervalsParams.Add.Price.Unit
+                                        .DimensionalPriceConfiguration
+                                        .builder()
+                                        .addDimensionValue("string")
+                                        .dimensionalPriceGroupId("dimensional_price_group_id")
+                                        .externalDimensionalPriceGroupId(
+                                            "external_dimensional_price_group_id"
+                                        )
+                                        .build()
+                                )
+                                .externalPriceId("external_price_id")
+                                .fixedPriceQuantity(0.0)
+                                .invoiceGroupingKey("x")
+                                .invoicingCycleConfiguration(
+                                    SubscriptionPriceIntervalsParams.Add.Price.Unit
+                                        .InvoicingCycleConfiguration
+                                        .builder()
+                                        .duration(0L)
+                                        .durationUnit(
+                                            SubscriptionPriceIntervalsParams.Add.Price.Unit
+                                                .InvoicingCycleConfiguration
+                                                .DurationUnit
+                                                .DAY
+                                        )
+                                        .build()
+                                )
+                                .metadata(
+                                    SubscriptionPriceIntervalsParams.Add.Price.Unit.Metadata
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .build()
                         )
                         .priceId("h74gfhdjvn7ujokd")
+                        .addUsageCustomerId("string")
                         .build()
                 )
-            )
-        assertThat(body.addAdjustments())
-            .isEqualTo(
-                listOf(
+                .addAddAdjustment(
                     SubscriptionPriceIntervalsParams.AddAdjustment.builder()
                         .adjustment(
                             SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
-                                .ofNewPercentageDiscount(
+                                .PercentageDiscount
+                                .builder()
+                                .percentageDiscount(0.0)
+                                .appliesToAll(
                                     SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
-                                        .NewPercentageDiscount
+                                        .PercentageDiscount
+                                        .AppliesToAll
+                                        .TRUE
+                                )
+                                .addAppliesToItemId("item_1")
+                                .addAppliesToItemId("item_2")
+                                .addAppliesToPriceId("price_1")
+                                .addAppliesToPriceId("price_2")
+                                .currency("currency")
+                                .addFilter(
+                                    SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
+                                        .PercentageDiscount
+                                        .Filter
                                         .builder()
-                                        .adjustmentType(
+                                        .field(
                                             SubscriptionPriceIntervalsParams.AddAdjustment
                                                 .Adjustment
-                                                .NewPercentageDiscount
-                                                .AdjustmentType
-                                                .PERCENTAGE_DISCOUNT
+                                                .PercentageDiscount
+                                                .Filter
+                                                .Field
+                                                .PRICE_ID
                                         )
-                                        .appliesToPriceIds(listOf("string"))
-                                        .percentageDiscount(42.23)
+                                        .operator(
+                                            SubscriptionPriceIntervalsParams.AddAdjustment
+                                                .Adjustment
+                                                .PercentageDiscount
+                                                .Filter
+                                                .Operator
+                                                .INCLUDES
+                                        )
+                                        .addValue("string")
                                         .build()
                                 )
+                                .isInvoiceLevel(true)
+                                .priceType(
+                                    SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
+                                        .PercentageDiscount
+                                        .PriceType
+                                        .USAGE
+                                )
+                                .build()
                         )
-                        .startDate(
-                            SubscriptionPriceIntervalsParams.AddAdjustment.StartDate.ofDateTime(
-                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                            )
-                        )
-                        .endDate(
-                            SubscriptionPriceIntervalsParams.AddAdjustment.EndDate.ofDateTime(
-                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                            )
-                        )
+                        .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
                 )
-            )
-        assertThat(body.edit())
-            .isEqualTo(
-                listOf(
+                .allowInvoiceCreditOrVoid(true)
+                .addEdit(
                     SubscriptionPriceIntervalsParams.Edit.builder()
                         .priceIntervalId("sdfs6wdjvn7ujokd")
-                        .billingCycleDay(123L)
-                        .endDate(
-                            SubscriptionPriceIntervalsParams.Edit.EndDate.ofDateTime(
-                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                            )
+                        .billingCycleDay(0L)
+                        .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .filter("my_property > 100 AND my_other_property = 'bar'")
+                        .addFixedFeeQuantityTransition(
+                            SubscriptionPriceIntervalsParams.Edit.FixedFeeQuantityTransition
+                                .builder()
+                                .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .quantity(5L)
+                                .build()
                         )
-                        .fixedFeeQuantityTransitions(
-                            listOf(
-                                SubscriptionPriceIntervalsParams.Edit.FixedFeeQuantityTransition
-                                    .builder()
-                                    .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .quantity(123L)
-                                    .build()
-                            )
-                        )
-                        .startDate(
-                            SubscriptionPriceIntervalsParams.Edit.StartDate.ofDateTime(
-                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                            )
-                        )
+                        .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .addUsageCustomerId("string")
                         .build()
                 )
-            )
-        assertThat(body.editAdjustments())
-            .isEqualTo(
-                listOf(
+                .addEditAdjustment(
                     SubscriptionPriceIntervalsParams.EditAdjustment.builder()
                         .adjustmentIntervalId("sdfs6wdjvn7ujokd")
-                        .endDate(
-                            SubscriptionPriceIntervalsParams.EditAdjustment.EndDate.ofDateTime(
-                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                            )
-                        )
-                        .startDate(
-                            SubscriptionPriceIntervalsParams.EditAdjustment.StartDate.ofDateTime(
-                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                            )
-                        )
+                        .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
                 )
+                .build()
+
+        val body = params._body()
+
+        assertThat(body.add().getOrNull())
+            .containsExactly(
+                SubscriptionPriceIntervalsParams.Add.builder()
+                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .allocationPrice(
+                        SubscriptionPriceIntervalsParams.Add.AllocationPrice.builder()
+                            .amount("10.00")
+                            .cadence(
+                                SubscriptionPriceIntervalsParams.Add.AllocationPrice.Cadence.MONTHLY
+                            )
+                            .currency("USD")
+                            .customExpiration(
+                                SubscriptionPriceIntervalsParams.Add.AllocationPrice
+                                    .CustomExpiration
+                                    .builder()
+                                    .duration(0L)
+                                    .durationUnit(
+                                        SubscriptionPriceIntervalsParams.Add.AllocationPrice
+                                            .CustomExpiration
+                                            .DurationUnit
+                                            .DAY
+                                    )
+                                    .build()
+                            )
+                            .expiresAtEndOfCadence(true)
+                            .build()
+                    )
+                    .addAmountDiscount(0.0)
+                    .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .externalPriceId("external_price_id")
+                    .filter("my_property > 100 AND my_other_property = 'bar'")
+                    .addFixedFeeQuantityTransition(
+                        SubscriptionPriceIntervalsParams.Add.FixedFeeQuantityTransition.builder()
+                            .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .quantity(5L)
+                            .build()
+                    )
+                    .maximumAmount(0.0)
+                    .minimumAmount(0.0)
+                    .price(
+                        SubscriptionPriceIntervalsParams.Add.Price.Unit.builder()
+                            .cadence(SubscriptionPriceIntervalsParams.Add.Price.Unit.Cadence.ANNUAL)
+                            .currency("currency")
+                            .itemId("item_id")
+                            .name("Annual fee")
+                            .unitConfig(
+                                SubscriptionPriceIntervalsParams.Add.Price.Unit.UnitConfig.builder()
+                                    .unitAmount("unit_amount")
+                                    .build()
+                            )
+                            .billableMetricId("billable_metric_id")
+                            .billedInAdvance(true)
+                            .billingCycleConfiguration(
+                                SubscriptionPriceIntervalsParams.Add.Price.Unit
+                                    .BillingCycleConfiguration
+                                    .builder()
+                                    .duration(0L)
+                                    .durationUnit(
+                                        SubscriptionPriceIntervalsParams.Add.Price.Unit
+                                            .BillingCycleConfiguration
+                                            .DurationUnit
+                                            .DAY
+                                    )
+                                    .build()
+                            )
+                            .conversionRate(0.0)
+                            .dimensionalPriceConfiguration(
+                                SubscriptionPriceIntervalsParams.Add.Price.Unit
+                                    .DimensionalPriceConfiguration
+                                    .builder()
+                                    .addDimensionValue("string")
+                                    .dimensionalPriceGroupId("dimensional_price_group_id")
+                                    .externalDimensionalPriceGroupId(
+                                        "external_dimensional_price_group_id"
+                                    )
+                                    .build()
+                            )
+                            .externalPriceId("external_price_id")
+                            .fixedPriceQuantity(0.0)
+                            .invoiceGroupingKey("x")
+                            .invoicingCycleConfiguration(
+                                SubscriptionPriceIntervalsParams.Add.Price.Unit
+                                    .InvoicingCycleConfiguration
+                                    .builder()
+                                    .duration(0L)
+                                    .durationUnit(
+                                        SubscriptionPriceIntervalsParams.Add.Price.Unit
+                                            .InvoicingCycleConfiguration
+                                            .DurationUnit
+                                            .DAY
+                                    )
+                                    .build()
+                            )
+                            .metadata(
+                                SubscriptionPriceIntervalsParams.Add.Price.Unit.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .priceId("h74gfhdjvn7ujokd")
+                    .addUsageCustomerId("string")
+                    .build()
+            )
+        assertThat(body.addAdjustments().getOrNull())
+            .containsExactly(
+                SubscriptionPriceIntervalsParams.AddAdjustment.builder()
+                    .adjustment(
+                        SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment.PercentageDiscount
+                            .builder()
+                            .percentageDiscount(0.0)
+                            .appliesToAll(
+                                SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .AppliesToAll
+                                    .TRUE
+                            )
+                            .addAppliesToItemId("item_1")
+                            .addAppliesToItemId("item_2")
+                            .addAppliesToPriceId("price_1")
+                            .addAppliesToPriceId("price_2")
+                            .currency("currency")
+                            .addFilter(
+                                SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .Filter
+                                    .builder()
+                                    .field(
+                                        SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Field
+                                            .PRICE_ID
+                                    )
+                                    .operator(
+                                        SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
+                                            .PercentageDiscount
+                                            .Filter
+                                            .Operator
+                                            .INCLUDES
+                                    )
+                                    .addValue("string")
+                                    .build()
+                            )
+                            .isInvoiceLevel(true)
+                            .priceType(
+                                SubscriptionPriceIntervalsParams.AddAdjustment.Adjustment
+                                    .PercentageDiscount
+                                    .PriceType
+                                    .USAGE
+                            )
+                            .build()
+                    )
+                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .build()
+            )
+        assertThat(body.allowInvoiceCreditOrVoid()).contains(true)
+        assertThat(body.edit().getOrNull())
+            .containsExactly(
+                SubscriptionPriceIntervalsParams.Edit.builder()
+                    .priceIntervalId("sdfs6wdjvn7ujokd")
+                    .billingCycleDay(0L)
+                    .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .filter("my_property > 100 AND my_other_property = 'bar'")
+                    .addFixedFeeQuantityTransition(
+                        SubscriptionPriceIntervalsParams.Edit.FixedFeeQuantityTransition.builder()
+                            .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .quantity(5L)
+                            .build()
+                    )
+                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .addUsageCustomerId("string")
+                    .build()
+            )
+        assertThat(body.editAdjustments().getOrNull())
+            .containsExactly(
+                SubscriptionPriceIntervalsParams.EditAdjustment.builder()
+                    .adjustmentIntervalId("sdfs6wdjvn7ujokd")
+                    .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .build()
             )
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             SubscriptionPriceIntervalsParams.builder().subscriptionId("subscription_id").build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-    }
 
-    @Test
-    fun getPathParam() {
-        val params =
-            SubscriptionPriceIntervalsParams.builder().subscriptionId("subscription_id").build()
-        assertThat(params).isNotNull
-        // path param "subscriptionId"
-        assertThat(params.getPathParam(0)).isEqualTo("subscription_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        val body = params._body()
     }
 }

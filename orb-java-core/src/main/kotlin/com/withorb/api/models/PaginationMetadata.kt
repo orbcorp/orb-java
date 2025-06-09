@@ -4,101 +4,192 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toImmutable
+import com.withorb.api.core.checkRequired
+import com.withorb.api.errors.OrbInvalidDataException
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
-@JsonDeserialize(builder = PaginationMetadata.Builder::class)
-@NoAutoDetect
 class PaginationMetadata
 private constructor(
     private val hasMore: JsonField<Boolean>,
     private val nextCursor: JsonField<String>,
-    private val additionalProperties: Map<String, JsonValue>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
+    @JsonCreator
+    private constructor(
+        @JsonProperty("has_more") @ExcludeMissing hasMore: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("next_cursor")
+        @ExcludeMissing
+        nextCursor: JsonField<String> = JsonMissing.of(),
+    ) : this(hasMore, nextCursor, mutableMapOf())
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun hasMore(): Boolean = hasMore.getRequired("has_more")
 
-    fun nextCursor(): Optional<String> = Optional.ofNullable(nextCursor.getNullable("next_cursor"))
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun nextCursor(): Optional<String> = nextCursor.getOptional("next_cursor")
 
-    @JsonProperty("has_more") @ExcludeMissing fun _hasMore() = hasMore
+    /**
+     * Returns the raw JSON value of [hasMore].
+     *
+     * Unlike [hasMore], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("has_more") @ExcludeMissing fun _hasMore(): JsonField<Boolean> = hasMore
 
-    @JsonProperty("next_cursor") @ExcludeMissing fun _nextCursor() = nextCursor
+    /**
+     * Returns the raw JSON value of [nextCursor].
+     *
+     * Unlike [nextCursor], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("next_cursor") @ExcludeMissing fun _nextCursor(): JsonField<String> = nextCursor
+
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    fun validate(): PaginationMetadata = apply {
-        if (!validated) {
-            hasMore()
-            nextCursor()
-            validated = true
-        }
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [PaginationMetadata].
+         *
+         * The following fields are required:
+         * ```java
+         * .hasMore()
+         * .nextCursor()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    /** A builder for [PaginationMetadata]. */
+    class Builder internal constructor() {
 
-        private var hasMore: JsonField<Boolean> = JsonMissing.of()
-        private var nextCursor: JsonField<String> = JsonMissing.of()
+        private var hasMore: JsonField<Boolean>? = null
+        private var nextCursor: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(paginationMetadata: PaginationMetadata) = apply {
-            this.hasMore = paginationMetadata.hasMore
-            this.nextCursor = paginationMetadata.nextCursor
-            additionalProperties(paginationMetadata.additionalProperties)
+            hasMore = paginationMetadata.hasMore
+            nextCursor = paginationMetadata.nextCursor
+            additionalProperties = paginationMetadata.additionalProperties.toMutableMap()
         }
 
         fun hasMore(hasMore: Boolean) = hasMore(JsonField.of(hasMore))
 
-        @JsonProperty("has_more")
-        @ExcludeMissing
+        /**
+         * Sets [Builder.hasMore] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.hasMore] with a well-typed [Boolean] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun hasMore(hasMore: JsonField<Boolean>) = apply { this.hasMore = hasMore }
 
-        fun nextCursor(nextCursor: String) = nextCursor(JsonField.of(nextCursor))
+        fun nextCursor(nextCursor: String?) = nextCursor(JsonField.ofNullable(nextCursor))
 
-        @JsonProperty("next_cursor")
-        @ExcludeMissing
+        /** Alias for calling [Builder.nextCursor] with `nextCursor.orElse(null)`. */
+        fun nextCursor(nextCursor: Optional<String>) = nextCursor(nextCursor.getOrNull())
+
+        /**
+         * Sets [Builder.nextCursor] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.nextCursor] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun nextCursor(nextCursor: JsonField<String>) = apply { this.nextCursor = nextCursor }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
         }
 
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
+        /**
+         * Returns an immutable instance of [PaginationMetadata].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .hasMore()
+         * .nextCursor()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): PaginationMetadata =
             PaginationMetadata(
-                hasMore,
-                nextCursor,
-                additionalProperties.toImmutable(),
+                checkRequired("hasMore", hasMore),
+                checkRequired("nextCursor", nextCursor),
+                additionalProperties.toMutableMap(),
             )
     }
+
+    private var validated: Boolean = false
+
+    fun validate(): PaginationMetadata = apply {
+        if (validated) {
+            return@apply
+        }
+
+        hasMore()
+        nextCursor()
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: OrbInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (if (hasMore.asKnown().isPresent) 1 else 0) + (if (nextCursor.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

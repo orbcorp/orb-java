@@ -2,24 +2,22 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class SubscriptionFetchParamsTest {
+internal class SubscriptionFetchParamsTest {
 
     @Test
-    fun createSubscriptionFetchParams() {
+    fun create() {
         SubscriptionFetchParams.builder().subscriptionId("subscription_id").build()
     }
 
     @Test
-    fun getPathParam() {
+    fun pathParams() {
         val params = SubscriptionFetchParams.builder().subscriptionId("subscription_id").build()
-        assertThat(params).isNotNull
-        // path param "subscriptionId"
-        assertThat(params.getPathParam(0)).isEqualTo("subscription_id")
+
+        assertThat(params._pathParam(0)).isEqualTo("subscription_id")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 }

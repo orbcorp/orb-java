@@ -3,102 +3,114 @@
 package com.withorb.api.services.async.plans
 
 import com.withorb.api.core.ClientOptions
+import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
 import com.withorb.api.core.http.HttpResponse.Handler
-import com.withorb.api.core.json
-import com.withorb.api.errors.OrbError
+import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.core.http.json
+import com.withorb.api.core.http.parseable
+import com.withorb.api.core.prepareAsync
 import com.withorb.api.models.Plan
 import com.withorb.api.models.PlanExternalPlanIdFetchParams
 import com.withorb.api.models.PlanExternalPlanIdUpdateParams
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class ExternalPlanIdServiceAsyncImpl
-constructor(
-    private val clientOptions: ClientOptions,
-) : ExternalPlanIdServiceAsync {
+internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdServiceAsync {
 
-    private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
+    private val withRawResponse: ExternalPlanIdServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
-    private val updateHandler: Handler<Plan> =
-        jsonHandler<Plan>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+    override fun withRawResponse(): ExternalPlanIdServiceAsync.WithRawResponse = withRawResponse
 
-    /**
-     * This endpoint can be used to update the `external_plan_id`, and `metadata` of an existing
-     * plan.
-     *
-     * Other fields on a customer are currently immutable.
-     */
     override fun update(
         params: PlanExternalPlanIdUpdateParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<Plan> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.PUT)
-                .addPathSegments("plans", "external_plan_id", params.getPathParam(0))
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .body(json(clientOptions.jsonMapper, params.getBody()))
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { updateHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Plan> =
+        // put /plans/external_plan_id/{external_plan_id}
+        withRawResponse().update(params, requestOptions).thenApply { it.parse() }
+
+    override fun fetch(
+        params: PlanExternalPlanIdFetchParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Plan> =
+        // get /plans/external_plan_id/{external_plan_id}
+        withRawResponse().fetch(params, requestOptions).thenApply { it.parse() }
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        ExternalPlanIdServiceAsync.WithRawResponse {
+
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        private val updateHandler: Handler<Plan> =
+            jsonHandler<Plan>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun update(
+            params: PlanExternalPlanIdUpdateParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Plan>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("otherExternalPlanId", params.otherExternalPlanId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .addPathSegments("plans", "external_plan_id", params._pathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { updateHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }
-    }
 
-    private val fetchHandler: Handler<Plan> =
-        jsonHandler<Plan>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val fetchHandler: Handler<Plan> =
+            jsonHandler<Plan>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-    /**
-     * This endpoint is used to fetch [plan](../guides/concepts##plan-and-price) details given an
-     * external_plan_id identifier. It returns information about the prices included in the plan and
-     * their configuration, as well as the product that the plan is attached to.
-     *
-     * If multiple plans are found to contain the specified external_plan_id, the active plans will
-     * take priority over archived ones, and among those, the endpoint will return the most recently
-     * created plan.
-     *
-     * ## Serialized prices
-     *
-     * Orb supports a few different pricing models out of the box. Each of these models is
-     * serialized differently in a given [Price](../guides/concepts#plan-and-price) object. The
-     * `model_type` field determines the key for the configuration object that is present. A
-     * detailed explanation of price types can be found in the
-     * [Price schema](../guides/concepts#plan-and-price). "
-     */
-    override fun fetch(
-        params: PlanExternalPlanIdFetchParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<Plan> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("plans", "external_plan_id", params.getPathParam(0))
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { fetchHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
+        override fun fetch(
+            params: PlanExternalPlanIdFetchParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Plan>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("externalPlanId", params.externalPlanId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("plans", "external_plan_id", params._pathParam(0))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { fetchHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }

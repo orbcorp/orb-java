@@ -2,220 +2,150 @@
 
 package com.withorb.api.models
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.withorb.api.core.ExcludeMissing
-import com.withorb.api.core.JsonField
-import com.withorb.api.core.JsonMissing
-import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toImmutable
+import com.withorb.api.core.AutoPagerAsync
+import com.withorb.api.core.PageAsync
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.async.SubscriptionServiceAsync
 import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
 
+/** @see [SubscriptionServiceAsync.fetchSchedule] */
 class SubscriptionFetchSchedulePageAsync
 private constructor(
-    private val subscriptionsService: SubscriptionServiceAsync,
+    private val service: SubscriptionServiceAsync,
+    private val streamHandlerExecutor: Executor,
     private val params: SubscriptionFetchScheduleParams,
-    private val response: Response,
-) {
+    private val response: SubscriptionFetchSchedulePageResponse,
+) : PageAsync<SubscriptionFetchScheduleResponse> {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [SubscriptionFetchSchedulePageResponse], but gracefully handles missing data.
+     *
+     * @see [SubscriptionFetchSchedulePageResponse.data]
+     */
+    fun data(): List<SubscriptionFetchScheduleResponse> =
+        response._data().getOptional("data").getOrNull() ?: emptyList()
 
-    fun data(): List<SubscriptionFetchScheduleResponse> = response().data()
+    /**
+     * Delegates to [SubscriptionFetchSchedulePageResponse], but gracefully handles missing data.
+     *
+     * @see [SubscriptionFetchSchedulePageResponse.paginationMetadata]
+     */
+    fun paginationMetadata(): Optional<PaginationMetadata> =
+        response._paginationMetadata().getOptional("pagination_metadata")
 
-    fun paginationMetadata(): PaginationMetadata = response().paginationMetadata()
+    override fun items(): List<SubscriptionFetchScheduleResponse> = data()
+
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() &&
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.isPresent
+
+    fun nextPageParams(): SubscriptionFetchScheduleParams {
+        val nextCursor =
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().cursor(nextCursor).build()
+    }
+
+    override fun nextPage(): CompletableFuture<SubscriptionFetchSchedulePageAsync> =
+        service.fetchSchedule(nextPageParams())
+
+    fun autoPager(): AutoPagerAsync<SubscriptionFetchScheduleResponse> =
+        AutoPagerAsync.from(this, streamHandlerExecutor)
+
+    /** The parameters that were used to request this page. */
+    fun params(): SubscriptionFetchScheduleParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): SubscriptionFetchSchedulePageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
+    companion object {
+
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [SubscriptionFetchSchedulePageAsync].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .streamHandlerExecutor()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [SubscriptionFetchSchedulePageAsync]. */
+    class Builder internal constructor() {
+
+        private var service: SubscriptionServiceAsync? = null
+        private var streamHandlerExecutor: Executor? = null
+        private var params: SubscriptionFetchScheduleParams? = null
+        private var response: SubscriptionFetchSchedulePageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(subscriptionFetchSchedulePageAsync: SubscriptionFetchSchedulePageAsync) =
+            apply {
+                service = subscriptionFetchSchedulePageAsync.service
+                streamHandlerExecutor = subscriptionFetchSchedulePageAsync.streamHandlerExecutor
+                params = subscriptionFetchSchedulePageAsync.params
+                response = subscriptionFetchSchedulePageAsync.response
+            }
+
+        fun service(service: SubscriptionServiceAsync) = apply { this.service = service }
+
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
+            this.streamHandlerExecutor = streamHandlerExecutor
+        }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: SubscriptionFetchScheduleParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: SubscriptionFetchSchedulePageResponse) = apply {
+            this.response = response
+        }
+
+        /**
+         * Returns an immutable instance of [SubscriptionFetchSchedulePageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .streamHandlerExecutor()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): SubscriptionFetchSchedulePageAsync =
+            SubscriptionFetchSchedulePageAsync(
+                checkRequired("service", service),
+                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionFetchSchedulePageAsync && subscriptionsService == other.subscriptionsService && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is SubscriptionFetchSchedulePageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionsService, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, streamHandlerExecutor, params, response) /* spotless:on */
 
     override fun toString() =
-        "SubscriptionFetchSchedulePageAsync{subscriptionsService=$subscriptionsService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        if (data().isEmpty()) {
-            return false
-        }
-
-        return paginationMetadata().nextCursor().isPresent
-    }
-
-    fun getNextPageParams(): Optional<SubscriptionFetchScheduleParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
-
-        return Optional.of(
-            SubscriptionFetchScheduleParams.builder()
-                .from(params)
-                .apply { paginationMetadata().nextCursor().ifPresent { this.cursor(it) } }
-                .build()
-        )
-    }
-
-    fun getNextPage(): CompletableFuture<Optional<SubscriptionFetchSchedulePageAsync>> {
-        return getNextPageParams()
-            .map { subscriptionsService.fetchSchedule(it).thenApply { Optional.of(it) } }
-            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
-    }
-
-    fun autoPager(): AutoPager = AutoPager(this)
-
-    companion object {
-
-        @JvmStatic
-        fun of(
-            subscriptionsService: SubscriptionServiceAsync,
-            params: SubscriptionFetchScheduleParams,
-            response: Response
-        ) =
-            SubscriptionFetchSchedulePageAsync(
-                subscriptionsService,
-                params,
-                response,
-            )
-    }
-
-    @JsonDeserialize(builder = Response.Builder::class)
-    @NoAutoDetect
-    class Response
-    constructor(
-        private val data: JsonField<List<SubscriptionFetchScheduleResponse>>,
-        private val paginationMetadata: JsonField<PaginationMetadata>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        private var validated: Boolean = false
-
-        fun data(): List<SubscriptionFetchScheduleResponse> = data.getNullable("data") ?: listOf()
-
-        fun paginationMetadata(): PaginationMetadata =
-            paginationMetadata.getRequired("pagination_metadata")
-
-        @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<SubscriptionFetchScheduleResponse>>> =
-            Optional.ofNullable(data)
-
-        @JsonProperty("pagination_metadata")
-        fun _paginationMetadata(): Optional<JsonField<PaginationMetadata>> =
-            Optional.ofNullable(paginationMetadata)
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): Response = apply {
-            if (!validated) {
-                data().map { it.validate() }
-                paginationMetadata().validate()
-                validated = true
-            }
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && data == other.data && paginationMetadata == other.paginationMetadata && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(data, paginationMetadata, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{data=$data, paginationMetadata=$paginationMetadata, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var data: JsonField<List<SubscriptionFetchScheduleResponse>> = JsonMissing.of()
-            private var paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.data = page.data
-                this.paginationMetadata = page.paginationMetadata
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun data(data: List<SubscriptionFetchScheduleResponse>) = data(JsonField.of(data))
-
-            @JsonProperty("data")
-            fun data(data: JsonField<List<SubscriptionFetchScheduleResponse>>) = apply {
-                this.data = data
-            }
-
-            fun paginationMetadata(paginationMetadata: PaginationMetadata) =
-                paginationMetadata(JsonField.of(paginationMetadata))
-
-            @JsonProperty("pagination_metadata")
-            fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply {
-                this.paginationMetadata = paginationMetadata
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
-        }
-    }
-
-    class AutoPager
-    constructor(
-        private val firstPage: SubscriptionFetchSchedulePageAsync,
-    ) {
-
-        fun forEach(
-            action: Predicate<SubscriptionFetchScheduleResponse>,
-            executor: Executor
-        ): CompletableFuture<Void> {
-            fun CompletableFuture<Optional<SubscriptionFetchSchedulePageAsync>>.forEach(
-                action: (SubscriptionFetchScheduleResponse) -> Boolean,
-                executor: Executor
-            ): CompletableFuture<Void> =
-                thenComposeAsync(
-                    { page ->
-                        page
-                            .filter { it.data().all(action) }
-                            .map { it.getNextPage().forEach(action, executor) }
-                            .orElseGet { CompletableFuture.completedFuture(null) }
-                    },
-                    executor
-                )
-            return CompletableFuture.completedFuture(Optional.of(firstPage))
-                .forEach(action::test, executor)
-        }
-
-        fun toList(executor: Executor): CompletableFuture<List<SubscriptionFetchScheduleResponse>> {
-            val values = mutableListOf<SubscriptionFetchScheduleResponse>()
-            return forEach(values::add, executor).thenApply { values }
-        }
-    }
+        "SubscriptionFetchSchedulePageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

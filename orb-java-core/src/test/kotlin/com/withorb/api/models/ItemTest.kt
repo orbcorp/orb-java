@@ -2,31 +2,37 @@
 
 package com.withorb.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.withorb.api.core.JsonValue
+import com.withorb.api.core.jsonMapper
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ItemTest {
+internal class ItemTest {
 
     @Test
-    fun createItem() {
+    fun create() {
         val item =
             Item.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .externalConnections(
-                    listOf(
-                        Item.ExternalConnection.builder()
-                            .externalConnectionName(
-                                Item.ExternalConnection.ExternalConnectionName.STRIPE
-                            )
-                            .externalEntityId("external_entity_id")
-                            .build()
-                    )
+                .addExternalConnection(
+                    Item.ExternalConnection.builder()
+                        .externalConnectionName(
+                            Item.ExternalConnection.ExternalConnectionName.STRIPE
+                        )
+                        .externalEntityId("external_entity_id")
+                        .build()
+                )
+                .metadata(
+                    Item.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
                 )
                 .name("name")
                 .build()
-        assertThat(item).isNotNull
+
         assertThat(item.id()).isEqualTo("id")
         assertThat(item.createdAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(item.externalConnections())
@@ -36,6 +42,41 @@ class ItemTest {
                     .externalEntityId("external_entity_id")
                     .build()
             )
+        assertThat(item.metadata())
+            .isEqualTo(
+                Item.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(item.name()).isEqualTo("name")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val item =
+            Item.builder()
+                .id("id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .addExternalConnection(
+                    Item.ExternalConnection.builder()
+                        .externalConnectionName(
+                            Item.ExternalConnection.ExternalConnectionName.STRIPE
+                        )
+                        .externalEntityId("external_entity_id")
+                        .build()
+                )
+                .metadata(
+                    Item.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
+                .name("name")
+                .build()
+
+        val roundtrippedItem =
+            jsonMapper.readValue(jsonMapper.writeValueAsString(item), jacksonTypeRef<Item>())
+
+        assertThat(roundtrippedItem).isEqualTo(item)
     }
 }

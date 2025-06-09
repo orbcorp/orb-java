@@ -4,82 +4,173 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.checkKnown
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.toImmutable
+import com.withorb.api.errors.OrbInvalidDataException
+import java.util.Collections
 import java.util.Objects
+import kotlin.jvm.optionals.getOrNull
 
-@JsonDeserialize(builder = PriceEvaluateResponse.Builder::class)
-@NoAutoDetect
 class PriceEvaluateResponse
 private constructor(
     private val data: JsonField<List<EvaluatePriceGroup>>,
-    private val additionalProperties: Map<String, JsonValue>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
+    @JsonCreator
+    private constructor(
+        @JsonProperty("data")
+        @ExcludeMissing
+        data: JsonField<List<EvaluatePriceGroup>> = JsonMissing.of()
+    ) : this(data, mutableMapOf())
 
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun data(): List<EvaluatePriceGroup> = data.getRequired("data")
 
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<EvaluatePriceGroup>> = data
+
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    fun validate(): PriceEvaluateResponse = apply {
-        if (!validated) {
-            data().forEach { it.validate() }
-            validated = true
-        }
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [PriceEvaluateResponse].
+         *
+         * The following fields are required:
+         * ```java
+         * .data()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    /** A builder for [PriceEvaluateResponse]. */
+    class Builder internal constructor() {
 
-        private var data: JsonField<List<EvaluatePriceGroup>> = JsonMissing.of()
+        private var data: JsonField<MutableList<EvaluatePriceGroup>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(priceEvaluateResponse: PriceEvaluateResponse) = apply {
-            this.data = priceEvaluateResponse.data
-            additionalProperties(priceEvaluateResponse.additionalProperties)
+            data = priceEvaluateResponse.data.map { it.toMutableList() }
+            additionalProperties = priceEvaluateResponse.additionalProperties.toMutableMap()
         }
 
         fun data(data: List<EvaluatePriceGroup>) = data(JsonField.of(data))
 
-        @JsonProperty("data")
-        @ExcludeMissing
-        fun data(data: JsonField<List<EvaluatePriceGroup>>) = apply { this.data = data }
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed `List<EvaluatePriceGroup>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun data(data: JsonField<List<EvaluatePriceGroup>>) = apply {
+            this.data = data.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [EvaluatePriceGroup] to [Builder.data].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addData(data: EvaluatePriceGroup) = apply {
+            this.data =
+                (this.data ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("data", it).add(data)
+                }
+        }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
         }
 
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
+        /**
+         * Returns an immutable instance of [PriceEvaluateResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .data()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): PriceEvaluateResponse =
-            PriceEvaluateResponse(data.map { it.toImmutable() }, additionalProperties.toImmutable())
+            PriceEvaluateResponse(
+                checkRequired("data", data).map { it.toImmutable() },
+                additionalProperties.toMutableMap(),
+            )
     }
+
+    private var validated: Boolean = false
+
+    fun validate(): PriceEvaluateResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        data().forEach { it.validate() }
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: OrbInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

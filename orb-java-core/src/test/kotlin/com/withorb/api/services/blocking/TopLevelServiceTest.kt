@@ -4,23 +4,23 @@ package com.withorb.api.services.blocking
 
 import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClient
-import com.withorb.api.models.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class TopLevelServiceTest {
+internal class TopLevelServiceTest {
 
     @Test
-    fun callPing() {
+    fun ping() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val topLevelService = client.topLevel()
-        val topLevelPingResponse = topLevelService.ping(TopLevelPingParams.builder().build())
-        println(topLevelPingResponse)
-        topLevelPingResponse.validate()
+
+        val response = topLevelService.ping()
+
+        response.validate()
     }
 }

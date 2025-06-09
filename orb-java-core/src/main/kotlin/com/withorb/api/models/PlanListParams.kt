@@ -5,19 +5,24 @@ package com.withorb.api.models
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.withorb.api.core.Enum
 import com.withorb.api.core.JsonField
-import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.errors.OrbInvalidDataException
-import com.withorb.api.models.*
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint returns a list of all [plans](/core-concepts#plan-and-price) for an account in a
+ * list format. The list of plans is ordered starting from the most recently created plan. The
+ * response also includes [`pagination_metadata`](/api-reference/pagination), which lets the caller
+ * retrieve the next page of results if they exist.
+ */
 class PlanListParams
-constructor(
+private constructor(
     private val createdAtGt: OffsetDateTime?,
     private val createdAtGte: OffsetDateTime?,
     private val createdAtLt: OffsetDateTime?,
@@ -27,7 +32,7 @@ constructor(
     private val status: Status?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun createdAtGt(): Optional<OffsetDateTime> = Optional.ofNullable(createdAtGt)
 
@@ -37,74 +42,34 @@ constructor(
 
     fun createdAtLte(): Optional<OffsetDateTime> = Optional.ofNullable(createdAtLte)
 
+    /**
+     * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+     * initial request.
+     */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
+    /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /** The plan status to filter to ('active', 'archived', or 'draft'). */
     fun status(): Optional<Status> = Optional.ofNullable(status)
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic
-    internal fun getQueryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.createdAtGt?.let {
-            queryParams.put(
-                "created_at[gt]",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
-            )
-        }
-        this.createdAtGte?.let {
-            queryParams.put(
-                "created_at[gte]",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
-            )
-        }
-        this.createdAtLt?.let {
-            queryParams.put(
-                "created_at[lt]",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
-            )
-        }
-        this.createdAtLte?.let {
-            queryParams.put(
-                "created_at[lte]",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
-            )
-        }
-        this.cursor?.let { queryParams.put("cursor", listOf(it.toString())) }
-        this.limit?.let { queryParams.put("limit", listOf(it.toString())) }
-        this.status?.let { queryParams.put("status", listOf(it.toString())) }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is PlanListParams && createdAtGt == other.createdAtGt && createdAtGte == other.createdAtGte && createdAtLt == other.createdAtLt && createdAtLte == other.createdAtLte && cursor == other.cursor && limit == other.limit && status == other.status && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(createdAtGt, createdAtGte, createdAtLt, createdAtLte, cursor, limit, status, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "PlanListParams{createdAtGt=$createdAtGt, createdAtGte=$createdAtGte, createdAtLt=$createdAtLt, createdAtLte=$createdAtLte, cursor=$cursor, limit=$limit, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): PlanListParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [PlanListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [PlanListParams]. */
+    class Builder internal constructor() {
 
         private var createdAtGt: OffsetDateTime? = null
         private var createdAtGte: OffsetDateTime? = null
@@ -118,36 +83,68 @@ constructor(
 
         @JvmSynthetic
         internal fun from(planListParams: PlanListParams) = apply {
-            this.createdAtGt = planListParams.createdAtGt
-            this.createdAtGte = planListParams.createdAtGte
-            this.createdAtLt = planListParams.createdAtLt
-            this.createdAtLte = planListParams.createdAtLte
-            this.cursor = planListParams.cursor
-            this.limit = planListParams.limit
-            this.status = planListParams.status
-            additionalHeaders(planListParams.additionalHeaders)
-            additionalQueryParams(planListParams.additionalQueryParams)
+            createdAtGt = planListParams.createdAtGt
+            createdAtGte = planListParams.createdAtGte
+            createdAtLt = planListParams.createdAtLt
+            createdAtLte = planListParams.createdAtLte
+            cursor = planListParams.cursor
+            limit = planListParams.limit
+            status = planListParams.status
+            additionalHeaders = planListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = planListParams.additionalQueryParams.toBuilder()
         }
 
-        fun createdAtGt(createdAtGt: OffsetDateTime) = apply { this.createdAtGt = createdAtGt }
+        fun createdAtGt(createdAtGt: OffsetDateTime?) = apply { this.createdAtGt = createdAtGt }
 
-        fun createdAtGte(createdAtGte: OffsetDateTime) = apply { this.createdAtGte = createdAtGte }
+        /** Alias for calling [Builder.createdAtGt] with `createdAtGt.orElse(null)`. */
+        fun createdAtGt(createdAtGt: Optional<OffsetDateTime>) =
+            createdAtGt(createdAtGt.getOrNull())
 
-        fun createdAtLt(createdAtLt: OffsetDateTime) = apply { this.createdAtLt = createdAtLt }
+        fun createdAtGte(createdAtGte: OffsetDateTime?) = apply { this.createdAtGte = createdAtGte }
 
-        fun createdAtLte(createdAtLte: OffsetDateTime) = apply { this.createdAtLte = createdAtLte }
+        /** Alias for calling [Builder.createdAtGte] with `createdAtGte.orElse(null)`. */
+        fun createdAtGte(createdAtGte: Optional<OffsetDateTime>) =
+            createdAtGte(createdAtGte.getOrNull())
+
+        fun createdAtLt(createdAtLt: OffsetDateTime?) = apply { this.createdAtLt = createdAtLt }
+
+        /** Alias for calling [Builder.createdAtLt] with `createdAtLt.orElse(null)`. */
+        fun createdAtLt(createdAtLt: Optional<OffsetDateTime>) =
+            createdAtLt(createdAtLt.getOrNull())
+
+        fun createdAtLte(createdAtLte: OffsetDateTime?) = apply { this.createdAtLte = createdAtLte }
+
+        /** Alias for calling [Builder.createdAtLte] with `createdAtLte.orElse(null)`. */
+        fun createdAtLte(createdAtLte: Optional<OffsetDateTime>) =
+            createdAtLte(createdAtLte.getOrNull())
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: String) = apply { this.cursor = cursor }
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         /** The plan status to filter to ('active', 'archived', or 'draft'). */
-        fun status(status: Status) = apply { this.status = status }
+        fun status(status: Status?) = apply { this.status = status }
+
+        /** Alias for calling [Builder.status] with `status.orElse(null)`. */
+        fun status(status: Optional<Status>) = status(status.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -247,6 +244,11 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [PlanListParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): PlanListParams =
             PlanListParams(
                 createdAtGt,
@@ -261,13 +263,147 @@ constructor(
             )
     }
 
-    class Status
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    override fun _headers(): Headers = additionalHeaders
 
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                createdAtGt?.let {
+                    put("created_at[gt]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                createdAtGte?.let {
+                    put("created_at[gte]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                createdAtLt?.let {
+                    put("created_at[lt]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                createdAtLte?.let {
+                    put("created_at[lte]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                cursor?.let { put("cursor", it) }
+                limit?.let { put("limit", it.toString()) }
+                status?.let { put("status", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
+
+    /** The plan status to filter to ('active', 'archived', or 'draft'). */
+    class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
         @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val ACTIVE = of("active")
+
+            @JvmField val ARCHIVED = of("archived")
+
+            @JvmField val DRAFT = of("draft")
+
+            @JvmStatic fun of(value: String) = Status(JsonField.of(value))
+        }
+
+        /** An enum containing [Status]'s known values. */
+        enum class Known {
+            ACTIVE,
+            ARCHIVED,
+            DRAFT,
+        }
+
+        /**
+         * An enum containing [Status]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Status] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            ACTIVE,
+            ARCHIVED,
+            DRAFT,
+            /** An enum member indicating that [Status] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                ACTIVE -> Value.ACTIVE
+                ARCHIVED -> Value.ARCHIVED
+                DRAFT -> Value.DRAFT
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws OrbInvalidDataException if this class instance's value is a not a known member.
+         */
+        fun known(): Known =
+            when (this) {
+                ACTIVE -> Known.ACTIVE
+                ARCHIVED -> Known.ARCHIVED
+                DRAFT -> Known.DRAFT
+                else -> throw OrbInvalidDataException("Unknown Status: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws OrbInvalidDataException if this class instance's value does not have the expected
+         *   primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        fun validate(): Status = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -280,47 +416,18 @@ constructor(
         override fun hashCode() = value.hashCode()
 
         override fun toString() = value.toString()
-
-        companion object {
-
-            @JvmField val ACTIVE = Status(JsonField.of("active"))
-
-            @JvmField val ARCHIVED = Status(JsonField.of("archived"))
-
-            @JvmField val DRAFT = Status(JsonField.of("draft"))
-
-            @JvmStatic fun of(value: String) = Status(JsonField.of(value))
-        }
-
-        enum class Known {
-            ACTIVE,
-            ARCHIVED,
-            DRAFT,
-        }
-
-        enum class Value {
-            ACTIVE,
-            ARCHIVED,
-            DRAFT,
-            _UNKNOWN,
-        }
-
-        fun value(): Value =
-            when (this) {
-                ACTIVE -> Value.ACTIVE
-                ARCHIVED -> Value.ARCHIVED
-                DRAFT -> Value.DRAFT
-                else -> Value._UNKNOWN
-            }
-
-        fun known(): Known =
-            when (this) {
-                ACTIVE -> Known.ACTIVE
-                ARCHIVED -> Known.ARCHIVED
-                DRAFT -> Known.DRAFT
-                else -> throw OrbInvalidDataException("Unknown Status: $value")
-            }
-
-        fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is PlanListParams && createdAtGt == other.createdAtGt && createdAtGte == other.createdAtGte && createdAtLt == other.createdAtLt && createdAtLte == other.createdAtLte && cursor == other.cursor && limit == other.limit && status == other.status && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(createdAtGt, createdAtGte, createdAtLt, createdAtLte, cursor, limit, status, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "PlanListParams{createdAtGt=$createdAtGt, createdAtGte=$createdAtGte, createdAtLt=$createdAtLt, createdAtLte=$createdAtLte, cursor=$cursor, limit=$limit, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

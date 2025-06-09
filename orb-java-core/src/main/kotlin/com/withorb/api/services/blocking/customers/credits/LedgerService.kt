@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking.customers.credits
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CustomerCreditLedgerCreateEntryByExternalIdParams
 import com.withorb.api.models.CustomerCreditLedgerCreateEntryByExternalIdResponse
 import com.withorb.api.models.CustomerCreditLedgerCreateEntryParams
@@ -17,13 +17,18 @@ import com.withorb.api.models.CustomerCreditLedgerListParams
 interface LedgerService {
 
     /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
      * The credits ledger provides _auditing_ functionality over Orb's credits system with a list of
      * actions that have taken place to modify a customer's credit balance. This
-     * [paginated endpoint](../reference/pagination) lists these entries, starting from the most
+     * [paginated endpoint](/api-reference/pagination) lists these entries, starting from the most
      * recent ledger entry.
      *
      * More details on using Orb's real-time credit feature are
-     * [here](../guides/product-catalog/prepurchase.md).
+     * [here](/product-catalog/prepurchase).
      *
      * There are four major types of modifications to credit balance, detailed below.
      *
@@ -95,11 +100,36 @@ interface LedgerService {
      * When credits are added to a customer's balance as a result of a correction, this entry will
      * be added to the ledger to indicate the adjustment of credits.
      */
-    @JvmOverloads
+    fun list(customerId: String): CustomerCreditLedgerListPage =
+        list(customerId, CustomerCreditLedgerListParams.none())
+
+    /** @see [list] */
+    fun list(
+        customerId: String,
+        params: CustomerCreditLedgerListParams = CustomerCreditLedgerListParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CustomerCreditLedgerListPage =
+        list(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+    /** @see [list] */
+    fun list(
+        customerId: String,
+        params: CustomerCreditLedgerListParams = CustomerCreditLedgerListParams.none(),
+    ): CustomerCreditLedgerListPage = list(customerId, params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: CustomerCreditLedgerListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditLedgerListPage
+
+    /** @see [list] */
+    fun list(params: CustomerCreditLedgerListParams): CustomerCreditLedgerListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
+    fun list(customerId: String, requestOptions: RequestOptions): CustomerCreditLedgerListPage =
+        list(customerId, CustomerCreditLedgerListParams.none(), requestOptions)
 
     /**
      * This endpoint allows you to create a new ledger entry for a specified customer's balance.
@@ -110,7 +140,7 @@ interface LedgerService {
      * 1. After calling this endpoint, [Fetch Credit Balance](fetch-customer-credits) will return a
      *    credit block that represents the changes (i.e. balance changes or transfers).
      * 2. A ledger entry will be added to the credits ledger for this customer, and therefore
-     *    returned in the [View Credits Ledger](fetch-customer-credits) response as well as
+     *    returned in the [View Credits Ledger](fetch-customer-credits-ledger) response as well as
      *    serialized in the response to this request. In the case of deductions without a specified
      *    block, multiple ledger entries may be created if the deduction spans credit blocks.
      * 3. If `invoice_settings` is specified, an invoice will be created that reflects the cost of
@@ -204,10 +234,29 @@ interface LedgerService {
      * decremented from, and `amount` indicates how many credits to return to the customer, up to
      * the block's initial balance.
      */
-    @JvmOverloads
+    fun createEntry(
+        customerId: String,
+        params: CustomerCreditLedgerCreateEntryParams,
+    ): CustomerCreditLedgerCreateEntryResponse =
+        createEntry(customerId, params, RequestOptions.none())
+
+    /** @see [createEntry] */
+    fun createEntry(
+        customerId: String,
+        params: CustomerCreditLedgerCreateEntryParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CustomerCreditLedgerCreateEntryResponse =
+        createEntry(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+    /** @see [createEntry] */
+    fun createEntry(
+        params: CustomerCreditLedgerCreateEntryParams
+    ): CustomerCreditLedgerCreateEntryResponse = createEntry(params, RequestOptions.none())
+
+    /** @see [createEntry] */
     fun createEntry(
         params: CustomerCreditLedgerCreateEntryParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditLedgerCreateEntryResponse
 
     /**
@@ -219,7 +268,7 @@ interface LedgerService {
      * 1. After calling this endpoint, [Fetch Credit Balance](fetch-customer-credits) will return a
      *    credit block that represents the changes (i.e. balance changes or transfers).
      * 2. A ledger entry will be added to the credits ledger for this customer, and therefore
-     *    returned in the [View Credits Ledger](fetch-customer-credits) response as well as
+     *    returned in the [View Credits Ledger](fetch-customer-credits-ledger) response as well as
      *    serialized in the response to this request. In the case of deductions without a specified
      *    block, multiple ledger entries may be created if the deduction spans credit blocks.
      * 3. If `invoice_settings` is specified, an invoice will be created that reflects the cost of
@@ -313,20 +362,43 @@ interface LedgerService {
      * decremented from, and `amount` indicates how many credits to return to the customer, up to
      * the block's initial balance.
      */
-    @JvmOverloads
+    fun createEntryByExternalId(
+        externalCustomerId: String,
+        params: CustomerCreditLedgerCreateEntryByExternalIdParams,
+    ): CustomerCreditLedgerCreateEntryByExternalIdResponse =
+        createEntryByExternalId(externalCustomerId, params, RequestOptions.none())
+
+    /** @see [createEntryByExternalId] */
+    fun createEntryByExternalId(
+        externalCustomerId: String,
+        params: CustomerCreditLedgerCreateEntryByExternalIdParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CustomerCreditLedgerCreateEntryByExternalIdResponse =
+        createEntryByExternalId(
+            params.toBuilder().externalCustomerId(externalCustomerId).build(),
+            requestOptions,
+        )
+
+    /** @see [createEntryByExternalId] */
+    fun createEntryByExternalId(
+        params: CustomerCreditLedgerCreateEntryByExternalIdParams
+    ): CustomerCreditLedgerCreateEntryByExternalIdResponse =
+        createEntryByExternalId(params, RequestOptions.none())
+
+    /** @see [createEntryByExternalId] */
     fun createEntryByExternalId(
         params: CustomerCreditLedgerCreateEntryByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditLedgerCreateEntryByExternalIdResponse
 
     /**
      * The credits ledger provides _auditing_ functionality over Orb's credits system with a list of
      * actions that have taken place to modify a customer's credit balance. This
-     * [paginated endpoint](../reference/pagination) lists these entries, starting from the most
+     * [paginated endpoint](/api-reference/pagination) lists these entries, starting from the most
      * recent ledger entry.
      *
      * More details on using Orb's real-time credit feature are
-     * [here](../guides/product-catalog/prepurchase.md).
+     * [here](/product-catalog/prepurchase).
      *
      * There are four major types of modifications to credit balance, detailed below.
      *
@@ -398,9 +470,229 @@ interface LedgerService {
      * When credits are added to a customer's balance as a result of a correction, this entry will
      * be added to the ledger to indicate the adjustment of credits.
      */
-    @JvmOverloads
+    fun listByExternalId(externalCustomerId: String): CustomerCreditLedgerListByExternalIdPage =
+        listByExternalId(externalCustomerId, CustomerCreditLedgerListByExternalIdParams.none())
+
+    /** @see [listByExternalId] */
+    fun listByExternalId(
+        externalCustomerId: String,
+        params: CustomerCreditLedgerListByExternalIdParams =
+            CustomerCreditLedgerListByExternalIdParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CustomerCreditLedgerListByExternalIdPage =
+        listByExternalId(
+            params.toBuilder().externalCustomerId(externalCustomerId).build(),
+            requestOptions,
+        )
+
+    /** @see [listByExternalId] */
+    fun listByExternalId(
+        externalCustomerId: String,
+        params: CustomerCreditLedgerListByExternalIdParams =
+            CustomerCreditLedgerListByExternalIdParams.none(),
+    ): CustomerCreditLedgerListByExternalIdPage =
+        listByExternalId(externalCustomerId, params, RequestOptions.none())
+
+    /** @see [listByExternalId] */
     fun listByExternalId(
         params: CustomerCreditLedgerListByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditLedgerListByExternalIdPage
+
+    /** @see [listByExternalId] */
+    fun listByExternalId(
+        params: CustomerCreditLedgerListByExternalIdParams
+    ): CustomerCreditLedgerListByExternalIdPage = listByExternalId(params, RequestOptions.none())
+
+    /** @see [listByExternalId] */
+    fun listByExternalId(
+        externalCustomerId: String,
+        requestOptions: RequestOptions,
+    ): CustomerCreditLedgerListByExternalIdPage =
+        listByExternalId(
+            externalCustomerId,
+            CustomerCreditLedgerListByExternalIdParams.none(),
+            requestOptions,
+        )
+
+    /** A view of [LedgerService] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `get /customers/{customer_id}/credits/ledger`, but is
+         * otherwise the same as [LedgerService.list].
+         */
+        @MustBeClosed
+        fun list(customerId: String): HttpResponseFor<CustomerCreditLedgerListPage> =
+            list(customerId, CustomerCreditLedgerListParams.none())
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            customerId: String,
+            params: CustomerCreditLedgerListParams = CustomerCreditLedgerListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerCreditLedgerListPage> =
+            list(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            customerId: String,
+            params: CustomerCreditLedgerListParams = CustomerCreditLedgerListParams.none(),
+        ): HttpResponseFor<CustomerCreditLedgerListPage> =
+            list(customerId, params, RequestOptions.none())
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: CustomerCreditLedgerListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerCreditLedgerListPage>
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: CustomerCreditLedgerListParams
+        ): HttpResponseFor<CustomerCreditLedgerListPage> = list(params, RequestOptions.none())
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            customerId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CustomerCreditLedgerListPage> =
+            list(customerId, CustomerCreditLedgerListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /customers/{customer_id}/credits/ledger_entry`, but
+         * is otherwise the same as [LedgerService.createEntry].
+         */
+        @MustBeClosed
+        fun createEntry(
+            customerId: String,
+            params: CustomerCreditLedgerCreateEntryParams,
+        ): HttpResponseFor<CustomerCreditLedgerCreateEntryResponse> =
+            createEntry(customerId, params, RequestOptions.none())
+
+        /** @see [createEntry] */
+        @MustBeClosed
+        fun createEntry(
+            customerId: String,
+            params: CustomerCreditLedgerCreateEntryParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerCreditLedgerCreateEntryResponse> =
+            createEntry(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+        /** @see [createEntry] */
+        @MustBeClosed
+        fun createEntry(
+            params: CustomerCreditLedgerCreateEntryParams
+        ): HttpResponseFor<CustomerCreditLedgerCreateEntryResponse> =
+            createEntry(params, RequestOptions.none())
+
+        /** @see [createEntry] */
+        @MustBeClosed
+        fun createEntry(
+            params: CustomerCreditLedgerCreateEntryParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerCreditLedgerCreateEntryResponse>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /customers/external_customer_id/{external_customer_id}/credits/ledger_entry`, but is
+         * otherwise the same as [LedgerService.createEntryByExternalId].
+         */
+        @MustBeClosed
+        fun createEntryByExternalId(
+            externalCustomerId: String,
+            params: CustomerCreditLedgerCreateEntryByExternalIdParams,
+        ): HttpResponseFor<CustomerCreditLedgerCreateEntryByExternalIdResponse> =
+            createEntryByExternalId(externalCustomerId, params, RequestOptions.none())
+
+        /** @see [createEntryByExternalId] */
+        @MustBeClosed
+        fun createEntryByExternalId(
+            externalCustomerId: String,
+            params: CustomerCreditLedgerCreateEntryByExternalIdParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerCreditLedgerCreateEntryByExternalIdResponse> =
+            createEntryByExternalId(
+                params.toBuilder().externalCustomerId(externalCustomerId).build(),
+                requestOptions,
+            )
+
+        /** @see [createEntryByExternalId] */
+        @MustBeClosed
+        fun createEntryByExternalId(
+            params: CustomerCreditLedgerCreateEntryByExternalIdParams
+        ): HttpResponseFor<CustomerCreditLedgerCreateEntryByExternalIdResponse> =
+            createEntryByExternalId(params, RequestOptions.none())
+
+        /** @see [createEntryByExternalId] */
+        @MustBeClosed
+        fun createEntryByExternalId(
+            params: CustomerCreditLedgerCreateEntryByExternalIdParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerCreditLedgerCreateEntryByExternalIdResponse>
+
+        /**
+         * Returns a raw HTTP response for `get
+         * /customers/external_customer_id/{external_customer_id}/credits/ledger`, but is otherwise
+         * the same as [LedgerService.listByExternalId].
+         */
+        @MustBeClosed
+        fun listByExternalId(
+            externalCustomerId: String
+        ): HttpResponseFor<CustomerCreditLedgerListByExternalIdPage> =
+            listByExternalId(externalCustomerId, CustomerCreditLedgerListByExternalIdParams.none())
+
+        /** @see [listByExternalId] */
+        @MustBeClosed
+        fun listByExternalId(
+            externalCustomerId: String,
+            params: CustomerCreditLedgerListByExternalIdParams =
+                CustomerCreditLedgerListByExternalIdParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerCreditLedgerListByExternalIdPage> =
+            listByExternalId(
+                params.toBuilder().externalCustomerId(externalCustomerId).build(),
+                requestOptions,
+            )
+
+        /** @see [listByExternalId] */
+        @MustBeClosed
+        fun listByExternalId(
+            externalCustomerId: String,
+            params: CustomerCreditLedgerListByExternalIdParams =
+                CustomerCreditLedgerListByExternalIdParams.none(),
+        ): HttpResponseFor<CustomerCreditLedgerListByExternalIdPage> =
+            listByExternalId(externalCustomerId, params, RequestOptions.none())
+
+        /** @see [listByExternalId] */
+        @MustBeClosed
+        fun listByExternalId(
+            params: CustomerCreditLedgerListByExternalIdParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerCreditLedgerListByExternalIdPage>
+
+        /** @see [listByExternalId] */
+        @MustBeClosed
+        fun listByExternalId(
+            params: CustomerCreditLedgerListByExternalIdParams
+        ): HttpResponseFor<CustomerCreditLedgerListByExternalIdPage> =
+            listByExternalId(params, RequestOptions.none())
+
+        /** @see [listByExternalId] */
+        @MustBeClosed
+        fun listByExternalId(
+            externalCustomerId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CustomerCreditLedgerListByExternalIdPage> =
+            listByExternalId(
+                externalCustomerId,
+                CustomerCreditLedgerListByExternalIdParams.none(),
+                requestOptions,
+            )
+    }
 }

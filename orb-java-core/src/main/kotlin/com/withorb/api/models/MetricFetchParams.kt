@@ -2,58 +2,42 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint is used to list [metrics](/core-concepts#metric). It returns information about the
+ * metrics including its name, description, and item.
+ */
 class MetricFetchParams
-constructor(
-    private val metricId: String,
+private constructor(
+    private val metricId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun metricId(): String = metricId
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> metricId
-            else -> ""
-        }
-    }
+    fun metricId(): Optional<String> = Optional.ofNullable(metricId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is MetricFetchParams && metricId == other.metricId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(metricId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "MetricFetchParams{metricId=$metricId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): MetricFetchParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [MetricFetchParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [MetricFetchParams]. */
+    class Builder internal constructor() {
 
         private var metricId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -61,12 +45,15 @@ constructor(
 
         @JvmSynthetic
         internal fun from(metricFetchParams: MetricFetchParams) = apply {
-            this.metricId = metricFetchParams.metricId
-            additionalHeaders(metricFetchParams.additionalHeaders)
-            additionalQueryParams(metricFetchParams.additionalQueryParams)
+            metricId = metricFetchParams.metricId
+            additionalHeaders = metricFetchParams.additionalHeaders.toBuilder()
+            additionalQueryParams = metricFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun metricId(metricId: String) = apply { this.metricId = metricId }
+        fun metricId(metricId: String?) = apply { this.metricId = metricId }
+
+        /** Alias for calling [Builder.metricId] with `metricId.orElse(null)`. */
+        fun metricId(metricId: Optional<String>) = metricId(metricId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,11 +153,35 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [MetricFetchParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): MetricFetchParams =
-            MetricFetchParams(
-                checkNotNull(metricId) { "`metricId` is required but was not set" },
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            MetricFetchParams(metricId, additionalHeaders.build(), additionalQueryParams.build())
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> metricId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is MetricFetchParams && metricId == other.metricId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(metricId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "MetricFetchParams{metricId=$metricId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

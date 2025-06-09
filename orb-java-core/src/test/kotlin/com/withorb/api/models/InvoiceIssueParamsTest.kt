@@ -2,39 +2,38 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class InvoiceIssueParamsTest {
+internal class InvoiceIssueParamsTest {
 
     @Test
-    fun createInvoiceIssueParams() {
+    fun create() {
         InvoiceIssueParams.builder().invoiceId("invoice_id").synchronous(true).build()
     }
 
     @Test
-    fun getBody() {
-        val params = InvoiceIssueParams.builder().invoiceId("invoice_id").synchronous(true).build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-        assertThat(body.synchronous()).isEqualTo(true)
-    }
-
-    @Test
-    fun getBodyWithoutOptionalFields() {
+    fun pathParams() {
         val params = InvoiceIssueParams.builder().invoiceId("invoice_id").build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-    }
 
-    @Test
-    fun getPathParam() {
-        val params = InvoiceIssueParams.builder().invoiceId("invoice_id").build()
-        assertThat(params).isNotNull
-        // path param "invoiceId"
-        assertThat(params.getPathParam(0)).isEqualTo("invoice_id")
+        assertThat(params._pathParam(0)).isEqualTo("invoice_id")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
+    fun body() {
+        val params = InvoiceIssueParams.builder().invoiceId("invoice_id").synchronous(true).build()
+
+        val body = params._body()
+
+        assertThat(body.synchronous()).contains(true)
+    }
+
+    @Test
+    fun bodyWithoutOptionalFields() {
+        val params = InvoiceIssueParams.builder().invoiceId("invoice_id").build()
+
+        val body = params._body()
     }
 }

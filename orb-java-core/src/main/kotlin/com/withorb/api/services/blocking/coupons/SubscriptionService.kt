@@ -1,24 +1,106 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking.coupons
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CouponSubscriptionListPage
 import com.withorb.api.models.CouponSubscriptionListParams
 
 interface SubscriptionService {
 
     /**
-     * This endpoint returns a list of all subscriptions that have redeemed a given coupon as a
-     * [paginated](../reference/pagination) list, ordered starting from the most recently created
-     * subscription. For a full discussion of the subscription resource, see
-     * [Subscription](../guides/concepts#subscription).
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
-    @JvmOverloads
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * This endpoint returns a list of all subscriptions that have redeemed a given coupon as a
+     * [paginated](/api-reference/pagination) list, ordered starting from the most recently created
+     * subscription. For a full discussion of the subscription resource, see
+     * [Subscription](/core-concepts#subscription).
+     */
+    fun list(couponId: String): CouponSubscriptionListPage =
+        list(couponId, CouponSubscriptionListParams.none())
+
+    /** @see [list] */
+    fun list(
+        couponId: String,
+        params: CouponSubscriptionListParams = CouponSubscriptionListParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CouponSubscriptionListPage =
+        list(params.toBuilder().couponId(couponId).build(), requestOptions)
+
+    /** @see [list] */
+    fun list(
+        couponId: String,
+        params: CouponSubscriptionListParams = CouponSubscriptionListParams.none(),
+    ): CouponSubscriptionListPage = list(couponId, params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: CouponSubscriptionListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CouponSubscriptionListPage
+
+    /** @see [list] */
+    fun list(params: CouponSubscriptionListParams): CouponSubscriptionListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
+    fun list(couponId: String, requestOptions: RequestOptions): CouponSubscriptionListPage =
+        list(couponId, CouponSubscriptionListParams.none(), requestOptions)
+
+    /**
+     * A view of [SubscriptionService] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `get /coupons/{coupon_id}/subscriptions`, but is
+         * otherwise the same as [SubscriptionService.list].
+         */
+        @MustBeClosed
+        fun list(couponId: String): HttpResponseFor<CouponSubscriptionListPage> =
+            list(couponId, CouponSubscriptionListParams.none())
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            couponId: String,
+            params: CouponSubscriptionListParams = CouponSubscriptionListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CouponSubscriptionListPage> =
+            list(params.toBuilder().couponId(couponId).build(), requestOptions)
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            couponId: String,
+            params: CouponSubscriptionListParams = CouponSubscriptionListParams.none(),
+        ): HttpResponseFor<CouponSubscriptionListPage> =
+            list(couponId, params, RequestOptions.none())
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: CouponSubscriptionListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CouponSubscriptionListPage>
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: CouponSubscriptionListParams
+        ): HttpResponseFor<CouponSubscriptionListPage> = list(params, RequestOptions.none())
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            couponId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CouponSubscriptionListPage> =
+            list(couponId, CouponSubscriptionListParams.none(), requestOptions)
+    }
 }

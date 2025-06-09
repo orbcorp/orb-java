@@ -2,58 +2,39 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/** This endpoint is used to fetch a backfill given an identifier. */
 class EventBackfillFetchParams
-constructor(
-    private val backfillId: String,
+private constructor(
+    private val backfillId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun backfillId(): String = backfillId
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> backfillId
-            else -> ""
-        }
-    }
+    fun backfillId(): Optional<String> = Optional.ofNullable(backfillId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is EventBackfillFetchParams && backfillId == other.backfillId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(backfillId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "EventBackfillFetchParams{backfillId=$backfillId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): EventBackfillFetchParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [EventBackfillFetchParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [EventBackfillFetchParams]. */
+    class Builder internal constructor() {
 
         private var backfillId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -61,12 +42,15 @@ constructor(
 
         @JvmSynthetic
         internal fun from(eventBackfillFetchParams: EventBackfillFetchParams) = apply {
-            this.backfillId = eventBackfillFetchParams.backfillId
-            additionalHeaders(eventBackfillFetchParams.additionalHeaders)
-            additionalQueryParams(eventBackfillFetchParams.additionalQueryParams)
+            backfillId = eventBackfillFetchParams.backfillId
+            additionalHeaders = eventBackfillFetchParams.additionalHeaders.toBuilder()
+            additionalQueryParams = eventBackfillFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun backfillId(backfillId: String) = apply { this.backfillId = backfillId }
+        fun backfillId(backfillId: String?) = apply { this.backfillId = backfillId }
+
+        /** Alias for calling [Builder.backfillId] with `backfillId.orElse(null)`. */
+        fun backfillId(backfillId: Optional<String>) = backfillId(backfillId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,11 +150,39 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [EventBackfillFetchParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): EventBackfillFetchParams =
             EventBackfillFetchParams(
-                checkNotNull(backfillId) { "`backfillId` is required but was not set" },
+                backfillId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> backfillId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is EventBackfillFetchParams && backfillId == other.backfillId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(backfillId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "EventBackfillFetchParams{backfillId=$backfillId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

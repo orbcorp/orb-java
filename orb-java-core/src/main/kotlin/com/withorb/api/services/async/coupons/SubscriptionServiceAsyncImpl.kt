@@ -3,58 +3,83 @@
 package com.withorb.api.services.async.coupons
 
 import com.withorb.api.core.ClientOptions
+import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
 import com.withorb.api.core.http.HttpResponse.Handler
-import com.withorb.api.errors.OrbError
+import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.core.http.parseable
+import com.withorb.api.core.prepareAsync
 import com.withorb.api.models.CouponSubscriptionListPageAsync
 import com.withorb.api.models.CouponSubscriptionListParams
+import com.withorb.api.models.Subscriptions
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
-class SubscriptionServiceAsyncImpl
-constructor(
-    private val clientOptions: ClientOptions,
-) : SubscriptionServiceAsync {
+class SubscriptionServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    SubscriptionServiceAsync {
 
-    private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
+    private val withRawResponse: SubscriptionServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
-    private val listHandler: Handler<CouponSubscriptionListPageAsync.Response> =
-        jsonHandler<CouponSubscriptionListPageAsync.Response>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
+    override fun withRawResponse(): SubscriptionServiceAsync.WithRawResponse = withRawResponse
 
-    /**
-     * This endpoint returns a list of all subscriptions that have redeemed a given coupon as a
-     * [paginated](../reference/pagination) list, ordered starting from the most recently created
-     * subscription. For a full discussion of the subscription resource, see
-     * [Subscription](../guides/concepts#subscription).
-     */
     override fun list(
         params: CouponSubscriptionListParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<CouponSubscriptionListPageAsync> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("coupons", params.getPathParam(0), "subscriptions")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { listHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CouponSubscriptionListPageAsync> =
+        // get /coupons/{coupon_id}/subscriptions
+        withRawResponse().list(params, requestOptions).thenApply { it.parse() }
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        SubscriptionServiceAsync.WithRawResponse {
+
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        private val listHandler: Handler<Subscriptions> =
+            jsonHandler<Subscriptions>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun list(
+            params: CouponSubscriptionListParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CouponSubscriptionListPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("couponId", params.couponId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("coupons", params._pathParam(0), "subscriptions")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { listHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                            .let {
+                                CouponSubscriptionListPageAsync.builder()
+                                    .service(SubscriptionServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
+                                    .params(params)
+                                    .response(it)
+                                    .build()
+                            }
                     }
                 }
-                .let { CouponSubscriptionListPageAsync.of(this, params, it) }
         }
     }
 }

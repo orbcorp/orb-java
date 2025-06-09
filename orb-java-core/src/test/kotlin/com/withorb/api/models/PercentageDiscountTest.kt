@@ -2,25 +2,73 @@
 
 package com.withorb.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.withorb.api.core.jsonMapper
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class PercentageDiscountTest {
+internal class PercentageDiscountTest {
 
     @Test
-    fun createPercentageDiscount() {
+    fun create() {
         val percentageDiscount =
             PercentageDiscount.builder()
-                .appliesToPriceIds(listOf("string"))
                 .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
-                .percentageDiscount(1.0)
+                .percentageDiscount(0.15)
+                .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                .addFilter(
+                    PercentageDiscount.Filter.builder()
+                        .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                        .operator(PercentageDiscount.Filter.Operator.INCLUDES)
+                        .addValue("string")
+                        .build()
+                )
                 .reason("reason")
                 .build()
-        assertThat(percentageDiscount).isNotNull
-        assertThat(percentageDiscount.appliesToPriceIds()).containsExactly("string")
+
         assertThat(percentageDiscount.discountType())
             .isEqualTo(PercentageDiscount.DiscountType.PERCENTAGE)
-        assertThat(percentageDiscount.percentageDiscount()).isEqualTo(1.0)
+        assertThat(percentageDiscount.percentageDiscount()).isEqualTo(0.15)
+        assertThat(percentageDiscount.appliesToPriceIds().getOrNull())
+            .containsExactly("h74gfhdjvn7ujokd", "7hfgtgjnbvc3ujkl")
+        assertThat(percentageDiscount.filters().getOrNull())
+            .containsExactly(
+                PercentageDiscount.Filter.builder()
+                    .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                    .operator(PercentageDiscount.Filter.Operator.INCLUDES)
+                    .addValue("string")
+                    .build()
+            )
         assertThat(percentageDiscount.reason()).contains("reason")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val percentageDiscount =
+            PercentageDiscount.builder()
+                .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                .percentageDiscount(0.15)
+                .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                .addFilter(
+                    PercentageDiscount.Filter.builder()
+                        .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                        .operator(PercentageDiscount.Filter.Operator.INCLUDES)
+                        .addValue("string")
+                        .build()
+                )
+                .reason("reason")
+                .build()
+
+        val roundtrippedPercentageDiscount =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(percentageDiscount),
+                jacksonTypeRef<PercentageDiscount>(),
+            )
+
+        assertThat(roundtrippedPercentageDiscount).isEqualTo(percentageDiscount)
     }
 }

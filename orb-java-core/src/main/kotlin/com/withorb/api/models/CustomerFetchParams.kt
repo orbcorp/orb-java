@@ -2,58 +2,44 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint is used to fetch customer details given an identifier. If the `Customer` is in the
+ * process of being deleted, only the properties `id` and `deleted: true` will be returned.
+ *
+ * See the [Customer resource](/core-concepts#customer) for a full discussion of the Customer model.
+ */
 class CustomerFetchParams
-constructor(
-    private val customerId: String,
+private constructor(
+    private val customerId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun customerId(): String = customerId
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> customerId
-            else -> ""
-        }
-    }
+    fun customerId(): Optional<String> = Optional.ofNullable(customerId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerFetchParams && customerId == other.customerId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CustomerFetchParams{customerId=$customerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): CustomerFetchParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [CustomerFetchParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [CustomerFetchParams]. */
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -61,12 +47,15 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerFetchParams: CustomerFetchParams) = apply {
-            this.customerId = customerFetchParams.customerId
-            additionalHeaders(customerFetchParams.additionalHeaders)
-            additionalQueryParams(customerFetchParams.additionalQueryParams)
+            customerId = customerFetchParams.customerId
+            additionalHeaders = customerFetchParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+        /** Alias for calling [Builder.customerId] with `customerId.orElse(null)`. */
+        fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,11 +155,39 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [CustomerFetchParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): CustomerFetchParams =
             CustomerFetchParams(
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
+                customerId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> customerId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerFetchParams && customerId == other.customerId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CustomerFetchParams{customerId=$customerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

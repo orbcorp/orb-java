@@ -2,214 +2,146 @@
 
 package com.withorb.api.models
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.withorb.api.core.ExcludeMissing
-import com.withorb.api.core.JsonField
-import com.withorb.api.core.JsonMissing
-import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toImmutable
+import com.withorb.api.core.AutoPagerAsync
+import com.withorb.api.core.PageAsync
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.async.coupons.SubscriptionServiceAsync
 import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
 
+/** @see [SubscriptionServiceAsync.list] */
 class CouponSubscriptionListPageAsync
 private constructor(
-    private val subscriptionsService: SubscriptionServiceAsync,
+    private val service: SubscriptionServiceAsync,
+    private val streamHandlerExecutor: Executor,
     private val params: CouponSubscriptionListParams,
-    private val response: Response,
-) {
+    private val response: Subscriptions,
+) : PageAsync<Subscription> {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [Subscriptions], but gracefully handles missing data.
+     *
+     * @see [Subscriptions.data]
+     */
+    fun data(): List<Subscription> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
-    fun data(): List<Subscription> = response().data()
+    /**
+     * Delegates to [Subscriptions], but gracefully handles missing data.
+     *
+     * @see [Subscriptions.paginationMetadata]
+     */
+    fun paginationMetadata(): Optional<PaginationMetadata> =
+        response._paginationMetadata().getOptional("pagination_metadata")
 
-    fun paginationMetadata(): PaginationMetadata = response().paginationMetadata()
+    override fun items(): List<Subscription> = data()
+
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() &&
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.isPresent
+
+    fun nextPageParams(): CouponSubscriptionListParams {
+        val nextCursor =
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().cursor(nextCursor).build()
+    }
+
+    override fun nextPage(): CompletableFuture<CouponSubscriptionListPageAsync> =
+        service.list(nextPageParams())
+
+    fun autoPager(): AutoPagerAsync<Subscription> = AutoPagerAsync.from(this, streamHandlerExecutor)
+
+    /** The parameters that were used to request this page. */
+    fun params(): CouponSubscriptionListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): Subscriptions = response
+
+    fun toBuilder() = Builder().from(this)
+
+    companion object {
+
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [CouponSubscriptionListPageAsync].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .streamHandlerExecutor()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [CouponSubscriptionListPageAsync]. */
+    class Builder internal constructor() {
+
+        private var service: SubscriptionServiceAsync? = null
+        private var streamHandlerExecutor: Executor? = null
+        private var params: CouponSubscriptionListParams? = null
+        private var response: Subscriptions? = null
+
+        @JvmSynthetic
+        internal fun from(couponSubscriptionListPageAsync: CouponSubscriptionListPageAsync) =
+            apply {
+                service = couponSubscriptionListPageAsync.service
+                streamHandlerExecutor = couponSubscriptionListPageAsync.streamHandlerExecutor
+                params = couponSubscriptionListPageAsync.params
+                response = couponSubscriptionListPageAsync.response
+            }
+
+        fun service(service: SubscriptionServiceAsync) = apply { this.service = service }
+
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
+            this.streamHandlerExecutor = streamHandlerExecutor
+        }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: CouponSubscriptionListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: Subscriptions) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [CouponSubscriptionListPageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .streamHandlerExecutor()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): CouponSubscriptionListPageAsync =
+            CouponSubscriptionListPageAsync(
+                checkRequired("service", service),
+                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is CouponSubscriptionListPageAsync && subscriptionsService == other.subscriptionsService && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is CouponSubscriptionListPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionsService, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, streamHandlerExecutor, params, response) /* spotless:on */
 
     override fun toString() =
-        "CouponSubscriptionListPageAsync{subscriptionsService=$subscriptionsService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        if (data().isEmpty()) {
-            return false
-        }
-
-        return paginationMetadata().nextCursor().isPresent
-    }
-
-    fun getNextPageParams(): Optional<CouponSubscriptionListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
-
-        return Optional.of(
-            CouponSubscriptionListParams.builder()
-                .from(params)
-                .apply { paginationMetadata().nextCursor().ifPresent { this.cursor(it) } }
-                .build()
-        )
-    }
-
-    fun getNextPage(): CompletableFuture<Optional<CouponSubscriptionListPageAsync>> {
-        return getNextPageParams()
-            .map { subscriptionsService.list(it).thenApply { Optional.of(it) } }
-            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
-    }
-
-    fun autoPager(): AutoPager = AutoPager(this)
-
-    companion object {
-
-        @JvmStatic
-        fun of(
-            subscriptionsService: SubscriptionServiceAsync,
-            params: CouponSubscriptionListParams,
-            response: Response
-        ) =
-            CouponSubscriptionListPageAsync(
-                subscriptionsService,
-                params,
-                response,
-            )
-    }
-
-    @JsonDeserialize(builder = Response.Builder::class)
-    @NoAutoDetect
-    class Response
-    constructor(
-        private val data: JsonField<List<Subscription>>,
-        private val paginationMetadata: JsonField<PaginationMetadata>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        private var validated: Boolean = false
-
-        fun data(): List<Subscription> = data.getNullable("data") ?: listOf()
-
-        fun paginationMetadata(): PaginationMetadata =
-            paginationMetadata.getRequired("pagination_metadata")
-
-        @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<Subscription>>> = Optional.ofNullable(data)
-
-        @JsonProperty("pagination_metadata")
-        fun _paginationMetadata(): Optional<JsonField<PaginationMetadata>> =
-            Optional.ofNullable(paginationMetadata)
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): Response = apply {
-            if (!validated) {
-                data().map { it.validate() }
-                paginationMetadata().validate()
-                validated = true
-            }
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && data == other.data && paginationMetadata == other.paginationMetadata && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(data, paginationMetadata, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{data=$data, paginationMetadata=$paginationMetadata, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var data: JsonField<List<Subscription>> = JsonMissing.of()
-            private var paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.data = page.data
-                this.paginationMetadata = page.paginationMetadata
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun data(data: List<Subscription>) = data(JsonField.of(data))
-
-            @JsonProperty("data")
-            fun data(data: JsonField<List<Subscription>>) = apply { this.data = data }
-
-            fun paginationMetadata(paginationMetadata: PaginationMetadata) =
-                paginationMetadata(JsonField.of(paginationMetadata))
-
-            @JsonProperty("pagination_metadata")
-            fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply {
-                this.paginationMetadata = paginationMetadata
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
-        }
-    }
-
-    class AutoPager
-    constructor(
-        private val firstPage: CouponSubscriptionListPageAsync,
-    ) {
-
-        fun forEach(action: Predicate<Subscription>, executor: Executor): CompletableFuture<Void> {
-            fun CompletableFuture<Optional<CouponSubscriptionListPageAsync>>.forEach(
-                action: (Subscription) -> Boolean,
-                executor: Executor
-            ): CompletableFuture<Void> =
-                thenComposeAsync(
-                    { page ->
-                        page
-                            .filter { it.data().all(action) }
-                            .map { it.getNextPage().forEach(action, executor) }
-                            .orElseGet { CompletableFuture.completedFuture(null) }
-                    },
-                    executor
-                )
-            return CompletableFuture.completedFuture(Optional.of(firstPage))
-                .forEach(action::test, executor)
-        }
-
-        fun toList(executor: Executor): CompletableFuture<List<Subscription>> {
-            val values = mutableListOf<Subscription>()
-            return forEach(values::add, executor).thenApply { values }
-        }
-    }
+        "CouponSubscriptionListPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

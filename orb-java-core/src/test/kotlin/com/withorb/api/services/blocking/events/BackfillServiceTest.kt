@@ -4,24 +4,24 @@ package com.withorb.api.services.blocking.events
 
 import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClient
-import com.withorb.api.models.*
-import com.withorb.api.models.EventBackfillListParams
+import com.withorb.api.models.EventBackfillCreateParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class BackfillServiceTest {
+internal class BackfillServiceTest {
 
     @Test
-    fun callCreate() {
+    fun create() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val backfillService = client.events().backfills()
-        val eventBackfillCreateResponse =
+
+        val backfill =
             backfillService.create(
                 EventBackfillCreateParams.builder()
                     .timeframeEnd(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -33,68 +33,63 @@ class BackfillServiceTest {
                     .replaceExistingEvents(true)
                     .build()
             )
-        println(eventBackfillCreateResponse)
-        eventBackfillCreateResponse.validate()
+
+        backfill.validate()
     }
 
     @Test
-    fun callList() {
+    fun list() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val backfillService = client.events().backfills()
-        val backfills = backfillService.list(EventBackfillListParams.builder().build())
-        println(backfills)
-        backfills.data().forEach { it.validate() }
+
+        val page = backfillService.list()
+
+        page.response().validate()
     }
 
     @Test
-    fun callClose() {
+    fun close() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val backfillService = client.events().backfills()
-        val eventBackfillCloseResponse =
-            backfillService.close(
-                EventBackfillCloseParams.builder().backfillId("backfill_id").build()
-            )
-        println(eventBackfillCloseResponse)
-        eventBackfillCloseResponse.validate()
+
+        val response = backfillService.close("backfill_id")
+
+        response.validate()
     }
 
     @Test
-    fun callFetch() {
+    fun fetch() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val backfillService = client.events().backfills()
-        val eventBackfillFetchResponse =
-            backfillService.fetch(
-                EventBackfillFetchParams.builder().backfillId("backfill_id").build()
-            )
-        println(eventBackfillFetchResponse)
-        eventBackfillFetchResponse.validate()
+
+        val response = backfillService.fetch("backfill_id")
+
+        response.validate()
     }
 
     @Test
-    fun callRevert() {
+    fun revert() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val backfillService = client.events().backfills()
-        val eventBackfillRevertResponse =
-            backfillService.revert(
-                EventBackfillRevertParams.builder().backfillId("backfill_id").build()
-            )
-        println(eventBackfillRevertResponse)
-        eventBackfillRevertResponse.validate()
+
+        val response = backfillService.revert("backfill_id")
+
+        response.validate()
     }
 }

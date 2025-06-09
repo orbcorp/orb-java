@@ -6,479 +6,997 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.Enum
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.checkKnown
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
- * The [Credit Note](/guides/invoicing/credit-notes) resource represents a credit that has been
- * applied to a particular invoice.
+ * The [Credit Note](/invoicing/credit-notes) resource represents a credit that has been applied to
+ * a particular invoice.
  */
-@JsonDeserialize(builder = CreditNote.Builder::class)
-@NoAutoDetect
 class CreditNote
 private constructor(
     private val id: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
-    private val voidedAt: JsonField<OffsetDateTime>,
     private val creditNoteNumber: JsonField<String>,
+    private val creditNotePdf: JsonField<String>,
+    private val customer: JsonField<Customer>,
     private val invoiceId: JsonField<String>,
+    private val lineItems: JsonField<List<LineItem>>,
+    private val maximumAmountAdjustment: JsonField<MaximumAmountAdjustment>,
     private val memo: JsonField<String>,
+    private val minimumAmountRefunded: JsonField<String>,
     private val reason: JsonField<Reason>,
-    private val type: JsonField<Type>,
     private val subtotal: JsonField<String>,
     private val total: JsonField<String>,
-    private val customer: JsonField<Customer>,
-    private val creditNotePdf: JsonField<String>,
-    private val minimumAmountRefunded: JsonField<String>,
+    private val type: JsonField<Type>,
+    private val voidedAt: JsonField<OffsetDateTime>,
     private val discounts: JsonField<List<Discount>>,
-    private val maximumAmountAdjustment: JsonField<MaximumAmountAdjustment>,
-    private val lineItems: JsonField<List<LineItem>>,
-    private val additionalProperties: Map<String, JsonValue>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
+    @JsonCreator
+    private constructor(
+        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("credit_note_number")
+        @ExcludeMissing
+        creditNoteNumber: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("credit_note_pdf")
+        @ExcludeMissing
+        creditNotePdf: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("customer") @ExcludeMissing customer: JsonField<Customer> = JsonMissing.of(),
+        @JsonProperty("invoice_id") @ExcludeMissing invoiceId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("line_items")
+        @ExcludeMissing
+        lineItems: JsonField<List<LineItem>> = JsonMissing.of(),
+        @JsonProperty("maximum_amount_adjustment")
+        @ExcludeMissing
+        maximumAmountAdjustment: JsonField<MaximumAmountAdjustment> = JsonMissing.of(),
+        @JsonProperty("memo") @ExcludeMissing memo: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("minimum_amount_refunded")
+        @ExcludeMissing
+        minimumAmountRefunded: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("reason") @ExcludeMissing reason: JsonField<Reason> = JsonMissing.of(),
+        @JsonProperty("subtotal") @ExcludeMissing subtotal: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("total") @ExcludeMissing total: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+        @JsonProperty("voided_at")
+        @ExcludeMissing
+        voidedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("discounts")
+        @ExcludeMissing
+        discounts: JsonField<List<Discount>> = JsonMissing.of(),
+    ) : this(
+        id,
+        createdAt,
+        creditNoteNumber,
+        creditNotePdf,
+        customer,
+        invoiceId,
+        lineItems,
+        maximumAmountAdjustment,
+        memo,
+        minimumAmountRefunded,
+        reason,
+        subtotal,
+        total,
+        type,
+        voidedAt,
+        discounts,
+        mutableMapOf(),
+    )
 
-    /** The Orb id of this credit note. */
+    /**
+     * The Orb id of this credit note.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun id(): String = id.getRequired("id")
 
-    /** The creation time of the resource in Orb. */
+    /**
+     * The creation time of the resource in Orb.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
-    /** The time at which the credit note was voided in Orb, if applicable. */
-    fun voidedAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(voidedAt.getNullable("voided_at"))
-
-    /** The unique identifier for credit notes. */
+    /**
+     * The unique identifier for credit notes.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun creditNoteNumber(): String = creditNoteNumber.getRequired("credit_note_number")
 
-    /** The id of the invoice resource that this credit note is applied to. */
-    fun invoiceId(): String = invoiceId.getRequired("invoice_id")
+    /**
+     * A URL to a PDF of the credit note.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun creditNotePdf(): Optional<String> = creditNotePdf.getOptional("credit_note_pdf")
 
-    /** An optional memo supplied on the credit note. */
-    fun memo(): Optional<String> = Optional.ofNullable(memo.getNullable("memo"))
-
-    fun reason(): Optional<Reason> = Optional.ofNullable(reason.getNullable("reason"))
-
-    fun type(): Type = type.getRequired("type")
-
-    /** The total prior to any creditable invoice-level discounts or minimums. */
-    fun subtotal(): String = subtotal.getRequired("subtotal")
-
-    /** The total including creditable invoice-level discounts or minimums, and tax. */
-    fun total(): String = total.getRequired("total")
-
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun customer(): Customer = customer.getRequired("customer")
 
-    /** A URL to a PDF of the credit note. */
-    fun creditNotePdf(): Optional<String> =
-        Optional.ofNullable(creditNotePdf.getNullable("credit_note_pdf"))
+    /**
+     * The id of the invoice resource that this credit note is applied to.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun invoiceId(): String = invoiceId.getRequired("invoice_id")
 
-    /** Any credited amount from the applied minimum on the invoice. */
-    fun minimumAmountRefunded(): Optional<String> =
-        Optional.ofNullable(minimumAmountRefunded.getNullable("minimum_amount_refunded"))
-
-    /** Any discounts applied on the original invoice. */
-    fun discounts(): Optional<List<Discount>> =
-        Optional.ofNullable(discounts.getNullable("discounts"))
-
-    /** The maximum amount applied on the original invoice */
-    fun maximumAmountAdjustment(): Optional<MaximumAmountAdjustment> =
-        Optional.ofNullable(maximumAmountAdjustment.getNullable("maximum_amount_adjustment"))
-
-    /** All of the line items associated with this credit note. */
+    /**
+     * All of the line items associated with this credit note.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun lineItems(): List<LineItem> = lineItems.getRequired("line_items")
 
-    /** The Orb id of this credit note. */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    /**
+     * The maximum amount applied on the original invoice
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun maximumAmountAdjustment(): Optional<MaximumAmountAdjustment> =
+        maximumAmountAdjustment.getOptional("maximum_amount_adjustment")
 
-    /** The creation time of the resource in Orb. */
-    @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
+    /**
+     * An optional memo supplied on the credit note.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun memo(): Optional<String> = memo.getOptional("memo")
 
-    /** The time at which the credit note was voided in Orb, if applicable. */
-    @JsonProperty("voided_at") @ExcludeMissing fun _voidedAt() = voidedAt
+    /**
+     * Any credited amount from the applied minimum on the invoice.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun minimumAmountRefunded(): Optional<String> =
+        minimumAmountRefunded.getOptional("minimum_amount_refunded")
 
-    /** The unique identifier for credit notes. */
-    @JsonProperty("credit_note_number") @ExcludeMissing fun _creditNoteNumber() = creditNoteNumber
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun reason(): Optional<Reason> = reason.getOptional("reason")
 
-    /** The id of the invoice resource that this credit note is applied to. */
-    @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
+    /**
+     * The total prior to any creditable invoice-level discounts or minimums.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun subtotal(): String = subtotal.getRequired("subtotal")
 
-    /** An optional memo supplied on the credit note. */
-    @JsonProperty("memo") @ExcludeMissing fun _memo() = memo
+    /**
+     * The total including creditable invoice-level discounts or minimums, and tax.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun total(): String = total.getRequired("total")
 
-    @JsonProperty("reason") @ExcludeMissing fun _reason() = reason
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun type(): Type = type.getRequired("type")
 
-    @JsonProperty("type") @ExcludeMissing fun _type() = type
+    /**
+     * The time at which the credit note was voided in Orb, if applicable.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun voidedAt(): Optional<OffsetDateTime> = voidedAt.getOptional("voided_at")
 
-    /** The total prior to any creditable invoice-level discounts or minimums. */
-    @JsonProperty("subtotal") @ExcludeMissing fun _subtotal() = subtotal
+    /**
+     * Any discounts applied on the original invoice.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun discounts(): Optional<List<Discount>> = discounts.getOptional("discounts")
 
-    /** The total including creditable invoice-level discounts or minimums, and tax. */
-    @JsonProperty("total") @ExcludeMissing fun _total() = total
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    @JsonProperty("customer") @ExcludeMissing fun _customer() = customer
-
-    /** A URL to a PDF of the credit note. */
-    @JsonProperty("credit_note_pdf") @ExcludeMissing fun _creditNotePdf() = creditNotePdf
-
-    /** Any credited amount from the applied minimum on the invoice. */
-    @JsonProperty("minimum_amount_refunded")
+    /**
+     * Returns the raw JSON value of [createdAt].
+     *
+     * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("created_at")
     @ExcludeMissing
-    fun _minimumAmountRefunded() = minimumAmountRefunded
+    fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
-    /** Any discounts applied on the original invoice. */
-    @JsonProperty("discounts") @ExcludeMissing fun _discounts() = discounts
+    /**
+     * Returns the raw JSON value of [creditNoteNumber].
+     *
+     * Unlike [creditNoteNumber], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("credit_note_number")
+    @ExcludeMissing
+    fun _creditNoteNumber(): JsonField<String> = creditNoteNumber
 
-    /** The maximum amount applied on the original invoice */
+    /**
+     * Returns the raw JSON value of [creditNotePdf].
+     *
+     * Unlike [creditNotePdf], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("credit_note_pdf")
+    @ExcludeMissing
+    fun _creditNotePdf(): JsonField<String> = creditNotePdf
+
+    /**
+     * Returns the raw JSON value of [customer].
+     *
+     * Unlike [customer], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("customer") @ExcludeMissing fun _customer(): JsonField<Customer> = customer
+
+    /**
+     * Returns the raw JSON value of [invoiceId].
+     *
+     * Unlike [invoiceId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId(): JsonField<String> = invoiceId
+
+    /**
+     * Returns the raw JSON value of [lineItems].
+     *
+     * Unlike [lineItems], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("line_items")
+    @ExcludeMissing
+    fun _lineItems(): JsonField<List<LineItem>> = lineItems
+
+    /**
+     * Returns the raw JSON value of [maximumAmountAdjustment].
+     *
+     * Unlike [maximumAmountAdjustment], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
     @JsonProperty("maximum_amount_adjustment")
     @ExcludeMissing
-    fun _maximumAmountAdjustment() = maximumAmountAdjustment
+    fun _maximumAmountAdjustment(): JsonField<MaximumAmountAdjustment> = maximumAmountAdjustment
 
-    /** All of the line items associated with this credit note. */
-    @JsonProperty("line_items") @ExcludeMissing fun _lineItems() = lineItems
+    /**
+     * Returns the raw JSON value of [memo].
+     *
+     * Unlike [memo], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("memo") @ExcludeMissing fun _memo(): JsonField<String> = memo
+
+    /**
+     * Returns the raw JSON value of [minimumAmountRefunded].
+     *
+     * Unlike [minimumAmountRefunded], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("minimum_amount_refunded")
+    @ExcludeMissing
+    fun _minimumAmountRefunded(): JsonField<String> = minimumAmountRefunded
+
+    /**
+     * Returns the raw JSON value of [reason].
+     *
+     * Unlike [reason], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<Reason> = reason
+
+    /**
+     * Returns the raw JSON value of [subtotal].
+     *
+     * Unlike [subtotal], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("subtotal") @ExcludeMissing fun _subtotal(): JsonField<String> = subtotal
+
+    /**
+     * Returns the raw JSON value of [total].
+     *
+     * Unlike [total], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("total") @ExcludeMissing fun _total(): JsonField<String> = total
+
+    /**
+     * Returns the raw JSON value of [type].
+     *
+     * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+
+    /**
+     * Returns the raw JSON value of [voidedAt].
+     *
+     * Unlike [voidedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("voided_at") @ExcludeMissing fun _voidedAt(): JsonField<OffsetDateTime> = voidedAt
+
+    /**
+     * Returns the raw JSON value of [discounts].
+     *
+     * Unlike [discounts], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("discounts")
+    @ExcludeMissing
+    fun _discounts(): JsonField<List<Discount>> = discounts
+
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    fun validate(): CreditNote = apply {
-        if (!validated) {
-            id()
-            createdAt()
-            voidedAt()
-            creditNoteNumber()
-            invoiceId()
-            memo()
-            reason()
-            type()
-            subtotal()
-            total()
-            customer().validate()
-            creditNotePdf()
-            minimumAmountRefunded()
-            discounts().map { it.forEach { it.validate() } }
-            maximumAmountAdjustment().map { it.validate() }
-            lineItems().forEach { it.validate() }
-            validated = true
-        }
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [CreditNote].
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .createdAt()
+         * .creditNoteNumber()
+         * .creditNotePdf()
+         * .customer()
+         * .invoiceId()
+         * .lineItems()
+         * .maximumAmountAdjustment()
+         * .memo()
+         * .minimumAmountRefunded()
+         * .reason()
+         * .subtotal()
+         * .total()
+         * .type()
+         * .voidedAt()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    /** A builder for [CreditNote]. */
+    class Builder internal constructor() {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var voidedAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var creditNoteNumber: JsonField<String> = JsonMissing.of()
-        private var invoiceId: JsonField<String> = JsonMissing.of()
-        private var memo: JsonField<String> = JsonMissing.of()
-        private var reason: JsonField<Reason> = JsonMissing.of()
-        private var type: JsonField<Type> = JsonMissing.of()
-        private var subtotal: JsonField<String> = JsonMissing.of()
-        private var total: JsonField<String> = JsonMissing.of()
-        private var customer: JsonField<Customer> = JsonMissing.of()
-        private var creditNotePdf: JsonField<String> = JsonMissing.of()
-        private var minimumAmountRefunded: JsonField<String> = JsonMissing.of()
-        private var discounts: JsonField<List<Discount>> = JsonMissing.of()
-        private var maximumAmountAdjustment: JsonField<MaximumAmountAdjustment> = JsonMissing.of()
-        private var lineItems: JsonField<List<LineItem>> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var createdAt: JsonField<OffsetDateTime>? = null
+        private var creditNoteNumber: JsonField<String>? = null
+        private var creditNotePdf: JsonField<String>? = null
+        private var customer: JsonField<Customer>? = null
+        private var invoiceId: JsonField<String>? = null
+        private var lineItems: JsonField<MutableList<LineItem>>? = null
+        private var maximumAmountAdjustment: JsonField<MaximumAmountAdjustment>? = null
+        private var memo: JsonField<String>? = null
+        private var minimumAmountRefunded: JsonField<String>? = null
+        private var reason: JsonField<Reason>? = null
+        private var subtotal: JsonField<String>? = null
+        private var total: JsonField<String>? = null
+        private var type: JsonField<Type>? = null
+        private var voidedAt: JsonField<OffsetDateTime>? = null
+        private var discounts: JsonField<MutableList<Discount>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(creditNote: CreditNote) = apply {
-            this.id = creditNote.id
-            this.createdAt = creditNote.createdAt
-            this.voidedAt = creditNote.voidedAt
-            this.creditNoteNumber = creditNote.creditNoteNumber
-            this.invoiceId = creditNote.invoiceId
-            this.memo = creditNote.memo
-            this.reason = creditNote.reason
-            this.type = creditNote.type
-            this.subtotal = creditNote.subtotal
-            this.total = creditNote.total
-            this.customer = creditNote.customer
-            this.creditNotePdf = creditNote.creditNotePdf
-            this.minimumAmountRefunded = creditNote.minimumAmountRefunded
-            this.discounts = creditNote.discounts
-            this.maximumAmountAdjustment = creditNote.maximumAmountAdjustment
-            this.lineItems = creditNote.lineItems
-            additionalProperties(creditNote.additionalProperties)
+            id = creditNote.id
+            createdAt = creditNote.createdAt
+            creditNoteNumber = creditNote.creditNoteNumber
+            creditNotePdf = creditNote.creditNotePdf
+            customer = creditNote.customer
+            invoiceId = creditNote.invoiceId
+            lineItems = creditNote.lineItems.map { it.toMutableList() }
+            maximumAmountAdjustment = creditNote.maximumAmountAdjustment
+            memo = creditNote.memo
+            minimumAmountRefunded = creditNote.minimumAmountRefunded
+            reason = creditNote.reason
+            subtotal = creditNote.subtotal
+            total = creditNote.total
+            type = creditNote.type
+            voidedAt = creditNote.voidedAt
+            discounts = creditNote.discounts.map { it.toMutableList() }
+            additionalProperties = creditNote.additionalProperties.toMutableMap()
         }
 
         /** The Orb id of this credit note. */
         fun id(id: String) = id(JsonField.of(id))
 
-        /** The Orb id of this credit note. */
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** The creation time of the resource in Orb. */
         fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
-        /** The creation time of the resource in Orb. */
-        @JsonProperty("created_at")
-        @ExcludeMissing
+        /**
+         * Sets [Builder.createdAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
-
-        /** The time at which the credit note was voided in Orb, if applicable. */
-        fun voidedAt(voidedAt: OffsetDateTime) = voidedAt(JsonField.of(voidedAt))
-
-        /** The time at which the credit note was voided in Orb, if applicable. */
-        @JsonProperty("voided_at")
-        @ExcludeMissing
-        fun voidedAt(voidedAt: JsonField<OffsetDateTime>) = apply { this.voidedAt = voidedAt }
 
         /** The unique identifier for credit notes. */
         fun creditNoteNumber(creditNoteNumber: String) =
             creditNoteNumber(JsonField.of(creditNoteNumber))
 
-        /** The unique identifier for credit notes. */
-        @JsonProperty("credit_note_number")
-        @ExcludeMissing
+        /**
+         * Sets [Builder.creditNoteNumber] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.creditNoteNumber] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun creditNoteNumber(creditNoteNumber: JsonField<String>) = apply {
             this.creditNoteNumber = creditNoteNumber
         }
 
-        /** The id of the invoice resource that this credit note is applied to. */
-        fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
-
-        /** The id of the invoice resource that this credit note is applied to. */
-        @JsonProperty("invoice_id")
-        @ExcludeMissing
-        fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
-
-        /** An optional memo supplied on the credit note. */
-        fun memo(memo: String) = memo(JsonField.of(memo))
-
-        /** An optional memo supplied on the credit note. */
-        @JsonProperty("memo")
-        @ExcludeMissing
-        fun memo(memo: JsonField<String>) = apply { this.memo = memo }
-
-        fun reason(reason: Reason) = reason(JsonField.of(reason))
-
-        @JsonProperty("reason")
-        @ExcludeMissing
-        fun reason(reason: JsonField<Reason>) = apply { this.reason = reason }
-
-        fun type(type: Type) = type(JsonField.of(type))
-
-        @JsonProperty("type")
-        @ExcludeMissing
-        fun type(type: JsonField<Type>) = apply { this.type = type }
-
-        /** The total prior to any creditable invoice-level discounts or minimums. */
-        fun subtotal(subtotal: String) = subtotal(JsonField.of(subtotal))
-
-        /** The total prior to any creditable invoice-level discounts or minimums. */
-        @JsonProperty("subtotal")
-        @ExcludeMissing
-        fun subtotal(subtotal: JsonField<String>) = apply { this.subtotal = subtotal }
-
-        /** The total including creditable invoice-level discounts or minimums, and tax. */
-        fun total(total: String) = total(JsonField.of(total))
-
-        /** The total including creditable invoice-level discounts or minimums, and tax. */
-        @JsonProperty("total")
-        @ExcludeMissing
-        fun total(total: JsonField<String>) = apply { this.total = total }
-
-        fun customer(customer: Customer) = customer(JsonField.of(customer))
-
-        @JsonProperty("customer")
-        @ExcludeMissing
-        fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
-
         /** A URL to a PDF of the credit note. */
-        fun creditNotePdf(creditNotePdf: String) = creditNotePdf(JsonField.of(creditNotePdf))
+        fun creditNotePdf(creditNotePdf: String?) =
+            creditNotePdf(JsonField.ofNullable(creditNotePdf))
 
-        /** A URL to a PDF of the credit note. */
-        @JsonProperty("credit_note_pdf")
-        @ExcludeMissing
+        /** Alias for calling [Builder.creditNotePdf] with `creditNotePdf.orElse(null)`. */
+        fun creditNotePdf(creditNotePdf: Optional<String>) =
+            creditNotePdf(creditNotePdf.getOrNull())
+
+        /**
+         * Sets [Builder.creditNotePdf] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.creditNotePdf] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun creditNotePdf(creditNotePdf: JsonField<String>) = apply {
             this.creditNotePdf = creditNotePdf
         }
 
-        /** Any credited amount from the applied minimum on the invoice. */
-        fun minimumAmountRefunded(minimumAmountRefunded: String) =
-            minimumAmountRefunded(JsonField.of(minimumAmountRefunded))
+        fun customer(customer: Customer) = customer(JsonField.of(customer))
 
-        /** Any credited amount from the applied minimum on the invoice. */
-        @JsonProperty("minimum_amount_refunded")
-        @ExcludeMissing
-        fun minimumAmountRefunded(minimumAmountRefunded: JsonField<String>) = apply {
-            this.minimumAmountRefunded = minimumAmountRefunded
+        /**
+         * Sets [Builder.customer] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.customer] with a well-typed [Customer] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
+
+        /** The id of the invoice resource that this credit note is applied to. */
+        fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
+
+        /**
+         * Sets [Builder.invoiceId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.invoiceId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
+
+        /** All of the line items associated with this credit note. */
+        fun lineItems(lineItems: List<LineItem>) = lineItems(JsonField.of(lineItems))
+
+        /**
+         * Sets [Builder.lineItems] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.lineItems] with a well-typed `List<LineItem>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun lineItems(lineItems: JsonField<List<LineItem>>) = apply {
+            this.lineItems = lineItems.map { it.toMutableList() }
         }
 
-        /** Any discounts applied on the original invoice. */
-        fun discounts(discounts: List<Discount>) = discounts(JsonField.of(discounts))
-
-        /** Any discounts applied on the original invoice. */
-        @JsonProperty("discounts")
-        @ExcludeMissing
-        fun discounts(discounts: JsonField<List<Discount>>) = apply { this.discounts = discounts }
+        /**
+         * Adds a single [LineItem] to [lineItems].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addLineItem(lineItem: LineItem) = apply {
+            lineItems =
+                (lineItems ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("lineItems", it).add(lineItem)
+                }
+        }
 
         /** The maximum amount applied on the original invoice */
-        fun maximumAmountAdjustment(maximumAmountAdjustment: MaximumAmountAdjustment) =
-            maximumAmountAdjustment(JsonField.of(maximumAmountAdjustment))
+        fun maximumAmountAdjustment(maximumAmountAdjustment: MaximumAmountAdjustment?) =
+            maximumAmountAdjustment(JsonField.ofNullable(maximumAmountAdjustment))
 
-        /** The maximum amount applied on the original invoice */
-        @JsonProperty("maximum_amount_adjustment")
-        @ExcludeMissing
+        /**
+         * Alias for calling [Builder.maximumAmountAdjustment] with
+         * `maximumAmountAdjustment.orElse(null)`.
+         */
+        fun maximumAmountAdjustment(maximumAmountAdjustment: Optional<MaximumAmountAdjustment>) =
+            maximumAmountAdjustment(maximumAmountAdjustment.getOrNull())
+
+        /**
+         * Sets [Builder.maximumAmountAdjustment] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.maximumAmountAdjustment] with a well-typed
+         * [MaximumAmountAdjustment] value instead. This method is primarily for setting the field
+         * to an undocumented or not yet supported value.
+         */
         fun maximumAmountAdjustment(maximumAmountAdjustment: JsonField<MaximumAmountAdjustment>) =
             apply {
                 this.maximumAmountAdjustment = maximumAmountAdjustment
             }
 
-        /** All of the line items associated with this credit note. */
-        fun lineItems(lineItems: List<LineItem>) = lineItems(JsonField.of(lineItems))
+        /** An optional memo supplied on the credit note. */
+        fun memo(memo: String?) = memo(JsonField.ofNullable(memo))
 
-        /** All of the line items associated with this credit note. */
-        @JsonProperty("line_items")
-        @ExcludeMissing
-        fun lineItems(lineItems: JsonField<List<LineItem>>) = apply { this.lineItems = lineItems }
+        /** Alias for calling [Builder.memo] with `memo.orElse(null)`. */
+        fun memo(memo: Optional<String>) = memo(memo.getOrNull())
+
+        /**
+         * Sets [Builder.memo] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.memo] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun memo(memo: JsonField<String>) = apply { this.memo = memo }
+
+        /** Any credited amount from the applied minimum on the invoice. */
+        fun minimumAmountRefunded(minimumAmountRefunded: String?) =
+            minimumAmountRefunded(JsonField.ofNullable(minimumAmountRefunded))
+
+        /**
+         * Alias for calling [Builder.minimumAmountRefunded] with
+         * `minimumAmountRefunded.orElse(null)`.
+         */
+        fun minimumAmountRefunded(minimumAmountRefunded: Optional<String>) =
+            minimumAmountRefunded(minimumAmountRefunded.getOrNull())
+
+        /**
+         * Sets [Builder.minimumAmountRefunded] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.minimumAmountRefunded] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun minimumAmountRefunded(minimumAmountRefunded: JsonField<String>) = apply {
+            this.minimumAmountRefunded = minimumAmountRefunded
+        }
+
+        fun reason(reason: Reason?) = reason(JsonField.ofNullable(reason))
+
+        /** Alias for calling [Builder.reason] with `reason.orElse(null)`. */
+        fun reason(reason: Optional<Reason>) = reason(reason.getOrNull())
+
+        /**
+         * Sets [Builder.reason] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.reason] with a well-typed [Reason] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun reason(reason: JsonField<Reason>) = apply { this.reason = reason }
+
+        /** The total prior to any creditable invoice-level discounts or minimums. */
+        fun subtotal(subtotal: String) = subtotal(JsonField.of(subtotal))
+
+        /**
+         * Sets [Builder.subtotal] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.subtotal] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun subtotal(subtotal: JsonField<String>) = apply { this.subtotal = subtotal }
+
+        /** The total including creditable invoice-level discounts or minimums, and tax. */
+        fun total(total: String) = total(JsonField.of(total))
+
+        /**
+         * Sets [Builder.total] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.total] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun total(total: JsonField<String>) = apply { this.total = total }
+
+        fun type(type: Type) = type(JsonField.of(type))
+
+        /**
+         * Sets [Builder.type] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.type] with a well-typed [Type] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun type(type: JsonField<Type>) = apply { this.type = type }
+
+        /** The time at which the credit note was voided in Orb, if applicable. */
+        fun voidedAt(voidedAt: OffsetDateTime?) = voidedAt(JsonField.ofNullable(voidedAt))
+
+        /** Alias for calling [Builder.voidedAt] with `voidedAt.orElse(null)`. */
+        fun voidedAt(voidedAt: Optional<OffsetDateTime>) = voidedAt(voidedAt.getOrNull())
+
+        /**
+         * Sets [Builder.voidedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.voidedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun voidedAt(voidedAt: JsonField<OffsetDateTime>) = apply { this.voidedAt = voidedAt }
+
+        /** Any discounts applied on the original invoice. */
+        fun discounts(discounts: List<Discount>) = discounts(JsonField.of(discounts))
+
+        /**
+         * Sets [Builder.discounts] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.discounts] with a well-typed `List<Discount>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun discounts(discounts: JsonField<List<Discount>>) = apply {
+            this.discounts = discounts.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [Discount] to [discounts].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addDiscount(discount: Discount) = apply {
+            discounts =
+                (discounts ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("discounts", it).add(discount)
+                }
+        }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
         }
 
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
+        /**
+         * Returns an immutable instance of [CreditNote].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .createdAt()
+         * .creditNoteNumber()
+         * .creditNotePdf()
+         * .customer()
+         * .invoiceId()
+         * .lineItems()
+         * .maximumAmountAdjustment()
+         * .memo()
+         * .minimumAmountRefunded()
+         * .reason()
+         * .subtotal()
+         * .total()
+         * .type()
+         * .voidedAt()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): CreditNote =
             CreditNote(
-                id,
-                createdAt,
-                voidedAt,
-                creditNoteNumber,
-                invoiceId,
-                memo,
-                reason,
-                type,
-                subtotal,
-                total,
-                customer,
-                creditNotePdf,
-                minimumAmountRefunded,
-                discounts.map { it.toImmutable() },
-                maximumAmountAdjustment,
-                lineItems.map { it.toImmutable() },
-                additionalProperties.toImmutable(),
+                checkRequired("id", id),
+                checkRequired("createdAt", createdAt),
+                checkRequired("creditNoteNumber", creditNoteNumber),
+                checkRequired("creditNotePdf", creditNotePdf),
+                checkRequired("customer", customer),
+                checkRequired("invoiceId", invoiceId),
+                checkRequired("lineItems", lineItems).map { it.toImmutable() },
+                checkRequired("maximumAmountAdjustment", maximumAmountAdjustment),
+                checkRequired("memo", memo),
+                checkRequired("minimumAmountRefunded", minimumAmountRefunded),
+                checkRequired("reason", reason),
+                checkRequired("subtotal", subtotal),
+                checkRequired("total", total),
+                checkRequired("type", type),
+                checkRequired("voidedAt", voidedAt),
+                (discounts ?: JsonMissing.of()).map { it.toImmutable() },
+                additionalProperties.toMutableMap(),
             )
     }
 
-    @JsonDeserialize(builder = Customer.Builder::class)
-    @NoAutoDetect
+    private var validated: Boolean = false
+
+    fun validate(): CreditNote = apply {
+        if (validated) {
+            return@apply
+        }
+
+        id()
+        createdAt()
+        creditNoteNumber()
+        creditNotePdf()
+        customer().validate()
+        invoiceId()
+        lineItems().forEach { it.validate() }
+        maximumAmountAdjustment().ifPresent { it.validate() }
+        memo()
+        minimumAmountRefunded()
+        reason().ifPresent { it.validate() }
+        subtotal()
+        total()
+        type().validate()
+        voidedAt()
+        discounts().ifPresent { it.forEach { it.validate() } }
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: OrbInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (if (id.asKnown().isPresent) 1 else 0) +
+            (if (createdAt.asKnown().isPresent) 1 else 0) +
+            (if (creditNoteNumber.asKnown().isPresent) 1 else 0) +
+            (if (creditNotePdf.asKnown().isPresent) 1 else 0) +
+            (customer.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (invoiceId.asKnown().isPresent) 1 else 0) +
+            (lineItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (maximumAmountAdjustment.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (memo.asKnown().isPresent) 1 else 0) +
+            (if (minimumAmountRefunded.asKnown().isPresent) 1 else 0) +
+            (reason.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (subtotal.asKnown().isPresent) 1 else 0) +
+            (if (total.asKnown().isPresent) 1 else 0) +
+            (type.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (voidedAt.asKnown().isPresent) 1 else 0) +
+            (discounts.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+
     class Customer
     private constructor(
         private val id: JsonField<String>,
         private val externalCustomerId: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("external_customer_id")
+            @ExcludeMissing
+            externalCustomerId: JsonField<String> = JsonMissing.of(),
+        ) : this(id, externalCustomerId, mutableMapOf())
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun id(): String = id.getRequired("id")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun externalCustomerId(): Optional<String> =
-            Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+            externalCustomerId.getOptional("external_customer_id")
 
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+        /**
+         * Returns the raw JSON value of [externalCustomerId].
+         *
+         * Unlike [externalCustomerId], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("external_customer_id")
         @ExcludeMissing
-        fun _externalCustomerId() = externalCustomerId
+        fun _externalCustomerId(): JsonField<String> = externalCustomerId
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): Customer = apply {
-            if (!validated) {
-                id()
-                externalCustomerId()
-                validated = true
-            }
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Customer].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .externalCustomerId()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [Customer]. */
+        class Builder internal constructor() {
 
-            private var id: JsonField<String> = JsonMissing.of()
-            private var externalCustomerId: JsonField<String> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var externalCustomerId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(customer: Customer) = apply {
-                this.id = customer.id
-                this.externalCustomerId = customer.externalCustomerId
-                additionalProperties(customer.additionalProperties)
+                id = customer.id
+                externalCustomerId = customer.externalCustomerId
+                additionalProperties = customer.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
 
-            @JsonProperty("id")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
-            fun externalCustomerId(externalCustomerId: String) =
-                externalCustomerId(JsonField.of(externalCustomerId))
+            fun externalCustomerId(externalCustomerId: String?) =
+                externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
-            @JsonProperty("external_customer_id")
-            @ExcludeMissing
+            /**
+             * Alias for calling [Builder.externalCustomerId] with
+             * `externalCustomerId.orElse(null)`.
+             */
+            fun externalCustomerId(externalCustomerId: Optional<String>) =
+                externalCustomerId(externalCustomerId.getOrNull())
+
+            /**
+             * Sets [Builder.externalCustomerId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.externalCustomerId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                 this.externalCustomerId = externalCustomerId
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
             }
 
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Customer].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .externalCustomerId()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Customer =
                 Customer(
-                    id,
-                    externalCustomerId,
-                    additionalProperties.toImmutable(),
+                    checkRequired("id", id),
+                    checkRequired("externalCustomerId", externalCustomerId),
+                    additionalProperties.toMutableMap(),
                 )
         }
+
+        private var validated: Boolean = false
+
+        fun validate(): Customer = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            externalCustomerId()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (if (externalCustomerId.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -498,308 +1016,633 @@ private constructor(
             "Customer{id=$id, externalCustomerId=$externalCustomerId, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = LineItem.Builder::class)
-    @NoAutoDetect
     class LineItem
     private constructor(
         private val id: JsonField<String>,
-        private val name: JsonField<String>,
-        private val subtotal: JsonField<String>,
         private val amount: JsonField<String>,
+        private val itemId: JsonField<String>,
+        private val name: JsonField<String>,
         private val quantity: JsonField<Double>,
-        private val discounts: JsonField<List<Discount>>,
+        private val subtotal: JsonField<String>,
         private val taxAmounts: JsonField<List<TaxAmount>>,
-        private val additionalProperties: Map<String, JsonValue>,
+        private val discounts: JsonField<List<Discount>>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("amount") @ExcludeMissing amount: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("item_id") @ExcludeMissing itemId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("quantity")
+            @ExcludeMissing
+            quantity: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("subtotal")
+            @ExcludeMissing
+            subtotal: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("tax_amounts")
+            @ExcludeMissing
+            taxAmounts: JsonField<List<TaxAmount>> = JsonMissing.of(),
+            @JsonProperty("discounts")
+            @ExcludeMissing
+            discounts: JsonField<List<Discount>> = JsonMissing.of(),
+        ) : this(
+            id,
+            amount,
+            itemId,
+            name,
+            quantity,
+            subtotal,
+            taxAmounts,
+            discounts,
+            mutableMapOf(),
+        )
 
-        /** The Orb id of this resource. */
+        /**
+         * The Orb id of this resource.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun id(): String = id.getRequired("id")
 
-        /** The name of the corresponding invoice line item. */
-        fun name(): String = name.getRequired("name")
-
-        /** The amount of the line item, excluding any line item minimums and discounts. */
-        fun subtotal(): String = subtotal.getRequired("subtotal")
-
-        /** The amount of the line item, including any line item minimums and discounts. */
+        /**
+         * The amount of the line item, including any line item minimums and discounts.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun amount(): String = amount.getRequired("amount")
 
-        /** An optional quantity credited. */
-        fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
+        /**
+         * The id of the item associated with this line item.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun itemId(): String = itemId.getRequired("item_id")
 
-        /** Any line item discounts from the invoice's line item. */
-        fun discounts(): Optional<List<Discount>> =
-            Optional.ofNullable(discounts.getNullable("discounts"))
+        /**
+         * The name of the corresponding invoice line item.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun name(): String = name.getRequired("name")
 
-        /** Any tax amounts applied onto the line item. */
+        /**
+         * An optional quantity credited.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun quantity(): Optional<Double> = quantity.getOptional("quantity")
+
+        /**
+         * The amount of the line item, excluding any line item minimums and discounts.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun subtotal(): String = subtotal.getRequired("subtotal")
+
+        /**
+         * Any tax amounts applied onto the line item.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun taxAmounts(): List<TaxAmount> = taxAmounts.getRequired("tax_amounts")
 
-        /** The Orb id of this resource. */
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        /**
+         * Any line item discounts from the invoice's line item.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun discounts(): Optional<List<Discount>> = discounts.getOptional("discounts")
 
-        /** The name of the corresponding invoice line item. */
-        @JsonProperty("name") @ExcludeMissing fun _name() = name
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-        /** The amount of the line item, excluding any line item minimums and discounts. */
-        @JsonProperty("subtotal") @ExcludeMissing fun _subtotal() = subtotal
+        /**
+         * Returns the raw JSON value of [amount].
+         *
+         * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
 
-        /** The amount of the line item, including any line item minimums and discounts. */
-        @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
+        /**
+         * Returns the raw JSON value of [itemId].
+         *
+         * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
 
-        /** An optional quantity credited. */
-        @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+        /**
+         * Returns the raw JSON value of [name].
+         *
+         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
-        /** Any line item discounts from the invoice's line item. */
-        @JsonProperty("discounts") @ExcludeMissing fun _discounts() = discounts
+        /**
+         * Returns the raw JSON value of [quantity].
+         *
+         * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
-        /** Any tax amounts applied onto the line item. */
-        @JsonProperty("tax_amounts") @ExcludeMissing fun _taxAmounts() = taxAmounts
+        /**
+         * Returns the raw JSON value of [subtotal].
+         *
+         * Unlike [subtotal], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("subtotal") @ExcludeMissing fun _subtotal(): JsonField<String> = subtotal
+
+        /**
+         * Returns the raw JSON value of [taxAmounts].
+         *
+         * Unlike [taxAmounts], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("tax_amounts")
+        @ExcludeMissing
+        fun _taxAmounts(): JsonField<List<TaxAmount>> = taxAmounts
+
+        /**
+         * Returns the raw JSON value of [discounts].
+         *
+         * Unlike [discounts], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("discounts")
+        @ExcludeMissing
+        fun _discounts(): JsonField<List<Discount>> = discounts
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): LineItem = apply {
-            if (!validated) {
-                id()
-                name()
-                subtotal()
-                amount()
-                quantity()
-                discounts().map { it.forEach { it.validate() } }
-                taxAmounts().forEach { it.validate() }
-                validated = true
-            }
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [LineItem].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .itemId()
+             * .name()
+             * .quantity()
+             * .subtotal()
+             * .taxAmounts()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [LineItem]. */
+        class Builder internal constructor() {
 
-            private var id: JsonField<String> = JsonMissing.of()
-            private var name: JsonField<String> = JsonMissing.of()
-            private var subtotal: JsonField<String> = JsonMissing.of()
-            private var amount: JsonField<String> = JsonMissing.of()
-            private var quantity: JsonField<Double> = JsonMissing.of()
-            private var discounts: JsonField<List<Discount>> = JsonMissing.of()
-            private var taxAmounts: JsonField<List<TaxAmount>> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var amount: JsonField<String>? = null
+            private var itemId: JsonField<String>? = null
+            private var name: JsonField<String>? = null
+            private var quantity: JsonField<Double>? = null
+            private var subtotal: JsonField<String>? = null
+            private var taxAmounts: JsonField<MutableList<TaxAmount>>? = null
+            private var discounts: JsonField<MutableList<Discount>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(lineItem: LineItem) = apply {
-                this.id = lineItem.id
-                this.name = lineItem.name
-                this.subtotal = lineItem.subtotal
-                this.amount = lineItem.amount
-                this.quantity = lineItem.quantity
-                this.discounts = lineItem.discounts
-                this.taxAmounts = lineItem.taxAmounts
-                additionalProperties(lineItem.additionalProperties)
+                id = lineItem.id
+                amount = lineItem.amount
+                itemId = lineItem.itemId
+                name = lineItem.name
+                quantity = lineItem.quantity
+                subtotal = lineItem.subtotal
+                taxAmounts = lineItem.taxAmounts.map { it.toMutableList() }
+                discounts = lineItem.discounts.map { it.toMutableList() }
+                additionalProperties = lineItem.additionalProperties.toMutableMap()
             }
 
             /** The Orb id of this resource. */
             fun id(id: String) = id(JsonField.of(id))
 
-            /** The Orb id of this resource. */
-            @JsonProperty("id")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun id(id: JsonField<String>) = apply { this.id = id }
-
-            /** The name of the corresponding invoice line item. */
-            fun name(name: String) = name(JsonField.of(name))
-
-            /** The name of the corresponding invoice line item. */
-            @JsonProperty("name")
-            @ExcludeMissing
-            fun name(name: JsonField<String>) = apply { this.name = name }
-
-            /** The amount of the line item, excluding any line item minimums and discounts. */
-            fun subtotal(subtotal: String) = subtotal(JsonField.of(subtotal))
-
-            /** The amount of the line item, excluding any line item minimums and discounts. */
-            @JsonProperty("subtotal")
-            @ExcludeMissing
-            fun subtotal(subtotal: JsonField<String>) = apply { this.subtotal = subtotal }
 
             /** The amount of the line item, including any line item minimums and discounts. */
             fun amount(amount: String) = amount(JsonField.of(amount))
 
-            /** The amount of the line item, including any line item minimums and discounts. */
-            @JsonProperty("amount")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.amount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.amount] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun amount(amount: JsonField<String>) = apply { this.amount = amount }
 
-            /** An optional quantity credited. */
-            fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
+            /** The id of the item associated with this line item. */
+            fun itemId(itemId: String) = itemId(JsonField.of(itemId))
+
+            /**
+             * Sets [Builder.itemId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.itemId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
+
+            /** The name of the corresponding invoice line item. */
+            fun name(name: String) = name(JsonField.of(name))
+
+            /**
+             * Sets [Builder.name] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.name] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** An optional quantity credited. */
-            @JsonProperty("quantity")
-            @ExcludeMissing
+            fun quantity(quantity: Double?) = quantity(JsonField.ofNullable(quantity))
+
+            /**
+             * Alias for [Builder.quantity].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun quantity(quantity: Double) = quantity(quantity as Double?)
+
+            /** Alias for calling [Builder.quantity] with `quantity.orElse(null)`. */
+            fun quantity(quantity: Optional<Double>) = quantity(quantity.getOrNull())
+
+            /**
+             * Sets [Builder.quantity] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.quantity] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
-            /** Any line item discounts from the invoice's line item. */
-            fun discounts(discounts: List<Discount>) = discounts(JsonField.of(discounts))
+            /** The amount of the line item, excluding any line item minimums and discounts. */
+            fun subtotal(subtotal: String) = subtotal(JsonField.of(subtotal))
 
-            /** Any line item discounts from the invoice's line item. */
-            @JsonProperty("discounts")
-            @ExcludeMissing
-            fun discounts(discounts: JsonField<List<Discount>>) = apply {
-                this.discounts = discounts
-            }
+            /**
+             * Sets [Builder.subtotal] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.subtotal] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun subtotal(subtotal: JsonField<String>) = apply { this.subtotal = subtotal }
 
             /** Any tax amounts applied onto the line item. */
             fun taxAmounts(taxAmounts: List<TaxAmount>) = taxAmounts(JsonField.of(taxAmounts))
 
-            /** Any tax amounts applied onto the line item. */
-            @JsonProperty("tax_amounts")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.taxAmounts] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.taxAmounts] with a well-typed `List<TaxAmount>`
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
             fun taxAmounts(taxAmounts: JsonField<List<TaxAmount>>) = apply {
-                this.taxAmounts = taxAmounts
+                this.taxAmounts = taxAmounts.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TaxAmount] to [taxAmounts].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addTaxAmount(taxAmount: TaxAmount) = apply {
+                taxAmounts =
+                    (taxAmounts ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("taxAmounts", it).add(taxAmount)
+                    }
+            }
+
+            /** Any line item discounts from the invoice's line item. */
+            fun discounts(discounts: List<Discount>) = discounts(JsonField.of(discounts))
+
+            /**
+             * Sets [Builder.discounts] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.discounts] with a well-typed `List<Discount>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun discounts(discounts: JsonField<List<Discount>>) = apply {
+                this.discounts = discounts.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [Discount] to [discounts].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addDiscount(discount: Discount) = apply {
+                discounts =
+                    (discounts ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("discounts", it).add(discount)
+                    }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
             }
 
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [LineItem].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .itemId()
+             * .name()
+             * .quantity()
+             * .subtotal()
+             * .taxAmounts()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): LineItem =
                 LineItem(
-                    id,
-                    name,
-                    subtotal,
-                    amount,
-                    quantity,
-                    discounts.map { it.toImmutable() },
-                    taxAmounts.map { it.toImmutable() },
-                    additionalProperties.toImmutable(),
+                    checkRequired("id", id),
+                    checkRequired("amount", amount),
+                    checkRequired("itemId", itemId),
+                    checkRequired("name", name),
+                    checkRequired("quantity", quantity),
+                    checkRequired("subtotal", subtotal),
+                    checkRequired("taxAmounts", taxAmounts).map { it.toImmutable() },
+                    (discounts ?: JsonMissing.of()).map { it.toImmutable() },
+                    additionalProperties.toMutableMap(),
                 )
         }
 
-        @JsonDeserialize(builder = TaxAmount.Builder::class)
-        @NoAutoDetect
+        private var validated: Boolean = false
+
+        fun validate(): LineItem = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            amount()
+            itemId()
+            name()
+            quantity()
+            subtotal()
+            taxAmounts().forEach { it.validate() }
+            discounts().ifPresent { it.forEach { it.validate() } }
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (if (amount.asKnown().isPresent) 1 else 0) +
+                (if (itemId.asKnown().isPresent) 1 else 0) +
+                (if (name.asKnown().isPresent) 1 else 0) +
+                (if (quantity.asKnown().isPresent) 1 else 0) +
+                (if (subtotal.asKnown().isPresent) 1 else 0) +
+                (taxAmounts.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (discounts.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+
         class TaxAmount
         private constructor(
+            private val amount: JsonField<String>,
             private val taxRateDescription: JsonField<String>,
             private val taxRatePercentage: JsonField<String>,
-            private val amount: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("amount")
+                @ExcludeMissing
+                amount: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("tax_rate_description")
+                @ExcludeMissing
+                taxRateDescription: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("tax_rate_percentage")
+                @ExcludeMissing
+                taxRatePercentage: JsonField<String> = JsonMissing.of(),
+            ) : this(amount, taxRateDescription, taxRatePercentage, mutableMapOf())
 
-            /** The human-readable description of the applied tax rate. */
+            /**
+             * The amount of additional tax incurred by this tax rate.
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun amount(): String = amount.getRequired("amount")
+
+            /**
+             * The human-readable description of the applied tax rate.
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun taxRateDescription(): String =
                 taxRateDescription.getRequired("tax_rate_description")
 
-            /** The tax rate percentage, out of 100. */
+            /**
+             * The tax rate percentage, out of 100.
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
             fun taxRatePercentage(): Optional<String> =
-                Optional.ofNullable(taxRatePercentage.getNullable("tax_rate_percentage"))
+                taxRatePercentage.getOptional("tax_rate_percentage")
 
-            /** The amount of additional tax incurred by this tax rate. */
-            fun amount(): String = amount.getRequired("amount")
+            /**
+             * Returns the raw JSON value of [amount].
+             *
+             * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
 
-            /** The human-readable description of the applied tax rate. */
+            /**
+             * Returns the raw JSON value of [taxRateDescription].
+             *
+             * Unlike [taxRateDescription], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("tax_rate_description")
             @ExcludeMissing
-            fun _taxRateDescription() = taxRateDescription
+            fun _taxRateDescription(): JsonField<String> = taxRateDescription
 
-            /** The tax rate percentage, out of 100. */
+            /**
+             * Returns the raw JSON value of [taxRatePercentage].
+             *
+             * Unlike [taxRatePercentage], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("tax_rate_percentage")
             @ExcludeMissing
-            fun _taxRatePercentage() = taxRatePercentage
+            fun _taxRatePercentage(): JsonField<String> = taxRatePercentage
 
-            /** The amount of additional tax incurred by this tax rate. */
-            @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): TaxAmount = apply {
-                if (!validated) {
-                    taxRateDescription()
-                    taxRatePercentage()
-                    amount()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [TaxAmount].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .amount()
+                 * .taxRateDescription()
+                 * .taxRatePercentage()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [TaxAmount]. */
+            class Builder internal constructor() {
 
-                private var taxRateDescription: JsonField<String> = JsonMissing.of()
-                private var taxRatePercentage: JsonField<String> = JsonMissing.of()
-                private var amount: JsonField<String> = JsonMissing.of()
+                private var amount: JsonField<String>? = null
+                private var taxRateDescription: JsonField<String>? = null
+                private var taxRatePercentage: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(taxAmount: TaxAmount) = apply {
-                    this.taxRateDescription = taxAmount.taxRateDescription
-                    this.taxRatePercentage = taxAmount.taxRatePercentage
-                    this.amount = taxAmount.amount
-                    additionalProperties(taxAmount.additionalProperties)
-                }
-
-                /** The human-readable description of the applied tax rate. */
-                fun taxRateDescription(taxRateDescription: String) =
-                    taxRateDescription(JsonField.of(taxRateDescription))
-
-                /** The human-readable description of the applied tax rate. */
-                @JsonProperty("tax_rate_description")
-                @ExcludeMissing
-                fun taxRateDescription(taxRateDescription: JsonField<String>) = apply {
-                    this.taxRateDescription = taxRateDescription
-                }
-
-                /** The tax rate percentage, out of 100. */
-                fun taxRatePercentage(taxRatePercentage: String) =
-                    taxRatePercentage(JsonField.of(taxRatePercentage))
-
-                /** The tax rate percentage, out of 100. */
-                @JsonProperty("tax_rate_percentage")
-                @ExcludeMissing
-                fun taxRatePercentage(taxRatePercentage: JsonField<String>) = apply {
-                    this.taxRatePercentage = taxRatePercentage
+                    amount = taxAmount.amount
+                    taxRateDescription = taxAmount.taxRateDescription
+                    taxRatePercentage = taxAmount.taxRatePercentage
+                    additionalProperties = taxAmount.additionalProperties.toMutableMap()
                 }
 
                 /** The amount of additional tax incurred by this tax rate. */
                 fun amount(amount: String) = amount(JsonField.of(amount))
 
-                /** The amount of additional tax incurred by this tax rate. */
-                @JsonProperty("amount")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.amount] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.amount] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun amount(amount: JsonField<String>) = apply { this.amount = amount }
+
+                /** The human-readable description of the applied tax rate. */
+                fun taxRateDescription(taxRateDescription: String) =
+                    taxRateDescription(JsonField.of(taxRateDescription))
+
+                /**
+                 * Sets [Builder.taxRateDescription] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.taxRateDescription] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun taxRateDescription(taxRateDescription: JsonField<String>) = apply {
+                    this.taxRateDescription = taxRateDescription
+                }
+
+                /** The tax rate percentage, out of 100. */
+                fun taxRatePercentage(taxRatePercentage: String?) =
+                    taxRatePercentage(JsonField.ofNullable(taxRatePercentage))
+
+                /**
+                 * Alias for calling [Builder.taxRatePercentage] with
+                 * `taxRatePercentage.orElse(null)`.
+                 */
+                fun taxRatePercentage(taxRatePercentage: Optional<String>) =
+                    taxRatePercentage(taxRatePercentage.getOrNull())
+
+                /**
+                 * Sets [Builder.taxRatePercentage] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.taxRatePercentage] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun taxRatePercentage(taxRatePercentage: JsonField<String>) = apply {
+                    this.taxRatePercentage = taxRatePercentage
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -807,141 +1650,356 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [TaxAmount].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .amount()
+                 * .taxRateDescription()
+                 * .taxRatePercentage()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): TaxAmount =
                     TaxAmount(
-                        taxRateDescription,
-                        taxRatePercentage,
-                        amount,
-                        additionalProperties.toImmutable(),
+                        checkRequired("amount", amount),
+                        checkRequired("taxRateDescription", taxRateDescription),
+                        checkRequired("taxRatePercentage", taxRatePercentage),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): TaxAmount = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                amount()
+                taxRateDescription()
+                taxRatePercentage()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (amount.asKnown().isPresent) 1 else 0) +
+                    (if (taxRateDescription.asKnown().isPresent) 1 else 0) +
+                    (if (taxRatePercentage.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return /* spotless:off */ other is TaxAmount && taxRateDescription == other.taxRateDescription && taxRatePercentage == other.taxRatePercentage && amount == other.amount && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is TaxAmount && amount == other.amount && taxRateDescription == other.taxRateDescription && taxRatePercentage == other.taxRatePercentage && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(taxRateDescription, taxRatePercentage, amount, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(amount, taxRateDescription, taxRatePercentage, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "TaxAmount{taxRateDescription=$taxRateDescription, taxRatePercentage=$taxRatePercentage, amount=$amount, additionalProperties=$additionalProperties}"
+                "TaxAmount{amount=$amount, taxRateDescription=$taxRateDescription, taxRatePercentage=$taxRatePercentage, additionalProperties=$additionalProperties}"
         }
 
-        @JsonDeserialize(builder = Discount.Builder::class)
-        @NoAutoDetect
         class Discount
         private constructor(
             private val id: JsonField<String>,
+            private val amountApplied: JsonField<String>,
+            private val appliesToPriceIds: JsonField<List<String>>,
             private val discountType: JsonField<DiscountType>,
             private val percentageDiscount: JsonField<Double>,
             private val amountDiscount: JsonField<String>,
-            private val amountApplied: JsonField<String>,
             private val reason: JsonField<String>,
-            private val appliesToPriceIds: JsonField<List<String>>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("amount_applied")
+                @ExcludeMissing
+                amountApplied: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("applies_to_price_ids")
+                @ExcludeMissing
+                appliesToPriceIds: JsonField<List<String>> = JsonMissing.of(),
+                @JsonProperty("discount_type")
+                @ExcludeMissing
+                discountType: JsonField<DiscountType> = JsonMissing.of(),
+                @JsonProperty("percentage_discount")
+                @ExcludeMissing
+                percentageDiscount: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("amount_discount")
+                @ExcludeMissing
+                amountDiscount: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("reason") @ExcludeMissing reason: JsonField<String> = JsonMissing.of(),
+            ) : this(
+                id,
+                amountApplied,
+                appliesToPriceIds,
+                discountType,
+                percentageDiscount,
+                amountDiscount,
+                reason,
+                mutableMapOf(),
+            )
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
-            fun discountType(): DiscountType = discountType.getRequired("discount_type")
-
-            fun percentageDiscount(): Double = percentageDiscount.getRequired("percentage_discount")
-
-            fun amountDiscount(): Optional<String> =
-                Optional.ofNullable(amountDiscount.getNullable("amount_discount"))
-
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun amountApplied(): String = amountApplied.getRequired("amount_applied")
 
-            fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
-
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun appliesToPriceIds(): List<String> =
                 appliesToPriceIds.getRequired("applies_to_price_ids")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
-            @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun percentageDiscount(): Double = percentageDiscount.getRequired("percentage_discount")
 
-            @JsonProperty("percentage_discount")
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
+            fun amountDiscount(): Optional<String> = amountDiscount.getOptional("amount_discount")
+
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
+            fun reason(): Optional<String> = reason.getOptional("reason")
+
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+            /**
+             * Returns the raw JSON value of [amountApplied].
+             *
+             * Unlike [amountApplied], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("amount_applied")
             @ExcludeMissing
-            fun _percentageDiscount() = percentageDiscount
+            fun _amountApplied(): JsonField<String> = amountApplied
 
-            @JsonProperty("amount_discount") @ExcludeMissing fun _amountDiscount() = amountDiscount
-
-            @JsonProperty("amount_applied") @ExcludeMissing fun _amountApplied() = amountApplied
-
-            @JsonProperty("reason") @ExcludeMissing fun _reason() = reason
-
+            /**
+             * Returns the raw JSON value of [appliesToPriceIds].
+             *
+             * Unlike [appliesToPriceIds], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("applies_to_price_ids")
             @ExcludeMissing
-            fun _appliesToPriceIds() = appliesToPriceIds
+            fun _appliesToPriceIds(): JsonField<List<String>> = appliesToPriceIds
+
+            /**
+             * Returns the raw JSON value of [discountType].
+             *
+             * Unlike [discountType], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("discount_type")
+            @ExcludeMissing
+            fun _discountType(): JsonField<DiscountType> = discountType
+
+            /**
+             * Returns the raw JSON value of [percentageDiscount].
+             *
+             * Unlike [percentageDiscount], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("percentage_discount")
+            @ExcludeMissing
+            fun _percentageDiscount(): JsonField<Double> = percentageDiscount
+
+            /**
+             * Returns the raw JSON value of [amountDiscount].
+             *
+             * Unlike [amountDiscount], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("amount_discount")
+            @ExcludeMissing
+            fun _amountDiscount(): JsonField<String> = amountDiscount
+
+            /**
+             * Returns the raw JSON value of [reason].
+             *
+             * Unlike [reason], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): Discount = apply {
-                if (!validated) {
-                    id()
-                    discountType()
-                    percentageDiscount()
-                    amountDiscount()
-                    amountApplied()
-                    reason()
-                    appliesToPriceIds()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Discount].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .amountApplied()
+                 * .appliesToPriceIds()
+                 * .discountType()
+                 * .percentageDiscount()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [Discount]. */
+            class Builder internal constructor() {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var discountType: JsonField<DiscountType> = JsonMissing.of()
-                private var percentageDiscount: JsonField<Double> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var amountApplied: JsonField<String>? = null
+                private var appliesToPriceIds: JsonField<MutableList<String>>? = null
+                private var discountType: JsonField<DiscountType>? = null
+                private var percentageDiscount: JsonField<Double>? = null
                 private var amountDiscount: JsonField<String> = JsonMissing.of()
-                private var amountApplied: JsonField<String> = JsonMissing.of()
                 private var reason: JsonField<String> = JsonMissing.of()
-                private var appliesToPriceIds: JsonField<List<String>> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(discount: Discount) = apply {
-                    this.id = discount.id
-                    this.discountType = discount.discountType
-                    this.percentageDiscount = discount.percentageDiscount
-                    this.amountDiscount = discount.amountDiscount
-                    this.amountApplied = discount.amountApplied
-                    this.reason = discount.reason
-                    this.appliesToPriceIds = discount.appliesToPriceIds
-                    additionalProperties(discount.additionalProperties)
+                    id = discount.id
+                    amountApplied = discount.amountApplied
+                    appliesToPriceIds = discount.appliesToPriceIds.map { it.toMutableList() }
+                    discountType = discount.discountType
+                    percentageDiscount = discount.percentageDiscount
+                    amountDiscount = discount.amountDiscount
+                    reason = discount.reason
+                    additionalProperties = discount.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
+
+                fun amountApplied(amountApplied: String) =
+                    amountApplied(JsonField.of(amountApplied))
+
+                /**
+                 * Sets [Builder.amountApplied] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.amountApplied] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun amountApplied(amountApplied: JsonField<String>) = apply {
+                    this.amountApplied = amountApplied
+                }
+
+                fun appliesToPriceIds(appliesToPriceIds: List<String>) =
+                    appliesToPriceIds(JsonField.of(appliesToPriceIds))
+
+                /**
+                 * Sets [Builder.appliesToPriceIds] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.appliesToPriceIds] with a well-typed
+                 * `List<String>` value instead. This method is primarily for setting the field to
+                 * an undocumented or not yet supported value.
+                 */
+                fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
+                    this.appliesToPriceIds = appliesToPriceIds.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [String] to [appliesToPriceIds].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addAppliesToPriceId(appliesToPriceId: String) = apply {
+                    appliesToPriceIds =
+                        (appliesToPriceIds ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("appliesToPriceIds", it).add(appliesToPriceId)
+                        }
+                }
 
                 fun discountType(discountType: DiscountType) =
                     discountType(JsonField.of(discountType))
 
-                @JsonProperty("discount_type")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.discountType] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.discountType] with a well-typed [DiscountType]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun discountType(discountType: JsonField<DiscountType>) = apply {
                     this.discountType = discountType
                 }
@@ -949,53 +2007,58 @@ private constructor(
                 fun percentageDiscount(percentageDiscount: Double) =
                     percentageDiscount(JsonField.of(percentageDiscount))
 
-                @JsonProperty("percentage_discount")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.percentageDiscount] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.percentageDiscount] with a well-typed [Double]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                     this.percentageDiscount = percentageDiscount
                 }
 
-                fun amountDiscount(amountDiscount: String) =
-                    amountDiscount(JsonField.of(amountDiscount))
+                fun amountDiscount(amountDiscount: String?) =
+                    amountDiscount(JsonField.ofNullable(amountDiscount))
 
-                @JsonProperty("amount_discount")
-                @ExcludeMissing
+                /**
+                 * Alias for calling [Builder.amountDiscount] with `amountDiscount.orElse(null)`.
+                 */
+                fun amountDiscount(amountDiscount: Optional<String>) =
+                    amountDiscount(amountDiscount.getOrNull())
+
+                /**
+                 * Sets [Builder.amountDiscount] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.amountDiscount] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun amountDiscount(amountDiscount: JsonField<String>) = apply {
                     this.amountDiscount = amountDiscount
                 }
 
-                fun amountApplied(amountApplied: String) =
-                    amountApplied(JsonField.of(amountApplied))
+                fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
-                @JsonProperty("amount_applied")
-                @ExcludeMissing
-                fun amountApplied(amountApplied: JsonField<String>) = apply {
-                    this.amountApplied = amountApplied
-                }
+                /** Alias for calling [Builder.reason] with `reason.orElse(null)`. */
+                fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
-                fun reason(reason: String) = reason(JsonField.of(reason))
-
-                @JsonProperty("reason")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.reason] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.reason] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun reason(reason: JsonField<String>) = apply { this.reason = reason }
-
-                fun appliesToPriceIds(appliesToPriceIds: List<String>) =
-                    appliesToPriceIds(JsonField.of(appliesToPriceIds))
-
-                @JsonProperty("applies_to_price_ids")
-                @ExcludeMissing
-                fun appliesToPriceIds(appliesToPriceIds: JsonField<List<String>>) = apply {
-                    this.appliesToPriceIds = appliesToPriceIds
-                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -1003,26 +2066,205 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Discount].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .amountApplied()
+                 * .appliesToPriceIds()
+                 * .discountType()
+                 * .percentageDiscount()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Discount =
                     Discount(
-                        id,
-                        discountType,
-                        percentageDiscount,
+                        checkRequired("id", id),
+                        checkRequired("amountApplied", amountApplied),
+                        checkRequired("appliesToPriceIds", appliesToPriceIds).map {
+                            it.toImmutable()
+                        },
+                        checkRequired("discountType", discountType),
+                        checkRequired("percentageDiscount", percentageDiscount),
                         amountDiscount,
-                        amountApplied,
                         reason,
-                        appliesToPriceIds.map { it.toImmutable() },
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
             }
 
+            private var validated: Boolean = false
+
+            fun validate(): Discount = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                amountApplied()
+                appliesToPriceIds()
+                discountType().validate()
+                percentageDiscount()
+                amountDiscount()
+                reason()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (amountApplied.asKnown().isPresent) 1 else 0) +
+                    (appliesToPriceIds.asKnown().getOrNull()?.size ?: 0) +
+                    (discountType.asKnown().getOrNull()?.validity() ?: 0) +
+                    (if (percentageDiscount.asKnown().isPresent) 1 else 0) +
+                    (if (amountDiscount.asKnown().isPresent) 1 else 0) +
+                    (if (reason.asKnown().isPresent) 1 else 0)
+
             class DiscountType
             @JsonCreator
-            private constructor(
-                private val value: JsonField<String>,
-            ) : Enum {
+            private constructor(private val value: JsonField<String>) : Enum {
 
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
                 @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    @JvmField val PERCENTAGE = of("percentage")
+
+                    @JvmField val AMOUNT = of("amount")
+
+                    @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
+                }
+
+                /** An enum containing [DiscountType]'s known values. */
+                enum class Known {
+                    PERCENTAGE,
+                    AMOUNT,
+                }
+
+                /**
+                 * An enum containing [DiscountType]'s known values, as well as an [_UNKNOWN]
+                 * member.
+                 *
+                 * An instance of [DiscountType] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    PERCENTAGE,
+                    AMOUNT,
+                    /**
+                     * An enum member indicating that [DiscountType] was instantiated with an
+                     * unknown value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        PERCENTAGE -> Value.PERCENTAGE
+                        AMOUNT -> Value.AMOUNT
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws OrbInvalidDataException if this class instance's value is a not a known
+                 *   member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        PERCENTAGE -> Known.PERCENTAGE
+                        AMOUNT -> Known.AMOUNT
+                        else -> throw OrbInvalidDataException("Unknown DiscountType: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws OrbInvalidDataException if this class instance's value does not have the
+                 *   expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        OrbInvalidDataException("Value is not a String")
+                    }
+
+                private var validated: Boolean = false
+
+                fun validate(): DiscountType = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: OrbInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -1035,42 +2277,6 @@ private constructor(
                 override fun hashCode() = value.hashCode()
 
                 override fun toString() = value.toString()
-
-                companion object {
-
-                    @JvmField val PERCENTAGE = DiscountType(JsonField.of("percentage"))
-
-                    @JvmField val AMOUNT = DiscountType(JsonField.of("amount"))
-
-                    @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
-                }
-
-                enum class Known {
-                    PERCENTAGE,
-                    AMOUNT,
-                }
-
-                enum class Value {
-                    PERCENTAGE,
-                    AMOUNT,
-                    _UNKNOWN,
-                }
-
-                fun value(): Value =
-                    when (this) {
-                        PERCENTAGE -> Value.PERCENTAGE
-                        AMOUNT -> Value.AMOUNT
-                        else -> Value._UNKNOWN
-                    }
-
-                fun known(): Known =
-                    when (this) {
-                        PERCENTAGE -> Known.PERCENTAGE
-                        AMOUNT -> Known.AMOUNT
-                        else -> throw OrbInvalidDataException("Unknown DiscountType: $value")
-                    }
-
-                fun asString(): String = _value().asStringOrThrow()
             }
 
             override fun equals(other: Any?): Boolean {
@@ -1078,17 +2284,17 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Discount && id == other.id && discountType == other.discountType && percentageDiscount == other.percentageDiscount && amountDiscount == other.amountDiscount && amountApplied == other.amountApplied && reason == other.reason && appliesToPriceIds == other.appliesToPriceIds && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Discount && id == other.id && amountApplied == other.amountApplied && appliesToPriceIds == other.appliesToPriceIds && discountType == other.discountType && percentageDiscount == other.percentageDiscount && amountDiscount == other.amountDiscount && reason == other.reason && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(id, discountType, percentageDiscount, amountDiscount, amountApplied, reason, appliesToPriceIds, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(id, amountApplied, appliesToPriceIds, discountType, percentageDiscount, amountDiscount, reason, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Discount{id=$id, discountType=$discountType, percentageDiscount=$percentageDiscount, amountDiscount=$amountDiscount, amountApplied=$amountApplied, reason=$reason, appliesToPriceIds=$appliesToPriceIds, additionalProperties=$additionalProperties}"
+                "Discount{id=$id, amountApplied=$amountApplied, appliesToPriceIds=$appliesToPriceIds, discountType=$discountType, percentageDiscount=$percentageDiscount, amountDiscount=$amountDiscount, reason=$reason, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -1096,102 +2302,201 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is LineItem && id == other.id && name == other.name && subtotal == other.subtotal && amount == other.amount && quantity == other.quantity && discounts == other.discounts && taxAmounts == other.taxAmounts && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is LineItem && id == other.id && amount == other.amount && itemId == other.itemId && name == other.name && quantity == other.quantity && subtotal == other.subtotal && taxAmounts == other.taxAmounts && discounts == other.discounts && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, name, subtotal, amount, quantity, discounts, taxAmounts, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, amount, itemId, name, quantity, subtotal, taxAmounts, discounts, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "LineItem{id=$id, name=$name, subtotal=$subtotal, amount=$amount, quantity=$quantity, discounts=$discounts, taxAmounts=$taxAmounts, additionalProperties=$additionalProperties}"
+            "LineItem{id=$id, amount=$amount, itemId=$itemId, name=$name, quantity=$quantity, subtotal=$subtotal, taxAmounts=$taxAmounts, discounts=$discounts, additionalProperties=$additionalProperties}"
     }
 
     /** The maximum amount applied on the original invoice */
-    @JsonDeserialize(builder = MaximumAmountAdjustment.Builder::class)
-    @NoAutoDetect
     class MaximumAmountAdjustment
     private constructor(
+        private val amountApplied: JsonField<String>,
         private val discountType: JsonField<DiscountType>,
         private val percentageDiscount: JsonField<Double>,
-        private val amountApplied: JsonField<String>,
-        private val reason: JsonField<String>,
         private val appliesToPrices: JsonField<List<AppliesToPrice>>,
-        private val additionalProperties: Map<String, JsonValue>,
+        private val reason: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
+        @JsonCreator
+        private constructor(
+            @JsonProperty("amount_applied")
+            @ExcludeMissing
+            amountApplied: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("discount_type")
+            @ExcludeMissing
+            discountType: JsonField<DiscountType> = JsonMissing.of(),
+            @JsonProperty("percentage_discount")
+            @ExcludeMissing
+            percentageDiscount: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("applies_to_prices")
+            @ExcludeMissing
+            appliesToPrices: JsonField<List<AppliesToPrice>> = JsonMissing.of(),
+            @JsonProperty("reason") @ExcludeMissing reason: JsonField<String> = JsonMissing.of(),
+        ) : this(
+            amountApplied,
+            discountType,
+            percentageDiscount,
+            appliesToPrices,
+            reason,
+            mutableMapOf(),
+        )
 
-        fun discountType(): DiscountType = discountType.getRequired("discount_type")
-
-        fun percentageDiscount(): Double = percentageDiscount.getRequired("percentage_discount")
-
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun amountApplied(): String = amountApplied.getRequired("amount_applied")
 
-        fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun percentageDiscount(): Double = percentageDiscount.getRequired("percentage_discount")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun appliesToPrices(): Optional<List<AppliesToPrice>> =
-            Optional.ofNullable(appliesToPrices.getNullable("applies_to_prices"))
+            appliesToPrices.getOptional("applies_to_prices")
 
-        @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun reason(): Optional<String> = reason.getOptional("reason")
 
+        /**
+         * Returns the raw JSON value of [amountApplied].
+         *
+         * Unlike [amountApplied], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("amount_applied")
+        @ExcludeMissing
+        fun _amountApplied(): JsonField<String> = amountApplied
+
+        /**
+         * Returns the raw JSON value of [discountType].
+         *
+         * Unlike [discountType], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("discount_type")
+        @ExcludeMissing
+        fun _discountType(): JsonField<DiscountType> = discountType
+
+        /**
+         * Returns the raw JSON value of [percentageDiscount].
+         *
+         * Unlike [percentageDiscount], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("percentage_discount")
         @ExcludeMissing
-        fun _percentageDiscount() = percentageDiscount
+        fun _percentageDiscount(): JsonField<Double> = percentageDiscount
 
-        @JsonProperty("amount_applied") @ExcludeMissing fun _amountApplied() = amountApplied
+        /**
+         * Returns the raw JSON value of [appliesToPrices].
+         *
+         * Unlike [appliesToPrices], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("applies_to_prices")
+        @ExcludeMissing
+        fun _appliesToPrices(): JsonField<List<AppliesToPrice>> = appliesToPrices
 
-        @JsonProperty("reason") @ExcludeMissing fun _reason() = reason
+        /**
+         * Returns the raw JSON value of [reason].
+         *
+         * Unlike [reason], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
-        @JsonProperty("applies_to_prices") @ExcludeMissing fun _appliesToPrices() = appliesToPrices
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): MaximumAmountAdjustment = apply {
-            if (!validated) {
-                discountType()
-                percentageDiscount()
-                amountApplied()
-                reason()
-                appliesToPrices().map { it.forEach { it.validate() } }
-                validated = true
-            }
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [MaximumAmountAdjustment].
+             *
+             * The following fields are required:
+             * ```java
+             * .amountApplied()
+             * .discountType()
+             * .percentageDiscount()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [MaximumAmountAdjustment]. */
+        class Builder internal constructor() {
 
-            private var discountType: JsonField<DiscountType> = JsonMissing.of()
-            private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-            private var amountApplied: JsonField<String> = JsonMissing.of()
+            private var amountApplied: JsonField<String>? = null
+            private var discountType: JsonField<DiscountType>? = null
+            private var percentageDiscount: JsonField<Double>? = null
+            private var appliesToPrices: JsonField<MutableList<AppliesToPrice>>? = null
             private var reason: JsonField<String> = JsonMissing.of()
-            private var appliesToPrices: JsonField<List<AppliesToPrice>> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(maximumAmountAdjustment: MaximumAmountAdjustment) = apply {
-                this.discountType = maximumAmountAdjustment.discountType
-                this.percentageDiscount = maximumAmountAdjustment.percentageDiscount
-                this.amountApplied = maximumAmountAdjustment.amountApplied
-                this.reason = maximumAmountAdjustment.reason
-                this.appliesToPrices = maximumAmountAdjustment.appliesToPrices
-                additionalProperties(maximumAmountAdjustment.additionalProperties)
+                amountApplied = maximumAmountAdjustment.amountApplied
+                discountType = maximumAmountAdjustment.discountType
+                percentageDiscount = maximumAmountAdjustment.percentageDiscount
+                appliesToPrices = maximumAmountAdjustment.appliesToPrices.map { it.toMutableList() }
+                reason = maximumAmountAdjustment.reason
+                additionalProperties = maximumAmountAdjustment.additionalProperties.toMutableMap()
+            }
+
+            fun amountApplied(amountApplied: String) = amountApplied(JsonField.of(amountApplied))
+
+            /**
+             * Sets [Builder.amountApplied] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.amountApplied] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun amountApplied(amountApplied: JsonField<String>) = apply {
+                this.amountApplied = amountApplied
             }
 
             fun discountType(discountType: DiscountType) = discountType(JsonField.of(discountType))
 
-            @JsonProperty("discount_type")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.discountType] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.discountType] with a well-typed [DiscountType] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun discountType(discountType: JsonField<DiscountType>) = apply {
                 this.discountType = discountType
             }
@@ -1199,67 +2504,251 @@ private constructor(
             fun percentageDiscount(percentageDiscount: Double) =
                 percentageDiscount(JsonField.of(percentageDiscount))
 
-            @JsonProperty("percentage_discount")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.percentageDiscount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.percentageDiscount] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                 this.percentageDiscount = percentageDiscount
             }
 
-            fun amountApplied(amountApplied: String) = amountApplied(JsonField.of(amountApplied))
+            fun appliesToPrices(appliesToPrices: List<AppliesToPrice>?) =
+                appliesToPrices(JsonField.ofNullable(appliesToPrices))
 
-            @JsonProperty("amount_applied")
-            @ExcludeMissing
-            fun amountApplied(amountApplied: JsonField<String>) = apply {
-                this.amountApplied = amountApplied
-            }
+            /** Alias for calling [Builder.appliesToPrices] with `appliesToPrices.orElse(null)`. */
+            fun appliesToPrices(appliesToPrices: Optional<List<AppliesToPrice>>) =
+                appliesToPrices(appliesToPrices.getOrNull())
 
-            fun reason(reason: String) = reason(JsonField.of(reason))
-
-            @JsonProperty("reason")
-            @ExcludeMissing
-            fun reason(reason: JsonField<String>) = apply { this.reason = reason }
-
-            fun appliesToPrices(appliesToPrices: List<AppliesToPrice>) =
-                appliesToPrices(JsonField.of(appliesToPrices))
-
-            @JsonProperty("applies_to_prices")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.appliesToPrices] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.appliesToPrices] with a well-typed
+             * `List<AppliesToPrice>` value instead. This method is primarily for setting the field
+             * to an undocumented or not yet supported value.
+             */
             fun appliesToPrices(appliesToPrices: JsonField<List<AppliesToPrice>>) = apply {
-                this.appliesToPrices = appliesToPrices
+                this.appliesToPrices = appliesToPrices.map { it.toMutableList() }
             }
+
+            /**
+             * Adds a single [AppliesToPrice] to [appliesToPrices].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addAppliesToPrice(appliesToPrice: AppliesToPrice) = apply {
+                appliesToPrices =
+                    (appliesToPrices ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("appliesToPrices", it).add(appliesToPrice)
+                    }
+            }
+
+            fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
+
+            /** Alias for calling [Builder.reason] with `reason.orElse(null)`. */
+            fun reason(reason: Optional<String>) = reason(reason.getOrNull())
+
+            /**
+             * Sets [Builder.reason] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.reason] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
             }
 
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [MaximumAmountAdjustment].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .amountApplied()
+             * .discountType()
+             * .percentageDiscount()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): MaximumAmountAdjustment =
                 MaximumAmountAdjustment(
-                    discountType,
-                    percentageDiscount,
-                    amountApplied,
+                    checkRequired("amountApplied", amountApplied),
+                    checkRequired("discountType", discountType),
+                    checkRequired("percentageDiscount", percentageDiscount),
+                    (appliesToPrices ?: JsonMissing.of()).map { it.toImmutable() },
                     reason,
-                    appliesToPrices.map { it.toImmutable() },
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
         }
 
-        class DiscountType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        private var validated: Boolean = false
 
+        fun validate(): MaximumAmountAdjustment = apply {
+            if (validated) {
+                return@apply
+            }
+
+            amountApplied()
+            discountType().validate()
+            percentageDiscount()
+            appliesToPrices().ifPresent { it.forEach { it.validate() } }
+            reason()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (amountApplied.asKnown().isPresent) 1 else 0) +
+                (discountType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (percentageDiscount.asKnown().isPresent) 1 else 0) +
+                (appliesToPrices.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (if (reason.asKnown().isPresent) 1 else 0)
+
+        class DiscountType @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val PERCENTAGE = of("percentage")
+
+                @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
+            }
+
+            /** An enum containing [DiscountType]'s known values. */
+            enum class Known {
+                PERCENTAGE
+            }
+
+            /**
+             * An enum containing [DiscountType]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [DiscountType] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                PERCENTAGE,
+                /**
+                 * An enum member indicating that [DiscountType] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    PERCENTAGE -> Value.PERCENTAGE
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    PERCENTAGE -> Known.PERCENTAGE
+                    else -> throw OrbInvalidDataException("Unknown DiscountType: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws OrbInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+            private var validated: Boolean = false
+
+            fun validate(): DiscountType = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1272,109 +2761,118 @@ private constructor(
             override fun hashCode() = value.hashCode()
 
             override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField val PERCENTAGE = DiscountType(JsonField.of("percentage"))
-
-                @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
-            }
-
-            enum class Known {
-                PERCENTAGE,
-            }
-
-            enum class Value {
-                PERCENTAGE,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    PERCENTAGE -> Value.PERCENTAGE
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    PERCENTAGE -> Known.PERCENTAGE
-                    else -> throw OrbInvalidDataException("Unknown DiscountType: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
         }
 
-        @JsonDeserialize(builder = AppliesToPrice.Builder::class)
-        @NoAutoDetect
         class AppliesToPrice
         private constructor(
             private val id: JsonField<String>,
             private val name: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+            ) : this(id, name, mutableMapOf())
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun name(): String = name.getRequired("name")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-            @JsonProperty("name") @ExcludeMissing fun _name() = name
+            /**
+             * Returns the raw JSON value of [name].
+             *
+             * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): AppliesToPrice = apply {
-                if (!validated) {
-                    id()
-                    name()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [AppliesToPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .name()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [AppliesToPrice]. */
+            class Builder internal constructor() {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var name: JsonField<String> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var name: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(appliesToPrice: AppliesToPrice) = apply {
-                    this.id = appliesToPrice.id
-                    this.name = appliesToPrice.name
-                    additionalProperties(appliesToPrice.additionalProperties)
+                    id = appliesToPrice.id
+                    name = appliesToPrice.name
+                    additionalProperties = appliesToPrice.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
                 fun name(name: String) = name(JsonField.of(name))
 
-                @JsonProperty("name")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.name] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.name] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun name(name: JsonField<String>) = apply { this.name = name }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -1382,13 +2880,64 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [AppliesToPrice].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .name()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): AppliesToPrice =
                     AppliesToPrice(
-                        id,
-                        name,
-                        additionalProperties.toImmutable(),
+                        checkRequired("id", id),
+                        checkRequired("name", name),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): AppliesToPrice = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                name()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) + (if (name.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1413,26 +2962,141 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is MaximumAmountAdjustment && discountType == other.discountType && percentageDiscount == other.percentageDiscount && amountApplied == other.amountApplied && reason == other.reason && appliesToPrices == other.appliesToPrices && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is MaximumAmountAdjustment && amountApplied == other.amountApplied && discountType == other.discountType && percentageDiscount == other.percentageDiscount && appliesToPrices == other.appliesToPrices && reason == other.reason && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(discountType, percentageDiscount, amountApplied, reason, appliesToPrices, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(amountApplied, discountType, percentageDiscount, appliesToPrices, reason, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "MaximumAmountAdjustment{discountType=$discountType, percentageDiscount=$percentageDiscount, amountApplied=$amountApplied, reason=$reason, appliesToPrices=$appliesToPrices, additionalProperties=$additionalProperties}"
+            "MaximumAmountAdjustment{amountApplied=$amountApplied, discountType=$discountType, percentageDiscount=$percentageDiscount, appliesToPrices=$appliesToPrices, reason=$reason, additionalProperties=$additionalProperties}"
     }
 
-    class Reason
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Reason @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
         @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val DUPLICATE = of("Duplicate")
+
+            @JvmField val FRAUDULENT = of("Fraudulent")
+
+            @JvmField val ORDER_CHANGE = of("Order change")
+
+            @JvmField val PRODUCT_UNSATISFACTORY = of("Product unsatisfactory")
+
+            @JvmStatic fun of(value: String) = Reason(JsonField.of(value))
+        }
+
+        /** An enum containing [Reason]'s known values. */
+        enum class Known {
+            DUPLICATE,
+            FRAUDULENT,
+            ORDER_CHANGE,
+            PRODUCT_UNSATISFACTORY,
+        }
+
+        /**
+         * An enum containing [Reason]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Reason] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            DUPLICATE,
+            FRAUDULENT,
+            ORDER_CHANGE,
+            PRODUCT_UNSATISFACTORY,
+            /** An enum member indicating that [Reason] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                DUPLICATE -> Value.DUPLICATE
+                FRAUDULENT -> Value.FRAUDULENT
+                ORDER_CHANGE -> Value.ORDER_CHANGE
+                PRODUCT_UNSATISFACTORY -> Value.PRODUCT_UNSATISFACTORY
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws OrbInvalidDataException if this class instance's value is a not a known member.
+         */
+        fun known(): Known =
+            when (this) {
+                DUPLICATE -> Known.DUPLICATE
+                FRAUDULENT -> Known.FRAUDULENT
+                ORDER_CHANGE -> Known.ORDER_CHANGE
+                PRODUCT_UNSATISFACTORY -> Known.PRODUCT_UNSATISFACTORY
+                else -> throw OrbInvalidDataException("Unknown Reason: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws OrbInvalidDataException if this class instance's value does not have the expected
+         *   primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        fun validate(): Reason = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1445,63 +3109,118 @@ private constructor(
         override fun hashCode() = value.hashCode()
 
         override fun toString() = value.toString()
+    }
+
+    class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
 
-            @JvmField val DUPLICATE = Reason(JsonField.of("Duplicate"))
+            @JvmField val REFUND = of("refund")
 
-            @JvmField val FRAUDULENT = Reason(JsonField.of("Fraudulent"))
+            @JvmField val ADJUSTMENT = of("adjustment")
 
-            @JvmField val ORDER_CHANGE = Reason(JsonField.of("Order change"))
-
-            @JvmField val PRODUCT_UNSATISFACTORY = Reason(JsonField.of("Product unsatisfactory"))
-
-            @JvmStatic fun of(value: String) = Reason(JsonField.of(value))
+            @JvmStatic fun of(value: String) = Type(JsonField.of(value))
         }
 
+        /** An enum containing [Type]'s known values. */
         enum class Known {
-            DUPLICATE,
-            FRAUDULENT,
-            ORDER_CHANGE,
-            PRODUCT_UNSATISFACTORY,
+            REFUND,
+            ADJUSTMENT,
         }
 
+        /**
+         * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Type] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
         enum class Value {
-            DUPLICATE,
-            FRAUDULENT,
-            ORDER_CHANGE,
-            PRODUCT_UNSATISFACTORY,
+            REFUND,
+            ADJUSTMENT,
+            /** An enum member indicating that [Type] was instantiated with an unknown value. */
             _UNKNOWN,
         }
 
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
         fun value(): Value =
             when (this) {
-                DUPLICATE -> Value.DUPLICATE
-                FRAUDULENT -> Value.FRAUDULENT
-                ORDER_CHANGE -> Value.ORDER_CHANGE
-                PRODUCT_UNSATISFACTORY -> Value.PRODUCT_UNSATISFACTORY
+                REFUND -> Value.REFUND
+                ADJUSTMENT -> Value.ADJUSTMENT
                 else -> Value._UNKNOWN
             }
 
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws OrbInvalidDataException if this class instance's value is a not a known member.
+         */
         fun known(): Known =
             when (this) {
-                DUPLICATE -> Known.DUPLICATE
-                FRAUDULENT -> Known.FRAUDULENT
-                ORDER_CHANGE -> Known.ORDER_CHANGE
-                PRODUCT_UNSATISFACTORY -> Known.PRODUCT_UNSATISFACTORY
-                else -> throw OrbInvalidDataException("Unknown Reason: $value")
+                REFUND -> Known.REFUND
+                ADJUSTMENT -> Known.ADJUSTMENT
+                else -> throw OrbInvalidDataException("Unknown Type: $value")
             }
 
-        fun asString(): String = _value().asStringOrThrow()
-    }
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws OrbInvalidDataException if this class instance's value does not have the expected
+         *   primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
 
-    class Type
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+        private var validated: Boolean = false
 
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        fun validate(): Type = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1514,126 +3233,189 @@ private constructor(
         override fun hashCode() = value.hashCode()
 
         override fun toString() = value.toString()
-
-        companion object {
-
-            @JvmField val REFUND = Type(JsonField.of("refund"))
-
-            @JvmField val ADJUSTMENT = Type(JsonField.of("adjustment"))
-
-            @JvmStatic fun of(value: String) = Type(JsonField.of(value))
-        }
-
-        enum class Known {
-            REFUND,
-            ADJUSTMENT,
-        }
-
-        enum class Value {
-            REFUND,
-            ADJUSTMENT,
-            _UNKNOWN,
-        }
-
-        fun value(): Value =
-            when (this) {
-                REFUND -> Value.REFUND
-                ADJUSTMENT -> Value.ADJUSTMENT
-                else -> Value._UNKNOWN
-            }
-
-        fun known(): Known =
-            when (this) {
-                REFUND -> Known.REFUND
-                ADJUSTMENT -> Known.ADJUSTMENT
-                else -> throw OrbInvalidDataException("Unknown Type: $value")
-            }
-
-        fun asString(): String = _value().asStringOrThrow()
     }
 
-    @JsonDeserialize(builder = Discount.Builder::class)
-    @NoAutoDetect
     class Discount
     private constructor(
+        private val amountApplied: JsonField<String>,
         private val discountType: JsonField<DiscountType>,
         private val percentageDiscount: JsonField<Double>,
-        private val amountApplied: JsonField<String>,
-        private val reason: JsonField<String>,
         private val appliesToPrices: JsonField<List<AppliesToPrice>>,
-        private val additionalProperties: Map<String, JsonValue>,
+        private val reason: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
+        @JsonCreator
+        private constructor(
+            @JsonProperty("amount_applied")
+            @ExcludeMissing
+            amountApplied: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("discount_type")
+            @ExcludeMissing
+            discountType: JsonField<DiscountType> = JsonMissing.of(),
+            @JsonProperty("percentage_discount")
+            @ExcludeMissing
+            percentageDiscount: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("applies_to_prices")
+            @ExcludeMissing
+            appliesToPrices: JsonField<List<AppliesToPrice>> = JsonMissing.of(),
+            @JsonProperty("reason") @ExcludeMissing reason: JsonField<String> = JsonMissing.of(),
+        ) : this(
+            amountApplied,
+            discountType,
+            percentageDiscount,
+            appliesToPrices,
+            reason,
+            mutableMapOf(),
+        )
 
-        fun discountType(): DiscountType = discountType.getRequired("discount_type")
-
-        fun percentageDiscount(): Double = percentageDiscount.getRequired("percentage_discount")
-
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun amountApplied(): String = amountApplied.getRequired("amount_applied")
 
-        fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun discountType(): DiscountType = discountType.getRequired("discount_type")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun percentageDiscount(): Double = percentageDiscount.getRequired("percentage_discount")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun appliesToPrices(): Optional<List<AppliesToPrice>> =
-            Optional.ofNullable(appliesToPrices.getNullable("applies_to_prices"))
+            appliesToPrices.getOptional("applies_to_prices")
 
-        @JsonProperty("discount_type") @ExcludeMissing fun _discountType() = discountType
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun reason(): Optional<String> = reason.getOptional("reason")
 
+        /**
+         * Returns the raw JSON value of [amountApplied].
+         *
+         * Unlike [amountApplied], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("amount_applied")
+        @ExcludeMissing
+        fun _amountApplied(): JsonField<String> = amountApplied
+
+        /**
+         * Returns the raw JSON value of [discountType].
+         *
+         * Unlike [discountType], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("discount_type")
+        @ExcludeMissing
+        fun _discountType(): JsonField<DiscountType> = discountType
+
+        /**
+         * Returns the raw JSON value of [percentageDiscount].
+         *
+         * Unlike [percentageDiscount], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("percentage_discount")
         @ExcludeMissing
-        fun _percentageDiscount() = percentageDiscount
+        fun _percentageDiscount(): JsonField<Double> = percentageDiscount
 
-        @JsonProperty("amount_applied") @ExcludeMissing fun _amountApplied() = amountApplied
+        /**
+         * Returns the raw JSON value of [appliesToPrices].
+         *
+         * Unlike [appliesToPrices], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("applies_to_prices")
+        @ExcludeMissing
+        fun _appliesToPrices(): JsonField<List<AppliesToPrice>> = appliesToPrices
 
-        @JsonProperty("reason") @ExcludeMissing fun _reason() = reason
+        /**
+         * Returns the raw JSON value of [reason].
+         *
+         * Unlike [reason], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
-        @JsonProperty("applies_to_prices") @ExcludeMissing fun _appliesToPrices() = appliesToPrices
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): Discount = apply {
-            if (!validated) {
-                discountType()
-                percentageDiscount()
-                amountApplied()
-                reason()
-                appliesToPrices().map { it.forEach { it.validate() } }
-                validated = true
-            }
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Discount].
+             *
+             * The following fields are required:
+             * ```java
+             * .amountApplied()
+             * .discountType()
+             * .percentageDiscount()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [Discount]. */
+        class Builder internal constructor() {
 
-            private var discountType: JsonField<DiscountType> = JsonMissing.of()
-            private var percentageDiscount: JsonField<Double> = JsonMissing.of()
-            private var amountApplied: JsonField<String> = JsonMissing.of()
+            private var amountApplied: JsonField<String>? = null
+            private var discountType: JsonField<DiscountType>? = null
+            private var percentageDiscount: JsonField<Double>? = null
+            private var appliesToPrices: JsonField<MutableList<AppliesToPrice>>? = null
             private var reason: JsonField<String> = JsonMissing.of()
-            private var appliesToPrices: JsonField<List<AppliesToPrice>> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(discount: Discount) = apply {
-                this.discountType = discount.discountType
-                this.percentageDiscount = discount.percentageDiscount
-                this.amountApplied = discount.amountApplied
-                this.reason = discount.reason
-                this.appliesToPrices = discount.appliesToPrices
-                additionalProperties(discount.additionalProperties)
+                amountApplied = discount.amountApplied
+                discountType = discount.discountType
+                percentageDiscount = discount.percentageDiscount
+                appliesToPrices = discount.appliesToPrices.map { it.toMutableList() }
+                reason = discount.reason
+                additionalProperties = discount.additionalProperties.toMutableMap()
+            }
+
+            fun amountApplied(amountApplied: String) = amountApplied(JsonField.of(amountApplied))
+
+            /**
+             * Sets [Builder.amountApplied] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.amountApplied] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun amountApplied(amountApplied: JsonField<String>) = apply {
+                this.amountApplied = amountApplied
             }
 
             fun discountType(discountType: DiscountType) = discountType(JsonField.of(discountType))
 
-            @JsonProperty("discount_type")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.discountType] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.discountType] with a well-typed [DiscountType] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun discountType(discountType: JsonField<DiscountType>) = apply {
                 this.discountType = discountType
             }
@@ -1641,67 +3423,251 @@ private constructor(
             fun percentageDiscount(percentageDiscount: Double) =
                 percentageDiscount(JsonField.of(percentageDiscount))
 
-            @JsonProperty("percentage_discount")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.percentageDiscount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.percentageDiscount] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun percentageDiscount(percentageDiscount: JsonField<Double>) = apply {
                 this.percentageDiscount = percentageDiscount
             }
 
-            fun amountApplied(amountApplied: String) = amountApplied(JsonField.of(amountApplied))
+            fun appliesToPrices(appliesToPrices: List<AppliesToPrice>?) =
+                appliesToPrices(JsonField.ofNullable(appliesToPrices))
 
-            @JsonProperty("amount_applied")
-            @ExcludeMissing
-            fun amountApplied(amountApplied: JsonField<String>) = apply {
-                this.amountApplied = amountApplied
-            }
+            /** Alias for calling [Builder.appliesToPrices] with `appliesToPrices.orElse(null)`. */
+            fun appliesToPrices(appliesToPrices: Optional<List<AppliesToPrice>>) =
+                appliesToPrices(appliesToPrices.getOrNull())
 
-            fun reason(reason: String) = reason(JsonField.of(reason))
-
-            @JsonProperty("reason")
-            @ExcludeMissing
-            fun reason(reason: JsonField<String>) = apply { this.reason = reason }
-
-            fun appliesToPrices(appliesToPrices: List<AppliesToPrice>) =
-                appliesToPrices(JsonField.of(appliesToPrices))
-
-            @JsonProperty("applies_to_prices")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.appliesToPrices] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.appliesToPrices] with a well-typed
+             * `List<AppliesToPrice>` value instead. This method is primarily for setting the field
+             * to an undocumented or not yet supported value.
+             */
             fun appliesToPrices(appliesToPrices: JsonField<List<AppliesToPrice>>) = apply {
-                this.appliesToPrices = appliesToPrices
+                this.appliesToPrices = appliesToPrices.map { it.toMutableList() }
             }
+
+            /**
+             * Adds a single [AppliesToPrice] to [appliesToPrices].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addAppliesToPrice(appliesToPrice: AppliesToPrice) = apply {
+                appliesToPrices =
+                    (appliesToPrices ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("appliesToPrices", it).add(appliesToPrice)
+                    }
+            }
+
+            fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
+
+            /** Alias for calling [Builder.reason] with `reason.orElse(null)`. */
+            fun reason(reason: Optional<String>) = reason(reason.getOrNull())
+
+            /**
+             * Sets [Builder.reason] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.reason] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
             }
 
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Discount].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .amountApplied()
+             * .discountType()
+             * .percentageDiscount()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Discount =
                 Discount(
-                    discountType,
-                    percentageDiscount,
-                    amountApplied,
+                    checkRequired("amountApplied", amountApplied),
+                    checkRequired("discountType", discountType),
+                    checkRequired("percentageDiscount", percentageDiscount),
+                    (appliesToPrices ?: JsonMissing.of()).map { it.toImmutable() },
                     reason,
-                    appliesToPrices.map { it.toImmutable() },
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
         }
 
-        class DiscountType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        private var validated: Boolean = false
 
+        fun validate(): Discount = apply {
+            if (validated) {
+                return@apply
+            }
+
+            amountApplied()
+            discountType().validate()
+            percentageDiscount()
+            appliesToPrices().ifPresent { it.forEach { it.validate() } }
+            reason()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (amountApplied.asKnown().isPresent) 1 else 0) +
+                (discountType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (percentageDiscount.asKnown().isPresent) 1 else 0) +
+                (appliesToPrices.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (if (reason.asKnown().isPresent) 1 else 0)
+
+        class DiscountType @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val PERCENTAGE = of("percentage")
+
+                @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
+            }
+
+            /** An enum containing [DiscountType]'s known values. */
+            enum class Known {
+                PERCENTAGE
+            }
+
+            /**
+             * An enum containing [DiscountType]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [DiscountType] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                PERCENTAGE,
+                /**
+                 * An enum member indicating that [DiscountType] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    PERCENTAGE -> Value.PERCENTAGE
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    PERCENTAGE -> Known.PERCENTAGE
+                    else -> throw OrbInvalidDataException("Unknown DiscountType: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws OrbInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+            private var validated: Boolean = false
+
+            fun validate(): DiscountType = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1714,109 +3680,118 @@ private constructor(
             override fun hashCode() = value.hashCode()
 
             override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField val PERCENTAGE = DiscountType(JsonField.of("percentage"))
-
-                @JvmStatic fun of(value: String) = DiscountType(JsonField.of(value))
-            }
-
-            enum class Known {
-                PERCENTAGE,
-            }
-
-            enum class Value {
-                PERCENTAGE,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    PERCENTAGE -> Value.PERCENTAGE
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    PERCENTAGE -> Known.PERCENTAGE
-                    else -> throw OrbInvalidDataException("Unknown DiscountType: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
         }
 
-        @JsonDeserialize(builder = AppliesToPrice.Builder::class)
-        @NoAutoDetect
         class AppliesToPrice
         private constructor(
             private val id: JsonField<String>,
             private val name: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+            ) : this(id, name, mutableMapOf())
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun name(): String = name.getRequired("name")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-            @JsonProperty("name") @ExcludeMissing fun _name() = name
+            /**
+             * Returns the raw JSON value of [name].
+             *
+             * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): AppliesToPrice = apply {
-                if (!validated) {
-                    id()
-                    name()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [AppliesToPrice].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .name()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [AppliesToPrice]. */
+            class Builder internal constructor() {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var name: JsonField<String> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var name: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(appliesToPrice: AppliesToPrice) = apply {
-                    this.id = appliesToPrice.id
-                    this.name = appliesToPrice.name
-                    additionalProperties(appliesToPrice.additionalProperties)
+                    id = appliesToPrice.id
+                    name = appliesToPrice.name
+                    additionalProperties = appliesToPrice.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
                 fun name(name: String) = name(JsonField.of(name))
 
-                @JsonProperty("name")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.name] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.name] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun name(name: JsonField<String>) = apply { this.name = name }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -1824,13 +3799,64 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [AppliesToPrice].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .name()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): AppliesToPrice =
                     AppliesToPrice(
-                        id,
-                        name,
-                        additionalProperties.toImmutable(),
+                        checkRequired("id", id),
+                        checkRequired("name", name),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): AppliesToPrice = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                name()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) + (if (name.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1855,17 +3881,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Discount && discountType == other.discountType && percentageDiscount == other.percentageDiscount && amountApplied == other.amountApplied && reason == other.reason && appliesToPrices == other.appliesToPrices && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Discount && amountApplied == other.amountApplied && discountType == other.discountType && percentageDiscount == other.percentageDiscount && appliesToPrices == other.appliesToPrices && reason == other.reason && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(discountType, percentageDiscount, amountApplied, reason, appliesToPrices, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(amountApplied, discountType, percentageDiscount, appliesToPrices, reason, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Discount{discountType=$discountType, percentageDiscount=$percentageDiscount, amountApplied=$amountApplied, reason=$reason, appliesToPrices=$appliesToPrices, additionalProperties=$additionalProperties}"
+            "Discount{amountApplied=$amountApplied, discountType=$discountType, percentageDiscount=$percentageDiscount, appliesToPrices=$appliesToPrices, reason=$reason, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -1873,15 +3899,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CreditNote && id == other.id && createdAt == other.createdAt && voidedAt == other.voidedAt && creditNoteNumber == other.creditNoteNumber && invoiceId == other.invoiceId && memo == other.memo && reason == other.reason && type == other.type && subtotal == other.subtotal && total == other.total && customer == other.customer && creditNotePdf == other.creditNotePdf && minimumAmountRefunded == other.minimumAmountRefunded && discounts == other.discounts && maximumAmountAdjustment == other.maximumAmountAdjustment && lineItems == other.lineItems && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CreditNote && id == other.id && createdAt == other.createdAt && creditNoteNumber == other.creditNoteNumber && creditNotePdf == other.creditNotePdf && customer == other.customer && invoiceId == other.invoiceId && lineItems == other.lineItems && maximumAmountAdjustment == other.maximumAmountAdjustment && memo == other.memo && minimumAmountRefunded == other.minimumAmountRefunded && reason == other.reason && subtotal == other.subtotal && total == other.total && type == other.type && voidedAt == other.voidedAt && discounts == other.discounts && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, createdAt, voidedAt, creditNoteNumber, invoiceId, memo, reason, type, subtotal, total, customer, creditNotePdf, minimumAmountRefunded, discounts, maximumAmountAdjustment, lineItems, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, createdAt, creditNoteNumber, creditNotePdf, customer, invoiceId, lineItems, maximumAmountAdjustment, memo, minimumAmountRefunded, reason, subtotal, total, type, voidedAt, discounts, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CreditNote{id=$id, createdAt=$createdAt, voidedAt=$voidedAt, creditNoteNumber=$creditNoteNumber, invoiceId=$invoiceId, memo=$memo, reason=$reason, type=$type, subtotal=$subtotal, total=$total, customer=$customer, creditNotePdf=$creditNotePdf, minimumAmountRefunded=$minimumAmountRefunded, discounts=$discounts, maximumAmountAdjustment=$maximumAmountAdjustment, lineItems=$lineItems, additionalProperties=$additionalProperties}"
+        "CreditNote{id=$id, createdAt=$createdAt, creditNoteNumber=$creditNoteNumber, creditNotePdf=$creditNotePdf, customer=$customer, invoiceId=$invoiceId, lineItems=$lineItems, maximumAmountAdjustment=$maximumAmountAdjustment, memo=$memo, minimumAmountRefunded=$minimumAmountRefunded, reason=$reason, subtotal=$subtotal, total=$total, type=$type, voidedAt=$voidedAt, discounts=$discounts, additionalProperties=$additionalProperties}"
 }

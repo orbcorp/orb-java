@@ -3,16 +3,15 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class InvoiceListParamsTest {
+internal class InvoiceListParamsTest {
 
     @Test
-    fun createInvoiceListParams() {
+    fun create() {
         InvoiceListParams.builder()
             .amount("amount")
             .amountGt("amount[gt]")
@@ -30,14 +29,14 @@ class InvoiceListParamsTest {
             .invoiceDateLt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .invoiceDateLte(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .isRecurring(true)
-            .limit(123L)
-            .status(listOf(InvoiceListParams.Status.DRAFT))
+            .limit(1L)
+            .addStatus(InvoiceListParams.Status.DRAFT)
             .subscriptionId("subscription_id")
             .build()
     }
 
     @Test
-    fun getQueryParams() {
+    fun queryParams() {
         val params =
             InvoiceListParams.builder()
                 .amount("amount")
@@ -56,37 +55,45 @@ class InvoiceListParamsTest {
                 .invoiceDateLt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .invoiceDateLte(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .isRecurring(true)
-                .limit(123L)
-                .status(listOf(InvoiceListParams.Status.DRAFT))
+                .limit(1L)
+                .addStatus(InvoiceListParams.Status.DRAFT)
                 .subscriptionId("subscription_id")
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("amount", "amount")
-        expected.put("amount[gt]", "amount[gt]")
-        expected.put("amount[lt]", "amount[lt]")
-        expected.put("cursor", "cursor")
-        expected.put("customer_id", "customer_id")
-        expected.put("date_type", InvoiceListParams.DateType.DUE_DATE.toString())
-        expected.put("due_date", "2019-12-27")
-        expected.put("due_date_window", "due_date_window")
-        expected.put("due_date[gt]", "2019-12-27")
-        expected.put("due_date[lt]", "2019-12-27")
-        expected.put("external_customer_id", "external_customer_id")
-        expected.put("invoice_date[gt]", "2019-12-27T18:11:19.117Z")
-        expected.put("invoice_date[gte]", "2019-12-27T18:11:19.117Z")
-        expected.put("invoice_date[lt]", "2019-12-27T18:11:19.117Z")
-        expected.put("invoice_date[lte]", "2019-12-27T18:11:19.117Z")
-        expected.put("is_recurring", "true")
-        expected.put("limit", "123")
-        expected.put("status[]", InvoiceListParams.Status.DRAFT.toString())
-        expected.put("subscription_id", "subscription_id")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("amount", "amount")
+                    .put("amount[gt]", "amount[gt]")
+                    .put("amount[lt]", "amount[lt]")
+                    .put("cursor", "cursor")
+                    .put("customer_id", "customer_id")
+                    .put("date_type", "due_date")
+                    .put("due_date", "2019-12-27")
+                    .put("due_date_window", "due_date_window")
+                    .put("due_date[gt]", "2019-12-27")
+                    .put("due_date[lt]", "2019-12-27")
+                    .put("external_customer_id", "external_customer_id")
+                    .put("invoice_date[gt]", "2019-12-27T18:11:19.117Z")
+                    .put("invoice_date[gte]", "2019-12-27T18:11:19.117Z")
+                    .put("invoice_date[lt]", "2019-12-27T18:11:19.117Z")
+                    .put("invoice_date[lte]", "2019-12-27T18:11:19.117Z")
+                    .put("is_recurring", "true")
+                    .put("limit", "1")
+                    .put("status[]", "draft")
+                    .put("subscription_id", "subscription_id")
+                    .build()
+            )
     }
 
     @Test
-    fun getQueryParamsWithoutOptionalFields() {
+    fun queryParamsWithoutOptionalFields() {
         val params = InvoiceListParams.builder().build()
-        val expected = QueryParams.builder()
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }

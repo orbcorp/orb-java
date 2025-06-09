@@ -4,180 +4,136 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.ExcludeMissing
+import com.withorb.api.core.JsonField
+import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
-import com.withorb.api.models.*
+import com.withorb.api.errors.OrbInvalidDataException
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint allows you to update the `metadata` property on a metric. If you pass `null` for
+ * the metadata value, it will clear any existing metadata for that invoice.
+ */
 class MetricUpdateParams
-constructor(
-    private val metricId: String,
-    private val metadata: Metadata?,
+private constructor(
+    private val metricId: String?,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
-) {
+) : Params {
 
-    fun metricId(): String = metricId
+    fun metricId(): Optional<String> = Optional.ofNullable(metricId)
 
-    fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+    /**
+     * User-specified key/value pairs for the resource. Individual keys can be removed by setting
+     * the value to `null`, and the entire metadata mapping can be cleared by setting `metadata` to
+     * `null`.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun metadata(): Optional<Metadata> = body.metadata()
 
-    @JvmSynthetic
-    internal fun getBody(): MetricUpdateBody {
-        return MetricUpdateBody(metadata, additionalBodyProperties)
-    }
+    /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _metadata(): JsonField<Metadata> = body._metadata()
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> metricId
-            else -> ""
-        }
-    }
-
-    @JsonDeserialize(builder = MetricUpdateBody.Builder::class)
-    @NoAutoDetect
-    class MetricUpdateBody
-    internal constructor(
-        private val metadata: Metadata?,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        /**
-         * User-specified key/value pairs for the resource. Individual keys can be removed by
-         * setting the value to `null`, and the entire metadata mapping can be cleared by setting
-         * `metadata` to `null`.
-         */
-        @JsonProperty("metadata") fun metadata(): Metadata? = metadata
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var metadata: Metadata? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(metricUpdateBody: MetricUpdateBody) = apply {
-                this.metadata = metricUpdateBody.metadata
-                additionalProperties(metricUpdateBody.additionalProperties)
-            }
-
-            /**
-             * User-specified key/value pairs for the resource. Individual keys can be removed by
-             * setting the value to `null`, and the entire metadata mapping can be cleared by
-             * setting `metadata` to `null`.
-             */
-            @JsonProperty("metadata")
-            fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun build(): MetricUpdateBody =
-                MetricUpdateBody(metadata, additionalProperties.toImmutable())
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is MetricUpdateBody && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(metadata, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "MetricUpdateBody{metadata=$metadata, additionalProperties=$additionalProperties}"
-    }
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is MetricUpdateParams && metricId == other.metricId && metadata == other.metadata && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(metricId, metadata, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "MetricUpdateParams{metricId=$metricId, metadata=$metadata, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): MetricUpdateParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [MetricUpdateParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [MetricUpdateParams]. */
+    class Builder internal constructor() {
 
         private var metricId: String? = null
-        private var metadata: Metadata? = null
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(metricUpdateParams: MetricUpdateParams) = apply {
-            this.metricId = metricUpdateParams.metricId
-            this.metadata = metricUpdateParams.metadata
-            additionalHeaders(metricUpdateParams.additionalHeaders)
-            additionalQueryParams(metricUpdateParams.additionalQueryParams)
-            additionalBodyProperties(metricUpdateParams.additionalBodyProperties)
+            metricId = metricUpdateParams.metricId
+            body = metricUpdateParams.body.toBuilder()
+            additionalHeaders = metricUpdateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = metricUpdateParams.additionalQueryParams.toBuilder()
         }
 
-        fun metricId(metricId: String) = apply { this.metricId = metricId }
+        fun metricId(metricId: String?) = apply { this.metricId = metricId }
+
+        /** Alias for calling [Builder.metricId] with `metricId.orElse(null)`. */
+        fun metricId(metricId: Optional<String>) = metricId(metricId.getOrNull())
+
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [metadata]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
 
         /**
          * User-specified key/value pairs for the resource. Individual keys can be removed by
          * setting the value to `null`, and the entire metadata mapping can be cleared by setting
          * `metadata` to `null`.
          */
-        fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+        fun metadata(metadata: Metadata?) = apply { body.metadata(metadata) }
+
+        /** Alias for calling [Builder.metadata] with `metadata.orElse(null)`. */
+        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
+
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -277,36 +233,182 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
-        }
-
+        /**
+         * Returns an immutable instance of [MetricUpdateParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): MetricUpdateParams =
             MetricUpdateParams(
-                checkNotNull(metricId) { "`metricId` is required but was not set" },
-                metadata,
+                metricId,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
+    }
+
+    fun _body(): Body = body
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> metricId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    class Body
+    private constructor(
+        private val metadata: JsonField<Metadata>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            metadata: JsonField<Metadata> = JsonMissing.of()
+        ) : this(metadata, mutableMapOf())
+
+        /**
+         * User-specified key/value pairs for the resource. Individual keys can be removed by
+         * setting the value to `null`, and the entire metadata mapping can be cleared by setting
+         * `metadata` to `null`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
+
+        /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Body]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Body]. */
+        class Builder internal constructor() {
+
+            private var metadata: JsonField<Metadata> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(body: Body) = apply {
+                metadata = body.metadata
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            /**
+             * User-specified key/value pairs for the resource. Individual keys can be removed by
+             * setting the value to `null`, and the entire metadata mapping can be cleared by
+             * setting `metadata` to `null`.
+             */
+            fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
+
+            /** Alias for calling [Builder.metadata] with `metadata.orElse(null)`. */
+            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
+
+            /**
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Body = Body(metadata, additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
+            }
+
+            metadata().ifPresent { it.validate() }
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int = (metadata.asKnown().getOrNull()?.validity() ?: 0)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Body && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(metadata, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Body{metadata=$metadata, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -314,11 +416,11 @@ constructor(
      * the value to `null`, and the entire metadata mapping can be cleared by setting `metadata` to
      * `null`.
      */
-    @JsonDeserialize(builder = Metadata.Builder::class)
-    @NoAutoDetect
     class Metadata
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
     ) {
 
         @JsonAnyGetter
@@ -329,34 +431,74 @@ constructor(
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [Metadata]. */
+        class Builder internal constructor() {
 
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(metadata: Metadata) = apply {
-                additionalProperties(metadata.additionalProperties)
+                additionalProperties = metadata.additionalProperties.toMutableMap()
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
             }
 
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Metadata].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): Metadata = Metadata(additionalProperties.toImmutable())
         }
+
+        private var validated: Boolean = false
+
+        fun validate(): Metadata = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -374,4 +516,17 @@ constructor(
 
         override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is MetricUpdateParams && metricId == other.metricId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(metricId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "MetricUpdateParams{metricId=$metricId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

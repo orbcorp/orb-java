@@ -2,209 +2,138 @@
 
 package com.withorb.api.models
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.withorb.api.core.ExcludeMissing
-import com.withorb.api.core.JsonField
-import com.withorb.api.core.JsonMissing
-import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toImmutable
+import com.withorb.api.core.AutoPager
+import com.withorb.api.core.Page
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.blocking.customers.BalanceTransactionService
 import java.util.Objects
 import java.util.Optional
-import java.util.stream.Stream
-import java.util.stream.StreamSupport
+import kotlin.jvm.optionals.getOrNull
 
+/** @see [BalanceTransactionService.list] */
 class CustomerBalanceTransactionListPage
 private constructor(
-    private val balanceTransactionsService: BalanceTransactionService,
+    private val service: BalanceTransactionService,
     private val params: CustomerBalanceTransactionListParams,
-    private val response: Response,
-) {
+    private val response: CustomerBalanceTransactionListPageResponse,
+) : Page<CustomerBalanceTransactionListResponse> {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [CustomerBalanceTransactionListPageResponse], but gracefully handles missing
+     * data.
+     *
+     * @see [CustomerBalanceTransactionListPageResponse.data]
+     */
+    fun data(): List<CustomerBalanceTransactionListResponse> =
+        response._data().getOptional("data").getOrNull() ?: emptyList()
 
-    fun data(): List<CustomerBalanceTransactionListResponse> = response().data()
+    /**
+     * Delegates to [CustomerBalanceTransactionListPageResponse], but gracefully handles missing
+     * data.
+     *
+     * @see [CustomerBalanceTransactionListPageResponse.paginationMetadata]
+     */
+    fun paginationMetadata(): Optional<PaginationMetadata> =
+        response._paginationMetadata().getOptional("pagination_metadata")
 
-    fun paginationMetadata(): PaginationMetadata = response().paginationMetadata()
+    override fun items(): List<CustomerBalanceTransactionListResponse> = data()
+
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() &&
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.isPresent
+
+    fun nextPageParams(): CustomerBalanceTransactionListParams {
+        val nextCursor =
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().cursor(nextCursor).build()
+    }
+
+    override fun nextPage(): CustomerBalanceTransactionListPage = service.list(nextPageParams())
+
+    fun autoPager(): AutoPager<CustomerBalanceTransactionListResponse> = AutoPager.from(this)
+
+    /** The parameters that were used to request this page. */
+    fun params(): CustomerBalanceTransactionListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): CustomerBalanceTransactionListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
+    companion object {
+
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [CustomerBalanceTransactionListPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [CustomerBalanceTransactionListPage]. */
+    class Builder internal constructor() {
+
+        private var service: BalanceTransactionService? = null
+        private var params: CustomerBalanceTransactionListParams? = null
+        private var response: CustomerBalanceTransactionListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(customerBalanceTransactionListPage: CustomerBalanceTransactionListPage) =
+            apply {
+                service = customerBalanceTransactionListPage.service
+                params = customerBalanceTransactionListPage.params
+                response = customerBalanceTransactionListPage.response
+            }
+
+        fun service(service: BalanceTransactionService) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: CustomerBalanceTransactionListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: CustomerBalanceTransactionListPageResponse) = apply {
+            this.response = response
+        }
+
+        /**
+         * Returns an immutable instance of [CustomerBalanceTransactionListPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): CustomerBalanceTransactionListPage =
+            CustomerBalanceTransactionListPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is CustomerBalanceTransactionListPage && balanceTransactionsService == other.balanceTransactionsService && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is CustomerBalanceTransactionListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(balanceTransactionsService, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
 
     override fun toString() =
-        "CustomerBalanceTransactionListPage{balanceTransactionsService=$balanceTransactionsService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        if (data().isEmpty()) {
-            return false
-        }
-
-        return paginationMetadata().nextCursor().isPresent
-    }
-
-    fun getNextPageParams(): Optional<CustomerBalanceTransactionListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
-
-        return Optional.of(
-            CustomerBalanceTransactionListParams.builder()
-                .from(params)
-                .apply { paginationMetadata().nextCursor().ifPresent { this.cursor(it) } }
-                .build()
-        )
-    }
-
-    fun getNextPage(): Optional<CustomerBalanceTransactionListPage> {
-        return getNextPageParams().map { balanceTransactionsService.list(it) }
-    }
-
-    fun autoPager(): AutoPager = AutoPager(this)
-
-    companion object {
-
-        @JvmStatic
-        fun of(
-            balanceTransactionsService: BalanceTransactionService,
-            params: CustomerBalanceTransactionListParams,
-            response: Response
-        ) =
-            CustomerBalanceTransactionListPage(
-                balanceTransactionsService,
-                params,
-                response,
-            )
-    }
-
-    @JsonDeserialize(builder = Response.Builder::class)
-    @NoAutoDetect
-    class Response
-    constructor(
-        private val data: JsonField<List<CustomerBalanceTransactionListResponse>>,
-        private val paginationMetadata: JsonField<PaginationMetadata>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        private var validated: Boolean = false
-
-        fun data(): List<CustomerBalanceTransactionListResponse> =
-            data.getNullable("data") ?: listOf()
-
-        fun paginationMetadata(): PaginationMetadata =
-            paginationMetadata.getRequired("pagination_metadata")
-
-        @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<CustomerBalanceTransactionListResponse>>> =
-            Optional.ofNullable(data)
-
-        @JsonProperty("pagination_metadata")
-        fun _paginationMetadata(): Optional<JsonField<PaginationMetadata>> =
-            Optional.ofNullable(paginationMetadata)
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): Response = apply {
-            if (!validated) {
-                data().map { it.validate() }
-                paginationMetadata().validate()
-                validated = true
-            }
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && data == other.data && paginationMetadata == other.paginationMetadata && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(data, paginationMetadata, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{data=$data, paginationMetadata=$paginationMetadata, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var data: JsonField<List<CustomerBalanceTransactionListResponse>> =
-                JsonMissing.of()
-            private var paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.data = page.data
-                this.paginationMetadata = page.paginationMetadata
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun data(data: List<CustomerBalanceTransactionListResponse>) = data(JsonField.of(data))
-
-            @JsonProperty("data")
-            fun data(data: JsonField<List<CustomerBalanceTransactionListResponse>>) = apply {
-                this.data = data
-            }
-
-            fun paginationMetadata(paginationMetadata: PaginationMetadata) =
-                paginationMetadata(JsonField.of(paginationMetadata))
-
-            @JsonProperty("pagination_metadata")
-            fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply {
-                this.paginationMetadata = paginationMetadata
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
-        }
-    }
-
-    class AutoPager
-    constructor(
-        private val firstPage: CustomerBalanceTransactionListPage,
-    ) : Iterable<CustomerBalanceTransactionListResponse> {
-
-        override fun iterator(): Iterator<CustomerBalanceTransactionListResponse> = iterator {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.data().size) {
-                    yield(page.data()[index++])
-                }
-                page = page.getNextPage().orElse(null) ?: break
-                index = 0
-            }
-        }
-
-        fun stream(): Stream<CustomerBalanceTransactionListResponse> {
-            return StreamSupport.stream(spliterator(), false)
-        }
-    }
+        "CustomerBalanceTransactionListPage{service=$service, params=$params, response=$response}"
 }

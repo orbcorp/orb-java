@@ -4,22 +4,24 @@ package com.withorb.api.services.blocking
 
 import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClient
-import com.withorb.api.models.*
-import com.withorb.api.models.MetricListParams
+import com.withorb.api.core.JsonValue
+import com.withorb.api.models.MetricCreateParams
+import com.withorb.api.models.MetricUpdateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class MetricServiceTest {
+internal class MetricServiceTest {
 
     @Test
-    fun callCreate() {
+    fun create() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val metricService = client.metrics()
+
         val billableMetric =
             metricService.create(
                 MetricCreateParams.builder()
@@ -27,56 +29,66 @@ class MetricServiceTest {
                     .itemId("item_id")
                     .name("Bytes downloaded")
                     .sql("SELECT sum(bytes_downloaded) FROM events WHERE download_speed = 'fast'")
-                    .metadata(MetricCreateParams.Metadata.builder().build())
+                    .metadata(
+                        MetricCreateParams.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .build()
             )
-        println(billableMetric)
+
         billableMetric.validate()
     }
 
     @Test
-    fun callUpdate() {
+    fun update() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val metricService = client.metrics()
+
         val billableMetric =
             metricService.update(
                 MetricUpdateParams.builder()
                     .metricId("metric_id")
-                    .metadata(MetricUpdateParams.Metadata.builder().build())
+                    .metadata(
+                        MetricUpdateParams.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .build()
             )
-        println(billableMetric)
+
         billableMetric.validate()
     }
 
     @Test
-    fun callList() {
+    fun list() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val metricService = client.metrics()
-        val billableMetrics = metricService.list(MetricListParams.builder().build())
-        println(billableMetrics)
-        billableMetrics.data().forEach { it.validate() }
+
+        val page = metricService.list()
+
+        page.response().validate()
     }
 
     @Test
-    fun callFetch() {
+    fun fetch() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val metricService = client.metrics()
-        val billableMetric =
-            metricService.fetch(MetricFetchParams.builder().metricId("metric_id").build())
-        println(billableMetric)
+
+        val billableMetric = metricService.fetch("metric_id")
+
         billableMetric.validate()
     }
 }

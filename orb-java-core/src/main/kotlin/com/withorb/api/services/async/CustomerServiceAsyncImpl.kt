@@ -3,23 +3,31 @@
 package com.withorb.api.services.async
 
 import com.withorb.api.core.ClientOptions
+import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.emptyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
+import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponse.Handler
-import com.withorb.api.core.json
-import com.withorb.api.errors.OrbError
+import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.core.http.json
+import com.withorb.api.core.http.parseable
+import com.withorb.api.core.prepareAsync
 import com.withorb.api.models.Customer
 import com.withorb.api.models.CustomerCreateParams
 import com.withorb.api.models.CustomerDeleteParams
 import com.withorb.api.models.CustomerFetchByExternalIdParams
 import com.withorb.api.models.CustomerFetchParams
 import com.withorb.api.models.CustomerListPageAsync
+import com.withorb.api.models.CustomerListPageResponse
 import com.withorb.api.models.CustomerListParams
+import com.withorb.api.models.CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams
+import com.withorb.api.models.CustomerSyncPaymentMethodsFromGatewayParams
 import com.withorb.api.models.CustomerUpdateByExternalIdParams
 import com.withorb.api.models.CustomerUpdateParams
 import com.withorb.api.services.async.customers.BalanceTransactionServiceAsync
@@ -29,13 +37,14 @@ import com.withorb.api.services.async.customers.CostServiceAsyncImpl
 import com.withorb.api.services.async.customers.CreditServiceAsync
 import com.withorb.api.services.async.customers.CreditServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
-class CustomerServiceAsyncImpl
-constructor(
-    private val clientOptions: ClientOptions,
-) : CustomerServiceAsync {
+class CustomerServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    CustomerServiceAsync {
 
-    private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
+    private val withRawResponse: CustomerServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     private val costs: CostServiceAsync by lazy { CostServiceAsyncImpl(clientOptions) }
 
@@ -45,261 +54,387 @@ constructor(
         BalanceTransactionServiceAsyncImpl(clientOptions)
     }
 
+    override fun withRawResponse(): CustomerServiceAsync.WithRawResponse = withRawResponse
+
     override fun costs(): CostServiceAsync = costs
 
     override fun credits(): CreditServiceAsync = credits
 
     override fun balanceTransactions(): BalanceTransactionServiceAsync = balanceTransactions
 
-    private val createHandler: Handler<Customer> =
-        jsonHandler<Customer>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-    /**
-     * This operation is used to create an Orb customer, who is party to the core billing
-     * relationship. See [Customer](../guides/concepts#customer) for an overview of the customer
-     * resource.
-     *
-     * This endpoint is critical in the following Orb functionality:
-     * - Automated charges can be configured by setting `payment_provider` and `payment_provider_id`
-     *   to automatically issue invoices
-     * - [Customer ID Aliases](../guides/events-and-metrics/customer-aliases) can be configured by
-     *   setting `external_customer_id`
-     * - [Timezone localization](../guides/product-catalog/timezones.md) can be configured on a
-     *   per-customer basis by setting the `timezone` parameter
-     */
     override fun create(
         params: CustomerCreateParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<Customer> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.POST)
-                .addPathSegments("customers")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .body(json(clientOptions.jsonMapper, params.getBody()))
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { createHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
-                }
-        }
-    }
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Customer> =
+        // post /customers
+        withRawResponse().create(params, requestOptions).thenApply { it.parse() }
 
-    private val updateHandler: Handler<Customer> =
-        jsonHandler<Customer>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-    /**
-     * This endpoint can be used to update the `payment_provider`, `payment_provider_id`, `name`,
-     * `email`, `email_delivery`, `tax_id`, `auto_collection`, `metadata`, `shipping_address`,
-     * `billing_address`, and `additional_emails` of an existing customer. Other fields on a
-     * customer are currently immutable.
-     */
     override fun update(
         params: CustomerUpdateParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<Customer> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.PUT)
-                .addPathSegments("customers", params.getPathParam(0))
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .body(json(clientOptions.jsonMapper, params.getBody()))
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { updateHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
-                }
-        }
-    }
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Customer> =
+        // put /customers/{customer_id}
+        withRawResponse().update(params, requestOptions).thenApply { it.parse() }
 
-    private val listHandler: Handler<CustomerListPageAsync.Response> =
-        jsonHandler<CustomerListPageAsync.Response>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
-
-    /**
-     * This endpoint returns a list of all customers for an account. The list of customers is
-     * ordered starting from the most recently created customer. This endpoint follows Orb's
-     * [standardized pagination format](../reference/pagination).
-     *
-     * See [Customer](../guides/concepts#customer) for an overview of the customer model.
-     */
     override fun list(
         params: CustomerListParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<CustomerListPageAsync> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("customers")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { listHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
-                }
-                .let { CustomerListPageAsync.of(this, params, it) }
-        }
-    }
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CustomerListPageAsync> =
+        // get /customers
+        withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
-    private val deleteHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
-
-    /**
-     * This performs a deletion of this customer, its subscriptions, and its invoices, provided the
-     * customer does not have any issued invoices. Customers with issued invoices cannot be deleted.
-     * This operation is irreversible. Note that this is a _soft_ deletion, but the data will be
-     * inaccessible through the API and Orb dashboard. For a hard-deletion, please reach out to the
-     * Orb team directly.
-     *
-     * **Note**: This operation happens asynchronously and can be expected to take a few minutes to
-     * propagate to related resources. However, querying for the customer on subsequent GET requests
-     * while deletion is in process will reflect its deletion with a `deleted: true` property. Once
-     * the customer deletion has been fully processed, the customer will not be returned in the API.
-     *
-     * On successful processing, this returns an empty dictionary (`{}`) in the API.
-     */
     override fun delete(
         params: CustomerDeleteParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<Void> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.DELETE)
-                .addPathSegments("customers", params.getPathParam(0))
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .apply { params.getBody().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response.use { deleteHandler.handle(it) }
-        }
-    }
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Void?> =
+        // delete /customers/{customer_id}
+        withRawResponse().delete(params, requestOptions).thenAccept {}
 
-    private val fetchHandler: Handler<Customer> =
-        jsonHandler<Customer>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-    /**
-     * This endpoint is used to fetch customer details given an identifier. If the `Customer` is in
-     * the process of being deleted, only the properties `id` and `deleted: true` will be returned.
-     *
-     * See the [Customer resource](../guides/core-concepts.mdx#customer) for a full discussion of
-     * the Customer model.
-     */
     override fun fetch(
         params: CustomerFetchParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<Customer> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("customers", params.getPathParam(0))
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { fetchHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
-                }
-        }
-    }
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Customer> =
+        // get /customers/{customer_id}
+        withRawResponse().fetch(params, requestOptions).thenApply { it.parse() }
 
-    private val fetchByExternalIdHandler: Handler<Customer> =
-        jsonHandler<Customer>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-    /**
-     * This endpoint is used to fetch customer details given an `external_customer_id` (see
-     * [Customer ID Aliases](../guides/events-and-metrics/customer-aliases)).
-     *
-     * Note that the resource and semantics of this endpoint exactly mirror
-     * [Get Customer](fetch-customer).
-     */
     override fun fetchByExternalId(
         params: CustomerFetchByExternalIdParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<Customer> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("customers", "external_customer_id", params.getPathParam(0))
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { fetchByExternalIdHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Customer> =
+        // get /customers/external_customer_id/{external_customer_id}
+        withRawResponse().fetchByExternalId(params, requestOptions).thenApply { it.parse() }
+
+    override fun syncPaymentMethodsFromGateway(
+        params: CustomerSyncPaymentMethodsFromGatewayParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Void?> =
+        // post /customers/{customer_id}/sync_payment_methods_from_gateway
+        withRawResponse().syncPaymentMethodsFromGateway(params, requestOptions).thenAccept {}
+
+    override fun syncPaymentMethodsFromGatewayByExternalCustomerId(
+        params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Void?> =
+        // post
+        // /customers/external_customer_id/{external_customer_id}/sync_payment_methods_from_gateway
+        withRawResponse()
+            .syncPaymentMethodsFromGatewayByExternalCustomerId(params, requestOptions)
+            .thenAccept {}
+
+    override fun updateByExternalId(
+        params: CustomerUpdateByExternalIdParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Customer> =
+        // put /customers/external_customer_id/{external_customer_id}
+        withRawResponse().updateByExternalId(params, requestOptions).thenApply { it.parse() }
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        CustomerServiceAsync.WithRawResponse {
+
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        private val costs: CostServiceAsync.WithRawResponse by lazy {
+            CostServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val credits: CreditServiceAsync.WithRawResponse by lazy {
+            CreditServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val balanceTransactions: BalanceTransactionServiceAsync.WithRawResponse by lazy {
+            BalanceTransactionServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        override fun costs(): CostServiceAsync.WithRawResponse = costs
+
+        override fun credits(): CreditServiceAsync.WithRawResponse = credits
+
+        override fun balanceTransactions(): BalanceTransactionServiceAsync.WithRawResponse =
+            balanceTransactions
+
+        private val createHandler: Handler<Customer> =
+            jsonHandler<Customer>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun create(
+            params: CustomerCreateParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Customer>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("customers")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { createHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }
-    }
 
-    private val updateByExternalIdHandler: Handler<Customer> =
-        jsonHandler<Customer>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val updateHandler: Handler<Customer> =
+            jsonHandler<Customer>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-    /**
-     * This endpoint is used to update customer details given an `external_customer_id` (see
-     * [Customer ID Aliases](../guides/events-and-metrics/customer-aliases)). Note that the resource
-     * and semantics of this endpoint exactly mirror [Update Customer](update-customer).
-     */
-    override fun updateByExternalId(
-        params: CustomerUpdateByExternalIdParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<Customer> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.PUT)
-                .addPathSegments("customers", "external_customer_id", params.getPathParam(0))
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .body(json(clientOptions.jsonMapper, params.getBody()))
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { updateByExternalIdHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
+        override fun update(
+            params: CustomerUpdateParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Customer>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .addPathSegments("customers", params._pathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { updateHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val listHandler: Handler<CustomerListPageResponse> =
+            jsonHandler<CustomerListPageResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun list(
+            params: CustomerListParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CustomerListPageAsync>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("customers")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { listHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                            .let {
+                                CustomerListPageAsync.builder()
+                                    .service(CustomerServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
+                                    .params(params)
+                                    .response(it)
+                                    .build()
+                            }
+                    }
+                }
+        }
+
+        private val deleteHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
+
+        override fun delete(
+            params: CustomerDeleteParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .addPathSegments("customers", params._pathParam(0))
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable { response.use { deleteHandler.handle(it) } }
+                }
+        }
+
+        private val fetchHandler: Handler<Customer> =
+            jsonHandler<Customer>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun fetch(
+            params: CustomerFetchParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Customer>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("customers", params._pathParam(0))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { fetchHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val fetchByExternalIdHandler: Handler<Customer> =
+            jsonHandler<Customer>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun fetchByExternalId(
+            params: CustomerFetchByExternalIdParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Customer>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("externalCustomerId", params.externalCustomerId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("customers", "external_customer_id", params._pathParam(0))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { fetchByExternalIdHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val syncPaymentMethodsFromGatewayHandler: Handler<Void?> =
+            emptyHandler().withErrorHandler(errorHandler)
+
+        override fun syncPaymentMethodsFromGateway(
+            params: CustomerSyncPaymentMethodsFromGatewayParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments(
+                        "customers",
+                        params._pathParam(0),
+                        "sync_payment_methods_from_gateway",
+                    )
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response.use { syncPaymentMethodsFromGatewayHandler.handle(it) }
+                    }
+                }
+        }
+
+        private val syncPaymentMethodsFromGatewayByExternalCustomerIdHandler: Handler<Void?> =
+            emptyHandler().withErrorHandler(errorHandler)
+
+        override fun syncPaymentMethodsFromGatewayByExternalCustomerId(
+            params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("externalCustomerId", params.externalCustomerId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments(
+                        "customers",
+                        "external_customer_id",
+                        params._pathParam(0),
+                        "sync_payment_methods_from_gateway",
+                    )
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response.use {
+                            syncPaymentMethodsFromGatewayByExternalCustomerIdHandler.handle(it)
+                        }
+                    }
+                }
+        }
+
+        private val updateByExternalIdHandler: Handler<Customer> =
+            jsonHandler<Customer>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun updateByExternalId(
+            params: CustomerUpdateByExternalIdParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Customer>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .addPathSegments("customers", "external_customer_id", params._pathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { updateByExternalIdHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }

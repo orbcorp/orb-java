@@ -3,68 +3,46 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
-import com.withorb.api.models.*
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint collects payment for an invoice using the customer's default payment method. This
+ * action can only be taken on invoices with status "issued".
+ */
 class InvoicePayParams
-constructor(
-    private val invoiceId: String,
+private constructor(
+    private val invoiceId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
-) {
+) : Params {
 
-    fun invoiceId(): String = invoiceId
+    fun invoiceId(): Optional<String> = Optional.ofNullable(invoiceId)
 
-    @JvmSynthetic
-    internal fun getBody(): Optional<Map<String, JsonValue>> {
-        return Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
-    }
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> invoiceId
-            else -> ""
-        }
-    }
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is InvoicePayParams && invoiceId == other.invoiceId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(invoiceId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "InvoicePayParams{invoiceId=$invoiceId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): InvoicePayParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [InvoicePayParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [InvoicePayParams]. */
+    class Builder internal constructor() {
 
         private var invoiceId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -73,13 +51,16 @@ constructor(
 
         @JvmSynthetic
         internal fun from(invoicePayParams: InvoicePayParams) = apply {
-            this.invoiceId = invoicePayParams.invoiceId
-            additionalHeaders(invoicePayParams.additionalHeaders)
-            additionalQueryParams(invoicePayParams.additionalQueryParams)
-            additionalBodyProperties(invoicePayParams.additionalBodyProperties)
+            invoiceId = invoicePayParams.invoiceId
+            additionalHeaders = invoicePayParams.additionalHeaders.toBuilder()
+            additionalQueryParams = invoicePayParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = invoicePayParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun invoiceId(invoiceId: String) = apply { this.invoiceId = invoiceId }
+        fun invoiceId(invoiceId: String?) = apply { this.invoiceId = invoiceId }
+
+        /** Alias for calling [Builder.invoiceId] with `invoiceId.orElse(null)`. */
+        fun invoiceId(invoiceId: Optional<String>) = invoiceId(invoiceId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -201,12 +182,43 @@ constructor(
             keys.forEach(::removeAdditionalBodyProperty)
         }
 
+        /**
+         * Returns an immutable instance of [InvoicePayParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): InvoicePayParams =
             InvoicePayParams(
-                checkNotNull(invoiceId) { "`invoiceId` is required but was not set" },
+                invoiceId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    fun _body(): Optional<Map<String, JsonValue>> =
+        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> invoiceId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is InvoicePayParams && invoiceId == other.invoiceId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(invoiceId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "InvoicePayParams{invoiceId=$invoiceId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

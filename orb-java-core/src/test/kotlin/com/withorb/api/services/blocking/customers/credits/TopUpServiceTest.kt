@@ -4,24 +4,27 @@ package com.withorb.api.services.blocking.customers.credits
 
 import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClient
-import com.withorb.api.models.*
-import com.withorb.api.models.CustomerCreditTopUpListByExternalIdParams
-import com.withorb.api.models.CustomerCreditTopUpListParams
+import com.withorb.api.models.CustomerCreditTopUpCreateByExternalIdParams
+import com.withorb.api.models.CustomerCreditTopUpCreateParams
+import com.withorb.api.models.CustomerCreditTopUpDeleteByExternalIdParams
+import com.withorb.api.models.CustomerCreditTopUpDeleteParams
+import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class TopUpServiceTest {
+internal class TopUpServiceTest {
 
     @Test
-    fun callCreate() {
+    fun create() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val topUpService = client.customers().credits().topUps()
-        val customerCreditTopUpCreateResponse =
+
+        val topUp =
             topUpService.create(
                 CustomerCreditTopUpCreateParams.builder()
                     .customerId("customer_id")
@@ -30,45 +33,45 @@ class TopUpServiceTest {
                     .invoiceSettings(
                         CustomerCreditTopUpCreateParams.InvoiceSettings.builder()
                             .autoCollection(true)
-                            .netTerms(123L)
+                            .netTerms(0L)
                             .memo("memo")
                             .requireSuccessfulPayment(true)
                             .build()
                     )
                     .perUnitCostBasis("per_unit_cost_basis")
                     .threshold("threshold")
-                    .expiresAfter(123L)
+                    .activeFrom(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .expiresAfter(0L)
                     .expiresAfterUnit(CustomerCreditTopUpCreateParams.ExpiresAfterUnit.DAY)
                     .build()
             )
-        println(customerCreditTopUpCreateResponse)
-        customerCreditTopUpCreateResponse.validate()
+
+        topUp.validate()
     }
 
     @Test
-    fun callList() {
+    fun list() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val topUpService = client.customers().credits().topUps()
-        val topUps =
-            topUpService.list(
-                CustomerCreditTopUpListParams.builder().customerId("customer_id").build()
-            )
-        println(topUps)
-        topUps.data().forEach { it.validate() }
+
+        val page = topUpService.list("customer_id")
+
+        page.response().validate()
     }
 
     @Test
-    fun callDelete() {
+    fun delete() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val topUpService = client.customers().credits().topUps()
+
         topUpService.delete(
             CustomerCreditTopUpDeleteParams.builder()
                 .customerId("customer_id")
@@ -78,14 +81,15 @@ class TopUpServiceTest {
     }
 
     @Test
-    fun callCreateByExternalId() {
+    fun createByExternalId() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val topUpService = client.customers().credits().topUps()
-        val customerCreditTopUpCreateByExternalIdResponse =
+
+        val response =
             topUpService.createByExternalId(
                 CustomerCreditTopUpCreateByExternalIdParams.builder()
                     .externalCustomerId("external_customer_id")
@@ -94,31 +98,33 @@ class TopUpServiceTest {
                     .invoiceSettings(
                         CustomerCreditTopUpCreateByExternalIdParams.InvoiceSettings.builder()
                             .autoCollection(true)
-                            .netTerms(123L)
+                            .netTerms(0L)
                             .memo("memo")
                             .requireSuccessfulPayment(true)
                             .build()
                     )
                     .perUnitCostBasis("per_unit_cost_basis")
                     .threshold("threshold")
-                    .expiresAfter(123L)
+                    .activeFrom(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .expiresAfter(0L)
                     .expiresAfterUnit(
                         CustomerCreditTopUpCreateByExternalIdParams.ExpiresAfterUnit.DAY
                     )
                     .build()
             )
-        println(customerCreditTopUpCreateByExternalIdResponse)
-        customerCreditTopUpCreateByExternalIdResponse.validate()
+
+        response.validate()
     }
 
     @Test
-    fun callDeleteByExternalId() {
+    fun deleteByExternalId() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val topUpService = client.customers().credits().topUps()
+
         topUpService.deleteByExternalId(
             CustomerCreditTopUpDeleteByExternalIdParams.builder()
                 .externalCustomerId("external_customer_id")
@@ -128,20 +134,16 @@ class TopUpServiceTest {
     }
 
     @Test
-    fun callListByExternalId() {
+    fun listByExternalId() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val topUpService = client.customers().credits().topUps()
-        val topUps =
-            topUpService.listByExternalId(
-                CustomerCreditTopUpListByExternalIdParams.builder()
-                    .externalCustomerId("external_customer_id")
-                    .build()
-            )
-        println(topUps)
-        topUps.data().forEach { it.validate() }
+
+        val page = topUpService.listByExternalId("external_customer_id")
+
+        page.response().validate()
     }
 }

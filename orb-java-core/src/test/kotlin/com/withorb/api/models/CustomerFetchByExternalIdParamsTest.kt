@@ -2,27 +2,25 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CustomerFetchByExternalIdParamsTest {
+internal class CustomerFetchByExternalIdParamsTest {
 
     @Test
-    fun createCustomerFetchByExternalIdParams() {
+    fun create() {
         CustomerFetchByExternalIdParams.builder().externalCustomerId("external_customer_id").build()
     }
 
     @Test
-    fun getPathParam() {
+    fun pathParams() {
         val params =
             CustomerFetchByExternalIdParams.builder()
                 .externalCustomerId("external_customer_id")
                 .build()
-        assertThat(params).isNotNull
-        // path param "externalCustomerId"
-        assertThat(params.getPathParam(0)).isEqualTo("external_customer_id")
+
+        assertThat(params._pathParam(0)).isEqualTo("external_customer_id")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 }

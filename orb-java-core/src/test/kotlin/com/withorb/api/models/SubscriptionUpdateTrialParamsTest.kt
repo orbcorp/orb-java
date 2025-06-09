@@ -2,85 +2,69 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class SubscriptionUpdateTrialParamsTest {
+internal class SubscriptionUpdateTrialParamsTest {
 
     @Test
-    fun createSubscriptionUpdateTrialParams() {
+    fun create() {
         SubscriptionUpdateTrialParams.builder()
             .subscriptionId("subscription_id")
-            .trialEndDate(
-                SubscriptionUpdateTrialParams.TrialEndDate.ofOffsetDateTime(
-                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                )
-            )
+            .trialEndDate(OffsetDateTime.parse("2017-07-21T17:32:28Z"))
             .shift(true)
             .build()
     }
 
     @Test
-    fun getBody() {
+    fun pathParams() {
         val params =
             SubscriptionUpdateTrialParams.builder()
                 .subscriptionId("subscription_id")
-                .trialEndDate(
-                    SubscriptionUpdateTrialParams.TrialEndDate.ofOffsetDateTime(
-                        OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                    )
-                )
+                .trialEndDate(OffsetDateTime.parse("2017-07-21T17:32:28Z"))
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("subscription_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
+    fun body() {
+        val params =
+            SubscriptionUpdateTrialParams.builder()
+                .subscriptionId("subscription_id")
+                .trialEndDate(OffsetDateTime.parse("2017-07-21T17:32:28Z"))
                 .shift(true)
                 .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
+
+        val body = params._body()
+
         assertThat(body.trialEndDate())
             .isEqualTo(
                 SubscriptionUpdateTrialParams.TrialEndDate.ofOffsetDateTime(
-                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                    OffsetDateTime.parse("2017-07-21T17:32:28Z")
                 )
             )
-        assertThat(body.shift()).isEqualTo(true)
+        assertThat(body.shift()).contains(true)
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             SubscriptionUpdateTrialParams.builder()
                 .subscriptionId("subscription_id")
-                .trialEndDate(
-                    SubscriptionUpdateTrialParams.TrialEndDate.ofOffsetDateTime(
-                        OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                    )
-                )
+                .trialEndDate(OffsetDateTime.parse("2017-07-21T17:32:28Z"))
                 .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
+
+        val body = params._body()
+
         assertThat(body.trialEndDate())
             .isEqualTo(
                 SubscriptionUpdateTrialParams.TrialEndDate.ofOffsetDateTime(
-                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                    OffsetDateTime.parse("2017-07-21T17:32:28Z")
                 )
             )
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            SubscriptionUpdateTrialParams.builder()
-                .subscriptionId("subscription_id")
-                .trialEndDate(
-                    SubscriptionUpdateTrialParams.TrialEndDate.ofOffsetDateTime(
-                        OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                    )
-                )
-                .build()
-        assertThat(params).isNotNull
-        // path param "subscriptionId"
-        assertThat(params.getPathParam(0)).isEqualTo("subscription_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

@@ -2,58 +2,42 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint is used to fetch a [Subscription](/core-concepts##subscription) given an
+ * identifier.
+ */
 class SubscriptionFetchParams
-constructor(
-    private val subscriptionId: String,
+private constructor(
+    private val subscriptionId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun subscriptionId(): String = subscriptionId
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> subscriptionId
-            else -> ""
-        }
-    }
+    fun subscriptionId(): Optional<String> = Optional.ofNullable(subscriptionId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is SubscriptionFetchParams && subscriptionId == other.subscriptionId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "SubscriptionFetchParams{subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): SubscriptionFetchParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [SubscriptionFetchParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [SubscriptionFetchParams]. */
+    class Builder internal constructor() {
 
         private var subscriptionId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -61,12 +45,16 @@ constructor(
 
         @JvmSynthetic
         internal fun from(subscriptionFetchParams: SubscriptionFetchParams) = apply {
-            this.subscriptionId = subscriptionFetchParams.subscriptionId
-            additionalHeaders(subscriptionFetchParams.additionalHeaders)
-            additionalQueryParams(subscriptionFetchParams.additionalQueryParams)
+            subscriptionId = subscriptionFetchParams.subscriptionId
+            additionalHeaders = subscriptionFetchParams.additionalHeaders.toBuilder()
+            additionalQueryParams = subscriptionFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
+        fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
+
+        /** Alias for calling [Builder.subscriptionId] with `subscriptionId.orElse(null)`. */
+        fun subscriptionId(subscriptionId: Optional<String>) =
+            subscriptionId(subscriptionId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,11 +154,39 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [SubscriptionFetchParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): SubscriptionFetchParams =
             SubscriptionFetchParams(
-                checkNotNull(subscriptionId) { "`subscriptionId` is required but was not set" },
+                subscriptionId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> subscriptionId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is SubscriptionFetchParams && subscriptionId == other.subscriptionId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "SubscriptionFetchParams{subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

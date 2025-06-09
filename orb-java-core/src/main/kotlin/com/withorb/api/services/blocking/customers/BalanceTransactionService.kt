@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking.customers
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CustomerBalanceTransactionCreateParams
 import com.withorb.api.models.CustomerBalanceTransactionCreateResponse
 import com.withorb.api.models.CustomerBalanceTransactionListPage
@@ -13,13 +13,36 @@ import com.withorb.api.models.CustomerBalanceTransactionListParams
 interface BalanceTransactionService {
 
     /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
      * Creates an immutable balance transaction that updates the customer's balance and returns back
      * the newly created transaction.
      */
-    @JvmOverloads
+    fun create(
+        customerId: String,
+        params: CustomerBalanceTransactionCreateParams,
+    ): CustomerBalanceTransactionCreateResponse = create(customerId, params, RequestOptions.none())
+
+    /** @see [create] */
+    fun create(
+        customerId: String,
+        params: CustomerBalanceTransactionCreateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CustomerBalanceTransactionCreateResponse =
+        create(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+    /** @see [create] */
+    fun create(
+        params: CustomerBalanceTransactionCreateParams
+    ): CustomerBalanceTransactionCreateResponse = create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: CustomerBalanceTransactionCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerBalanceTransactionCreateResponse
 
     /**
@@ -42,16 +65,127 @@ interface BalanceTransactionService {
      * This endpoint retrieves all customer balance transactions in reverse chronological order for
      * a single customer, providing a complete audit trail of all adjustments and invoice
      * applications.
-     *
-     * ## Eligibility
-     *
-     * The customer balance can only be applied to invoices or adjusted manually if invoices are not
-     * synced to a separate invoicing provider. If a payment gateway such as Stripe is used, the
-     * balance will be applied to the invoice before forwarding payment to the gateway.
      */
-    @JvmOverloads
+    fun list(customerId: String): CustomerBalanceTransactionListPage =
+        list(customerId, CustomerBalanceTransactionListParams.none())
+
+    /** @see [list] */
+    fun list(
+        customerId: String,
+        params: CustomerBalanceTransactionListParams = CustomerBalanceTransactionListParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CustomerBalanceTransactionListPage =
+        list(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+    /** @see [list] */
+    fun list(
+        customerId: String,
+        params: CustomerBalanceTransactionListParams = CustomerBalanceTransactionListParams.none(),
+    ): CustomerBalanceTransactionListPage = list(customerId, params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: CustomerBalanceTransactionListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerBalanceTransactionListPage
+
+    /** @see [list] */
+    fun list(params: CustomerBalanceTransactionListParams): CustomerBalanceTransactionListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
+    fun list(
+        customerId: String,
+        requestOptions: RequestOptions,
+    ): CustomerBalanceTransactionListPage =
+        list(customerId, CustomerBalanceTransactionListParams.none(), requestOptions)
+
+    /**
+     * A view of [BalanceTransactionService] that provides access to raw HTTP responses for each
+     * method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `post /customers/{customer_id}/balance_transactions`, but
+         * is otherwise the same as [BalanceTransactionService.create].
+         */
+        @MustBeClosed
+        fun create(
+            customerId: String,
+            params: CustomerBalanceTransactionCreateParams,
+        ): HttpResponseFor<CustomerBalanceTransactionCreateResponse> =
+            create(customerId, params, RequestOptions.none())
+
+        /** @see [create] */
+        @MustBeClosed
+        fun create(
+            customerId: String,
+            params: CustomerBalanceTransactionCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerBalanceTransactionCreateResponse> =
+            create(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+        /** @see [create] */
+        @MustBeClosed
+        fun create(
+            params: CustomerBalanceTransactionCreateParams
+        ): HttpResponseFor<CustomerBalanceTransactionCreateResponse> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
+        @MustBeClosed
+        fun create(
+            params: CustomerBalanceTransactionCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerBalanceTransactionCreateResponse>
+
+        /**
+         * Returns a raw HTTP response for `get /customers/{customer_id}/balance_transactions`, but
+         * is otherwise the same as [BalanceTransactionService.list].
+         */
+        @MustBeClosed
+        fun list(customerId: String): HttpResponseFor<CustomerBalanceTransactionListPage> =
+            list(customerId, CustomerBalanceTransactionListParams.none())
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            customerId: String,
+            params: CustomerBalanceTransactionListParams =
+                CustomerBalanceTransactionListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerBalanceTransactionListPage> =
+            list(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            customerId: String,
+            params: CustomerBalanceTransactionListParams =
+                CustomerBalanceTransactionListParams.none(),
+        ): HttpResponseFor<CustomerBalanceTransactionListPage> =
+            list(customerId, params, RequestOptions.none())
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: CustomerBalanceTransactionListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerBalanceTransactionListPage>
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: CustomerBalanceTransactionListParams
+        ): HttpResponseFor<CustomerBalanceTransactionListPage> = list(params, RequestOptions.none())
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            customerId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CustomerBalanceTransactionListPage> =
+            list(customerId, CustomerBalanceTransactionListParams.none(), requestOptions)
+    }
 }

@@ -2,62 +2,50 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint is used to list all add-on prices created using the
+ * [price creation endpoint](/api-reference/price/create-price).
+ */
 class PriceListParams
-constructor(
+private constructor(
     private val cursor: String?,
     private val limit: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
+    /**
+     * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+     * initial request.
+     */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
+    /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic
-    internal fun getQueryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.cursor?.let { queryParams.put("cursor", listOf(it.toString())) }
-        this.limit?.let { queryParams.put("limit", listOf(it.toString())) }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is PriceListParams && cursor == other.cursor && limit == other.limit && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(cursor, limit, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "PriceListParams{cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): PriceListParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [PriceListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [PriceListParams]. */
+    class Builder internal constructor() {
 
         private var cursor: String? = null
         private var limit: Long? = null
@@ -66,20 +54,33 @@ constructor(
 
         @JvmSynthetic
         internal fun from(priceListParams: PriceListParams) = apply {
-            this.cursor = priceListParams.cursor
-            this.limit = priceListParams.limit
-            additionalHeaders(priceListParams.additionalHeaders)
-            additionalQueryParams(priceListParams.additionalQueryParams)
+            cursor = priceListParams.cursor
+            limit = priceListParams.limit
+            additionalHeaders = priceListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = priceListParams.additionalQueryParams.toBuilder()
         }
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: String) = apply { this.cursor = cursor }
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -179,12 +180,36 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [PriceListParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): PriceListParams =
-            PriceListParams(
-                cursor,
-                limit,
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            PriceListParams(cursor, limit, additionalHeaders.build(), additionalQueryParams.build())
     }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                cursor?.let { put("cursor", it) }
+                limit?.let { put("limit", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is PriceListParams && cursor == other.cursor && limit == other.limit && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(cursor, limit, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "PriceListParams{cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

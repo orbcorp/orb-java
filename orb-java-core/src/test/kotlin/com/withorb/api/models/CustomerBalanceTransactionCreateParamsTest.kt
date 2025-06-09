@@ -2,14 +2,13 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CustomerBalanceTransactionCreateParamsTest {
+internal class CustomerBalanceTransactionCreateParamsTest {
 
     @Test
-    fun createCustomerBalanceTransactionCreateParams() {
+    fun create() {
         CustomerBalanceTransactionCreateParams.builder()
             .customerId("customer_id")
             .amount("amount")
@@ -19,7 +18,21 @@ class CustomerBalanceTransactionCreateParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun pathParams() {
+        val params =
+            CustomerBalanceTransactionCreateParams.builder()
+                .customerId("customer_id")
+                .amount("amount")
+                .type(CustomerBalanceTransactionCreateParams.Type.INCREMENT)
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("customer_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
+    fun body() {
         val params =
             CustomerBalanceTransactionCreateParams.builder()
                 .customerId("customer_id")
@@ -27,39 +40,26 @@ class CustomerBalanceTransactionCreateParamsTest {
                 .type(CustomerBalanceTransactionCreateParams.Type.INCREMENT)
                 .description("description")
                 .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
+
+        val body = params._body()
+
         assertThat(body.amount()).isEqualTo("amount")
         assertThat(body.type()).isEqualTo(CustomerBalanceTransactionCreateParams.Type.INCREMENT)
-        assertThat(body.description()).isEqualTo("description")
+        assertThat(body.description()).contains("description")
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             CustomerBalanceTransactionCreateParams.builder()
                 .customerId("customer_id")
                 .amount("amount")
                 .type(CustomerBalanceTransactionCreateParams.Type.INCREMENT)
                 .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
+
+        val body = params._body()
+
         assertThat(body.amount()).isEqualTo("amount")
         assertThat(body.type()).isEqualTo(CustomerBalanceTransactionCreateParams.Type.INCREMENT)
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            CustomerBalanceTransactionCreateParams.builder()
-                .customerId("customer_id")
-                .amount("amount")
-                .type(CustomerBalanceTransactionCreateParams.Type.INCREMENT)
-                .build()
-        assertThat(params).isNotNull
-        // path param "customerId"
-        assertThat(params.getPathParam(0)).isEqualTo("customer_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

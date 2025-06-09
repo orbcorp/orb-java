@@ -2,84 +2,76 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class AlertCreateForSubscriptionParamsTest {
+internal class AlertCreateForSubscriptionParamsTest {
 
     @Test
-    fun createAlertCreateForSubscriptionParams() {
+    fun create() {
         AlertCreateForSubscriptionParams.builder()
             .subscriptionId("subscription_id")
-            .thresholds(
-                listOf(AlertCreateForSubscriptionParams.Threshold.builder().value(42.23).build())
-            )
+            .addThreshold(AlertCreateForSubscriptionParams.Threshold.builder().value(0.0).build())
             .type(AlertCreateForSubscriptionParams.Type.USAGE_EXCEEDED)
             .metricId("metric_id")
             .build()
     }
 
     @Test
-    fun getBody() {
+    fun pathParams() {
         val params =
             AlertCreateForSubscriptionParams.builder()
                 .subscriptionId("subscription_id")
-                .thresholds(
-                    listOf(
-                        AlertCreateForSubscriptionParams.Threshold.builder().value(42.23).build()
-                    )
+                .addThreshold(
+                    AlertCreateForSubscriptionParams.Threshold.builder().value(0.0).build()
+                )
+                .type(AlertCreateForSubscriptionParams.Type.USAGE_EXCEEDED)
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("subscription_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
+    fun body() {
+        val params =
+            AlertCreateForSubscriptionParams.builder()
+                .subscriptionId("subscription_id")
+                .addThreshold(
+                    AlertCreateForSubscriptionParams.Threshold.builder().value(0.0).build()
                 )
                 .type(AlertCreateForSubscriptionParams.Type.USAGE_EXCEEDED)
                 .metricId("metric_id")
                 .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
+
+        val body = params._body()
+
         assertThat(body.thresholds())
-            .isEqualTo(
-                listOf(AlertCreateForSubscriptionParams.Threshold.builder().value(42.23).build())
+            .containsExactly(
+                AlertCreateForSubscriptionParams.Threshold.builder().value(0.0).build()
             )
         assertThat(body.type()).isEqualTo(AlertCreateForSubscriptionParams.Type.USAGE_EXCEEDED)
-        assertThat(body.metricId()).isEqualTo("metric_id")
+        assertThat(body.metricId()).contains("metric_id")
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             AlertCreateForSubscriptionParams.builder()
                 .subscriptionId("subscription_id")
-                .thresholds(
-                    listOf(
-                        AlertCreateForSubscriptionParams.Threshold.builder().value(42.23).build()
-                    )
+                .addThreshold(
+                    AlertCreateForSubscriptionParams.Threshold.builder().value(0.0).build()
                 )
                 .type(AlertCreateForSubscriptionParams.Type.USAGE_EXCEEDED)
                 .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
+
+        val body = params._body()
+
         assertThat(body.thresholds())
-            .isEqualTo(
-                listOf(AlertCreateForSubscriptionParams.Threshold.builder().value(42.23).build())
+            .containsExactly(
+                AlertCreateForSubscriptionParams.Threshold.builder().value(0.0).build()
             )
         assertThat(body.type()).isEqualTo(AlertCreateForSubscriptionParams.Type.USAGE_EXCEEDED)
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            AlertCreateForSubscriptionParams.builder()
-                .subscriptionId("subscription_id")
-                .thresholds(
-                    listOf(
-                        AlertCreateForSubscriptionParams.Threshold.builder().value(42.23).build()
-                    )
-                )
-                .type(AlertCreateForSubscriptionParams.Type.USAGE_EXCEEDED)
-                .build()
-        assertThat(params).isNotNull
-        // path param "subscriptionId"
-        assertThat(params.getPathParam(0)).isEqualTo("subscription_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

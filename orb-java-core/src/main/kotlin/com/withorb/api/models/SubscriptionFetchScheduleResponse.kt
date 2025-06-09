@@ -4,208 +4,393 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toImmutable
+import com.withorb.api.core.checkRequired
+import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
-@JsonDeserialize(builder = SubscriptionFetchScheduleResponse.Builder::class)
-@NoAutoDetect
 class SubscriptionFetchScheduleResponse
 private constructor(
-    private val startDate: JsonField<OffsetDateTime>,
-    private val endDate: JsonField<OffsetDateTime>,
     private val createdAt: JsonField<OffsetDateTime>,
+    private val endDate: JsonField<OffsetDateTime>,
     private val plan: JsonField<Plan>,
-    private val additionalProperties: Map<String, JsonValue>,
+    private val startDate: JsonField<OffsetDateTime>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
+    @JsonCreator
+    private constructor(
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("end_date")
+        @ExcludeMissing
+        endDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("plan") @ExcludeMissing plan: JsonField<Plan> = JsonMissing.of(),
+        @JsonProperty("start_date")
+        @ExcludeMissing
+        startDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+    ) : this(createdAt, endDate, plan, startDate, mutableMapOf())
 
-    fun startDate(): OffsetDateTime = startDate.getRequired("start_date")
-
-    fun endDate(): Optional<OffsetDateTime> = Optional.ofNullable(endDate.getNullable("end_date"))
-
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
-    fun plan(): Plan = plan.getRequired("plan")
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun endDate(): Optional<OffsetDateTime> = endDate.getOptional("end_date")
 
-    @JsonProperty("start_date") @ExcludeMissing fun _startDate() = startDate
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun plan(): Optional<Plan> = plan.getOptional("plan")
 
-    @JsonProperty("end_date") @ExcludeMissing fun _endDate() = endDate
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun startDate(): OffsetDateTime = startDate.getRequired("start_date")
 
-    @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
+    /**
+     * Returns the raw JSON value of [createdAt].
+     *
+     * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
-    @JsonProperty("plan") @ExcludeMissing fun _plan() = plan
+    /**
+     * Returns the raw JSON value of [endDate].
+     *
+     * Unlike [endDate], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("end_date") @ExcludeMissing fun _endDate(): JsonField<OffsetDateTime> = endDate
+
+    /**
+     * Returns the raw JSON value of [plan].
+     *
+     * Unlike [plan], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("plan") @ExcludeMissing fun _plan(): JsonField<Plan> = plan
+
+    /**
+     * Returns the raw JSON value of [startDate].
+     *
+     * Unlike [startDate], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("start_date")
+    @ExcludeMissing
+    fun _startDate(): JsonField<OffsetDateTime> = startDate
+
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    fun validate(): SubscriptionFetchScheduleResponse = apply {
-        if (!validated) {
-            startDate()
-            endDate()
-            createdAt()
-            plan().validate()
-            validated = true
-        }
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [SubscriptionFetchScheduleResponse].
+         *
+         * The following fields are required:
+         * ```java
+         * .createdAt()
+         * .endDate()
+         * .plan()
+         * .startDate()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    /** A builder for [SubscriptionFetchScheduleResponse]. */
+    class Builder internal constructor() {
 
-        private var startDate: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var endDate: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var plan: JsonField<Plan> = JsonMissing.of()
+        private var createdAt: JsonField<OffsetDateTime>? = null
+        private var endDate: JsonField<OffsetDateTime>? = null
+        private var plan: JsonField<Plan>? = null
+        private var startDate: JsonField<OffsetDateTime>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(subscriptionFetchScheduleResponse: SubscriptionFetchScheduleResponse) =
             apply {
-                this.startDate = subscriptionFetchScheduleResponse.startDate
-                this.endDate = subscriptionFetchScheduleResponse.endDate
-                this.createdAt = subscriptionFetchScheduleResponse.createdAt
-                this.plan = subscriptionFetchScheduleResponse.plan
-                additionalProperties(subscriptionFetchScheduleResponse.additionalProperties)
+                createdAt = subscriptionFetchScheduleResponse.createdAt
+                endDate = subscriptionFetchScheduleResponse.endDate
+                plan = subscriptionFetchScheduleResponse.plan
+                startDate = subscriptionFetchScheduleResponse.startDate
+                additionalProperties =
+                    subscriptionFetchScheduleResponse.additionalProperties.toMutableMap()
             }
-
-        fun startDate(startDate: OffsetDateTime) = startDate(JsonField.of(startDate))
-
-        @JsonProperty("start_date")
-        @ExcludeMissing
-        fun startDate(startDate: JsonField<OffsetDateTime>) = apply { this.startDate = startDate }
-
-        fun endDate(endDate: OffsetDateTime) = endDate(JsonField.of(endDate))
-
-        @JsonProperty("end_date")
-        @ExcludeMissing
-        fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
 
         fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
-        @JsonProperty("created_at")
-        @ExcludeMissing
+        /**
+         * Sets [Builder.createdAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
-        fun plan(plan: Plan) = plan(JsonField.of(plan))
+        fun endDate(endDate: OffsetDateTime?) = endDate(JsonField.ofNullable(endDate))
 
-        @JsonProperty("plan")
-        @ExcludeMissing
+        /** Alias for calling [Builder.endDate] with `endDate.orElse(null)`. */
+        fun endDate(endDate: Optional<OffsetDateTime>) = endDate(endDate.getOrNull())
+
+        /**
+         * Sets [Builder.endDate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.endDate] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun endDate(endDate: JsonField<OffsetDateTime>) = apply { this.endDate = endDate }
+
+        fun plan(plan: Plan?) = plan(JsonField.ofNullable(plan))
+
+        /** Alias for calling [Builder.plan] with `plan.orElse(null)`. */
+        fun plan(plan: Optional<Plan>) = plan(plan.getOrNull())
+
+        /**
+         * Sets [Builder.plan] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.plan] with a well-typed [Plan] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun plan(plan: JsonField<Plan>) = apply { this.plan = plan }
+
+        fun startDate(startDate: OffsetDateTime) = startDate(JsonField.of(startDate))
+
+        /**
+         * Sets [Builder.startDate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.startDate] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun startDate(startDate: JsonField<OffsetDateTime>) = apply { this.startDate = startDate }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
         }
 
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
+        /**
+         * Returns an immutable instance of [SubscriptionFetchScheduleResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .createdAt()
+         * .endDate()
+         * .plan()
+         * .startDate()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): SubscriptionFetchScheduleResponse =
             SubscriptionFetchScheduleResponse(
-                startDate,
-                endDate,
-                createdAt,
-                plan,
-                additionalProperties.toImmutable(),
+                checkRequired("createdAt", createdAt),
+                checkRequired("endDate", endDate),
+                checkRequired("plan", plan),
+                checkRequired("startDate", startDate),
+                additionalProperties.toMutableMap(),
             )
     }
 
-    @JsonDeserialize(builder = Plan.Builder::class)
-    @NoAutoDetect
+    private var validated: Boolean = false
+
+    fun validate(): SubscriptionFetchScheduleResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        createdAt()
+        endDate()
+        plan().ifPresent { it.validate() }
+        startDate()
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: OrbInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (if (createdAt.asKnown().isPresent) 1 else 0) +
+            (if (endDate.asKnown().isPresent) 1 else 0) +
+            (plan.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (startDate.asKnown().isPresent) 1 else 0)
+
     class Plan
     private constructor(
         private val id: JsonField<String>,
         private val externalPlanId: JsonField<String>,
         private val name: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("external_plan_id")
+            @ExcludeMissing
+            externalPlanId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        ) : this(id, externalPlanId, name, mutableMapOf())
 
-        fun id(): Optional<String> = Optional.ofNullable(id.getNullable("id"))
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun id(): Optional<String> = id.getOptional("id")
 
         /**
          * An optional user-defined ID for this plan resource, used throughout the system as an
          * alias for this Plan. Use this field to identify a plan by an existing identifier in your
          * system.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
-        fun externalPlanId(): Optional<String> =
-            Optional.ofNullable(externalPlanId.getNullable("external_plan_id"))
-
-        fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
-
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        fun externalPlanId(): Optional<String> = externalPlanId.getOptional("external_plan_id")
 
         /**
-         * An optional user-defined ID for this plan resource, used throughout the system as an
-         * alias for this Plan. Use this field to identify a plan by an existing identifier in your
-         * system.
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
-        @JsonProperty("external_plan_id") @ExcludeMissing fun _externalPlanId() = externalPlanId
+        fun name(): Optional<String> = name.getOptional("name")
 
-        @JsonProperty("name") @ExcludeMissing fun _name() = name
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [externalPlanId].
+         *
+         * Unlike [externalPlanId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("external_plan_id")
+        @ExcludeMissing
+        fun _externalPlanId(): JsonField<String> = externalPlanId
+
+        /**
+         * Returns the raw JSON value of [name].
+         *
+         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): Plan = apply {
-            if (!validated) {
-                id()
-                externalPlanId()
-                name()
-                validated = true
-            }
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Plan].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .externalPlanId()
+             * .name()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [Plan]. */
+        class Builder internal constructor() {
 
-            private var id: JsonField<String> = JsonMissing.of()
-            private var externalPlanId: JsonField<String> = JsonMissing.of()
-            private var name: JsonField<String> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var externalPlanId: JsonField<String>? = null
+            private var name: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(plan: Plan) = apply {
-                this.id = plan.id
-                this.externalPlanId = plan.externalPlanId
-                this.name = plan.name
-                additionalProperties(plan.additionalProperties)
+                id = plan.id
+                externalPlanId = plan.externalPlanId
+                name = plan.name
+                additionalProperties = plan.additionalProperties.toMutableMap()
             }
 
-            fun id(id: String) = id(JsonField.of(id))
+            fun id(id: String?) = id(JsonField.ofNullable(id))
 
-            @JsonProperty("id")
-            @ExcludeMissing
+            /** Alias for calling [Builder.id] with `id.orElse(null)`. */
+            fun id(id: Optional<String>) = id(id.getOrNull())
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             /**
@@ -213,48 +398,112 @@ private constructor(
              * alias for this Plan. Use this field to identify a plan by an existing identifier in
              * your system.
              */
-            fun externalPlanId(externalPlanId: String) =
-                externalPlanId(JsonField.of(externalPlanId))
+            fun externalPlanId(externalPlanId: String?) =
+                externalPlanId(JsonField.ofNullable(externalPlanId))
+
+            /** Alias for calling [Builder.externalPlanId] with `externalPlanId.orElse(null)`. */
+            fun externalPlanId(externalPlanId: Optional<String>) =
+                externalPlanId(externalPlanId.getOrNull())
 
             /**
-             * An optional user-defined ID for this plan resource, used throughout the system as an
-             * alias for this Plan. Use this field to identify a plan by an existing identifier in
-             * your system.
+             * Sets [Builder.externalPlanId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.externalPlanId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            @JsonProperty("external_plan_id")
-            @ExcludeMissing
             fun externalPlanId(externalPlanId: JsonField<String>) = apply {
                 this.externalPlanId = externalPlanId
             }
 
-            fun name(name: String) = name(JsonField.of(name))
+            fun name(name: String?) = name(JsonField.ofNullable(name))
 
-            @JsonProperty("name")
-            @ExcludeMissing
+            /** Alias for calling [Builder.name] with `name.orElse(null)`. */
+            fun name(name: Optional<String>) = name(name.getOrNull())
+
+            /**
+             * Sets [Builder.name] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.name] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
             }
 
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Plan].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .externalPlanId()
+             * .name()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Plan =
                 Plan(
-                    id,
-                    externalPlanId,
-                    name,
-                    additionalProperties.toImmutable(),
+                    checkRequired("id", id),
+                    checkRequired("externalPlanId", externalPlanId),
+                    checkRequired("name", name),
+                    additionalProperties.toMutableMap(),
                 )
         }
+
+        private var validated: Boolean = false
+
+        fun validate(): Plan = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            externalPlanId()
+            name()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (if (externalPlanId.asKnown().isPresent) 1 else 0) +
+                (if (name.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -279,15 +528,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionFetchScheduleResponse && startDate == other.startDate && endDate == other.endDate && createdAt == other.createdAt && plan == other.plan && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is SubscriptionFetchScheduleResponse && createdAt == other.createdAt && endDate == other.endDate && plan == other.plan && startDate == other.startDate && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(startDate, endDate, createdAt, plan, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(createdAt, endDate, plan, startDate, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "SubscriptionFetchScheduleResponse{startDate=$startDate, endDate=$endDate, createdAt=$createdAt, plan=$plan, additionalProperties=$additionalProperties}"
+        "SubscriptionFetchScheduleResponse{createdAt=$createdAt, endDate=$endDate, plan=$plan, startDate=$startDate, additionalProperties=$additionalProperties}"
 }

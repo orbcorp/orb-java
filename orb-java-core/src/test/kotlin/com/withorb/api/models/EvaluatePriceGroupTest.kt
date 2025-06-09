@@ -2,23 +2,44 @@
 
 package com.withorb.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.withorb.api.core.jsonMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class EvaluatePriceGroupTest {
+internal class EvaluatePriceGroupTest {
 
     @Test
-    fun createEvaluatePriceGroup() {
+    fun create() {
         val evaluatePriceGroup =
             EvaluatePriceGroup.builder()
                 .amount("amount")
-                .groupingValues(listOf(EvaluatePriceGroup.GroupingValue.ofString("string")))
-                .quantity(42.23)
+                .addGroupingValue("string")
+                .quantity(0.0)
                 .build()
-        assertThat(evaluatePriceGroup).isNotNull
+
         assertThat(evaluatePriceGroup.amount()).isEqualTo("amount")
         assertThat(evaluatePriceGroup.groupingValues())
             .containsExactly(EvaluatePriceGroup.GroupingValue.ofString("string"))
-        assertThat(evaluatePriceGroup.quantity()).isEqualTo(42.23)
+        assertThat(evaluatePriceGroup.quantity()).isEqualTo(0.0)
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val evaluatePriceGroup =
+            EvaluatePriceGroup.builder()
+                .amount("amount")
+                .addGroupingValue("string")
+                .quantity(0.0)
+                .build()
+
+        val roundtrippedEvaluatePriceGroup =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(evaluatePriceGroup),
+                jacksonTypeRef<EvaluatePriceGroup>(),
+            )
+
+        assertThat(roundtrippedEvaluatePriceGroup).isEqualTo(evaluatePriceGroup)
     }
 }

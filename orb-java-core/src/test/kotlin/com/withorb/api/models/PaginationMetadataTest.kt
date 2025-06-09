@@ -2,17 +2,34 @@
 
 package com.withorb.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.withorb.api.core.jsonMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class PaginationMetadataTest {
+internal class PaginationMetadataTest {
 
     @Test
-    fun createPaginationMetadata() {
+    fun create() {
         val paginationMetadata =
             PaginationMetadata.builder().hasMore(true).nextCursor("next_cursor").build()
-        assertThat(paginationMetadata).isNotNull
+
         assertThat(paginationMetadata.hasMore()).isEqualTo(true)
         assertThat(paginationMetadata.nextCursor()).contains("next_cursor")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val paginationMetadata =
+            PaginationMetadata.builder().hasMore(true).nextCursor("next_cursor").build()
+
+        val roundtrippedPaginationMetadata =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(paginationMetadata),
+                jacksonTypeRef<PaginationMetadata>(),
+            )
+
+        assertThat(roundtrippedPaginationMetadata).isEqualTo(paginationMetadata)
     }
 }

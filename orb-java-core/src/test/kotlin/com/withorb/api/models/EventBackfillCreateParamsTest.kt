@@ -2,15 +2,14 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class EventBackfillCreateParamsTest {
+internal class EventBackfillCreateParamsTest {
 
     @Test
-    fun createEventBackfillCreateParams() {
+    fun create() {
         EventBackfillCreateParams.builder()
             .timeframeEnd(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .timeframeStart(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -23,7 +22,7 @@ class EventBackfillCreateParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             EventBackfillCreateParams.builder()
                 .timeframeEnd(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -34,28 +33,30 @@ class EventBackfillCreateParamsTest {
                 .externalCustomerId("external_customer_id")
                 .replaceExistingEvents(true)
                 .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
+
+        val body = params._body()
+
         assertThat(body.timeframeEnd()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(body.timeframeStart())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.closeTime()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(body.customerId()).isEqualTo("customer_id")
+        assertThat(body.closeTime()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.customerId()).contains("customer_id")
         assertThat(body.deprecationFilter())
-            .isEqualTo("my_numeric_property > 100 AND my_other_property = 'bar'")
-        assertThat(body.externalCustomerId()).isEqualTo("external_customer_id")
-        assertThat(body.replaceExistingEvents()).isEqualTo(true)
+            .contains("my_numeric_property > 100 AND my_other_property = 'bar'")
+        assertThat(body.externalCustomerId()).contains("external_customer_id")
+        assertThat(body.replaceExistingEvents()).contains(true)
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             EventBackfillCreateParams.builder()
                 .timeframeEnd(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .timeframeStart(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
+
+        val body = params._body()
+
         assertThat(body.timeframeEnd()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(body.timeframeStart())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

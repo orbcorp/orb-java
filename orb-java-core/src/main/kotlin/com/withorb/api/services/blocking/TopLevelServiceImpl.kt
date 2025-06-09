@@ -3,6 +3,7 @@
 package com.withorb.api.services.blocking
 
 import com.withorb.api.core.ClientOptions
+import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
@@ -10,49 +11,58 @@ import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
 import com.withorb.api.core.http.HttpResponse.Handler
-import com.withorb.api.errors.OrbError
+import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.core.http.parseable
+import com.withorb.api.core.prepare
 import com.withorb.api.models.TopLevelPingParams
 import com.withorb.api.models.TopLevelPingResponse
 
-class TopLevelServiceImpl
-constructor(
-    private val clientOptions: ClientOptions,
-) : TopLevelService {
+class TopLevelServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    TopLevelService {
 
-    private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
+    private val withRawResponse: TopLevelService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
-    private val pingHandler: Handler<TopLevelPingResponse> =
-        jsonHandler<TopLevelPingResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+    override fun withRawResponse(): TopLevelService.WithRawResponse = withRawResponse
 
-    /**
-     * This endpoint allows you to test your connection to the Orb API and check the validity of
-     * your API key, passed in the Authorization header. This is particularly useful for checking
-     * that your environment is set up properly, and is a great choice for connectors and
-     * integrations.
-     *
-     * This API does not have any side-effects or return any Orb resources.
-     */
     override fun ping(
         params: TopLevelPingParams,
-        requestOptions: RequestOptions
-    ): TopLevelPingResponse {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("ping")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .build()
-        return clientOptions.httpClient.execute(request, requestOptions).let { response ->
-            response
-                .use { pingHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
+        requestOptions: RequestOptions,
+    ): TopLevelPingResponse =
+        // get /ping
+        withRawResponse().ping(params, requestOptions).parse()
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        TopLevelService.WithRawResponse {
+
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        private val pingHandler: Handler<TopLevelPingResponse> =
+            jsonHandler<TopLevelPingResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun ping(
+            params: TopLevelPingParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<TopLevelPingResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("ping")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { pingHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
                     }
-                }
+            }
         }
     }
 }

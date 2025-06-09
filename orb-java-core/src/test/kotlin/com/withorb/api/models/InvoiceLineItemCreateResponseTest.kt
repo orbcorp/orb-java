@@ -2,182 +2,305 @@
 
 package com.withorb.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.withorb.api.core.JsonValue
+import com.withorb.api.core.jsonMapper
 import java.time.OffsetDateTime
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class InvoiceLineItemCreateResponseTest {
+internal class InvoiceLineItemCreateResponseTest {
 
     @Test
-    fun createInvoiceLineItemCreateResponse() {
+    fun create() {
         val invoiceLineItemCreateResponse =
             InvoiceLineItemCreateResponse.builder()
                 .id("id")
+                .adjustedSubtotal("5.00")
+                .addAdjustment(
+                    InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.builder()
+                        .id("id")
+                        .amount("amount")
+                        .addAppliesToPriceId("string")
+                        .addFilter(
+                            InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter.builder()
+                                .field(
+                                    InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter
+                                        .Field
+                                        .PRICE_ID
+                                )
+                                .operator(
+                                    InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter
+                                        .Operator
+                                        .INCLUDES
+                                )
+                                .addValue("string")
+                                .build()
+                        )
+                        .isInvoiceLevel(true)
+                        .reason("reason")
+                        .usageDiscount(0.0)
+                        .build()
+                )
                 .amount("7.00")
+                .creditsApplied("6.00")
                 .discount(
-                    Discount.ofPercentageDiscount(
-                        PercentageDiscount.builder()
-                            .appliesToPriceIds(listOf("string"))
-                            .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
-                            .percentageDiscount(1.0)
-                            .reason("reason")
-                            .build()
-                    )
+                    PercentageDiscount.builder()
+                        .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                        .percentageDiscount(0.15)
+                        .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                        .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                        .addFilter(
+                            PercentageDiscount.Filter.builder()
+                                .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                                .operator(PercentageDiscount.Filter.Operator.INCLUDES)
+                                .addValue("string")
+                                .build()
+                        )
+                        .reason("reason")
+                        .build()
                 )
                 .endDate(OffsetDateTime.parse("2022-02-01T08:00:00+00:00"))
+                .filter("filter")
                 .grouping("grouping")
                 .maximum(
                     InvoiceLineItemCreateResponse.Maximum.builder()
-                        .appliesToPriceIds(listOf("string"))
+                        .addAppliesToPriceId("string")
+                        .addFilter(
+                            InvoiceLineItemCreateResponse.Maximum.Filter.builder()
+                                .field(InvoiceLineItemCreateResponse.Maximum.Filter.Field.PRICE_ID)
+                                .operator(
+                                    InvoiceLineItemCreateResponse.Maximum.Filter.Operator.INCLUDES
+                                )
+                                .addValue("string")
+                                .build()
+                        )
                         .maximumAmount("maximum_amount")
                         .build()
                 )
                 .maximumAmount("maximum_amount")
                 .minimum(
                     InvoiceLineItemCreateResponse.Minimum.builder()
-                        .appliesToPriceIds(listOf("string"))
+                        .addAppliesToPriceId("string")
+                        .addFilter(
+                            InvoiceLineItemCreateResponse.Minimum.Filter.builder()
+                                .field(InvoiceLineItemCreateResponse.Minimum.Filter.Field.PRICE_ID)
+                                .operator(
+                                    InvoiceLineItemCreateResponse.Minimum.Filter.Operator.INCLUDES
+                                )
+                                .addValue("string")
+                                .build()
+                        )
                         .minimumAmount("minimum_amount")
                         .build()
                 )
                 .minimumAmount("minimum_amount")
                 .name("Fixed Fee")
+                .partiallyInvoicedAmount("4.00")
                 .price(
-                    Price.ofUnitPrice(
-                        Price.UnitPrice.builder()
-                            .id("id")
-                            .billableMetric(
-                                Price.UnitPrice.BillableMetric.builder().id("id").build()
-                            )
-                            .billingCycleConfiguration(
-                                Price.UnitPrice.BillingCycleConfiguration.builder()
-                                    .duration(123L)
-                                    .durationUnit(
-                                        Price.UnitPrice.BillingCycleConfiguration.DurationUnit.DAY
-                                    )
-                                    .build()
-                            )
-                            .cadence(Price.UnitPrice.Cadence.ONE_TIME)
-                            .conversionRate(42.23)
-                            .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .creditAllocation(
-                                Price.UnitPrice.CreditAllocation.builder()
-                                    .allowsRollover(true)
-                                    .currency("currency")
-                                    .build()
-                            )
-                            .currency("currency")
-                            .discount(
-                                Discount.ofPercentageDiscount(
-                                    PercentageDiscount.builder()
-                                        .appliesToPriceIds(listOf("string"))
-                                        .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
-                                        .percentageDiscount(1.0)
-                                        .reason("reason")
+                    Price.Unit.builder()
+                        .id("id")
+                        .billableMetric(Price.Unit.BillableMetric.builder().id("id").build())
+                        .billingCycleConfiguration(
+                            Price.Unit.BillingCycleConfiguration.builder()
+                                .duration(0L)
+                                .durationUnit(Price.Unit.BillingCycleConfiguration.DurationUnit.DAY)
+                                .build()
+                        )
+                        .cadence(Price.Unit.Cadence.ONE_TIME)
+                        .conversionRate(0.0)
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .creditAllocation(
+                            Price.Unit.CreditAllocation.builder()
+                                .allowsRollover(true)
+                                .currency("currency")
+                                .customExpiration(
+                                    Price.Unit.CreditAllocation.CustomExpiration.builder()
+                                        .duration(0L)
+                                        .durationUnit(
+                                            Price.Unit.CreditAllocation.CustomExpiration
+                                                .DurationUnit
+                                                .DAY
+                                        )
                                         .build()
-                                )
-                            )
-                            .externalPriceId("external_price_id")
-                            .fixedPriceQuantity(42.23)
-                            .invoicingCycleConfiguration(
-                                Price.UnitPrice.InvoicingCycleConfiguration.builder()
-                                    .duration(123L)
-                                    .durationUnit(
-                                        Price.UnitPrice.InvoicingCycleConfiguration.DurationUnit.DAY
-                                    )
-                                    .build()
-                            )
-                            .item(Price.UnitPrice.Item.builder().id("id").name("name").build())
-                            .maximum(
-                                Price.UnitPrice.Maximum.builder()
-                                    .appliesToPriceIds(listOf("string"))
-                                    .maximumAmount("maximum_amount")
-                                    .build()
-                            )
-                            .maximumAmount("maximum_amount")
-                            .metadata(Price.UnitPrice.Metadata.builder().build())
-                            .minimum(
-                                Price.UnitPrice.Minimum.builder()
-                                    .appliesToPriceIds(listOf("string"))
-                                    .minimumAmount("minimum_amount")
-                                    .build()
-                            )
-                            .minimumAmount("minimum_amount")
-                            .modelType(Price.UnitPrice.ModelType.UNIT)
-                            .name("name")
-                            .planPhaseOrder(123L)
-                            .priceType(Price.UnitPrice.PriceType.USAGE_PRICE)
-                            .unitConfig(
-                                Price.UnitPrice.UnitConfig.builder()
-                                    .unitAmount("unit_amount")
-                                    .build()
-                            )
-                            .build()
-                    )
-                )
-                .quantity(42.23)
-                .startDate(OffsetDateTime.parse("2022-02-01T08:00:00+00:00"))
-                .subLineItems(
-                    listOf(
-                        InvoiceLineItemCreateResponse.SubLineItem.ofMatrixSubLineItem(
-                            InvoiceLineItemCreateResponse.SubLineItem.MatrixSubLineItem.builder()
-                                .amount("9.00")
-                                .grouping(
-                                    InvoiceLineItemCreateResponse.SubLineItem.MatrixSubLineItem
-                                        .Grouping
-                                        .builder()
-                                        .key("region")
-                                        .value("west")
-                                        .build()
-                                )
-                                .matrixConfig(
-                                    InvoiceLineItemCreateResponse.SubLineItem.MatrixSubLineItem
-                                        .MatrixConfig
-                                        .builder()
-                                        .dimensionValues(listOf("string"))
-                                        .build()
-                                )
-                                .name("Tier One")
-                                .quantity(42.23)
-                                .type(
-                                    InvoiceLineItemCreateResponse.SubLineItem.MatrixSubLineItem.Type
-                                        .MATRIX
                                 )
                                 .build()
                         )
-                    )
+                        .currency("currency")
+                        .discount(
+                            PercentageDiscount.builder()
+                                .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                                .percentageDiscount(0.15)
+                                .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                                .addFilter(
+                                    PercentageDiscount.Filter.builder()
+                                        .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                                        .operator(PercentageDiscount.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
+                                .reason("reason")
+                                .build()
+                        )
+                        .externalPriceId("external_price_id")
+                        .fixedPriceQuantity(0.0)
+                        .invoicingCycleConfiguration(
+                            Price.Unit.InvoicingCycleConfiguration.builder()
+                                .duration(0L)
+                                .durationUnit(
+                                    Price.Unit.InvoicingCycleConfiguration.DurationUnit.DAY
+                                )
+                                .build()
+                        )
+                        .item(Price.Unit.Item.builder().id("id").name("name").build())
+                        .maximum(
+                            Price.Unit.Maximum.builder()
+                                .addAppliesToPriceId("string")
+                                .addFilter(
+                                    Price.Unit.Maximum.Filter.builder()
+                                        .field(Price.Unit.Maximum.Filter.Field.PRICE_ID)
+                                        .operator(Price.Unit.Maximum.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
+                                .maximumAmount("maximum_amount")
+                                .build()
+                        )
+                        .maximumAmount("maximum_amount")
+                        .metadata(
+                            Price.Unit.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .minimum(
+                            Price.Unit.Minimum.builder()
+                                .addAppliesToPriceId("string")
+                                .addFilter(
+                                    Price.Unit.Minimum.Filter.builder()
+                                        .field(Price.Unit.Minimum.Filter.Field.PRICE_ID)
+                                        .operator(Price.Unit.Minimum.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
+                                .minimumAmount("minimum_amount")
+                                .build()
+                        )
+                        .minimumAmount("minimum_amount")
+                        .name("name")
+                        .planPhaseOrder(0L)
+                        .priceType(Price.Unit.PriceType.USAGE_PRICE)
+                        .unitConfig(
+                            Price.Unit.UnitConfig.builder().unitAmount("unit_amount").build()
+                        )
+                        .dimensionalPriceConfiguration(
+                            Price.Unit.DimensionalPriceConfiguration.builder()
+                                .addDimensionValue("string")
+                                .dimensionalPriceGroupId("dimensional_price_group_id")
+                                .build()
+                        )
+                        .build()
+                )
+                .quantity(1.0)
+                .startDate(OffsetDateTime.parse("2022-02-01T08:00:00+00:00"))
+                .addSubLineItem(
+                    InvoiceLineItemCreateResponse.SubLineItem.Matrix.builder()
+                        .amount("9.00")
+                        .grouping(
+                            InvoiceLineItemCreateResponse.SubLineItem.Matrix.Grouping.builder()
+                                .key("region")
+                                .value("west")
+                                .build()
+                        )
+                        .matrixConfig(
+                            InvoiceLineItemCreateResponse.SubLineItem.Matrix.MatrixConfig.builder()
+                                .addDimensionValue("string")
+                                .build()
+                        )
+                        .name("Tier One")
+                        .quantity(5.0)
+                        .build()
                 )
                 .subtotal("9.00")
-                .taxAmounts(
-                    listOf(
-                        InvoiceLineItemCreateResponse.TaxAmount.builder()
-                            .amount("amount")
-                            .taxRateDescription("tax_rate_description")
-                            .taxRatePercentage("tax_rate_percentage")
-                            .build()
-                    )
+                .addTaxAmount(
+                    InvoiceLineItemCreateResponse.TaxAmount.builder()
+                        .amount("amount")
+                        .taxRateDescription("tax_rate_description")
+                        .taxRatePercentage("tax_rate_percentage")
+                        .build()
                 )
+                .addUsageCustomerId("string")
                 .build()
-        assertThat(invoiceLineItemCreateResponse).isNotNull
+
         assertThat(invoiceLineItemCreateResponse.id()).isEqualTo("id")
+        assertThat(invoiceLineItemCreateResponse.adjustedSubtotal()).isEqualTo("5.00")
+        assertThat(invoiceLineItemCreateResponse.adjustments())
+            .containsExactly(
+                InvoiceLineItemCreateResponse.Adjustment.ofUsageDiscount(
+                    InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.builder()
+                        .id("id")
+                        .amount("amount")
+                        .addAppliesToPriceId("string")
+                        .addFilter(
+                            InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter.builder()
+                                .field(
+                                    InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter
+                                        .Field
+                                        .PRICE_ID
+                                )
+                                .operator(
+                                    InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter
+                                        .Operator
+                                        .INCLUDES
+                                )
+                                .addValue("string")
+                                .build()
+                        )
+                        .isInvoiceLevel(true)
+                        .reason("reason")
+                        .usageDiscount(0.0)
+                        .build()
+                )
+            )
         assertThat(invoiceLineItemCreateResponse.amount()).isEqualTo("7.00")
+        assertThat(invoiceLineItemCreateResponse.creditsApplied()).isEqualTo("6.00")
         assertThat(invoiceLineItemCreateResponse.discount())
             .contains(
-                Discount.ofPercentageDiscount(
+                Discount.ofPercentage(
                     PercentageDiscount.builder()
-                        .appliesToPriceIds(listOf("string"))
                         .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
-                        .percentageDiscount(1.0)
+                        .percentageDiscount(0.15)
+                        .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                        .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                        .addFilter(
+                            PercentageDiscount.Filter.builder()
+                                .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                                .operator(PercentageDiscount.Filter.Operator.INCLUDES)
+                                .addValue("string")
+                                .build()
+                        )
                         .reason("reason")
                         .build()
                 )
             )
         assertThat(invoiceLineItemCreateResponse.endDate())
             .isEqualTo(OffsetDateTime.parse("2022-02-01T08:00:00+00:00"))
+        assertThat(invoiceLineItemCreateResponse.filter()).contains("filter")
         assertThat(invoiceLineItemCreateResponse.grouping()).contains("grouping")
         assertThat(invoiceLineItemCreateResponse.maximum())
             .contains(
                 InvoiceLineItemCreateResponse.Maximum.builder()
-                    .appliesToPriceIds(listOf("string"))
+                    .addAppliesToPriceId("string")
+                    .addFilter(
+                        InvoiceLineItemCreateResponse.Maximum.Filter.builder()
+                            .field(InvoiceLineItemCreateResponse.Maximum.Filter.Field.PRICE_ID)
+                            .operator(
+                                InvoiceLineItemCreateResponse.Maximum.Filter.Operator.INCLUDES
+                            )
+                            .addValue("string")
+                            .build()
+                    )
                     .maximumAmount("maximum_amount")
                     .build()
             )
@@ -185,108 +308,150 @@ class InvoiceLineItemCreateResponseTest {
         assertThat(invoiceLineItemCreateResponse.minimum())
             .contains(
                 InvoiceLineItemCreateResponse.Minimum.builder()
-                    .appliesToPriceIds(listOf("string"))
+                    .addAppliesToPriceId("string")
+                    .addFilter(
+                        InvoiceLineItemCreateResponse.Minimum.Filter.builder()
+                            .field(InvoiceLineItemCreateResponse.Minimum.Filter.Field.PRICE_ID)
+                            .operator(
+                                InvoiceLineItemCreateResponse.Minimum.Filter.Operator.INCLUDES
+                            )
+                            .addValue("string")
+                            .build()
+                    )
                     .minimumAmount("minimum_amount")
                     .build()
             )
         assertThat(invoiceLineItemCreateResponse.minimumAmount()).contains("minimum_amount")
         assertThat(invoiceLineItemCreateResponse.name()).isEqualTo("Fixed Fee")
+        assertThat(invoiceLineItemCreateResponse.partiallyInvoicedAmount()).isEqualTo("4.00")
         assertThat(invoiceLineItemCreateResponse.price())
-            .contains(
-                Price.ofUnitPrice(
-                    Price.UnitPrice.builder()
+            .isEqualTo(
+                Price.ofUnit(
+                    Price.Unit.builder()
                         .id("id")
-                        .billableMetric(Price.UnitPrice.BillableMetric.builder().id("id").build())
+                        .billableMetric(Price.Unit.BillableMetric.builder().id("id").build())
                         .billingCycleConfiguration(
-                            Price.UnitPrice.BillingCycleConfiguration.builder()
-                                .duration(123L)
-                                .durationUnit(
-                                    Price.UnitPrice.BillingCycleConfiguration.DurationUnit.DAY
-                                )
+                            Price.Unit.BillingCycleConfiguration.builder()
+                                .duration(0L)
+                                .durationUnit(Price.Unit.BillingCycleConfiguration.DurationUnit.DAY)
                                 .build()
                         )
-                        .cadence(Price.UnitPrice.Cadence.ONE_TIME)
-                        .conversionRate(42.23)
+                        .cadence(Price.Unit.Cadence.ONE_TIME)
+                        .conversionRate(0.0)
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .creditAllocation(
-                            Price.UnitPrice.CreditAllocation.builder()
+                            Price.Unit.CreditAllocation.builder()
                                 .allowsRollover(true)
                                 .currency("currency")
+                                .customExpiration(
+                                    Price.Unit.CreditAllocation.CustomExpiration.builder()
+                                        .duration(0L)
+                                        .durationUnit(
+                                            Price.Unit.CreditAllocation.CustomExpiration
+                                                .DurationUnit
+                                                .DAY
+                                        )
+                                        .build()
+                                )
                                 .build()
                         )
                         .currency("currency")
                         .discount(
-                            Discount.ofPercentageDiscount(
-                                PercentageDiscount.builder()
-                                    .appliesToPriceIds(listOf("string"))
-                                    .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
-                                    .percentageDiscount(1.0)
-                                    .reason("reason")
-                                    .build()
-                            )
+                            PercentageDiscount.builder()
+                                .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                                .percentageDiscount(0.15)
+                                .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                                .addFilter(
+                                    PercentageDiscount.Filter.builder()
+                                        .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                                        .operator(PercentageDiscount.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
+                                .reason("reason")
+                                .build()
                         )
                         .externalPriceId("external_price_id")
-                        .fixedPriceQuantity(42.23)
+                        .fixedPriceQuantity(0.0)
                         .invoicingCycleConfiguration(
-                            Price.UnitPrice.InvoicingCycleConfiguration.builder()
-                                .duration(123L)
+                            Price.Unit.InvoicingCycleConfiguration.builder()
+                                .duration(0L)
                                 .durationUnit(
-                                    Price.UnitPrice.InvoicingCycleConfiguration.DurationUnit.DAY
+                                    Price.Unit.InvoicingCycleConfiguration.DurationUnit.DAY
                                 )
                                 .build()
                         )
-                        .item(Price.UnitPrice.Item.builder().id("id").name("name").build())
+                        .item(Price.Unit.Item.builder().id("id").name("name").build())
                         .maximum(
-                            Price.UnitPrice.Maximum.builder()
-                                .appliesToPriceIds(listOf("string"))
+                            Price.Unit.Maximum.builder()
+                                .addAppliesToPriceId("string")
+                                .addFilter(
+                                    Price.Unit.Maximum.Filter.builder()
+                                        .field(Price.Unit.Maximum.Filter.Field.PRICE_ID)
+                                        .operator(Price.Unit.Maximum.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
                                 .maximumAmount("maximum_amount")
                                 .build()
                         )
                         .maximumAmount("maximum_amount")
-                        .metadata(Price.UnitPrice.Metadata.builder().build())
+                        .metadata(
+                            Price.Unit.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .minimum(
-                            Price.UnitPrice.Minimum.builder()
-                                .appliesToPriceIds(listOf("string"))
+                            Price.Unit.Minimum.builder()
+                                .addAppliesToPriceId("string")
+                                .addFilter(
+                                    Price.Unit.Minimum.Filter.builder()
+                                        .field(Price.Unit.Minimum.Filter.Field.PRICE_ID)
+                                        .operator(Price.Unit.Minimum.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
                                 .minimumAmount("minimum_amount")
                                 .build()
                         )
                         .minimumAmount("minimum_amount")
-                        .modelType(Price.UnitPrice.ModelType.UNIT)
                         .name("name")
-                        .planPhaseOrder(123L)
-                        .priceType(Price.UnitPrice.PriceType.USAGE_PRICE)
+                        .planPhaseOrder(0L)
+                        .priceType(Price.Unit.PriceType.USAGE_PRICE)
                         .unitConfig(
-                            Price.UnitPrice.UnitConfig.builder().unitAmount("unit_amount").build()
+                            Price.Unit.UnitConfig.builder().unitAmount("unit_amount").build()
+                        )
+                        .dimensionalPriceConfiguration(
+                            Price.Unit.DimensionalPriceConfiguration.builder()
+                                .addDimensionValue("string")
+                                .dimensionalPriceGroupId("dimensional_price_group_id")
+                                .build()
                         )
                         .build()
                 )
             )
-        assertThat(invoiceLineItemCreateResponse.quantity()).isEqualTo(42.23)
+        assertThat(invoiceLineItemCreateResponse.quantity()).isEqualTo(1.0)
         assertThat(invoiceLineItemCreateResponse.startDate())
             .isEqualTo(OffsetDateTime.parse("2022-02-01T08:00:00+00:00"))
         assertThat(invoiceLineItemCreateResponse.subLineItems())
             .containsExactly(
-                InvoiceLineItemCreateResponse.SubLineItem.ofMatrixSubLineItem(
-                    InvoiceLineItemCreateResponse.SubLineItem.MatrixSubLineItem.builder()
+                InvoiceLineItemCreateResponse.SubLineItem.ofMatrix(
+                    InvoiceLineItemCreateResponse.SubLineItem.Matrix.builder()
                         .amount("9.00")
                         .grouping(
-                            InvoiceLineItemCreateResponse.SubLineItem.MatrixSubLineItem.Grouping
-                                .builder()
+                            InvoiceLineItemCreateResponse.SubLineItem.Matrix.Grouping.builder()
                                 .key("region")
                                 .value("west")
                                 .build()
                         )
                         .matrixConfig(
-                            InvoiceLineItemCreateResponse.SubLineItem.MatrixSubLineItem.MatrixConfig
-                                .builder()
-                                .dimensionValues(listOf("string"))
+                            InvoiceLineItemCreateResponse.SubLineItem.Matrix.MatrixConfig.builder()
+                                .addDimensionValue("string")
                                 .build()
                         )
                         .name("Tier One")
-                        .quantity(42.23)
-                        .type(
-                            InvoiceLineItemCreateResponse.SubLineItem.MatrixSubLineItem.Type.MATRIX
-                        )
+                        .quantity(5.0)
                         .build()
                 )
             )
@@ -299,5 +464,239 @@ class InvoiceLineItemCreateResponseTest {
                     .taxRatePercentage("tax_rate_percentage")
                     .build()
             )
+        assertThat(invoiceLineItemCreateResponse.usageCustomerIds().getOrNull())
+            .containsExactly("string")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val invoiceLineItemCreateResponse =
+            InvoiceLineItemCreateResponse.builder()
+                .id("id")
+                .adjustedSubtotal("5.00")
+                .addAdjustment(
+                    InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.builder()
+                        .id("id")
+                        .amount("amount")
+                        .addAppliesToPriceId("string")
+                        .addFilter(
+                            InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter.builder()
+                                .field(
+                                    InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter
+                                        .Field
+                                        .PRICE_ID
+                                )
+                                .operator(
+                                    InvoiceLineItemCreateResponse.Adjustment.UsageDiscount.Filter
+                                        .Operator
+                                        .INCLUDES
+                                )
+                                .addValue("string")
+                                .build()
+                        )
+                        .isInvoiceLevel(true)
+                        .reason("reason")
+                        .usageDiscount(0.0)
+                        .build()
+                )
+                .amount("7.00")
+                .creditsApplied("6.00")
+                .discount(
+                    PercentageDiscount.builder()
+                        .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                        .percentageDiscount(0.15)
+                        .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                        .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                        .addFilter(
+                            PercentageDiscount.Filter.builder()
+                                .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                                .operator(PercentageDiscount.Filter.Operator.INCLUDES)
+                                .addValue("string")
+                                .build()
+                        )
+                        .reason("reason")
+                        .build()
+                )
+                .endDate(OffsetDateTime.parse("2022-02-01T08:00:00+00:00"))
+                .filter("filter")
+                .grouping("grouping")
+                .maximum(
+                    InvoiceLineItemCreateResponse.Maximum.builder()
+                        .addAppliesToPriceId("string")
+                        .addFilter(
+                            InvoiceLineItemCreateResponse.Maximum.Filter.builder()
+                                .field(InvoiceLineItemCreateResponse.Maximum.Filter.Field.PRICE_ID)
+                                .operator(
+                                    InvoiceLineItemCreateResponse.Maximum.Filter.Operator.INCLUDES
+                                )
+                                .addValue("string")
+                                .build()
+                        )
+                        .maximumAmount("maximum_amount")
+                        .build()
+                )
+                .maximumAmount("maximum_amount")
+                .minimum(
+                    InvoiceLineItemCreateResponse.Minimum.builder()
+                        .addAppliesToPriceId("string")
+                        .addFilter(
+                            InvoiceLineItemCreateResponse.Minimum.Filter.builder()
+                                .field(InvoiceLineItemCreateResponse.Minimum.Filter.Field.PRICE_ID)
+                                .operator(
+                                    InvoiceLineItemCreateResponse.Minimum.Filter.Operator.INCLUDES
+                                )
+                                .addValue("string")
+                                .build()
+                        )
+                        .minimumAmount("minimum_amount")
+                        .build()
+                )
+                .minimumAmount("minimum_amount")
+                .name("Fixed Fee")
+                .partiallyInvoicedAmount("4.00")
+                .price(
+                    Price.Unit.builder()
+                        .id("id")
+                        .billableMetric(Price.Unit.BillableMetric.builder().id("id").build())
+                        .billingCycleConfiguration(
+                            Price.Unit.BillingCycleConfiguration.builder()
+                                .duration(0L)
+                                .durationUnit(Price.Unit.BillingCycleConfiguration.DurationUnit.DAY)
+                                .build()
+                        )
+                        .cadence(Price.Unit.Cadence.ONE_TIME)
+                        .conversionRate(0.0)
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .creditAllocation(
+                            Price.Unit.CreditAllocation.builder()
+                                .allowsRollover(true)
+                                .currency("currency")
+                                .customExpiration(
+                                    Price.Unit.CreditAllocation.CustomExpiration.builder()
+                                        .duration(0L)
+                                        .durationUnit(
+                                            Price.Unit.CreditAllocation.CustomExpiration
+                                                .DurationUnit
+                                                .DAY
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .currency("currency")
+                        .discount(
+                            PercentageDiscount.builder()
+                                .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                                .percentageDiscount(0.15)
+                                .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                                .addFilter(
+                                    PercentageDiscount.Filter.builder()
+                                        .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                                        .operator(PercentageDiscount.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
+                                .reason("reason")
+                                .build()
+                        )
+                        .externalPriceId("external_price_id")
+                        .fixedPriceQuantity(0.0)
+                        .invoicingCycleConfiguration(
+                            Price.Unit.InvoicingCycleConfiguration.builder()
+                                .duration(0L)
+                                .durationUnit(
+                                    Price.Unit.InvoicingCycleConfiguration.DurationUnit.DAY
+                                )
+                                .build()
+                        )
+                        .item(Price.Unit.Item.builder().id("id").name("name").build())
+                        .maximum(
+                            Price.Unit.Maximum.builder()
+                                .addAppliesToPriceId("string")
+                                .addFilter(
+                                    Price.Unit.Maximum.Filter.builder()
+                                        .field(Price.Unit.Maximum.Filter.Field.PRICE_ID)
+                                        .operator(Price.Unit.Maximum.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
+                                .maximumAmount("maximum_amount")
+                                .build()
+                        )
+                        .maximumAmount("maximum_amount")
+                        .metadata(
+                            Price.Unit.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .minimum(
+                            Price.Unit.Minimum.builder()
+                                .addAppliesToPriceId("string")
+                                .addFilter(
+                                    Price.Unit.Minimum.Filter.builder()
+                                        .field(Price.Unit.Minimum.Filter.Field.PRICE_ID)
+                                        .operator(Price.Unit.Minimum.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
+                                .minimumAmount("minimum_amount")
+                                .build()
+                        )
+                        .minimumAmount("minimum_amount")
+                        .name("name")
+                        .planPhaseOrder(0L)
+                        .priceType(Price.Unit.PriceType.USAGE_PRICE)
+                        .unitConfig(
+                            Price.Unit.UnitConfig.builder().unitAmount("unit_amount").build()
+                        )
+                        .dimensionalPriceConfiguration(
+                            Price.Unit.DimensionalPriceConfiguration.builder()
+                                .addDimensionValue("string")
+                                .dimensionalPriceGroupId("dimensional_price_group_id")
+                                .build()
+                        )
+                        .build()
+                )
+                .quantity(1.0)
+                .startDate(OffsetDateTime.parse("2022-02-01T08:00:00+00:00"))
+                .addSubLineItem(
+                    InvoiceLineItemCreateResponse.SubLineItem.Matrix.builder()
+                        .amount("9.00")
+                        .grouping(
+                            InvoiceLineItemCreateResponse.SubLineItem.Matrix.Grouping.builder()
+                                .key("region")
+                                .value("west")
+                                .build()
+                        )
+                        .matrixConfig(
+                            InvoiceLineItemCreateResponse.SubLineItem.Matrix.MatrixConfig.builder()
+                                .addDimensionValue("string")
+                                .build()
+                        )
+                        .name("Tier One")
+                        .quantity(5.0)
+                        .build()
+                )
+                .subtotal("9.00")
+                .addTaxAmount(
+                    InvoiceLineItemCreateResponse.TaxAmount.builder()
+                        .amount("amount")
+                        .taxRateDescription("tax_rate_description")
+                        .taxRatePercentage("tax_rate_percentage")
+                        .build()
+                )
+                .addUsageCustomerId("string")
+                .build()
+
+        val roundtrippedInvoiceLineItemCreateResponse =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(invoiceLineItemCreateResponse),
+                jacksonTypeRef<InvoiceLineItemCreateResponse>(),
+            )
+
+        assertThat(roundtrippedInvoiceLineItemCreateResponse)
+            .isEqualTo(invoiceLineItemCreateResponse)
     }
 }

@@ -1,10 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async.customers.credits
 
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CustomerCreditLedgerCreateEntryByExternalIdParams
 import com.withorb.api.models.CustomerCreditLedgerCreateEntryByExternalIdResponse
 import com.withorb.api.models.CustomerCreditLedgerCreateEntryParams
@@ -18,13 +17,18 @@ import java.util.concurrent.CompletableFuture
 interface LedgerServiceAsync {
 
     /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
      * The credits ledger provides _auditing_ functionality over Orb's credits system with a list of
      * actions that have taken place to modify a customer's credit balance. This
-     * [paginated endpoint](../reference/pagination) lists these entries, starting from the most
+     * [paginated endpoint](/api-reference/pagination) lists these entries, starting from the most
      * recent ledger entry.
      *
      * More details on using Orb's real-time credit feature are
-     * [here](../guides/product-catalog/prepurchase.md).
+     * [here](/product-catalog/prepurchase).
      *
      * There are four major types of modifications to credit balance, detailed below.
      *
@@ -96,11 +100,41 @@ interface LedgerServiceAsync {
      * When credits are added to a customer's balance as a result of a correction, this entry will
      * be added to the ledger to indicate the adjustment of credits.
      */
-    @JvmOverloads
+    fun list(customerId: String): CompletableFuture<CustomerCreditLedgerListPageAsync> =
+        list(customerId, CustomerCreditLedgerListParams.none())
+
+    /** @see [list] */
+    fun list(
+        customerId: String,
+        params: CustomerCreditLedgerListParams = CustomerCreditLedgerListParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CustomerCreditLedgerListPageAsync> =
+        list(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+    /** @see [list] */
+    fun list(
+        customerId: String,
+        params: CustomerCreditLedgerListParams = CustomerCreditLedgerListParams.none(),
+    ): CompletableFuture<CustomerCreditLedgerListPageAsync> =
+        list(customerId, params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: CustomerCreditLedgerListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditLedgerListPageAsync>
+
+    /** @see [list] */
+    fun list(
+        params: CustomerCreditLedgerListParams
+    ): CompletableFuture<CustomerCreditLedgerListPageAsync> = list(params, RequestOptions.none())
+
+    /** @see [list] */
+    fun list(
+        customerId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CustomerCreditLedgerListPageAsync> =
+        list(customerId, CustomerCreditLedgerListParams.none(), requestOptions)
 
     /**
      * This endpoint allows you to create a new ledger entry for a specified customer's balance.
@@ -111,7 +145,7 @@ interface LedgerServiceAsync {
      * 1. After calling this endpoint, [Fetch Credit Balance](fetch-customer-credits) will return a
      *    credit block that represents the changes (i.e. balance changes or transfers).
      * 2. A ledger entry will be added to the credits ledger for this customer, and therefore
-     *    returned in the [View Credits Ledger](fetch-customer-credits) response as well as
+     *    returned in the [View Credits Ledger](fetch-customer-credits-ledger) response as well as
      *    serialized in the response to this request. In the case of deductions without a specified
      *    block, multiple ledger entries may be created if the deduction spans credit blocks.
      * 3. If `invoice_settings` is specified, an invoice will be created that reflects the cost of
@@ -205,10 +239,30 @@ interface LedgerServiceAsync {
      * decremented from, and `amount` indicates how many credits to return to the customer, up to
      * the block's initial balance.
      */
-    @JvmOverloads
+    fun createEntry(
+        customerId: String,
+        params: CustomerCreditLedgerCreateEntryParams,
+    ): CompletableFuture<CustomerCreditLedgerCreateEntryResponse> =
+        createEntry(customerId, params, RequestOptions.none())
+
+    /** @see [createEntry] */
+    fun createEntry(
+        customerId: String,
+        params: CustomerCreditLedgerCreateEntryParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CustomerCreditLedgerCreateEntryResponse> =
+        createEntry(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+    /** @see [createEntry] */
+    fun createEntry(
+        params: CustomerCreditLedgerCreateEntryParams
+    ): CompletableFuture<CustomerCreditLedgerCreateEntryResponse> =
+        createEntry(params, RequestOptions.none())
+
+    /** @see [createEntry] */
     fun createEntry(
         params: CustomerCreditLedgerCreateEntryParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditLedgerCreateEntryResponse>
 
     /**
@@ -220,7 +274,7 @@ interface LedgerServiceAsync {
      * 1. After calling this endpoint, [Fetch Credit Balance](fetch-customer-credits) will return a
      *    credit block that represents the changes (i.e. balance changes or transfers).
      * 2. A ledger entry will be added to the credits ledger for this customer, and therefore
-     *    returned in the [View Credits Ledger](fetch-customer-credits) response as well as
+     *    returned in the [View Credits Ledger](fetch-customer-credits-ledger) response as well as
      *    serialized in the response to this request. In the case of deductions without a specified
      *    block, multiple ledger entries may be created if the deduction spans credit blocks.
      * 3. If `invoice_settings` is specified, an invoice will be created that reflects the cost of
@@ -314,20 +368,43 @@ interface LedgerServiceAsync {
      * decremented from, and `amount` indicates how many credits to return to the customer, up to
      * the block's initial balance.
      */
-    @JvmOverloads
+    fun createEntryByExternalId(
+        externalCustomerId: String,
+        params: CustomerCreditLedgerCreateEntryByExternalIdParams,
+    ): CompletableFuture<CustomerCreditLedgerCreateEntryByExternalIdResponse> =
+        createEntryByExternalId(externalCustomerId, params, RequestOptions.none())
+
+    /** @see [createEntryByExternalId] */
+    fun createEntryByExternalId(
+        externalCustomerId: String,
+        params: CustomerCreditLedgerCreateEntryByExternalIdParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CustomerCreditLedgerCreateEntryByExternalIdResponse> =
+        createEntryByExternalId(
+            params.toBuilder().externalCustomerId(externalCustomerId).build(),
+            requestOptions,
+        )
+
+    /** @see [createEntryByExternalId] */
+    fun createEntryByExternalId(
+        params: CustomerCreditLedgerCreateEntryByExternalIdParams
+    ): CompletableFuture<CustomerCreditLedgerCreateEntryByExternalIdResponse> =
+        createEntryByExternalId(params, RequestOptions.none())
+
+    /** @see [createEntryByExternalId] */
     fun createEntryByExternalId(
         params: CustomerCreditLedgerCreateEntryByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditLedgerCreateEntryByExternalIdResponse>
 
     /**
      * The credits ledger provides _auditing_ functionality over Orb's credits system with a list of
      * actions that have taken place to modify a customer's credit balance. This
-     * [paginated endpoint](../reference/pagination) lists these entries, starting from the most
+     * [paginated endpoint](/api-reference/pagination) lists these entries, starting from the most
      * recent ledger entry.
      *
      * More details on using Orb's real-time credit feature are
-     * [here](../guides/product-catalog/prepurchase.md).
+     * [here](/product-catalog/prepurchase).
      *
      * There are four major types of modifications to credit balance, detailed below.
      *
@@ -399,9 +476,217 @@ interface LedgerServiceAsync {
      * When credits are added to a customer's balance as a result of a correction, this entry will
      * be added to the ledger to indicate the adjustment of credits.
      */
-    @JvmOverloads
+    fun listByExternalId(
+        externalCustomerId: String
+    ): CompletableFuture<CustomerCreditLedgerListByExternalIdPageAsync> =
+        listByExternalId(externalCustomerId, CustomerCreditLedgerListByExternalIdParams.none())
+
+    /** @see [listByExternalId] */
+    fun listByExternalId(
+        externalCustomerId: String,
+        params: CustomerCreditLedgerListByExternalIdParams =
+            CustomerCreditLedgerListByExternalIdParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CustomerCreditLedgerListByExternalIdPageAsync> =
+        listByExternalId(
+            params.toBuilder().externalCustomerId(externalCustomerId).build(),
+            requestOptions,
+        )
+
+    /** @see [listByExternalId] */
+    fun listByExternalId(
+        externalCustomerId: String,
+        params: CustomerCreditLedgerListByExternalIdParams =
+            CustomerCreditLedgerListByExternalIdParams.none(),
+    ): CompletableFuture<CustomerCreditLedgerListByExternalIdPageAsync> =
+        listByExternalId(externalCustomerId, params, RequestOptions.none())
+
+    /** @see [listByExternalId] */
     fun listByExternalId(
         params: CustomerCreditLedgerListByExternalIdParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditLedgerListByExternalIdPageAsync>
+
+    /** @see [listByExternalId] */
+    fun listByExternalId(
+        params: CustomerCreditLedgerListByExternalIdParams
+    ): CompletableFuture<CustomerCreditLedgerListByExternalIdPageAsync> =
+        listByExternalId(params, RequestOptions.none())
+
+    /** @see [listByExternalId] */
+    fun listByExternalId(
+        externalCustomerId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CustomerCreditLedgerListByExternalIdPageAsync> =
+        listByExternalId(
+            externalCustomerId,
+            CustomerCreditLedgerListByExternalIdParams.none(),
+            requestOptions,
+        )
+
+    /**
+     * A view of [LedgerServiceAsync] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `get /customers/{customer_id}/credits/ledger`, but is
+         * otherwise the same as [LedgerServiceAsync.list].
+         */
+        fun list(
+            customerId: String
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListPageAsync>> =
+            list(customerId, CustomerCreditLedgerListParams.none())
+
+        /** @see [list] */
+        fun list(
+            customerId: String,
+            params: CustomerCreditLedgerListParams = CustomerCreditLedgerListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListPageAsync>> =
+            list(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+        /** @see [list] */
+        fun list(
+            customerId: String,
+            params: CustomerCreditLedgerListParams = CustomerCreditLedgerListParams.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListPageAsync>> =
+            list(customerId, params, RequestOptions.none())
+
+        /** @see [list] */
+        fun list(
+            params: CustomerCreditLedgerListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListPageAsync>>
+
+        /** @see [list] */
+        fun list(
+            params: CustomerCreditLedgerListParams
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
+        fun list(
+            customerId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListPageAsync>> =
+            list(customerId, CustomerCreditLedgerListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /customers/{customer_id}/credits/ledger_entry`, but
+         * is otherwise the same as [LedgerServiceAsync.createEntry].
+         */
+        fun createEntry(
+            customerId: String,
+            params: CustomerCreditLedgerCreateEntryParams,
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryResponse>> =
+            createEntry(customerId, params, RequestOptions.none())
+
+        /** @see [createEntry] */
+        fun createEntry(
+            customerId: String,
+            params: CustomerCreditLedgerCreateEntryParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryResponse>> =
+            createEntry(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+        /** @see [createEntry] */
+        fun createEntry(
+            params: CustomerCreditLedgerCreateEntryParams
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryResponse>> =
+            createEntry(params, RequestOptions.none())
+
+        /** @see [createEntry] */
+        fun createEntry(
+            params: CustomerCreditLedgerCreateEntryParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /customers/external_customer_id/{external_customer_id}/credits/ledger_entry`, but is
+         * otherwise the same as [LedgerServiceAsync.createEntryByExternalId].
+         */
+        fun createEntryByExternalId(
+            externalCustomerId: String,
+            params: CustomerCreditLedgerCreateEntryByExternalIdParams,
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryByExternalIdResponse>> =
+            createEntryByExternalId(externalCustomerId, params, RequestOptions.none())
+
+        /** @see [createEntryByExternalId] */
+        fun createEntryByExternalId(
+            externalCustomerId: String,
+            params: CustomerCreditLedgerCreateEntryByExternalIdParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryByExternalIdResponse>> =
+            createEntryByExternalId(
+                params.toBuilder().externalCustomerId(externalCustomerId).build(),
+                requestOptions,
+            )
+
+        /** @see [createEntryByExternalId] */
+        fun createEntryByExternalId(
+            params: CustomerCreditLedgerCreateEntryByExternalIdParams
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryByExternalIdResponse>> =
+            createEntryByExternalId(params, RequestOptions.none())
+
+        /** @see [createEntryByExternalId] */
+        fun createEntryByExternalId(
+            params: CustomerCreditLedgerCreateEntryByExternalIdParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryByExternalIdResponse>>
+
+        /**
+         * Returns a raw HTTP response for `get
+         * /customers/external_customer_id/{external_customer_id}/credits/ledger`, but is otherwise
+         * the same as [LedgerServiceAsync.listByExternalId].
+         */
+        fun listByExternalId(
+            externalCustomerId: String
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListByExternalIdPageAsync>> =
+            listByExternalId(externalCustomerId, CustomerCreditLedgerListByExternalIdParams.none())
+
+        /** @see [listByExternalId] */
+        fun listByExternalId(
+            externalCustomerId: String,
+            params: CustomerCreditLedgerListByExternalIdParams =
+                CustomerCreditLedgerListByExternalIdParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListByExternalIdPageAsync>> =
+            listByExternalId(
+                params.toBuilder().externalCustomerId(externalCustomerId).build(),
+                requestOptions,
+            )
+
+        /** @see [listByExternalId] */
+        fun listByExternalId(
+            externalCustomerId: String,
+            params: CustomerCreditLedgerListByExternalIdParams =
+                CustomerCreditLedgerListByExternalIdParams.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListByExternalIdPageAsync>> =
+            listByExternalId(externalCustomerId, params, RequestOptions.none())
+
+        /** @see [listByExternalId] */
+        fun listByExternalId(
+            params: CustomerCreditLedgerListByExternalIdParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListByExternalIdPageAsync>>
+
+        /** @see [listByExternalId] */
+        fun listByExternalId(
+            params: CustomerCreditLedgerListByExternalIdParams
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListByExternalIdPageAsync>> =
+            listByExternalId(params, RequestOptions.none())
+
+        /** @see [listByExternalId] */
+        fun listByExternalId(
+            externalCustomerId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListByExternalIdPageAsync>> =
+            listByExternalId(
+                externalCustomerId,
+                CustomerCreditLedgerListByExternalIdParams.none(),
+                requestOptions,
+            )
+    }
 }

@@ -4,86 +4,154 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toImmutable
+import com.withorb.api.core.checkRequired
+import com.withorb.api.errors.OrbInvalidDataException
+import java.util.Collections
 import java.util.Objects
 
-@JsonDeserialize(builder = EventUpdateResponse.Builder::class)
-@NoAutoDetect
 class EventUpdateResponse
 private constructor(
     private val amended: JsonField<String>,
-    private val additionalProperties: Map<String, JsonValue>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
+    @JsonCreator
+    private constructor(
+        @JsonProperty("amended") @ExcludeMissing amended: JsonField<String> = JsonMissing.of()
+    ) : this(amended, mutableMapOf())
 
-    /** event_id of the amended event, if successfully ingested */
+    /**
+     * event_id of the amended event, if successfully ingested
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun amended(): String = amended.getRequired("amended")
 
-    /** event_id of the amended event, if successfully ingested */
-    @JsonProperty("amended") @ExcludeMissing fun _amended() = amended
+    /**
+     * Returns the raw JSON value of [amended].
+     *
+     * Unlike [amended], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("amended") @ExcludeMissing fun _amended(): JsonField<String> = amended
+
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    fun validate(): EventUpdateResponse = apply {
-        if (!validated) {
-            amended()
-            validated = true
-        }
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [EventUpdateResponse].
+         *
+         * The following fields are required:
+         * ```java
+         * .amended()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    /** A builder for [EventUpdateResponse]. */
+    class Builder internal constructor() {
 
-        private var amended: JsonField<String> = JsonMissing.of()
+        private var amended: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(eventUpdateResponse: EventUpdateResponse) = apply {
-            this.amended = eventUpdateResponse.amended
-            additionalProperties(eventUpdateResponse.additionalProperties)
+            amended = eventUpdateResponse.amended
+            additionalProperties = eventUpdateResponse.additionalProperties.toMutableMap()
         }
 
         /** event_id of the amended event, if successfully ingested */
         fun amended(amended: String) = amended(JsonField.of(amended))
 
-        /** event_id of the amended event, if successfully ingested */
-        @JsonProperty("amended")
-        @ExcludeMissing
+        /**
+         * Sets [Builder.amended] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.amended] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun amended(amended: JsonField<String>) = apply { this.amended = amended }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
         }
 
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
+        /**
+         * Returns an immutable instance of [EventUpdateResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .amended()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): EventUpdateResponse =
-            EventUpdateResponse(amended, additionalProperties.toImmutable())
+            EventUpdateResponse(
+                checkRequired("amended", amended),
+                additionalProperties.toMutableMap(),
+            )
     }
+
+    private var validated: Boolean = false
+
+    fun validate(): EventUpdateResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        amended()
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: OrbInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic internal fun validity(): Int = (if (amended.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

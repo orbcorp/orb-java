@@ -20,153 +20,192 @@ import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.checkKnown
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.getOrThrow
 import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.time.OffsetDateTime
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits within
+ * Orb.
+ */
 @JsonDeserialize(using = CustomerCreditLedgerListResponse.Deserializer::class)
 @JsonSerialize(using = CustomerCreditLedgerListResponse.Serializer::class)
 class CustomerCreditLedgerListResponse
 private constructor(
-    private val incrementLedgerEntry: IncrementLedgerEntry? = null,
-    private val decrementLedgerEntry: DecrementLedgerEntry? = null,
-    private val expirationChangeLedgerEntry: ExpirationChangeLedgerEntry? = null,
-    private val creditBlockExpiryLedgerEntry: CreditBlockExpiryLedgerEntry? = null,
-    private val voidLedgerEntry: VoidLedgerEntry? = null,
-    private val voidInitiatedLedgerEntry: VoidInitiatedLedgerEntry? = null,
-    private val amendmentLedgerEntry: AmendmentLedgerEntry? = null,
+    private val increment: Increment? = null,
+    private val decrement: Decrement? = null,
+    private val expirationChange: ExpirationChange? = null,
+    private val creditBlockExpiry: CreditBlockExpiry? = null,
+    private val void_: Void? = null,
+    private val voidInitiated: VoidInitiated? = null,
+    private val amendment: Amendment? = null,
     private val _json: JsonValue? = null,
 ) {
 
-    private var validated: Boolean = false
+    fun increment(): Optional<Increment> = Optional.ofNullable(increment)
 
-    fun incrementLedgerEntry(): Optional<IncrementLedgerEntry> =
-        Optional.ofNullable(incrementLedgerEntry)
+    fun decrement(): Optional<Decrement> = Optional.ofNullable(decrement)
 
-    fun decrementLedgerEntry(): Optional<DecrementLedgerEntry> =
-        Optional.ofNullable(decrementLedgerEntry)
+    fun expirationChange(): Optional<ExpirationChange> = Optional.ofNullable(expirationChange)
 
-    fun expirationChangeLedgerEntry(): Optional<ExpirationChangeLedgerEntry> =
-        Optional.ofNullable(expirationChangeLedgerEntry)
+    fun creditBlockExpiry(): Optional<CreditBlockExpiry> = Optional.ofNullable(creditBlockExpiry)
 
-    fun creditBlockExpiryLedgerEntry(): Optional<CreditBlockExpiryLedgerEntry> =
-        Optional.ofNullable(creditBlockExpiryLedgerEntry)
+    fun void_(): Optional<Void> = Optional.ofNullable(void_)
 
-    fun voidLedgerEntry(): Optional<VoidLedgerEntry> = Optional.ofNullable(voidLedgerEntry)
+    fun voidInitiated(): Optional<VoidInitiated> = Optional.ofNullable(voidInitiated)
 
-    fun voidInitiatedLedgerEntry(): Optional<VoidInitiatedLedgerEntry> =
-        Optional.ofNullable(voidInitiatedLedgerEntry)
+    fun amendment(): Optional<Amendment> = Optional.ofNullable(amendment)
 
-    fun amendmentLedgerEntry(): Optional<AmendmentLedgerEntry> =
-        Optional.ofNullable(amendmentLedgerEntry)
+    fun isIncrement(): Boolean = increment != null
 
-    fun isIncrementLedgerEntry(): Boolean = incrementLedgerEntry != null
+    fun isDecrement(): Boolean = decrement != null
 
-    fun isDecrementLedgerEntry(): Boolean = decrementLedgerEntry != null
+    fun isExpirationChange(): Boolean = expirationChange != null
 
-    fun isExpirationChangeLedgerEntry(): Boolean = expirationChangeLedgerEntry != null
+    fun isCreditBlockExpiry(): Boolean = creditBlockExpiry != null
 
-    fun isCreditBlockExpiryLedgerEntry(): Boolean = creditBlockExpiryLedgerEntry != null
+    fun isVoid(): Boolean = void_ != null
 
-    fun isVoidLedgerEntry(): Boolean = voidLedgerEntry != null
+    fun isVoidInitiated(): Boolean = voidInitiated != null
 
-    fun isVoidInitiatedLedgerEntry(): Boolean = voidInitiatedLedgerEntry != null
+    fun isAmendment(): Boolean = amendment != null
 
-    fun isAmendmentLedgerEntry(): Boolean = amendmentLedgerEntry != null
+    fun asIncrement(): Increment = increment.getOrThrow("increment")
 
-    fun asIncrementLedgerEntry(): IncrementLedgerEntry =
-        incrementLedgerEntry.getOrThrow("incrementLedgerEntry")
+    fun asDecrement(): Decrement = decrement.getOrThrow("decrement")
 
-    fun asDecrementLedgerEntry(): DecrementLedgerEntry =
-        decrementLedgerEntry.getOrThrow("decrementLedgerEntry")
+    fun asExpirationChange(): ExpirationChange = expirationChange.getOrThrow("expirationChange")
 
-    fun asExpirationChangeLedgerEntry(): ExpirationChangeLedgerEntry =
-        expirationChangeLedgerEntry.getOrThrow("expirationChangeLedgerEntry")
+    fun asCreditBlockExpiry(): CreditBlockExpiry = creditBlockExpiry.getOrThrow("creditBlockExpiry")
 
-    fun asCreditBlockExpiryLedgerEntry(): CreditBlockExpiryLedgerEntry =
-        creditBlockExpiryLedgerEntry.getOrThrow("creditBlockExpiryLedgerEntry")
+    fun asVoid(): Void = void_.getOrThrow("void_")
 
-    fun asVoidLedgerEntry(): VoidLedgerEntry = voidLedgerEntry.getOrThrow("voidLedgerEntry")
+    fun asVoidInitiated(): VoidInitiated = voidInitiated.getOrThrow("voidInitiated")
 
-    fun asVoidInitiatedLedgerEntry(): VoidInitiatedLedgerEntry =
-        voidInitiatedLedgerEntry.getOrThrow("voidInitiatedLedgerEntry")
-
-    fun asAmendmentLedgerEntry(): AmendmentLedgerEntry =
-        amendmentLedgerEntry.getOrThrow("amendmentLedgerEntry")
+    fun asAmendment(): Amendment = amendment.getOrThrow("amendment")
 
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
-    fun <T> accept(visitor: Visitor<T>): T {
-        return when {
-            incrementLedgerEntry != null -> visitor.visitIncrementLedgerEntry(incrementLedgerEntry)
-            decrementLedgerEntry != null -> visitor.visitDecrementLedgerEntry(decrementLedgerEntry)
-            expirationChangeLedgerEntry != null ->
-                visitor.visitExpirationChangeLedgerEntry(expirationChangeLedgerEntry)
-            creditBlockExpiryLedgerEntry != null ->
-                visitor.visitCreditBlockExpiryLedgerEntry(creditBlockExpiryLedgerEntry)
-            voidLedgerEntry != null -> visitor.visitVoidLedgerEntry(voidLedgerEntry)
-            voidInitiatedLedgerEntry != null ->
-                visitor.visitVoidInitiatedLedgerEntry(voidInitiatedLedgerEntry)
-            amendmentLedgerEntry != null -> visitor.visitAmendmentLedgerEntry(amendmentLedgerEntry)
+    fun <T> accept(visitor: Visitor<T>): T =
+        when {
+            increment != null -> visitor.visitIncrement(increment)
+            decrement != null -> visitor.visitDecrement(decrement)
+            expirationChange != null -> visitor.visitExpirationChange(expirationChange)
+            creditBlockExpiry != null -> visitor.visitCreditBlockExpiry(creditBlockExpiry)
+            void_ != null -> visitor.visitVoid(void_)
+            voidInitiated != null -> visitor.visitVoidInitiated(voidInitiated)
+            amendment != null -> visitor.visitAmendment(amendment)
             else -> visitor.unknown(_json)
         }
-    }
+
+    private var validated: Boolean = false
 
     fun validate(): CustomerCreditLedgerListResponse = apply {
-        if (!validated) {
-            if (
-                incrementLedgerEntry == null &&
-                    decrementLedgerEntry == null &&
-                    expirationChangeLedgerEntry == null &&
-                    creditBlockExpiryLedgerEntry == null &&
-                    voidLedgerEntry == null &&
-                    voidInitiatedLedgerEntry == null &&
-                    amendmentLedgerEntry == null
-            ) {
-                throw OrbInvalidDataException("Unknown CustomerCreditLedgerListResponse: $_json")
-            }
-            incrementLedgerEntry?.validate()
-            decrementLedgerEntry?.validate()
-            expirationChangeLedgerEntry?.validate()
-            creditBlockExpiryLedgerEntry?.validate()
-            voidLedgerEntry?.validate()
-            voidInitiatedLedgerEntry?.validate()
-            amendmentLedgerEntry?.validate()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        accept(
+            object : Visitor<Unit> {
+                override fun visitIncrement(increment: Increment) {
+                    increment.validate()
+                }
+
+                override fun visitDecrement(decrement: Decrement) {
+                    decrement.validate()
+                }
+
+                override fun visitExpirationChange(expirationChange: ExpirationChange) {
+                    expirationChange.validate()
+                }
+
+                override fun visitCreditBlockExpiry(creditBlockExpiry: CreditBlockExpiry) {
+                    creditBlockExpiry.validate()
+                }
+
+                override fun visitVoid(void_: Void) {
+                    void_.validate()
+                }
+
+                override fun visitVoidInitiated(voidInitiated: VoidInitiated) {
+                    voidInitiated.validate()
+                }
+
+                override fun visitAmendment(amendment: Amendment) {
+                    amendment.validate()
+                }
+            }
+        )
+        validated = true
     }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: OrbInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        accept(
+            object : Visitor<Int> {
+                override fun visitIncrement(increment: Increment) = increment.validity()
+
+                override fun visitDecrement(decrement: Decrement) = decrement.validity()
+
+                override fun visitExpirationChange(expirationChange: ExpirationChange) =
+                    expirationChange.validity()
+
+                override fun visitCreditBlockExpiry(creditBlockExpiry: CreditBlockExpiry) =
+                    creditBlockExpiry.validity()
+
+                override fun visitVoid(void_: Void) = void_.validity()
+
+                override fun visitVoidInitiated(voidInitiated: VoidInitiated) =
+                    voidInitiated.validity()
+
+                override fun visitAmendment(amendment: Amendment) = amendment.validity()
+
+                override fun unknown(json: JsonValue?) = 0
+            }
+        )
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is CustomerCreditLedgerListResponse && incrementLedgerEntry == other.incrementLedgerEntry && decrementLedgerEntry == other.decrementLedgerEntry && expirationChangeLedgerEntry == other.expirationChangeLedgerEntry && creditBlockExpiryLedgerEntry == other.creditBlockExpiryLedgerEntry && voidLedgerEntry == other.voidLedgerEntry && voidInitiatedLedgerEntry == other.voidInitiatedLedgerEntry && amendmentLedgerEntry == other.amendmentLedgerEntry /* spotless:on */
+        return /* spotless:off */ other is CustomerCreditLedgerListResponse && increment == other.increment && decrement == other.decrement && expirationChange == other.expirationChange && creditBlockExpiry == other.creditBlockExpiry && void_ == other.void_ && voidInitiated == other.voidInitiated && amendment == other.amendment /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(incrementLedgerEntry, decrementLedgerEntry, expirationChangeLedgerEntry, creditBlockExpiryLedgerEntry, voidLedgerEntry, voidInitiatedLedgerEntry, amendmentLedgerEntry) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(increment, decrement, expirationChange, creditBlockExpiry, void_, voidInitiated, amendment) /* spotless:on */
 
     override fun toString(): String =
         when {
-            incrementLedgerEntry != null ->
-                "CustomerCreditLedgerListResponse{incrementLedgerEntry=$incrementLedgerEntry}"
-            decrementLedgerEntry != null ->
-                "CustomerCreditLedgerListResponse{decrementLedgerEntry=$decrementLedgerEntry}"
-            expirationChangeLedgerEntry != null ->
-                "CustomerCreditLedgerListResponse{expirationChangeLedgerEntry=$expirationChangeLedgerEntry}"
-            creditBlockExpiryLedgerEntry != null ->
-                "CustomerCreditLedgerListResponse{creditBlockExpiryLedgerEntry=$creditBlockExpiryLedgerEntry}"
-            voidLedgerEntry != null ->
-                "CustomerCreditLedgerListResponse{voidLedgerEntry=$voidLedgerEntry}"
-            voidInitiatedLedgerEntry != null ->
-                "CustomerCreditLedgerListResponse{voidInitiatedLedgerEntry=$voidInitiatedLedgerEntry}"
-            amendmentLedgerEntry != null ->
-                "CustomerCreditLedgerListResponse{amendmentLedgerEntry=$amendmentLedgerEntry}"
+            increment != null -> "CustomerCreditLedgerListResponse{increment=$increment}"
+            decrement != null -> "CustomerCreditLedgerListResponse{decrement=$decrement}"
+            expirationChange != null ->
+                "CustomerCreditLedgerListResponse{expirationChange=$expirationChange}"
+            creditBlockExpiry != null ->
+                "CustomerCreditLedgerListResponse{creditBlockExpiry=$creditBlockExpiry}"
+            void_ != null -> "CustomerCreditLedgerListResponse{void_=$void_}"
+            voidInitiated != null ->
+                "CustomerCreditLedgerListResponse{voidInitiated=$voidInitiated}"
+            amendment != null -> "CustomerCreditLedgerListResponse{amendment=$amendment}"
             _json != null -> "CustomerCreditLedgerListResponse{_unknown=$_json}"
             else -> throw IllegalStateException("Invalid CustomerCreditLedgerListResponse")
         }
@@ -174,68 +213,68 @@ private constructor(
     companion object {
 
         @JvmStatic
-        fun ofIncrementLedgerEntry(incrementLedgerEntry: IncrementLedgerEntry) =
-            CustomerCreditLedgerListResponse(incrementLedgerEntry = incrementLedgerEntry)
+        fun ofIncrement(increment: Increment) =
+            CustomerCreditLedgerListResponse(increment = increment)
 
         @JvmStatic
-        fun ofDecrementLedgerEntry(decrementLedgerEntry: DecrementLedgerEntry) =
-            CustomerCreditLedgerListResponse(decrementLedgerEntry = decrementLedgerEntry)
+        fun ofDecrement(decrement: Decrement) =
+            CustomerCreditLedgerListResponse(decrement = decrement)
 
         @JvmStatic
-        fun ofExpirationChangeLedgerEntry(
-            expirationChangeLedgerEntry: ExpirationChangeLedgerEntry
-        ) =
-            CustomerCreditLedgerListResponse(
-                expirationChangeLedgerEntry = expirationChangeLedgerEntry
-            )
+        fun ofExpirationChange(expirationChange: ExpirationChange) =
+            CustomerCreditLedgerListResponse(expirationChange = expirationChange)
 
         @JvmStatic
-        fun ofCreditBlockExpiryLedgerEntry(
-            creditBlockExpiryLedgerEntry: CreditBlockExpiryLedgerEntry
-        ) =
-            CustomerCreditLedgerListResponse(
-                creditBlockExpiryLedgerEntry = creditBlockExpiryLedgerEntry
-            )
+        fun ofCreditBlockExpiry(creditBlockExpiry: CreditBlockExpiry) =
+            CustomerCreditLedgerListResponse(creditBlockExpiry = creditBlockExpiry)
+
+        @JvmStatic fun ofVoid(void_: Void) = CustomerCreditLedgerListResponse(void_ = void_)
 
         @JvmStatic
-        fun ofVoidLedgerEntry(voidLedgerEntry: VoidLedgerEntry) =
-            CustomerCreditLedgerListResponse(voidLedgerEntry = voidLedgerEntry)
+        fun ofVoidInitiated(voidInitiated: VoidInitiated) =
+            CustomerCreditLedgerListResponse(voidInitiated = voidInitiated)
 
         @JvmStatic
-        fun ofVoidInitiatedLedgerEntry(voidInitiatedLedgerEntry: VoidInitiatedLedgerEntry) =
-            CustomerCreditLedgerListResponse(voidInitiatedLedgerEntry = voidInitiatedLedgerEntry)
-
-        @JvmStatic
-        fun ofAmendmentLedgerEntry(amendmentLedgerEntry: AmendmentLedgerEntry) =
-            CustomerCreditLedgerListResponse(amendmentLedgerEntry = amendmentLedgerEntry)
+        fun ofAmendment(amendment: Amendment) =
+            CustomerCreditLedgerListResponse(amendment = amendment)
     }
 
+    /**
+     * An interface that defines how to map each variant of [CustomerCreditLedgerListResponse] to a
+     * value of type [T].
+     */
     interface Visitor<out T> {
 
-        fun visitIncrementLedgerEntry(incrementLedgerEntry: IncrementLedgerEntry): T
+        fun visitIncrement(increment: Increment): T
 
-        fun visitDecrementLedgerEntry(decrementLedgerEntry: DecrementLedgerEntry): T
+        fun visitDecrement(decrement: Decrement): T
 
-        fun visitExpirationChangeLedgerEntry(
-            expirationChangeLedgerEntry: ExpirationChangeLedgerEntry
-        ): T
+        fun visitExpirationChange(expirationChange: ExpirationChange): T
 
-        fun visitCreditBlockExpiryLedgerEntry(
-            creditBlockExpiryLedgerEntry: CreditBlockExpiryLedgerEntry
-        ): T
+        fun visitCreditBlockExpiry(creditBlockExpiry: CreditBlockExpiry): T
 
-        fun visitVoidLedgerEntry(voidLedgerEntry: VoidLedgerEntry): T
+        fun visitVoid(void_: Void): T
 
-        fun visitVoidInitiatedLedgerEntry(voidInitiatedLedgerEntry: VoidInitiatedLedgerEntry): T
+        fun visitVoidInitiated(voidInitiated: VoidInitiated): T
 
-        fun visitAmendmentLedgerEntry(amendmentLedgerEntry: AmendmentLedgerEntry): T
+        fun visitAmendment(amendment: Amendment): T
 
+        /**
+         * Maps an unknown variant of [CustomerCreditLedgerListResponse] to a value of type [T].
+         *
+         * An instance of [CustomerCreditLedgerListResponse] can contain an unknown variant if it
+         * was deserialized from data that doesn't match any known variant. For example, if the SDK
+         * is on an older version than the API, then the API may respond with new variants that the
+         * SDK is unaware of.
+         *
+         * @throws OrbInvalidDataException in the default implementation.
+         */
         fun unknown(json: JsonValue?): T {
             throw OrbInvalidDataException("Unknown CustomerCreditLedgerListResponse: $json")
         }
     }
 
-    class Deserializer :
+    internal class Deserializer :
         BaseDeserializer<CustomerCreditLedgerListResponse>(
             CustomerCreditLedgerListResponse::class
         ) {
@@ -246,73 +285,39 @@ private constructor(
 
             when (entryType) {
                 "increment" -> {
-                    tryDeserialize(node, jacksonTypeRef<IncrementLedgerEntry>()) { it.validate() }
-                        ?.let {
-                            return CustomerCreditLedgerListResponse(
-                                incrementLedgerEntry = it,
-                                _json = json
-                            )
-                        }
+                    return tryDeserialize(node, jacksonTypeRef<Increment>())?.let {
+                        CustomerCreditLedgerListResponse(increment = it, _json = json)
+                    } ?: CustomerCreditLedgerListResponse(_json = json)
                 }
                 "decrement" -> {
-                    tryDeserialize(node, jacksonTypeRef<DecrementLedgerEntry>()) { it.validate() }
-                        ?.let {
-                            return CustomerCreditLedgerListResponse(
-                                decrementLedgerEntry = it,
-                                _json = json
-                            )
-                        }
+                    return tryDeserialize(node, jacksonTypeRef<Decrement>())?.let {
+                        CustomerCreditLedgerListResponse(decrement = it, _json = json)
+                    } ?: CustomerCreditLedgerListResponse(_json = json)
                 }
                 "expiration_change" -> {
-                    tryDeserialize(node, jacksonTypeRef<ExpirationChangeLedgerEntry>()) {
-                            it.validate()
-                        }
-                        ?.let {
-                            return CustomerCreditLedgerListResponse(
-                                expirationChangeLedgerEntry = it,
-                                _json = json
-                            )
-                        }
+                    return tryDeserialize(node, jacksonTypeRef<ExpirationChange>())?.let {
+                        CustomerCreditLedgerListResponse(expirationChange = it, _json = json)
+                    } ?: CustomerCreditLedgerListResponse(_json = json)
                 }
                 "credit_block_expiry" -> {
-                    tryDeserialize(node, jacksonTypeRef<CreditBlockExpiryLedgerEntry>()) {
-                            it.validate()
-                        }
-                        ?.let {
-                            return CustomerCreditLedgerListResponse(
-                                creditBlockExpiryLedgerEntry = it,
-                                _json = json
-                            )
-                        }
+                    return tryDeserialize(node, jacksonTypeRef<CreditBlockExpiry>())?.let {
+                        CustomerCreditLedgerListResponse(creditBlockExpiry = it, _json = json)
+                    } ?: CustomerCreditLedgerListResponse(_json = json)
                 }
                 "void" -> {
-                    tryDeserialize(node, jacksonTypeRef<VoidLedgerEntry>()) { it.validate() }
-                        ?.let {
-                            return CustomerCreditLedgerListResponse(
-                                voidLedgerEntry = it,
-                                _json = json
-                            )
-                        }
+                    return tryDeserialize(node, jacksonTypeRef<Void>())?.let {
+                        CustomerCreditLedgerListResponse(void_ = it, _json = json)
+                    } ?: CustomerCreditLedgerListResponse(_json = json)
                 }
                 "void_initiated" -> {
-                    tryDeserialize(node, jacksonTypeRef<VoidInitiatedLedgerEntry>()) {
-                            it.validate()
-                        }
-                        ?.let {
-                            return CustomerCreditLedgerListResponse(
-                                voidInitiatedLedgerEntry = it,
-                                _json = json
-                            )
-                        }
+                    return tryDeserialize(node, jacksonTypeRef<VoidInitiated>())?.let {
+                        CustomerCreditLedgerListResponse(voidInitiated = it, _json = json)
+                    } ?: CustomerCreditLedgerListResponse(_json = json)
                 }
                 "amendment" -> {
-                    tryDeserialize(node, jacksonTypeRef<AmendmentLedgerEntry>()) { it.validate() }
-                        ?.let {
-                            return CustomerCreditLedgerListResponse(
-                                amendmentLedgerEntry = it,
-                                _json = json
-                            )
-                        }
+                    return tryDeserialize(node, jacksonTypeRef<Amendment>())?.let {
+                        CustomerCreditLedgerListResponse(amendment = it, _json = json)
+                    } ?: CustomerCreditLedgerListResponse(_json = json)
                 }
             }
 
@@ -320,185 +325,523 @@ private constructor(
         }
     }
 
-    class Serializer :
+    internal class Serializer :
         BaseSerializer<CustomerCreditLedgerListResponse>(CustomerCreditLedgerListResponse::class) {
 
         override fun serialize(
             value: CustomerCreditLedgerListResponse,
             generator: JsonGenerator,
-            provider: SerializerProvider
+            provider: SerializerProvider,
         ) {
             when {
-                value.incrementLedgerEntry != null ->
-                    generator.writeObject(value.incrementLedgerEntry)
-                value.decrementLedgerEntry != null ->
-                    generator.writeObject(value.decrementLedgerEntry)
-                value.expirationChangeLedgerEntry != null ->
-                    generator.writeObject(value.expirationChangeLedgerEntry)
-                value.creditBlockExpiryLedgerEntry != null ->
-                    generator.writeObject(value.creditBlockExpiryLedgerEntry)
-                value.voidLedgerEntry != null -> generator.writeObject(value.voidLedgerEntry)
-                value.voidInitiatedLedgerEntry != null ->
-                    generator.writeObject(value.voidInitiatedLedgerEntry)
-                value.amendmentLedgerEntry != null ->
-                    generator.writeObject(value.amendmentLedgerEntry)
+                value.increment != null -> generator.writeObject(value.increment)
+                value.decrement != null -> generator.writeObject(value.decrement)
+                value.expirationChange != null -> generator.writeObject(value.expirationChange)
+                value.creditBlockExpiry != null -> generator.writeObject(value.creditBlockExpiry)
+                value.void_ != null -> generator.writeObject(value.void_)
+                value.voidInitiated != null -> generator.writeObject(value.voidInitiated)
+                value.amendment != null -> generator.writeObject(value.amendment)
                 value._json != null -> generator.writeObject(value._json)
                 else -> throw IllegalStateException("Invalid CustomerCreditLedgerListResponse")
             }
         }
     }
 
-    @JsonDeserialize(builder = IncrementLedgerEntry.Builder::class)
-    @NoAutoDetect
-    class IncrementLedgerEntry
+    class Increment
     private constructor(
-        private val metadata: JsonField<Metadata>,
         private val id: JsonField<String>,
-        private val ledgerSequenceNumber: JsonField<Long>,
-        private val entryStatus: JsonField<EntryStatus>,
-        private val customer: JsonField<Customer>,
-        private val startingBalance: JsonField<Double>,
-        private val endingBalance: JsonField<Double>,
         private val amount: JsonField<Double>,
-        private val currency: JsonField<String>,
         private val createdAt: JsonField<OffsetDateTime>,
-        private val description: JsonField<String>,
         private val creditBlock: JsonField<CreditBlock>,
-        private val entryType: JsonField<EntryType>,
-        private val additionalProperties: Map<String, JsonValue>,
+        private val currency: JsonField<String>,
+        private val customer: JsonField<Customer>,
+        private val description: JsonField<String>,
+        private val endingBalance: JsonField<Double>,
+        private val entryStatus: JsonField<EntryStatus>,
+        private val entryType: JsonValue,
+        private val ledgerSequenceNumber: JsonField<Long>,
+        private val metadata: JsonField<Metadata>,
+        private val startingBalance: JsonField<Double>,
+        private val createdInvoices: JsonField<List<Invoice>>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("amount") @ExcludeMissing amount: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("created_at")
+            @ExcludeMissing
+            createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("credit_block")
+            @ExcludeMissing
+            creditBlock: JsonField<CreditBlock> = JsonMissing.of(),
+            @JsonProperty("currency")
+            @ExcludeMissing
+            currency: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("customer")
+            @ExcludeMissing
+            customer: JsonField<Customer> = JsonMissing.of(),
+            @JsonProperty("description")
+            @ExcludeMissing
+            description: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("ending_balance")
+            @ExcludeMissing
+            endingBalance: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("entry_status")
+            @ExcludeMissing
+            entryStatus: JsonField<EntryStatus> = JsonMissing.of(),
+            @JsonProperty("entry_type") @ExcludeMissing entryType: JsonValue = JsonMissing.of(),
+            @JsonProperty("ledger_sequence_number")
+            @ExcludeMissing
+            ledgerSequenceNumber: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            metadata: JsonField<Metadata> = JsonMissing.of(),
+            @JsonProperty("starting_balance")
+            @ExcludeMissing
+            startingBalance: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("created_invoices")
+            @ExcludeMissing
+            createdInvoices: JsonField<List<Invoice>> = JsonMissing.of(),
+        ) : this(
+            id,
+            amount,
+            createdAt,
+            creditBlock,
+            currency,
+            customer,
+            description,
+            endingBalance,
+            entryStatus,
+            entryType,
+            ledgerSequenceNumber,
+            metadata,
+            startingBalance,
+            createdInvoices,
+            mutableMapOf(),
+        )
 
         /**
-         * User specified key-value pairs for the resource. If not present, this defaults to an
-         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
-         * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun metadata(): Metadata = metadata.getRequired("metadata")
-
         fun id(): String = id.getRequired("id")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun amount(): Double = amount.getRequired("amount")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun creditBlock(): CreditBlock = creditBlock.getRequired("credit_block")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun currency(): String = currency.getRequired("currency")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun customer(): Customer = customer.getRequired("customer")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun description(): Optional<String> = description.getOptional("description")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun endingBalance(): Double = endingBalance.getRequired("ending_balance")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun entryStatus(): EntryStatus = entryStatus.getRequired("entry_status")
+
+        /**
+         * Expected to always return the following:
+         * ```java
+         * JsonValue.from("increment")
+         * ```
+         *
+         * However, this method can be useful for debugging and logging (e.g. if the server
+         * responded with an unexpected value).
+         */
+        @JsonProperty("entry_type") @ExcludeMissing fun _entryType(): JsonValue = entryType
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun ledgerSequenceNumber(): Long =
             ledgerSequenceNumber.getRequired("ledger_sequence_number")
 
-        fun entryStatus(): EntryStatus = entryStatus.getRequired("entry_status")
-
-        fun customer(): Customer = customer.getRequired("customer")
-
-        fun startingBalance(): Double = startingBalance.getRequired("starting_balance")
-
-        fun endingBalance(): Double = endingBalance.getRequired("ending_balance")
-
-        fun amount(): Double = amount.getRequired("amount")
-
-        fun currency(): String = currency.getRequired("currency")
-
-        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
-
-        fun description(): Optional<String> =
-            Optional.ofNullable(description.getNullable("description"))
-
-        fun creditBlock(): CreditBlock = creditBlock.getRequired("credit_block")
-
-        fun entryType(): EntryType = entryType.getRequired("entry_type")
-
         /**
          * User specified key-value pairs for the resource. If not present, this defaults to an
          * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
          * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
+        fun metadata(): Metadata = metadata.getRequired("metadata")
 
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun startingBalance(): Double = startingBalance.getRequired("starting_balance")
 
+        /**
+         * If the increment resulted in invoice creation, the list of created invoices
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun createdInvoices(): Optional<List<Invoice>> =
+            createdInvoices.getOptional("created_invoices")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [amount].
+         *
+         * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
+
+        /**
+         * Returns the raw JSON value of [createdAt].
+         *
+         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        fun _createdAt(): JsonField<OffsetDateTime> = createdAt
+
+        /**
+         * Returns the raw JSON value of [creditBlock].
+         *
+         * Unlike [creditBlock], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("credit_block")
+        @ExcludeMissing
+        fun _creditBlock(): JsonField<CreditBlock> = creditBlock
+
+        /**
+         * Returns the raw JSON value of [currency].
+         *
+         * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
+
+        /**
+         * Returns the raw JSON value of [customer].
+         *
+         * Unlike [customer], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("customer") @ExcludeMissing fun _customer(): JsonField<Customer> = customer
+
+        /**
+         * Returns the raw JSON value of [description].
+         *
+         * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("description")
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
+
+        /**
+         * Returns the raw JSON value of [endingBalance].
+         *
+         * Unlike [endingBalance], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("ending_balance")
+        @ExcludeMissing
+        fun _endingBalance(): JsonField<Double> = endingBalance
+
+        /**
+         * Returns the raw JSON value of [entryStatus].
+         *
+         * Unlike [entryStatus], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("entry_status")
+        @ExcludeMissing
+        fun _entryStatus(): JsonField<EntryStatus> = entryStatus
+
+        /**
+         * Returns the raw JSON value of [ledgerSequenceNumber].
+         *
+         * Unlike [ledgerSequenceNumber], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("ledger_sequence_number")
         @ExcludeMissing
-        fun _ledgerSequenceNumber() = ledgerSequenceNumber
+        fun _ledgerSequenceNumber(): JsonField<Long> = ledgerSequenceNumber
 
-        @JsonProperty("entry_status") @ExcludeMissing fun _entryStatus() = entryStatus
+        /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
-        @JsonProperty("customer") @ExcludeMissing fun _customer() = customer
+        /**
+         * Returns the raw JSON value of [startingBalance].
+         *
+         * Unlike [startingBalance], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("starting_balance")
+        @ExcludeMissing
+        fun _startingBalance(): JsonField<Double> = startingBalance
 
-        @JsonProperty("starting_balance") @ExcludeMissing fun _startingBalance() = startingBalance
+        /**
+         * Returns the raw JSON value of [createdInvoices].
+         *
+         * Unlike [createdInvoices], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("created_invoices")
+        @ExcludeMissing
+        fun _createdInvoices(): JsonField<List<Invoice>> = createdInvoices
 
-        @JsonProperty("ending_balance") @ExcludeMissing fun _endingBalance() = endingBalance
-
-        @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
-
-        @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
-
-        @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
-
-        @JsonProperty("description") @ExcludeMissing fun _description() = description
-
-        @JsonProperty("credit_block") @ExcludeMissing fun _creditBlock() = creditBlock
-
-        @JsonProperty("entry_type") @ExcludeMissing fun _entryType() = entryType
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): IncrementLedgerEntry = apply {
-            if (!validated) {
-                metadata().validate()
-                id()
-                ledgerSequenceNumber()
-                entryStatus()
-                customer().validate()
-                startingBalance()
-                endingBalance()
-                amount()
-                currency()
-                createdAt()
-                description()
-                creditBlock().validate()
-                entryType()
-                validated = true
-            }
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Increment].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .startingBalance()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [Increment]. */
+        class Builder internal constructor() {
 
-            private var metadata: JsonField<Metadata> = JsonMissing.of()
-            private var id: JsonField<String> = JsonMissing.of()
-            private var ledgerSequenceNumber: JsonField<Long> = JsonMissing.of()
-            private var entryStatus: JsonField<EntryStatus> = JsonMissing.of()
-            private var customer: JsonField<Customer> = JsonMissing.of()
-            private var startingBalance: JsonField<Double> = JsonMissing.of()
-            private var endingBalance: JsonField<Double> = JsonMissing.of()
-            private var amount: JsonField<Double> = JsonMissing.of()
-            private var currency: JsonField<String> = JsonMissing.of()
-            private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var description: JsonField<String> = JsonMissing.of()
-            private var creditBlock: JsonField<CreditBlock> = JsonMissing.of()
-            private var entryType: JsonField<EntryType> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var amount: JsonField<Double>? = null
+            private var createdAt: JsonField<OffsetDateTime>? = null
+            private var creditBlock: JsonField<CreditBlock>? = null
+            private var currency: JsonField<String>? = null
+            private var customer: JsonField<Customer>? = null
+            private var description: JsonField<String>? = null
+            private var endingBalance: JsonField<Double>? = null
+            private var entryStatus: JsonField<EntryStatus>? = null
+            private var entryType: JsonValue = JsonValue.from("increment")
+            private var ledgerSequenceNumber: JsonField<Long>? = null
+            private var metadata: JsonField<Metadata>? = null
+            private var startingBalance: JsonField<Double>? = null
+            private var createdInvoices: JsonField<MutableList<Invoice>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(incrementLedgerEntry: IncrementLedgerEntry) = apply {
-                this.metadata = incrementLedgerEntry.metadata
-                this.id = incrementLedgerEntry.id
-                this.ledgerSequenceNumber = incrementLedgerEntry.ledgerSequenceNumber
-                this.entryStatus = incrementLedgerEntry.entryStatus
-                this.customer = incrementLedgerEntry.customer
-                this.startingBalance = incrementLedgerEntry.startingBalance
-                this.endingBalance = incrementLedgerEntry.endingBalance
-                this.amount = incrementLedgerEntry.amount
-                this.currency = incrementLedgerEntry.currency
-                this.createdAt = incrementLedgerEntry.createdAt
-                this.description = incrementLedgerEntry.description
-                this.creditBlock = incrementLedgerEntry.creditBlock
-                this.entryType = incrementLedgerEntry.entryType
-                additionalProperties(incrementLedgerEntry.additionalProperties)
+            internal fun from(increment: Increment) = apply {
+                id = increment.id
+                amount = increment.amount
+                createdAt = increment.createdAt
+                creditBlock = increment.creditBlock
+                currency = increment.currency
+                customer = increment.customer
+                description = increment.description
+                endingBalance = increment.endingBalance
+                entryStatus = increment.entryStatus
+                entryType = increment.entryType
+                ledgerSequenceNumber = increment.ledgerSequenceNumber
+                metadata = increment.metadata
+                startingBalance = increment.startingBalance
+                createdInvoices = increment.createdInvoices.map { it.toMutableList() }
+                additionalProperties = increment.additionalProperties.toMutableMap()
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun amount(amount: Double) = amount(JsonField.of(amount))
+
+            /**
+             * Sets [Builder.amount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.amount] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+            /**
+             * Sets [Builder.createdAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
+                this.createdAt = createdAt
+            }
+
+            fun creditBlock(creditBlock: CreditBlock) = creditBlock(JsonField.of(creditBlock))
+
+            /**
+             * Sets [Builder.creditBlock] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.creditBlock] with a well-typed [CreditBlock] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun creditBlock(creditBlock: JsonField<CreditBlock>) = apply {
+                this.creditBlock = creditBlock
+            }
+
+            fun currency(currency: String) = currency(JsonField.of(currency))
+
+            /**
+             * Sets [Builder.currency] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.currency] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
+
+            fun customer(customer: Customer) = customer(JsonField.of(customer))
+
+            /**
+             * Sets [Builder.customer] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.customer] with a well-typed [Customer] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
+
+            fun description(description: String?) = description(JsonField.ofNullable(description))
+
+            /** Alias for calling [Builder.description] with `description.orElse(null)`. */
+            fun description(description: Optional<String>) = description(description.getOrNull())
+
+            /**
+             * Sets [Builder.description] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.description] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
+
+            fun endingBalance(endingBalance: Double) = endingBalance(JsonField.of(endingBalance))
+
+            /**
+             * Sets [Builder.endingBalance] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.endingBalance] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun endingBalance(endingBalance: JsonField<Double>) = apply {
+                this.endingBalance = endingBalance
+            }
+
+            fun entryStatus(entryStatus: EntryStatus) = entryStatus(JsonField.of(entryStatus))
+
+            /**
+             * Sets [Builder.entryStatus] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.entryStatus] with a well-typed [EntryStatus] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun entryStatus(entryStatus: JsonField<EntryStatus>) = apply {
+                this.entryStatus = entryStatus
+            }
+
+            /**
+             * Sets the field to an arbitrary JSON value.
+             *
+             * It is usually unnecessary to call this method because the field defaults to the
+             * following:
+             * ```java
+             * JsonValue.from("increment")
+             * ```
+             *
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun entryType(entryType: JsonValue) = apply { this.entryType = entryType }
+
+            fun ledgerSequenceNumber(ledgerSequenceNumber: Long) =
+                ledgerSequenceNumber(JsonField.of(ledgerSequenceNumber))
+
+            /**
+             * Sets [Builder.ledgerSequenceNumber] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.ledgerSequenceNumber] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun ledgerSequenceNumber(ledgerSequenceNumber: JsonField<Long>) = apply {
+                this.ledgerSequenceNumber = ledgerSequenceNumber
             }
 
             /**
@@ -509,229 +852,346 @@ private constructor(
             fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
             /**
-             * User specified key-value pairs for the resource. If not present, this defaults to an
-             * empty dictionary. Individual keys can be removed by setting the value to `null`, and
-             * the entire metadata mapping can be cleared by setting `metadata` to `null`.
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
-
-            fun id(id: String) = id(JsonField.of(id))
-
-            @JsonProperty("id")
-            @ExcludeMissing
-            fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun ledgerSequenceNumber(ledgerSequenceNumber: Long) =
-                ledgerSequenceNumber(JsonField.of(ledgerSequenceNumber))
-
-            @JsonProperty("ledger_sequence_number")
-            @ExcludeMissing
-            fun ledgerSequenceNumber(ledgerSequenceNumber: JsonField<Long>) = apply {
-                this.ledgerSequenceNumber = ledgerSequenceNumber
-            }
-
-            fun entryStatus(entryStatus: EntryStatus) = entryStatus(JsonField.of(entryStatus))
-
-            @JsonProperty("entry_status")
-            @ExcludeMissing
-            fun entryStatus(entryStatus: JsonField<EntryStatus>) = apply {
-                this.entryStatus = entryStatus
-            }
-
-            fun customer(customer: Customer) = customer(JsonField.of(customer))
-
-            @JsonProperty("customer")
-            @ExcludeMissing
-            fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
 
             fun startingBalance(startingBalance: Double) =
                 startingBalance(JsonField.of(startingBalance))
 
-            @JsonProperty("starting_balance")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.startingBalance] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.startingBalance] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun startingBalance(startingBalance: JsonField<Double>) = apply {
                 this.startingBalance = startingBalance
             }
 
-            fun endingBalance(endingBalance: Double) = endingBalance(JsonField.of(endingBalance))
+            /** If the increment resulted in invoice creation, the list of created invoices */
+            fun createdInvoices(createdInvoices: List<Invoice>?) =
+                createdInvoices(JsonField.ofNullable(createdInvoices))
 
-            @JsonProperty("ending_balance")
-            @ExcludeMissing
-            fun endingBalance(endingBalance: JsonField<Double>) = apply {
-                this.endingBalance = endingBalance
+            /** Alias for calling [Builder.createdInvoices] with `createdInvoices.orElse(null)`. */
+            fun createdInvoices(createdInvoices: Optional<List<Invoice>>) =
+                createdInvoices(createdInvoices.getOrNull())
+
+            /**
+             * Sets [Builder.createdInvoices] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdInvoices] with a well-typed `List<Invoice>`
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun createdInvoices(createdInvoices: JsonField<List<Invoice>>) = apply {
+                this.createdInvoices = createdInvoices.map { it.toMutableList() }
             }
 
-            fun amount(amount: Double) = amount(JsonField.of(amount))
-
-            @JsonProperty("amount")
-            @ExcludeMissing
-            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
-
-            fun currency(currency: String) = currency(JsonField.of(currency))
-
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
-
-            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
-
-            @JsonProperty("created_at")
-            @ExcludeMissing
-            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
-                this.createdAt = createdAt
+            /**
+             * Adds a single [Invoice] to [createdInvoices].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCreatedInvoice(createdInvoice: Invoice) = apply {
+                createdInvoices =
+                    (createdInvoices ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("createdInvoices", it).add(createdInvoice)
+                    }
             }
-
-            fun description(description: String) = description(JsonField.of(description))
-
-            @JsonProperty("description")
-            @ExcludeMissing
-            fun description(description: JsonField<String>) = apply {
-                this.description = description
-            }
-
-            fun creditBlock(creditBlock: CreditBlock) = creditBlock(JsonField.of(creditBlock))
-
-            @JsonProperty("credit_block")
-            @ExcludeMissing
-            fun creditBlock(creditBlock: JsonField<CreditBlock>) = apply {
-                this.creditBlock = creditBlock
-            }
-
-            fun entryType(entryType: EntryType) = entryType(JsonField.of(entryType))
-
-            @JsonProperty("entry_type")
-            @ExcludeMissing
-            fun entryType(entryType: JsonField<EntryType>) = apply { this.entryType = entryType }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): IncrementLedgerEntry =
-                IncrementLedgerEntry(
-                    metadata,
-                    id,
-                    ledgerSequenceNumber,
-                    entryStatus,
-                    customer,
-                    startingBalance,
-                    endingBalance,
-                    amount,
-                    currency,
-                    createdAt,
-                    description,
-                    creditBlock,
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Increment].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .startingBalance()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Increment =
+                Increment(
+                    checkRequired("id", id),
+                    checkRequired("amount", amount),
+                    checkRequired("createdAt", createdAt),
+                    checkRequired("creditBlock", creditBlock),
+                    checkRequired("currency", currency),
+                    checkRequired("customer", customer),
+                    checkRequired("description", description),
+                    checkRequired("endingBalance", endingBalance),
+                    checkRequired("entryStatus", entryStatus),
                     entryType,
-                    additionalProperties.toImmutable(),
+                    checkRequired("ledgerSequenceNumber", ledgerSequenceNumber),
+                    checkRequired("metadata", metadata),
+                    checkRequired("startingBalance", startingBalance),
+                    (createdInvoices ?: JsonMissing.of()).map { it.toImmutable() },
+                    additionalProperties.toMutableMap(),
                 )
         }
 
-        @JsonDeserialize(builder = CreditBlock.Builder::class)
-        @NoAutoDetect
+        private var validated: Boolean = false
+
+        fun validate(): Increment = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            amount()
+            createdAt()
+            creditBlock().validate()
+            currency()
+            customer().validate()
+            description()
+            endingBalance()
+            entryStatus().validate()
+            _entryType().let {
+                if (it != JsonValue.from("increment")) {
+                    throw OrbInvalidDataException("'entryType' is invalid, received $it")
+                }
+            }
+            ledgerSequenceNumber()
+            metadata().validate()
+            startingBalance()
+            createdInvoices().ifPresent { it.forEach { it.validate() } }
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (if (amount.asKnown().isPresent) 1 else 0) +
+                (if (createdAt.asKnown().isPresent) 1 else 0) +
+                (creditBlock.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (currency.asKnown().isPresent) 1 else 0) +
+                (customer.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (description.asKnown().isPresent) 1 else 0) +
+                (if (endingBalance.asKnown().isPresent) 1 else 0) +
+                (entryStatus.asKnown().getOrNull()?.validity() ?: 0) +
+                entryType.let { if (it == JsonValue.from("increment")) 1 else 0 } +
+                (if (ledgerSequenceNumber.asKnown().isPresent) 1 else 0) +
+                (metadata.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (startingBalance.asKnown().isPresent) 1 else 0) +
+                (createdInvoices.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+
         class CreditBlock
         private constructor(
             private val id: JsonField<String>,
             private val expiryDate: JsonField<OffsetDateTime>,
             private val perUnitCostBasis: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("expiry_date")
+                @ExcludeMissing
+                expiryDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("per_unit_cost_basis")
+                @ExcludeMissing
+                perUnitCostBasis: JsonField<String> = JsonMissing.of(),
+            ) : this(id, expiryDate, perUnitCostBasis, mutableMapOf())
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
-            fun expiryDate(): Optional<OffsetDateTime> =
-                Optional.ofNullable(expiryDate.getNullable("expiry_date"))
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
+            fun expiryDate(): Optional<OffsetDateTime> = expiryDate.getOptional("expiry_date")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
             fun perUnitCostBasis(): Optional<String> =
-                Optional.ofNullable(perUnitCostBasis.getNullable("per_unit_cost_basis"))
+                perUnitCostBasis.getOptional("per_unit_cost_basis")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-            @JsonProperty("expiry_date") @ExcludeMissing fun _expiryDate() = expiryDate
+            /**
+             * Returns the raw JSON value of [expiryDate].
+             *
+             * Unlike [expiryDate], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("expiry_date")
+            @ExcludeMissing
+            fun _expiryDate(): JsonField<OffsetDateTime> = expiryDate
 
+            /**
+             * Returns the raw JSON value of [perUnitCostBasis].
+             *
+             * Unlike [perUnitCostBasis], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("per_unit_cost_basis")
             @ExcludeMissing
-            fun _perUnitCostBasis() = perUnitCostBasis
+            fun _perUnitCostBasis(): JsonField<String> = perUnitCostBasis
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): CreditBlock = apply {
-                if (!validated) {
-                    id()
-                    expiryDate()
-                    perUnitCostBasis()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [CreditBlock].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [CreditBlock]. */
+            class Builder internal constructor() {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var expiryDate: JsonField<OffsetDateTime> = JsonMissing.of()
-                private var perUnitCostBasis: JsonField<String> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var expiryDate: JsonField<OffsetDateTime>? = null
+                private var perUnitCostBasis: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(creditBlock: CreditBlock) = apply {
-                    this.id = creditBlock.id
-                    this.expiryDate = creditBlock.expiryDate
-                    this.perUnitCostBasis = creditBlock.perUnitCostBasis
-                    additionalProperties(creditBlock.additionalProperties)
+                    id = creditBlock.id
+                    expiryDate = creditBlock.expiryDate
+                    perUnitCostBasis = creditBlock.perUnitCostBasis
+                    additionalProperties = creditBlock.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
-                fun expiryDate(expiryDate: OffsetDateTime) = expiryDate(JsonField.of(expiryDate))
+                fun expiryDate(expiryDate: OffsetDateTime?) =
+                    expiryDate(JsonField.ofNullable(expiryDate))
 
-                @JsonProperty("expiry_date")
-                @ExcludeMissing
+                /** Alias for calling [Builder.expiryDate] with `expiryDate.orElse(null)`. */
+                fun expiryDate(expiryDate: Optional<OffsetDateTime>) =
+                    expiryDate(expiryDate.getOrNull())
+
+                /**
+                 * Sets [Builder.expiryDate] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.expiryDate] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun expiryDate(expiryDate: JsonField<OffsetDateTime>) = apply {
                     this.expiryDate = expiryDate
                 }
 
-                fun perUnitCostBasis(perUnitCostBasis: String) =
-                    perUnitCostBasis(JsonField.of(perUnitCostBasis))
+                fun perUnitCostBasis(perUnitCostBasis: String?) =
+                    perUnitCostBasis(JsonField.ofNullable(perUnitCostBasis))
 
-                @JsonProperty("per_unit_cost_basis")
-                @ExcludeMissing
+                /**
+                 * Alias for calling [Builder.perUnitCostBasis] with
+                 * `perUnitCostBasis.orElse(null)`.
+                 */
+                fun perUnitCostBasis(perUnitCostBasis: Optional<String>) =
+                    perUnitCostBasis(perUnitCostBasis.getOrNull())
+
+                /**
+                 * Sets [Builder.perUnitCostBasis] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.perUnitCostBasis] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun perUnitCostBasis(perUnitCostBasis: JsonField<String>) = apply {
                     this.perUnitCostBasis = perUnitCostBasis
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -739,14 +1199,69 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [CreditBlock].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): CreditBlock =
                     CreditBlock(
-                        id,
-                        expiryDate,
-                        perUnitCostBasis,
-                        additionalProperties.toImmutable(),
+                        checkRequired("id", id),
+                        checkRequired("expiryDate", expiryDate),
+                        checkRequired("perUnitCostBasis", perUnitCostBasis),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): CreditBlock = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                expiryDate()
+                perUnitCostBasis()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (expiryDate.asKnown().isPresent) 1 else 0) +
+                    (if (perUnitCostBasis.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -766,83 +1281,131 @@ private constructor(
                 "CreditBlock{id=$id, expiryDate=$expiryDate, perUnitCostBasis=$perUnitCostBasis, additionalProperties=$additionalProperties}"
         }
 
-        @JsonDeserialize(builder = Customer.Builder::class)
-        @NoAutoDetect
         class Customer
         private constructor(
             private val id: JsonField<String>,
             private val externalCustomerId: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("external_customer_id")
+                @ExcludeMissing
+                externalCustomerId: JsonField<String> = JsonMissing.of(),
+            ) : this(id, externalCustomerId, mutableMapOf())
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
             fun externalCustomerId(): Optional<String> =
-                Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+                externalCustomerId.getOptional("external_customer_id")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+            /**
+             * Returns the raw JSON value of [externalCustomerId].
+             *
+             * Unlike [externalCustomerId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("external_customer_id")
             @ExcludeMissing
-            fun _externalCustomerId() = externalCustomerId
+            fun _externalCustomerId(): JsonField<String> = externalCustomerId
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): Customer = apply {
-                if (!validated) {
-                    id()
-                    externalCustomerId()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Customer].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [Customer]. */
+            class Builder internal constructor() {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var externalCustomerId: JsonField<String> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var externalCustomerId: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(customer: Customer) = apply {
-                    this.id = customer.id
-                    this.externalCustomerId = customer.externalCustomerId
-                    additionalProperties(customer.additionalProperties)
+                    id = customer.id
+                    externalCustomerId = customer.externalCustomerId
+                    additionalProperties = customer.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
-                fun externalCustomerId(externalCustomerId: String) =
-                    externalCustomerId(JsonField.of(externalCustomerId))
+                fun externalCustomerId(externalCustomerId: String?) =
+                    externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
-                @JsonProperty("external_customer_id")
-                @ExcludeMissing
+                /**
+                 * Alias for calling [Builder.externalCustomerId] with
+                 * `externalCustomerId.orElse(null)`.
+                 */
+                fun externalCustomerId(externalCustomerId: Optional<String>) =
+                    externalCustomerId(externalCustomerId.getOrNull())
+
+                /**
+                 * Sets [Builder.externalCustomerId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.externalCustomerId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                     this.externalCustomerId = externalCustomerId
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -850,13 +1413,65 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Customer].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Customer =
                     Customer(
-                        id,
-                        externalCustomerId,
-                        additionalProperties.toImmutable(),
+                        checkRequired("id", id),
+                        checkRequired("externalCustomerId", externalCustomerId),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Customer = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                externalCustomerId()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (externalCustomerId.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -876,13 +1491,121 @@ private constructor(
                 "Customer{id=$id, externalCustomerId=$externalCustomerId, additionalProperties=$additionalProperties}"
         }
 
-        class EntryStatus
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class EntryStatus @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val COMMITTED = of("committed")
+
+                @JvmField val PENDING = of("pending")
+
+                @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
+            }
+
+            /** An enum containing [EntryStatus]'s known values. */
+            enum class Known {
+                COMMITTED,
+                PENDING,
+            }
+
+            /**
+             * An enum containing [EntryStatus]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [EntryStatus] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                COMMITTED,
+                PENDING,
+                /**
+                 * An enum member indicating that [EntryStatus] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    COMMITTED -> Value.COMMITTED
+                    PENDING -> Value.PENDING
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    COMMITTED -> Known.COMMITTED
+                    PENDING -> Known.PENDING
+                    else -> throw OrbInvalidDataException("Unknown EntryStatus: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws OrbInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+            private var validated: Boolean = false
+
+            fun validate(): EntryStatus = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -895,93 +1618,6 @@ private constructor(
             override fun hashCode() = value.hashCode()
 
             override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField val COMMITTED = EntryStatus(JsonField.of("committed"))
-
-                @JvmField val PENDING = EntryStatus(JsonField.of("pending"))
-
-                @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
-            }
-
-            enum class Known {
-                COMMITTED,
-                PENDING,
-            }
-
-            enum class Value {
-                COMMITTED,
-                PENDING,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    COMMITTED -> Value.COMMITTED
-                    PENDING -> Value.PENDING
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    COMMITTED -> Known.COMMITTED
-                    PENDING -> Known.PENDING
-                    else -> throw OrbInvalidDataException("Unknown EntryStatus: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
-        }
-
-        class EntryType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
-
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is EntryType && value == other.value /* spotless:on */
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField val INCREMENT = EntryType(JsonField.of("increment"))
-
-                @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
-            }
-
-            enum class Known {
-                INCREMENT,
-            }
-
-            enum class Value {
-                INCREMENT,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    INCREMENT -> Value.INCREMENT
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    INCREMENT -> Known.INCREMENT
-                    else -> throw OrbInvalidDataException("Unknown EntryType: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
         }
 
         /**
@@ -989,49 +1625,42 @@ private constructor(
          * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
          * entire metadata mapping can be cleared by setting `metadata` to `null`.
          */
-        @JsonDeserialize(builder = Metadata.Builder::class)
-        @NoAutoDetect
         class Metadata
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
         ) {
-
-            private var validated: Boolean = false
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-            fun validate(): Metadata = apply {
-                if (!validated) {
-                    validated = true
-                }
-            }
-
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /** Returns a mutable builder for constructing an instance of [Metadata]. */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [Metadata]. */
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(metadata: Metadata) = apply {
-                    additionalProperties(metadata.additionalProperties)
+                    additionalProperties = metadata.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -1039,8 +1668,49 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Metadata].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
                 fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Metadata = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1064,448 +1734,911 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is IncrementLedgerEntry && metadata == other.metadata && id == other.id && ledgerSequenceNumber == other.ledgerSequenceNumber && entryStatus == other.entryStatus && customer == other.customer && startingBalance == other.startingBalance && endingBalance == other.endingBalance && amount == other.amount && currency == other.currency && createdAt == other.createdAt && description == other.description && creditBlock == other.creditBlock && entryType == other.entryType && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Increment && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && startingBalance == other.startingBalance && createdInvoices == other.createdInvoices && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(metadata, id, ledgerSequenceNumber, entryStatus, customer, startingBalance, endingBalance, amount, currency, createdAt, description, creditBlock, entryType, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, amount, createdAt, creditBlock, currency, customer, description, endingBalance, entryStatus, entryType, ledgerSequenceNumber, metadata, startingBalance, createdInvoices, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "IncrementLedgerEntry{metadata=$metadata, id=$id, ledgerSequenceNumber=$ledgerSequenceNumber, entryStatus=$entryStatus, customer=$customer, startingBalance=$startingBalance, endingBalance=$endingBalance, amount=$amount, currency=$currency, createdAt=$createdAt, description=$description, creditBlock=$creditBlock, entryType=$entryType, additionalProperties=$additionalProperties}"
+            "Increment{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, startingBalance=$startingBalance, createdInvoices=$createdInvoices, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = DecrementLedgerEntry.Builder::class)
-    @NoAutoDetect
-    class DecrementLedgerEntry
+    class Decrement
     private constructor(
-        private val metadata: JsonField<Metadata>,
         private val id: JsonField<String>,
-        private val ledgerSequenceNumber: JsonField<Long>,
-        private val entryStatus: JsonField<EntryStatus>,
-        private val customer: JsonField<Customer>,
-        private val startingBalance: JsonField<Double>,
-        private val endingBalance: JsonField<Double>,
         private val amount: JsonField<Double>,
-        private val currency: JsonField<String>,
         private val createdAt: JsonField<OffsetDateTime>,
-        private val description: JsonField<String>,
         private val creditBlock: JsonField<CreditBlock>,
-        private val entryType: JsonField<EntryType>,
-        private val priceId: JsonField<String>,
+        private val currency: JsonField<String>,
+        private val customer: JsonField<Customer>,
+        private val description: JsonField<String>,
+        private val endingBalance: JsonField<Double>,
+        private val entryStatus: JsonField<EntryStatus>,
+        private val entryType: JsonValue,
+        private val ledgerSequenceNumber: JsonField<Long>,
+        private val metadata: JsonField<Metadata>,
+        private val startingBalance: JsonField<Double>,
         private val eventId: JsonField<String>,
         private val invoiceId: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
+        private val priceId: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
-
-        /**
-         * User specified key-value pairs for the resource. If not present, this defaults to an
-         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
-         * entire metadata mapping can be cleared by setting `metadata` to `null`.
-         */
-        fun metadata(): Metadata = metadata.getRequired("metadata")
-
-        fun id(): String = id.getRequired("id")
-
-        fun ledgerSequenceNumber(): Long =
-            ledgerSequenceNumber.getRequired("ledger_sequence_number")
-
-        fun entryStatus(): EntryStatus = entryStatus.getRequired("entry_status")
-
-        fun customer(): Customer = customer.getRequired("customer")
-
-        fun startingBalance(): Double = startingBalance.getRequired("starting_balance")
-
-        fun endingBalance(): Double = endingBalance.getRequired("ending_balance")
-
-        fun amount(): Double = amount.getRequired("amount")
-
-        fun currency(): String = currency.getRequired("currency")
-
-        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
-
-        fun description(): Optional<String> =
-            Optional.ofNullable(description.getNullable("description"))
-
-        fun creditBlock(): CreditBlock = creditBlock.getRequired("credit_block")
-
-        fun entryType(): EntryType = entryType.getRequired("entry_type")
-
-        fun priceId(): Optional<String> = Optional.ofNullable(priceId.getNullable("price_id"))
-
-        fun eventId(): Optional<String> = Optional.ofNullable(eventId.getNullable("event_id"))
-
-        fun invoiceId(): Optional<String> = Optional.ofNullable(invoiceId.getNullable("invoice_id"))
-
-        /**
-         * User specified key-value pairs for the resource. If not present, this defaults to an
-         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
-         * entire metadata mapping can be cleared by setting `metadata` to `null`.
-         */
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
-
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
-
-        @JsonProperty("ledger_sequence_number")
-        @ExcludeMissing
-        fun _ledgerSequenceNumber() = ledgerSequenceNumber
-
-        @JsonProperty("entry_status") @ExcludeMissing fun _entryStatus() = entryStatus
-
-        @JsonProperty("customer") @ExcludeMissing fun _customer() = customer
-
-        @JsonProperty("starting_balance") @ExcludeMissing fun _startingBalance() = startingBalance
-
-        @JsonProperty("ending_balance") @ExcludeMissing fun _endingBalance() = endingBalance
-
-        @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
-
-        @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
-
-        @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
-
-        @JsonProperty("description") @ExcludeMissing fun _description() = description
-
-        @JsonProperty("credit_block") @ExcludeMissing fun _creditBlock() = creditBlock
-
-        @JsonProperty("entry_type") @ExcludeMissing fun _entryType() = entryType
-
-        @JsonProperty("price_id") @ExcludeMissing fun _priceId() = priceId
-
-        @JsonProperty("event_id") @ExcludeMissing fun _eventId() = eventId
-
-        @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId() = invoiceId
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): DecrementLedgerEntry = apply {
-            if (!validated) {
-                metadata().validate()
-                id()
-                ledgerSequenceNumber()
-                entryStatus()
-                customer().validate()
-                startingBalance()
-                endingBalance()
-                amount()
-                currency()
-                createdAt()
-                description()
-                creditBlock().validate()
-                entryType()
-                priceId()
-                eventId()
-                invoiceId()
-                validated = true
-            }
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var metadata: JsonField<Metadata> = JsonMissing.of()
-            private var id: JsonField<String> = JsonMissing.of()
-            private var ledgerSequenceNumber: JsonField<Long> = JsonMissing.of()
-            private var entryStatus: JsonField<EntryStatus> = JsonMissing.of()
-            private var customer: JsonField<Customer> = JsonMissing.of()
-            private var startingBalance: JsonField<Double> = JsonMissing.of()
-            private var endingBalance: JsonField<Double> = JsonMissing.of()
-            private var amount: JsonField<Double> = JsonMissing.of()
-            private var currency: JsonField<String> = JsonMissing.of()
-            private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var description: JsonField<String> = JsonMissing.of()
-            private var creditBlock: JsonField<CreditBlock> = JsonMissing.of()
-            private var entryType: JsonField<EntryType> = JsonMissing.of()
-            private var priceId: JsonField<String> = JsonMissing.of()
-            private var eventId: JsonField<String> = JsonMissing.of()
-            private var invoiceId: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(decrementLedgerEntry: DecrementLedgerEntry) = apply {
-                this.metadata = decrementLedgerEntry.metadata
-                this.id = decrementLedgerEntry.id
-                this.ledgerSequenceNumber = decrementLedgerEntry.ledgerSequenceNumber
-                this.entryStatus = decrementLedgerEntry.entryStatus
-                this.customer = decrementLedgerEntry.customer
-                this.startingBalance = decrementLedgerEntry.startingBalance
-                this.endingBalance = decrementLedgerEntry.endingBalance
-                this.amount = decrementLedgerEntry.amount
-                this.currency = decrementLedgerEntry.currency
-                this.createdAt = decrementLedgerEntry.createdAt
-                this.description = decrementLedgerEntry.description
-                this.creditBlock = decrementLedgerEntry.creditBlock
-                this.entryType = decrementLedgerEntry.entryType
-                this.priceId = decrementLedgerEntry.priceId
-                this.eventId = decrementLedgerEntry.eventId
-                this.invoiceId = decrementLedgerEntry.invoiceId
-                additionalProperties(decrementLedgerEntry.additionalProperties)
-            }
-
-            /**
-             * User specified key-value pairs for the resource. If not present, this defaults to an
-             * empty dictionary. Individual keys can be removed by setting the value to `null`, and
-             * the entire metadata mapping can be cleared by setting `metadata` to `null`.
-             */
-            fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
-
-            /**
-             * User specified key-value pairs for the resource. If not present, this defaults to an
-             * empty dictionary. Individual keys can be removed by setting the value to `null`, and
-             * the entire metadata mapping can be cleared by setting `metadata` to `null`.
-             */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
-
-            fun id(id: String) = id(JsonField.of(id))
-
-            @JsonProperty("id")
-            @ExcludeMissing
-            fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun ledgerSequenceNumber(ledgerSequenceNumber: Long) =
-                ledgerSequenceNumber(JsonField.of(ledgerSequenceNumber))
-
-            @JsonProperty("ledger_sequence_number")
-            @ExcludeMissing
-            fun ledgerSequenceNumber(ledgerSequenceNumber: JsonField<Long>) = apply {
-                this.ledgerSequenceNumber = ledgerSequenceNumber
-            }
-
-            fun entryStatus(entryStatus: EntryStatus) = entryStatus(JsonField.of(entryStatus))
-
-            @JsonProperty("entry_status")
-            @ExcludeMissing
-            fun entryStatus(entryStatus: JsonField<EntryStatus>) = apply {
-                this.entryStatus = entryStatus
-            }
-
-            fun customer(customer: Customer) = customer(JsonField.of(customer))
-
-            @JsonProperty("customer")
-            @ExcludeMissing
-            fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
-
-            fun startingBalance(startingBalance: Double) =
-                startingBalance(JsonField.of(startingBalance))
-
-            @JsonProperty("starting_balance")
-            @ExcludeMissing
-            fun startingBalance(startingBalance: JsonField<Double>) = apply {
-                this.startingBalance = startingBalance
-            }
-
-            fun endingBalance(endingBalance: Double) = endingBalance(JsonField.of(endingBalance))
-
-            @JsonProperty("ending_balance")
-            @ExcludeMissing
-            fun endingBalance(endingBalance: JsonField<Double>) = apply {
-                this.endingBalance = endingBalance
-            }
-
-            fun amount(amount: Double) = amount(JsonField.of(amount))
-
-            @JsonProperty("amount")
-            @ExcludeMissing
-            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
-
-            fun currency(currency: String) = currency(JsonField.of(currency))
-
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
-
-            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
-
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("amount") @ExcludeMissing amount: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("created_at")
             @ExcludeMissing
-            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
-                this.createdAt = createdAt
-            }
-
-            fun description(description: String) = description(JsonField.of(description))
-
-            @JsonProperty("description")
-            @ExcludeMissing
-            fun description(description: JsonField<String>) = apply {
-                this.description = description
-            }
-
-            fun creditBlock(creditBlock: CreditBlock) = creditBlock(JsonField.of(creditBlock))
-
+            createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("credit_block")
             @ExcludeMissing
-            fun creditBlock(creditBlock: JsonField<CreditBlock>) = apply {
-                this.creditBlock = creditBlock
-            }
-
-            fun entryType(entryType: EntryType) = entryType(JsonField.of(entryType))
-
-            @JsonProperty("entry_type")
+            creditBlock: JsonField<CreditBlock> = JsonMissing.of(),
+            @JsonProperty("currency")
             @ExcludeMissing
-            fun entryType(entryType: JsonField<EntryType>) = apply { this.entryType = entryType }
-
-            fun priceId(priceId: String) = priceId(JsonField.of(priceId))
-
-            @JsonProperty("price_id")
+            currency: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("customer")
             @ExcludeMissing
-            fun priceId(priceId: JsonField<String>) = apply { this.priceId = priceId }
-
-            fun eventId(eventId: String) = eventId(JsonField.of(eventId))
-
-            @JsonProperty("event_id")
+            customer: JsonField<Customer> = JsonMissing.of(),
+            @JsonProperty("description")
             @ExcludeMissing
-            fun eventId(eventId: JsonField<String>) = apply { this.eventId = eventId }
-
-            fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
-
+            description: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("ending_balance")
+            @ExcludeMissing
+            endingBalance: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("entry_status")
+            @ExcludeMissing
+            entryStatus: JsonField<EntryStatus> = JsonMissing.of(),
+            @JsonProperty("entry_type") @ExcludeMissing entryType: JsonValue = JsonMissing.of(),
+            @JsonProperty("ledger_sequence_number")
+            @ExcludeMissing
+            ledgerSequenceNumber: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            metadata: JsonField<Metadata> = JsonMissing.of(),
+            @JsonProperty("starting_balance")
+            @ExcludeMissing
+            startingBalance: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("event_id") @ExcludeMissing eventId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("invoice_id")
             @ExcludeMissing
+            invoiceId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("price_id") @ExcludeMissing priceId: JsonField<String> = JsonMissing.of(),
+        ) : this(
+            id,
+            amount,
+            createdAt,
+            creditBlock,
+            currency,
+            customer,
+            description,
+            endingBalance,
+            entryStatus,
+            entryType,
+            ledgerSequenceNumber,
+            metadata,
+            startingBalance,
+            eventId,
+            invoiceId,
+            priceId,
+            mutableMapOf(),
+        )
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun id(): String = id.getRequired("id")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun amount(): Double = amount.getRequired("amount")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun creditBlock(): CreditBlock = creditBlock.getRequired("credit_block")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun currency(): String = currency.getRequired("currency")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun customer(): Customer = customer.getRequired("customer")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun description(): Optional<String> = description.getOptional("description")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun endingBalance(): Double = endingBalance.getRequired("ending_balance")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun entryStatus(): EntryStatus = entryStatus.getRequired("entry_status")
+
+        /**
+         * Expected to always return the following:
+         * ```java
+         * JsonValue.from("decrement")
+         * ```
+         *
+         * However, this method can be useful for debugging and logging (e.g. if the server
+         * responded with an unexpected value).
+         */
+        @JsonProperty("entry_type") @ExcludeMissing fun _entryType(): JsonValue = entryType
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun ledgerSequenceNumber(): Long =
+            ledgerSequenceNumber.getRequired("ledger_sequence_number")
+
+        /**
+         * User specified key-value pairs for the resource. If not present, this defaults to an
+         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
+         * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun metadata(): Metadata = metadata.getRequired("metadata")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun startingBalance(): Double = startingBalance.getRequired("starting_balance")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun eventId(): Optional<String> = eventId.getOptional("event_id")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun invoiceId(): Optional<String> = invoiceId.getOptional("invoice_id")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun priceId(): Optional<String> = priceId.getOptional("price_id")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [amount].
+         *
+         * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
+
+        /**
+         * Returns the raw JSON value of [createdAt].
+         *
+         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        fun _createdAt(): JsonField<OffsetDateTime> = createdAt
+
+        /**
+         * Returns the raw JSON value of [creditBlock].
+         *
+         * Unlike [creditBlock], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("credit_block")
+        @ExcludeMissing
+        fun _creditBlock(): JsonField<CreditBlock> = creditBlock
+
+        /**
+         * Returns the raw JSON value of [currency].
+         *
+         * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
+
+        /**
+         * Returns the raw JSON value of [customer].
+         *
+         * Unlike [customer], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("customer") @ExcludeMissing fun _customer(): JsonField<Customer> = customer
+
+        /**
+         * Returns the raw JSON value of [description].
+         *
+         * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("description")
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
+
+        /**
+         * Returns the raw JSON value of [endingBalance].
+         *
+         * Unlike [endingBalance], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("ending_balance")
+        @ExcludeMissing
+        fun _endingBalance(): JsonField<Double> = endingBalance
+
+        /**
+         * Returns the raw JSON value of [entryStatus].
+         *
+         * Unlike [entryStatus], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("entry_status")
+        @ExcludeMissing
+        fun _entryStatus(): JsonField<EntryStatus> = entryStatus
+
+        /**
+         * Returns the raw JSON value of [ledgerSequenceNumber].
+         *
+         * Unlike [ledgerSequenceNumber], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("ledger_sequence_number")
+        @ExcludeMissing
+        fun _ledgerSequenceNumber(): JsonField<Long> = ledgerSequenceNumber
+
+        /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+
+        /**
+         * Returns the raw JSON value of [startingBalance].
+         *
+         * Unlike [startingBalance], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("starting_balance")
+        @ExcludeMissing
+        fun _startingBalance(): JsonField<Double> = startingBalance
+
+        /**
+         * Returns the raw JSON value of [eventId].
+         *
+         * Unlike [eventId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("event_id") @ExcludeMissing fun _eventId(): JsonField<String> = eventId
+
+        /**
+         * Returns the raw JSON value of [invoiceId].
+         *
+         * Unlike [invoiceId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId(): JsonField<String> = invoiceId
+
+        /**
+         * Returns the raw JSON value of [priceId].
+         *
+         * Unlike [priceId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("price_id") @ExcludeMissing fun _priceId(): JsonField<String> = priceId
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Decrement].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .startingBalance()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Decrement]. */
+        class Builder internal constructor() {
+
+            private var id: JsonField<String>? = null
+            private var amount: JsonField<Double>? = null
+            private var createdAt: JsonField<OffsetDateTime>? = null
+            private var creditBlock: JsonField<CreditBlock>? = null
+            private var currency: JsonField<String>? = null
+            private var customer: JsonField<Customer>? = null
+            private var description: JsonField<String>? = null
+            private var endingBalance: JsonField<Double>? = null
+            private var entryStatus: JsonField<EntryStatus>? = null
+            private var entryType: JsonValue = JsonValue.from("decrement")
+            private var ledgerSequenceNumber: JsonField<Long>? = null
+            private var metadata: JsonField<Metadata>? = null
+            private var startingBalance: JsonField<Double>? = null
+            private var eventId: JsonField<String> = JsonMissing.of()
+            private var invoiceId: JsonField<String> = JsonMissing.of()
+            private var priceId: JsonField<String> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(decrement: Decrement) = apply {
+                id = decrement.id
+                amount = decrement.amount
+                createdAt = decrement.createdAt
+                creditBlock = decrement.creditBlock
+                currency = decrement.currency
+                customer = decrement.customer
+                description = decrement.description
+                endingBalance = decrement.endingBalance
+                entryStatus = decrement.entryStatus
+                entryType = decrement.entryType
+                ledgerSequenceNumber = decrement.ledgerSequenceNumber
+                metadata = decrement.metadata
+                startingBalance = decrement.startingBalance
+                eventId = decrement.eventId
+                invoiceId = decrement.invoiceId
+                priceId = decrement.priceId
+                additionalProperties = decrement.additionalProperties.toMutableMap()
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun amount(amount: Double) = amount(JsonField.of(amount))
+
+            /**
+             * Sets [Builder.amount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.amount] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+            /**
+             * Sets [Builder.createdAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
+                this.createdAt = createdAt
+            }
+
+            fun creditBlock(creditBlock: CreditBlock) = creditBlock(JsonField.of(creditBlock))
+
+            /**
+             * Sets [Builder.creditBlock] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.creditBlock] with a well-typed [CreditBlock] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun creditBlock(creditBlock: JsonField<CreditBlock>) = apply {
+                this.creditBlock = creditBlock
+            }
+
+            fun currency(currency: String) = currency(JsonField.of(currency))
+
+            /**
+             * Sets [Builder.currency] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.currency] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
+
+            fun customer(customer: Customer) = customer(JsonField.of(customer))
+
+            /**
+             * Sets [Builder.customer] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.customer] with a well-typed [Customer] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
+
+            fun description(description: String?) = description(JsonField.ofNullable(description))
+
+            /** Alias for calling [Builder.description] with `description.orElse(null)`. */
+            fun description(description: Optional<String>) = description(description.getOrNull())
+
+            /**
+             * Sets [Builder.description] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.description] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
+
+            fun endingBalance(endingBalance: Double) = endingBalance(JsonField.of(endingBalance))
+
+            /**
+             * Sets [Builder.endingBalance] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.endingBalance] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun endingBalance(endingBalance: JsonField<Double>) = apply {
+                this.endingBalance = endingBalance
+            }
+
+            fun entryStatus(entryStatus: EntryStatus) = entryStatus(JsonField.of(entryStatus))
+
+            /**
+             * Sets [Builder.entryStatus] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.entryStatus] with a well-typed [EntryStatus] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun entryStatus(entryStatus: JsonField<EntryStatus>) = apply {
+                this.entryStatus = entryStatus
+            }
+
+            /**
+             * Sets the field to an arbitrary JSON value.
+             *
+             * It is usually unnecessary to call this method because the field defaults to the
+             * following:
+             * ```java
+             * JsonValue.from("decrement")
+             * ```
+             *
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun entryType(entryType: JsonValue) = apply { this.entryType = entryType }
+
+            fun ledgerSequenceNumber(ledgerSequenceNumber: Long) =
+                ledgerSequenceNumber(JsonField.of(ledgerSequenceNumber))
+
+            /**
+             * Sets [Builder.ledgerSequenceNumber] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.ledgerSequenceNumber] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun ledgerSequenceNumber(ledgerSequenceNumber: JsonField<Long>) = apply {
+                this.ledgerSequenceNumber = ledgerSequenceNumber
+            }
+
+            /**
+             * User specified key-value pairs for the resource. If not present, this defaults to an
+             * empty dictionary. Individual keys can be removed by setting the value to `null`, and
+             * the entire metadata mapping can be cleared by setting `metadata` to `null`.
+             */
+            fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+
+            /**
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
+
+            fun startingBalance(startingBalance: Double) =
+                startingBalance(JsonField.of(startingBalance))
+
+            /**
+             * Sets [Builder.startingBalance] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.startingBalance] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun startingBalance(startingBalance: JsonField<Double>) = apply {
+                this.startingBalance = startingBalance
+            }
+
+            fun eventId(eventId: String?) = eventId(JsonField.ofNullable(eventId))
+
+            /** Alias for calling [Builder.eventId] with `eventId.orElse(null)`. */
+            fun eventId(eventId: Optional<String>) = eventId(eventId.getOrNull())
+
+            /**
+             * Sets [Builder.eventId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.eventId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun eventId(eventId: JsonField<String>) = apply { this.eventId = eventId }
+
+            fun invoiceId(invoiceId: String?) = invoiceId(JsonField.ofNullable(invoiceId))
+
+            /** Alias for calling [Builder.invoiceId] with `invoiceId.orElse(null)`. */
+            fun invoiceId(invoiceId: Optional<String>) = invoiceId(invoiceId.getOrNull())
+
+            /**
+             * Sets [Builder.invoiceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.invoiceId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
 
+            fun priceId(priceId: String?) = priceId(JsonField.ofNullable(priceId))
+
+            /** Alias for calling [Builder.priceId] with `priceId.orElse(null)`. */
+            fun priceId(priceId: Optional<String>) = priceId(priceId.getOrNull())
+
+            /**
+             * Sets [Builder.priceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.priceId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun priceId(priceId: JsonField<String>) = apply { this.priceId = priceId }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): DecrementLedgerEntry =
-                DecrementLedgerEntry(
-                    metadata,
-                    id,
-                    ledgerSequenceNumber,
-                    entryStatus,
-                    customer,
-                    startingBalance,
-                    endingBalance,
-                    amount,
-                    currency,
-                    createdAt,
-                    description,
-                    creditBlock,
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Decrement].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .startingBalance()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Decrement =
+                Decrement(
+                    checkRequired("id", id),
+                    checkRequired("amount", amount),
+                    checkRequired("createdAt", createdAt),
+                    checkRequired("creditBlock", creditBlock),
+                    checkRequired("currency", currency),
+                    checkRequired("customer", customer),
+                    checkRequired("description", description),
+                    checkRequired("endingBalance", endingBalance),
+                    checkRequired("entryStatus", entryStatus),
                     entryType,
-                    priceId,
+                    checkRequired("ledgerSequenceNumber", ledgerSequenceNumber),
+                    checkRequired("metadata", metadata),
+                    checkRequired("startingBalance", startingBalance),
                     eventId,
                     invoiceId,
-                    additionalProperties.toImmutable(),
+                    priceId,
+                    additionalProperties.toMutableMap(),
                 )
         }
 
-        @JsonDeserialize(builder = CreditBlock.Builder::class)
-        @NoAutoDetect
+        private var validated: Boolean = false
+
+        fun validate(): Decrement = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            amount()
+            createdAt()
+            creditBlock().validate()
+            currency()
+            customer().validate()
+            description()
+            endingBalance()
+            entryStatus().validate()
+            _entryType().let {
+                if (it != JsonValue.from("decrement")) {
+                    throw OrbInvalidDataException("'entryType' is invalid, received $it")
+                }
+            }
+            ledgerSequenceNumber()
+            metadata().validate()
+            startingBalance()
+            eventId()
+            invoiceId()
+            priceId()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (if (amount.asKnown().isPresent) 1 else 0) +
+                (if (createdAt.asKnown().isPresent) 1 else 0) +
+                (creditBlock.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (currency.asKnown().isPresent) 1 else 0) +
+                (customer.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (description.asKnown().isPresent) 1 else 0) +
+                (if (endingBalance.asKnown().isPresent) 1 else 0) +
+                (entryStatus.asKnown().getOrNull()?.validity() ?: 0) +
+                entryType.let { if (it == JsonValue.from("decrement")) 1 else 0 } +
+                (if (ledgerSequenceNumber.asKnown().isPresent) 1 else 0) +
+                (metadata.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (startingBalance.asKnown().isPresent) 1 else 0) +
+                (if (eventId.asKnown().isPresent) 1 else 0) +
+                (if (invoiceId.asKnown().isPresent) 1 else 0) +
+                (if (priceId.asKnown().isPresent) 1 else 0)
+
         class CreditBlock
         private constructor(
             private val id: JsonField<String>,
             private val expiryDate: JsonField<OffsetDateTime>,
             private val perUnitCostBasis: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("expiry_date")
+                @ExcludeMissing
+                expiryDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("per_unit_cost_basis")
+                @ExcludeMissing
+                perUnitCostBasis: JsonField<String> = JsonMissing.of(),
+            ) : this(id, expiryDate, perUnitCostBasis, mutableMapOf())
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
-            fun expiryDate(): Optional<OffsetDateTime> =
-                Optional.ofNullable(expiryDate.getNullable("expiry_date"))
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
+            fun expiryDate(): Optional<OffsetDateTime> = expiryDate.getOptional("expiry_date")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
             fun perUnitCostBasis(): Optional<String> =
-                Optional.ofNullable(perUnitCostBasis.getNullable("per_unit_cost_basis"))
+                perUnitCostBasis.getOptional("per_unit_cost_basis")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-            @JsonProperty("expiry_date") @ExcludeMissing fun _expiryDate() = expiryDate
+            /**
+             * Returns the raw JSON value of [expiryDate].
+             *
+             * Unlike [expiryDate], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("expiry_date")
+            @ExcludeMissing
+            fun _expiryDate(): JsonField<OffsetDateTime> = expiryDate
 
+            /**
+             * Returns the raw JSON value of [perUnitCostBasis].
+             *
+             * Unlike [perUnitCostBasis], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("per_unit_cost_basis")
             @ExcludeMissing
-            fun _perUnitCostBasis() = perUnitCostBasis
+            fun _perUnitCostBasis(): JsonField<String> = perUnitCostBasis
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): CreditBlock = apply {
-                if (!validated) {
-                    id()
-                    expiryDate()
-                    perUnitCostBasis()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [CreditBlock].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [CreditBlock]. */
+            class Builder internal constructor() {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var expiryDate: JsonField<OffsetDateTime> = JsonMissing.of()
-                private var perUnitCostBasis: JsonField<String> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var expiryDate: JsonField<OffsetDateTime>? = null
+                private var perUnitCostBasis: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(creditBlock: CreditBlock) = apply {
-                    this.id = creditBlock.id
-                    this.expiryDate = creditBlock.expiryDate
-                    this.perUnitCostBasis = creditBlock.perUnitCostBasis
-                    additionalProperties(creditBlock.additionalProperties)
+                    id = creditBlock.id
+                    expiryDate = creditBlock.expiryDate
+                    perUnitCostBasis = creditBlock.perUnitCostBasis
+                    additionalProperties = creditBlock.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
-                fun expiryDate(expiryDate: OffsetDateTime) = expiryDate(JsonField.of(expiryDate))
+                fun expiryDate(expiryDate: OffsetDateTime?) =
+                    expiryDate(JsonField.ofNullable(expiryDate))
 
-                @JsonProperty("expiry_date")
-                @ExcludeMissing
+                /** Alias for calling [Builder.expiryDate] with `expiryDate.orElse(null)`. */
+                fun expiryDate(expiryDate: Optional<OffsetDateTime>) =
+                    expiryDate(expiryDate.getOrNull())
+
+                /**
+                 * Sets [Builder.expiryDate] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.expiryDate] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun expiryDate(expiryDate: JsonField<OffsetDateTime>) = apply {
                     this.expiryDate = expiryDate
                 }
 
-                fun perUnitCostBasis(perUnitCostBasis: String) =
-                    perUnitCostBasis(JsonField.of(perUnitCostBasis))
+                fun perUnitCostBasis(perUnitCostBasis: String?) =
+                    perUnitCostBasis(JsonField.ofNullable(perUnitCostBasis))
 
-                @JsonProperty("per_unit_cost_basis")
-                @ExcludeMissing
+                /**
+                 * Alias for calling [Builder.perUnitCostBasis] with
+                 * `perUnitCostBasis.orElse(null)`.
+                 */
+                fun perUnitCostBasis(perUnitCostBasis: Optional<String>) =
+                    perUnitCostBasis(perUnitCostBasis.getOrNull())
+
+                /**
+                 * Sets [Builder.perUnitCostBasis] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.perUnitCostBasis] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun perUnitCostBasis(perUnitCostBasis: JsonField<String>) = apply {
                     this.perUnitCostBasis = perUnitCostBasis
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -1513,14 +2646,69 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [CreditBlock].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): CreditBlock =
                     CreditBlock(
-                        id,
-                        expiryDate,
-                        perUnitCostBasis,
-                        additionalProperties.toImmutable(),
+                        checkRequired("id", id),
+                        checkRequired("expiryDate", expiryDate),
+                        checkRequired("perUnitCostBasis", perUnitCostBasis),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): CreditBlock = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                expiryDate()
+                perUnitCostBasis()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (expiryDate.asKnown().isPresent) 1 else 0) +
+                    (if (perUnitCostBasis.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1540,83 +2728,131 @@ private constructor(
                 "CreditBlock{id=$id, expiryDate=$expiryDate, perUnitCostBasis=$perUnitCostBasis, additionalProperties=$additionalProperties}"
         }
 
-        @JsonDeserialize(builder = Customer.Builder::class)
-        @NoAutoDetect
         class Customer
         private constructor(
             private val id: JsonField<String>,
             private val externalCustomerId: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("external_customer_id")
+                @ExcludeMissing
+                externalCustomerId: JsonField<String> = JsonMissing.of(),
+            ) : this(id, externalCustomerId, mutableMapOf())
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
             fun externalCustomerId(): Optional<String> =
-                Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+                externalCustomerId.getOptional("external_customer_id")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+            /**
+             * Returns the raw JSON value of [externalCustomerId].
+             *
+             * Unlike [externalCustomerId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("external_customer_id")
             @ExcludeMissing
-            fun _externalCustomerId() = externalCustomerId
+            fun _externalCustomerId(): JsonField<String> = externalCustomerId
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): Customer = apply {
-                if (!validated) {
-                    id()
-                    externalCustomerId()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Customer].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [Customer]. */
+            class Builder internal constructor() {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var externalCustomerId: JsonField<String> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var externalCustomerId: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(customer: Customer) = apply {
-                    this.id = customer.id
-                    this.externalCustomerId = customer.externalCustomerId
-                    additionalProperties(customer.additionalProperties)
+                    id = customer.id
+                    externalCustomerId = customer.externalCustomerId
+                    additionalProperties = customer.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
-                fun externalCustomerId(externalCustomerId: String) =
-                    externalCustomerId(JsonField.of(externalCustomerId))
+                fun externalCustomerId(externalCustomerId: String?) =
+                    externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
-                @JsonProperty("external_customer_id")
-                @ExcludeMissing
+                /**
+                 * Alias for calling [Builder.externalCustomerId] with
+                 * `externalCustomerId.orElse(null)`.
+                 */
+                fun externalCustomerId(externalCustomerId: Optional<String>) =
+                    externalCustomerId(externalCustomerId.getOrNull())
+
+                /**
+                 * Sets [Builder.externalCustomerId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.externalCustomerId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                     this.externalCustomerId = externalCustomerId
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -1624,13 +2860,65 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Customer].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Customer =
                     Customer(
-                        id,
-                        externalCustomerId,
-                        additionalProperties.toImmutable(),
+                        checkRequired("id", id),
+                        checkRequired("externalCustomerId", externalCustomerId),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Customer = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                externalCustomerId()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (externalCustomerId.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1650,13 +2938,121 @@ private constructor(
                 "Customer{id=$id, externalCustomerId=$externalCustomerId, additionalProperties=$additionalProperties}"
         }
 
-        class EntryStatus
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class EntryStatus @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val COMMITTED = of("committed")
+
+                @JvmField val PENDING = of("pending")
+
+                @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
+            }
+
+            /** An enum containing [EntryStatus]'s known values. */
+            enum class Known {
+                COMMITTED,
+                PENDING,
+            }
+
+            /**
+             * An enum containing [EntryStatus]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [EntryStatus] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                COMMITTED,
+                PENDING,
+                /**
+                 * An enum member indicating that [EntryStatus] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    COMMITTED -> Value.COMMITTED
+                    PENDING -> Value.PENDING
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    COMMITTED -> Known.COMMITTED
+                    PENDING -> Known.PENDING
+                    else -> throw OrbInvalidDataException("Unknown EntryStatus: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws OrbInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+            private var validated: Boolean = false
+
+            fun validate(): EntryStatus = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1669,93 +3065,6 @@ private constructor(
             override fun hashCode() = value.hashCode()
 
             override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField val COMMITTED = EntryStatus(JsonField.of("committed"))
-
-                @JvmField val PENDING = EntryStatus(JsonField.of("pending"))
-
-                @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
-            }
-
-            enum class Known {
-                COMMITTED,
-                PENDING,
-            }
-
-            enum class Value {
-                COMMITTED,
-                PENDING,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    COMMITTED -> Value.COMMITTED
-                    PENDING -> Value.PENDING
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    COMMITTED -> Known.COMMITTED
-                    PENDING -> Known.PENDING
-                    else -> throw OrbInvalidDataException("Unknown EntryStatus: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
-        }
-
-        class EntryType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
-
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is EntryType && value == other.value /* spotless:on */
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField val DECREMENT = EntryType(JsonField.of("decrement"))
-
-                @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
-            }
-
-            enum class Known {
-                DECREMENT,
-            }
-
-            enum class Value {
-                DECREMENT,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    DECREMENT -> Value.DECREMENT
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    DECREMENT -> Known.DECREMENT
-                    else -> throw OrbInvalidDataException("Unknown EntryType: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
         }
 
         /**
@@ -1763,49 +3072,42 @@ private constructor(
          * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
          * entire metadata mapping can be cleared by setting `metadata` to `null`.
          */
-        @JsonDeserialize(builder = Metadata.Builder::class)
-        @NoAutoDetect
         class Metadata
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
         ) {
-
-            private var validated: Boolean = false
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-            fun validate(): Metadata = apply {
-                if (!validated) {
-                    validated = true
-                }
-            }
-
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /** Returns a mutable builder for constructing an instance of [Metadata]. */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [Metadata]. */
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(metadata: Metadata) = apply {
-                    additionalProperties(metadata.additionalProperties)
+                    additionalProperties = metadata.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -1813,8 +3115,49 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Metadata].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
                 fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Metadata = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1838,181 +3181,513 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is DecrementLedgerEntry && metadata == other.metadata && id == other.id && ledgerSequenceNumber == other.ledgerSequenceNumber && entryStatus == other.entryStatus && customer == other.customer && startingBalance == other.startingBalance && endingBalance == other.endingBalance && amount == other.amount && currency == other.currency && createdAt == other.createdAt && description == other.description && creditBlock == other.creditBlock && entryType == other.entryType && priceId == other.priceId && eventId == other.eventId && invoiceId == other.invoiceId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Decrement && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && startingBalance == other.startingBalance && eventId == other.eventId && invoiceId == other.invoiceId && priceId == other.priceId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(metadata, id, ledgerSequenceNumber, entryStatus, customer, startingBalance, endingBalance, amount, currency, createdAt, description, creditBlock, entryType, priceId, eventId, invoiceId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, amount, createdAt, creditBlock, currency, customer, description, endingBalance, entryStatus, entryType, ledgerSequenceNumber, metadata, startingBalance, eventId, invoiceId, priceId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "DecrementLedgerEntry{metadata=$metadata, id=$id, ledgerSequenceNumber=$ledgerSequenceNumber, entryStatus=$entryStatus, customer=$customer, startingBalance=$startingBalance, endingBalance=$endingBalance, amount=$amount, currency=$currency, createdAt=$createdAt, description=$description, creditBlock=$creditBlock, entryType=$entryType, priceId=$priceId, eventId=$eventId, invoiceId=$invoiceId, additionalProperties=$additionalProperties}"
+            "Decrement{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, startingBalance=$startingBalance, eventId=$eventId, invoiceId=$invoiceId, priceId=$priceId, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = ExpirationChangeLedgerEntry.Builder::class)
-    @NoAutoDetect
-    class ExpirationChangeLedgerEntry
+    class ExpirationChange
     private constructor(
-        private val metadata: JsonField<Metadata>,
         private val id: JsonField<String>,
-        private val ledgerSequenceNumber: JsonField<Long>,
-        private val entryStatus: JsonField<EntryStatus>,
-        private val customer: JsonField<Customer>,
-        private val startingBalance: JsonField<Double>,
-        private val endingBalance: JsonField<Double>,
         private val amount: JsonField<Double>,
-        private val currency: JsonField<String>,
         private val createdAt: JsonField<OffsetDateTime>,
-        private val description: JsonField<String>,
         private val creditBlock: JsonField<CreditBlock>,
-        private val entryType: JsonField<EntryType>,
+        private val currency: JsonField<String>,
+        private val customer: JsonField<Customer>,
+        private val description: JsonField<String>,
+        private val endingBalance: JsonField<Double>,
+        private val entryStatus: JsonField<EntryStatus>,
+        private val entryType: JsonValue,
+        private val ledgerSequenceNumber: JsonField<Long>,
+        private val metadata: JsonField<Metadata>,
         private val newBlockExpiryDate: JsonField<OffsetDateTime>,
-        private val additionalProperties: Map<String, JsonValue>,
+        private val startingBalance: JsonField<Double>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("amount") @ExcludeMissing amount: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("created_at")
+            @ExcludeMissing
+            createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("credit_block")
+            @ExcludeMissing
+            creditBlock: JsonField<CreditBlock> = JsonMissing.of(),
+            @JsonProperty("currency")
+            @ExcludeMissing
+            currency: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("customer")
+            @ExcludeMissing
+            customer: JsonField<Customer> = JsonMissing.of(),
+            @JsonProperty("description")
+            @ExcludeMissing
+            description: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("ending_balance")
+            @ExcludeMissing
+            endingBalance: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("entry_status")
+            @ExcludeMissing
+            entryStatus: JsonField<EntryStatus> = JsonMissing.of(),
+            @JsonProperty("entry_type") @ExcludeMissing entryType: JsonValue = JsonMissing.of(),
+            @JsonProperty("ledger_sequence_number")
+            @ExcludeMissing
+            ledgerSequenceNumber: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            metadata: JsonField<Metadata> = JsonMissing.of(),
+            @JsonProperty("new_block_expiry_date")
+            @ExcludeMissing
+            newBlockExpiryDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("starting_balance")
+            @ExcludeMissing
+            startingBalance: JsonField<Double> = JsonMissing.of(),
+        ) : this(
+            id,
+            amount,
+            createdAt,
+            creditBlock,
+            currency,
+            customer,
+            description,
+            endingBalance,
+            entryStatus,
+            entryType,
+            ledgerSequenceNumber,
+            metadata,
+            newBlockExpiryDate,
+            startingBalance,
+            mutableMapOf(),
+        )
 
         /**
-         * User specified key-value pairs for the resource. If not present, this defaults to an
-         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
-         * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun metadata(): Metadata = metadata.getRequired("metadata")
-
         fun id(): String = id.getRequired("id")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun amount(): Double = amount.getRequired("amount")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun creditBlock(): CreditBlock = creditBlock.getRequired("credit_block")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun currency(): String = currency.getRequired("currency")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun customer(): Customer = customer.getRequired("customer")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun description(): Optional<String> = description.getOptional("description")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun endingBalance(): Double = endingBalance.getRequired("ending_balance")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun entryStatus(): EntryStatus = entryStatus.getRequired("entry_status")
+
+        /**
+         * Expected to always return the following:
+         * ```java
+         * JsonValue.from("expiration_change")
+         * ```
+         *
+         * However, this method can be useful for debugging and logging (e.g. if the server
+         * responded with an unexpected value).
+         */
+        @JsonProperty("entry_type") @ExcludeMissing fun _entryType(): JsonValue = entryType
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun ledgerSequenceNumber(): Long =
             ledgerSequenceNumber.getRequired("ledger_sequence_number")
 
-        fun entryStatus(): EntryStatus = entryStatus.getRequired("entry_status")
-
-        fun customer(): Customer = customer.getRequired("customer")
-
-        fun startingBalance(): Double = startingBalance.getRequired("starting_balance")
-
-        fun endingBalance(): Double = endingBalance.getRequired("ending_balance")
-
-        fun amount(): Double = amount.getRequired("amount")
-
-        fun currency(): String = currency.getRequired("currency")
-
-        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
-
-        fun description(): Optional<String> =
-            Optional.ofNullable(description.getNullable("description"))
-
-        fun creditBlock(): CreditBlock = creditBlock.getRequired("credit_block")
-
-        fun entryType(): EntryType = entryType.getRequired("entry_type")
-
-        fun newBlockExpiryDate(): OffsetDateTime =
-            newBlockExpiryDate.getRequired("new_block_expiry_date")
-
         /**
          * User specified key-value pairs for the resource. If not present, this defaults to an
          * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
          * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
+        fun metadata(): Metadata = metadata.getRequired("metadata")
 
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun newBlockExpiryDate(): Optional<OffsetDateTime> =
+            newBlockExpiryDate.getOptional("new_block_expiry_date")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun startingBalance(): Double = startingBalance.getRequired("starting_balance")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [amount].
+         *
+         * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
+
+        /**
+         * Returns the raw JSON value of [createdAt].
+         *
+         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        fun _createdAt(): JsonField<OffsetDateTime> = createdAt
+
+        /**
+         * Returns the raw JSON value of [creditBlock].
+         *
+         * Unlike [creditBlock], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("credit_block")
+        @ExcludeMissing
+        fun _creditBlock(): JsonField<CreditBlock> = creditBlock
+
+        /**
+         * Returns the raw JSON value of [currency].
+         *
+         * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
+
+        /**
+         * Returns the raw JSON value of [customer].
+         *
+         * Unlike [customer], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("customer") @ExcludeMissing fun _customer(): JsonField<Customer> = customer
+
+        /**
+         * Returns the raw JSON value of [description].
+         *
+         * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("description")
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
+
+        /**
+         * Returns the raw JSON value of [endingBalance].
+         *
+         * Unlike [endingBalance], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("ending_balance")
+        @ExcludeMissing
+        fun _endingBalance(): JsonField<Double> = endingBalance
+
+        /**
+         * Returns the raw JSON value of [entryStatus].
+         *
+         * Unlike [entryStatus], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("entry_status")
+        @ExcludeMissing
+        fun _entryStatus(): JsonField<EntryStatus> = entryStatus
+
+        /**
+         * Returns the raw JSON value of [ledgerSequenceNumber].
+         *
+         * Unlike [ledgerSequenceNumber], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("ledger_sequence_number")
         @ExcludeMissing
-        fun _ledgerSequenceNumber() = ledgerSequenceNumber
+        fun _ledgerSequenceNumber(): JsonField<Long> = ledgerSequenceNumber
 
-        @JsonProperty("entry_status") @ExcludeMissing fun _entryStatus() = entryStatus
+        /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
-        @JsonProperty("customer") @ExcludeMissing fun _customer() = customer
-
-        @JsonProperty("starting_balance") @ExcludeMissing fun _startingBalance() = startingBalance
-
-        @JsonProperty("ending_balance") @ExcludeMissing fun _endingBalance() = endingBalance
-
-        @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
-
-        @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
-
-        @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
-
-        @JsonProperty("description") @ExcludeMissing fun _description() = description
-
-        @JsonProperty("credit_block") @ExcludeMissing fun _creditBlock() = creditBlock
-
-        @JsonProperty("entry_type") @ExcludeMissing fun _entryType() = entryType
-
+        /**
+         * Returns the raw JSON value of [newBlockExpiryDate].
+         *
+         * Unlike [newBlockExpiryDate], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("new_block_expiry_date")
         @ExcludeMissing
-        fun _newBlockExpiryDate() = newBlockExpiryDate
+        fun _newBlockExpiryDate(): JsonField<OffsetDateTime> = newBlockExpiryDate
+
+        /**
+         * Returns the raw JSON value of [startingBalance].
+         *
+         * Unlike [startingBalance], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("starting_balance")
+        @ExcludeMissing
+        fun _startingBalance(): JsonField<Double> = startingBalance
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): ExpirationChangeLedgerEntry = apply {
-            if (!validated) {
-                metadata().validate()
-                id()
-                ledgerSequenceNumber()
-                entryStatus()
-                customer().validate()
-                startingBalance()
-                endingBalance()
-                amount()
-                currency()
-                createdAt()
-                description()
-                creditBlock().validate()
-                entryType()
-                newBlockExpiryDate()
-                validated = true
-            }
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [ExpirationChange].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .newBlockExpiryDate()
+             * .startingBalance()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [ExpirationChange]. */
+        class Builder internal constructor() {
 
-            private var metadata: JsonField<Metadata> = JsonMissing.of()
-            private var id: JsonField<String> = JsonMissing.of()
-            private var ledgerSequenceNumber: JsonField<Long> = JsonMissing.of()
-            private var entryStatus: JsonField<EntryStatus> = JsonMissing.of()
-            private var customer: JsonField<Customer> = JsonMissing.of()
-            private var startingBalance: JsonField<Double> = JsonMissing.of()
-            private var endingBalance: JsonField<Double> = JsonMissing.of()
-            private var amount: JsonField<Double> = JsonMissing.of()
-            private var currency: JsonField<String> = JsonMissing.of()
-            private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var description: JsonField<String> = JsonMissing.of()
-            private var creditBlock: JsonField<CreditBlock> = JsonMissing.of()
-            private var entryType: JsonField<EntryType> = JsonMissing.of()
-            private var newBlockExpiryDate: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var amount: JsonField<Double>? = null
+            private var createdAt: JsonField<OffsetDateTime>? = null
+            private var creditBlock: JsonField<CreditBlock>? = null
+            private var currency: JsonField<String>? = null
+            private var customer: JsonField<Customer>? = null
+            private var description: JsonField<String>? = null
+            private var endingBalance: JsonField<Double>? = null
+            private var entryStatus: JsonField<EntryStatus>? = null
+            private var entryType: JsonValue = JsonValue.from("expiration_change")
+            private var ledgerSequenceNumber: JsonField<Long>? = null
+            private var metadata: JsonField<Metadata>? = null
+            private var newBlockExpiryDate: JsonField<OffsetDateTime>? = null
+            private var startingBalance: JsonField<Double>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(expirationChangeLedgerEntry: ExpirationChangeLedgerEntry) = apply {
-                this.metadata = expirationChangeLedgerEntry.metadata
-                this.id = expirationChangeLedgerEntry.id
-                this.ledgerSequenceNumber = expirationChangeLedgerEntry.ledgerSequenceNumber
-                this.entryStatus = expirationChangeLedgerEntry.entryStatus
-                this.customer = expirationChangeLedgerEntry.customer
-                this.startingBalance = expirationChangeLedgerEntry.startingBalance
-                this.endingBalance = expirationChangeLedgerEntry.endingBalance
-                this.amount = expirationChangeLedgerEntry.amount
-                this.currency = expirationChangeLedgerEntry.currency
-                this.createdAt = expirationChangeLedgerEntry.createdAt
-                this.description = expirationChangeLedgerEntry.description
-                this.creditBlock = expirationChangeLedgerEntry.creditBlock
-                this.entryType = expirationChangeLedgerEntry.entryType
-                this.newBlockExpiryDate = expirationChangeLedgerEntry.newBlockExpiryDate
-                additionalProperties(expirationChangeLedgerEntry.additionalProperties)
+            internal fun from(expirationChange: ExpirationChange) = apply {
+                id = expirationChange.id
+                amount = expirationChange.amount
+                createdAt = expirationChange.createdAt
+                creditBlock = expirationChange.creditBlock
+                currency = expirationChange.currency
+                customer = expirationChange.customer
+                description = expirationChange.description
+                endingBalance = expirationChange.endingBalance
+                entryStatus = expirationChange.entryStatus
+                entryType = expirationChange.entryType
+                ledgerSequenceNumber = expirationChange.ledgerSequenceNumber
+                metadata = expirationChange.metadata
+                newBlockExpiryDate = expirationChange.newBlockExpiryDate
+                startingBalance = expirationChange.startingBalance
+                additionalProperties = expirationChange.additionalProperties.toMutableMap()
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun amount(amount: Double) = amount(JsonField.of(amount))
+
+            /**
+             * Sets [Builder.amount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.amount] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+            /**
+             * Sets [Builder.createdAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
+                this.createdAt = createdAt
+            }
+
+            fun creditBlock(creditBlock: CreditBlock) = creditBlock(JsonField.of(creditBlock))
+
+            /**
+             * Sets [Builder.creditBlock] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.creditBlock] with a well-typed [CreditBlock] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun creditBlock(creditBlock: JsonField<CreditBlock>) = apply {
+                this.creditBlock = creditBlock
+            }
+
+            fun currency(currency: String) = currency(JsonField.of(currency))
+
+            /**
+             * Sets [Builder.currency] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.currency] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
+
+            fun customer(customer: Customer) = customer(JsonField.of(customer))
+
+            /**
+             * Sets [Builder.customer] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.customer] with a well-typed [Customer] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
+
+            fun description(description: String?) = description(JsonField.ofNullable(description))
+
+            /** Alias for calling [Builder.description] with `description.orElse(null)`. */
+            fun description(description: Optional<String>) = description(description.getOrNull())
+
+            /**
+             * Sets [Builder.description] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.description] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
+
+            fun endingBalance(endingBalance: Double) = endingBalance(JsonField.of(endingBalance))
+
+            /**
+             * Sets [Builder.endingBalance] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.endingBalance] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun endingBalance(endingBalance: JsonField<Double>) = apply {
+                this.endingBalance = endingBalance
+            }
+
+            fun entryStatus(entryStatus: EntryStatus) = entryStatus(JsonField.of(entryStatus))
+
+            /**
+             * Sets [Builder.entryStatus] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.entryStatus] with a well-typed [EntryStatus] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun entryStatus(entryStatus: JsonField<EntryStatus>) = apply {
+                this.entryStatus = entryStatus
+            }
+
+            /**
+             * Sets the field to an arbitrary JSON value.
+             *
+             * It is usually unnecessary to call this method because the field defaults to the
+             * following:
+             * ```java
+             * JsonValue.from("expiration_change")
+             * ```
+             *
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun entryType(entryType: JsonValue) = apply { this.entryType = entryType }
+
+            fun ledgerSequenceNumber(ledgerSequenceNumber: Long) =
+                ledgerSequenceNumber(JsonField.of(ledgerSequenceNumber))
+
+            /**
+             * Sets [Builder.ledgerSequenceNumber] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.ledgerSequenceNumber] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun ledgerSequenceNumber(ledgerSequenceNumber: JsonField<Long>) = apply {
+                this.ledgerSequenceNumber = ledgerSequenceNumber
             }
 
             /**
@@ -2023,239 +3698,337 @@ private constructor(
             fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
             /**
-             * User specified key-value pairs for the resource. If not present, this defaults to an
-             * empty dictionary. Individual keys can be removed by setting the value to `null`, and
-             * the entire metadata mapping can be cleared by setting `metadata` to `null`.
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
-            fun id(id: String) = id(JsonField.of(id))
+            fun newBlockExpiryDate(newBlockExpiryDate: OffsetDateTime?) =
+                newBlockExpiryDate(JsonField.ofNullable(newBlockExpiryDate))
 
-            @JsonProperty("id")
-            @ExcludeMissing
-            fun id(id: JsonField<String>) = apply { this.id = id }
+            /**
+             * Alias for calling [Builder.newBlockExpiryDate] with
+             * `newBlockExpiryDate.orElse(null)`.
+             */
+            fun newBlockExpiryDate(newBlockExpiryDate: Optional<OffsetDateTime>) =
+                newBlockExpiryDate(newBlockExpiryDate.getOrNull())
 
-            fun ledgerSequenceNumber(ledgerSequenceNumber: Long) =
-                ledgerSequenceNumber(JsonField.of(ledgerSequenceNumber))
-
-            @JsonProperty("ledger_sequence_number")
-            @ExcludeMissing
-            fun ledgerSequenceNumber(ledgerSequenceNumber: JsonField<Long>) = apply {
-                this.ledgerSequenceNumber = ledgerSequenceNumber
-            }
-
-            fun entryStatus(entryStatus: EntryStatus) = entryStatus(JsonField.of(entryStatus))
-
-            @JsonProperty("entry_status")
-            @ExcludeMissing
-            fun entryStatus(entryStatus: JsonField<EntryStatus>) = apply {
-                this.entryStatus = entryStatus
-            }
-
-            fun customer(customer: Customer) = customer(JsonField.of(customer))
-
-            @JsonProperty("customer")
-            @ExcludeMissing
-            fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
-
-            fun startingBalance(startingBalance: Double) =
-                startingBalance(JsonField.of(startingBalance))
-
-            @JsonProperty("starting_balance")
-            @ExcludeMissing
-            fun startingBalance(startingBalance: JsonField<Double>) = apply {
-                this.startingBalance = startingBalance
-            }
-
-            fun endingBalance(endingBalance: Double) = endingBalance(JsonField.of(endingBalance))
-
-            @JsonProperty("ending_balance")
-            @ExcludeMissing
-            fun endingBalance(endingBalance: JsonField<Double>) = apply {
-                this.endingBalance = endingBalance
-            }
-
-            fun amount(amount: Double) = amount(JsonField.of(amount))
-
-            @JsonProperty("amount")
-            @ExcludeMissing
-            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
-
-            fun currency(currency: String) = currency(JsonField.of(currency))
-
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
-
-            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
-
-            @JsonProperty("created_at")
-            @ExcludeMissing
-            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
-                this.createdAt = createdAt
-            }
-
-            fun description(description: String) = description(JsonField.of(description))
-
-            @JsonProperty("description")
-            @ExcludeMissing
-            fun description(description: JsonField<String>) = apply {
-                this.description = description
-            }
-
-            fun creditBlock(creditBlock: CreditBlock) = creditBlock(JsonField.of(creditBlock))
-
-            @JsonProperty("credit_block")
-            @ExcludeMissing
-            fun creditBlock(creditBlock: JsonField<CreditBlock>) = apply {
-                this.creditBlock = creditBlock
-            }
-
-            fun entryType(entryType: EntryType) = entryType(JsonField.of(entryType))
-
-            @JsonProperty("entry_type")
-            @ExcludeMissing
-            fun entryType(entryType: JsonField<EntryType>) = apply { this.entryType = entryType }
-
-            fun newBlockExpiryDate(newBlockExpiryDate: OffsetDateTime) =
-                newBlockExpiryDate(JsonField.of(newBlockExpiryDate))
-
-            @JsonProperty("new_block_expiry_date")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.newBlockExpiryDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.newBlockExpiryDate] with a well-typed
+             * [OffsetDateTime] value instead. This method is primarily for setting the field to an
+             * undocumented or not yet supported value.
+             */
             fun newBlockExpiryDate(newBlockExpiryDate: JsonField<OffsetDateTime>) = apply {
                 this.newBlockExpiryDate = newBlockExpiryDate
             }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+            fun startingBalance(startingBalance: Double) =
+                startingBalance(JsonField.of(startingBalance))
+
+            /**
+             * Sets [Builder.startingBalance] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.startingBalance] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun startingBalance(startingBalance: JsonField<Double>) = apply {
+                this.startingBalance = startingBalance
             }
 
-            @JsonAnySetter
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): ExpirationChangeLedgerEntry =
-                ExpirationChangeLedgerEntry(
-                    metadata,
-                    id,
-                    ledgerSequenceNumber,
-                    entryStatus,
-                    customer,
-                    startingBalance,
-                    endingBalance,
-                    amount,
-                    currency,
-                    createdAt,
-                    description,
-                    creditBlock,
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [ExpirationChange].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .newBlockExpiryDate()
+             * .startingBalance()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): ExpirationChange =
+                ExpirationChange(
+                    checkRequired("id", id),
+                    checkRequired("amount", amount),
+                    checkRequired("createdAt", createdAt),
+                    checkRequired("creditBlock", creditBlock),
+                    checkRequired("currency", currency),
+                    checkRequired("customer", customer),
+                    checkRequired("description", description),
+                    checkRequired("endingBalance", endingBalance),
+                    checkRequired("entryStatus", entryStatus),
                     entryType,
-                    newBlockExpiryDate,
-                    additionalProperties.toImmutable(),
+                    checkRequired("ledgerSequenceNumber", ledgerSequenceNumber),
+                    checkRequired("metadata", metadata),
+                    checkRequired("newBlockExpiryDate", newBlockExpiryDate),
+                    checkRequired("startingBalance", startingBalance),
+                    additionalProperties.toMutableMap(),
                 )
         }
 
-        @JsonDeserialize(builder = CreditBlock.Builder::class)
-        @NoAutoDetect
+        private var validated: Boolean = false
+
+        fun validate(): ExpirationChange = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            amount()
+            createdAt()
+            creditBlock().validate()
+            currency()
+            customer().validate()
+            description()
+            endingBalance()
+            entryStatus().validate()
+            _entryType().let {
+                if (it != JsonValue.from("expiration_change")) {
+                    throw OrbInvalidDataException("'entryType' is invalid, received $it")
+                }
+            }
+            ledgerSequenceNumber()
+            metadata().validate()
+            newBlockExpiryDate()
+            startingBalance()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (if (amount.asKnown().isPresent) 1 else 0) +
+                (if (createdAt.asKnown().isPresent) 1 else 0) +
+                (creditBlock.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (currency.asKnown().isPresent) 1 else 0) +
+                (customer.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (description.asKnown().isPresent) 1 else 0) +
+                (if (endingBalance.asKnown().isPresent) 1 else 0) +
+                (entryStatus.asKnown().getOrNull()?.validity() ?: 0) +
+                entryType.let { if (it == JsonValue.from("expiration_change")) 1 else 0 } +
+                (if (ledgerSequenceNumber.asKnown().isPresent) 1 else 0) +
+                (metadata.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (newBlockExpiryDate.asKnown().isPresent) 1 else 0) +
+                (if (startingBalance.asKnown().isPresent) 1 else 0)
+
         class CreditBlock
         private constructor(
             private val id: JsonField<String>,
             private val expiryDate: JsonField<OffsetDateTime>,
             private val perUnitCostBasis: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("expiry_date")
+                @ExcludeMissing
+                expiryDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("per_unit_cost_basis")
+                @ExcludeMissing
+                perUnitCostBasis: JsonField<String> = JsonMissing.of(),
+            ) : this(id, expiryDate, perUnitCostBasis, mutableMapOf())
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
-            fun expiryDate(): Optional<OffsetDateTime> =
-                Optional.ofNullable(expiryDate.getNullable("expiry_date"))
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
+            fun expiryDate(): Optional<OffsetDateTime> = expiryDate.getOptional("expiry_date")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
             fun perUnitCostBasis(): Optional<String> =
-                Optional.ofNullable(perUnitCostBasis.getNullable("per_unit_cost_basis"))
+                perUnitCostBasis.getOptional("per_unit_cost_basis")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-            @JsonProperty("expiry_date") @ExcludeMissing fun _expiryDate() = expiryDate
+            /**
+             * Returns the raw JSON value of [expiryDate].
+             *
+             * Unlike [expiryDate], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("expiry_date")
+            @ExcludeMissing
+            fun _expiryDate(): JsonField<OffsetDateTime> = expiryDate
 
+            /**
+             * Returns the raw JSON value of [perUnitCostBasis].
+             *
+             * Unlike [perUnitCostBasis], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("per_unit_cost_basis")
             @ExcludeMissing
-            fun _perUnitCostBasis() = perUnitCostBasis
+            fun _perUnitCostBasis(): JsonField<String> = perUnitCostBasis
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): CreditBlock = apply {
-                if (!validated) {
-                    id()
-                    expiryDate()
-                    perUnitCostBasis()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [CreditBlock].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [CreditBlock]. */
+            class Builder internal constructor() {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var expiryDate: JsonField<OffsetDateTime> = JsonMissing.of()
-                private var perUnitCostBasis: JsonField<String> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var expiryDate: JsonField<OffsetDateTime>? = null
+                private var perUnitCostBasis: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(creditBlock: CreditBlock) = apply {
-                    this.id = creditBlock.id
-                    this.expiryDate = creditBlock.expiryDate
-                    this.perUnitCostBasis = creditBlock.perUnitCostBasis
-                    additionalProperties(creditBlock.additionalProperties)
+                    id = creditBlock.id
+                    expiryDate = creditBlock.expiryDate
+                    perUnitCostBasis = creditBlock.perUnitCostBasis
+                    additionalProperties = creditBlock.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
-                fun expiryDate(expiryDate: OffsetDateTime) = expiryDate(JsonField.of(expiryDate))
+                fun expiryDate(expiryDate: OffsetDateTime?) =
+                    expiryDate(JsonField.ofNullable(expiryDate))
 
-                @JsonProperty("expiry_date")
-                @ExcludeMissing
+                /** Alias for calling [Builder.expiryDate] with `expiryDate.orElse(null)`. */
+                fun expiryDate(expiryDate: Optional<OffsetDateTime>) =
+                    expiryDate(expiryDate.getOrNull())
+
+                /**
+                 * Sets [Builder.expiryDate] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.expiryDate] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun expiryDate(expiryDate: JsonField<OffsetDateTime>) = apply {
                     this.expiryDate = expiryDate
                 }
 
-                fun perUnitCostBasis(perUnitCostBasis: String) =
-                    perUnitCostBasis(JsonField.of(perUnitCostBasis))
+                fun perUnitCostBasis(perUnitCostBasis: String?) =
+                    perUnitCostBasis(JsonField.ofNullable(perUnitCostBasis))
 
-                @JsonProperty("per_unit_cost_basis")
-                @ExcludeMissing
+                /**
+                 * Alias for calling [Builder.perUnitCostBasis] with
+                 * `perUnitCostBasis.orElse(null)`.
+                 */
+                fun perUnitCostBasis(perUnitCostBasis: Optional<String>) =
+                    perUnitCostBasis(perUnitCostBasis.getOrNull())
+
+                /**
+                 * Sets [Builder.perUnitCostBasis] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.perUnitCostBasis] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun perUnitCostBasis(perUnitCostBasis: JsonField<String>) = apply {
                     this.perUnitCostBasis = perUnitCostBasis
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -2263,14 +4036,69 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [CreditBlock].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): CreditBlock =
                     CreditBlock(
-                        id,
-                        expiryDate,
-                        perUnitCostBasis,
-                        additionalProperties.toImmutable(),
+                        checkRequired("id", id),
+                        checkRequired("expiryDate", expiryDate),
+                        checkRequired("perUnitCostBasis", perUnitCostBasis),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): CreditBlock = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                expiryDate()
+                perUnitCostBasis()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (expiryDate.asKnown().isPresent) 1 else 0) +
+                    (if (perUnitCostBasis.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -2290,83 +4118,131 @@ private constructor(
                 "CreditBlock{id=$id, expiryDate=$expiryDate, perUnitCostBasis=$perUnitCostBasis, additionalProperties=$additionalProperties}"
         }
 
-        @JsonDeserialize(builder = Customer.Builder::class)
-        @NoAutoDetect
         class Customer
         private constructor(
             private val id: JsonField<String>,
             private val externalCustomerId: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("external_customer_id")
+                @ExcludeMissing
+                externalCustomerId: JsonField<String> = JsonMissing.of(),
+            ) : this(id, externalCustomerId, mutableMapOf())
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
             fun externalCustomerId(): Optional<String> =
-                Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+                externalCustomerId.getOptional("external_customer_id")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+            /**
+             * Returns the raw JSON value of [externalCustomerId].
+             *
+             * Unlike [externalCustomerId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("external_customer_id")
             @ExcludeMissing
-            fun _externalCustomerId() = externalCustomerId
+            fun _externalCustomerId(): JsonField<String> = externalCustomerId
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): Customer = apply {
-                if (!validated) {
-                    id()
-                    externalCustomerId()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Customer].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [Customer]. */
+            class Builder internal constructor() {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var externalCustomerId: JsonField<String> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var externalCustomerId: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(customer: Customer) = apply {
-                    this.id = customer.id
-                    this.externalCustomerId = customer.externalCustomerId
-                    additionalProperties(customer.additionalProperties)
+                    id = customer.id
+                    externalCustomerId = customer.externalCustomerId
+                    additionalProperties = customer.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
-                fun externalCustomerId(externalCustomerId: String) =
-                    externalCustomerId(JsonField.of(externalCustomerId))
+                fun externalCustomerId(externalCustomerId: String?) =
+                    externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
-                @JsonProperty("external_customer_id")
-                @ExcludeMissing
+                /**
+                 * Alias for calling [Builder.externalCustomerId] with
+                 * `externalCustomerId.orElse(null)`.
+                 */
+                fun externalCustomerId(externalCustomerId: Optional<String>) =
+                    externalCustomerId(externalCustomerId.getOrNull())
+
+                /**
+                 * Sets [Builder.externalCustomerId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.externalCustomerId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                     this.externalCustomerId = externalCustomerId
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -2374,13 +4250,65 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Customer].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Customer =
                     Customer(
-                        id,
-                        externalCustomerId,
-                        additionalProperties.toImmutable(),
+                        checkRequired("id", id),
+                        checkRequired("externalCustomerId", externalCustomerId),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Customer = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                externalCustomerId()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (externalCustomerId.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -2400,13 +4328,121 @@ private constructor(
                 "Customer{id=$id, externalCustomerId=$externalCustomerId, additionalProperties=$additionalProperties}"
         }
 
-        class EntryStatus
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class EntryStatus @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val COMMITTED = of("committed")
+
+                @JvmField val PENDING = of("pending")
+
+                @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
+            }
+
+            /** An enum containing [EntryStatus]'s known values. */
+            enum class Known {
+                COMMITTED,
+                PENDING,
+            }
+
+            /**
+             * An enum containing [EntryStatus]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [EntryStatus] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                COMMITTED,
+                PENDING,
+                /**
+                 * An enum member indicating that [EntryStatus] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    COMMITTED -> Value.COMMITTED
+                    PENDING -> Value.PENDING
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    COMMITTED -> Known.COMMITTED
+                    PENDING -> Known.PENDING
+                    else -> throw OrbInvalidDataException("Unknown EntryStatus: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws OrbInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+            private var validated: Boolean = false
+
+            fun validate(): EntryStatus = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -2419,93 +4455,6 @@ private constructor(
             override fun hashCode() = value.hashCode()
 
             override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField val COMMITTED = EntryStatus(JsonField.of("committed"))
-
-                @JvmField val PENDING = EntryStatus(JsonField.of("pending"))
-
-                @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
-            }
-
-            enum class Known {
-                COMMITTED,
-                PENDING,
-            }
-
-            enum class Value {
-                COMMITTED,
-                PENDING,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    COMMITTED -> Value.COMMITTED
-                    PENDING -> Value.PENDING
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    COMMITTED -> Known.COMMITTED
-                    PENDING -> Known.PENDING
-                    else -> throw OrbInvalidDataException("Unknown EntryStatus: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
-        }
-
-        class EntryType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
-
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is EntryType && value == other.value /* spotless:on */
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField val EXPIRATION_CHANGE = EntryType(JsonField.of("expiration_change"))
-
-                @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
-            }
-
-            enum class Known {
-                EXPIRATION_CHANGE,
-            }
-
-            enum class Value {
-                EXPIRATION_CHANGE,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    EXPIRATION_CHANGE -> Value.EXPIRATION_CHANGE
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    EXPIRATION_CHANGE -> Known.EXPIRATION_CHANGE
-                    else -> throw OrbInvalidDataException("Unknown EntryType: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
         }
 
         /**
@@ -2513,49 +4462,42 @@ private constructor(
          * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
          * entire metadata mapping can be cleared by setting `metadata` to `null`.
          */
-        @JsonDeserialize(builder = Metadata.Builder::class)
-        @NoAutoDetect
         class Metadata
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
         ) {
-
-            private var validated: Boolean = false
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-            fun validate(): Metadata = apply {
-                if (!validated) {
-                    validated = true
-                }
-            }
-
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /** Returns a mutable builder for constructing an instance of [Metadata]. */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [Metadata]. */
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(metadata: Metadata) = apply {
-                    additionalProperties(metadata.additionalProperties)
+                    additionalProperties = metadata.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -2563,8 +4505,49 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Metadata].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
                 fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Metadata = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -2588,170 +4571,488 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ExpirationChangeLedgerEntry && metadata == other.metadata && id == other.id && ledgerSequenceNumber == other.ledgerSequenceNumber && entryStatus == other.entryStatus && customer == other.customer && startingBalance == other.startingBalance && endingBalance == other.endingBalance && amount == other.amount && currency == other.currency && createdAt == other.createdAt && description == other.description && creditBlock == other.creditBlock && entryType == other.entryType && newBlockExpiryDate == other.newBlockExpiryDate && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ExpirationChange && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && newBlockExpiryDate == other.newBlockExpiryDate && startingBalance == other.startingBalance && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(metadata, id, ledgerSequenceNumber, entryStatus, customer, startingBalance, endingBalance, amount, currency, createdAt, description, creditBlock, entryType, newBlockExpiryDate, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, amount, createdAt, creditBlock, currency, customer, description, endingBalance, entryStatus, entryType, ledgerSequenceNumber, metadata, newBlockExpiryDate, startingBalance, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ExpirationChangeLedgerEntry{metadata=$metadata, id=$id, ledgerSequenceNumber=$ledgerSequenceNumber, entryStatus=$entryStatus, customer=$customer, startingBalance=$startingBalance, endingBalance=$endingBalance, amount=$amount, currency=$currency, createdAt=$createdAt, description=$description, creditBlock=$creditBlock, entryType=$entryType, newBlockExpiryDate=$newBlockExpiryDate, additionalProperties=$additionalProperties}"
+            "ExpirationChange{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, newBlockExpiryDate=$newBlockExpiryDate, startingBalance=$startingBalance, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = CreditBlockExpiryLedgerEntry.Builder::class)
-    @NoAutoDetect
-    class CreditBlockExpiryLedgerEntry
+    class CreditBlockExpiry
     private constructor(
-        private val metadata: JsonField<Metadata>,
         private val id: JsonField<String>,
-        private val ledgerSequenceNumber: JsonField<Long>,
-        private val entryStatus: JsonField<EntryStatus>,
-        private val customer: JsonField<Customer>,
-        private val startingBalance: JsonField<Double>,
-        private val endingBalance: JsonField<Double>,
         private val amount: JsonField<Double>,
-        private val currency: JsonField<String>,
         private val createdAt: JsonField<OffsetDateTime>,
-        private val description: JsonField<String>,
         private val creditBlock: JsonField<CreditBlock>,
-        private val entryType: JsonField<EntryType>,
-        private val additionalProperties: Map<String, JsonValue>,
+        private val currency: JsonField<String>,
+        private val customer: JsonField<Customer>,
+        private val description: JsonField<String>,
+        private val endingBalance: JsonField<Double>,
+        private val entryStatus: JsonField<EntryStatus>,
+        private val entryType: JsonValue,
+        private val ledgerSequenceNumber: JsonField<Long>,
+        private val metadata: JsonField<Metadata>,
+        private val startingBalance: JsonField<Double>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("amount") @ExcludeMissing amount: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("created_at")
+            @ExcludeMissing
+            createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("credit_block")
+            @ExcludeMissing
+            creditBlock: JsonField<CreditBlock> = JsonMissing.of(),
+            @JsonProperty("currency")
+            @ExcludeMissing
+            currency: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("customer")
+            @ExcludeMissing
+            customer: JsonField<Customer> = JsonMissing.of(),
+            @JsonProperty("description")
+            @ExcludeMissing
+            description: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("ending_balance")
+            @ExcludeMissing
+            endingBalance: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("entry_status")
+            @ExcludeMissing
+            entryStatus: JsonField<EntryStatus> = JsonMissing.of(),
+            @JsonProperty("entry_type") @ExcludeMissing entryType: JsonValue = JsonMissing.of(),
+            @JsonProperty("ledger_sequence_number")
+            @ExcludeMissing
+            ledgerSequenceNumber: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            metadata: JsonField<Metadata> = JsonMissing.of(),
+            @JsonProperty("starting_balance")
+            @ExcludeMissing
+            startingBalance: JsonField<Double> = JsonMissing.of(),
+        ) : this(
+            id,
+            amount,
+            createdAt,
+            creditBlock,
+            currency,
+            customer,
+            description,
+            endingBalance,
+            entryStatus,
+            entryType,
+            ledgerSequenceNumber,
+            metadata,
+            startingBalance,
+            mutableMapOf(),
+        )
 
         /**
-         * User specified key-value pairs for the resource. If not present, this defaults to an
-         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
-         * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun metadata(): Metadata = metadata.getRequired("metadata")
-
         fun id(): String = id.getRequired("id")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun amount(): Double = amount.getRequired("amount")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun creditBlock(): CreditBlock = creditBlock.getRequired("credit_block")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun currency(): String = currency.getRequired("currency")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun customer(): Customer = customer.getRequired("customer")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun description(): Optional<String> = description.getOptional("description")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun endingBalance(): Double = endingBalance.getRequired("ending_balance")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun entryStatus(): EntryStatus = entryStatus.getRequired("entry_status")
+
+        /**
+         * Expected to always return the following:
+         * ```java
+         * JsonValue.from("credit_block_expiry")
+         * ```
+         *
+         * However, this method can be useful for debugging and logging (e.g. if the server
+         * responded with an unexpected value).
+         */
+        @JsonProperty("entry_type") @ExcludeMissing fun _entryType(): JsonValue = entryType
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun ledgerSequenceNumber(): Long =
             ledgerSequenceNumber.getRequired("ledger_sequence_number")
 
-        fun entryStatus(): EntryStatus = entryStatus.getRequired("entry_status")
-
-        fun customer(): Customer = customer.getRequired("customer")
-
-        fun startingBalance(): Double = startingBalance.getRequired("starting_balance")
-
-        fun endingBalance(): Double = endingBalance.getRequired("ending_balance")
-
-        fun amount(): Double = amount.getRequired("amount")
-
-        fun currency(): String = currency.getRequired("currency")
-
-        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
-
-        fun description(): Optional<String> =
-            Optional.ofNullable(description.getNullable("description"))
-
-        fun creditBlock(): CreditBlock = creditBlock.getRequired("credit_block")
-
-        fun entryType(): EntryType = entryType.getRequired("entry_type")
-
         /**
          * User specified key-value pairs for the resource. If not present, this defaults to an
          * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
          * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
+        fun metadata(): Metadata = metadata.getRequired("metadata")
 
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun startingBalance(): Double = startingBalance.getRequired("starting_balance")
 
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [amount].
+         *
+         * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
+
+        /**
+         * Returns the raw JSON value of [createdAt].
+         *
+         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        fun _createdAt(): JsonField<OffsetDateTime> = createdAt
+
+        /**
+         * Returns the raw JSON value of [creditBlock].
+         *
+         * Unlike [creditBlock], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("credit_block")
+        @ExcludeMissing
+        fun _creditBlock(): JsonField<CreditBlock> = creditBlock
+
+        /**
+         * Returns the raw JSON value of [currency].
+         *
+         * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
+
+        /**
+         * Returns the raw JSON value of [customer].
+         *
+         * Unlike [customer], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("customer") @ExcludeMissing fun _customer(): JsonField<Customer> = customer
+
+        /**
+         * Returns the raw JSON value of [description].
+         *
+         * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("description")
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
+
+        /**
+         * Returns the raw JSON value of [endingBalance].
+         *
+         * Unlike [endingBalance], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("ending_balance")
+        @ExcludeMissing
+        fun _endingBalance(): JsonField<Double> = endingBalance
+
+        /**
+         * Returns the raw JSON value of [entryStatus].
+         *
+         * Unlike [entryStatus], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("entry_status")
+        @ExcludeMissing
+        fun _entryStatus(): JsonField<EntryStatus> = entryStatus
+
+        /**
+         * Returns the raw JSON value of [ledgerSequenceNumber].
+         *
+         * Unlike [ledgerSequenceNumber], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("ledger_sequence_number")
         @ExcludeMissing
-        fun _ledgerSequenceNumber() = ledgerSequenceNumber
+        fun _ledgerSequenceNumber(): JsonField<Long> = ledgerSequenceNumber
 
-        @JsonProperty("entry_status") @ExcludeMissing fun _entryStatus() = entryStatus
+        /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
-        @JsonProperty("customer") @ExcludeMissing fun _customer() = customer
+        /**
+         * Returns the raw JSON value of [startingBalance].
+         *
+         * Unlike [startingBalance], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("starting_balance")
+        @ExcludeMissing
+        fun _startingBalance(): JsonField<Double> = startingBalance
 
-        @JsonProperty("starting_balance") @ExcludeMissing fun _startingBalance() = startingBalance
-
-        @JsonProperty("ending_balance") @ExcludeMissing fun _endingBalance() = endingBalance
-
-        @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
-
-        @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
-
-        @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
-
-        @JsonProperty("description") @ExcludeMissing fun _description() = description
-
-        @JsonProperty("credit_block") @ExcludeMissing fun _creditBlock() = creditBlock
-
-        @JsonProperty("entry_type") @ExcludeMissing fun _entryType() = entryType
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): CreditBlockExpiryLedgerEntry = apply {
-            if (!validated) {
-                metadata().validate()
-                id()
-                ledgerSequenceNumber()
-                entryStatus()
-                customer().validate()
-                startingBalance()
-                endingBalance()
-                amount()
-                currency()
-                createdAt()
-                description()
-                creditBlock().validate()
-                entryType()
-                validated = true
-            }
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [CreditBlockExpiry].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .startingBalance()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [CreditBlockExpiry]. */
+        class Builder internal constructor() {
 
-            private var metadata: JsonField<Metadata> = JsonMissing.of()
-            private var id: JsonField<String> = JsonMissing.of()
-            private var ledgerSequenceNumber: JsonField<Long> = JsonMissing.of()
-            private var entryStatus: JsonField<EntryStatus> = JsonMissing.of()
-            private var customer: JsonField<Customer> = JsonMissing.of()
-            private var startingBalance: JsonField<Double> = JsonMissing.of()
-            private var endingBalance: JsonField<Double> = JsonMissing.of()
-            private var amount: JsonField<Double> = JsonMissing.of()
-            private var currency: JsonField<String> = JsonMissing.of()
-            private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var description: JsonField<String> = JsonMissing.of()
-            private var creditBlock: JsonField<CreditBlock> = JsonMissing.of()
-            private var entryType: JsonField<EntryType> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var amount: JsonField<Double>? = null
+            private var createdAt: JsonField<OffsetDateTime>? = null
+            private var creditBlock: JsonField<CreditBlock>? = null
+            private var currency: JsonField<String>? = null
+            private var customer: JsonField<Customer>? = null
+            private var description: JsonField<String>? = null
+            private var endingBalance: JsonField<Double>? = null
+            private var entryStatus: JsonField<EntryStatus>? = null
+            private var entryType: JsonValue = JsonValue.from("credit_block_expiry")
+            private var ledgerSequenceNumber: JsonField<Long>? = null
+            private var metadata: JsonField<Metadata>? = null
+            private var startingBalance: JsonField<Double>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(creditBlockExpiryLedgerEntry: CreditBlockExpiryLedgerEntry) = apply {
-                this.metadata = creditBlockExpiryLedgerEntry.metadata
-                this.id = creditBlockExpiryLedgerEntry.id
-                this.ledgerSequenceNumber = creditBlockExpiryLedgerEntry.ledgerSequenceNumber
-                this.entryStatus = creditBlockExpiryLedgerEntry.entryStatus
-                this.customer = creditBlockExpiryLedgerEntry.customer
-                this.startingBalance = creditBlockExpiryLedgerEntry.startingBalance
-                this.endingBalance = creditBlockExpiryLedgerEntry.endingBalance
-                this.amount = creditBlockExpiryLedgerEntry.amount
-                this.currency = creditBlockExpiryLedgerEntry.currency
-                this.createdAt = creditBlockExpiryLedgerEntry.createdAt
-                this.description = creditBlockExpiryLedgerEntry.description
-                this.creditBlock = creditBlockExpiryLedgerEntry.creditBlock
-                this.entryType = creditBlockExpiryLedgerEntry.entryType
-                additionalProperties(creditBlockExpiryLedgerEntry.additionalProperties)
+            internal fun from(creditBlockExpiry: CreditBlockExpiry) = apply {
+                id = creditBlockExpiry.id
+                amount = creditBlockExpiry.amount
+                createdAt = creditBlockExpiry.createdAt
+                creditBlock = creditBlockExpiry.creditBlock
+                currency = creditBlockExpiry.currency
+                customer = creditBlockExpiry.customer
+                description = creditBlockExpiry.description
+                endingBalance = creditBlockExpiry.endingBalance
+                entryStatus = creditBlockExpiry.entryStatus
+                entryType = creditBlockExpiry.entryType
+                ledgerSequenceNumber = creditBlockExpiry.ledgerSequenceNumber
+                metadata = creditBlockExpiry.metadata
+                startingBalance = creditBlockExpiry.startingBalance
+                additionalProperties = creditBlockExpiry.additionalProperties.toMutableMap()
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun amount(amount: Double) = amount(JsonField.of(amount))
+
+            /**
+             * Sets [Builder.amount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.amount] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+            /**
+             * Sets [Builder.createdAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
+                this.createdAt = createdAt
+            }
+
+            fun creditBlock(creditBlock: CreditBlock) = creditBlock(JsonField.of(creditBlock))
+
+            /**
+             * Sets [Builder.creditBlock] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.creditBlock] with a well-typed [CreditBlock] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun creditBlock(creditBlock: JsonField<CreditBlock>) = apply {
+                this.creditBlock = creditBlock
+            }
+
+            fun currency(currency: String) = currency(JsonField.of(currency))
+
+            /**
+             * Sets [Builder.currency] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.currency] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
+
+            fun customer(customer: Customer) = customer(JsonField.of(customer))
+
+            /**
+             * Sets [Builder.customer] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.customer] with a well-typed [Customer] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
+
+            fun description(description: String?) = description(JsonField.ofNullable(description))
+
+            /** Alias for calling [Builder.description] with `description.orElse(null)`. */
+            fun description(description: Optional<String>) = description(description.getOrNull())
+
+            /**
+             * Sets [Builder.description] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.description] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
+
+            fun endingBalance(endingBalance: Double) = endingBalance(JsonField.of(endingBalance))
+
+            /**
+             * Sets [Builder.endingBalance] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.endingBalance] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun endingBalance(endingBalance: JsonField<Double>) = apply {
+                this.endingBalance = endingBalance
+            }
+
+            fun entryStatus(entryStatus: EntryStatus) = entryStatus(JsonField.of(entryStatus))
+
+            /**
+             * Sets [Builder.entryStatus] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.entryStatus] with a well-typed [EntryStatus] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun entryStatus(entryStatus: JsonField<EntryStatus>) = apply {
+                this.entryStatus = entryStatus
+            }
+
+            /**
+             * Sets the field to an arbitrary JSON value.
+             *
+             * It is usually unnecessary to call this method because the field defaults to the
+             * following:
+             * ```java
+             * JsonValue.from("credit_block_expiry")
+             * ```
+             *
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun entryType(entryType: JsonValue) = apply { this.entryType = entryType }
+
+            fun ledgerSequenceNumber(ledgerSequenceNumber: Long) =
+                ledgerSequenceNumber(JsonField.of(ledgerSequenceNumber))
+
+            /**
+             * Sets [Builder.ledgerSequenceNumber] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.ledgerSequenceNumber] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun ledgerSequenceNumber(ledgerSequenceNumber: JsonField<Long>) = apply {
+                this.ledgerSequenceNumber = ledgerSequenceNumber
             }
 
             /**
@@ -2762,229 +5063,312 @@ private constructor(
             fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
             /**
-             * User specified key-value pairs for the resource. If not present, this defaults to an
-             * empty dictionary. Individual keys can be removed by setting the value to `null`, and
-             * the entire metadata mapping can be cleared by setting `metadata` to `null`.
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
-
-            fun id(id: String) = id(JsonField.of(id))
-
-            @JsonProperty("id")
-            @ExcludeMissing
-            fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun ledgerSequenceNumber(ledgerSequenceNumber: Long) =
-                ledgerSequenceNumber(JsonField.of(ledgerSequenceNumber))
-
-            @JsonProperty("ledger_sequence_number")
-            @ExcludeMissing
-            fun ledgerSequenceNumber(ledgerSequenceNumber: JsonField<Long>) = apply {
-                this.ledgerSequenceNumber = ledgerSequenceNumber
-            }
-
-            fun entryStatus(entryStatus: EntryStatus) = entryStatus(JsonField.of(entryStatus))
-
-            @JsonProperty("entry_status")
-            @ExcludeMissing
-            fun entryStatus(entryStatus: JsonField<EntryStatus>) = apply {
-                this.entryStatus = entryStatus
-            }
-
-            fun customer(customer: Customer) = customer(JsonField.of(customer))
-
-            @JsonProperty("customer")
-            @ExcludeMissing
-            fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
 
             fun startingBalance(startingBalance: Double) =
                 startingBalance(JsonField.of(startingBalance))
 
-            @JsonProperty("starting_balance")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.startingBalance] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.startingBalance] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun startingBalance(startingBalance: JsonField<Double>) = apply {
                 this.startingBalance = startingBalance
             }
 
-            fun endingBalance(endingBalance: Double) = endingBalance(JsonField.of(endingBalance))
-
-            @JsonProperty("ending_balance")
-            @ExcludeMissing
-            fun endingBalance(endingBalance: JsonField<Double>) = apply {
-                this.endingBalance = endingBalance
-            }
-
-            fun amount(amount: Double) = amount(JsonField.of(amount))
-
-            @JsonProperty("amount")
-            @ExcludeMissing
-            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
-
-            fun currency(currency: String) = currency(JsonField.of(currency))
-
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
-
-            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
-
-            @JsonProperty("created_at")
-            @ExcludeMissing
-            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
-                this.createdAt = createdAt
-            }
-
-            fun description(description: String) = description(JsonField.of(description))
-
-            @JsonProperty("description")
-            @ExcludeMissing
-            fun description(description: JsonField<String>) = apply {
-                this.description = description
-            }
-
-            fun creditBlock(creditBlock: CreditBlock) = creditBlock(JsonField.of(creditBlock))
-
-            @JsonProperty("credit_block")
-            @ExcludeMissing
-            fun creditBlock(creditBlock: JsonField<CreditBlock>) = apply {
-                this.creditBlock = creditBlock
-            }
-
-            fun entryType(entryType: EntryType) = entryType(JsonField.of(entryType))
-
-            @JsonProperty("entry_type")
-            @ExcludeMissing
-            fun entryType(entryType: JsonField<EntryType>) = apply { this.entryType = entryType }
-
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CreditBlockExpiryLedgerEntry =
-                CreditBlockExpiryLedgerEntry(
-                    metadata,
-                    id,
-                    ledgerSequenceNumber,
-                    entryStatus,
-                    customer,
-                    startingBalance,
-                    endingBalance,
-                    amount,
-                    currency,
-                    createdAt,
-                    description,
-                    creditBlock,
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [CreditBlockExpiry].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .startingBalance()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): CreditBlockExpiry =
+                CreditBlockExpiry(
+                    checkRequired("id", id),
+                    checkRequired("amount", amount),
+                    checkRequired("createdAt", createdAt),
+                    checkRequired("creditBlock", creditBlock),
+                    checkRequired("currency", currency),
+                    checkRequired("customer", customer),
+                    checkRequired("description", description),
+                    checkRequired("endingBalance", endingBalance),
+                    checkRequired("entryStatus", entryStatus),
                     entryType,
-                    additionalProperties.toImmutable(),
+                    checkRequired("ledgerSequenceNumber", ledgerSequenceNumber),
+                    checkRequired("metadata", metadata),
+                    checkRequired("startingBalance", startingBalance),
+                    additionalProperties.toMutableMap(),
                 )
         }
 
-        @JsonDeserialize(builder = CreditBlock.Builder::class)
-        @NoAutoDetect
+        private var validated: Boolean = false
+
+        fun validate(): CreditBlockExpiry = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            amount()
+            createdAt()
+            creditBlock().validate()
+            currency()
+            customer().validate()
+            description()
+            endingBalance()
+            entryStatus().validate()
+            _entryType().let {
+                if (it != JsonValue.from("credit_block_expiry")) {
+                    throw OrbInvalidDataException("'entryType' is invalid, received $it")
+                }
+            }
+            ledgerSequenceNumber()
+            metadata().validate()
+            startingBalance()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (if (amount.asKnown().isPresent) 1 else 0) +
+                (if (createdAt.asKnown().isPresent) 1 else 0) +
+                (creditBlock.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (currency.asKnown().isPresent) 1 else 0) +
+                (customer.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (description.asKnown().isPresent) 1 else 0) +
+                (if (endingBalance.asKnown().isPresent) 1 else 0) +
+                (entryStatus.asKnown().getOrNull()?.validity() ?: 0) +
+                entryType.let { if (it == JsonValue.from("credit_block_expiry")) 1 else 0 } +
+                (if (ledgerSequenceNumber.asKnown().isPresent) 1 else 0) +
+                (metadata.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (startingBalance.asKnown().isPresent) 1 else 0)
+
         class CreditBlock
         private constructor(
             private val id: JsonField<String>,
             private val expiryDate: JsonField<OffsetDateTime>,
             private val perUnitCostBasis: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("expiry_date")
+                @ExcludeMissing
+                expiryDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("per_unit_cost_basis")
+                @ExcludeMissing
+                perUnitCostBasis: JsonField<String> = JsonMissing.of(),
+            ) : this(id, expiryDate, perUnitCostBasis, mutableMapOf())
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
-            fun expiryDate(): Optional<OffsetDateTime> =
-                Optional.ofNullable(expiryDate.getNullable("expiry_date"))
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
+            fun expiryDate(): Optional<OffsetDateTime> = expiryDate.getOptional("expiry_date")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
             fun perUnitCostBasis(): Optional<String> =
-                Optional.ofNullable(perUnitCostBasis.getNullable("per_unit_cost_basis"))
+                perUnitCostBasis.getOptional("per_unit_cost_basis")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-            @JsonProperty("expiry_date") @ExcludeMissing fun _expiryDate() = expiryDate
+            /**
+             * Returns the raw JSON value of [expiryDate].
+             *
+             * Unlike [expiryDate], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("expiry_date")
+            @ExcludeMissing
+            fun _expiryDate(): JsonField<OffsetDateTime> = expiryDate
 
+            /**
+             * Returns the raw JSON value of [perUnitCostBasis].
+             *
+             * Unlike [perUnitCostBasis], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("per_unit_cost_basis")
             @ExcludeMissing
-            fun _perUnitCostBasis() = perUnitCostBasis
+            fun _perUnitCostBasis(): JsonField<String> = perUnitCostBasis
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): CreditBlock = apply {
-                if (!validated) {
-                    id()
-                    expiryDate()
-                    perUnitCostBasis()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [CreditBlock].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [CreditBlock]. */
+            class Builder internal constructor() {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var expiryDate: JsonField<OffsetDateTime> = JsonMissing.of()
-                private var perUnitCostBasis: JsonField<String> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var expiryDate: JsonField<OffsetDateTime>? = null
+                private var perUnitCostBasis: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(creditBlock: CreditBlock) = apply {
-                    this.id = creditBlock.id
-                    this.expiryDate = creditBlock.expiryDate
-                    this.perUnitCostBasis = creditBlock.perUnitCostBasis
-                    additionalProperties(creditBlock.additionalProperties)
+                    id = creditBlock.id
+                    expiryDate = creditBlock.expiryDate
+                    perUnitCostBasis = creditBlock.perUnitCostBasis
+                    additionalProperties = creditBlock.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
-                fun expiryDate(expiryDate: OffsetDateTime) = expiryDate(JsonField.of(expiryDate))
+                fun expiryDate(expiryDate: OffsetDateTime?) =
+                    expiryDate(JsonField.ofNullable(expiryDate))
 
-                @JsonProperty("expiry_date")
-                @ExcludeMissing
+                /** Alias for calling [Builder.expiryDate] with `expiryDate.orElse(null)`. */
+                fun expiryDate(expiryDate: Optional<OffsetDateTime>) =
+                    expiryDate(expiryDate.getOrNull())
+
+                /**
+                 * Sets [Builder.expiryDate] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.expiryDate] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun expiryDate(expiryDate: JsonField<OffsetDateTime>) = apply {
                     this.expiryDate = expiryDate
                 }
 
-                fun perUnitCostBasis(perUnitCostBasis: String) =
-                    perUnitCostBasis(JsonField.of(perUnitCostBasis))
+                fun perUnitCostBasis(perUnitCostBasis: String?) =
+                    perUnitCostBasis(JsonField.ofNullable(perUnitCostBasis))
 
-                @JsonProperty("per_unit_cost_basis")
-                @ExcludeMissing
+                /**
+                 * Alias for calling [Builder.perUnitCostBasis] with
+                 * `perUnitCostBasis.orElse(null)`.
+                 */
+                fun perUnitCostBasis(perUnitCostBasis: Optional<String>) =
+                    perUnitCostBasis(perUnitCostBasis.getOrNull())
+
+                /**
+                 * Sets [Builder.perUnitCostBasis] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.perUnitCostBasis] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun perUnitCostBasis(perUnitCostBasis: JsonField<String>) = apply {
                     this.perUnitCostBasis = perUnitCostBasis
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -2992,14 +5376,69 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [CreditBlock].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): CreditBlock =
                     CreditBlock(
-                        id,
-                        expiryDate,
-                        perUnitCostBasis,
-                        additionalProperties.toImmutable(),
+                        checkRequired("id", id),
+                        checkRequired("expiryDate", expiryDate),
+                        checkRequired("perUnitCostBasis", perUnitCostBasis),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): CreditBlock = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                expiryDate()
+                perUnitCostBasis()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (expiryDate.asKnown().isPresent) 1 else 0) +
+                    (if (perUnitCostBasis.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -3019,83 +5458,131 @@ private constructor(
                 "CreditBlock{id=$id, expiryDate=$expiryDate, perUnitCostBasis=$perUnitCostBasis, additionalProperties=$additionalProperties}"
         }
 
-        @JsonDeserialize(builder = Customer.Builder::class)
-        @NoAutoDetect
         class Customer
         private constructor(
             private val id: JsonField<String>,
             private val externalCustomerId: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("external_customer_id")
+                @ExcludeMissing
+                externalCustomerId: JsonField<String> = JsonMissing.of(),
+            ) : this(id, externalCustomerId, mutableMapOf())
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
             fun externalCustomerId(): Optional<String> =
-                Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+                externalCustomerId.getOptional("external_customer_id")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+            /**
+             * Returns the raw JSON value of [externalCustomerId].
+             *
+             * Unlike [externalCustomerId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("external_customer_id")
             @ExcludeMissing
-            fun _externalCustomerId() = externalCustomerId
+            fun _externalCustomerId(): JsonField<String> = externalCustomerId
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): Customer = apply {
-                if (!validated) {
-                    id()
-                    externalCustomerId()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Customer].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [Customer]. */
+            class Builder internal constructor() {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var externalCustomerId: JsonField<String> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var externalCustomerId: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(customer: Customer) = apply {
-                    this.id = customer.id
-                    this.externalCustomerId = customer.externalCustomerId
-                    additionalProperties(customer.additionalProperties)
+                    id = customer.id
+                    externalCustomerId = customer.externalCustomerId
+                    additionalProperties = customer.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
-                fun externalCustomerId(externalCustomerId: String) =
-                    externalCustomerId(JsonField.of(externalCustomerId))
+                fun externalCustomerId(externalCustomerId: String?) =
+                    externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
-                @JsonProperty("external_customer_id")
-                @ExcludeMissing
+                /**
+                 * Alias for calling [Builder.externalCustomerId] with
+                 * `externalCustomerId.orElse(null)`.
+                 */
+                fun externalCustomerId(externalCustomerId: Optional<String>) =
+                    externalCustomerId(externalCustomerId.getOrNull())
+
+                /**
+                 * Sets [Builder.externalCustomerId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.externalCustomerId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                     this.externalCustomerId = externalCustomerId
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -3103,13 +5590,65 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Customer].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Customer =
                     Customer(
-                        id,
-                        externalCustomerId,
-                        additionalProperties.toImmutable(),
+                        checkRequired("id", id),
+                        checkRequired("externalCustomerId", externalCustomerId),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Customer = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                externalCustomerId()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (externalCustomerId.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -3129,13 +5668,121 @@ private constructor(
                 "Customer{id=$id, externalCustomerId=$externalCustomerId, additionalProperties=$additionalProperties}"
         }
 
-        class EntryStatus
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class EntryStatus @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val COMMITTED = of("committed")
+
+                @JvmField val PENDING = of("pending")
+
+                @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
+            }
+
+            /** An enum containing [EntryStatus]'s known values. */
+            enum class Known {
+                COMMITTED,
+                PENDING,
+            }
+
+            /**
+             * An enum containing [EntryStatus]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [EntryStatus] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                COMMITTED,
+                PENDING,
+                /**
+                 * An enum member indicating that [EntryStatus] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    COMMITTED -> Value.COMMITTED
+                    PENDING -> Value.PENDING
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    COMMITTED -> Known.COMMITTED
+                    PENDING -> Known.PENDING
+                    else -> throw OrbInvalidDataException("Unknown EntryStatus: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws OrbInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+            private var validated: Boolean = false
+
+            fun validate(): EntryStatus = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -3148,93 +5795,6 @@ private constructor(
             override fun hashCode() = value.hashCode()
 
             override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField val COMMITTED = EntryStatus(JsonField.of("committed"))
-
-                @JvmField val PENDING = EntryStatus(JsonField.of("pending"))
-
-                @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
-            }
-
-            enum class Known {
-                COMMITTED,
-                PENDING,
-            }
-
-            enum class Value {
-                COMMITTED,
-                PENDING,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    COMMITTED -> Value.COMMITTED
-                    PENDING -> Value.PENDING
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    COMMITTED -> Known.COMMITTED
-                    PENDING -> Known.PENDING
-                    else -> throw OrbInvalidDataException("Unknown EntryStatus: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
-        }
-
-        class EntryType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
-
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is EntryType && value == other.value /* spotless:on */
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField val CREDIT_BLOCK_EXPIRY = EntryType(JsonField.of("credit_block_expiry"))
-
-                @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
-            }
-
-            enum class Known {
-                CREDIT_BLOCK_EXPIRY,
-            }
-
-            enum class Value {
-                CREDIT_BLOCK_EXPIRY,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    CREDIT_BLOCK_EXPIRY -> Value.CREDIT_BLOCK_EXPIRY
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    CREDIT_BLOCK_EXPIRY -> Known.CREDIT_BLOCK_EXPIRY
-                    else -> throw OrbInvalidDataException("Unknown EntryType: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
         }
 
         /**
@@ -3242,49 +5802,42 @@ private constructor(
          * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
          * entire metadata mapping can be cleared by setting `metadata` to `null`.
          */
-        @JsonDeserialize(builder = Metadata.Builder::class)
-        @NoAutoDetect
         class Metadata
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
         ) {
-
-            private var validated: Boolean = false
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-            fun validate(): Metadata = apply {
-                if (!validated) {
-                    validated = true
-                }
-            }
-
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /** Returns a mutable builder for constructing an instance of [Metadata]. */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [Metadata]. */
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(metadata: Metadata) = apply {
-                    additionalProperties(metadata.additionalProperties)
+                    additionalProperties = metadata.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -3292,8 +5845,49 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Metadata].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
                 fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Metadata = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -3317,187 +5911,534 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CreditBlockExpiryLedgerEntry && metadata == other.metadata && id == other.id && ledgerSequenceNumber == other.ledgerSequenceNumber && entryStatus == other.entryStatus && customer == other.customer && startingBalance == other.startingBalance && endingBalance == other.endingBalance && amount == other.amount && currency == other.currency && createdAt == other.createdAt && description == other.description && creditBlock == other.creditBlock && entryType == other.entryType && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CreditBlockExpiry && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && startingBalance == other.startingBalance && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(metadata, id, ledgerSequenceNumber, entryStatus, customer, startingBalance, endingBalance, amount, currency, createdAt, description, creditBlock, entryType, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, amount, createdAt, creditBlock, currency, customer, description, endingBalance, entryStatus, entryType, ledgerSequenceNumber, metadata, startingBalance, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CreditBlockExpiryLedgerEntry{metadata=$metadata, id=$id, ledgerSequenceNumber=$ledgerSequenceNumber, entryStatus=$entryStatus, customer=$customer, startingBalance=$startingBalance, endingBalance=$endingBalance, amount=$amount, currency=$currency, createdAt=$createdAt, description=$description, creditBlock=$creditBlock, entryType=$entryType, additionalProperties=$additionalProperties}"
+            "CreditBlockExpiry{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, startingBalance=$startingBalance, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = VoidLedgerEntry.Builder::class)
-    @NoAutoDetect
-    class VoidLedgerEntry
+    class Void
     private constructor(
-        private val metadata: JsonField<Metadata>,
         private val id: JsonField<String>,
-        private val ledgerSequenceNumber: JsonField<Long>,
-        private val entryStatus: JsonField<EntryStatus>,
-        private val customer: JsonField<Customer>,
-        private val startingBalance: JsonField<Double>,
-        private val endingBalance: JsonField<Double>,
         private val amount: JsonField<Double>,
-        private val currency: JsonField<String>,
         private val createdAt: JsonField<OffsetDateTime>,
-        private val description: JsonField<String>,
         private val creditBlock: JsonField<CreditBlock>,
-        private val entryType: JsonField<EntryType>,
-        private val voidReason: JsonField<String>,
+        private val currency: JsonField<String>,
+        private val customer: JsonField<Customer>,
+        private val description: JsonField<String>,
+        private val endingBalance: JsonField<Double>,
+        private val entryStatus: JsonField<EntryStatus>,
+        private val entryType: JsonValue,
+        private val ledgerSequenceNumber: JsonField<Long>,
+        private val metadata: JsonField<Metadata>,
+        private val startingBalance: JsonField<Double>,
         private val voidAmount: JsonField<Double>,
-        private val additionalProperties: Map<String, JsonValue>,
+        private val voidReason: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("amount") @ExcludeMissing amount: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("created_at")
+            @ExcludeMissing
+            createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("credit_block")
+            @ExcludeMissing
+            creditBlock: JsonField<CreditBlock> = JsonMissing.of(),
+            @JsonProperty("currency")
+            @ExcludeMissing
+            currency: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("customer")
+            @ExcludeMissing
+            customer: JsonField<Customer> = JsonMissing.of(),
+            @JsonProperty("description")
+            @ExcludeMissing
+            description: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("ending_balance")
+            @ExcludeMissing
+            endingBalance: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("entry_status")
+            @ExcludeMissing
+            entryStatus: JsonField<EntryStatus> = JsonMissing.of(),
+            @JsonProperty("entry_type") @ExcludeMissing entryType: JsonValue = JsonMissing.of(),
+            @JsonProperty("ledger_sequence_number")
+            @ExcludeMissing
+            ledgerSequenceNumber: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            metadata: JsonField<Metadata> = JsonMissing.of(),
+            @JsonProperty("starting_balance")
+            @ExcludeMissing
+            startingBalance: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("void_amount")
+            @ExcludeMissing
+            voidAmount: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("void_reason")
+            @ExcludeMissing
+            voidReason: JsonField<String> = JsonMissing.of(),
+        ) : this(
+            id,
+            amount,
+            createdAt,
+            creditBlock,
+            currency,
+            customer,
+            description,
+            endingBalance,
+            entryStatus,
+            entryType,
+            ledgerSequenceNumber,
+            metadata,
+            startingBalance,
+            voidAmount,
+            voidReason,
+            mutableMapOf(),
+        )
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun id(): String = id.getRequired("id")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun amount(): Double = amount.getRequired("amount")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun creditBlock(): CreditBlock = creditBlock.getRequired("credit_block")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun currency(): String = currency.getRequired("currency")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun customer(): Customer = customer.getRequired("customer")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun description(): Optional<String> = description.getOptional("description")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun endingBalance(): Double = endingBalance.getRequired("ending_balance")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun entryStatus(): EntryStatus = entryStatus.getRequired("entry_status")
+
+        /**
+         * Expected to always return the following:
+         * ```java
+         * JsonValue.from("void")
+         * ```
+         *
+         * However, this method can be useful for debugging and logging (e.g. if the server
+         * responded with an unexpected value).
+         */
+        @JsonProperty("entry_type") @ExcludeMissing fun _entryType(): JsonValue = entryType
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun ledgerSequenceNumber(): Long =
+            ledgerSequenceNumber.getRequired("ledger_sequence_number")
 
         /**
          * User specified key-value pairs for the resource. If not present, this defaults to an
          * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
          * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun metadata(): Metadata = metadata.getRequired("metadata")
 
-        fun id(): String = id.getRequired("id")
-
-        fun ledgerSequenceNumber(): Long =
-            ledgerSequenceNumber.getRequired("ledger_sequence_number")
-
-        fun entryStatus(): EntryStatus = entryStatus.getRequired("entry_status")
-
-        fun customer(): Customer = customer.getRequired("customer")
-
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun startingBalance(): Double = startingBalance.getRequired("starting_balance")
 
-        fun endingBalance(): Double = endingBalance.getRequired("ending_balance")
-
-        fun amount(): Double = amount.getRequired("amount")
-
-        fun currency(): String = currency.getRequired("currency")
-
-        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
-
-        fun description(): Optional<String> =
-            Optional.ofNullable(description.getNullable("description"))
-
-        fun creditBlock(): CreditBlock = creditBlock.getRequired("credit_block")
-
-        fun entryType(): EntryType = entryType.getRequired("entry_type")
-
-        fun voidReason(): Optional<String> =
-            Optional.ofNullable(voidReason.getNullable("void_reason"))
-
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun voidAmount(): Double = voidAmount.getRequired("void_amount")
 
         /**
-         * User specified key-value pairs for the resource. If not present, this defaults to an
-         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
-         * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
+        fun voidReason(): Optional<String> = voidReason.getOptional("void_reason")
 
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+        /**
+         * Returns the raw JSON value of [amount].
+         *
+         * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
+
+        /**
+         * Returns the raw JSON value of [createdAt].
+         *
+         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        fun _createdAt(): JsonField<OffsetDateTime> = createdAt
+
+        /**
+         * Returns the raw JSON value of [creditBlock].
+         *
+         * Unlike [creditBlock], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("credit_block")
+        @ExcludeMissing
+        fun _creditBlock(): JsonField<CreditBlock> = creditBlock
+
+        /**
+         * Returns the raw JSON value of [currency].
+         *
+         * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
+
+        /**
+         * Returns the raw JSON value of [customer].
+         *
+         * Unlike [customer], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("customer") @ExcludeMissing fun _customer(): JsonField<Customer> = customer
+
+        /**
+         * Returns the raw JSON value of [description].
+         *
+         * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("description")
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
+
+        /**
+         * Returns the raw JSON value of [endingBalance].
+         *
+         * Unlike [endingBalance], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("ending_balance")
+        @ExcludeMissing
+        fun _endingBalance(): JsonField<Double> = endingBalance
+
+        /**
+         * Returns the raw JSON value of [entryStatus].
+         *
+         * Unlike [entryStatus], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("entry_status")
+        @ExcludeMissing
+        fun _entryStatus(): JsonField<EntryStatus> = entryStatus
+
+        /**
+         * Returns the raw JSON value of [ledgerSequenceNumber].
+         *
+         * Unlike [ledgerSequenceNumber], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("ledger_sequence_number")
         @ExcludeMissing
-        fun _ledgerSequenceNumber() = ledgerSequenceNumber
+        fun _ledgerSequenceNumber(): JsonField<Long> = ledgerSequenceNumber
 
-        @JsonProperty("entry_status") @ExcludeMissing fun _entryStatus() = entryStatus
+        /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
-        @JsonProperty("customer") @ExcludeMissing fun _customer() = customer
+        /**
+         * Returns the raw JSON value of [startingBalance].
+         *
+         * Unlike [startingBalance], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("starting_balance")
+        @ExcludeMissing
+        fun _startingBalance(): JsonField<Double> = startingBalance
 
-        @JsonProperty("starting_balance") @ExcludeMissing fun _startingBalance() = startingBalance
+        /**
+         * Returns the raw JSON value of [voidAmount].
+         *
+         * Unlike [voidAmount], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("void_amount")
+        @ExcludeMissing
+        fun _voidAmount(): JsonField<Double> = voidAmount
 
-        @JsonProperty("ending_balance") @ExcludeMissing fun _endingBalance() = endingBalance
+        /**
+         * Returns the raw JSON value of [voidReason].
+         *
+         * Unlike [voidReason], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("void_reason")
+        @ExcludeMissing
+        fun _voidReason(): JsonField<String> = voidReason
 
-        @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
-
-        @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
-
-        @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
-
-        @JsonProperty("description") @ExcludeMissing fun _description() = description
-
-        @JsonProperty("credit_block") @ExcludeMissing fun _creditBlock() = creditBlock
-
-        @JsonProperty("entry_type") @ExcludeMissing fun _entryType() = entryType
-
-        @JsonProperty("void_reason") @ExcludeMissing fun _voidReason() = voidReason
-
-        @JsonProperty("void_amount") @ExcludeMissing fun _voidAmount() = voidAmount
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): VoidLedgerEntry = apply {
-            if (!validated) {
-                metadata().validate()
-                id()
-                ledgerSequenceNumber()
-                entryStatus()
-                customer().validate()
-                startingBalance()
-                endingBalance()
-                amount()
-                currency()
-                createdAt()
-                description()
-                creditBlock().validate()
-                entryType()
-                voidReason()
-                voidAmount()
-                validated = true
-            }
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Void].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .startingBalance()
+             * .voidAmount()
+             * .voidReason()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [Void]. */
+        class Builder internal constructor() {
 
-            private var metadata: JsonField<Metadata> = JsonMissing.of()
-            private var id: JsonField<String> = JsonMissing.of()
-            private var ledgerSequenceNumber: JsonField<Long> = JsonMissing.of()
-            private var entryStatus: JsonField<EntryStatus> = JsonMissing.of()
-            private var customer: JsonField<Customer> = JsonMissing.of()
-            private var startingBalance: JsonField<Double> = JsonMissing.of()
-            private var endingBalance: JsonField<Double> = JsonMissing.of()
-            private var amount: JsonField<Double> = JsonMissing.of()
-            private var currency: JsonField<String> = JsonMissing.of()
-            private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var description: JsonField<String> = JsonMissing.of()
-            private var creditBlock: JsonField<CreditBlock> = JsonMissing.of()
-            private var entryType: JsonField<EntryType> = JsonMissing.of()
-            private var voidReason: JsonField<String> = JsonMissing.of()
-            private var voidAmount: JsonField<Double> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var amount: JsonField<Double>? = null
+            private var createdAt: JsonField<OffsetDateTime>? = null
+            private var creditBlock: JsonField<CreditBlock>? = null
+            private var currency: JsonField<String>? = null
+            private var customer: JsonField<Customer>? = null
+            private var description: JsonField<String>? = null
+            private var endingBalance: JsonField<Double>? = null
+            private var entryStatus: JsonField<EntryStatus>? = null
+            private var entryType: JsonValue = JsonValue.from("void")
+            private var ledgerSequenceNumber: JsonField<Long>? = null
+            private var metadata: JsonField<Metadata>? = null
+            private var startingBalance: JsonField<Double>? = null
+            private var voidAmount: JsonField<Double>? = null
+            private var voidReason: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(voidLedgerEntry: VoidLedgerEntry) = apply {
-                this.metadata = voidLedgerEntry.metadata
-                this.id = voidLedgerEntry.id
-                this.ledgerSequenceNumber = voidLedgerEntry.ledgerSequenceNumber
-                this.entryStatus = voidLedgerEntry.entryStatus
-                this.customer = voidLedgerEntry.customer
-                this.startingBalance = voidLedgerEntry.startingBalance
-                this.endingBalance = voidLedgerEntry.endingBalance
-                this.amount = voidLedgerEntry.amount
-                this.currency = voidLedgerEntry.currency
-                this.createdAt = voidLedgerEntry.createdAt
-                this.description = voidLedgerEntry.description
-                this.creditBlock = voidLedgerEntry.creditBlock
-                this.entryType = voidLedgerEntry.entryType
-                this.voidReason = voidLedgerEntry.voidReason
-                this.voidAmount = voidLedgerEntry.voidAmount
-                additionalProperties(voidLedgerEntry.additionalProperties)
+            internal fun from(void_: Void) = apply {
+                id = void_.id
+                amount = void_.amount
+                createdAt = void_.createdAt
+                creditBlock = void_.creditBlock
+                currency = void_.currency
+                customer = void_.customer
+                description = void_.description
+                endingBalance = void_.endingBalance
+                entryStatus = void_.entryStatus
+                entryType = void_.entryType
+                ledgerSequenceNumber = void_.ledgerSequenceNumber
+                metadata = void_.metadata
+                startingBalance = void_.startingBalance
+                voidAmount = void_.voidAmount
+                voidReason = void_.voidReason
+                additionalProperties = void_.additionalProperties.toMutableMap()
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun amount(amount: Double) = amount(JsonField.of(amount))
+
+            /**
+             * Sets [Builder.amount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.amount] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+            /**
+             * Sets [Builder.createdAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
+                this.createdAt = createdAt
+            }
+
+            fun creditBlock(creditBlock: CreditBlock) = creditBlock(JsonField.of(creditBlock))
+
+            /**
+             * Sets [Builder.creditBlock] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.creditBlock] with a well-typed [CreditBlock] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun creditBlock(creditBlock: JsonField<CreditBlock>) = apply {
+                this.creditBlock = creditBlock
+            }
+
+            fun currency(currency: String) = currency(JsonField.of(currency))
+
+            /**
+             * Sets [Builder.currency] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.currency] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
+
+            fun customer(customer: Customer) = customer(JsonField.of(customer))
+
+            /**
+             * Sets [Builder.customer] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.customer] with a well-typed [Customer] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
+
+            fun description(description: String?) = description(JsonField.ofNullable(description))
+
+            /** Alias for calling [Builder.description] with `description.orElse(null)`. */
+            fun description(description: Optional<String>) = description(description.getOrNull())
+
+            /**
+             * Sets [Builder.description] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.description] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
+
+            fun endingBalance(endingBalance: Double) = endingBalance(JsonField.of(endingBalance))
+
+            /**
+             * Sets [Builder.endingBalance] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.endingBalance] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun endingBalance(endingBalance: JsonField<Double>) = apply {
+                this.endingBalance = endingBalance
+            }
+
+            fun entryStatus(entryStatus: EntryStatus) = entryStatus(JsonField.of(entryStatus))
+
+            /**
+             * Sets [Builder.entryStatus] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.entryStatus] with a well-typed [EntryStatus] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun entryStatus(entryStatus: JsonField<EntryStatus>) = apply {
+                this.entryStatus = entryStatus
+            }
+
+            /**
+             * Sets the field to an arbitrary JSON value.
+             *
+             * It is usually unnecessary to call this method because the field defaults to the
+             * following:
+             * ```java
+             * JsonValue.from("void")
+             * ```
+             *
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun entryType(entryType: JsonValue) = apply { this.entryType = entryType }
+
+            fun ledgerSequenceNumber(ledgerSequenceNumber: Long) =
+                ledgerSequenceNumber(JsonField.of(ledgerSequenceNumber))
+
+            /**
+             * Sets [Builder.ledgerSequenceNumber] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.ledgerSequenceNumber] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun ledgerSequenceNumber(ledgerSequenceNumber: JsonField<Long>) = apply {
+                this.ledgerSequenceNumber = ledgerSequenceNumber
             }
 
             /**
@@ -3508,243 +6449,345 @@ private constructor(
             fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
             /**
-             * User specified key-value pairs for the resource. If not present, this defaults to an
-             * empty dictionary. Individual keys can be removed by setting the value to `null`, and
-             * the entire metadata mapping can be cleared by setting `metadata` to `null`.
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
-
-            fun id(id: String) = id(JsonField.of(id))
-
-            @JsonProperty("id")
-            @ExcludeMissing
-            fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun ledgerSequenceNumber(ledgerSequenceNumber: Long) =
-                ledgerSequenceNumber(JsonField.of(ledgerSequenceNumber))
-
-            @JsonProperty("ledger_sequence_number")
-            @ExcludeMissing
-            fun ledgerSequenceNumber(ledgerSequenceNumber: JsonField<Long>) = apply {
-                this.ledgerSequenceNumber = ledgerSequenceNumber
-            }
-
-            fun entryStatus(entryStatus: EntryStatus) = entryStatus(JsonField.of(entryStatus))
-
-            @JsonProperty("entry_status")
-            @ExcludeMissing
-            fun entryStatus(entryStatus: JsonField<EntryStatus>) = apply {
-                this.entryStatus = entryStatus
-            }
-
-            fun customer(customer: Customer) = customer(JsonField.of(customer))
-
-            @JsonProperty("customer")
-            @ExcludeMissing
-            fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
 
             fun startingBalance(startingBalance: Double) =
                 startingBalance(JsonField.of(startingBalance))
 
-            @JsonProperty("starting_balance")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.startingBalance] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.startingBalance] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun startingBalance(startingBalance: JsonField<Double>) = apply {
                 this.startingBalance = startingBalance
             }
-
-            fun endingBalance(endingBalance: Double) = endingBalance(JsonField.of(endingBalance))
-
-            @JsonProperty("ending_balance")
-            @ExcludeMissing
-            fun endingBalance(endingBalance: JsonField<Double>) = apply {
-                this.endingBalance = endingBalance
-            }
-
-            fun amount(amount: Double) = amount(JsonField.of(amount))
-
-            @JsonProperty("amount")
-            @ExcludeMissing
-            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
-
-            fun currency(currency: String) = currency(JsonField.of(currency))
-
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
-
-            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
-
-            @JsonProperty("created_at")
-            @ExcludeMissing
-            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
-                this.createdAt = createdAt
-            }
-
-            fun description(description: String) = description(JsonField.of(description))
-
-            @JsonProperty("description")
-            @ExcludeMissing
-            fun description(description: JsonField<String>) = apply {
-                this.description = description
-            }
-
-            fun creditBlock(creditBlock: CreditBlock) = creditBlock(JsonField.of(creditBlock))
-
-            @JsonProperty("credit_block")
-            @ExcludeMissing
-            fun creditBlock(creditBlock: JsonField<CreditBlock>) = apply {
-                this.creditBlock = creditBlock
-            }
-
-            fun entryType(entryType: EntryType) = entryType(JsonField.of(entryType))
-
-            @JsonProperty("entry_type")
-            @ExcludeMissing
-            fun entryType(entryType: JsonField<EntryType>) = apply { this.entryType = entryType }
-
-            fun voidReason(voidReason: String) = voidReason(JsonField.of(voidReason))
-
-            @JsonProperty("void_reason")
-            @ExcludeMissing
-            fun voidReason(voidReason: JsonField<String>) = apply { this.voidReason = voidReason }
 
             fun voidAmount(voidAmount: Double) = voidAmount(JsonField.of(voidAmount))
 
-            @JsonProperty("void_amount")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.voidAmount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.voidAmount] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun voidAmount(voidAmount: JsonField<Double>) = apply { this.voidAmount = voidAmount }
+
+            fun voidReason(voidReason: String?) = voidReason(JsonField.ofNullable(voidReason))
+
+            /** Alias for calling [Builder.voidReason] with `voidReason.orElse(null)`. */
+            fun voidReason(voidReason: Optional<String>) = voidReason(voidReason.getOrNull())
+
+            /**
+             * Sets [Builder.voidReason] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.voidReason] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun voidReason(voidReason: JsonField<String>) = apply { this.voidReason = voidReason }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): VoidLedgerEntry =
-                VoidLedgerEntry(
-                    metadata,
-                    id,
-                    ledgerSequenceNumber,
-                    entryStatus,
-                    customer,
-                    startingBalance,
-                    endingBalance,
-                    amount,
-                    currency,
-                    createdAt,
-                    description,
-                    creditBlock,
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Void].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .startingBalance()
+             * .voidAmount()
+             * .voidReason()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Void =
+                Void(
+                    checkRequired("id", id),
+                    checkRequired("amount", amount),
+                    checkRequired("createdAt", createdAt),
+                    checkRequired("creditBlock", creditBlock),
+                    checkRequired("currency", currency),
+                    checkRequired("customer", customer),
+                    checkRequired("description", description),
+                    checkRequired("endingBalance", endingBalance),
+                    checkRequired("entryStatus", entryStatus),
                     entryType,
-                    voidReason,
-                    voidAmount,
-                    additionalProperties.toImmutable(),
+                    checkRequired("ledgerSequenceNumber", ledgerSequenceNumber),
+                    checkRequired("metadata", metadata),
+                    checkRequired("startingBalance", startingBalance),
+                    checkRequired("voidAmount", voidAmount),
+                    checkRequired("voidReason", voidReason),
+                    additionalProperties.toMutableMap(),
                 )
         }
 
-        @JsonDeserialize(builder = CreditBlock.Builder::class)
-        @NoAutoDetect
+        private var validated: Boolean = false
+
+        fun validate(): Void = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            amount()
+            createdAt()
+            creditBlock().validate()
+            currency()
+            customer().validate()
+            description()
+            endingBalance()
+            entryStatus().validate()
+            _entryType().let {
+                if (it != JsonValue.from("void")) {
+                    throw OrbInvalidDataException("'entryType' is invalid, received $it")
+                }
+            }
+            ledgerSequenceNumber()
+            metadata().validate()
+            startingBalance()
+            voidAmount()
+            voidReason()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (if (amount.asKnown().isPresent) 1 else 0) +
+                (if (createdAt.asKnown().isPresent) 1 else 0) +
+                (creditBlock.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (currency.asKnown().isPresent) 1 else 0) +
+                (customer.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (description.asKnown().isPresent) 1 else 0) +
+                (if (endingBalance.asKnown().isPresent) 1 else 0) +
+                (entryStatus.asKnown().getOrNull()?.validity() ?: 0) +
+                entryType.let { if (it == JsonValue.from("void")) 1 else 0 } +
+                (if (ledgerSequenceNumber.asKnown().isPresent) 1 else 0) +
+                (metadata.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (startingBalance.asKnown().isPresent) 1 else 0) +
+                (if (voidAmount.asKnown().isPresent) 1 else 0) +
+                (if (voidReason.asKnown().isPresent) 1 else 0)
+
         class CreditBlock
         private constructor(
             private val id: JsonField<String>,
             private val expiryDate: JsonField<OffsetDateTime>,
             private val perUnitCostBasis: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("expiry_date")
+                @ExcludeMissing
+                expiryDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("per_unit_cost_basis")
+                @ExcludeMissing
+                perUnitCostBasis: JsonField<String> = JsonMissing.of(),
+            ) : this(id, expiryDate, perUnitCostBasis, mutableMapOf())
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
-            fun expiryDate(): Optional<OffsetDateTime> =
-                Optional.ofNullable(expiryDate.getNullable("expiry_date"))
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
+            fun expiryDate(): Optional<OffsetDateTime> = expiryDate.getOptional("expiry_date")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
             fun perUnitCostBasis(): Optional<String> =
-                Optional.ofNullable(perUnitCostBasis.getNullable("per_unit_cost_basis"))
+                perUnitCostBasis.getOptional("per_unit_cost_basis")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-            @JsonProperty("expiry_date") @ExcludeMissing fun _expiryDate() = expiryDate
+            /**
+             * Returns the raw JSON value of [expiryDate].
+             *
+             * Unlike [expiryDate], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("expiry_date")
+            @ExcludeMissing
+            fun _expiryDate(): JsonField<OffsetDateTime> = expiryDate
 
+            /**
+             * Returns the raw JSON value of [perUnitCostBasis].
+             *
+             * Unlike [perUnitCostBasis], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("per_unit_cost_basis")
             @ExcludeMissing
-            fun _perUnitCostBasis() = perUnitCostBasis
+            fun _perUnitCostBasis(): JsonField<String> = perUnitCostBasis
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): CreditBlock = apply {
-                if (!validated) {
-                    id()
-                    expiryDate()
-                    perUnitCostBasis()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [CreditBlock].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [CreditBlock]. */
+            class Builder internal constructor() {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var expiryDate: JsonField<OffsetDateTime> = JsonMissing.of()
-                private var perUnitCostBasis: JsonField<String> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var expiryDate: JsonField<OffsetDateTime>? = null
+                private var perUnitCostBasis: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(creditBlock: CreditBlock) = apply {
-                    this.id = creditBlock.id
-                    this.expiryDate = creditBlock.expiryDate
-                    this.perUnitCostBasis = creditBlock.perUnitCostBasis
-                    additionalProperties(creditBlock.additionalProperties)
+                    id = creditBlock.id
+                    expiryDate = creditBlock.expiryDate
+                    perUnitCostBasis = creditBlock.perUnitCostBasis
+                    additionalProperties = creditBlock.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
-                fun expiryDate(expiryDate: OffsetDateTime) = expiryDate(JsonField.of(expiryDate))
+                fun expiryDate(expiryDate: OffsetDateTime?) =
+                    expiryDate(JsonField.ofNullable(expiryDate))
 
-                @JsonProperty("expiry_date")
-                @ExcludeMissing
+                /** Alias for calling [Builder.expiryDate] with `expiryDate.orElse(null)`. */
+                fun expiryDate(expiryDate: Optional<OffsetDateTime>) =
+                    expiryDate(expiryDate.getOrNull())
+
+                /**
+                 * Sets [Builder.expiryDate] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.expiryDate] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun expiryDate(expiryDate: JsonField<OffsetDateTime>) = apply {
                     this.expiryDate = expiryDate
                 }
 
-                fun perUnitCostBasis(perUnitCostBasis: String) =
-                    perUnitCostBasis(JsonField.of(perUnitCostBasis))
+                fun perUnitCostBasis(perUnitCostBasis: String?) =
+                    perUnitCostBasis(JsonField.ofNullable(perUnitCostBasis))
 
-                @JsonProperty("per_unit_cost_basis")
-                @ExcludeMissing
+                /**
+                 * Alias for calling [Builder.perUnitCostBasis] with
+                 * `perUnitCostBasis.orElse(null)`.
+                 */
+                fun perUnitCostBasis(perUnitCostBasis: Optional<String>) =
+                    perUnitCostBasis(perUnitCostBasis.getOrNull())
+
+                /**
+                 * Sets [Builder.perUnitCostBasis] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.perUnitCostBasis] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun perUnitCostBasis(perUnitCostBasis: JsonField<String>) = apply {
                     this.perUnitCostBasis = perUnitCostBasis
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -3752,14 +6795,69 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [CreditBlock].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): CreditBlock =
                     CreditBlock(
-                        id,
-                        expiryDate,
-                        perUnitCostBasis,
-                        additionalProperties.toImmutable(),
+                        checkRequired("id", id),
+                        checkRequired("expiryDate", expiryDate),
+                        checkRequired("perUnitCostBasis", perUnitCostBasis),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): CreditBlock = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                expiryDate()
+                perUnitCostBasis()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (expiryDate.asKnown().isPresent) 1 else 0) +
+                    (if (perUnitCostBasis.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -3779,83 +6877,131 @@ private constructor(
                 "CreditBlock{id=$id, expiryDate=$expiryDate, perUnitCostBasis=$perUnitCostBasis, additionalProperties=$additionalProperties}"
         }
 
-        @JsonDeserialize(builder = Customer.Builder::class)
-        @NoAutoDetect
         class Customer
         private constructor(
             private val id: JsonField<String>,
             private val externalCustomerId: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("external_customer_id")
+                @ExcludeMissing
+                externalCustomerId: JsonField<String> = JsonMissing.of(),
+            ) : this(id, externalCustomerId, mutableMapOf())
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
             fun externalCustomerId(): Optional<String> =
-                Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+                externalCustomerId.getOptional("external_customer_id")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+            /**
+             * Returns the raw JSON value of [externalCustomerId].
+             *
+             * Unlike [externalCustomerId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("external_customer_id")
             @ExcludeMissing
-            fun _externalCustomerId() = externalCustomerId
+            fun _externalCustomerId(): JsonField<String> = externalCustomerId
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): Customer = apply {
-                if (!validated) {
-                    id()
-                    externalCustomerId()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Customer].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [Customer]. */
+            class Builder internal constructor() {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var externalCustomerId: JsonField<String> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var externalCustomerId: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(customer: Customer) = apply {
-                    this.id = customer.id
-                    this.externalCustomerId = customer.externalCustomerId
-                    additionalProperties(customer.additionalProperties)
+                    id = customer.id
+                    externalCustomerId = customer.externalCustomerId
+                    additionalProperties = customer.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
-                fun externalCustomerId(externalCustomerId: String) =
-                    externalCustomerId(JsonField.of(externalCustomerId))
+                fun externalCustomerId(externalCustomerId: String?) =
+                    externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
-                @JsonProperty("external_customer_id")
-                @ExcludeMissing
+                /**
+                 * Alias for calling [Builder.externalCustomerId] with
+                 * `externalCustomerId.orElse(null)`.
+                 */
+                fun externalCustomerId(externalCustomerId: Optional<String>) =
+                    externalCustomerId(externalCustomerId.getOrNull())
+
+                /**
+                 * Sets [Builder.externalCustomerId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.externalCustomerId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                     this.externalCustomerId = externalCustomerId
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -3863,13 +7009,65 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Customer].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Customer =
                     Customer(
-                        id,
-                        externalCustomerId,
-                        additionalProperties.toImmutable(),
+                        checkRequired("id", id),
+                        checkRequired("externalCustomerId", externalCustomerId),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Customer = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                externalCustomerId()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (externalCustomerId.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -3889,13 +7087,121 @@ private constructor(
                 "Customer{id=$id, externalCustomerId=$externalCustomerId, additionalProperties=$additionalProperties}"
         }
 
-        class EntryStatus
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class EntryStatus @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val COMMITTED = of("committed")
+
+                @JvmField val PENDING = of("pending")
+
+                @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
+            }
+
+            /** An enum containing [EntryStatus]'s known values. */
+            enum class Known {
+                COMMITTED,
+                PENDING,
+            }
+
+            /**
+             * An enum containing [EntryStatus]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [EntryStatus] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                COMMITTED,
+                PENDING,
+                /**
+                 * An enum member indicating that [EntryStatus] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    COMMITTED -> Value.COMMITTED
+                    PENDING -> Value.PENDING
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    COMMITTED -> Known.COMMITTED
+                    PENDING -> Known.PENDING
+                    else -> throw OrbInvalidDataException("Unknown EntryStatus: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws OrbInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+            private var validated: Boolean = false
+
+            fun validate(): EntryStatus = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -3908,93 +7214,6 @@ private constructor(
             override fun hashCode() = value.hashCode()
 
             override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField val COMMITTED = EntryStatus(JsonField.of("committed"))
-
-                @JvmField val PENDING = EntryStatus(JsonField.of("pending"))
-
-                @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
-            }
-
-            enum class Known {
-                COMMITTED,
-                PENDING,
-            }
-
-            enum class Value {
-                COMMITTED,
-                PENDING,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    COMMITTED -> Value.COMMITTED
-                    PENDING -> Value.PENDING
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    COMMITTED -> Known.COMMITTED
-                    PENDING -> Known.PENDING
-                    else -> throw OrbInvalidDataException("Unknown EntryStatus: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
-        }
-
-        class EntryType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
-
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is EntryType && value == other.value /* spotless:on */
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField val VOID = EntryType(JsonField.of("void"))
-
-                @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
-            }
-
-            enum class Known {
-                VOID,
-            }
-
-            enum class Value {
-                VOID,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    VOID -> Value.VOID
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    VOID -> Known.VOID
-                    else -> throw OrbInvalidDataException("Unknown EntryType: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
         }
 
         /**
@@ -4002,49 +7221,42 @@ private constructor(
          * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
          * entire metadata mapping can be cleared by setting `metadata` to `null`.
          */
-        @JsonDeserialize(builder = Metadata.Builder::class)
-        @NoAutoDetect
         class Metadata
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
         ) {
-
-            private var validated: Boolean = false
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-            fun validate(): Metadata = apply {
-                if (!validated) {
-                    validated = true
-                }
-            }
-
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /** Returns a mutable builder for constructing an instance of [Metadata]. */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [Metadata]. */
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(metadata: Metadata) = apply {
-                    additionalProperties(metadata.additionalProperties)
+                    additionalProperties = metadata.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -4052,8 +7264,49 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Metadata].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
                 fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Metadata = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -4077,198 +7330,559 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is VoidLedgerEntry && metadata == other.metadata && id == other.id && ledgerSequenceNumber == other.ledgerSequenceNumber && entryStatus == other.entryStatus && customer == other.customer && startingBalance == other.startingBalance && endingBalance == other.endingBalance && amount == other.amount && currency == other.currency && createdAt == other.createdAt && description == other.description && creditBlock == other.creditBlock && entryType == other.entryType && voidReason == other.voidReason && voidAmount == other.voidAmount && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Void && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && startingBalance == other.startingBalance && voidAmount == other.voidAmount && voidReason == other.voidReason && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(metadata, id, ledgerSequenceNumber, entryStatus, customer, startingBalance, endingBalance, amount, currency, createdAt, description, creditBlock, entryType, voidReason, voidAmount, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, amount, createdAt, creditBlock, currency, customer, description, endingBalance, entryStatus, entryType, ledgerSequenceNumber, metadata, startingBalance, voidAmount, voidReason, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "VoidLedgerEntry{metadata=$metadata, id=$id, ledgerSequenceNumber=$ledgerSequenceNumber, entryStatus=$entryStatus, customer=$customer, startingBalance=$startingBalance, endingBalance=$endingBalance, amount=$amount, currency=$currency, createdAt=$createdAt, description=$description, creditBlock=$creditBlock, entryType=$entryType, voidReason=$voidReason, voidAmount=$voidAmount, additionalProperties=$additionalProperties}"
+            "Void{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, startingBalance=$startingBalance, voidAmount=$voidAmount, voidReason=$voidReason, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = VoidInitiatedLedgerEntry.Builder::class)
-    @NoAutoDetect
-    class VoidInitiatedLedgerEntry
+    class VoidInitiated
     private constructor(
-        private val metadata: JsonField<Metadata>,
         private val id: JsonField<String>,
-        private val ledgerSequenceNumber: JsonField<Long>,
-        private val entryStatus: JsonField<EntryStatus>,
-        private val customer: JsonField<Customer>,
-        private val startingBalance: JsonField<Double>,
-        private val endingBalance: JsonField<Double>,
         private val amount: JsonField<Double>,
-        private val currency: JsonField<String>,
         private val createdAt: JsonField<OffsetDateTime>,
-        private val description: JsonField<String>,
         private val creditBlock: JsonField<CreditBlock>,
-        private val entryType: JsonField<EntryType>,
+        private val currency: JsonField<String>,
+        private val customer: JsonField<Customer>,
+        private val description: JsonField<String>,
+        private val endingBalance: JsonField<Double>,
+        private val entryStatus: JsonField<EntryStatus>,
+        private val entryType: JsonValue,
+        private val ledgerSequenceNumber: JsonField<Long>,
+        private val metadata: JsonField<Metadata>,
         private val newBlockExpiryDate: JsonField<OffsetDateTime>,
-        private val voidReason: JsonField<String>,
+        private val startingBalance: JsonField<Double>,
         private val voidAmount: JsonField<Double>,
-        private val additionalProperties: Map<String, JsonValue>,
+        private val voidReason: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("amount") @ExcludeMissing amount: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("created_at")
+            @ExcludeMissing
+            createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("credit_block")
+            @ExcludeMissing
+            creditBlock: JsonField<CreditBlock> = JsonMissing.of(),
+            @JsonProperty("currency")
+            @ExcludeMissing
+            currency: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("customer")
+            @ExcludeMissing
+            customer: JsonField<Customer> = JsonMissing.of(),
+            @JsonProperty("description")
+            @ExcludeMissing
+            description: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("ending_balance")
+            @ExcludeMissing
+            endingBalance: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("entry_status")
+            @ExcludeMissing
+            entryStatus: JsonField<EntryStatus> = JsonMissing.of(),
+            @JsonProperty("entry_type") @ExcludeMissing entryType: JsonValue = JsonMissing.of(),
+            @JsonProperty("ledger_sequence_number")
+            @ExcludeMissing
+            ledgerSequenceNumber: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            metadata: JsonField<Metadata> = JsonMissing.of(),
+            @JsonProperty("new_block_expiry_date")
+            @ExcludeMissing
+            newBlockExpiryDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("starting_balance")
+            @ExcludeMissing
+            startingBalance: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("void_amount")
+            @ExcludeMissing
+            voidAmount: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("void_reason")
+            @ExcludeMissing
+            voidReason: JsonField<String> = JsonMissing.of(),
+        ) : this(
+            id,
+            amount,
+            createdAt,
+            creditBlock,
+            currency,
+            customer,
+            description,
+            endingBalance,
+            entryStatus,
+            entryType,
+            ledgerSequenceNumber,
+            metadata,
+            newBlockExpiryDate,
+            startingBalance,
+            voidAmount,
+            voidReason,
+            mutableMapOf(),
+        )
 
         /**
-         * User specified key-value pairs for the resource. If not present, this defaults to an
-         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
-         * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun metadata(): Metadata = metadata.getRequired("metadata")
-
         fun id(): String = id.getRequired("id")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun amount(): Double = amount.getRequired("amount")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun creditBlock(): CreditBlock = creditBlock.getRequired("credit_block")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun currency(): String = currency.getRequired("currency")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun customer(): Customer = customer.getRequired("customer")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun description(): Optional<String> = description.getOptional("description")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun endingBalance(): Double = endingBalance.getRequired("ending_balance")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun entryStatus(): EntryStatus = entryStatus.getRequired("entry_status")
+
+        /**
+         * Expected to always return the following:
+         * ```java
+         * JsonValue.from("void_initiated")
+         * ```
+         *
+         * However, this method can be useful for debugging and logging (e.g. if the server
+         * responded with an unexpected value).
+         */
+        @JsonProperty("entry_type") @ExcludeMissing fun _entryType(): JsonValue = entryType
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun ledgerSequenceNumber(): Long =
             ledgerSequenceNumber.getRequired("ledger_sequence_number")
 
-        fun entryStatus(): EntryStatus = entryStatus.getRequired("entry_status")
-
-        fun customer(): Customer = customer.getRequired("customer")
-
-        fun startingBalance(): Double = startingBalance.getRequired("starting_balance")
-
-        fun endingBalance(): Double = endingBalance.getRequired("ending_balance")
-
-        fun amount(): Double = amount.getRequired("amount")
-
-        fun currency(): String = currency.getRequired("currency")
-
-        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
-
-        fun description(): Optional<String> =
-            Optional.ofNullable(description.getNullable("description"))
-
-        fun creditBlock(): CreditBlock = creditBlock.getRequired("credit_block")
-
-        fun entryType(): EntryType = entryType.getRequired("entry_type")
-
-        fun newBlockExpiryDate(): OffsetDateTime =
-            newBlockExpiryDate.getRequired("new_block_expiry_date")
-
-        fun voidReason(): Optional<String> =
-            Optional.ofNullable(voidReason.getNullable("void_reason"))
-
-        fun voidAmount(): Double = voidAmount.getRequired("void_amount")
-
         /**
          * User specified key-value pairs for the resource. If not present, this defaults to an
          * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
          * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
+        fun metadata(): Metadata = metadata.getRequired("metadata")
 
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun newBlockExpiryDate(): OffsetDateTime =
+            newBlockExpiryDate.getRequired("new_block_expiry_date")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun startingBalance(): Double = startingBalance.getRequired("starting_balance")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun voidAmount(): Double = voidAmount.getRequired("void_amount")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun voidReason(): Optional<String> = voidReason.getOptional("void_reason")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [amount].
+         *
+         * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
+
+        /**
+         * Returns the raw JSON value of [createdAt].
+         *
+         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        fun _createdAt(): JsonField<OffsetDateTime> = createdAt
+
+        /**
+         * Returns the raw JSON value of [creditBlock].
+         *
+         * Unlike [creditBlock], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("credit_block")
+        @ExcludeMissing
+        fun _creditBlock(): JsonField<CreditBlock> = creditBlock
+
+        /**
+         * Returns the raw JSON value of [currency].
+         *
+         * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
+
+        /**
+         * Returns the raw JSON value of [customer].
+         *
+         * Unlike [customer], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("customer") @ExcludeMissing fun _customer(): JsonField<Customer> = customer
+
+        /**
+         * Returns the raw JSON value of [description].
+         *
+         * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("description")
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
+
+        /**
+         * Returns the raw JSON value of [endingBalance].
+         *
+         * Unlike [endingBalance], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("ending_balance")
+        @ExcludeMissing
+        fun _endingBalance(): JsonField<Double> = endingBalance
+
+        /**
+         * Returns the raw JSON value of [entryStatus].
+         *
+         * Unlike [entryStatus], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("entry_status")
+        @ExcludeMissing
+        fun _entryStatus(): JsonField<EntryStatus> = entryStatus
+
+        /**
+         * Returns the raw JSON value of [ledgerSequenceNumber].
+         *
+         * Unlike [ledgerSequenceNumber], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("ledger_sequence_number")
         @ExcludeMissing
-        fun _ledgerSequenceNumber() = ledgerSequenceNumber
+        fun _ledgerSequenceNumber(): JsonField<Long> = ledgerSequenceNumber
 
-        @JsonProperty("entry_status") @ExcludeMissing fun _entryStatus() = entryStatus
+        /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
-        @JsonProperty("customer") @ExcludeMissing fun _customer() = customer
-
-        @JsonProperty("starting_balance") @ExcludeMissing fun _startingBalance() = startingBalance
-
-        @JsonProperty("ending_balance") @ExcludeMissing fun _endingBalance() = endingBalance
-
-        @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
-
-        @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
-
-        @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
-
-        @JsonProperty("description") @ExcludeMissing fun _description() = description
-
-        @JsonProperty("credit_block") @ExcludeMissing fun _creditBlock() = creditBlock
-
-        @JsonProperty("entry_type") @ExcludeMissing fun _entryType() = entryType
-
+        /**
+         * Returns the raw JSON value of [newBlockExpiryDate].
+         *
+         * Unlike [newBlockExpiryDate], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("new_block_expiry_date")
         @ExcludeMissing
-        fun _newBlockExpiryDate() = newBlockExpiryDate
+        fun _newBlockExpiryDate(): JsonField<OffsetDateTime> = newBlockExpiryDate
 
-        @JsonProperty("void_reason") @ExcludeMissing fun _voidReason() = voidReason
+        /**
+         * Returns the raw JSON value of [startingBalance].
+         *
+         * Unlike [startingBalance], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("starting_balance")
+        @ExcludeMissing
+        fun _startingBalance(): JsonField<Double> = startingBalance
 
-        @JsonProperty("void_amount") @ExcludeMissing fun _voidAmount() = voidAmount
+        /**
+         * Returns the raw JSON value of [voidAmount].
+         *
+         * Unlike [voidAmount], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("void_amount")
+        @ExcludeMissing
+        fun _voidAmount(): JsonField<Double> = voidAmount
+
+        /**
+         * Returns the raw JSON value of [voidReason].
+         *
+         * Unlike [voidReason], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("void_reason")
+        @ExcludeMissing
+        fun _voidReason(): JsonField<String> = voidReason
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): VoidInitiatedLedgerEntry = apply {
-            if (!validated) {
-                metadata().validate()
-                id()
-                ledgerSequenceNumber()
-                entryStatus()
-                customer().validate()
-                startingBalance()
-                endingBalance()
-                amount()
-                currency()
-                createdAt()
-                description()
-                creditBlock().validate()
-                entryType()
-                newBlockExpiryDate()
-                voidReason()
-                voidAmount()
-                validated = true
-            }
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [VoidInitiated].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .newBlockExpiryDate()
+             * .startingBalance()
+             * .voidAmount()
+             * .voidReason()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [VoidInitiated]. */
+        class Builder internal constructor() {
 
-            private var metadata: JsonField<Metadata> = JsonMissing.of()
-            private var id: JsonField<String> = JsonMissing.of()
-            private var ledgerSequenceNumber: JsonField<Long> = JsonMissing.of()
-            private var entryStatus: JsonField<EntryStatus> = JsonMissing.of()
-            private var customer: JsonField<Customer> = JsonMissing.of()
-            private var startingBalance: JsonField<Double> = JsonMissing.of()
-            private var endingBalance: JsonField<Double> = JsonMissing.of()
-            private var amount: JsonField<Double> = JsonMissing.of()
-            private var currency: JsonField<String> = JsonMissing.of()
-            private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var description: JsonField<String> = JsonMissing.of()
-            private var creditBlock: JsonField<CreditBlock> = JsonMissing.of()
-            private var entryType: JsonField<EntryType> = JsonMissing.of()
-            private var newBlockExpiryDate: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var voidReason: JsonField<String> = JsonMissing.of()
-            private var voidAmount: JsonField<Double> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var amount: JsonField<Double>? = null
+            private var createdAt: JsonField<OffsetDateTime>? = null
+            private var creditBlock: JsonField<CreditBlock>? = null
+            private var currency: JsonField<String>? = null
+            private var customer: JsonField<Customer>? = null
+            private var description: JsonField<String>? = null
+            private var endingBalance: JsonField<Double>? = null
+            private var entryStatus: JsonField<EntryStatus>? = null
+            private var entryType: JsonValue = JsonValue.from("void_initiated")
+            private var ledgerSequenceNumber: JsonField<Long>? = null
+            private var metadata: JsonField<Metadata>? = null
+            private var newBlockExpiryDate: JsonField<OffsetDateTime>? = null
+            private var startingBalance: JsonField<Double>? = null
+            private var voidAmount: JsonField<Double>? = null
+            private var voidReason: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(voidInitiatedLedgerEntry: VoidInitiatedLedgerEntry) = apply {
-                this.metadata = voidInitiatedLedgerEntry.metadata
-                this.id = voidInitiatedLedgerEntry.id
-                this.ledgerSequenceNumber = voidInitiatedLedgerEntry.ledgerSequenceNumber
-                this.entryStatus = voidInitiatedLedgerEntry.entryStatus
-                this.customer = voidInitiatedLedgerEntry.customer
-                this.startingBalance = voidInitiatedLedgerEntry.startingBalance
-                this.endingBalance = voidInitiatedLedgerEntry.endingBalance
-                this.amount = voidInitiatedLedgerEntry.amount
-                this.currency = voidInitiatedLedgerEntry.currency
-                this.createdAt = voidInitiatedLedgerEntry.createdAt
-                this.description = voidInitiatedLedgerEntry.description
-                this.creditBlock = voidInitiatedLedgerEntry.creditBlock
-                this.entryType = voidInitiatedLedgerEntry.entryType
-                this.newBlockExpiryDate = voidInitiatedLedgerEntry.newBlockExpiryDate
-                this.voidReason = voidInitiatedLedgerEntry.voidReason
-                this.voidAmount = voidInitiatedLedgerEntry.voidAmount
-                additionalProperties(voidInitiatedLedgerEntry.additionalProperties)
+            internal fun from(voidInitiated: VoidInitiated) = apply {
+                id = voidInitiated.id
+                amount = voidInitiated.amount
+                createdAt = voidInitiated.createdAt
+                creditBlock = voidInitiated.creditBlock
+                currency = voidInitiated.currency
+                customer = voidInitiated.customer
+                description = voidInitiated.description
+                endingBalance = voidInitiated.endingBalance
+                entryStatus = voidInitiated.entryStatus
+                entryType = voidInitiated.entryType
+                ledgerSequenceNumber = voidInitiated.ledgerSequenceNumber
+                metadata = voidInitiated.metadata
+                newBlockExpiryDate = voidInitiated.newBlockExpiryDate
+                startingBalance = voidInitiated.startingBalance
+                voidAmount = voidInitiated.voidAmount
+                voidReason = voidInitiated.voidReason
+                additionalProperties = voidInitiated.additionalProperties.toMutableMap()
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun amount(amount: Double) = amount(JsonField.of(amount))
+
+            /**
+             * Sets [Builder.amount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.amount] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+            /**
+             * Sets [Builder.createdAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
+                this.createdAt = createdAt
+            }
+
+            fun creditBlock(creditBlock: CreditBlock) = creditBlock(JsonField.of(creditBlock))
+
+            /**
+             * Sets [Builder.creditBlock] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.creditBlock] with a well-typed [CreditBlock] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun creditBlock(creditBlock: JsonField<CreditBlock>) = apply {
+                this.creditBlock = creditBlock
+            }
+
+            fun currency(currency: String) = currency(JsonField.of(currency))
+
+            /**
+             * Sets [Builder.currency] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.currency] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
+
+            fun customer(customer: Customer) = customer(JsonField.of(customer))
+
+            /**
+             * Sets [Builder.customer] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.customer] with a well-typed [Customer] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
+
+            fun description(description: String?) = description(JsonField.ofNullable(description))
+
+            /** Alias for calling [Builder.description] with `description.orElse(null)`. */
+            fun description(description: Optional<String>) = description(description.getOrNull())
+
+            /**
+             * Sets [Builder.description] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.description] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
+
+            fun endingBalance(endingBalance: Double) = endingBalance(JsonField.of(endingBalance))
+
+            /**
+             * Sets [Builder.endingBalance] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.endingBalance] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun endingBalance(endingBalance: JsonField<Double>) = apply {
+                this.endingBalance = endingBalance
+            }
+
+            fun entryStatus(entryStatus: EntryStatus) = entryStatus(JsonField.of(entryStatus))
+
+            /**
+             * Sets [Builder.entryStatus] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.entryStatus] with a well-typed [EntryStatus] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun entryStatus(entryStatus: JsonField<EntryStatus>) = apply {
+                this.entryStatus = entryStatus
+            }
+
+            /**
+             * Sets the field to an arbitrary JSON value.
+             *
+             * It is usually unnecessary to call this method because the field defaults to the
+             * following:
+             * ```java
+             * JsonValue.from("void_initiated")
+             * ```
+             *
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun entryType(entryType: JsonValue) = apply { this.entryType = entryType }
+
+            fun ledgerSequenceNumber(ledgerSequenceNumber: Long) =
+                ledgerSequenceNumber(JsonField.of(ledgerSequenceNumber))
+
+            /**
+             * Sets [Builder.ledgerSequenceNumber] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.ledgerSequenceNumber] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun ledgerSequenceNumber(ledgerSequenceNumber: JsonField<Long>) = apply {
+                this.ledgerSequenceNumber = ledgerSequenceNumber
             }
 
             /**
@@ -4279,253 +7893,363 @@ private constructor(
             fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
             /**
-             * User specified key-value pairs for the resource. If not present, this defaults to an
-             * empty dictionary. Individual keys can be removed by setting the value to `null`, and
-             * the entire metadata mapping can be cleared by setting `metadata` to `null`.
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
-
-            fun id(id: String) = id(JsonField.of(id))
-
-            @JsonProperty("id")
-            @ExcludeMissing
-            fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun ledgerSequenceNumber(ledgerSequenceNumber: Long) =
-                ledgerSequenceNumber(JsonField.of(ledgerSequenceNumber))
-
-            @JsonProperty("ledger_sequence_number")
-            @ExcludeMissing
-            fun ledgerSequenceNumber(ledgerSequenceNumber: JsonField<Long>) = apply {
-                this.ledgerSequenceNumber = ledgerSequenceNumber
-            }
-
-            fun entryStatus(entryStatus: EntryStatus) = entryStatus(JsonField.of(entryStatus))
-
-            @JsonProperty("entry_status")
-            @ExcludeMissing
-            fun entryStatus(entryStatus: JsonField<EntryStatus>) = apply {
-                this.entryStatus = entryStatus
-            }
-
-            fun customer(customer: Customer) = customer(JsonField.of(customer))
-
-            @JsonProperty("customer")
-            @ExcludeMissing
-            fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
-
-            fun startingBalance(startingBalance: Double) =
-                startingBalance(JsonField.of(startingBalance))
-
-            @JsonProperty("starting_balance")
-            @ExcludeMissing
-            fun startingBalance(startingBalance: JsonField<Double>) = apply {
-                this.startingBalance = startingBalance
-            }
-
-            fun endingBalance(endingBalance: Double) = endingBalance(JsonField.of(endingBalance))
-
-            @JsonProperty("ending_balance")
-            @ExcludeMissing
-            fun endingBalance(endingBalance: JsonField<Double>) = apply {
-                this.endingBalance = endingBalance
-            }
-
-            fun amount(amount: Double) = amount(JsonField.of(amount))
-
-            @JsonProperty("amount")
-            @ExcludeMissing
-            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
-
-            fun currency(currency: String) = currency(JsonField.of(currency))
-
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
-
-            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
-
-            @JsonProperty("created_at")
-            @ExcludeMissing
-            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
-                this.createdAt = createdAt
-            }
-
-            fun description(description: String) = description(JsonField.of(description))
-
-            @JsonProperty("description")
-            @ExcludeMissing
-            fun description(description: JsonField<String>) = apply {
-                this.description = description
-            }
-
-            fun creditBlock(creditBlock: CreditBlock) = creditBlock(JsonField.of(creditBlock))
-
-            @JsonProperty("credit_block")
-            @ExcludeMissing
-            fun creditBlock(creditBlock: JsonField<CreditBlock>) = apply {
-                this.creditBlock = creditBlock
-            }
-
-            fun entryType(entryType: EntryType) = entryType(JsonField.of(entryType))
-
-            @JsonProperty("entry_type")
-            @ExcludeMissing
-            fun entryType(entryType: JsonField<EntryType>) = apply { this.entryType = entryType }
 
             fun newBlockExpiryDate(newBlockExpiryDate: OffsetDateTime) =
                 newBlockExpiryDate(JsonField.of(newBlockExpiryDate))
 
-            @JsonProperty("new_block_expiry_date")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.newBlockExpiryDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.newBlockExpiryDate] with a well-typed
+             * [OffsetDateTime] value instead. This method is primarily for setting the field to an
+             * undocumented or not yet supported value.
+             */
             fun newBlockExpiryDate(newBlockExpiryDate: JsonField<OffsetDateTime>) = apply {
                 this.newBlockExpiryDate = newBlockExpiryDate
             }
 
-            fun voidReason(voidReason: String) = voidReason(JsonField.of(voidReason))
+            fun startingBalance(startingBalance: Double) =
+                startingBalance(JsonField.of(startingBalance))
 
-            @JsonProperty("void_reason")
-            @ExcludeMissing
-            fun voidReason(voidReason: JsonField<String>) = apply { this.voidReason = voidReason }
+            /**
+             * Sets [Builder.startingBalance] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.startingBalance] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun startingBalance(startingBalance: JsonField<Double>) = apply {
+                this.startingBalance = startingBalance
+            }
 
             fun voidAmount(voidAmount: Double) = voidAmount(JsonField.of(voidAmount))
 
-            @JsonProperty("void_amount")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.voidAmount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.voidAmount] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun voidAmount(voidAmount: JsonField<Double>) = apply { this.voidAmount = voidAmount }
+
+            fun voidReason(voidReason: String?) = voidReason(JsonField.ofNullable(voidReason))
+
+            /** Alias for calling [Builder.voidReason] with `voidReason.orElse(null)`. */
+            fun voidReason(voidReason: Optional<String>) = voidReason(voidReason.getOrNull())
+
+            /**
+             * Sets [Builder.voidReason] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.voidReason] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun voidReason(voidReason: JsonField<String>) = apply { this.voidReason = voidReason }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): VoidInitiatedLedgerEntry =
-                VoidInitiatedLedgerEntry(
-                    metadata,
-                    id,
-                    ledgerSequenceNumber,
-                    entryStatus,
-                    customer,
-                    startingBalance,
-                    endingBalance,
-                    amount,
-                    currency,
-                    createdAt,
-                    description,
-                    creditBlock,
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [VoidInitiated].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .newBlockExpiryDate()
+             * .startingBalance()
+             * .voidAmount()
+             * .voidReason()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): VoidInitiated =
+                VoidInitiated(
+                    checkRequired("id", id),
+                    checkRequired("amount", amount),
+                    checkRequired("createdAt", createdAt),
+                    checkRequired("creditBlock", creditBlock),
+                    checkRequired("currency", currency),
+                    checkRequired("customer", customer),
+                    checkRequired("description", description),
+                    checkRequired("endingBalance", endingBalance),
+                    checkRequired("entryStatus", entryStatus),
                     entryType,
-                    newBlockExpiryDate,
-                    voidReason,
-                    voidAmount,
-                    additionalProperties.toImmutable(),
+                    checkRequired("ledgerSequenceNumber", ledgerSequenceNumber),
+                    checkRequired("metadata", metadata),
+                    checkRequired("newBlockExpiryDate", newBlockExpiryDate),
+                    checkRequired("startingBalance", startingBalance),
+                    checkRequired("voidAmount", voidAmount),
+                    checkRequired("voidReason", voidReason),
+                    additionalProperties.toMutableMap(),
                 )
         }
 
-        @JsonDeserialize(builder = CreditBlock.Builder::class)
-        @NoAutoDetect
+        private var validated: Boolean = false
+
+        fun validate(): VoidInitiated = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            amount()
+            createdAt()
+            creditBlock().validate()
+            currency()
+            customer().validate()
+            description()
+            endingBalance()
+            entryStatus().validate()
+            _entryType().let {
+                if (it != JsonValue.from("void_initiated")) {
+                    throw OrbInvalidDataException("'entryType' is invalid, received $it")
+                }
+            }
+            ledgerSequenceNumber()
+            metadata().validate()
+            newBlockExpiryDate()
+            startingBalance()
+            voidAmount()
+            voidReason()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (if (amount.asKnown().isPresent) 1 else 0) +
+                (if (createdAt.asKnown().isPresent) 1 else 0) +
+                (creditBlock.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (currency.asKnown().isPresent) 1 else 0) +
+                (customer.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (description.asKnown().isPresent) 1 else 0) +
+                (if (endingBalance.asKnown().isPresent) 1 else 0) +
+                (entryStatus.asKnown().getOrNull()?.validity() ?: 0) +
+                entryType.let { if (it == JsonValue.from("void_initiated")) 1 else 0 } +
+                (if (ledgerSequenceNumber.asKnown().isPresent) 1 else 0) +
+                (metadata.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (newBlockExpiryDate.asKnown().isPresent) 1 else 0) +
+                (if (startingBalance.asKnown().isPresent) 1 else 0) +
+                (if (voidAmount.asKnown().isPresent) 1 else 0) +
+                (if (voidReason.asKnown().isPresent) 1 else 0)
+
         class CreditBlock
         private constructor(
             private val id: JsonField<String>,
             private val expiryDate: JsonField<OffsetDateTime>,
             private val perUnitCostBasis: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("expiry_date")
+                @ExcludeMissing
+                expiryDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("per_unit_cost_basis")
+                @ExcludeMissing
+                perUnitCostBasis: JsonField<String> = JsonMissing.of(),
+            ) : this(id, expiryDate, perUnitCostBasis, mutableMapOf())
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
-            fun expiryDate(): Optional<OffsetDateTime> =
-                Optional.ofNullable(expiryDate.getNullable("expiry_date"))
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
+            fun expiryDate(): Optional<OffsetDateTime> = expiryDate.getOptional("expiry_date")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
             fun perUnitCostBasis(): Optional<String> =
-                Optional.ofNullable(perUnitCostBasis.getNullable("per_unit_cost_basis"))
+                perUnitCostBasis.getOptional("per_unit_cost_basis")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-            @JsonProperty("expiry_date") @ExcludeMissing fun _expiryDate() = expiryDate
+            /**
+             * Returns the raw JSON value of [expiryDate].
+             *
+             * Unlike [expiryDate], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("expiry_date")
+            @ExcludeMissing
+            fun _expiryDate(): JsonField<OffsetDateTime> = expiryDate
 
+            /**
+             * Returns the raw JSON value of [perUnitCostBasis].
+             *
+             * Unlike [perUnitCostBasis], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("per_unit_cost_basis")
             @ExcludeMissing
-            fun _perUnitCostBasis() = perUnitCostBasis
+            fun _perUnitCostBasis(): JsonField<String> = perUnitCostBasis
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): CreditBlock = apply {
-                if (!validated) {
-                    id()
-                    expiryDate()
-                    perUnitCostBasis()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [CreditBlock].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [CreditBlock]. */
+            class Builder internal constructor() {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var expiryDate: JsonField<OffsetDateTime> = JsonMissing.of()
-                private var perUnitCostBasis: JsonField<String> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var expiryDate: JsonField<OffsetDateTime>? = null
+                private var perUnitCostBasis: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(creditBlock: CreditBlock) = apply {
-                    this.id = creditBlock.id
-                    this.expiryDate = creditBlock.expiryDate
-                    this.perUnitCostBasis = creditBlock.perUnitCostBasis
-                    additionalProperties(creditBlock.additionalProperties)
+                    id = creditBlock.id
+                    expiryDate = creditBlock.expiryDate
+                    perUnitCostBasis = creditBlock.perUnitCostBasis
+                    additionalProperties = creditBlock.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
-                fun expiryDate(expiryDate: OffsetDateTime) = expiryDate(JsonField.of(expiryDate))
+                fun expiryDate(expiryDate: OffsetDateTime?) =
+                    expiryDate(JsonField.ofNullable(expiryDate))
 
-                @JsonProperty("expiry_date")
-                @ExcludeMissing
+                /** Alias for calling [Builder.expiryDate] with `expiryDate.orElse(null)`. */
+                fun expiryDate(expiryDate: Optional<OffsetDateTime>) =
+                    expiryDate(expiryDate.getOrNull())
+
+                /**
+                 * Sets [Builder.expiryDate] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.expiryDate] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun expiryDate(expiryDate: JsonField<OffsetDateTime>) = apply {
                     this.expiryDate = expiryDate
                 }
 
-                fun perUnitCostBasis(perUnitCostBasis: String) =
-                    perUnitCostBasis(JsonField.of(perUnitCostBasis))
+                fun perUnitCostBasis(perUnitCostBasis: String?) =
+                    perUnitCostBasis(JsonField.ofNullable(perUnitCostBasis))
 
-                @JsonProperty("per_unit_cost_basis")
-                @ExcludeMissing
+                /**
+                 * Alias for calling [Builder.perUnitCostBasis] with
+                 * `perUnitCostBasis.orElse(null)`.
+                 */
+                fun perUnitCostBasis(perUnitCostBasis: Optional<String>) =
+                    perUnitCostBasis(perUnitCostBasis.getOrNull())
+
+                /**
+                 * Sets [Builder.perUnitCostBasis] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.perUnitCostBasis] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun perUnitCostBasis(perUnitCostBasis: JsonField<String>) = apply {
                     this.perUnitCostBasis = perUnitCostBasis
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -4533,14 +8257,69 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [CreditBlock].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): CreditBlock =
                     CreditBlock(
-                        id,
-                        expiryDate,
-                        perUnitCostBasis,
-                        additionalProperties.toImmutable(),
+                        checkRequired("id", id),
+                        checkRequired("expiryDate", expiryDate),
+                        checkRequired("perUnitCostBasis", perUnitCostBasis),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): CreditBlock = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                expiryDate()
+                perUnitCostBasis()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (expiryDate.asKnown().isPresent) 1 else 0) +
+                    (if (perUnitCostBasis.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -4560,83 +8339,131 @@ private constructor(
                 "CreditBlock{id=$id, expiryDate=$expiryDate, perUnitCostBasis=$perUnitCostBasis, additionalProperties=$additionalProperties}"
         }
 
-        @JsonDeserialize(builder = Customer.Builder::class)
-        @NoAutoDetect
         class Customer
         private constructor(
             private val id: JsonField<String>,
             private val externalCustomerId: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("external_customer_id")
+                @ExcludeMissing
+                externalCustomerId: JsonField<String> = JsonMissing.of(),
+            ) : this(id, externalCustomerId, mutableMapOf())
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
             fun externalCustomerId(): Optional<String> =
-                Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+                externalCustomerId.getOptional("external_customer_id")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+            /**
+             * Returns the raw JSON value of [externalCustomerId].
+             *
+             * Unlike [externalCustomerId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("external_customer_id")
             @ExcludeMissing
-            fun _externalCustomerId() = externalCustomerId
+            fun _externalCustomerId(): JsonField<String> = externalCustomerId
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): Customer = apply {
-                if (!validated) {
-                    id()
-                    externalCustomerId()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Customer].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [Customer]. */
+            class Builder internal constructor() {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var externalCustomerId: JsonField<String> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var externalCustomerId: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(customer: Customer) = apply {
-                    this.id = customer.id
-                    this.externalCustomerId = customer.externalCustomerId
-                    additionalProperties(customer.additionalProperties)
+                    id = customer.id
+                    externalCustomerId = customer.externalCustomerId
+                    additionalProperties = customer.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
-                fun externalCustomerId(externalCustomerId: String) =
-                    externalCustomerId(JsonField.of(externalCustomerId))
+                fun externalCustomerId(externalCustomerId: String?) =
+                    externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
-                @JsonProperty("external_customer_id")
-                @ExcludeMissing
+                /**
+                 * Alias for calling [Builder.externalCustomerId] with
+                 * `externalCustomerId.orElse(null)`.
+                 */
+                fun externalCustomerId(externalCustomerId: Optional<String>) =
+                    externalCustomerId(externalCustomerId.getOrNull())
+
+                /**
+                 * Sets [Builder.externalCustomerId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.externalCustomerId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                     this.externalCustomerId = externalCustomerId
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -4644,13 +8471,65 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Customer].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Customer =
                     Customer(
-                        id,
-                        externalCustomerId,
-                        additionalProperties.toImmutable(),
+                        checkRequired("id", id),
+                        checkRequired("externalCustomerId", externalCustomerId),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Customer = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                externalCustomerId()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (externalCustomerId.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -4670,13 +8549,121 @@ private constructor(
                 "Customer{id=$id, externalCustomerId=$externalCustomerId, additionalProperties=$additionalProperties}"
         }
 
-        class EntryStatus
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class EntryStatus @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val COMMITTED = of("committed")
+
+                @JvmField val PENDING = of("pending")
+
+                @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
+            }
+
+            /** An enum containing [EntryStatus]'s known values. */
+            enum class Known {
+                COMMITTED,
+                PENDING,
+            }
+
+            /**
+             * An enum containing [EntryStatus]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [EntryStatus] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                COMMITTED,
+                PENDING,
+                /**
+                 * An enum member indicating that [EntryStatus] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    COMMITTED -> Value.COMMITTED
+                    PENDING -> Value.PENDING
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    COMMITTED -> Known.COMMITTED
+                    PENDING -> Known.PENDING
+                    else -> throw OrbInvalidDataException("Unknown EntryStatus: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws OrbInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+            private var validated: Boolean = false
+
+            fun validate(): EntryStatus = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -4689,93 +8676,6 @@ private constructor(
             override fun hashCode() = value.hashCode()
 
             override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField val COMMITTED = EntryStatus(JsonField.of("committed"))
-
-                @JvmField val PENDING = EntryStatus(JsonField.of("pending"))
-
-                @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
-            }
-
-            enum class Known {
-                COMMITTED,
-                PENDING,
-            }
-
-            enum class Value {
-                COMMITTED,
-                PENDING,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    COMMITTED -> Value.COMMITTED
-                    PENDING -> Value.PENDING
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    COMMITTED -> Known.COMMITTED
-                    PENDING -> Known.PENDING
-                    else -> throw OrbInvalidDataException("Unknown EntryStatus: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
-        }
-
-        class EntryType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
-
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is EntryType && value == other.value /* spotless:on */
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField val VOID_INITIATED = EntryType(JsonField.of("void_initiated"))
-
-                @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
-            }
-
-            enum class Known {
-                VOID_INITIATED,
-            }
-
-            enum class Value {
-                VOID_INITIATED,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    VOID_INITIATED -> Value.VOID_INITIATED
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    VOID_INITIATED -> Known.VOID_INITIATED
-                    else -> throw OrbInvalidDataException("Unknown EntryType: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
         }
 
         /**
@@ -4783,49 +8683,42 @@ private constructor(
          * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
          * entire metadata mapping can be cleared by setting `metadata` to `null`.
          */
-        @JsonDeserialize(builder = Metadata.Builder::class)
-        @NoAutoDetect
         class Metadata
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
         ) {
-
-            private var validated: Boolean = false
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-            fun validate(): Metadata = apply {
-                if (!validated) {
-                    validated = true
-                }
-            }
-
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /** Returns a mutable builder for constructing an instance of [Metadata]. */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [Metadata]. */
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(metadata: Metadata) = apply {
-                    additionalProperties(metadata.additionalProperties)
+                    additionalProperties = metadata.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -4833,8 +8726,49 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Metadata].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
                 fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Metadata = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -4858,170 +8792,488 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is VoidInitiatedLedgerEntry && metadata == other.metadata && id == other.id && ledgerSequenceNumber == other.ledgerSequenceNumber && entryStatus == other.entryStatus && customer == other.customer && startingBalance == other.startingBalance && endingBalance == other.endingBalance && amount == other.amount && currency == other.currency && createdAt == other.createdAt && description == other.description && creditBlock == other.creditBlock && entryType == other.entryType && newBlockExpiryDate == other.newBlockExpiryDate && voidReason == other.voidReason && voidAmount == other.voidAmount && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is VoidInitiated && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && newBlockExpiryDate == other.newBlockExpiryDate && startingBalance == other.startingBalance && voidAmount == other.voidAmount && voidReason == other.voidReason && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(metadata, id, ledgerSequenceNumber, entryStatus, customer, startingBalance, endingBalance, amount, currency, createdAt, description, creditBlock, entryType, newBlockExpiryDate, voidReason, voidAmount, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, amount, createdAt, creditBlock, currency, customer, description, endingBalance, entryStatus, entryType, ledgerSequenceNumber, metadata, newBlockExpiryDate, startingBalance, voidAmount, voidReason, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "VoidInitiatedLedgerEntry{metadata=$metadata, id=$id, ledgerSequenceNumber=$ledgerSequenceNumber, entryStatus=$entryStatus, customer=$customer, startingBalance=$startingBalance, endingBalance=$endingBalance, amount=$amount, currency=$currency, createdAt=$createdAt, description=$description, creditBlock=$creditBlock, entryType=$entryType, newBlockExpiryDate=$newBlockExpiryDate, voidReason=$voidReason, voidAmount=$voidAmount, additionalProperties=$additionalProperties}"
+            "VoidInitiated{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, newBlockExpiryDate=$newBlockExpiryDate, startingBalance=$startingBalance, voidAmount=$voidAmount, voidReason=$voidReason, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = AmendmentLedgerEntry.Builder::class)
-    @NoAutoDetect
-    class AmendmentLedgerEntry
+    class Amendment
     private constructor(
-        private val metadata: JsonField<Metadata>,
         private val id: JsonField<String>,
-        private val ledgerSequenceNumber: JsonField<Long>,
-        private val entryStatus: JsonField<EntryStatus>,
-        private val customer: JsonField<Customer>,
-        private val startingBalance: JsonField<Double>,
-        private val endingBalance: JsonField<Double>,
         private val amount: JsonField<Double>,
-        private val currency: JsonField<String>,
         private val createdAt: JsonField<OffsetDateTime>,
-        private val description: JsonField<String>,
         private val creditBlock: JsonField<CreditBlock>,
-        private val entryType: JsonField<EntryType>,
-        private val additionalProperties: Map<String, JsonValue>,
+        private val currency: JsonField<String>,
+        private val customer: JsonField<Customer>,
+        private val description: JsonField<String>,
+        private val endingBalance: JsonField<Double>,
+        private val entryStatus: JsonField<EntryStatus>,
+        private val entryType: JsonValue,
+        private val ledgerSequenceNumber: JsonField<Long>,
+        private val metadata: JsonField<Metadata>,
+        private val startingBalance: JsonField<Double>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        private var validated: Boolean = false
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("amount") @ExcludeMissing amount: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("created_at")
+            @ExcludeMissing
+            createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("credit_block")
+            @ExcludeMissing
+            creditBlock: JsonField<CreditBlock> = JsonMissing.of(),
+            @JsonProperty("currency")
+            @ExcludeMissing
+            currency: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("customer")
+            @ExcludeMissing
+            customer: JsonField<Customer> = JsonMissing.of(),
+            @JsonProperty("description")
+            @ExcludeMissing
+            description: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("ending_balance")
+            @ExcludeMissing
+            endingBalance: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("entry_status")
+            @ExcludeMissing
+            entryStatus: JsonField<EntryStatus> = JsonMissing.of(),
+            @JsonProperty("entry_type") @ExcludeMissing entryType: JsonValue = JsonMissing.of(),
+            @JsonProperty("ledger_sequence_number")
+            @ExcludeMissing
+            ledgerSequenceNumber: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            metadata: JsonField<Metadata> = JsonMissing.of(),
+            @JsonProperty("starting_balance")
+            @ExcludeMissing
+            startingBalance: JsonField<Double> = JsonMissing.of(),
+        ) : this(
+            id,
+            amount,
+            createdAt,
+            creditBlock,
+            currency,
+            customer,
+            description,
+            endingBalance,
+            entryStatus,
+            entryType,
+            ledgerSequenceNumber,
+            metadata,
+            startingBalance,
+            mutableMapOf(),
+        )
 
         /**
-         * User specified key-value pairs for the resource. If not present, this defaults to an
-         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
-         * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun metadata(): Metadata = metadata.getRequired("metadata")
-
         fun id(): String = id.getRequired("id")
 
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun amount(): Double = amount.getRequired("amount")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun creditBlock(): CreditBlock = creditBlock.getRequired("credit_block")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun currency(): String = currency.getRequired("currency")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun customer(): Customer = customer.getRequired("customer")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun description(): Optional<String> = description.getOptional("description")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun endingBalance(): Double = endingBalance.getRequired("ending_balance")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun entryStatus(): EntryStatus = entryStatus.getRequired("entry_status")
+
+        /**
+         * Expected to always return the following:
+         * ```java
+         * JsonValue.from("amendment")
+         * ```
+         *
+         * However, this method can be useful for debugging and logging (e.g. if the server
+         * responded with an unexpected value).
+         */
+        @JsonProperty("entry_type") @ExcludeMissing fun _entryType(): JsonValue = entryType
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun ledgerSequenceNumber(): Long =
             ledgerSequenceNumber.getRequired("ledger_sequence_number")
 
-        fun entryStatus(): EntryStatus = entryStatus.getRequired("entry_status")
-
-        fun customer(): Customer = customer.getRequired("customer")
-
-        fun startingBalance(): Double = startingBalance.getRequired("starting_balance")
-
-        fun endingBalance(): Double = endingBalance.getRequired("ending_balance")
-
-        fun amount(): Double = amount.getRequired("amount")
-
-        fun currency(): String = currency.getRequired("currency")
-
-        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
-
-        fun description(): Optional<String> =
-            Optional.ofNullable(description.getNullable("description"))
-
-        fun creditBlock(): CreditBlock = creditBlock.getRequired("credit_block")
-
-        fun entryType(): EntryType = entryType.getRequired("entry_type")
-
         /**
          * User specified key-value pairs for the resource. If not present, this defaults to an
          * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
          * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata() = metadata
+        fun metadata(): Metadata = metadata.getRequired("metadata")
 
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun startingBalance(): Double = startingBalance.getRequired("starting_balance")
 
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [amount].
+         *
+         * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
+
+        /**
+         * Returns the raw JSON value of [createdAt].
+         *
+         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        fun _createdAt(): JsonField<OffsetDateTime> = createdAt
+
+        /**
+         * Returns the raw JSON value of [creditBlock].
+         *
+         * Unlike [creditBlock], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("credit_block")
+        @ExcludeMissing
+        fun _creditBlock(): JsonField<CreditBlock> = creditBlock
+
+        /**
+         * Returns the raw JSON value of [currency].
+         *
+         * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
+
+        /**
+         * Returns the raw JSON value of [customer].
+         *
+         * Unlike [customer], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("customer") @ExcludeMissing fun _customer(): JsonField<Customer> = customer
+
+        /**
+         * Returns the raw JSON value of [description].
+         *
+         * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("description")
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
+
+        /**
+         * Returns the raw JSON value of [endingBalance].
+         *
+         * Unlike [endingBalance], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("ending_balance")
+        @ExcludeMissing
+        fun _endingBalance(): JsonField<Double> = endingBalance
+
+        /**
+         * Returns the raw JSON value of [entryStatus].
+         *
+         * Unlike [entryStatus], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("entry_status")
+        @ExcludeMissing
+        fun _entryStatus(): JsonField<EntryStatus> = entryStatus
+
+        /**
+         * Returns the raw JSON value of [ledgerSequenceNumber].
+         *
+         * Unlike [ledgerSequenceNumber], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("ledger_sequence_number")
         @ExcludeMissing
-        fun _ledgerSequenceNumber() = ledgerSequenceNumber
+        fun _ledgerSequenceNumber(): JsonField<Long> = ledgerSequenceNumber
 
-        @JsonProperty("entry_status") @ExcludeMissing fun _entryStatus() = entryStatus
+        /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
-        @JsonProperty("customer") @ExcludeMissing fun _customer() = customer
+        /**
+         * Returns the raw JSON value of [startingBalance].
+         *
+         * Unlike [startingBalance], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("starting_balance")
+        @ExcludeMissing
+        fun _startingBalance(): JsonField<Double> = startingBalance
 
-        @JsonProperty("starting_balance") @ExcludeMissing fun _startingBalance() = startingBalance
-
-        @JsonProperty("ending_balance") @ExcludeMissing fun _endingBalance() = endingBalance
-
-        @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
-
-        @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
-
-        @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
-
-        @JsonProperty("description") @ExcludeMissing fun _description() = description
-
-        @JsonProperty("credit_block") @ExcludeMissing fun _creditBlock() = creditBlock
-
-        @JsonProperty("entry_type") @ExcludeMissing fun _entryType() = entryType
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): AmendmentLedgerEntry = apply {
-            if (!validated) {
-                metadata().validate()
-                id()
-                ledgerSequenceNumber()
-                entryStatus()
-                customer().validate()
-                startingBalance()
-                endingBalance()
-                amount()
-                currency()
-                createdAt()
-                description()
-                creditBlock().validate()
-                entryType()
-                validated = true
-            }
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Amendment].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .startingBalance()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [Amendment]. */
+        class Builder internal constructor() {
 
-            private var metadata: JsonField<Metadata> = JsonMissing.of()
-            private var id: JsonField<String> = JsonMissing.of()
-            private var ledgerSequenceNumber: JsonField<Long> = JsonMissing.of()
-            private var entryStatus: JsonField<EntryStatus> = JsonMissing.of()
-            private var customer: JsonField<Customer> = JsonMissing.of()
-            private var startingBalance: JsonField<Double> = JsonMissing.of()
-            private var endingBalance: JsonField<Double> = JsonMissing.of()
-            private var amount: JsonField<Double> = JsonMissing.of()
-            private var currency: JsonField<String> = JsonMissing.of()
-            private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var description: JsonField<String> = JsonMissing.of()
-            private var creditBlock: JsonField<CreditBlock> = JsonMissing.of()
-            private var entryType: JsonField<EntryType> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var amount: JsonField<Double>? = null
+            private var createdAt: JsonField<OffsetDateTime>? = null
+            private var creditBlock: JsonField<CreditBlock>? = null
+            private var currency: JsonField<String>? = null
+            private var customer: JsonField<Customer>? = null
+            private var description: JsonField<String>? = null
+            private var endingBalance: JsonField<Double>? = null
+            private var entryStatus: JsonField<EntryStatus>? = null
+            private var entryType: JsonValue = JsonValue.from("amendment")
+            private var ledgerSequenceNumber: JsonField<Long>? = null
+            private var metadata: JsonField<Metadata>? = null
+            private var startingBalance: JsonField<Double>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(amendmentLedgerEntry: AmendmentLedgerEntry) = apply {
-                this.metadata = amendmentLedgerEntry.metadata
-                this.id = amendmentLedgerEntry.id
-                this.ledgerSequenceNumber = amendmentLedgerEntry.ledgerSequenceNumber
-                this.entryStatus = amendmentLedgerEntry.entryStatus
-                this.customer = amendmentLedgerEntry.customer
-                this.startingBalance = amendmentLedgerEntry.startingBalance
-                this.endingBalance = amendmentLedgerEntry.endingBalance
-                this.amount = amendmentLedgerEntry.amount
-                this.currency = amendmentLedgerEntry.currency
-                this.createdAt = amendmentLedgerEntry.createdAt
-                this.description = amendmentLedgerEntry.description
-                this.creditBlock = amendmentLedgerEntry.creditBlock
-                this.entryType = amendmentLedgerEntry.entryType
-                additionalProperties(amendmentLedgerEntry.additionalProperties)
+            internal fun from(amendment: Amendment) = apply {
+                id = amendment.id
+                amount = amendment.amount
+                createdAt = amendment.createdAt
+                creditBlock = amendment.creditBlock
+                currency = amendment.currency
+                customer = amendment.customer
+                description = amendment.description
+                endingBalance = amendment.endingBalance
+                entryStatus = amendment.entryStatus
+                entryType = amendment.entryType
+                ledgerSequenceNumber = amendment.ledgerSequenceNumber
+                metadata = amendment.metadata
+                startingBalance = amendment.startingBalance
+                additionalProperties = amendment.additionalProperties.toMutableMap()
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun amount(amount: Double) = amount(JsonField.of(amount))
+
+            /**
+             * Sets [Builder.amount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.amount] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+            /**
+             * Sets [Builder.createdAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
+                this.createdAt = createdAt
+            }
+
+            fun creditBlock(creditBlock: CreditBlock) = creditBlock(JsonField.of(creditBlock))
+
+            /**
+             * Sets [Builder.creditBlock] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.creditBlock] with a well-typed [CreditBlock] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun creditBlock(creditBlock: JsonField<CreditBlock>) = apply {
+                this.creditBlock = creditBlock
+            }
+
+            fun currency(currency: String) = currency(JsonField.of(currency))
+
+            /**
+             * Sets [Builder.currency] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.currency] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
+
+            fun customer(customer: Customer) = customer(JsonField.of(customer))
+
+            /**
+             * Sets [Builder.customer] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.customer] with a well-typed [Customer] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
+
+            fun description(description: String?) = description(JsonField.ofNullable(description))
+
+            /** Alias for calling [Builder.description] with `description.orElse(null)`. */
+            fun description(description: Optional<String>) = description(description.getOrNull())
+
+            /**
+             * Sets [Builder.description] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.description] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
+
+            fun endingBalance(endingBalance: Double) = endingBalance(JsonField.of(endingBalance))
+
+            /**
+             * Sets [Builder.endingBalance] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.endingBalance] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun endingBalance(endingBalance: JsonField<Double>) = apply {
+                this.endingBalance = endingBalance
+            }
+
+            fun entryStatus(entryStatus: EntryStatus) = entryStatus(JsonField.of(entryStatus))
+
+            /**
+             * Sets [Builder.entryStatus] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.entryStatus] with a well-typed [EntryStatus] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun entryStatus(entryStatus: JsonField<EntryStatus>) = apply {
+                this.entryStatus = entryStatus
+            }
+
+            /**
+             * Sets the field to an arbitrary JSON value.
+             *
+             * It is usually unnecessary to call this method because the field defaults to the
+             * following:
+             * ```java
+             * JsonValue.from("amendment")
+             * ```
+             *
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun entryType(entryType: JsonValue) = apply { this.entryType = entryType }
+
+            fun ledgerSequenceNumber(ledgerSequenceNumber: Long) =
+                ledgerSequenceNumber(JsonField.of(ledgerSequenceNumber))
+
+            /**
+             * Sets [Builder.ledgerSequenceNumber] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.ledgerSequenceNumber] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun ledgerSequenceNumber(ledgerSequenceNumber: JsonField<Long>) = apply {
+                this.ledgerSequenceNumber = ledgerSequenceNumber
             }
 
             /**
@@ -5032,229 +9284,312 @@ private constructor(
             fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
             /**
-             * User specified key-value pairs for the resource. If not present, this defaults to an
-             * empty dictionary. Individual keys can be removed by setting the value to `null`, and
-             * the entire metadata mapping can be cleared by setting `metadata` to `null`.
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            @JsonProperty("metadata")
-            @ExcludeMissing
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
-
-            fun id(id: String) = id(JsonField.of(id))
-
-            @JsonProperty("id")
-            @ExcludeMissing
-            fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun ledgerSequenceNumber(ledgerSequenceNumber: Long) =
-                ledgerSequenceNumber(JsonField.of(ledgerSequenceNumber))
-
-            @JsonProperty("ledger_sequence_number")
-            @ExcludeMissing
-            fun ledgerSequenceNumber(ledgerSequenceNumber: JsonField<Long>) = apply {
-                this.ledgerSequenceNumber = ledgerSequenceNumber
-            }
-
-            fun entryStatus(entryStatus: EntryStatus) = entryStatus(JsonField.of(entryStatus))
-
-            @JsonProperty("entry_status")
-            @ExcludeMissing
-            fun entryStatus(entryStatus: JsonField<EntryStatus>) = apply {
-                this.entryStatus = entryStatus
-            }
-
-            fun customer(customer: Customer) = customer(JsonField.of(customer))
-
-            @JsonProperty("customer")
-            @ExcludeMissing
-            fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
 
             fun startingBalance(startingBalance: Double) =
                 startingBalance(JsonField.of(startingBalance))
 
-            @JsonProperty("starting_balance")
-            @ExcludeMissing
+            /**
+             * Sets [Builder.startingBalance] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.startingBalance] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun startingBalance(startingBalance: JsonField<Double>) = apply {
                 this.startingBalance = startingBalance
             }
 
-            fun endingBalance(endingBalance: Double) = endingBalance(JsonField.of(endingBalance))
-
-            @JsonProperty("ending_balance")
-            @ExcludeMissing
-            fun endingBalance(endingBalance: JsonField<Double>) = apply {
-                this.endingBalance = endingBalance
-            }
-
-            fun amount(amount: Double) = amount(JsonField.of(amount))
-
-            @JsonProperty("amount")
-            @ExcludeMissing
-            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
-
-            fun currency(currency: String) = currency(JsonField.of(currency))
-
-            @JsonProperty("currency")
-            @ExcludeMissing
-            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
-
-            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
-
-            @JsonProperty("created_at")
-            @ExcludeMissing
-            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
-                this.createdAt = createdAt
-            }
-
-            fun description(description: String) = description(JsonField.of(description))
-
-            @JsonProperty("description")
-            @ExcludeMissing
-            fun description(description: JsonField<String>) = apply {
-                this.description = description
-            }
-
-            fun creditBlock(creditBlock: CreditBlock) = creditBlock(JsonField.of(creditBlock))
-
-            @JsonProperty("credit_block")
-            @ExcludeMissing
-            fun creditBlock(creditBlock: JsonField<CreditBlock>) = apply {
-                this.creditBlock = creditBlock
-            }
-
-            fun entryType(entryType: EntryType) = entryType(JsonField.of(entryType))
-
-            @JsonProperty("entry_type")
-            @ExcludeMissing
-            fun entryType(entryType: JsonField<EntryType>) = apply { this.entryType = entryType }
-
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): AmendmentLedgerEntry =
-                AmendmentLedgerEntry(
-                    metadata,
-                    id,
-                    ledgerSequenceNumber,
-                    entryStatus,
-                    customer,
-                    startingBalance,
-                    endingBalance,
-                    amount,
-                    currency,
-                    createdAt,
-                    description,
-                    creditBlock,
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Amendment].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .amount()
+             * .createdAt()
+             * .creditBlock()
+             * .currency()
+             * .customer()
+             * .description()
+             * .endingBalance()
+             * .entryStatus()
+             * .ledgerSequenceNumber()
+             * .metadata()
+             * .startingBalance()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Amendment =
+                Amendment(
+                    checkRequired("id", id),
+                    checkRequired("amount", amount),
+                    checkRequired("createdAt", createdAt),
+                    checkRequired("creditBlock", creditBlock),
+                    checkRequired("currency", currency),
+                    checkRequired("customer", customer),
+                    checkRequired("description", description),
+                    checkRequired("endingBalance", endingBalance),
+                    checkRequired("entryStatus", entryStatus),
                     entryType,
-                    additionalProperties.toImmutable(),
+                    checkRequired("ledgerSequenceNumber", ledgerSequenceNumber),
+                    checkRequired("metadata", metadata),
+                    checkRequired("startingBalance", startingBalance),
+                    additionalProperties.toMutableMap(),
                 )
         }
 
-        @JsonDeserialize(builder = CreditBlock.Builder::class)
-        @NoAutoDetect
+        private var validated: Boolean = false
+
+        fun validate(): Amendment = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            amount()
+            createdAt()
+            creditBlock().validate()
+            currency()
+            customer().validate()
+            description()
+            endingBalance()
+            entryStatus().validate()
+            _entryType().let {
+                if (it != JsonValue.from("amendment")) {
+                    throw OrbInvalidDataException("'entryType' is invalid, received $it")
+                }
+            }
+            ledgerSequenceNumber()
+            metadata().validate()
+            startingBalance()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (if (amount.asKnown().isPresent) 1 else 0) +
+                (if (createdAt.asKnown().isPresent) 1 else 0) +
+                (creditBlock.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (currency.asKnown().isPresent) 1 else 0) +
+                (customer.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (description.asKnown().isPresent) 1 else 0) +
+                (if (endingBalance.asKnown().isPresent) 1 else 0) +
+                (entryStatus.asKnown().getOrNull()?.validity() ?: 0) +
+                entryType.let { if (it == JsonValue.from("amendment")) 1 else 0 } +
+                (if (ledgerSequenceNumber.asKnown().isPresent) 1 else 0) +
+                (metadata.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (startingBalance.asKnown().isPresent) 1 else 0)
+
         class CreditBlock
         private constructor(
             private val id: JsonField<String>,
             private val expiryDate: JsonField<OffsetDateTime>,
             private val perUnitCostBasis: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("expiry_date")
+                @ExcludeMissing
+                expiryDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("per_unit_cost_basis")
+                @ExcludeMissing
+                perUnitCostBasis: JsonField<String> = JsonMissing.of(),
+            ) : this(id, expiryDate, perUnitCostBasis, mutableMapOf())
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
-            fun expiryDate(): Optional<OffsetDateTime> =
-                Optional.ofNullable(expiryDate.getNullable("expiry_date"))
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
+            fun expiryDate(): Optional<OffsetDateTime> = expiryDate.getOptional("expiry_date")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
             fun perUnitCostBasis(): Optional<String> =
-                Optional.ofNullable(perUnitCostBasis.getNullable("per_unit_cost_basis"))
+                perUnitCostBasis.getOptional("per_unit_cost_basis")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-            @JsonProperty("expiry_date") @ExcludeMissing fun _expiryDate() = expiryDate
+            /**
+             * Returns the raw JSON value of [expiryDate].
+             *
+             * Unlike [expiryDate], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("expiry_date")
+            @ExcludeMissing
+            fun _expiryDate(): JsonField<OffsetDateTime> = expiryDate
 
+            /**
+             * Returns the raw JSON value of [perUnitCostBasis].
+             *
+             * Unlike [perUnitCostBasis], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("per_unit_cost_basis")
             @ExcludeMissing
-            fun _perUnitCostBasis() = perUnitCostBasis
+            fun _perUnitCostBasis(): JsonField<String> = perUnitCostBasis
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): CreditBlock = apply {
-                if (!validated) {
-                    id()
-                    expiryDate()
-                    perUnitCostBasis()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [CreditBlock].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [CreditBlock]. */
+            class Builder internal constructor() {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var expiryDate: JsonField<OffsetDateTime> = JsonMissing.of()
-                private var perUnitCostBasis: JsonField<String> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var expiryDate: JsonField<OffsetDateTime>? = null
+                private var perUnitCostBasis: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(creditBlock: CreditBlock) = apply {
-                    this.id = creditBlock.id
-                    this.expiryDate = creditBlock.expiryDate
-                    this.perUnitCostBasis = creditBlock.perUnitCostBasis
-                    additionalProperties(creditBlock.additionalProperties)
+                    id = creditBlock.id
+                    expiryDate = creditBlock.expiryDate
+                    perUnitCostBasis = creditBlock.perUnitCostBasis
+                    additionalProperties = creditBlock.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
-                fun expiryDate(expiryDate: OffsetDateTime) = expiryDate(JsonField.of(expiryDate))
+                fun expiryDate(expiryDate: OffsetDateTime?) =
+                    expiryDate(JsonField.ofNullable(expiryDate))
 
-                @JsonProperty("expiry_date")
-                @ExcludeMissing
+                /** Alias for calling [Builder.expiryDate] with `expiryDate.orElse(null)`. */
+                fun expiryDate(expiryDate: Optional<OffsetDateTime>) =
+                    expiryDate(expiryDate.getOrNull())
+
+                /**
+                 * Sets [Builder.expiryDate] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.expiryDate] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun expiryDate(expiryDate: JsonField<OffsetDateTime>) = apply {
                     this.expiryDate = expiryDate
                 }
 
-                fun perUnitCostBasis(perUnitCostBasis: String) =
-                    perUnitCostBasis(JsonField.of(perUnitCostBasis))
+                fun perUnitCostBasis(perUnitCostBasis: String?) =
+                    perUnitCostBasis(JsonField.ofNullable(perUnitCostBasis))
 
-                @JsonProperty("per_unit_cost_basis")
-                @ExcludeMissing
+                /**
+                 * Alias for calling [Builder.perUnitCostBasis] with
+                 * `perUnitCostBasis.orElse(null)`.
+                 */
+                fun perUnitCostBasis(perUnitCostBasis: Optional<String>) =
+                    perUnitCostBasis(perUnitCostBasis.getOrNull())
+
+                /**
+                 * Sets [Builder.perUnitCostBasis] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.perUnitCostBasis] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun perUnitCostBasis(perUnitCostBasis: JsonField<String>) = apply {
                     this.perUnitCostBasis = perUnitCostBasis
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -5262,14 +9597,69 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [CreditBlock].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .expiryDate()
+                 * .perUnitCostBasis()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): CreditBlock =
                     CreditBlock(
-                        id,
-                        expiryDate,
-                        perUnitCostBasis,
-                        additionalProperties.toImmutable(),
+                        checkRequired("id", id),
+                        checkRequired("expiryDate", expiryDate),
+                        checkRequired("perUnitCostBasis", perUnitCostBasis),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): CreditBlock = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                expiryDate()
+                perUnitCostBasis()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (expiryDate.asKnown().isPresent) 1 else 0) +
+                    (if (perUnitCostBasis.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -5289,83 +9679,131 @@ private constructor(
                 "CreditBlock{id=$id, expiryDate=$expiryDate, perUnitCostBasis=$perUnitCostBasis, additionalProperties=$additionalProperties}"
         }
 
-        @JsonDeserialize(builder = Customer.Builder::class)
-        @NoAutoDetect
         class Customer
         private constructor(
             private val id: JsonField<String>,
             private val externalCustomerId: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            private var validated: Boolean = false
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("external_customer_id")
+                @ExcludeMissing
+                externalCustomerId: JsonField<String> = JsonMissing.of(),
+            ) : this(id, externalCustomerId, mutableMapOf())
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
             fun externalCustomerId(): Optional<String> =
-                Optional.ofNullable(externalCustomerId.getNullable("external_customer_id"))
+                externalCustomerId.getOptional("external_customer_id")
 
-            @JsonProperty("id") @ExcludeMissing fun _id() = id
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+            /**
+             * Returns the raw JSON value of [externalCustomerId].
+             *
+             * Unlike [externalCustomerId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("external_customer_id")
             @ExcludeMissing
-            fun _externalCustomerId() = externalCustomerId
+            fun _externalCustomerId(): JsonField<String> = externalCustomerId
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun validate(): Customer = apply {
-                if (!validated) {
-                    id()
-                    externalCustomerId()
-                    validated = true
-                }
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Customer].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [Customer]. */
+            class Builder internal constructor() {
 
-                private var id: JsonField<String> = JsonMissing.of()
-                private var externalCustomerId: JsonField<String> = JsonMissing.of()
+                private var id: JsonField<String>? = null
+                private var externalCustomerId: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(customer: Customer) = apply {
-                    this.id = customer.id
-                    this.externalCustomerId = customer.externalCustomerId
-                    additionalProperties(customer.additionalProperties)
+                    id = customer.id
+                    externalCustomerId = customer.externalCustomerId
+                    additionalProperties = customer.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
 
-                @JsonProperty("id")
-                @ExcludeMissing
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
-                fun externalCustomerId(externalCustomerId: String) =
-                    externalCustomerId(JsonField.of(externalCustomerId))
+                fun externalCustomerId(externalCustomerId: String?) =
+                    externalCustomerId(JsonField.ofNullable(externalCustomerId))
 
-                @JsonProperty("external_customer_id")
-                @ExcludeMissing
+                /**
+                 * Alias for calling [Builder.externalCustomerId] with
+                 * `externalCustomerId.orElse(null)`.
+                 */
+                fun externalCustomerId(externalCustomerId: Optional<String>) =
+                    externalCustomerId(externalCustomerId.getOrNull())
+
+                /**
+                 * Sets [Builder.externalCustomerId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.externalCustomerId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
                     this.externalCustomerId = externalCustomerId
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -5373,13 +9811,65 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Customer].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .externalCustomerId()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Customer =
                     Customer(
-                        id,
-                        externalCustomerId,
-                        additionalProperties.toImmutable(),
+                        checkRequired("id", id),
+                        checkRequired("externalCustomerId", externalCustomerId),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Customer = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                externalCustomerId()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (externalCustomerId.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -5399,13 +9889,121 @@ private constructor(
                 "Customer{id=$id, externalCustomerId=$externalCustomerId, additionalProperties=$additionalProperties}"
         }
 
-        class EntryStatus
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class EntryStatus @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val COMMITTED = of("committed")
+
+                @JvmField val PENDING = of("pending")
+
+                @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
+            }
+
+            /** An enum containing [EntryStatus]'s known values. */
+            enum class Known {
+                COMMITTED,
+                PENDING,
+            }
+
+            /**
+             * An enum containing [EntryStatus]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [EntryStatus] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                COMMITTED,
+                PENDING,
+                /**
+                 * An enum member indicating that [EntryStatus] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    COMMITTED -> Value.COMMITTED
+                    PENDING -> Value.PENDING
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    COMMITTED -> Known.COMMITTED
+                    PENDING -> Known.PENDING
+                    else -> throw OrbInvalidDataException("Unknown EntryStatus: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws OrbInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+            private var validated: Boolean = false
+
+            fun validate(): EntryStatus = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -5418,93 +10016,6 @@ private constructor(
             override fun hashCode() = value.hashCode()
 
             override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField val COMMITTED = EntryStatus(JsonField.of("committed"))
-
-                @JvmField val PENDING = EntryStatus(JsonField.of("pending"))
-
-                @JvmStatic fun of(value: String) = EntryStatus(JsonField.of(value))
-            }
-
-            enum class Known {
-                COMMITTED,
-                PENDING,
-            }
-
-            enum class Value {
-                COMMITTED,
-                PENDING,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    COMMITTED -> Value.COMMITTED
-                    PENDING -> Value.PENDING
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    COMMITTED -> Known.COMMITTED
-                    PENDING -> Known.PENDING
-                    else -> throw OrbInvalidDataException("Unknown EntryStatus: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
-        }
-
-        class EntryType
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
-
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is EntryType && value == other.value /* spotless:on */
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField val AMENDMENT = EntryType(JsonField.of("amendment"))
-
-                @JvmStatic fun of(value: String) = EntryType(JsonField.of(value))
-            }
-
-            enum class Known {
-                AMENDMENT,
-            }
-
-            enum class Value {
-                AMENDMENT,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    AMENDMENT -> Value.AMENDMENT
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    AMENDMENT -> Known.AMENDMENT
-                    else -> throw OrbInvalidDataException("Unknown EntryType: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
         }
 
         /**
@@ -5512,49 +10023,42 @@ private constructor(
          * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
          * entire metadata mapping can be cleared by setting `metadata` to `null`.
          */
-        @JsonDeserialize(builder = Metadata.Builder::class)
-        @NoAutoDetect
         class Metadata
+        @JsonCreator
         private constructor(
-            private val additionalProperties: Map<String, JsonValue>,
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
         ) {
-
-            private var validated: Boolean = false
 
             @JsonAnyGetter
             @ExcludeMissing
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-            fun validate(): Metadata = apply {
-                if (!validated) {
-                    validated = true
-                }
-            }
-
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /** Returns a mutable builder for constructing an instance of [Metadata]. */
                 @JvmStatic fun builder() = Builder()
             }
 
-            class Builder {
+            /** A builder for [Metadata]. */
+            class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(metadata: Metadata) = apply {
-                    additionalProperties(metadata.additionalProperties)
+                    additionalProperties = metadata.additionalProperties.toMutableMap()
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
-                    this.additionalProperties.putAll(additionalProperties)
+                    putAllAdditionalProperties(additionalProperties)
                 }
 
-                @JsonAnySetter
                 fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    this.additionalProperties.put(key, value)
+                    additionalProperties.put(key, value)
                 }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -5562,8 +10066,49 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Metadata].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
                 fun build(): Metadata = Metadata(additionalProperties.toImmutable())
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Metadata = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -5587,16 +10132,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is AmendmentLedgerEntry && metadata == other.metadata && id == other.id && ledgerSequenceNumber == other.ledgerSequenceNumber && entryStatus == other.entryStatus && customer == other.customer && startingBalance == other.startingBalance && endingBalance == other.endingBalance && amount == other.amount && currency == other.currency && createdAt == other.createdAt && description == other.description && creditBlock == other.creditBlock && entryType == other.entryType && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Amendment && id == other.id && amount == other.amount && createdAt == other.createdAt && creditBlock == other.creditBlock && currency == other.currency && customer == other.customer && description == other.description && endingBalance == other.endingBalance && entryStatus == other.entryStatus && entryType == other.entryType && ledgerSequenceNumber == other.ledgerSequenceNumber && metadata == other.metadata && startingBalance == other.startingBalance && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(metadata, id, ledgerSequenceNumber, entryStatus, customer, startingBalance, endingBalance, amount, currency, createdAt, description, creditBlock, entryType, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, amount, createdAt, creditBlock, currency, customer, description, endingBalance, entryStatus, entryType, ledgerSequenceNumber, metadata, startingBalance, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "AmendmentLedgerEntry{metadata=$metadata, id=$id, ledgerSequenceNumber=$ledgerSequenceNumber, entryStatus=$entryStatus, customer=$customer, startingBalance=$startingBalance, endingBalance=$endingBalance, amount=$amount, currency=$currency, createdAt=$createdAt, description=$description, creditBlock=$creditBlock, entryType=$entryType, additionalProperties=$additionalProperties}"
+            "Amendment{id=$id, amount=$amount, createdAt=$createdAt, creditBlock=$creditBlock, currency=$currency, customer=$customer, description=$description, endingBalance=$endingBalance, entryStatus=$entryStatus, entryType=$entryType, ledgerSequenceNumber=$ledgerSequenceNumber, metadata=$metadata, startingBalance=$startingBalance, additionalProperties=$additionalProperties}"
     }
 }

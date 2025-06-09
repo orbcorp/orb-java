@@ -2,80 +2,68 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Returns a paginated list of unexpired, non-zero credit blocks for a customer.
+ *
+ * If `include_all_blocks` is set to `true`, all credit blocks (including expired and depleted
+ * blocks) will be included in the response.
+ *
+ * Note that `currency` defaults to credits if not specified. To use a real world currency, set
+ * `currency` to an ISO 4217 string.
+ */
 class CustomerCreditListParams
-constructor(
-    private val customerId: String,
+private constructor(
+    private val customerId: String?,
     private val currency: String?,
     private val cursor: String?,
     private val includeAllBlocks: Boolean?,
     private val limit: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun customerId(): String = customerId
+    fun customerId(): Optional<String> = Optional.ofNullable(customerId)
 
+    /** The ledger currency or custom pricing unit to use. */
     fun currency(): Optional<String> = Optional.ofNullable(currency)
 
+    /**
+     * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+     * initial request.
+     */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
+    /**
+     * If set to True, all expired and depleted blocks, as well as active block will be returned.
+     */
     fun includeAllBlocks(): Optional<Boolean> = Optional.ofNullable(includeAllBlocks)
 
+    /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic
-    internal fun getQueryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.currency?.let { queryParams.put("currency", listOf(it.toString())) }
-        this.cursor?.let { queryParams.put("cursor", listOf(it.toString())) }
-        this.includeAllBlocks?.let { queryParams.put("include_all_blocks", listOf(it.toString())) }
-        this.limit?.let { queryParams.put("limit", listOf(it.toString())) }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> customerId
-            else -> ""
-        }
-    }
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerCreditListParams && customerId == other.customerId && currency == other.currency && cursor == other.cursor && includeAllBlocks == other.includeAllBlocks && limit == other.limit && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, currency, cursor, includeAllBlocks, limit, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CustomerCreditListParams{customerId=$customerId, currency=$currency, cursor=$cursor, includeAllBlocks=$includeAllBlocks, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): CustomerCreditListParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [CustomerCreditListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [CustomerCreditListParams]. */
+    class Builder internal constructor() {
 
         private var customerId: String? = null
         private var currency: String? = null
@@ -87,33 +75,67 @@ constructor(
 
         @JvmSynthetic
         internal fun from(customerCreditListParams: CustomerCreditListParams) = apply {
-            this.customerId = customerCreditListParams.customerId
-            this.currency = customerCreditListParams.currency
-            this.cursor = customerCreditListParams.cursor
-            this.includeAllBlocks = customerCreditListParams.includeAllBlocks
-            this.limit = customerCreditListParams.limit
-            additionalHeaders(customerCreditListParams.additionalHeaders)
-            additionalQueryParams(customerCreditListParams.additionalQueryParams)
+            customerId = customerCreditListParams.customerId
+            currency = customerCreditListParams.currency
+            cursor = customerCreditListParams.cursor
+            includeAllBlocks = customerCreditListParams.includeAllBlocks
+            limit = customerCreditListParams.limit
+            additionalHeaders = customerCreditListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerCreditListParams.additionalQueryParams.toBuilder()
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String?) = apply { this.customerId = customerId }
+
+        /** Alias for calling [Builder.customerId] with `customerId.orElse(null)`. */
+        fun customerId(customerId: Optional<String>) = customerId(customerId.getOrNull())
 
         /** The ledger currency or custom pricing unit to use. */
-        fun currency(currency: String) = apply { this.currency = currency }
+        fun currency(currency: String?) = apply { this.currency = currency }
+
+        /** Alias for calling [Builder.currency] with `currency.orElse(null)`. */
+        fun currency(currency: Optional<String>) = currency(currency.getOrNull())
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: String) = apply { this.cursor = cursor }
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /** Include all blocks, not just active ones. */
-        fun includeAllBlocks(includeAllBlocks: Boolean) = apply {
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
+
+        /**
+         * If set to True, all expired and depleted blocks, as well as active block will be
+         * returned.
+         */
+        fun includeAllBlocks(includeAllBlocks: Boolean?) = apply {
             this.includeAllBlocks = includeAllBlocks
         }
 
+        /**
+         * Alias for [Builder.includeAllBlocks].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun includeAllBlocks(includeAllBlocks: Boolean) =
+            includeAllBlocks(includeAllBlocks as Boolean?)
+
+        /** Alias for calling [Builder.includeAllBlocks] with `includeAllBlocks.orElse(null)`. */
+        fun includeAllBlocks(includeAllBlocks: Optional<Boolean>) =
+            includeAllBlocks(includeAllBlocks.getOrNull())
+
         /** The number of items to fetch. Defaults to 20. */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -213,9 +235,14 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [CustomerCreditListParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): CustomerCreditListParams =
             CustomerCreditListParams(
-                checkNotNull(customerId) { "`customerId` is required but was not set" },
+                customerId,
                 currency,
                 cursor,
                 includeAllBlocks,
@@ -224,4 +251,36 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> customerId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                currency?.let { put("currency", it) }
+                cursor?.let { put("cursor", it) }
+                includeAllBlocks?.let { put("include_all_blocks", it.toString()) }
+                limit?.let { put("limit", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerCreditListParams && customerId == other.customerId && currency == other.currency && cursor == other.cursor && includeAllBlocks == other.includeAllBlocks && limit == other.limit && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, currency, cursor, includeAllBlocks, limit, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CustomerCreditListParams{customerId=$customerId, currency=$currency, cursor=$cursor, includeAllBlocks=$includeAllBlocks, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

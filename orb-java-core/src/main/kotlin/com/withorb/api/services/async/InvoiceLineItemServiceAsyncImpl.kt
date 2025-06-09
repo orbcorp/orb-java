@@ -3,6 +3,7 @@
 package com.withorb.api.services.async
 
 import com.withorb.api.core.ClientOptions
+import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
@@ -10,48 +11,62 @@ import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
 import com.withorb.api.core.http.HttpResponse.Handler
-import com.withorb.api.core.json
-import com.withorb.api.errors.OrbError
+import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.core.http.json
+import com.withorb.api.core.http.parseable
+import com.withorb.api.core.prepareAsync
 import com.withorb.api.models.InvoiceLineItemCreateParams
 import com.withorb.api.models.InvoiceLineItemCreateResponse
 import java.util.concurrent.CompletableFuture
 
 class InvoiceLineItemServiceAsyncImpl
-constructor(
-    private val clientOptions: ClientOptions,
-) : InvoiceLineItemServiceAsync {
+internal constructor(private val clientOptions: ClientOptions) : InvoiceLineItemServiceAsync {
 
-    private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
+    private val withRawResponse: InvoiceLineItemServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
-    private val createHandler: Handler<InvoiceLineItemCreateResponse> =
-        jsonHandler<InvoiceLineItemCreateResponse>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
+    override fun withRawResponse(): InvoiceLineItemServiceAsync.WithRawResponse = withRawResponse
 
-    /**
-     * This creates a one-off fixed fee invoice line item on an Invoice. This can only be done for
-     * invoices that are in a `draft` status.
-     */
     override fun create(
         params: InvoiceLineItemCreateParams,
-        requestOptions: RequestOptions
-    ): CompletableFuture<InvoiceLineItemCreateResponse> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.POST)
-                .addPathSegments("invoice_line_items")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .body(json(clientOptions.jsonMapper, params.getBody()))
-                .build()
-        return clientOptions.httpClient.executeAsync(request, requestOptions).thenApply { response
-            ->
-            response
-                .use { createHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
+        requestOptions: RequestOptions,
+    ): CompletableFuture<InvoiceLineItemCreateResponse> =
+        // post /invoice_line_items
+        withRawResponse().create(params, requestOptions).thenApply { it.parse() }
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        InvoiceLineItemServiceAsync.WithRawResponse {
+
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        private val createHandler: Handler<InvoiceLineItemCreateResponse> =
+            jsonHandler<InvoiceLineItemCreateResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun create(
+            params: InvoiceLineItemCreateParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<InvoiceLineItemCreateResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("invoice_line_items")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { createHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }

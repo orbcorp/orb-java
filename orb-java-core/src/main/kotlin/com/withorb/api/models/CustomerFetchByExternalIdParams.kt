@@ -2,58 +2,48 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint is used to fetch customer details given an `external_customer_id` (see
+ * [Customer ID Aliases](/events-and-metrics/customer-aliases)).
+ *
+ * Note that the resource and semantics of this endpoint exactly mirror
+ * [Get Customer](fetch-customer).
+ */
 class CustomerFetchByExternalIdParams
-constructor(
-    private val externalCustomerId: String,
+private constructor(
+    private val externalCustomerId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun externalCustomerId(): String = externalCustomerId
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> externalCustomerId
-            else -> ""
-        }
-    }
+    fun externalCustomerId(): Optional<String> = Optional.ofNullable(externalCustomerId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CustomerFetchByExternalIdParams && externalCustomerId == other.externalCustomerId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalCustomerId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CustomerFetchByExternalIdParams{externalCustomerId=$externalCustomerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): CustomerFetchByExternalIdParams = builder().build()
+
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [CustomerFetchByExternalIdParams].
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [CustomerFetchByExternalIdParams]. */
+    class Builder internal constructor() {
 
         private var externalCustomerId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -62,14 +52,21 @@ constructor(
         @JvmSynthetic
         internal fun from(customerFetchByExternalIdParams: CustomerFetchByExternalIdParams) =
             apply {
-                this.externalCustomerId = customerFetchByExternalIdParams.externalCustomerId
-                additionalHeaders(customerFetchByExternalIdParams.additionalHeaders)
-                additionalQueryParams(customerFetchByExternalIdParams.additionalQueryParams)
+                externalCustomerId = customerFetchByExternalIdParams.externalCustomerId
+                additionalHeaders = customerFetchByExternalIdParams.additionalHeaders.toBuilder()
+                additionalQueryParams =
+                    customerFetchByExternalIdParams.additionalQueryParams.toBuilder()
             }
 
-        fun externalCustomerId(externalCustomerId: String) = apply {
+        fun externalCustomerId(externalCustomerId: String?) = apply {
             this.externalCustomerId = externalCustomerId
         }
+
+        /**
+         * Alias for calling [Builder.externalCustomerId] with `externalCustomerId.orElse(null)`.
+         */
+        fun externalCustomerId(externalCustomerId: Optional<String>) =
+            externalCustomerId(externalCustomerId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -169,13 +166,39 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [CustomerFetchByExternalIdParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): CustomerFetchByExternalIdParams =
             CustomerFetchByExternalIdParams(
-                checkNotNull(externalCustomerId) {
-                    "`externalCustomerId` is required but was not set"
-                },
+                externalCustomerId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> externalCustomerId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CustomerFetchByExternalIdParams && externalCustomerId == other.externalCustomerId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalCustomerId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CustomerFetchByExternalIdParams{externalCustomerId=$externalCustomerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

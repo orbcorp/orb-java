@@ -1,10 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async.customers
 
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CustomerBalanceTransactionCreateParams
 import com.withorb.api.models.CustomerBalanceTransactionCreateResponse
 import com.withorb.api.models.CustomerBalanceTransactionListPageAsync
@@ -14,13 +13,38 @@ import java.util.concurrent.CompletableFuture
 interface BalanceTransactionServiceAsync {
 
     /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
      * Creates an immutable balance transaction that updates the customer's balance and returns back
      * the newly created transaction.
      */
-    @JvmOverloads
+    fun create(
+        customerId: String,
+        params: CustomerBalanceTransactionCreateParams,
+    ): CompletableFuture<CustomerBalanceTransactionCreateResponse> =
+        create(customerId, params, RequestOptions.none())
+
+    /** @see [create] */
+    fun create(
+        customerId: String,
+        params: CustomerBalanceTransactionCreateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CustomerBalanceTransactionCreateResponse> =
+        create(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+    /** @see [create] */
+    fun create(
+        params: CustomerBalanceTransactionCreateParams
+    ): CompletableFuture<CustomerBalanceTransactionCreateResponse> =
+        create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: CustomerBalanceTransactionCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerBalanceTransactionCreateResponse>
 
     /**
@@ -43,16 +67,123 @@ interface BalanceTransactionServiceAsync {
      * This endpoint retrieves all customer balance transactions in reverse chronological order for
      * a single customer, providing a complete audit trail of all adjustments and invoice
      * applications.
-     *
-     * ## Eligibility
-     *
-     * The customer balance can only be applied to invoices or adjusted manually if invoices are not
-     * synced to a separate invoicing provider. If a payment gateway such as Stripe is used, the
-     * balance will be applied to the invoice before forwarding payment to the gateway.
      */
-    @JvmOverloads
+    fun list(customerId: String): CompletableFuture<CustomerBalanceTransactionListPageAsync> =
+        list(customerId, CustomerBalanceTransactionListParams.none())
+
+    /** @see [list] */
+    fun list(
+        customerId: String,
+        params: CustomerBalanceTransactionListParams = CustomerBalanceTransactionListParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CustomerBalanceTransactionListPageAsync> =
+        list(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+    /** @see [list] */
+    fun list(
+        customerId: String,
+        params: CustomerBalanceTransactionListParams = CustomerBalanceTransactionListParams.none(),
+    ): CompletableFuture<CustomerBalanceTransactionListPageAsync> =
+        list(customerId, params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: CustomerBalanceTransactionListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerBalanceTransactionListPageAsync>
+
+    /** @see [list] */
+    fun list(
+        params: CustomerBalanceTransactionListParams
+    ): CompletableFuture<CustomerBalanceTransactionListPageAsync> =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
+    fun list(
+        customerId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CustomerBalanceTransactionListPageAsync> =
+        list(customerId, CustomerBalanceTransactionListParams.none(), requestOptions)
+
+    /**
+     * A view of [BalanceTransactionServiceAsync] that provides access to raw HTTP responses for
+     * each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `post /customers/{customer_id}/balance_transactions`, but
+         * is otherwise the same as [BalanceTransactionServiceAsync.create].
+         */
+        fun create(
+            customerId: String,
+            params: CustomerBalanceTransactionCreateParams,
+        ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionCreateResponse>> =
+            create(customerId, params, RequestOptions.none())
+
+        /** @see [create] */
+        fun create(
+            customerId: String,
+            params: CustomerBalanceTransactionCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionCreateResponse>> =
+            create(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+        /** @see [create] */
+        fun create(
+            params: CustomerBalanceTransactionCreateParams
+        ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionCreateResponse>> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
+        fun create(
+            params: CustomerBalanceTransactionCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionCreateResponse>>
+
+        /**
+         * Returns a raw HTTP response for `get /customers/{customer_id}/balance_transactions`, but
+         * is otherwise the same as [BalanceTransactionServiceAsync.list].
+         */
+        fun list(
+            customerId: String
+        ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionListPageAsync>> =
+            list(customerId, CustomerBalanceTransactionListParams.none())
+
+        /** @see [list] */
+        fun list(
+            customerId: String,
+            params: CustomerBalanceTransactionListParams =
+                CustomerBalanceTransactionListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionListPageAsync>> =
+            list(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+        /** @see [list] */
+        fun list(
+            customerId: String,
+            params: CustomerBalanceTransactionListParams =
+                CustomerBalanceTransactionListParams.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionListPageAsync>> =
+            list(customerId, params, RequestOptions.none())
+
+        /** @see [list] */
+        fun list(
+            params: CustomerBalanceTransactionListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionListPageAsync>>
+
+        /** @see [list] */
+        fun list(
+            params: CustomerBalanceTransactionListParams
+        ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
+        fun list(
+            customerId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionListPageAsync>> =
+            list(customerId, CustomerBalanceTransactionListParams.none(), requestOptions)
+    }
 }

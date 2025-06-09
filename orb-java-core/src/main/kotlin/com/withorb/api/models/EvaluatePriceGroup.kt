@@ -4,6 +4,7 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.ObjectCodec
@@ -18,127 +19,255 @@ import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.allMaxBy
+import com.withorb.api.core.checkKnown
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.getOrThrow
 import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
-@JsonDeserialize(builder = EvaluatePriceGroup.Builder::class)
-@NoAutoDetect
 class EvaluatePriceGroup
 private constructor(
+    private val amount: JsonField<String>,
     private val groupingValues: JsonField<List<GroupingValue>>,
     private val quantity: JsonField<Double>,
-    private val amount: JsonField<String>,
-    private val additionalProperties: Map<String, JsonValue>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
+    @JsonCreator
+    private constructor(
+        @JsonProperty("amount") @ExcludeMissing amount: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("grouping_values")
+        @ExcludeMissing
+        groupingValues: JsonField<List<GroupingValue>> = JsonMissing.of(),
+        @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Double> = JsonMissing.of(),
+    ) : this(amount, groupingValues, quantity, mutableMapOf())
 
-    /** The values for the group in the order specified by `grouping_keys` */
-    fun groupingValues(): List<GroupingValue> = groupingValues.getRequired("grouping_values")
-
-    /** The price's usage quantity for the group */
-    fun quantity(): Double = quantity.getRequired("quantity")
-
-    /** The price's output for the group */
+    /**
+     * The price's output for the group
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun amount(): String = amount.getRequired("amount")
 
-    /** The values for the group in the order specified by `grouping_keys` */
-    @JsonProperty("grouping_values") @ExcludeMissing fun _groupingValues() = groupingValues
+    /**
+     * The values for the group in the order specified by `grouping_keys`
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun groupingValues(): List<GroupingValue> = groupingValues.getRequired("grouping_values")
 
-    /** The price's usage quantity for the group */
-    @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+    /**
+     * The price's usage quantity for the group
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun quantity(): Double = quantity.getRequired("quantity")
 
-    /** The price's output for the group */
-    @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
+    /**
+     * Returns the raw JSON value of [amount].
+     *
+     * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
+
+    /**
+     * Returns the raw JSON value of [groupingValues].
+     *
+     * Unlike [groupingValues], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("grouping_values")
+    @ExcludeMissing
+    fun _groupingValues(): JsonField<List<GroupingValue>> = groupingValues
+
+    /**
+     * Returns the raw JSON value of [quantity].
+     *
+     * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
+
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    fun validate(): EvaluatePriceGroup = apply {
-        if (!validated) {
-            groupingValues()
-            quantity()
-            amount()
-            validated = true
-        }
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [EvaluatePriceGroup].
+         *
+         * The following fields are required:
+         * ```java
+         * .amount()
+         * .groupingValues()
+         * .quantity()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    /** A builder for [EvaluatePriceGroup]. */
+    class Builder internal constructor() {
 
-        private var groupingValues: JsonField<List<GroupingValue>> = JsonMissing.of()
-        private var quantity: JsonField<Double> = JsonMissing.of()
-        private var amount: JsonField<String> = JsonMissing.of()
+        private var amount: JsonField<String>? = null
+        private var groupingValues: JsonField<MutableList<GroupingValue>>? = null
+        private var quantity: JsonField<Double>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(evaluatePriceGroup: EvaluatePriceGroup) = apply {
-            this.groupingValues = evaluatePriceGroup.groupingValues
-            this.quantity = evaluatePriceGroup.quantity
-            this.amount = evaluatePriceGroup.amount
-            additionalProperties(evaluatePriceGroup.additionalProperties)
+            amount = evaluatePriceGroup.amount
+            groupingValues = evaluatePriceGroup.groupingValues.map { it.toMutableList() }
+            quantity = evaluatePriceGroup.quantity
+            additionalProperties = evaluatePriceGroup.additionalProperties.toMutableMap()
         }
+
+        /** The price's output for the group */
+        fun amount(amount: String) = amount(JsonField.of(amount))
+
+        /**
+         * Sets [Builder.amount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.amount] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun amount(amount: JsonField<String>) = apply { this.amount = amount }
 
         /** The values for the group in the order specified by `grouping_keys` */
         fun groupingValues(groupingValues: List<GroupingValue>) =
             groupingValues(JsonField.of(groupingValues))
 
-        /** The values for the group in the order specified by `grouping_keys` */
-        @JsonProperty("grouping_values")
-        @ExcludeMissing
+        /**
+         * Sets [Builder.groupingValues] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.groupingValues] with a well-typed `List<GroupingValue>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
         fun groupingValues(groupingValues: JsonField<List<GroupingValue>>) = apply {
-            this.groupingValues = groupingValues
+            this.groupingValues = groupingValues.map { it.toMutableList() }
         }
+
+        /**
+         * Adds a single [GroupingValue] to [groupingValues].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addGroupingValue(groupingValue: GroupingValue) = apply {
+            groupingValues =
+                (groupingValues ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("groupingValues", it).add(groupingValue)
+                }
+        }
+
+        /** Alias for calling [addGroupingValue] with `GroupingValue.ofString(string)`. */
+        fun addGroupingValue(string: String) = addGroupingValue(GroupingValue.ofString(string))
+
+        /** Alias for calling [addGroupingValue] with `GroupingValue.ofNumber(number)`. */
+        fun addGroupingValue(number: Double) = addGroupingValue(GroupingValue.ofNumber(number))
+
+        /** Alias for calling [addGroupingValue] with `GroupingValue.ofBool(bool)`. */
+        fun addGroupingValue(bool: Boolean) = addGroupingValue(GroupingValue.ofBool(bool))
 
         /** The price's usage quantity for the group */
         fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
-        /** The price's usage quantity for the group */
-        @JsonProperty("quantity")
-        @ExcludeMissing
+        /**
+         * Sets [Builder.quantity] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.quantity] with a well-typed [Double] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
-
-        /** The price's output for the group */
-        fun amount(amount: String) = amount(JsonField.of(amount))
-
-        /** The price's output for the group */
-        @JsonProperty("amount")
-        @ExcludeMissing
-        fun amount(amount: JsonField<String>) = apply { this.amount = amount }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
         }
 
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
+        /**
+         * Returns an immutable instance of [EvaluatePriceGroup].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .amount()
+         * .groupingValues()
+         * .quantity()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): EvaluatePriceGroup =
             EvaluatePriceGroup(
-                groupingValues.map { it.toImmutable() },
-                quantity,
-                amount,
-                additionalProperties.toImmutable(),
+                checkRequired("amount", amount),
+                checkRequired("groupingValues", groupingValues).map { it.toImmutable() },
+                checkRequired("quantity", quantity),
+                additionalProperties.toMutableMap(),
             )
     }
+
+    private var validated: Boolean = false
+
+    fun validate(): EvaluatePriceGroup = apply {
+        if (validated) {
+            return@apply
+        }
+
+        amount()
+        groupingValues().forEach { it.validate() }
+        quantity()
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: OrbInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (if (amount.asKnown().isPresent) 1 else 0) +
+            (groupingValues.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (quantity.asKnown().isPresent) 1 else 0)
 
     @JsonDeserialize(using = GroupingValue.Deserializer::class)
     @JsonSerialize(using = GroupingValue.Serializer::class)
@@ -149,8 +278,6 @@ private constructor(
         private val bool: Boolean? = null,
         private val _json: JsonValue? = null,
     ) {
-
-        private var validated: Boolean = false
 
         fun string(): Optional<String> = Optional.ofNullable(string)
 
@@ -172,23 +299,60 @@ private constructor(
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
-        fun <T> accept(visitor: Visitor<T>): T {
-            return when {
+        fun <T> accept(visitor: Visitor<T>): T =
+            when {
                 string != null -> visitor.visitString(string)
                 number != null -> visitor.visitNumber(number)
                 bool != null -> visitor.visitBool(bool)
                 else -> visitor.unknown(_json)
             }
-        }
+
+        private var validated: Boolean = false
 
         fun validate(): GroupingValue = apply {
-            if (!validated) {
-                if (string == null && number == null && bool == null) {
-                    throw OrbInvalidDataException("Unknown GroupingValue: $_json")
-                }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            accept(
+                object : Visitor<Unit> {
+                    override fun visitString(string: String) {}
+
+                    override fun visitNumber(number: Double) {}
+
+                    override fun visitBool(bool: Boolean) {}
+                }
+            )
+            validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            accept(
+                object : Visitor<Int> {
+                    override fun visitString(string: String) = 1
+
+                    override fun visitNumber(number: Double) = 1
+
+                    override fun visitBool(bool: Boolean) = 1
+
+                    override fun unknown(json: JsonValue?) = 0
+                }
+            )
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -218,6 +382,10 @@ private constructor(
             @JvmStatic fun ofBool(bool: Boolean) = GroupingValue(bool = bool)
         }
 
+        /**
+         * An interface that defines how to map each variant of [GroupingValue] to a value of type
+         * [T].
+         */
         interface Visitor<out T> {
 
             fun visitString(string: String): T
@@ -226,36 +394,60 @@ private constructor(
 
             fun visitBool(bool: Boolean): T
 
+            /**
+             * Maps an unknown variant of [GroupingValue] to a value of type [T].
+             *
+             * An instance of [GroupingValue] can contain an unknown variant if it was deserialized
+             * from data that doesn't match any known variant. For example, if the SDK is on an
+             * older version than the API, then the API may respond with new variants that the SDK
+             * is unaware of.
+             *
+             * @throws OrbInvalidDataException in the default implementation.
+             */
             fun unknown(json: JsonValue?): T {
                 throw OrbInvalidDataException("Unknown GroupingValue: $json")
             }
         }
 
-        class Deserializer : BaseDeserializer<GroupingValue>(GroupingValue::class) {
+        internal class Deserializer : BaseDeserializer<GroupingValue>(GroupingValue::class) {
 
             override fun ObjectCodec.deserialize(node: JsonNode): GroupingValue {
                 val json = JsonValue.fromJsonNode(node)
 
-                tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                    return GroupingValue(string = it, _json = json)
+                val bestMatches =
+                    sequenceOf(
+                            tryDeserialize(node, jacksonTypeRef<String>())?.let {
+                                GroupingValue(string = it, _json = json)
+                            },
+                            tryDeserialize(node, jacksonTypeRef<Double>())?.let {
+                                GroupingValue(number = it, _json = json)
+                            },
+                            tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
+                                GroupingValue(bool = it, _json = json)
+                            },
+                        )
+                        .filterNotNull()
+                        .allMaxBy { it.validity() }
+                        .toList()
+                return when (bestMatches.size) {
+                    // This can happen if what we're deserializing is completely incompatible with
+                    // all the possible variants (e.g. deserializing from object).
+                    0 -> GroupingValue(_json = json)
+                    1 -> bestMatches.single()
+                    // If there's more than one match with the highest validity, then use the first
+                    // completely valid match, or simply the first match if none are completely
+                    // valid.
+                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
                 }
-                tryDeserialize(node, jacksonTypeRef<Double>())?.let {
-                    return GroupingValue(number = it, _json = json)
-                }
-                tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
-                    return GroupingValue(bool = it, _json = json)
-                }
-
-                return GroupingValue(_json = json)
             }
         }
 
-        class Serializer : BaseSerializer<GroupingValue>(GroupingValue::class) {
+        internal class Serializer : BaseSerializer<GroupingValue>(GroupingValue::class) {
 
             override fun serialize(
                 value: GroupingValue,
                 generator: JsonGenerator,
-                provider: SerializerProvider
+                provider: SerializerProvider,
             ) {
                 when {
                     value.string != null -> generator.writeObject(value.string)
@@ -273,15 +465,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is EvaluatePriceGroup && groupingValues == other.groupingValues && quantity == other.quantity && amount == other.amount && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is EvaluatePriceGroup && amount == other.amount && groupingValues == other.groupingValues && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(groupingValues, quantity, amount, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(amount, groupingValues, quantity, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "EvaluatePriceGroup{groupingValues=$groupingValues, quantity=$quantity, amount=$amount, additionalProperties=$additionalProperties}"
+        "EvaluatePriceGroup{amount=$amount, groupingValues=$groupingValues, quantity=$quantity, additionalProperties=$additionalProperties}"
 }

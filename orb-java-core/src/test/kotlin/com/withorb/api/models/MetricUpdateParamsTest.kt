@@ -2,46 +2,59 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
+import com.withorb.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class MetricUpdateParamsTest {
+internal class MetricUpdateParamsTest {
 
     @Test
-    fun createMetricUpdateParams() {
+    fun create() {
         MetricUpdateParams.builder()
             .metricId("metric_id")
-            .metadata(MetricUpdateParams.Metadata.builder().build())
+            .metadata(
+                MetricUpdateParams.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
             .build()
     }
 
     @Test
-    fun getBody() {
+    fun pathParams() {
+        val params = MetricUpdateParams.builder().metricId("metric_id").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("metric_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
+    fun body() {
         val params =
             MetricUpdateParams.builder()
                 .metricId("metric_id")
-                .metadata(MetricUpdateParams.Metadata.builder().build())
+                .metadata(
+                    MetricUpdateParams.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-        assertThat(body.metadata()).isEqualTo(MetricUpdateParams.Metadata.builder().build())
+
+        val body = params._body()
+
+        assertThat(body.metadata())
+            .contains(
+                MetricUpdateParams.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params = MetricUpdateParams.builder().metricId("metric_id").build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-    }
 
-    @Test
-    fun getPathParam() {
-        val params = MetricUpdateParams.builder().metricId("metric_id").build()
-        assertThat(params).isNotNull
-        // path param "metricId"
-        assertThat(params.getPathParam(0)).isEqualTo("metric_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        val body = params._body()
     }
 }

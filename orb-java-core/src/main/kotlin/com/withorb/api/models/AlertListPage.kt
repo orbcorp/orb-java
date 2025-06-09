@@ -2,200 +2,130 @@
 
 package com.withorb.api.models
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.withorb.api.core.ExcludeMissing
-import com.withorb.api.core.JsonField
-import com.withorb.api.core.JsonMissing
-import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toImmutable
+import com.withorb.api.core.AutoPager
+import com.withorb.api.core.Page
+import com.withorb.api.core.checkRequired
 import com.withorb.api.services.blocking.AlertService
 import java.util.Objects
 import java.util.Optional
-import java.util.stream.Stream
-import java.util.stream.StreamSupport
+import kotlin.jvm.optionals.getOrNull
 
+/** @see [AlertService.list] */
 class AlertListPage
 private constructor(
-    private val alertsService: AlertService,
+    private val service: AlertService,
     private val params: AlertListParams,
-    private val response: Response,
-) {
+    private val response: AlertListPageResponse,
+) : Page<Alert> {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [AlertListPageResponse], but gracefully handles missing data.
+     *
+     * @see [AlertListPageResponse.data]
+     */
+    fun data(): List<Alert> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
-    fun data(): List<Alert> = response().data()
+    /**
+     * Delegates to [AlertListPageResponse], but gracefully handles missing data.
+     *
+     * @see [AlertListPageResponse.paginationMetadata]
+     */
+    fun paginationMetadata(): Optional<PaginationMetadata> =
+        response._paginationMetadata().getOptional("pagination_metadata")
 
-    fun paginationMetadata(): PaginationMetadata = response().paginationMetadata()
+    override fun items(): List<Alert> = data()
+
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() &&
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.isPresent
+
+    fun nextPageParams(): AlertListParams {
+        val nextCursor =
+            paginationMetadata().flatMap { it._nextCursor().getOptional("next_cursor") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().cursor(nextCursor).build()
+    }
+
+    override fun nextPage(): AlertListPage = service.list(nextPageParams())
+
+    fun autoPager(): AutoPager<Alert> = AutoPager.from(this)
+
+    /** The parameters that were used to request this page. */
+    fun params(): AlertListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): AlertListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
+    companion object {
+
+        /**
+         * Returns a mutable builder for constructing an instance of [AlertListPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [AlertListPage]. */
+    class Builder internal constructor() {
+
+        private var service: AlertService? = null
+        private var params: AlertListParams? = null
+        private var response: AlertListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(alertListPage: AlertListPage) = apply {
+            service = alertListPage.service
+            params = alertListPage.params
+            response = alertListPage.response
+        }
+
+        fun service(service: AlertService) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: AlertListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: AlertListPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [AlertListPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): AlertListPage =
+            AlertListPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is AlertListPage && alertsService == other.alertsService && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is AlertListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(alertsService, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
 
-    override fun toString() =
-        "AlertListPage{alertsService=$alertsService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        if (data().isEmpty()) {
-            return false
-        }
-
-        return paginationMetadata().nextCursor().isPresent
-    }
-
-    fun getNextPageParams(): Optional<AlertListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
-
-        return Optional.of(
-            AlertListParams.builder()
-                .from(params)
-                .apply { paginationMetadata().nextCursor().ifPresent { this.cursor(it) } }
-                .build()
-        )
-    }
-
-    fun getNextPage(): Optional<AlertListPage> {
-        return getNextPageParams().map { alertsService.list(it) }
-    }
-
-    fun autoPager(): AutoPager = AutoPager(this)
-
-    companion object {
-
-        @JvmStatic
-        fun of(alertsService: AlertService, params: AlertListParams, response: Response) =
-            AlertListPage(
-                alertsService,
-                params,
-                response,
-            )
-    }
-
-    @JsonDeserialize(builder = Response.Builder::class)
-    @NoAutoDetect
-    class Response
-    constructor(
-        private val data: JsonField<List<Alert>>,
-        private val paginationMetadata: JsonField<PaginationMetadata>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        private var validated: Boolean = false
-
-        fun data(): List<Alert> = data.getNullable("data") ?: listOf()
-
-        fun paginationMetadata(): PaginationMetadata =
-            paginationMetadata.getRequired("pagination_metadata")
-
-        @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<Alert>>> = Optional.ofNullable(data)
-
-        @JsonProperty("pagination_metadata")
-        fun _paginationMetadata(): Optional<JsonField<PaginationMetadata>> =
-            Optional.ofNullable(paginationMetadata)
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun validate(): Response = apply {
-            if (!validated) {
-                data().map { it.validate() }
-                paginationMetadata().validate()
-                validated = true
-            }
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && data == other.data && paginationMetadata == other.paginationMetadata && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(data, paginationMetadata, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{data=$data, paginationMetadata=$paginationMetadata, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var data: JsonField<List<Alert>> = JsonMissing.of()
-            private var paginationMetadata: JsonField<PaginationMetadata> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.data = page.data
-                this.paginationMetadata = page.paginationMetadata
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun data(data: List<Alert>) = data(JsonField.of(data))
-
-            @JsonProperty("data")
-            fun data(data: JsonField<List<Alert>>) = apply { this.data = data }
-
-            fun paginationMetadata(paginationMetadata: PaginationMetadata) =
-                paginationMetadata(JsonField.of(paginationMetadata))
-
-            @JsonProperty("pagination_metadata")
-            fun paginationMetadata(paginationMetadata: JsonField<PaginationMetadata>) = apply {
-                this.paginationMetadata = paginationMetadata
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun build() =
-                Response(
-                    data,
-                    paginationMetadata,
-                    additionalProperties.toImmutable(),
-                )
-        }
-    }
-
-    class AutoPager
-    constructor(
-        private val firstPage: AlertListPage,
-    ) : Iterable<Alert> {
-
-        override fun iterator(): Iterator<Alert> = iterator {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.data().size) {
-                    yield(page.data()[index++])
-                }
-                page = page.getNextPage().orElse(null) ?: break
-                index = 0
-            }
-        }
-
-        fun stream(): Stream<Alert> {
-            return StreamSupport.stream(spliterator(), false)
-        }
-    }
+    override fun toString() = "AlertListPage{service=$service, params=$params, response=$response}"
 }

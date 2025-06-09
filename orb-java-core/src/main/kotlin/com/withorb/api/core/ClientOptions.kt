@@ -9,21 +9,38 @@ import com.withorb.api.core.http.PhantomReachableClosingHttpClient
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.http.RetryingHttpClient
 import java.time.Clock
+import java.util.Optional
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
+import java.util.concurrent.ThreadFactory
+import java.util.concurrent.atomic.AtomicLong
+import kotlin.jvm.optionals.getOrNull
 
 class ClientOptions
 private constructor(
     private val originalHttpClient: HttpClient,
     @get:JvmName("httpClient") val httpClient: HttpClient,
+    @get:JvmName("checkJacksonVersionCompatibility") val checkJacksonVersionCompatibility: Boolean,
     @get:JvmName("jsonMapper") val jsonMapper: JsonMapper,
+    @get:JvmName("streamHandlerExecutor") val streamHandlerExecutor: Executor,
     @get:JvmName("clock") val clock: Clock,
     @get:JvmName("baseUrl") val baseUrl: String,
     @get:JvmName("headers") val headers: Headers,
     @get:JvmName("queryParams") val queryParams: QueryParams,
     @get:JvmName("responseValidation") val responseValidation: Boolean,
+    @get:JvmName("timeout") val timeout: Timeout,
     @get:JvmName("maxRetries") val maxRetries: Int,
     @get:JvmName("apiKey") val apiKey: String,
-    @get:JvmName("webhookSecret") val webhookSecret: String?,
+    private val webhookSecret: String?,
 ) {
+
+    init {
+        if (checkJacksonVersionCompatibility) {
+            checkJacksonVersionCompatibility()
+        }
+    }
+
+    fun webhookSecret(): Optional<String> = Optional.ofNullable(webhookSecret)
 
     fun toBuilder() = Builder().from(this)
 
@@ -31,20 +48,33 @@ private constructor(
 
         const val PRODUCTION_URL = "https://api.withorb.com/v1"
 
+        /**
+         * Returns a mutable builder for constructing an instance of [ClientOptions].
+         *
+         * The following fields are required:
+         * ```java
+         * .httpClient()
+         * .apiKey()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
 
         @JvmStatic fun fromEnv(): ClientOptions = builder().fromEnv().build()
     }
 
-    class Builder {
+    /** A builder for [ClientOptions]. */
+    class Builder internal constructor() {
 
         private var httpClient: HttpClient? = null
+        private var checkJacksonVersionCompatibility: Boolean = true
         private var jsonMapper: JsonMapper = jsonMapper()
+        private var streamHandlerExecutor: Executor? = null
         private var clock: Clock = Clock.systemUTC()
         private var baseUrl: String = PRODUCTION_URL
         private var headers: Headers.Builder = Headers.builder()
         private var queryParams: QueryParams.Builder = QueryParams.builder()
         private var responseValidation: Boolean = false
+        private var timeout: Timeout = Timeout.default()
         private var maxRetries: Int = 2
         private var apiKey: String? = null
         private var webhookSecret: String? = null
@@ -52,12 +82,15 @@ private constructor(
         @JvmSynthetic
         internal fun from(clientOptions: ClientOptions) = apply {
             httpClient = clientOptions.originalHttpClient
+            checkJacksonVersionCompatibility = clientOptions.checkJacksonVersionCompatibility
             jsonMapper = clientOptions.jsonMapper
+            streamHandlerExecutor = clientOptions.streamHandlerExecutor
             clock = clientOptions.clock
             baseUrl = clientOptions.baseUrl
             headers = clientOptions.headers.toBuilder()
             queryParams = clientOptions.queryParams.toBuilder()
             responseValidation = clientOptions.responseValidation
+            timeout = clientOptions.timeout
             maxRetries = clientOptions.maxRetries
             apiKey = clientOptions.apiKey
             webhookSecret = clientOptions.webhookSecret
@@ -65,11 +98,35 @@ private constructor(
 
         fun httpClient(httpClient: HttpClient) = apply { this.httpClient = httpClient }
 
+        fun checkJacksonVersionCompatibility(checkJacksonVersionCompatibility: Boolean) = apply {
+            this.checkJacksonVersionCompatibility = checkJacksonVersionCompatibility
+        }
+
         fun jsonMapper(jsonMapper: JsonMapper) = apply { this.jsonMapper = jsonMapper }
+
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
+            this.streamHandlerExecutor = streamHandlerExecutor
+        }
 
         fun clock(clock: Clock) = apply { this.clock = clock }
 
         fun baseUrl(baseUrl: String) = apply { this.baseUrl = baseUrl }
+
+        fun responseValidation(responseValidation: Boolean) = apply {
+            this.responseValidation = responseValidation
+        }
+
+        fun timeout(timeout: Timeout) = apply { this.timeout = timeout }
+
+        fun maxRetries(maxRetries: Int) = apply { this.maxRetries = maxRetries }
+
+        fun apiKey(apiKey: String) = apply { this.apiKey = apiKey }
+
+        fun webhookSecret(webhookSecret: String?) = apply { this.webhookSecret = webhookSecret }
+
+        /** Alias for calling [Builder.webhookSecret] with `webhookSecret.orElse(null)`. */
+        fun webhookSecret(webhookSecret: Optional<String>) =
+            webhookSecret(webhookSecret.getOrNull())
 
         fun headers(headers: Headers) = apply {
             this.headers.clear()
@@ -151,24 +208,30 @@ private constructor(
 
         fun removeAllQueryParams(keys: Set<String>) = apply { queryParams.removeAll(keys) }
 
-        fun responseValidation(responseValidation: Boolean) = apply {
-            this.responseValidation = responseValidation
-        }
-
-        fun maxRetries(maxRetries: Int) = apply { this.maxRetries = maxRetries }
-
-        fun apiKey(apiKey: String) = apply { this.apiKey = apiKey }
-
-        fun webhookSecret(webhookSecret: String?) = apply { this.webhookSecret = webhookSecret }
+        fun baseUrl(): String = baseUrl
 
         fun fromEnv() = apply {
+            System.getenv("ORB_BASE_URL")?.let { baseUrl(it) }
             System.getenv("ORB_API_KEY")?.let { apiKey(it) }
             System.getenv("ORB_WEBHOOK_SECRET")?.let { webhookSecret(it) }
         }
 
+        /**
+         * Returns an immutable instance of [ClientOptions].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .httpClient()
+         * .apiKey()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): ClientOptions {
-            checkNotNull(httpClient) { "`httpClient` is required but was not set" }
-            checkNotNull(apiKey) { "`apiKey` is required but was not set" }
+            val httpClient = checkRequired("httpClient", httpClient)
+            val apiKey = checkRequired("apiKey", apiKey)
 
             val headers = Headers.builder()
             val queryParams = QueryParams.builder()
@@ -179,7 +242,7 @@ private constructor(
             headers.put("X-Stainless-Package-Version", getPackageVersion())
             headers.put("X-Stainless-Runtime", "JRE")
             headers.put("X-Stainless-Runtime-Version", getJavaVersion())
-            apiKey?.let {
+            apiKey.let {
                 if (!it.isEmpty()) {
                     headers.put("Authorization", "Bearer $it")
                 }
@@ -188,23 +251,39 @@ private constructor(
             queryParams.replaceAll(this.queryParams.build())
 
             return ClientOptions(
-                httpClient!!,
+                httpClient,
                 PhantomReachableClosingHttpClient(
                     RetryingHttpClient.builder()
-                        .httpClient(httpClient!!)
+                        .httpClient(httpClient)
                         .clock(clock)
                         .maxRetries(maxRetries)
                         .idempotencyHeader("Idempotency-Key")
                         .build()
                 ),
+                checkJacksonVersionCompatibility,
                 jsonMapper,
+                streamHandlerExecutor
+                    ?: Executors.newCachedThreadPool(
+                        object : ThreadFactory {
+
+                            private val threadFactory: ThreadFactory =
+                                Executors.defaultThreadFactory()
+                            private val count = AtomicLong(0)
+
+                            override fun newThread(runnable: Runnable): Thread =
+                                threadFactory.newThread(runnable).also {
+                                    it.name = "orb-stream-handler-thread-${count.getAndIncrement()}"
+                                }
+                        }
+                    ),
                 clock,
                 baseUrl,
                 headers.build(),
                 queryParams.build(),
                 responseValidation,
+                timeout,
                 maxRetries,
-                apiKey!!,
+                apiKey,
                 webhookSecret,
             )
         }

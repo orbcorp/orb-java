@@ -2,58 +2,55 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint is used to fetch [plan](/core-concepts#plan-and-price) details given a plan
+ * identifier. It returns information about the prices included in the plan and their configuration,
+ * as well as the product that the plan is attached to.
+ *
+ * ## Serialized prices
+ *
+ * Orb supports a few different pricing models out of the box. Each of these models is serialized
+ * differently in a given [Price](/core-concepts#plan-and-price) object. The `model_type` field
+ * determines the key for the configuration object that is present. A detailed explanation of price
+ * types can be found in the [Price schema](/core-concepts#plan-and-price).
+ *
+ * ## Phases
+ *
+ * Orb supports plan phases, also known as contract ramps. For plans with phases, the serialized
+ * prices refer to all prices across all phases.
+ */
 class PlanFetchParams
-constructor(
-    private val planId: String,
+private constructor(
+    private val planId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun planId(): String = planId
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> planId
-            else -> ""
-        }
-    }
+    fun planId(): Optional<String> = Optional.ofNullable(planId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is PlanFetchParams && planId == other.planId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(planId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "PlanFetchParams{planId=$planId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): PlanFetchParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [PlanFetchParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [PlanFetchParams]. */
+    class Builder internal constructor() {
 
         private var planId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -61,12 +58,15 @@ constructor(
 
         @JvmSynthetic
         internal fun from(planFetchParams: PlanFetchParams) = apply {
-            this.planId = planFetchParams.planId
-            additionalHeaders(planFetchParams.additionalHeaders)
-            additionalQueryParams(planFetchParams.additionalQueryParams)
+            planId = planFetchParams.planId
+            additionalHeaders = planFetchParams.additionalHeaders.toBuilder()
+            additionalQueryParams = planFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun planId(planId: String) = apply { this.planId = planId }
+        fun planId(planId: String?) = apply { this.planId = planId }
+
+        /** Alias for calling [Builder.planId] with `planId.orElse(null)`. */
+        fun planId(planId: Optional<String>) = planId(planId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,11 +166,35 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [PlanFetchParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): PlanFetchParams =
-            PlanFetchParams(
-                checkNotNull(planId) { "`planId` is required but was not set" },
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            PlanFetchParams(planId, additionalHeaders.build(), additionalQueryParams.build())
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> planId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is PlanFetchParams && planId == other.planId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(planId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "PlanFetchParams{planId=$planId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

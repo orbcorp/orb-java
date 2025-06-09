@@ -5,99 +5,110 @@ package com.withorb.api.services.blocking
 import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClient
 import com.withorb.api.core.JsonValue
-import com.withorb.api.models.*
+import com.withorb.api.models.EventIngestParams
+import com.withorb.api.models.EventSearchParams
+import com.withorb.api.models.EventUpdateParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class EventServiceTest {
+internal class EventServiceTest {
 
     @Test
-    fun callUpdate() {
+    fun update() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val eventService = client.events()
-        val eventUpdateResponse =
+
+        val event =
             eventService.update(
                 EventUpdateParams.builder()
                     .eventId("event_id")
                     .eventName("event_name")
-                    .properties(JsonValue.from(mapOf<String, Any>()))
+                    .properties(
+                        EventUpdateParams.Properties.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
                     .customerId("customer_id")
                     .externalCustomerId("external_customer_id")
                     .build()
             )
-        println(eventUpdateResponse)
-        eventUpdateResponse.validate()
+
+        event.validate()
     }
 
     @Test
-    fun callDeprecate() {
+    fun deprecate() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val eventService = client.events()
-        val eventDeprecateResponse =
-            eventService.deprecate(EventDeprecateParams.builder().eventId("event_id").build())
-        println(eventDeprecateResponse)
-        eventDeprecateResponse.validate()
+
+        val response = eventService.deprecate("event_id")
+
+        response.validate()
     }
 
     @Test
-    fun callIngest() {
+    fun ingest() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val eventService = client.events()
-        val eventIngestResponse =
+
+        val response =
             eventService.ingest(
                 EventIngestParams.builder()
-                    .events(
-                        listOf(
-                            EventIngestParams.Event.builder()
-                                .eventName("event_name")
-                                .idempotencyKey("idempotency_key")
-                                .properties(JsonValue.from(mapOf<String, Any>()))
-                                .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
-                                .customerId("customer_id")
-                                .externalCustomerId("external_customer_id")
-                                .build()
-                        )
-                    )
                     .backfillId("backfill_id")
                     .debug(true)
+                    .addEvent(
+                        EventIngestParams.Event.builder()
+                            .eventName("event_name")
+                            .idempotencyKey("idempotency_key")
+                            .properties(
+                                EventIngestParams.Event.Properties.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .timestamp(OffsetDateTime.parse("2020-12-09T16:09:53Z"))
+                            .customerId("customer_id")
+                            .externalCustomerId("external_customer_id")
+                            .build()
+                    )
                     .build()
             )
-        println(eventIngestResponse)
-        eventIngestResponse.validate()
+
+        response.validate()
     }
 
     @Test
-    fun callSearch() {
+    fun search() {
         val client =
             OrbOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
         val eventService = client.events()
-        val eventSearchResponse =
+
+        val response =
             eventService.search(
                 EventSearchParams.builder()
-                    .eventIds(listOf("string"))
+                    .addEventId("string")
                     .timeframeEnd(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .timeframeStart(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .build()
             )
-        println(eventSearchResponse)
-        eventSearchResponse.validate()
+
+        response.validate()
     }
 }

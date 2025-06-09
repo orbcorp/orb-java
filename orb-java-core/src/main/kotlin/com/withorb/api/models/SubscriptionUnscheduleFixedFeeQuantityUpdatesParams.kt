@@ -4,182 +4,141 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.ExcludeMissing
+import com.withorb.api.core.JsonField
+import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.core.toImmutable
-import com.withorb.api.models.*
+import com.withorb.api.errors.OrbInvalidDataException
+import java.util.Collections
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint can be used to clear scheduled updates to the quantity for a fixed fee.
+ *
+ * If there are no updates scheduled, a request validation error will be returned with a 400 status
+ * code.
+ */
 class SubscriptionUnscheduleFixedFeeQuantityUpdatesParams
-constructor(
-    private val subscriptionId: String,
-    private val priceId: String,
+private constructor(
+    private val subscriptionId: String?,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
-) {
+) : Params {
 
-    fun subscriptionId(): String = subscriptionId
+    fun subscriptionId(): Optional<String> = Optional.ofNullable(subscriptionId)
 
-    fun priceId(): String = priceId
+    /**
+     * Price for which the updates should be cleared. Must be a fixed fee.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun priceId(): String = body.priceId()
 
-    @JvmSynthetic
-    internal fun getBody(): SubscriptionUnscheduleFixedFeeQuantityUpdatesBody {
-        return SubscriptionUnscheduleFixedFeeQuantityUpdatesBody(priceId, additionalBodyProperties)
-    }
+    /**
+     * Returns the raw JSON value of [priceId].
+     *
+     * Unlike [priceId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _priceId(): JsonField<String> = body._priceId()
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> subscriptionId
-            else -> ""
-        }
-    }
-
-    @JsonDeserialize(builder = SubscriptionUnscheduleFixedFeeQuantityUpdatesBody.Builder::class)
-    @NoAutoDetect
-    class SubscriptionUnscheduleFixedFeeQuantityUpdatesBody
-    internal constructor(
-        private val priceId: String?,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
-
-        /** Price for which the updates should be cleared. Must be a fixed fee. */
-        @JsonProperty("price_id") fun priceId(): String? = priceId
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var priceId: String? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(
-                subscriptionUnscheduleFixedFeeQuantityUpdatesBody:
-                    SubscriptionUnscheduleFixedFeeQuantityUpdatesBody
-            ) = apply {
-                this.priceId = subscriptionUnscheduleFixedFeeQuantityUpdatesBody.priceId
-                additionalProperties(
-                    subscriptionUnscheduleFixedFeeQuantityUpdatesBody.additionalProperties
-                )
-            }
-
-            /** Price for which the updates should be cleared. Must be a fixed fee. */
-            @JsonProperty("price_id")
-            fun priceId(priceId: String) = apply { this.priceId = priceId }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun build(): SubscriptionUnscheduleFixedFeeQuantityUpdatesBody =
-                SubscriptionUnscheduleFixedFeeQuantityUpdatesBody(
-                    checkNotNull(priceId) { "`priceId` is required but was not set" },
-                    additionalProperties.toImmutable()
-                )
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is SubscriptionUnscheduleFixedFeeQuantityUpdatesBody && priceId == other.priceId && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(priceId, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "SubscriptionUnscheduleFixedFeeQuantityUpdatesBody{priceId=$priceId, additionalProperties=$additionalProperties}"
-    }
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is SubscriptionUnscheduleFixedFeeQuantityUpdatesParams && subscriptionId == other.subscriptionId && priceId == other.priceId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, priceId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "SubscriptionUnscheduleFixedFeeQuantityUpdatesParams{subscriptionId=$subscriptionId, priceId=$priceId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [SubscriptionUnscheduleFixedFeeQuantityUpdatesParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .priceId()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [SubscriptionUnscheduleFixedFeeQuantityUpdatesParams]. */
+    class Builder internal constructor() {
 
         private var subscriptionId: String? = null
-        private var priceId: String? = null
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(
             subscriptionUnscheduleFixedFeeQuantityUpdatesParams:
                 SubscriptionUnscheduleFixedFeeQuantityUpdatesParams
         ) = apply {
-            this.subscriptionId = subscriptionUnscheduleFixedFeeQuantityUpdatesParams.subscriptionId
-            this.priceId = subscriptionUnscheduleFixedFeeQuantityUpdatesParams.priceId
-            additionalHeaders(subscriptionUnscheduleFixedFeeQuantityUpdatesParams.additionalHeaders)
-            additionalQueryParams(
+            subscriptionId = subscriptionUnscheduleFixedFeeQuantityUpdatesParams.subscriptionId
+            body = subscriptionUnscheduleFixedFeeQuantityUpdatesParams.body.toBuilder()
+            additionalHeaders =
+                subscriptionUnscheduleFixedFeeQuantityUpdatesParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
                 subscriptionUnscheduleFixedFeeQuantityUpdatesParams.additionalQueryParams
-            )
-            additionalBodyProperties(
-                subscriptionUnscheduleFixedFeeQuantityUpdatesParams.additionalBodyProperties
-            )
+                    .toBuilder()
         }
 
-        fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
+        fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
+
+        /** Alias for calling [Builder.subscriptionId] with `subscriptionId.orElse(null)`. */
+        fun subscriptionId(subscriptionId: Optional<String>) =
+            subscriptionId(subscriptionId.getOrNull())
+
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [priceId]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
 
         /** Price for which the updates should be cleared. Must be a fixed fee. */
-        fun priceId(priceId: String) = apply { this.priceId = priceId }
+        fun priceId(priceId: String) = apply { body.priceId(priceId) }
+
+        /**
+         * Sets [Builder.priceId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.priceId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun priceId(priceId: JsonField<String>) = apply { body.priceId(priceId) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -279,35 +238,204 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
-        }
-
+        /**
+         * Returns an immutable instance of [SubscriptionUnscheduleFixedFeeQuantityUpdatesParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .priceId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): SubscriptionUnscheduleFixedFeeQuantityUpdatesParams =
             SubscriptionUnscheduleFixedFeeQuantityUpdatesParams(
-                checkNotNull(subscriptionId) { "`subscriptionId` is required but was not set" },
-                checkNotNull(priceId) { "`priceId` is required but was not set" },
+                subscriptionId,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
+
+    fun _body(): Body = body
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> subscriptionId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    class Body
+    private constructor(
+        private val priceId: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("price_id") @ExcludeMissing priceId: JsonField<String> = JsonMissing.of()
+        ) : this(priceId, mutableMapOf())
+
+        /**
+         * Price for which the updates should be cleared. Must be a fixed fee.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun priceId(): String = priceId.getRequired("price_id")
+
+        /**
+         * Returns the raw JSON value of [priceId].
+         *
+         * Unlike [priceId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("price_id") @ExcludeMissing fun _priceId(): JsonField<String> = priceId
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```java
+             * .priceId()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Body]. */
+        class Builder internal constructor() {
+
+            private var priceId: JsonField<String>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(body: Body) = apply {
+                priceId = body.priceId
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            /** Price for which the updates should be cleared. Must be a fixed fee. */
+            fun priceId(priceId: String) = priceId(JsonField.of(priceId))
+
+            /**
+             * Sets [Builder.priceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.priceId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun priceId(priceId: JsonField<String>) = apply { this.priceId = priceId }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .priceId()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Body =
+                Body(checkRequired("priceId", priceId), additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
+            }
+
+            priceId()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = (if (priceId.asKnown().isPresent) 1 else 0)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Body && priceId == other.priceId && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(priceId, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Body{priceId=$priceId, additionalProperties=$additionalProperties}"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is SubscriptionUnscheduleFixedFeeQuantityUpdatesParams && subscriptionId == other.subscriptionId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "SubscriptionUnscheduleFixedFeeQuantityUpdatesParams{subscriptionId=$subscriptionId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

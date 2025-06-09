@@ -2,32 +2,31 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
+import com.withorb.api.core.JsonValue
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CustomerCreateParamsTest {
+internal class CustomerCreateParamsTest {
 
     @Test
-    fun createCustomerCreateParams() {
+    fun create() {
         CustomerCreateParams.builder()
-            .email("dev@stainlessapi.com")
+            .email("dev@stainless.com")
             .name("x")
             .accountingSyncConfiguration(
                 CustomerCreateParams.AccountingSyncConfiguration.builder()
-                    .accountingProviders(
-                        listOf(
-                            CustomerCreateParams.AccountingSyncConfiguration.AccountingProvider
-                                .builder()
-                                .externalProviderId("external_provider_id")
-                                .providerType("provider_type")
-                                .build()
-                        )
+                    .addAccountingProvider(
+                        CustomerCreateParams.AccountingSyncConfiguration.AccountingProvider
+                            .builder()
+                            .externalProviderId("external_provider_id")
+                            .providerType("provider_type")
+                            .build()
                     )
                     .excluded(true)
                     .build()
             )
-            .additionalEmails(listOf("string"))
+            .addAdditionalEmail("dev@stainless.com")
             .autoCollection(true)
             .billingAddress(
                 CustomerCreateParams.BillingAddress.builder()
@@ -42,7 +41,17 @@ class CustomerCreateParamsTest {
             .currency("currency")
             .emailDelivery(true)
             .externalCustomerId("external_customer_id")
-            .metadata(CustomerCreateParams.Metadata.builder().build())
+            .hierarchy(
+                CustomerCreateParams.Hierarchy.builder()
+                    .addChildCustomerId("string")
+                    .parentCustomerId("parent_customer_id")
+                    .build()
+            )
+            .metadata(
+                CustomerCreateParams.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
             .paymentProvider(CustomerCreateParams.PaymentProvider.QUICKBOOKS)
             .paymentProviderId("payment_provider_id")
             .reportingConfiguration(
@@ -59,17 +68,10 @@ class CustomerCreateParamsTest {
                     .build()
             )
             .taxConfiguration(
-                CustomerCreateParams.TaxConfiguration.ofNewAvalaraTaxConfiguration(
-                    CustomerCreateParams.TaxConfiguration.NewAvalaraTaxConfiguration.builder()
-                        .taxExempt(true)
-                        .taxProvider(
-                            CustomerCreateParams.TaxConfiguration.NewAvalaraTaxConfiguration
-                                .TaxProvider
-                                .AVALARA
-                        )
-                        .taxExemptionCode("tax_exemption_code")
-                        .build()
-                )
+                CustomerCreateParams.TaxConfiguration.Avalara.builder()
+                    .taxExempt(true)
+                    .taxExemptionCode("tax_exemption_code")
+                    .build()
             )
             .taxId(
                 CustomerCreateParams.TaxId.builder()
@@ -83,26 +85,24 @@ class CustomerCreateParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             CustomerCreateParams.builder()
-                .email("dev@stainlessapi.com")
+                .email("dev@stainless.com")
                 .name("x")
                 .accountingSyncConfiguration(
                     CustomerCreateParams.AccountingSyncConfiguration.builder()
-                        .accountingProviders(
-                            listOf(
-                                CustomerCreateParams.AccountingSyncConfiguration.AccountingProvider
-                                    .builder()
-                                    .externalProviderId("external_provider_id")
-                                    .providerType("provider_type")
-                                    .build()
-                            )
+                        .addAccountingProvider(
+                            CustomerCreateParams.AccountingSyncConfiguration.AccountingProvider
+                                .builder()
+                                .externalProviderId("external_provider_id")
+                                .providerType("provider_type")
+                                .build()
                         )
                         .excluded(true)
                         .build()
                 )
-                .additionalEmails(listOf("string"))
+                .addAdditionalEmail("dev@stainless.com")
                 .autoCollection(true)
                 .billingAddress(
                     CustomerCreateParams.BillingAddress.builder()
@@ -117,7 +117,17 @@ class CustomerCreateParamsTest {
                 .currency("currency")
                 .emailDelivery(true)
                 .externalCustomerId("external_customer_id")
-                .metadata(CustomerCreateParams.Metadata.builder().build())
+                .hierarchy(
+                    CustomerCreateParams.Hierarchy.builder()
+                        .addChildCustomerId("string")
+                        .parentCustomerId("parent_customer_id")
+                        .build()
+                )
+                .metadata(
+                    CustomerCreateParams.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .paymentProvider(CustomerCreateParams.PaymentProvider.QUICKBOOKS)
                 .paymentProviderId("payment_provider_id")
                 .reportingConfiguration(
@@ -134,17 +144,10 @@ class CustomerCreateParamsTest {
                         .build()
                 )
                 .taxConfiguration(
-                    CustomerCreateParams.TaxConfiguration.ofNewAvalaraTaxConfiguration(
-                        CustomerCreateParams.TaxConfiguration.NewAvalaraTaxConfiguration.builder()
-                            .taxExempt(true)
-                            .taxProvider(
-                                CustomerCreateParams.TaxConfiguration.NewAvalaraTaxConfiguration
-                                    .TaxProvider
-                                    .AVALARA
-                            )
-                            .taxExemptionCode("tax_exemption_code")
-                            .build()
-                    )
+                    CustomerCreateParams.TaxConfiguration.Avalara.builder()
+                        .taxExempt(true)
+                        .taxExemptionCode("tax_exemption_code")
+                        .build()
                 )
                 .taxId(
                     CustomerCreateParams.TaxId.builder()
@@ -155,29 +158,28 @@ class CustomerCreateParamsTest {
                 )
                 .timezone("timezone")
                 .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-        assertThat(body.email()).isEqualTo("dev@stainlessapi.com")
+
+        val body = params._body()
+
+        assertThat(body.email()).isEqualTo("dev@stainless.com")
         assertThat(body.name()).isEqualTo("x")
         assertThat(body.accountingSyncConfiguration())
-            .isEqualTo(
+            .contains(
                 CustomerCreateParams.AccountingSyncConfiguration.builder()
-                    .accountingProviders(
-                        listOf(
-                            CustomerCreateParams.AccountingSyncConfiguration.AccountingProvider
-                                .builder()
-                                .externalProviderId("external_provider_id")
-                                .providerType("provider_type")
-                                .build()
-                        )
+                    .addAccountingProvider(
+                        CustomerCreateParams.AccountingSyncConfiguration.AccountingProvider
+                            .builder()
+                            .externalProviderId("external_provider_id")
+                            .providerType("provider_type")
+                            .build()
                     )
                     .excluded(true)
                     .build()
             )
-        assertThat(body.additionalEmails()).isEqualTo(listOf("string"))
-        assertThat(body.autoCollection()).isEqualTo(true)
+        assertThat(body.additionalEmails().getOrNull()).containsExactly("dev@stainless.com")
+        assertThat(body.autoCollection()).contains(true)
         assertThat(body.billingAddress())
-            .isEqualTo(
+            .contains(
                 CustomerCreateParams.BillingAddress.builder()
                     .city("city")
                     .country("country")
@@ -187,17 +189,28 @@ class CustomerCreateParamsTest {
                     .state("state")
                     .build()
             )
-        assertThat(body.currency()).isEqualTo("currency")
-        assertThat(body.emailDelivery()).isEqualTo(true)
-        assertThat(body.externalCustomerId()).isEqualTo("external_customer_id")
-        assertThat(body.metadata()).isEqualTo(CustomerCreateParams.Metadata.builder().build())
-        assertThat(body.paymentProvider())
-            .isEqualTo(CustomerCreateParams.PaymentProvider.QUICKBOOKS)
-        assertThat(body.paymentProviderId()).isEqualTo("payment_provider_id")
+        assertThat(body.currency()).contains("currency")
+        assertThat(body.emailDelivery()).contains(true)
+        assertThat(body.externalCustomerId()).contains("external_customer_id")
+        assertThat(body.hierarchy())
+            .contains(
+                CustomerCreateParams.Hierarchy.builder()
+                    .addChildCustomerId("string")
+                    .parentCustomerId("parent_customer_id")
+                    .build()
+            )
+        assertThat(body.metadata())
+            .contains(
+                CustomerCreateParams.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
+        assertThat(body.paymentProvider()).contains(CustomerCreateParams.PaymentProvider.QUICKBOOKS)
+        assertThat(body.paymentProviderId()).contains("payment_provider_id")
         assertThat(body.reportingConfiguration())
-            .isEqualTo(CustomerCreateParams.ReportingConfiguration.builder().exempt(true).build())
+            .contains(CustomerCreateParams.ReportingConfiguration.builder().exempt(true).build())
         assertThat(body.shippingAddress())
-            .isEqualTo(
+            .contains(
                 CustomerCreateParams.ShippingAddress.builder()
                     .city("city")
                     .country("country")
@@ -208,36 +221,32 @@ class CustomerCreateParamsTest {
                     .build()
             )
         assertThat(body.taxConfiguration())
-            .isEqualTo(
-                CustomerCreateParams.TaxConfiguration.ofNewAvalaraTaxConfiguration(
-                    CustomerCreateParams.TaxConfiguration.NewAvalaraTaxConfiguration.builder()
+            .contains(
+                CustomerCreateParams.TaxConfiguration.ofAvalara(
+                    CustomerCreateParams.TaxConfiguration.Avalara.builder()
                         .taxExempt(true)
-                        .taxProvider(
-                            CustomerCreateParams.TaxConfiguration.NewAvalaraTaxConfiguration
-                                .TaxProvider
-                                .AVALARA
-                        )
                         .taxExemptionCode("tax_exemption_code")
                         .build()
                 )
             )
         assertThat(body.taxId())
-            .isEqualTo(
+            .contains(
                 CustomerCreateParams.TaxId.builder()
                     .country(CustomerCreateParams.TaxId.Country.AD)
                     .type(CustomerCreateParams.TaxId.Type.AD_NRT)
                     .value("value")
                     .build()
             )
-        assertThat(body.timezone()).isEqualTo("timezone")
+        assertThat(body.timezone()).contains("timezone")
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
-        val params = CustomerCreateParams.builder().email("dev@stainlessapi.com").name("x").build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-        assertThat(body.email()).isEqualTo("dev@stainlessapi.com")
+    fun bodyWithoutOptionalFields() {
+        val params = CustomerCreateParams.builder().email("dev@stainless.com").name("x").build()
+
+        val body = params._body()
+
+        assertThat(body.email()).isEqualTo("dev@stainless.com")
         assertThat(body.name()).isEqualTo("x")
     }
 }

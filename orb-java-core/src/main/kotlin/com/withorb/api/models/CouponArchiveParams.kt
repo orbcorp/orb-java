@@ -3,68 +3,47 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
-import com.withorb.api.models.*
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint allows a coupon to be archived. Archived coupons can no longer be redeemed, and
+ * will be hidden from lists of active coupons. Additionally, once a coupon is archived, its
+ * redemption code can be reused for a different coupon.
+ */
 class CouponArchiveParams
-constructor(
-    private val couponId: String,
+private constructor(
+    private val couponId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
-) {
+) : Params {
 
-    fun couponId(): String = couponId
+    fun couponId(): Optional<String> = Optional.ofNullable(couponId)
 
-    @JvmSynthetic
-    internal fun getBody(): Optional<Map<String, JsonValue>> {
-        return Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
-    }
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> couponId
-            else -> ""
-        }
-    }
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CouponArchiveParams && couponId == other.couponId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(couponId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "CouponArchiveParams{couponId=$couponId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): CouponArchiveParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [CouponArchiveParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [CouponArchiveParams]. */
+    class Builder internal constructor() {
 
         private var couponId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -73,13 +52,16 @@ constructor(
 
         @JvmSynthetic
         internal fun from(couponArchiveParams: CouponArchiveParams) = apply {
-            this.couponId = couponArchiveParams.couponId
-            additionalHeaders(couponArchiveParams.additionalHeaders)
-            additionalQueryParams(couponArchiveParams.additionalQueryParams)
-            additionalBodyProperties(couponArchiveParams.additionalBodyProperties)
+            couponId = couponArchiveParams.couponId
+            additionalHeaders = couponArchiveParams.additionalHeaders.toBuilder()
+            additionalQueryParams = couponArchiveParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = couponArchiveParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun couponId(couponId: String) = apply { this.couponId = couponId }
+        fun couponId(couponId: String?) = apply { this.couponId = couponId }
+
+        /** Alias for calling [Builder.couponId] with `couponId.orElse(null)`. */
+        fun couponId(couponId: Optional<String>) = couponId(couponId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -201,12 +183,43 @@ constructor(
             keys.forEach(::removeAdditionalBodyProperty)
         }
 
+        /**
+         * Returns an immutable instance of [CouponArchiveParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): CouponArchiveParams =
             CouponArchiveParams(
-                checkNotNull(couponId) { "`couponId` is required but was not set" },
+                couponId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    fun _body(): Optional<Map<String, JsonValue>> =
+        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> couponId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CouponArchiveParams && couponId == other.couponId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(couponId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "CouponArchiveParams{couponId=$couponId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

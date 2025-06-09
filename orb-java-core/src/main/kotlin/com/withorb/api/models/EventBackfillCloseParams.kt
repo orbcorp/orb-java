@@ -3,68 +3,47 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
-import com.withorb.api.models.*
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Closing a backfill makes the updated usage visible in Orb. Upon closing a backfill, Orb will
+ * asynchronously reflect the updated usage in invoice amounts and usage graphs. Once all of the
+ * updates are complete, the backfill's status will transition to `reflected`.
+ */
 class EventBackfillCloseParams
-constructor(
-    private val backfillId: String,
+private constructor(
+    private val backfillId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
-) {
+) : Params {
 
-    fun backfillId(): String = backfillId
+    fun backfillId(): Optional<String> = Optional.ofNullable(backfillId)
 
-    @JvmSynthetic
-    internal fun getBody(): Optional<Map<String, JsonValue>> {
-        return Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
-    }
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> backfillId
-            else -> ""
-        }
-    }
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is EventBackfillCloseParams && backfillId == other.backfillId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(backfillId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "EventBackfillCloseParams{backfillId=$backfillId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): EventBackfillCloseParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [EventBackfillCloseParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [EventBackfillCloseParams]. */
+    class Builder internal constructor() {
 
         private var backfillId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -73,13 +52,17 @@ constructor(
 
         @JvmSynthetic
         internal fun from(eventBackfillCloseParams: EventBackfillCloseParams) = apply {
-            this.backfillId = eventBackfillCloseParams.backfillId
-            additionalHeaders(eventBackfillCloseParams.additionalHeaders)
-            additionalQueryParams(eventBackfillCloseParams.additionalQueryParams)
-            additionalBodyProperties(eventBackfillCloseParams.additionalBodyProperties)
+            backfillId = eventBackfillCloseParams.backfillId
+            additionalHeaders = eventBackfillCloseParams.additionalHeaders.toBuilder()
+            additionalQueryParams = eventBackfillCloseParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                eventBackfillCloseParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun backfillId(backfillId: String) = apply { this.backfillId = backfillId }
+        fun backfillId(backfillId: String?) = apply { this.backfillId = backfillId }
+
+        /** Alias for calling [Builder.backfillId] with `backfillId.orElse(null)`. */
+        fun backfillId(backfillId: Optional<String>) = backfillId(backfillId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -201,12 +184,43 @@ constructor(
             keys.forEach(::removeAdditionalBodyProperty)
         }
 
+        /**
+         * Returns an immutable instance of [EventBackfillCloseParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): EventBackfillCloseParams =
             EventBackfillCloseParams(
-                checkNotNull(backfillId) { "`backfillId` is required but was not set" },
+                backfillId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    fun _body(): Optional<Map<String, JsonValue>> =
+        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> backfillId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is EventBackfillCloseParams && backfillId == other.backfillId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(backfillId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "EventBackfillCloseParams{backfillId=$backfillId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

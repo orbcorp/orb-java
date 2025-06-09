@@ -2,18 +2,23 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint returns a [paginated](/api-reference/pagination) list of all plans associated with
+ * a subscription along with their start and end dates. This list contains the subscription's
+ * initial plan along with past and future plan changes.
+ */
 class SubscriptionFetchScheduleParams
-constructor(
-    private val subscriptionId: String,
+private constructor(
+    private val subscriptionId: String?,
     private val cursor: String?,
     private val limit: Long?,
     private val startDateGt: OffsetDateTime?,
@@ -22,12 +27,17 @@ constructor(
     private val startDateLte: OffsetDateTime?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun subscriptionId(): String = subscriptionId
+    fun subscriptionId(): Optional<String> = Optional.ofNullable(subscriptionId)
 
+    /**
+     * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+     * initial request.
+     */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
+    /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
     fun startDateGt(): Optional<OffsetDateTime> = Optional.ofNullable(startDateGt)
@@ -38,74 +48,25 @@ constructor(
 
     fun startDateLte(): Optional<OffsetDateTime> = Optional.ofNullable(startDateLte)
 
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic
-    internal fun getQueryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.cursor?.let { queryParams.put("cursor", listOf(it.toString())) }
-        this.limit?.let { queryParams.put("limit", listOf(it.toString())) }
-        this.startDateGt?.let {
-            queryParams.put(
-                "start_date[gt]",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
-            )
-        }
-        this.startDateGte?.let {
-            queryParams.put(
-                "start_date[gte]",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
-            )
-        }
-        this.startDateLt?.let {
-            queryParams.put(
-                "start_date[lt]",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
-            )
-        }
-        this.startDateLte?.let {
-            queryParams.put(
-                "start_date[lte]",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
-            )
-        }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> subscriptionId
-            else -> ""
-        }
-    }
-
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is SubscriptionFetchScheduleParams && subscriptionId == other.subscriptionId && cursor == other.cursor && limit == other.limit && startDateGt == other.startDateGt && startDateGte == other.startDateGte && startDateLt == other.startDateLt && startDateLte == other.startDateLte && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, cursor, limit, startDateGt, startDateGte, startDateLt, startDateLte, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "SubscriptionFetchScheduleParams{subscriptionId=$subscriptionId, cursor=$cursor, limit=$limit, startDateGt=$startDateGt, startDateGte=$startDateGte, startDateLt=$startDateLt, startDateLte=$startDateLte, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): SubscriptionFetchScheduleParams = builder().build()
+
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [SubscriptionFetchScheduleParams].
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [SubscriptionFetchScheduleParams]. */
+    class Builder internal constructor() {
 
         private var subscriptionId: String? = null
         private var cursor: String? = null
@@ -120,35 +81,69 @@ constructor(
         @JvmSynthetic
         internal fun from(subscriptionFetchScheduleParams: SubscriptionFetchScheduleParams) =
             apply {
-                this.subscriptionId = subscriptionFetchScheduleParams.subscriptionId
-                this.cursor = subscriptionFetchScheduleParams.cursor
-                this.limit = subscriptionFetchScheduleParams.limit
-                this.startDateGt = subscriptionFetchScheduleParams.startDateGt
-                this.startDateGte = subscriptionFetchScheduleParams.startDateGte
-                this.startDateLt = subscriptionFetchScheduleParams.startDateLt
-                this.startDateLte = subscriptionFetchScheduleParams.startDateLte
-                additionalHeaders(subscriptionFetchScheduleParams.additionalHeaders)
-                additionalQueryParams(subscriptionFetchScheduleParams.additionalQueryParams)
+                subscriptionId = subscriptionFetchScheduleParams.subscriptionId
+                cursor = subscriptionFetchScheduleParams.cursor
+                limit = subscriptionFetchScheduleParams.limit
+                startDateGt = subscriptionFetchScheduleParams.startDateGt
+                startDateGte = subscriptionFetchScheduleParams.startDateGte
+                startDateLt = subscriptionFetchScheduleParams.startDateLt
+                startDateLte = subscriptionFetchScheduleParams.startDateLte
+                additionalHeaders = subscriptionFetchScheduleParams.additionalHeaders.toBuilder()
+                additionalQueryParams =
+                    subscriptionFetchScheduleParams.additionalQueryParams.toBuilder()
             }
 
-        fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
+        fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
+
+        /** Alias for calling [Builder.subscriptionId] with `subscriptionId.orElse(null)`. */
+        fun subscriptionId(subscriptionId: Optional<String>) =
+            subscriptionId(subscriptionId.getOrNull())
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: String) = apply { this.cursor = cursor }
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
 
-        fun startDateGt(startDateGt: OffsetDateTime) = apply { this.startDateGt = startDateGt }
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun limit(limit: Long) = limit(limit as Long?)
 
-        fun startDateGte(startDateGte: OffsetDateTime) = apply { this.startDateGte = startDateGte }
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
-        fun startDateLt(startDateLt: OffsetDateTime) = apply { this.startDateLt = startDateLt }
+        fun startDateGt(startDateGt: OffsetDateTime?) = apply { this.startDateGt = startDateGt }
 
-        fun startDateLte(startDateLte: OffsetDateTime) = apply { this.startDateLte = startDateLte }
+        /** Alias for calling [Builder.startDateGt] with `startDateGt.orElse(null)`. */
+        fun startDateGt(startDateGt: Optional<OffsetDateTime>) =
+            startDateGt(startDateGt.getOrNull())
+
+        fun startDateGte(startDateGte: OffsetDateTime?) = apply { this.startDateGte = startDateGte }
+
+        /** Alias for calling [Builder.startDateGte] with `startDateGte.orElse(null)`. */
+        fun startDateGte(startDateGte: Optional<OffsetDateTime>) =
+            startDateGte(startDateGte.getOrNull())
+
+        fun startDateLt(startDateLt: OffsetDateTime?) = apply { this.startDateLt = startDateLt }
+
+        /** Alias for calling [Builder.startDateLt] with `startDateLt.orElse(null)`. */
+        fun startDateLt(startDateLt: Optional<OffsetDateTime>) =
+            startDateLt(startDateLt.getOrNull())
+
+        fun startDateLte(startDateLte: OffsetDateTime?) = apply { this.startDateLte = startDateLte }
+
+        /** Alias for calling [Builder.startDateLte] with `startDateLte.orElse(null)`. */
+        fun startDateLte(startDateLte: Optional<OffsetDateTime>) =
+            startDateLte(startDateLte.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -248,9 +243,14 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [SubscriptionFetchScheduleParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): SubscriptionFetchScheduleParams =
             SubscriptionFetchScheduleParams(
-                checkNotNull(subscriptionId) { "`subscriptionId` is required but was not set" },
+                subscriptionId,
                 cursor,
                 limit,
                 startDateGt,
@@ -261,4 +261,46 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> subscriptionId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                cursor?.let { put("cursor", it) }
+                limit?.let { put("limit", it.toString()) }
+                startDateGt?.let {
+                    put("start_date[gt]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                startDateGte?.let {
+                    put("start_date[gte]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                startDateLt?.let {
+                    put("start_date[lt]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                startDateLte?.let {
+                    put("start_date[lte]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                putAll(additionalQueryParams)
+            }
+            .build()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is SubscriptionFetchScheduleParams && subscriptionId == other.subscriptionId && cursor == other.cursor && limit == other.limit && startDateGt == other.startDateGt && startDateGte == other.startDateGte && startDateLt == other.startDateLt && startDateLte == other.startDateLte && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, cursor, limit, startDateGt, startDateGte, startDateLt, startDateLte, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "SubscriptionFetchScheduleParams{subscriptionId=$subscriptionId, cursor=$cursor, limit=$limit, startDateGt=$startDateGt, startDateGte=$startDateGte, startDateLt=$startDateLt, startDateLte=$startDateLte, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

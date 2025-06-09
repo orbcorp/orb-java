@@ -2,57 +2,46 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
 
+/**
+ * This endpoint can be used to fetch the upcoming [invoice](/core-concepts#invoice) for the current
+ * billing period given a subscription.
+ */
 class InvoiceFetchUpcomingParams
-constructor(
+private constructor(
     private val subscriptionId: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun subscriptionId(): String = subscriptionId
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic
-    internal fun getQueryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.subscriptionId.let { queryParams.put("subscription_id", listOf(it.toString())) }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is InvoiceFetchUpcomingParams && subscriptionId == other.subscriptionId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "InvoiceFetchUpcomingParams{subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [InvoiceFetchUpcomingParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .subscriptionId()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [InvoiceFetchUpcomingParams]. */
+    class Builder internal constructor() {
 
         private var subscriptionId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -60,9 +49,9 @@ constructor(
 
         @JvmSynthetic
         internal fun from(invoiceFetchUpcomingParams: InvoiceFetchUpcomingParams) = apply {
-            this.subscriptionId = invoiceFetchUpcomingParams.subscriptionId
-            additionalHeaders(invoiceFetchUpcomingParams.additionalHeaders)
-            additionalQueryParams(invoiceFetchUpcomingParams.additionalQueryParams)
+            subscriptionId = invoiceFetchUpcomingParams.subscriptionId
+            additionalHeaders = invoiceFetchUpcomingParams.additionalHeaders.toBuilder()
+            additionalQueryParams = invoiceFetchUpcomingParams.additionalQueryParams.toBuilder()
         }
 
         fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
@@ -165,11 +154,46 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [InvoiceFetchUpcomingParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .subscriptionId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): InvoiceFetchUpcomingParams =
             InvoiceFetchUpcomingParams(
-                checkNotNull(subscriptionId) { "`subscriptionId` is required but was not set" },
+                checkRequired("subscriptionId", subscriptionId),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                put("subscription_id", subscriptionId)
+                putAll(additionalQueryParams)
+            }
+            .build()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is InvoiceFetchUpcomingParams && subscriptionId == other.subscriptionId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "InvoiceFetchUpcomingParams{subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

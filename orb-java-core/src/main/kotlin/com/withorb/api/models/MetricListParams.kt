@@ -2,17 +2,21 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint is used to fetch [metric](/core-concepts##metric) details given a metric
+ * identifier. It returns information about the metrics including its name, description, and item.
+ */
 class MetricListParams
-constructor(
+private constructor(
     private val createdAtGt: OffsetDateTime?,
     private val createdAtGte: OffsetDateTime?,
     private val createdAtLt: OffsetDateTime?,
@@ -21,7 +25,7 @@ constructor(
     private val limit: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun createdAtGt(): Optional<OffsetDateTime> = Optional.ofNullable(createdAtGt)
 
@@ -31,71 +35,31 @@ constructor(
 
     fun createdAtLte(): Optional<OffsetDateTime> = Optional.ofNullable(createdAtLte)
 
+    /**
+     * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+     * initial request.
+     */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
+    /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic
-    internal fun getQueryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.createdAtGt?.let {
-            queryParams.put(
-                "created_at[gt]",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
-            )
-        }
-        this.createdAtGte?.let {
-            queryParams.put(
-                "created_at[gte]",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
-            )
-        }
-        this.createdAtLt?.let {
-            queryParams.put(
-                "created_at[lt]",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
-            )
-        }
-        this.createdAtLte?.let {
-            queryParams.put(
-                "created_at[lte]",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
-            )
-        }
-        this.cursor?.let { queryParams.put("cursor", listOf(it.toString())) }
-        this.limit?.let { queryParams.put("limit", listOf(it.toString())) }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is MetricListParams && createdAtGt == other.createdAtGt && createdAtGte == other.createdAtGte && createdAtLt == other.createdAtLt && createdAtLte == other.createdAtLte && cursor == other.cursor && limit == other.limit && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(createdAtGt, createdAtGte, createdAtLt, createdAtLte, cursor, limit, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "MetricListParams{createdAtGt=$createdAtGt, createdAtGte=$createdAtGte, createdAtLt=$createdAtLt, createdAtLte=$createdAtLte, cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): MetricListParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [MetricListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [MetricListParams]. */
+    class Builder internal constructor() {
 
         private var createdAtGt: OffsetDateTime? = null
         private var createdAtGte: OffsetDateTime? = null
@@ -108,32 +72,61 @@ constructor(
 
         @JvmSynthetic
         internal fun from(metricListParams: MetricListParams) = apply {
-            this.createdAtGt = metricListParams.createdAtGt
-            this.createdAtGte = metricListParams.createdAtGte
-            this.createdAtLt = metricListParams.createdAtLt
-            this.createdAtLte = metricListParams.createdAtLte
-            this.cursor = metricListParams.cursor
-            this.limit = metricListParams.limit
-            additionalHeaders(metricListParams.additionalHeaders)
-            additionalQueryParams(metricListParams.additionalQueryParams)
+            createdAtGt = metricListParams.createdAtGt
+            createdAtGte = metricListParams.createdAtGte
+            createdAtLt = metricListParams.createdAtLt
+            createdAtLte = metricListParams.createdAtLte
+            cursor = metricListParams.cursor
+            limit = metricListParams.limit
+            additionalHeaders = metricListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = metricListParams.additionalQueryParams.toBuilder()
         }
 
-        fun createdAtGt(createdAtGt: OffsetDateTime) = apply { this.createdAtGt = createdAtGt }
+        fun createdAtGt(createdAtGt: OffsetDateTime?) = apply { this.createdAtGt = createdAtGt }
 
-        fun createdAtGte(createdAtGte: OffsetDateTime) = apply { this.createdAtGte = createdAtGte }
+        /** Alias for calling [Builder.createdAtGt] with `createdAtGt.orElse(null)`. */
+        fun createdAtGt(createdAtGt: Optional<OffsetDateTime>) =
+            createdAtGt(createdAtGt.getOrNull())
 
-        fun createdAtLt(createdAtLt: OffsetDateTime) = apply { this.createdAtLt = createdAtLt }
+        fun createdAtGte(createdAtGte: OffsetDateTime?) = apply { this.createdAtGte = createdAtGte }
 
-        fun createdAtLte(createdAtLte: OffsetDateTime) = apply { this.createdAtLte = createdAtLte }
+        /** Alias for calling [Builder.createdAtGte] with `createdAtGte.orElse(null)`. */
+        fun createdAtGte(createdAtGte: Optional<OffsetDateTime>) =
+            createdAtGte(createdAtGte.getOrNull())
+
+        fun createdAtLt(createdAtLt: OffsetDateTime?) = apply { this.createdAtLt = createdAtLt }
+
+        /** Alias for calling [Builder.createdAtLt] with `createdAtLt.orElse(null)`. */
+        fun createdAtLt(createdAtLt: Optional<OffsetDateTime>) =
+            createdAtLt(createdAtLt.getOrNull())
+
+        fun createdAtLte(createdAtLte: OffsetDateTime?) = apply { this.createdAtLte = createdAtLte }
+
+        /** Alias for calling [Builder.createdAtLte] with `createdAtLte.orElse(null)`. */
+        fun createdAtLte(createdAtLte: Optional<OffsetDateTime>) =
+            createdAtLte(createdAtLte.getOrNull())
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: String) = apply { this.cursor = cursor }
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -233,6 +226,11 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [MetricListParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): MetricListParams =
             MetricListParams(
                 createdAtGt,
@@ -245,4 +243,40 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                createdAtGt?.let {
+                    put("created_at[gt]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                createdAtGte?.let {
+                    put("created_at[gte]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                createdAtLt?.let {
+                    put("created_at[lt]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                createdAtLte?.let {
+                    put("created_at[lte]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                cursor?.let { put("cursor", it) }
+                limit?.let { put("limit", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is MetricListParams && createdAtGt == other.createdAtGt && createdAtGte == other.createdAtGte && createdAtLt == other.createdAtLt && createdAtLte == other.createdAtLte && cursor == other.cursor && limit == other.limit && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(createdAtGt, createdAtGte, createdAtLt, createdAtLte, cursor, limit, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "MetricListParams{createdAtGt=$createdAtGt, createdAtGte=$createdAtGte, createdAtLt=$createdAtLt, createdAtLte=$createdAtLte, cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

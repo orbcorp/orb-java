@@ -2,58 +2,39 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/** This endpoint returns an item identified by its item_id. */
 class ItemFetchParams
-constructor(
-    private val itemId: String,
+private constructor(
+    private val itemId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun itemId(): String = itemId
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> itemId
-            else -> ""
-        }
-    }
+    fun itemId(): Optional<String> = Optional.ofNullable(itemId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ItemFetchParams && itemId == other.itemId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(itemId, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "ItemFetchParams{itemId=$itemId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): ItemFetchParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [ItemFetchParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [ItemFetchParams]. */
+    class Builder internal constructor() {
 
         private var itemId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -61,12 +42,15 @@ constructor(
 
         @JvmSynthetic
         internal fun from(itemFetchParams: ItemFetchParams) = apply {
-            this.itemId = itemFetchParams.itemId
-            additionalHeaders(itemFetchParams.additionalHeaders)
-            additionalQueryParams(itemFetchParams.additionalQueryParams)
+            itemId = itemFetchParams.itemId
+            additionalHeaders = itemFetchParams.additionalHeaders.toBuilder()
+            additionalQueryParams = itemFetchParams.additionalQueryParams.toBuilder()
         }
 
-        fun itemId(itemId: String) = apply { this.itemId = itemId }
+        fun itemId(itemId: String?) = apply { this.itemId = itemId }
+
+        /** Alias for calling [Builder.itemId] with `itemId.orElse(null)`. */
+        fun itemId(itemId: Optional<String>) = itemId(itemId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,11 +150,35 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [ItemFetchParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): ItemFetchParams =
-            ItemFetchParams(
-                checkNotNull(itemId) { "`itemId` is required but was not set" },
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            ItemFetchParams(itemId, additionalHeaders.build(), additionalQueryParams.build())
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> itemId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ItemFetchParams && itemId == other.itemId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(itemId, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "ItemFetchParams{itemId=$itemId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -3,68 +3,76 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
-import com.withorb.api.models.*
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint is used to deprecate a single usage event with a given `event_id`. `event_id`
+ * refers to the `idempotency_key` passed in during ingestion.
+ *
+ * This endpoint will mark the existing event as ignored. Note that if you attempt to re-ingest an
+ * event with the same `event_id` as a deprecated event, Orb will return an error.
+ *
+ * This is a powerful and audit-safe mechanism to retroactively deprecate a single event in cases
+ * where you need to:
+ * - no longer bill for an event that was improperly reported
+ * - no longer bill for an event based on the result of an external API call (e.g. call to a payment
+ *   gateway failed and the user should not be billed)
+ *
+ * If you want to only change specific properties of an event, but keep the event as part of the
+ * billing calculation, use the [Amend event](amend-event) endpoint instead.
+ *
+ * This API is always audit-safe. The process will still retain the deprecated event, though it will
+ * be ignored for billing calculations. For auditing and data fidelity purposes, Orb never
+ * overwrites or permanently deletes ingested usage data.
+ *
+ * ## Request validation
+ * - Orb does not accept an `idempotency_key` with the event in this endpoint, since this request is
+ *   by design idempotent. On retryable errors, you should retry the request and assume the
+ *   deprecation operation has not succeeded until receipt of a 2xx.
+ * - The event's `timestamp` must fall within the customer's current subscription's billing period,
+ *   or within the grace period of the customer's current subscription's previous billing period.
+ *   Orb does not allow deprecating events for billing periods that have already invoiced customers.
+ * - The `customer_id` or the `external_customer_id` of the original event ingestion request must
+ *   identify a Customer resource within Orb, even if this event was ingested during the initial
+ *   integration period. We do not allow deprecating events for customers not in the Orb system.
+ * - By default, no more than 100 events can be deprecated for a single customer in a 100 day
+ *   period. For higher volume updates, consider using the [event backfill](create-backfill)
+ *   endpoint.
+ */
 class EventDeprecateParams
-constructor(
-    private val eventId: String,
+private constructor(
+    private val eventId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
-) {
+) : Params {
 
-    fun eventId(): String = eventId
+    fun eventId(): Optional<String> = Optional.ofNullable(eventId)
 
-    @JvmSynthetic
-    internal fun getBody(): Optional<Map<String, JsonValue>> {
-        return Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
-    }
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> eventId
-            else -> ""
-        }
-    }
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is EventDeprecateParams && eventId == other.eventId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(eventId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
-
-    override fun toString() =
-        "EventDeprecateParams{eventId=$eventId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): EventDeprecateParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [EventDeprecateParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [EventDeprecateParams]. */
+    class Builder internal constructor() {
 
         private var eventId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -73,13 +81,16 @@ constructor(
 
         @JvmSynthetic
         internal fun from(eventDeprecateParams: EventDeprecateParams) = apply {
-            this.eventId = eventDeprecateParams.eventId
-            additionalHeaders(eventDeprecateParams.additionalHeaders)
-            additionalQueryParams(eventDeprecateParams.additionalQueryParams)
-            additionalBodyProperties(eventDeprecateParams.additionalBodyProperties)
+            eventId = eventDeprecateParams.eventId
+            additionalHeaders = eventDeprecateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = eventDeprecateParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = eventDeprecateParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun eventId(eventId: String) = apply { this.eventId = eventId }
+        fun eventId(eventId: String?) = apply { this.eventId = eventId }
+
+        /** Alias for calling [Builder.eventId] with `eventId.orElse(null)`. */
+        fun eventId(eventId: Optional<String>) = eventId(eventId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -201,12 +212,43 @@ constructor(
             keys.forEach(::removeAdditionalBodyProperty)
         }
 
+        /**
+         * Returns an immutable instance of [EventDeprecateParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): EventDeprecateParams =
             EventDeprecateParams(
-                checkNotNull(eventId) { "`eventId` is required but was not set" },
+                eventId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
             )
     }
+
+    fun _body(): Optional<Map<String, JsonValue>> =
+        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> eventId ?: ""
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is EventDeprecateParams && eventId == other.eventId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(eventId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+
+    override fun toString() =
+        "EventDeprecateParams{eventId=$eventId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

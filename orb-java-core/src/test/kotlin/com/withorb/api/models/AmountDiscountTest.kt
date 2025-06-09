@@ -2,24 +2,72 @@
 
 package com.withorb.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.withorb.api.core.jsonMapper
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class AmountDiscountTest {
+internal class AmountDiscountTest {
 
     @Test
-    fun createAmountDiscount() {
+    fun create() {
         val amountDiscount =
             AmountDiscount.builder()
                 .amountDiscount("amount_discount")
-                .appliesToPriceIds(listOf("string"))
                 .discountType(AmountDiscount.DiscountType.AMOUNT)
+                .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                .addFilter(
+                    AmountDiscount.Filter.builder()
+                        .field(AmountDiscount.Filter.Field.PRICE_ID)
+                        .operator(AmountDiscount.Filter.Operator.INCLUDES)
+                        .addValue("string")
+                        .build()
+                )
                 .reason("reason")
                 .build()
-        assertThat(amountDiscount).isNotNull
+
         assertThat(amountDiscount.amountDiscount()).isEqualTo("amount_discount")
-        assertThat(amountDiscount.appliesToPriceIds()).containsExactly("string")
         assertThat(amountDiscount.discountType()).isEqualTo(AmountDiscount.DiscountType.AMOUNT)
+        assertThat(amountDiscount.appliesToPriceIds().getOrNull())
+            .containsExactly("h74gfhdjvn7ujokd", "7hfgtgjnbvc3ujkl")
+        assertThat(amountDiscount.filters().getOrNull())
+            .containsExactly(
+                AmountDiscount.Filter.builder()
+                    .field(AmountDiscount.Filter.Field.PRICE_ID)
+                    .operator(AmountDiscount.Filter.Operator.INCLUDES)
+                    .addValue("string")
+                    .build()
+            )
         assertThat(amountDiscount.reason()).contains("reason")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val amountDiscount =
+            AmountDiscount.builder()
+                .amountDiscount("amount_discount")
+                .discountType(AmountDiscount.DiscountType.AMOUNT)
+                .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                .addFilter(
+                    AmountDiscount.Filter.builder()
+                        .field(AmountDiscount.Filter.Field.PRICE_ID)
+                        .operator(AmountDiscount.Filter.Operator.INCLUDES)
+                        .addValue("string")
+                        .build()
+                )
+                .reason("reason")
+                .build()
+
+        val roundtrippedAmountDiscount =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(amountDiscount),
+                jacksonTypeRef<AmountDiscount>(),
+            )
+
+        assertThat(roundtrippedAmountDiscount).isEqualTo(amountDiscount)
     }
 }

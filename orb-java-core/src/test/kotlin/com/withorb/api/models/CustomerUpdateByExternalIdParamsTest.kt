@@ -2,32 +2,31 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
+import com.withorb.api.core.JsonValue
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CustomerUpdateByExternalIdParamsTest {
+internal class CustomerUpdateByExternalIdParamsTest {
 
     @Test
-    fun createCustomerUpdateByExternalIdParams() {
+    fun create() {
         CustomerUpdateByExternalIdParams.builder()
             .id("external_customer_id")
             .accountingSyncConfiguration(
                 CustomerUpdateByExternalIdParams.AccountingSyncConfiguration.builder()
-                    .accountingProviders(
-                        listOf(
-                            CustomerUpdateByExternalIdParams.AccountingSyncConfiguration
-                                .AccountingProvider
-                                .builder()
-                                .externalProviderId("external_provider_id")
-                                .providerType("provider_type")
-                                .build()
-                        )
+                    .addAccountingProvider(
+                        CustomerUpdateByExternalIdParams.AccountingSyncConfiguration
+                            .AccountingProvider
+                            .builder()
+                            .externalProviderId("external_provider_id")
+                            .providerType("provider_type")
+                            .build()
                     )
                     .excluded(true)
                     .build()
             )
-            .additionalEmails(listOf("string"))
+            .addAdditionalEmail("string")
             .autoCollection(true)
             .billingAddress(
                 CustomerUpdateByExternalIdParams.BillingAddress.builder()
@@ -40,10 +39,20 @@ class CustomerUpdateByExternalIdParamsTest {
                     .build()
             )
             .currency("currency")
-            .email("dev@stainlessapi.com")
+            .email("dev@stainless.com")
             .emailDelivery(true)
             .externalCustomerId("external_customer_id")
-            .metadata(CustomerUpdateByExternalIdParams.Metadata.builder().build())
+            .hierarchy(
+                CustomerUpdateByExternalIdParams.Hierarchy.builder()
+                    .addChildCustomerId("string")
+                    .parentCustomerId("parent_customer_id")
+                    .build()
+            )
+            .metadata(
+                CustomerUpdateByExternalIdParams.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
             .name("name")
             .paymentProvider(CustomerUpdateByExternalIdParams.PaymentProvider.QUICKBOOKS)
             .paymentProviderId("payment_provider_id")
@@ -63,19 +72,10 @@ class CustomerUpdateByExternalIdParamsTest {
                     .build()
             )
             .taxConfiguration(
-                CustomerUpdateByExternalIdParams.TaxConfiguration.ofNewAvalaraTaxConfiguration(
-                    CustomerUpdateByExternalIdParams.TaxConfiguration.NewAvalaraTaxConfiguration
-                        .builder()
-                        .taxExempt(true)
-                        .taxProvider(
-                            CustomerUpdateByExternalIdParams.TaxConfiguration
-                                .NewAvalaraTaxConfiguration
-                                .TaxProvider
-                                .AVALARA
-                        )
-                        .taxExemptionCode("tax_exemption_code")
-                        .build()
-                )
+                CustomerUpdateByExternalIdParams.TaxConfiguration.Avalara.builder()
+                    .taxExempt(true)
+                    .taxExemptionCode("tax_exemption_code")
+                    .build()
             )
             .taxId(
                 CustomerUpdateByExternalIdParams.TaxId.builder()
@@ -88,26 +88,33 @@ class CustomerUpdateByExternalIdParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun pathParams() {
+        val params = CustomerUpdateByExternalIdParams.builder().id("external_customer_id").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("external_customer_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
+    fun body() {
         val params =
             CustomerUpdateByExternalIdParams.builder()
                 .id("external_customer_id")
                 .accountingSyncConfiguration(
                     CustomerUpdateByExternalIdParams.AccountingSyncConfiguration.builder()
-                        .accountingProviders(
-                            listOf(
-                                CustomerUpdateByExternalIdParams.AccountingSyncConfiguration
-                                    .AccountingProvider
-                                    .builder()
-                                    .externalProviderId("external_provider_id")
-                                    .providerType("provider_type")
-                                    .build()
-                            )
+                        .addAccountingProvider(
+                            CustomerUpdateByExternalIdParams.AccountingSyncConfiguration
+                                .AccountingProvider
+                                .builder()
+                                .externalProviderId("external_provider_id")
+                                .providerType("provider_type")
+                                .build()
                         )
                         .excluded(true)
                         .build()
                 )
-                .additionalEmails(listOf("string"))
+                .addAdditionalEmail("string")
                 .autoCollection(true)
                 .billingAddress(
                     CustomerUpdateByExternalIdParams.BillingAddress.builder()
@@ -120,10 +127,20 @@ class CustomerUpdateByExternalIdParamsTest {
                         .build()
                 )
                 .currency("currency")
-                .email("dev@stainlessapi.com")
+                .email("dev@stainless.com")
                 .emailDelivery(true)
                 .externalCustomerId("external_customer_id")
-                .metadata(CustomerUpdateByExternalIdParams.Metadata.builder().build())
+                .hierarchy(
+                    CustomerUpdateByExternalIdParams.Hierarchy.builder()
+                        .addChildCustomerId("string")
+                        .parentCustomerId("parent_customer_id")
+                        .build()
+                )
+                .metadata(
+                    CustomerUpdateByExternalIdParams.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .name("name")
                 .paymentProvider(CustomerUpdateByExternalIdParams.PaymentProvider.QUICKBOOKS)
                 .paymentProviderId("payment_provider_id")
@@ -143,19 +160,10 @@ class CustomerUpdateByExternalIdParamsTest {
                         .build()
                 )
                 .taxConfiguration(
-                    CustomerUpdateByExternalIdParams.TaxConfiguration.ofNewAvalaraTaxConfiguration(
-                        CustomerUpdateByExternalIdParams.TaxConfiguration.NewAvalaraTaxConfiguration
-                            .builder()
-                            .taxExempt(true)
-                            .taxProvider(
-                                CustomerUpdateByExternalIdParams.TaxConfiguration
-                                    .NewAvalaraTaxConfiguration
-                                    .TaxProvider
-                                    .AVALARA
-                            )
-                            .taxExemptionCode("tax_exemption_code")
-                            .build()
-                    )
+                    CustomerUpdateByExternalIdParams.TaxConfiguration.Avalara.builder()
+                        .taxExempt(true)
+                        .taxExemptionCode("tax_exemption_code")
+                        .build()
                 )
                 .taxId(
                     CustomerUpdateByExternalIdParams.TaxId.builder()
@@ -165,28 +173,27 @@ class CustomerUpdateByExternalIdParamsTest {
                         .build()
                 )
                 .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
+
+        val body = params._body()
+
         assertThat(body.accountingSyncConfiguration())
-            .isEqualTo(
+            .contains(
                 CustomerUpdateByExternalIdParams.AccountingSyncConfiguration.builder()
-                    .accountingProviders(
-                        listOf(
-                            CustomerUpdateByExternalIdParams.AccountingSyncConfiguration
-                                .AccountingProvider
-                                .builder()
-                                .externalProviderId("external_provider_id")
-                                .providerType("provider_type")
-                                .build()
-                        )
+                    .addAccountingProvider(
+                        CustomerUpdateByExternalIdParams.AccountingSyncConfiguration
+                            .AccountingProvider
+                            .builder()
+                            .externalProviderId("external_provider_id")
+                            .providerType("provider_type")
+                            .build()
                     )
                     .excluded(true)
                     .build()
             )
-        assertThat(body.additionalEmails()).isEqualTo(listOf("string"))
-        assertThat(body.autoCollection()).isEqualTo(true)
+        assertThat(body.additionalEmails().getOrNull()).containsExactly("string")
+        assertThat(body.autoCollection()).contains(true)
         assertThat(body.billingAddress())
-            .isEqualTo(
+            .contains(
                 CustomerUpdateByExternalIdParams.BillingAddress.builder()
                     .city("city")
                     .country("country")
@@ -196,24 +203,35 @@ class CustomerUpdateByExternalIdParamsTest {
                     .state("state")
                     .build()
             )
-        assertThat(body.currency()).isEqualTo("currency")
-        assertThat(body.email()).isEqualTo("dev@stainlessapi.com")
-        assertThat(body.emailDelivery()).isEqualTo(true)
-        assertThat(body.externalCustomerId()).isEqualTo("external_customer_id")
+        assertThat(body.currency()).contains("currency")
+        assertThat(body.email()).contains("dev@stainless.com")
+        assertThat(body.emailDelivery()).contains(true)
+        assertThat(body.externalCustomerId()).contains("external_customer_id")
+        assertThat(body.hierarchy())
+            .contains(
+                CustomerUpdateByExternalIdParams.Hierarchy.builder()
+                    .addChildCustomerId("string")
+                    .parentCustomerId("parent_customer_id")
+                    .build()
+            )
         assertThat(body.metadata())
-            .isEqualTo(CustomerUpdateByExternalIdParams.Metadata.builder().build())
-        assertThat(body.name()).isEqualTo("name")
+            .contains(
+                CustomerUpdateByExternalIdParams.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
+        assertThat(body.name()).contains("name")
         assertThat(body.paymentProvider())
-            .isEqualTo(CustomerUpdateByExternalIdParams.PaymentProvider.QUICKBOOKS)
-        assertThat(body.paymentProviderId()).isEqualTo("payment_provider_id")
+            .contains(CustomerUpdateByExternalIdParams.PaymentProvider.QUICKBOOKS)
+        assertThat(body.paymentProviderId()).contains("payment_provider_id")
         assertThat(body.reportingConfiguration())
-            .isEqualTo(
+            .contains(
                 CustomerUpdateByExternalIdParams.ReportingConfiguration.builder()
                     .exempt(true)
                     .build()
             )
         assertThat(body.shippingAddress())
-            .isEqualTo(
+            .contains(
                 CustomerUpdateByExternalIdParams.ShippingAddress.builder()
                     .city("city")
                     .country("country")
@@ -224,23 +242,16 @@ class CustomerUpdateByExternalIdParamsTest {
                     .build()
             )
         assertThat(body.taxConfiguration())
-            .isEqualTo(
-                CustomerUpdateByExternalIdParams.TaxConfiguration.ofNewAvalaraTaxConfiguration(
-                    CustomerUpdateByExternalIdParams.TaxConfiguration.NewAvalaraTaxConfiguration
-                        .builder()
+            .contains(
+                CustomerUpdateByExternalIdParams.TaxConfiguration.ofAvalara(
+                    CustomerUpdateByExternalIdParams.TaxConfiguration.Avalara.builder()
                         .taxExempt(true)
-                        .taxProvider(
-                            CustomerUpdateByExternalIdParams.TaxConfiguration
-                                .NewAvalaraTaxConfiguration
-                                .TaxProvider
-                                .AVALARA
-                        )
                         .taxExemptionCode("tax_exemption_code")
                         .build()
                 )
             )
         assertThat(body.taxId())
-            .isEqualTo(
+            .contains(
                 CustomerUpdateByExternalIdParams.TaxId.builder()
                     .country(CustomerUpdateByExternalIdParams.TaxId.Country.AD)
                     .type(CustomerUpdateByExternalIdParams.TaxId.Type.AD_NRT)
@@ -250,19 +261,9 @@ class CustomerUpdateByExternalIdParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params = CustomerUpdateByExternalIdParams.builder().id("external_customer_id").build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-    }
 
-    @Test
-    fun getPathParam() {
-        val params = CustomerUpdateByExternalIdParams.builder().id("external_customer_id").build()
-        assertThat(params).isNotNull
-        // path param "id"
-        assertThat(params.getPathParam(0)).isEqualTo("external_customer_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        val body = params._body()
     }
 }

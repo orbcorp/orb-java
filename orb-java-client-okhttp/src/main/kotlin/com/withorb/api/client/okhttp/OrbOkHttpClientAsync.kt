@@ -6,35 +6,51 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import com.withorb.api.client.OrbClientAsync
 import com.withorb.api.client.OrbClientAsyncImpl
 import com.withorb.api.core.ClientOptions
+import com.withorb.api.core.Timeout
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.net.Proxy
 import java.time.Clock
 import java.time.Duration
+import java.util.Optional
+import java.util.concurrent.Executor
+import kotlin.jvm.optionals.getOrNull
 
 class OrbOkHttpClientAsync private constructor() {
 
     companion object {
 
+        /** Returns a mutable builder for constructing an instance of [OrbOkHttpClientAsync]. */
         @JvmStatic fun builder() = Builder()
 
         @JvmStatic fun fromEnv(): OrbClientAsync = builder().fromEnv().build()
     }
 
-    class Builder {
+    /** A builder for [OrbOkHttpClientAsync]. */
+    class Builder internal constructor() {
 
         private var clientOptions: ClientOptions.Builder = ClientOptions.builder()
-        private var baseUrl: String = ClientOptions.PRODUCTION_URL
-        // The default timeout for the client is 1 minute.
-        private var timeout: Duration = Duration.ofSeconds(60)
+        private var timeout: Timeout = Timeout.default()
         private var proxy: Proxy? = null
 
-        fun baseUrl(baseUrl: String) = apply {
-            clientOptions.baseUrl(baseUrl)
-            this.baseUrl = baseUrl
+        fun baseUrl(baseUrl: String) = apply { clientOptions.baseUrl(baseUrl) }
+
+        /**
+         * Whether to throw an exception if any of the Jackson versions detected at runtime are
+         * incompatible with the SDK's minimum supported Jackson version (2.13.4).
+         *
+         * Defaults to true. Use extreme caution when disabling this option. There is no guarantee
+         * that the SDK will work correctly when using an incompatible Jackson version.
+         */
+        fun checkJacksonVersionCompatibility(checkJacksonVersionCompatibility: Boolean) = apply {
+            clientOptions.checkJacksonVersionCompatibility(checkJacksonVersionCompatibility)
         }
 
         fun jsonMapper(jsonMapper: JsonMapper) = apply { clientOptions.jsonMapper(jsonMapper) }
+
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
+            clientOptions.streamHandlerExecutor(streamHandlerExecutor)
+        }
 
         fun clock(clock: Clock) = apply { clientOptions.clock(clock) }
 
@@ -118,7 +134,19 @@ class OrbOkHttpClientAsync private constructor() {
             clientOptions.removeAllQueryParams(keys)
         }
 
-        fun timeout(timeout: Duration) = apply { this.timeout = timeout }
+        fun timeout(timeout: Timeout) = apply {
+            clientOptions.timeout(timeout)
+            this.timeout = timeout
+        }
+
+        /**
+         * Sets the maximum time allowed for a complete HTTP call, not including retries.
+         *
+         * See [Timeout.request] for more details.
+         *
+         * For fine-grained control, pass a [Timeout] object.
+         */
+        fun timeout(timeout: Duration) = timeout(Timeout.builder().request(timeout).build())
 
         fun maxRetries(maxRetries: Int) = apply { clientOptions.maxRetries(maxRetries) }
 
@@ -134,14 +162,23 @@ class OrbOkHttpClientAsync private constructor() {
             clientOptions.webhookSecret(webhookSecret)
         }
 
+        /** Alias for calling [Builder.webhookSecret] with `webhookSecret.orElse(null)`. */
+        fun webhookSecret(webhookSecret: Optional<String>) =
+            webhookSecret(webhookSecret.getOrNull())
+
         fun fromEnv() = apply { clientOptions.fromEnv() }
 
+        /**
+         * Returns an immutable instance of [OrbClientAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): OrbClientAsync =
             OrbClientAsyncImpl(
                 clientOptions
                     .httpClient(
                         OkHttpClient.builder()
-                            .baseUrl(baseUrl)
+                            .baseUrl(clientOptions.baseUrl())
                             .timeout(timeout)
                             .proxy(proxy)
                             .build()

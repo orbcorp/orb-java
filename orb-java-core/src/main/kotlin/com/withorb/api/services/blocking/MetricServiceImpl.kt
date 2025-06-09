@@ -3,150 +3,182 @@
 package com.withorb.api.services.blocking
 
 import com.withorb.api.core.ClientOptions
+import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
 import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
 import com.withorb.api.core.http.HttpResponse.Handler
-import com.withorb.api.core.json
-import com.withorb.api.errors.OrbError
+import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.core.http.json
+import com.withorb.api.core.http.parseable
+import com.withorb.api.core.prepare
 import com.withorb.api.models.BillableMetric
 import com.withorb.api.models.MetricCreateParams
 import com.withorb.api.models.MetricFetchParams
 import com.withorb.api.models.MetricListPage
+import com.withorb.api.models.MetricListPageResponse
 import com.withorb.api.models.MetricListParams
 import com.withorb.api.models.MetricUpdateParams
+import kotlin.jvm.optionals.getOrNull
 
-class MetricServiceImpl
-constructor(
-    private val clientOptions: ClientOptions,
-) : MetricService {
+class MetricServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    MetricService {
 
-    private val errorHandler: Handler<OrbError> = errorHandler(clientOptions.jsonMapper)
+    private val withRawResponse: MetricService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
-    private val createHandler: Handler<BillableMetric> =
-        jsonHandler<BillableMetric>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+    override fun withRawResponse(): MetricService.WithRawResponse = withRawResponse
 
-    /**
-     * This endpoint is used to create a [metric](../guides/concepts##metric) using a SQL string.
-     * See [SQL support](../guides/extensibility/advanced-metrics#sql-support) for a description of
-     * constructing SQL queries with examples.
-     */
     override fun create(
         params: MetricCreateParams,
-        requestOptions: RequestOptions
-    ): BillableMetric {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.POST)
-                .addPathSegments("metrics")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .body(json(clientOptions.jsonMapper, params.getBody()))
-                .build()
-        return clientOptions.httpClient.execute(request, requestOptions).let { response ->
-            response
-                .use { createHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
-                }
-        }
-    }
+        requestOptions: RequestOptions,
+    ): BillableMetric =
+        // post /metrics
+        withRawResponse().create(params, requestOptions).parse()
 
-    private val updateHandler: Handler<BillableMetric> =
-        jsonHandler<BillableMetric>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-    /**
-     * This endpoint allows you to update the `metadata` property on a metric. If you pass `null`
-     * for the metadata value, it will clear any existing metadata for that invoice.
-     */
     override fun update(
         params: MetricUpdateParams,
-        requestOptions: RequestOptions
-    ): BillableMetric {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.PUT)
-                .addPathSegments("metrics", params.getPathParam(0))
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .body(json(clientOptions.jsonMapper, params.getBody()))
-                .build()
-        return clientOptions.httpClient.execute(request, requestOptions).let { response ->
-            response
-                .use { updateHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
+        requestOptions: RequestOptions,
+    ): BillableMetric =
+        // put /metrics/{metric_id}
+        withRawResponse().update(params, requestOptions).parse()
+
+    override fun list(params: MetricListParams, requestOptions: RequestOptions): MetricListPage =
+        // get /metrics
+        withRawResponse().list(params, requestOptions).parse()
+
+    override fun fetch(params: MetricFetchParams, requestOptions: RequestOptions): BillableMetric =
+        // get /metrics/{metric_id}
+        withRawResponse().fetch(params, requestOptions).parse()
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        MetricService.WithRawResponse {
+
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        private val createHandler: Handler<BillableMetric> =
+            jsonHandler<BillableMetric>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun create(
+            params: MetricCreateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BillableMetric> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("metrics")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { createHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
                     }
-                }
+            }
         }
-    }
 
-    private val listHandler: Handler<MetricListPage.Response> =
-        jsonHandler<MetricListPage.Response>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
+        private val updateHandler: Handler<BillableMetric> =
+            jsonHandler<BillableMetric>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-    /**
-     * This endpoint is used to fetch [metric](../guides/concepts#metric) details given a metric
-     * identifier. It returns information about the metrics including its name, description, and
-     * item.
-     */
-    override fun list(params: MetricListParams, requestOptions: RequestOptions): MetricListPage {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("metrics")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .build()
-        return clientOptions.httpClient.execute(request, requestOptions).let { response ->
-            response
-                .use { listHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
+        override fun update(
+            params: MetricUpdateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BillableMetric> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("metricId", params.metricId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .addPathSegments("metrics", params._pathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { updateHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
                     }
-                }
-                .let { MetricListPage.of(this, params, it) }
+            }
         }
-    }
 
-    private val fetchHandler: Handler<BillableMetric> =
-        jsonHandler<BillableMetric>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listHandler: Handler<MetricListPageResponse> =
+            jsonHandler<MetricListPageResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-    /**
-     * This endpoint is used to list [metrics](../guides/concepts##metric). It returns information
-     * about the metrics including its name, description, and item.
-     */
-    override fun fetch(params: MetricFetchParams, requestOptions: RequestOptions): BillableMetric {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("metrics", params.getPathParam(0))
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .build()
-        return clientOptions.httpClient.execute(request, requestOptions).let { response ->
-            response
-                .use { fetchHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
+        override fun list(
+            params: MetricListParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<MetricListPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("metrics")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
                     }
-                }
+                    .let {
+                        MetricListPage.builder()
+                            .service(MetricServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
+            }
+        }
+
+        private val fetchHandler: Handler<BillableMetric> =
+            jsonHandler<BillableMetric>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun fetch(
+            params: MetricFetchParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BillableMetric> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("metricId", params.metricId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("metrics", params._pathParam(0))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { fetchHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
     }
 }

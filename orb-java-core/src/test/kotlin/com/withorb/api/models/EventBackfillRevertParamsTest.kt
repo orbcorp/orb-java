@@ -2,24 +2,22 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class EventBackfillRevertParamsTest {
+internal class EventBackfillRevertParamsTest {
 
     @Test
-    fun createEventBackfillRevertParams() {
+    fun create() {
         EventBackfillRevertParams.builder().backfillId("backfill_id").build()
     }
 
     @Test
-    fun getPathParam() {
+    fun pathParams() {
         val params = EventBackfillRevertParams.builder().backfillId("backfill_id").build()
-        assertThat(params).isNotNull
-        // path param "backfillId"
-        assertThat(params.getPathParam(0)).isEqualTo("backfill_id")
+
+        assertThat(params._pathParam(0)).isEqualTo("backfill_id")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 }

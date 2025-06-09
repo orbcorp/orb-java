@@ -2,70 +2,61 @@
 
 package com.withorb.api.models
 
-import com.withorb.api.core.NoAutoDetect
+import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * This endpoint returns a list of all coupons for an account in a list format.
+ *
+ * The list of coupons is ordered starting from the most recently created coupon. The response also
+ * includes `pagination_metadata`, which lets the caller retrieve the next page of results if they
+ * exist. More information about pagination can be found in the Pagination-metadata schema.
+ */
 class CouponListParams
-constructor(
+private constructor(
     private val cursor: String?,
     private val limit: Long?,
     private val redemptionCode: String?,
     private val showArchived: Boolean?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
+    /**
+     * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
+     * initial request.
+     */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
+    /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
+    /** Filter to coupons matching this redemption code. */
     fun redemptionCode(): Optional<String> = Optional.ofNullable(redemptionCode)
 
+    /** Show archived coupons as well (by default, this endpoint only returns active coupons). */
     fun showArchived(): Optional<Boolean> = Optional.ofNullable(showArchived)
-
-    @JvmSynthetic internal fun getHeaders(): Headers = additionalHeaders
-
-    @JvmSynthetic
-    internal fun getQueryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.cursor?.let { queryParams.put("cursor", listOf(it.toString())) }
-        this.limit?.let { queryParams.put("limit", listOf(it.toString())) }
-        this.redemptionCode?.let { queryParams.put("redemption_code", listOf(it.toString())) }
-        this.showArchived?.let { queryParams.put("show_archived", listOf(it.toString())) }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CouponListParams && cursor == other.cursor && limit == other.limit && redemptionCode == other.redemptionCode && showArchived == other.showArchived && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(cursor, limit, redemptionCode, showArchived, additionalHeaders, additionalQueryParams) /* spotless:on */
-
-    override fun toString() =
-        "CouponListParams{cursor=$cursor, limit=$limit, redemptionCode=$redemptionCode, showArchived=$showArchived, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        @JvmStatic fun none(): CouponListParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [CouponListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Builder {
+    /** A builder for [CouponListParams]. */
+    class Builder internal constructor() {
 
         private var cursor: String? = null
         private var limit: Long? = null
@@ -76,30 +67,57 @@ constructor(
 
         @JvmSynthetic
         internal fun from(couponListParams: CouponListParams) = apply {
-            this.cursor = couponListParams.cursor
-            this.limit = couponListParams.limit
-            this.redemptionCode = couponListParams.redemptionCode
-            this.showArchived = couponListParams.showArchived
-            additionalHeaders(couponListParams.additionalHeaders)
-            additionalQueryParams(couponListParams.additionalQueryParams)
+            cursor = couponListParams.cursor
+            limit = couponListParams.limit
+            redemptionCode = couponListParams.redemptionCode
+            showArchived = couponListParams.showArchived
+            additionalHeaders = couponListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = couponListParams.additionalQueryParams.toBuilder()
         }
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
          * initial request.
          */
-        fun cursor(cursor: String) = apply { this.cursor = cursor }
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
         /** The number of items to fetch. Defaults to 20. */
-        fun limit(limit: Long) = apply { this.limit = limit }
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         /** Filter to coupons matching this redemption code. */
-        fun redemptionCode(redemptionCode: String) = apply { this.redemptionCode = redemptionCode }
+        fun redemptionCode(redemptionCode: String?) = apply { this.redemptionCode = redemptionCode }
+
+        /** Alias for calling [Builder.redemptionCode] with `redemptionCode.orElse(null)`. */
+        fun redemptionCode(redemptionCode: Optional<String>) =
+            redemptionCode(redemptionCode.getOrNull())
 
         /**
          * Show archived coupons as well (by default, this endpoint only returns active coupons).
          */
-        fun showArchived(showArchived: Boolean) = apply { this.showArchived = showArchived }
+        fun showArchived(showArchived: Boolean?) = apply { this.showArchived = showArchived }
+
+        /**
+         * Alias for [Builder.showArchived].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun showArchived(showArchived: Boolean) = showArchived(showArchived as Boolean?)
+
+        /** Alias for calling [Builder.showArchived] with `showArchived.orElse(null)`. */
+        fun showArchived(showArchived: Optional<Boolean>) = showArchived(showArchived.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -199,6 +217,11 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [CouponListParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): CouponListParams =
             CouponListParams(
                 cursor,
@@ -209,4 +232,30 @@ constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                cursor?.let { put("cursor", it) }
+                limit?.let { put("limit", it.toString()) }
+                redemptionCode?.let { put("redemption_code", it) }
+                showArchived?.let { put("show_archived", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CouponListParams && cursor == other.cursor && limit == other.limit && redemptionCode == other.redemptionCode && showArchived == other.showArchived && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(cursor, limit, redemptionCode, showArchived, additionalHeaders, additionalQueryParams) /* spotless:on */
+
+    override fun toString() =
+        "CouponListParams{cursor=$cursor, limit=$limit, redemptionCode=$redemptionCode, showArchived=$showArchived, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

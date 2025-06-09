@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.blocking
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.EventDeprecateParams
 import com.withorb.api.models.EventDeprecateResponse
 import com.withorb.api.models.EventIngestParams
@@ -17,6 +17,11 @@ import com.withorb.api.services.blocking.events.BackfillService
 import com.withorb.api.services.blocking.events.VolumeService
 
 interface EventService {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     fun backfills(): BackfillService
 
@@ -63,10 +68,24 @@ interface EventService {
      *   period. For higher volume updates, consider using the [event backfill](create-backfill)
      *   endpoint.
      */
-    @JvmOverloads
+    fun update(eventId: String, params: EventUpdateParams): EventUpdateResponse =
+        update(eventId, params, RequestOptions.none())
+
+    /** @see [update] */
+    fun update(
+        eventId: String,
+        params: EventUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): EventUpdateResponse = update(params.toBuilder().eventId(eventId).build(), requestOptions)
+
+    /** @see [update] */
+    fun update(params: EventUpdateParams): EventUpdateResponse =
+        update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: EventUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): EventUpdateResponse
 
     /**
@@ -83,7 +102,7 @@ interface EventService {
      *   payment gateway failed and the user should not be billed)
      *
      * If you want to only change specific properties of an event, but keep the event as part of the
-     * billing calculation, use the [Amend single event](amend-event) endpoint instead.
+     * billing calculation, use the [Amend event](amend-event) endpoint instead.
      *
      * This API is always audit-safe. The process will still retain the deprecated event, though it
      * will be ignored for billing calculations. For auditing and data fidelity purposes, Orb never
@@ -105,11 +124,36 @@ interface EventService {
      *   period. For higher volume updates, consider using the [event backfill](create-backfill)
      *   endpoint.
      */
-    @JvmOverloads
+    fun deprecate(eventId: String): EventDeprecateResponse =
+        deprecate(eventId, EventDeprecateParams.none())
+
+    /** @see [deprecate] */
+    fun deprecate(
+        eventId: String,
+        params: EventDeprecateParams = EventDeprecateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): EventDeprecateResponse =
+        deprecate(params.toBuilder().eventId(eventId).build(), requestOptions)
+
+    /** @see [deprecate] */
+    fun deprecate(
+        eventId: String,
+        params: EventDeprecateParams = EventDeprecateParams.none(),
+    ): EventDeprecateResponse = deprecate(eventId, params, RequestOptions.none())
+
+    /** @see [deprecate] */
     fun deprecate(
         params: EventDeprecateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): EventDeprecateResponse
+
+    /** @see [deprecate] */
+    fun deprecate(params: EventDeprecateParams): EventDeprecateResponse =
+        deprecate(params, RequestOptions.none())
+
+    /** @see [deprecate] */
+    fun deprecate(eventId: String, requestOptions: RequestOptions): EventDeprecateResponse =
+        deprecate(eventId, EventDeprecateParams.none(), requestOptions)
 
     /**
      * Orb's event ingestion model and API is designed around two core principles:
@@ -190,6 +234,8 @@ interface EventService {
      *   query engine to determine usage.
      * - Logging a region or cluster with each event can help you provide customers more granular
      *   visibility into their usage.
+     * - If you are using matrix pricing and matching a matrix price key with a property, you should
+     *   ensure the value for that property is sent as a string.
      *
      * We encourage logging this metadata with an eye towards future use cases to ensure full
      * coverage for historical data. The datatype of the value in the properties dictionary is
@@ -274,8 +320,7 @@ interface EventService {
      *
      * If `debug=true` is not specified, the response will only contain `validation_failed`. Orb
      * will still honor the idempotency guarantees set
-     * [here](../guides/events-and-metrics/event-ingestion#event-volume-and-concurrency) in all
-     * cases.
+     * [here](/events-and-metrics/event-ingestion#event-volume-and-concurrency) in all cases.
      *
      * We strongly recommend that you only use debug mode as part of testing your initial Orb
      * integration. Once you're ready to switch to production, disable debug mode to take advantage
@@ -301,15 +346,18 @@ interface EventService {
      * }
      * ```
      */
-    @JvmOverloads
+    fun ingest(params: EventIngestParams): EventIngestResponse =
+        ingest(params, RequestOptions.none())
+
+    /** @see [ingest] */
     fun ingest(
         params: EventIngestParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): EventIngestResponse
 
     /**
      * This endpoint returns a filtered set of events for an account in a
-     * [paginated list format](../reference/pagination).
+     * [paginated list format](/api-reference/pagination).
      *
      * Note that this is a `POST` endpoint rather than a `GET` endpoint because it employs a JSON
      * body for search criteria rather than query parameters, allowing for a more flexible search
@@ -323,9 +371,126 @@ interface EventService {
      * By default, Orb will not throw a `404` if no events matched, Orb will return an empty array
      * for `data` instead.
      */
-    @JvmOverloads
+    fun search(params: EventSearchParams): EventSearchResponse =
+        search(params, RequestOptions.none())
+
+    /** @see [search] */
     fun search(
         params: EventSearchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): EventSearchResponse
+
+    /** A view of [EventService] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        fun backfills(): BackfillService.WithRawResponse
+
+        fun volume(): VolumeService.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `put /events/{event_id}`, but is otherwise the same as
+         * [EventService.update].
+         */
+        @MustBeClosed
+        fun update(
+            eventId: String,
+            params: EventUpdateParams,
+        ): HttpResponseFor<EventUpdateResponse> = update(eventId, params, RequestOptions.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            eventId: String,
+            params: EventUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<EventUpdateResponse> =
+            update(params.toBuilder().eventId(eventId).build(), requestOptions)
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(params: EventUpdateParams): HttpResponseFor<EventUpdateResponse> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            params: EventUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<EventUpdateResponse>
+
+        /**
+         * Returns a raw HTTP response for `put /events/{event_id}/deprecate`, but is otherwise the
+         * same as [EventService.deprecate].
+         */
+        @MustBeClosed
+        fun deprecate(eventId: String): HttpResponseFor<EventDeprecateResponse> =
+            deprecate(eventId, EventDeprecateParams.none())
+
+        /** @see [deprecate] */
+        @MustBeClosed
+        fun deprecate(
+            eventId: String,
+            params: EventDeprecateParams = EventDeprecateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<EventDeprecateResponse> =
+            deprecate(params.toBuilder().eventId(eventId).build(), requestOptions)
+
+        /** @see [deprecate] */
+        @MustBeClosed
+        fun deprecate(
+            eventId: String,
+            params: EventDeprecateParams = EventDeprecateParams.none(),
+        ): HttpResponseFor<EventDeprecateResponse> =
+            deprecate(eventId, params, RequestOptions.none())
+
+        /** @see [deprecate] */
+        @MustBeClosed
+        fun deprecate(
+            params: EventDeprecateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<EventDeprecateResponse>
+
+        /** @see [deprecate] */
+        @MustBeClosed
+        fun deprecate(params: EventDeprecateParams): HttpResponseFor<EventDeprecateResponse> =
+            deprecate(params, RequestOptions.none())
+
+        /** @see [deprecate] */
+        @MustBeClosed
+        fun deprecate(
+            eventId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<EventDeprecateResponse> =
+            deprecate(eventId, EventDeprecateParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /ingest`, but is otherwise the same as
+         * [EventService.ingest].
+         */
+        @MustBeClosed
+        fun ingest(params: EventIngestParams): HttpResponseFor<EventIngestResponse> =
+            ingest(params, RequestOptions.none())
+
+        /** @see [ingest] */
+        @MustBeClosed
+        fun ingest(
+            params: EventIngestParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<EventIngestResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /events/search`, but is otherwise the same as
+         * [EventService.search].
+         */
+        @MustBeClosed
+        fun search(params: EventSearchParams): HttpResponseFor<EventSearchResponse> =
+            search(params, RequestOptions.none())
+
+        /** @see [search] */
+        @MustBeClosed
+        fun search(
+            params: EventSearchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<EventSearchResponse>
+    }
 }

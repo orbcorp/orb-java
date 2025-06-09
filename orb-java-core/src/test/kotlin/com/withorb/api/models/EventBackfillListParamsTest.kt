@@ -3,30 +3,32 @@
 package com.withorb.api.models
 
 import com.withorb.api.core.http.QueryParams
-import com.withorb.api.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class EventBackfillListParamsTest {
+internal class EventBackfillListParamsTest {
 
     @Test
-    fun createEventBackfillListParams() {
-        EventBackfillListParams.builder().cursor("cursor").limit(123L).build()
+    fun create() {
+        EventBackfillListParams.builder().cursor("cursor").limit(1L).build()
     }
 
     @Test
-    fun getQueryParams() {
-        val params = EventBackfillListParams.builder().cursor("cursor").limit(123L).build()
-        val expected = QueryParams.builder()
-        expected.put("cursor", "cursor")
-        expected.put("limit", "123")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+    fun queryParams() {
+        val params = EventBackfillListParams.builder().cursor("cursor").limit(1L).build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(QueryParams.builder().put("cursor", "cursor").put("limit", "1").build())
     }
 
     @Test
-    fun getQueryParamsWithoutOptionalFields() {
+    fun queryParamsWithoutOptionalFields() {
         val params = EventBackfillListParams.builder().build()
-        val expected = QueryParams.builder()
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }

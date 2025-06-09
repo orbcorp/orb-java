@@ -1,10 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.withorb.api.services.async
 
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.EventDeprecateParams
 import com.withorb.api.models.EventDeprecateResponse
 import com.withorb.api.models.EventIngestParams
@@ -18,6 +17,11 @@ import com.withorb.api.services.async.events.VolumeServiceAsync
 import java.util.concurrent.CompletableFuture
 
 interface EventServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     fun backfills(): BackfillServiceAsync
 
@@ -64,10 +68,25 @@ interface EventServiceAsync {
      *   period. For higher volume updates, consider using the [event backfill](create-backfill)
      *   endpoint.
      */
-    @JvmOverloads
+    fun update(eventId: String, params: EventUpdateParams): CompletableFuture<EventUpdateResponse> =
+        update(eventId, params, RequestOptions.none())
+
+    /** @see [update] */
+    fun update(
+        eventId: String,
+        params: EventUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<EventUpdateResponse> =
+        update(params.toBuilder().eventId(eventId).build(), requestOptions)
+
+    /** @see [update] */
+    fun update(params: EventUpdateParams): CompletableFuture<EventUpdateResponse> =
+        update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: EventUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventUpdateResponse>
 
     /**
@@ -84,7 +103,7 @@ interface EventServiceAsync {
      *   payment gateway failed and the user should not be billed)
      *
      * If you want to only change specific properties of an event, but keep the event as part of the
-     * billing calculation, use the [Amend single event](amend-event) endpoint instead.
+     * billing calculation, use the [Amend event](amend-event) endpoint instead.
      *
      * This API is always audit-safe. The process will still retain the deprecated event, though it
      * will be ignored for billing calculations. For auditing and data fidelity purposes, Orb never
@@ -106,11 +125,39 @@ interface EventServiceAsync {
      *   period. For higher volume updates, consider using the [event backfill](create-backfill)
      *   endpoint.
      */
-    @JvmOverloads
+    fun deprecate(eventId: String): CompletableFuture<EventDeprecateResponse> =
+        deprecate(eventId, EventDeprecateParams.none())
+
+    /** @see [deprecate] */
+    fun deprecate(
+        eventId: String,
+        params: EventDeprecateParams = EventDeprecateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<EventDeprecateResponse> =
+        deprecate(params.toBuilder().eventId(eventId).build(), requestOptions)
+
+    /** @see [deprecate] */
+    fun deprecate(
+        eventId: String,
+        params: EventDeprecateParams = EventDeprecateParams.none(),
+    ): CompletableFuture<EventDeprecateResponse> = deprecate(eventId, params, RequestOptions.none())
+
+    /** @see [deprecate] */
     fun deprecate(
         params: EventDeprecateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventDeprecateResponse>
+
+    /** @see [deprecate] */
+    fun deprecate(params: EventDeprecateParams): CompletableFuture<EventDeprecateResponse> =
+        deprecate(params, RequestOptions.none())
+
+    /** @see [deprecate] */
+    fun deprecate(
+        eventId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<EventDeprecateResponse> =
+        deprecate(eventId, EventDeprecateParams.none(), requestOptions)
 
     /**
      * Orb's event ingestion model and API is designed around two core principles:
@@ -191,6 +238,8 @@ interface EventServiceAsync {
      *   query engine to determine usage.
      * - Logging a region or cluster with each event can help you provide customers more granular
      *   visibility into their usage.
+     * - If you are using matrix pricing and matching a matrix price key with a property, you should
+     *   ensure the value for that property is sent as a string.
      *
      * We encourage logging this metadata with an eye towards future use cases to ensure full
      * coverage for historical data. The datatype of the value in the properties dictionary is
@@ -275,8 +324,7 @@ interface EventServiceAsync {
      *
      * If `debug=true` is not specified, the response will only contain `validation_failed`. Orb
      * will still honor the idempotency guarantees set
-     * [here](../guides/events-and-metrics/event-ingestion#event-volume-and-concurrency) in all
-     * cases.
+     * [here](/events-and-metrics/event-ingestion#event-volume-and-concurrency) in all cases.
      *
      * We strongly recommend that you only use debug mode as part of testing your initial Orb
      * integration. Once you're ready to switch to production, disable debug mode to take advantage
@@ -302,15 +350,18 @@ interface EventServiceAsync {
      * }
      * ```
      */
-    @JvmOverloads
+    fun ingest(params: EventIngestParams): CompletableFuture<EventIngestResponse> =
+        ingest(params, RequestOptions.none())
+
+    /** @see [ingest] */
     fun ingest(
         params: EventIngestParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventIngestResponse>
 
     /**
      * This endpoint returns a filtered set of events for an account in a
-     * [paginated list format](../reference/pagination).
+     * [paginated list format](/api-reference/pagination).
      *
      * Note that this is a `POST` endpoint rather than a `GET` endpoint because it employs a JSON
      * body for search criteria rather than query parameters, allowing for a more flexible search
@@ -324,9 +375,121 @@ interface EventServiceAsync {
      * By default, Orb will not throw a `404` if no events matched, Orb will return an empty array
      * for `data` instead.
      */
-    @JvmOverloads
+    fun search(params: EventSearchParams): CompletableFuture<EventSearchResponse> =
+        search(params, RequestOptions.none())
+
+    /** @see [search] */
     fun search(
         params: EventSearchParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventSearchResponse>
+
+    /** A view of [EventServiceAsync] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        fun backfills(): BackfillServiceAsync.WithRawResponse
+
+        fun volume(): VolumeServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `put /events/{event_id}`, but is otherwise the same as
+         * [EventServiceAsync.update].
+         */
+        fun update(
+            eventId: String,
+            params: EventUpdateParams,
+        ): CompletableFuture<HttpResponseFor<EventUpdateResponse>> =
+            update(eventId, params, RequestOptions.none())
+
+        /** @see [update] */
+        fun update(
+            eventId: String,
+            params: EventUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventUpdateResponse>> =
+            update(params.toBuilder().eventId(eventId).build(), requestOptions)
+
+        /** @see [update] */
+        fun update(
+            params: EventUpdateParams
+        ): CompletableFuture<HttpResponseFor<EventUpdateResponse>> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
+        fun update(
+            params: EventUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventUpdateResponse>>
+
+        /**
+         * Returns a raw HTTP response for `put /events/{event_id}/deprecate`, but is otherwise the
+         * same as [EventServiceAsync.deprecate].
+         */
+        fun deprecate(eventId: String): CompletableFuture<HttpResponseFor<EventDeprecateResponse>> =
+            deprecate(eventId, EventDeprecateParams.none())
+
+        /** @see [deprecate] */
+        fun deprecate(
+            eventId: String,
+            params: EventDeprecateParams = EventDeprecateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>> =
+            deprecate(params.toBuilder().eventId(eventId).build(), requestOptions)
+
+        /** @see [deprecate] */
+        fun deprecate(
+            eventId: String,
+            params: EventDeprecateParams = EventDeprecateParams.none(),
+        ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>> =
+            deprecate(eventId, params, RequestOptions.none())
+
+        /** @see [deprecate] */
+        fun deprecate(
+            params: EventDeprecateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>>
+
+        /** @see [deprecate] */
+        fun deprecate(
+            params: EventDeprecateParams
+        ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>> =
+            deprecate(params, RequestOptions.none())
+
+        /** @see [deprecate] */
+        fun deprecate(
+            eventId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>> =
+            deprecate(eventId, EventDeprecateParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /ingest`, but is otherwise the same as
+         * [EventServiceAsync.ingest].
+         */
+        fun ingest(
+            params: EventIngestParams
+        ): CompletableFuture<HttpResponseFor<EventIngestResponse>> =
+            ingest(params, RequestOptions.none())
+
+        /** @see [ingest] */
+        fun ingest(
+            params: EventIngestParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventIngestResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /events/search`, but is otherwise the same as
+         * [EventServiceAsync.search].
+         */
+        fun search(
+            params: EventSearchParams
+        ): CompletableFuture<HttpResponseFor<EventSearchResponse>> =
+            search(params, RequestOptions.none())
+
+        /** @see [search] */
+        fun search(
+            params: EventSearchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<EventSearchResponse>>
+    }
 }

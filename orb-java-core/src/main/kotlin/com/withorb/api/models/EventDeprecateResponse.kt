@@ -4,86 +4,155 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
-import com.withorb.api.core.NoAutoDetect
-import com.withorb.api.core.toImmutable
+import com.withorb.api.core.checkRequired
+import com.withorb.api.errors.OrbInvalidDataException
+import java.util.Collections
 import java.util.Objects
 
-@JsonDeserialize(builder = EventDeprecateResponse.Builder::class)
-@NoAutoDetect
 class EventDeprecateResponse
 private constructor(
     private val deprecated: JsonField<String>,
-    private val additionalProperties: Map<String, JsonValue>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
+    @JsonCreator
+    private constructor(
+        @JsonProperty("deprecated") @ExcludeMissing deprecated: JsonField<String> = JsonMissing.of()
+    ) : this(deprecated, mutableMapOf())
 
-    /** event_id of the deprecated event, if successfully updated */
+    /**
+     * event_id of the deprecated event, if successfully updated
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun deprecated(): String = deprecated.getRequired("deprecated")
 
-    /** event_id of the deprecated event, if successfully updated */
-    @JsonProperty("deprecated") @ExcludeMissing fun _deprecated() = deprecated
+    /**
+     * Returns the raw JSON value of [deprecated].
+     *
+     * Unlike [deprecated], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("deprecated") @ExcludeMissing fun _deprecated(): JsonField<String> = deprecated
+
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    fun validate(): EventDeprecateResponse = apply {
-        if (!validated) {
-            deprecated()
-            validated = true
-        }
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [EventDeprecateResponse].
+         *
+         * The following fields are required:
+         * ```java
+         * .deprecated()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    class Builder {
+    /** A builder for [EventDeprecateResponse]. */
+    class Builder internal constructor() {
 
-        private var deprecated: JsonField<String> = JsonMissing.of()
+        private var deprecated: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(eventDeprecateResponse: EventDeprecateResponse) = apply {
-            this.deprecated = eventDeprecateResponse.deprecated
-            additionalProperties(eventDeprecateResponse.additionalProperties)
+            deprecated = eventDeprecateResponse.deprecated
+            additionalProperties = eventDeprecateResponse.additionalProperties.toMutableMap()
         }
 
         /** event_id of the deprecated event, if successfully updated */
         fun deprecated(deprecated: String) = deprecated(JsonField.of(deprecated))
 
-        /** event_id of the deprecated event, if successfully updated */
-        @JsonProperty("deprecated")
-        @ExcludeMissing
+        /**
+         * Sets [Builder.deprecated] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.deprecated] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun deprecated(deprecated: JsonField<String>) = apply { this.deprecated = deprecated }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
         }
 
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
+        /**
+         * Returns an immutable instance of [EventDeprecateResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .deprecated()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): EventDeprecateResponse =
-            EventDeprecateResponse(deprecated, additionalProperties.toImmutable())
+            EventDeprecateResponse(
+                checkRequired("deprecated", deprecated),
+                additionalProperties.toMutableMap(),
+            )
     }
+
+    private var validated: Boolean = false
+
+    fun validate(): EventDeprecateResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        deprecated()
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: OrbInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic internal fun validity(): Int = (if (deprecated.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

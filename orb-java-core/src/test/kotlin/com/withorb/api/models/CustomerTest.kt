@@ -2,18 +2,21 @@
 
 package com.withorb.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.withorb.api.core.JsonValue
+import com.withorb.api.core.jsonMapper
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CustomerTest {
+internal class CustomerTest {
 
     @Test
-    fun createCustomer() {
+    fun create() {
         val customer =
             Customer.builder()
                 .id("id")
-                .additionalEmails(listOf("string"))
+                .addAdditionalEmail("string")
                 .autoCollection(true)
                 .balance("balance")
                 .billingAddress(
@@ -32,7 +35,27 @@ class CustomerTest {
                 .emailDelivery(true)
                 .exemptFromAutomatedTax(true)
                 .externalCustomerId("external_customer_id")
-                .metadata(Customer.Metadata.builder().build())
+                .hierarchy(
+                    Customer.Hierarchy.builder()
+                        .addChild(
+                            Customer.Hierarchy.Child.builder()
+                                .id("id")
+                                .externalCustomerId("external_customer_id")
+                                .build()
+                        )
+                        .parent(
+                            Customer.Hierarchy.Parent.builder()
+                                .id("id")
+                                .externalCustomerId("external_customer_id")
+                                .build()
+                        )
+                        .build()
+                )
+                .metadata(
+                    Customer.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .name("name")
                 .paymentProvider(Customer.PaymentProvider.QUICKBOOKS)
                 .paymentProviderId("payment_provider_id")
@@ -57,17 +80,15 @@ class CustomerTest {
                 .timezone("timezone")
                 .accountingSyncConfiguration(
                     Customer.AccountingSyncConfiguration.builder()
-                        .accountingProviders(
-                            listOf(
-                                Customer.AccountingSyncConfiguration.AccountingProvider.builder()
-                                    .externalProviderId("external_provider_id")
-                                    .providerType(
-                                        Customer.AccountingSyncConfiguration.AccountingProvider
-                                            .ProviderType
-                                            .QUICKBOOKS
-                                    )
-                                    .build()
-                            )
+                        .addAccountingProvider(
+                            Customer.AccountingSyncConfiguration.AccountingProvider.builder()
+                                .externalProviderId("external_provider_id")
+                                .providerType(
+                                    Customer.AccountingSyncConfiguration.AccountingProvider
+                                        .ProviderType
+                                        .QUICKBOOKS
+                                )
+                                .build()
                         )
                         .excluded(true)
                         .build()
@@ -76,7 +97,7 @@ class CustomerTest {
                     Customer.ReportingConfiguration.builder().exempt(true).build()
                 )
                 .build()
-        assertThat(customer).isNotNull
+
         assertThat(customer.id()).isEqualTo("id")
         assertThat(customer.additionalEmails()).containsExactly("string")
         assertThat(customer.autoCollection()).isEqualTo(true)
@@ -98,7 +119,29 @@ class CustomerTest {
         assertThat(customer.emailDelivery()).isEqualTo(true)
         assertThat(customer.exemptFromAutomatedTax()).contains(true)
         assertThat(customer.externalCustomerId()).contains("external_customer_id")
-        assertThat(customer.metadata()).isEqualTo(Customer.Metadata.builder().build())
+        assertThat(customer.hierarchy())
+            .isEqualTo(
+                Customer.Hierarchy.builder()
+                    .addChild(
+                        Customer.Hierarchy.Child.builder()
+                            .id("id")
+                            .externalCustomerId("external_customer_id")
+                            .build()
+                    )
+                    .parent(
+                        Customer.Hierarchy.Parent.builder()
+                            .id("id")
+                            .externalCustomerId("external_customer_id")
+                            .build()
+                    )
+                    .build()
+            )
+        assertThat(customer.metadata())
+            .isEqualTo(
+                Customer.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(customer.name()).isEqualTo("name")
         assertThat(customer.paymentProvider()).contains(Customer.PaymentProvider.QUICKBOOKS)
         assertThat(customer.paymentProviderId()).contains("payment_provider_id")
@@ -126,8 +169,93 @@ class CustomerTest {
         assertThat(customer.accountingSyncConfiguration())
             .contains(
                 Customer.AccountingSyncConfiguration.builder()
-                    .accountingProviders(
-                        listOf(
+                    .addAccountingProvider(
+                        Customer.AccountingSyncConfiguration.AccountingProvider.builder()
+                            .externalProviderId("external_provider_id")
+                            .providerType(
+                                Customer.AccountingSyncConfiguration.AccountingProvider.ProviderType
+                                    .QUICKBOOKS
+                            )
+                            .build()
+                    )
+                    .excluded(true)
+                    .build()
+            )
+        assertThat(customer.reportingConfiguration())
+            .contains(Customer.ReportingConfiguration.builder().exempt(true).build())
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val customer =
+            Customer.builder()
+                .id("id")
+                .addAdditionalEmail("string")
+                .autoCollection(true)
+                .balance("balance")
+                .billingAddress(
+                    Customer.BillingAddress.builder()
+                        .city("city")
+                        .country("country")
+                        .line1("line1")
+                        .line2("line2")
+                        .postalCode("postal_code")
+                        .state("state")
+                        .build()
+                )
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .currency("currency")
+                .email("email")
+                .emailDelivery(true)
+                .exemptFromAutomatedTax(true)
+                .externalCustomerId("external_customer_id")
+                .hierarchy(
+                    Customer.Hierarchy.builder()
+                        .addChild(
+                            Customer.Hierarchy.Child.builder()
+                                .id("id")
+                                .externalCustomerId("external_customer_id")
+                                .build()
+                        )
+                        .parent(
+                            Customer.Hierarchy.Parent.builder()
+                                .id("id")
+                                .externalCustomerId("external_customer_id")
+                                .build()
+                        )
+                        .build()
+                )
+                .metadata(
+                    Customer.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
+                .name("name")
+                .paymentProvider(Customer.PaymentProvider.QUICKBOOKS)
+                .paymentProviderId("payment_provider_id")
+                .portalUrl("portal_url")
+                .shippingAddress(
+                    Customer.ShippingAddress.builder()
+                        .city("city")
+                        .country("country")
+                        .line1("line1")
+                        .line2("line2")
+                        .postalCode("postal_code")
+                        .state("state")
+                        .build()
+                )
+                .taxId(
+                    Customer.TaxId.builder()
+                        .country(Customer.TaxId.Country.AD)
+                        .type(Customer.TaxId.Type.AD_NRT)
+                        .value("value")
+                        .build()
+                )
+                .timezone("timezone")
+                .accountingSyncConfiguration(
+                    Customer.AccountingSyncConfiguration.builder()
+                        .addAccountingProvider(
                             Customer.AccountingSyncConfiguration.AccountingProvider.builder()
                                 .externalProviderId("external_provider_id")
                                 .providerType(
@@ -137,11 +265,20 @@ class CustomerTest {
                                 )
                                 .build()
                         )
-                    )
-                    .excluded(true)
-                    .build()
+                        .excluded(true)
+                        .build()
+                )
+                .reportingConfiguration(
+                    Customer.ReportingConfiguration.builder().exempt(true).build()
+                )
+                .build()
+
+        val roundtrippedCustomer =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(customer),
+                jacksonTypeRef<Customer>(),
             )
-        assertThat(customer.reportingConfiguration())
-            .contains(Customer.ReportingConfiguration.builder().exempt(true).build())
+
+        assertThat(roundtrippedCustomer).isEqualTo(customer)
     }
 }
