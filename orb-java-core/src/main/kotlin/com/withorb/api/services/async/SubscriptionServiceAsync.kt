@@ -4,11 +4,10 @@ package com.withorb.api.services.async
 
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.models.MutatedSubscription
 import com.withorb.api.models.Subscription
 import com.withorb.api.models.SubscriptionCancelParams
-import com.withorb.api.models.SubscriptionCancelResponse
 import com.withorb.api.models.SubscriptionCreateParams
-import com.withorb.api.models.SubscriptionCreateResponse
 import com.withorb.api.models.SubscriptionFetchCostsParams
 import com.withorb.api.models.SubscriptionFetchCostsResponse
 import com.withorb.api.models.SubscriptionFetchParams
@@ -18,24 +17,15 @@ import com.withorb.api.models.SubscriptionFetchUsageParams
 import com.withorb.api.models.SubscriptionListPageAsync
 import com.withorb.api.models.SubscriptionListParams
 import com.withorb.api.models.SubscriptionPriceIntervalsParams
-import com.withorb.api.models.SubscriptionPriceIntervalsResponse
 import com.withorb.api.models.SubscriptionRedeemCouponParams
-import com.withorb.api.models.SubscriptionRedeemCouponResponse
 import com.withorb.api.models.SubscriptionSchedulePlanChangeParams
-import com.withorb.api.models.SubscriptionSchedulePlanChangeResponse
 import com.withorb.api.models.SubscriptionTriggerPhaseParams
-import com.withorb.api.models.SubscriptionTriggerPhaseResponse
 import com.withorb.api.models.SubscriptionUnscheduleCancellationParams
-import com.withorb.api.models.SubscriptionUnscheduleCancellationResponse
 import com.withorb.api.models.SubscriptionUnscheduleFixedFeeQuantityUpdatesParams
-import com.withorb.api.models.SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse
 import com.withorb.api.models.SubscriptionUnschedulePendingPlanChangesParams
-import com.withorb.api.models.SubscriptionUnschedulePendingPlanChangesResponse
 import com.withorb.api.models.SubscriptionUpdateFixedFeeQuantityParams
-import com.withorb.api.models.SubscriptionUpdateFixedFeeQuantityResponse
 import com.withorb.api.models.SubscriptionUpdateParams
 import com.withorb.api.models.SubscriptionUpdateTrialParams
-import com.withorb.api.models.SubscriptionUpdateTrialResponse
 import com.withorb.api.models.SubscriptionUsage
 import java.util.concurrent.CompletableFuture
 
@@ -284,22 +274,21 @@ interface SubscriptionServiceAsync {
      * subscription's invoicing currency, when creating a subscription. E.g. pass in `10.00` to
      * issue an invoice when usage amounts hit $10.00 for a subscription that invoices in USD.
      */
-    fun create(): CompletableFuture<SubscriptionCreateResponse> =
-        create(SubscriptionCreateParams.none())
+    fun create(): CompletableFuture<MutatedSubscription> = create(SubscriptionCreateParams.none())
 
     /** @see [create] */
     fun create(
         params: SubscriptionCreateParams = SubscriptionCreateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionCreateResponse>
+    ): CompletableFuture<MutatedSubscription>
 
     /** @see [create] */
     fun create(
         params: SubscriptionCreateParams = SubscriptionCreateParams.none()
-    ): CompletableFuture<SubscriptionCreateResponse> = create(params, RequestOptions.none())
+    ): CompletableFuture<MutatedSubscription> = create(params, RequestOptions.none())
 
     /** @see [create] */
-    fun create(requestOptions: RequestOptions): CompletableFuture<SubscriptionCreateResponse> =
+    fun create(requestOptions: RequestOptions): CompletableFuture<MutatedSubscription> =
         create(SubscriptionCreateParams.none(), requestOptions)
 
     /**
@@ -423,7 +412,7 @@ interface SubscriptionServiceAsync {
     fun cancel(
         subscriptionId: String,
         params: SubscriptionCancelParams,
-    ): CompletableFuture<SubscriptionCancelResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         cancel(subscriptionId, params, RequestOptions.none())
 
     /** @see [cancel] */
@@ -431,18 +420,18 @@ interface SubscriptionServiceAsync {
         subscriptionId: String,
         params: SubscriptionCancelParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionCancelResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         cancel(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
 
     /** @see [cancel] */
-    fun cancel(params: SubscriptionCancelParams): CompletableFuture<SubscriptionCancelResponse> =
+    fun cancel(params: SubscriptionCancelParams): CompletableFuture<MutatedSubscription> =
         cancel(params, RequestOptions.none())
 
     /** @see [cancel] */
     fun cancel(
         params: SubscriptionCancelParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionCancelResponse>
+    ): CompletableFuture<MutatedSubscription>
 
     /**
      * This endpoint is used to fetch a [Subscription](/core-concepts##subscription) given an
@@ -852,9 +841,7 @@ interface SubscriptionServiceAsync {
      * using the `fixed_fee_quantity_transitions` property on a subscription’s serialized price
      * intervals.
      */
-    fun priceIntervals(
-        subscriptionId: String
-    ): CompletableFuture<SubscriptionPriceIntervalsResponse> =
+    fun priceIntervals(subscriptionId: String): CompletableFuture<MutatedSubscription> =
         priceIntervals(subscriptionId, SubscriptionPriceIntervalsParams.none())
 
     /** @see [priceIntervals] */
@@ -862,40 +849,39 @@ interface SubscriptionServiceAsync {
         subscriptionId: String,
         params: SubscriptionPriceIntervalsParams = SubscriptionPriceIntervalsParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionPriceIntervalsResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         priceIntervals(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
 
     /** @see [priceIntervals] */
     fun priceIntervals(
         subscriptionId: String,
         params: SubscriptionPriceIntervalsParams = SubscriptionPriceIntervalsParams.none(),
-    ): CompletableFuture<SubscriptionPriceIntervalsResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         priceIntervals(subscriptionId, params, RequestOptions.none())
 
     /** @see [priceIntervals] */
     fun priceIntervals(
         params: SubscriptionPriceIntervalsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionPriceIntervalsResponse>
+    ): CompletableFuture<MutatedSubscription>
 
     /** @see [priceIntervals] */
     fun priceIntervals(
         params: SubscriptionPriceIntervalsParams
-    ): CompletableFuture<SubscriptionPriceIntervalsResponse> =
-        priceIntervals(params, RequestOptions.none())
+    ): CompletableFuture<MutatedSubscription> = priceIntervals(params, RequestOptions.none())
 
     /** @see [priceIntervals] */
     fun priceIntervals(
         subscriptionId: String,
         requestOptions: RequestOptions,
-    ): CompletableFuture<SubscriptionPriceIntervalsResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         priceIntervals(subscriptionId, SubscriptionPriceIntervalsParams.none(), requestOptions)
 
     /** Redeem a coupon effective at a given time. */
     fun redeemCoupon(
         subscriptionId: String,
         params: SubscriptionRedeemCouponParams,
-    ): CompletableFuture<SubscriptionRedeemCouponResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         redeemCoupon(subscriptionId, params, RequestOptions.none())
 
     /** @see [redeemCoupon] */
@@ -903,20 +889,19 @@ interface SubscriptionServiceAsync {
         subscriptionId: String,
         params: SubscriptionRedeemCouponParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionRedeemCouponResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         redeemCoupon(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
 
     /** @see [redeemCoupon] */
     fun redeemCoupon(
         params: SubscriptionRedeemCouponParams
-    ): CompletableFuture<SubscriptionRedeemCouponResponse> =
-        redeemCoupon(params, RequestOptions.none())
+    ): CompletableFuture<MutatedSubscription> = redeemCoupon(params, RequestOptions.none())
 
     /** @see [redeemCoupon] */
     fun redeemCoupon(
         params: SubscriptionRedeemCouponParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionRedeemCouponResponse>
+    ): CompletableFuture<MutatedSubscription>
 
     /**
      * This endpoint can be used to change an existing subscription's plan. It returns the
@@ -1087,7 +1072,7 @@ interface SubscriptionServiceAsync {
     fun schedulePlanChange(
         subscriptionId: String,
         params: SubscriptionSchedulePlanChangeParams,
-    ): CompletableFuture<SubscriptionSchedulePlanChangeResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         schedulePlanChange(subscriptionId, params, RequestOptions.none())
 
     /** @see [schedulePlanChange] */
@@ -1095,7 +1080,7 @@ interface SubscriptionServiceAsync {
         subscriptionId: String,
         params: SubscriptionSchedulePlanChangeParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionSchedulePlanChangeResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         schedulePlanChange(
             params.toBuilder().subscriptionId(subscriptionId).build(),
             requestOptions,
@@ -1104,19 +1089,18 @@ interface SubscriptionServiceAsync {
     /** @see [schedulePlanChange] */
     fun schedulePlanChange(
         params: SubscriptionSchedulePlanChangeParams
-    ): CompletableFuture<SubscriptionSchedulePlanChangeResponse> =
-        schedulePlanChange(params, RequestOptions.none())
+    ): CompletableFuture<MutatedSubscription> = schedulePlanChange(params, RequestOptions.none())
 
     /** @see [schedulePlanChange] */
     fun schedulePlanChange(
         params: SubscriptionSchedulePlanChangeParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionSchedulePlanChangeResponse>
+    ): CompletableFuture<MutatedSubscription>
 
     /**
      * Manually trigger a phase, effective the given date (or the current time, if not specified).
      */
-    fun triggerPhase(subscriptionId: String): CompletableFuture<SubscriptionTriggerPhaseResponse> =
+    fun triggerPhase(subscriptionId: String): CompletableFuture<MutatedSubscription> =
         triggerPhase(subscriptionId, SubscriptionTriggerPhaseParams.none())
 
     /** @see [triggerPhase] */
@@ -1124,33 +1108,32 @@ interface SubscriptionServiceAsync {
         subscriptionId: String,
         params: SubscriptionTriggerPhaseParams = SubscriptionTriggerPhaseParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionTriggerPhaseResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         triggerPhase(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
 
     /** @see [triggerPhase] */
     fun triggerPhase(
         subscriptionId: String,
         params: SubscriptionTriggerPhaseParams = SubscriptionTriggerPhaseParams.none(),
-    ): CompletableFuture<SubscriptionTriggerPhaseResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         triggerPhase(subscriptionId, params, RequestOptions.none())
 
     /** @see [triggerPhase] */
     fun triggerPhase(
         params: SubscriptionTriggerPhaseParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionTriggerPhaseResponse>
+    ): CompletableFuture<MutatedSubscription>
 
     /** @see [triggerPhase] */
     fun triggerPhase(
         params: SubscriptionTriggerPhaseParams
-    ): CompletableFuture<SubscriptionTriggerPhaseResponse> =
-        triggerPhase(params, RequestOptions.none())
+    ): CompletableFuture<MutatedSubscription> = triggerPhase(params, RequestOptions.none())
 
     /** @see [triggerPhase] */
     fun triggerPhase(
         subscriptionId: String,
         requestOptions: RequestOptions,
-    ): CompletableFuture<SubscriptionTriggerPhaseResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         triggerPhase(subscriptionId, SubscriptionTriggerPhaseParams.none(), requestOptions)
 
     /**
@@ -1160,9 +1143,7 @@ interface SubscriptionServiceAsync {
      * This operation will turn on auto-renew, ensuring that the subscription does not end at the
      * currently scheduled cancellation time.
      */
-    fun unscheduleCancellation(
-        subscriptionId: String
-    ): CompletableFuture<SubscriptionUnscheduleCancellationResponse> =
+    fun unscheduleCancellation(subscriptionId: String): CompletableFuture<MutatedSubscription> =
         unscheduleCancellation(subscriptionId, SubscriptionUnscheduleCancellationParams.none())
 
     /** @see [unscheduleCancellation] */
@@ -1171,7 +1152,7 @@ interface SubscriptionServiceAsync {
         params: SubscriptionUnscheduleCancellationParams =
             SubscriptionUnscheduleCancellationParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionUnscheduleCancellationResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         unscheduleCancellation(
             params.toBuilder().subscriptionId(subscriptionId).build(),
             requestOptions,
@@ -1182,26 +1163,26 @@ interface SubscriptionServiceAsync {
         subscriptionId: String,
         params: SubscriptionUnscheduleCancellationParams =
             SubscriptionUnscheduleCancellationParams.none(),
-    ): CompletableFuture<SubscriptionUnscheduleCancellationResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         unscheduleCancellation(subscriptionId, params, RequestOptions.none())
 
     /** @see [unscheduleCancellation] */
     fun unscheduleCancellation(
         params: SubscriptionUnscheduleCancellationParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionUnscheduleCancellationResponse>
+    ): CompletableFuture<MutatedSubscription>
 
     /** @see [unscheduleCancellation] */
     fun unscheduleCancellation(
         params: SubscriptionUnscheduleCancellationParams
-    ): CompletableFuture<SubscriptionUnscheduleCancellationResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         unscheduleCancellation(params, RequestOptions.none())
 
     /** @see [unscheduleCancellation] */
     fun unscheduleCancellation(
         subscriptionId: String,
         requestOptions: RequestOptions,
-    ): CompletableFuture<SubscriptionUnscheduleCancellationResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         unscheduleCancellation(
             subscriptionId,
             SubscriptionUnscheduleCancellationParams.none(),
@@ -1217,7 +1198,7 @@ interface SubscriptionServiceAsync {
     fun unscheduleFixedFeeQuantityUpdates(
         subscriptionId: String,
         params: SubscriptionUnscheduleFixedFeeQuantityUpdatesParams,
-    ): CompletableFuture<SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         unscheduleFixedFeeQuantityUpdates(subscriptionId, params, RequestOptions.none())
 
     /** @see [unscheduleFixedFeeQuantityUpdates] */
@@ -1225,7 +1206,7 @@ interface SubscriptionServiceAsync {
         subscriptionId: String,
         params: SubscriptionUnscheduleFixedFeeQuantityUpdatesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         unscheduleFixedFeeQuantityUpdates(
             params.toBuilder().subscriptionId(subscriptionId).build(),
             requestOptions,
@@ -1234,14 +1215,14 @@ interface SubscriptionServiceAsync {
     /** @see [unscheduleFixedFeeQuantityUpdates] */
     fun unscheduleFixedFeeQuantityUpdates(
         params: SubscriptionUnscheduleFixedFeeQuantityUpdatesParams
-    ): CompletableFuture<SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         unscheduleFixedFeeQuantityUpdates(params, RequestOptions.none())
 
     /** @see [unscheduleFixedFeeQuantityUpdates] */
     fun unscheduleFixedFeeQuantityUpdates(
         params: SubscriptionUnscheduleFixedFeeQuantityUpdatesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse>
+    ): CompletableFuture<MutatedSubscription>
 
     /**
      * This endpoint can be used to unschedule any pending plan changes on an existing subscription.
@@ -1249,7 +1230,7 @@ interface SubscriptionServiceAsync {
      */
     fun unschedulePendingPlanChanges(
         subscriptionId: String
-    ): CompletableFuture<SubscriptionUnschedulePendingPlanChangesResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         unschedulePendingPlanChanges(
             subscriptionId,
             SubscriptionUnschedulePendingPlanChangesParams.none(),
@@ -1261,7 +1242,7 @@ interface SubscriptionServiceAsync {
         params: SubscriptionUnschedulePendingPlanChangesParams =
             SubscriptionUnschedulePendingPlanChangesParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionUnschedulePendingPlanChangesResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         unschedulePendingPlanChanges(
             params.toBuilder().subscriptionId(subscriptionId).build(),
             requestOptions,
@@ -1272,26 +1253,26 @@ interface SubscriptionServiceAsync {
         subscriptionId: String,
         params: SubscriptionUnschedulePendingPlanChangesParams =
             SubscriptionUnschedulePendingPlanChangesParams.none(),
-    ): CompletableFuture<SubscriptionUnschedulePendingPlanChangesResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         unschedulePendingPlanChanges(subscriptionId, params, RequestOptions.none())
 
     /** @see [unschedulePendingPlanChanges] */
     fun unschedulePendingPlanChanges(
         params: SubscriptionUnschedulePendingPlanChangesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionUnschedulePendingPlanChangesResponse>
+    ): CompletableFuture<MutatedSubscription>
 
     /** @see [unschedulePendingPlanChanges] */
     fun unschedulePendingPlanChanges(
         params: SubscriptionUnschedulePendingPlanChangesParams
-    ): CompletableFuture<SubscriptionUnschedulePendingPlanChangesResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         unschedulePendingPlanChanges(params, RequestOptions.none())
 
     /** @see [unschedulePendingPlanChanges] */
     fun unschedulePendingPlanChanges(
         subscriptionId: String,
         requestOptions: RequestOptions,
-    ): CompletableFuture<SubscriptionUnschedulePendingPlanChangesResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         unschedulePendingPlanChanges(
             subscriptionId,
             SubscriptionUnschedulePendingPlanChangesParams.none(),
@@ -1315,7 +1296,7 @@ interface SubscriptionServiceAsync {
     fun updateFixedFeeQuantity(
         subscriptionId: String,
         params: SubscriptionUpdateFixedFeeQuantityParams,
-    ): CompletableFuture<SubscriptionUpdateFixedFeeQuantityResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         updateFixedFeeQuantity(subscriptionId, params, RequestOptions.none())
 
     /** @see [updateFixedFeeQuantity] */
@@ -1323,7 +1304,7 @@ interface SubscriptionServiceAsync {
         subscriptionId: String,
         params: SubscriptionUpdateFixedFeeQuantityParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionUpdateFixedFeeQuantityResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         updateFixedFeeQuantity(
             params.toBuilder().subscriptionId(subscriptionId).build(),
             requestOptions,
@@ -1332,14 +1313,14 @@ interface SubscriptionServiceAsync {
     /** @see [updateFixedFeeQuantity] */
     fun updateFixedFeeQuantity(
         params: SubscriptionUpdateFixedFeeQuantityParams
-    ): CompletableFuture<SubscriptionUpdateFixedFeeQuantityResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         updateFixedFeeQuantity(params, RequestOptions.none())
 
     /** @see [updateFixedFeeQuantity] */
     fun updateFixedFeeQuantity(
         params: SubscriptionUpdateFixedFeeQuantityParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionUpdateFixedFeeQuantityResponse>
+    ): CompletableFuture<MutatedSubscription>
 
     /**
      * This endpoint is used to update the trial end date for a subscription. The new trial end date
@@ -1362,7 +1343,7 @@ interface SubscriptionServiceAsync {
     fun updateTrial(
         subscriptionId: String,
         params: SubscriptionUpdateTrialParams,
-    ): CompletableFuture<SubscriptionUpdateTrialResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         updateTrial(subscriptionId, params, RequestOptions.none())
 
     /** @see [updateTrial] */
@@ -1370,20 +1351,18 @@ interface SubscriptionServiceAsync {
         subscriptionId: String,
         params: SubscriptionUpdateTrialParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionUpdateTrialResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         updateTrial(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
 
     /** @see [updateTrial] */
-    fun updateTrial(
-        params: SubscriptionUpdateTrialParams
-    ): CompletableFuture<SubscriptionUpdateTrialResponse> =
+    fun updateTrial(params: SubscriptionUpdateTrialParams): CompletableFuture<MutatedSubscription> =
         updateTrial(params, RequestOptions.none())
 
     /** @see [updateTrial] */
     fun updateTrial(
         params: SubscriptionUpdateTrialParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SubscriptionUpdateTrialResponse>
+    ): CompletableFuture<MutatedSubscription>
 
     /**
      * A view of [SubscriptionServiceAsync] that provides access to raw HTTP responses for each
@@ -1395,25 +1374,25 @@ interface SubscriptionServiceAsync {
          * Returns a raw HTTP response for `post /subscriptions`, but is otherwise the same as
          * [SubscriptionServiceAsync.create].
          */
-        fun create(): CompletableFuture<HttpResponseFor<SubscriptionCreateResponse>> =
+        fun create(): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             create(SubscriptionCreateParams.none())
 
         /** @see [create] */
         fun create(
             params: SubscriptionCreateParams = SubscriptionCreateParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionCreateResponse>>
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>>
 
         /** @see [create] */
         fun create(
             params: SubscriptionCreateParams = SubscriptionCreateParams.none()
-        ): CompletableFuture<HttpResponseFor<SubscriptionCreateResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             create(params, RequestOptions.none())
 
         /** @see [create] */
         fun create(
             requestOptions: RequestOptions
-        ): CompletableFuture<HttpResponseFor<SubscriptionCreateResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             create(SubscriptionCreateParams.none(), requestOptions)
 
         /**
@@ -1488,7 +1467,7 @@ interface SubscriptionServiceAsync {
         fun cancel(
             subscriptionId: String,
             params: SubscriptionCancelParams,
-        ): CompletableFuture<HttpResponseFor<SubscriptionCancelResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             cancel(subscriptionId, params, RequestOptions.none())
 
         /** @see [cancel] */
@@ -1496,20 +1475,20 @@ interface SubscriptionServiceAsync {
             subscriptionId: String,
             params: SubscriptionCancelParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionCancelResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             cancel(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
 
         /** @see [cancel] */
         fun cancel(
             params: SubscriptionCancelParams
-        ): CompletableFuture<HttpResponseFor<SubscriptionCancelResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             cancel(params, RequestOptions.none())
 
         /** @see [cancel] */
         fun cancel(
             params: SubscriptionCancelParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionCancelResponse>>
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>>
 
         /**
          * Returns a raw HTTP response for `get /subscriptions/{subscription_id}`, but is otherwise
@@ -1686,7 +1665,7 @@ interface SubscriptionServiceAsync {
          */
         fun priceIntervals(
             subscriptionId: String
-        ): CompletableFuture<HttpResponseFor<SubscriptionPriceIntervalsResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             priceIntervals(subscriptionId, SubscriptionPriceIntervalsParams.none())
 
         /** @see [priceIntervals] */
@@ -1694,7 +1673,7 @@ interface SubscriptionServiceAsync {
             subscriptionId: String,
             params: SubscriptionPriceIntervalsParams = SubscriptionPriceIntervalsParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionPriceIntervalsResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             priceIntervals(
                 params.toBuilder().subscriptionId(subscriptionId).build(),
                 requestOptions,
@@ -1704,26 +1683,26 @@ interface SubscriptionServiceAsync {
         fun priceIntervals(
             subscriptionId: String,
             params: SubscriptionPriceIntervalsParams = SubscriptionPriceIntervalsParams.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionPriceIntervalsResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             priceIntervals(subscriptionId, params, RequestOptions.none())
 
         /** @see [priceIntervals] */
         fun priceIntervals(
             params: SubscriptionPriceIntervalsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionPriceIntervalsResponse>>
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>>
 
         /** @see [priceIntervals] */
         fun priceIntervals(
             params: SubscriptionPriceIntervalsParams
-        ): CompletableFuture<HttpResponseFor<SubscriptionPriceIntervalsResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             priceIntervals(params, RequestOptions.none())
 
         /** @see [priceIntervals] */
         fun priceIntervals(
             subscriptionId: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<SubscriptionPriceIntervalsResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             priceIntervals(subscriptionId, SubscriptionPriceIntervalsParams.none(), requestOptions)
 
         /**
@@ -1733,7 +1712,7 @@ interface SubscriptionServiceAsync {
         fun redeemCoupon(
             subscriptionId: String,
             params: SubscriptionRedeemCouponParams,
-        ): CompletableFuture<HttpResponseFor<SubscriptionRedeemCouponResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             redeemCoupon(subscriptionId, params, RequestOptions.none())
 
         /** @see [redeemCoupon] */
@@ -1741,20 +1720,20 @@ interface SubscriptionServiceAsync {
             subscriptionId: String,
             params: SubscriptionRedeemCouponParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionRedeemCouponResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             redeemCoupon(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
 
         /** @see [redeemCoupon] */
         fun redeemCoupon(
             params: SubscriptionRedeemCouponParams
-        ): CompletableFuture<HttpResponseFor<SubscriptionRedeemCouponResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             redeemCoupon(params, RequestOptions.none())
 
         /** @see [redeemCoupon] */
         fun redeemCoupon(
             params: SubscriptionRedeemCouponParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionRedeemCouponResponse>>
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>>
 
         /**
          * Returns a raw HTTP response for `post
@@ -1764,7 +1743,7 @@ interface SubscriptionServiceAsync {
         fun schedulePlanChange(
             subscriptionId: String,
             params: SubscriptionSchedulePlanChangeParams,
-        ): CompletableFuture<HttpResponseFor<SubscriptionSchedulePlanChangeResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             schedulePlanChange(subscriptionId, params, RequestOptions.none())
 
         /** @see [schedulePlanChange] */
@@ -1772,7 +1751,7 @@ interface SubscriptionServiceAsync {
             subscriptionId: String,
             params: SubscriptionSchedulePlanChangeParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionSchedulePlanChangeResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             schedulePlanChange(
                 params.toBuilder().subscriptionId(subscriptionId).build(),
                 requestOptions,
@@ -1781,14 +1760,14 @@ interface SubscriptionServiceAsync {
         /** @see [schedulePlanChange] */
         fun schedulePlanChange(
             params: SubscriptionSchedulePlanChangeParams
-        ): CompletableFuture<HttpResponseFor<SubscriptionSchedulePlanChangeResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             schedulePlanChange(params, RequestOptions.none())
 
         /** @see [schedulePlanChange] */
         fun schedulePlanChange(
             params: SubscriptionSchedulePlanChangeParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionSchedulePlanChangeResponse>>
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>>
 
         /**
          * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/trigger_phase`,
@@ -1796,7 +1775,7 @@ interface SubscriptionServiceAsync {
          */
         fun triggerPhase(
             subscriptionId: String
-        ): CompletableFuture<HttpResponseFor<SubscriptionTriggerPhaseResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             triggerPhase(subscriptionId, SubscriptionTriggerPhaseParams.none())
 
         /** @see [triggerPhase] */
@@ -1804,33 +1783,33 @@ interface SubscriptionServiceAsync {
             subscriptionId: String,
             params: SubscriptionTriggerPhaseParams = SubscriptionTriggerPhaseParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionTriggerPhaseResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             triggerPhase(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
 
         /** @see [triggerPhase] */
         fun triggerPhase(
             subscriptionId: String,
             params: SubscriptionTriggerPhaseParams = SubscriptionTriggerPhaseParams.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionTriggerPhaseResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             triggerPhase(subscriptionId, params, RequestOptions.none())
 
         /** @see [triggerPhase] */
         fun triggerPhase(
             params: SubscriptionTriggerPhaseParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionTriggerPhaseResponse>>
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>>
 
         /** @see [triggerPhase] */
         fun triggerPhase(
             params: SubscriptionTriggerPhaseParams
-        ): CompletableFuture<HttpResponseFor<SubscriptionTriggerPhaseResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             triggerPhase(params, RequestOptions.none())
 
         /** @see [triggerPhase] */
         fun triggerPhase(
             subscriptionId: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<SubscriptionTriggerPhaseResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             triggerPhase(subscriptionId, SubscriptionTriggerPhaseParams.none(), requestOptions)
 
         /**
@@ -1840,7 +1819,7 @@ interface SubscriptionServiceAsync {
          */
         fun unscheduleCancellation(
             subscriptionId: String
-        ): CompletableFuture<HttpResponseFor<SubscriptionUnscheduleCancellationResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             unscheduleCancellation(subscriptionId, SubscriptionUnscheduleCancellationParams.none())
 
         /** @see [unscheduleCancellation] */
@@ -1849,7 +1828,7 @@ interface SubscriptionServiceAsync {
             params: SubscriptionUnscheduleCancellationParams =
                 SubscriptionUnscheduleCancellationParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionUnscheduleCancellationResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             unscheduleCancellation(
                 params.toBuilder().subscriptionId(subscriptionId).build(),
                 requestOptions,
@@ -1860,26 +1839,26 @@ interface SubscriptionServiceAsync {
             subscriptionId: String,
             params: SubscriptionUnscheduleCancellationParams =
                 SubscriptionUnscheduleCancellationParams.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionUnscheduleCancellationResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             unscheduleCancellation(subscriptionId, params, RequestOptions.none())
 
         /** @see [unscheduleCancellation] */
         fun unscheduleCancellation(
             params: SubscriptionUnscheduleCancellationParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionUnscheduleCancellationResponse>>
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>>
 
         /** @see [unscheduleCancellation] */
         fun unscheduleCancellation(
             params: SubscriptionUnscheduleCancellationParams
-        ): CompletableFuture<HttpResponseFor<SubscriptionUnscheduleCancellationResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             unscheduleCancellation(params, RequestOptions.none())
 
         /** @see [unscheduleCancellation] */
         fun unscheduleCancellation(
             subscriptionId: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<SubscriptionUnscheduleCancellationResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             unscheduleCancellation(
                 subscriptionId,
                 SubscriptionUnscheduleCancellationParams.none(),
@@ -1894,18 +1873,15 @@ interface SubscriptionServiceAsync {
         fun unscheduleFixedFeeQuantityUpdates(
             subscriptionId: String,
             params: SubscriptionUnscheduleFixedFeeQuantityUpdatesParams,
-        ): CompletableFuture<
-            HttpResponseFor<SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse>
-        > = unscheduleFixedFeeQuantityUpdates(subscriptionId, params, RequestOptions.none())
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
+            unscheduleFixedFeeQuantityUpdates(subscriptionId, params, RequestOptions.none())
 
         /** @see [unscheduleFixedFeeQuantityUpdates] */
         fun unscheduleFixedFeeQuantityUpdates(
             subscriptionId: String,
             params: SubscriptionUnscheduleFixedFeeQuantityUpdatesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<
-            HttpResponseFor<SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse>
-        > =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             unscheduleFixedFeeQuantityUpdates(
                 params.toBuilder().subscriptionId(subscriptionId).build(),
                 requestOptions,
@@ -1914,15 +1890,14 @@ interface SubscriptionServiceAsync {
         /** @see [unscheduleFixedFeeQuantityUpdates] */
         fun unscheduleFixedFeeQuantityUpdates(
             params: SubscriptionUnscheduleFixedFeeQuantityUpdatesParams
-        ): CompletableFuture<
-            HttpResponseFor<SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse>
-        > = unscheduleFixedFeeQuantityUpdates(params, RequestOptions.none())
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
+            unscheduleFixedFeeQuantityUpdates(params, RequestOptions.none())
 
         /** @see [unscheduleFixedFeeQuantityUpdates] */
         fun unscheduleFixedFeeQuantityUpdates(
             params: SubscriptionUnscheduleFixedFeeQuantityUpdatesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse>>
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>>
 
         /**
          * Returns a raw HTTP response for `post
@@ -1931,7 +1906,7 @@ interface SubscriptionServiceAsync {
          */
         fun unschedulePendingPlanChanges(
             subscriptionId: String
-        ): CompletableFuture<HttpResponseFor<SubscriptionUnschedulePendingPlanChangesResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             unschedulePendingPlanChanges(
                 subscriptionId,
                 SubscriptionUnschedulePendingPlanChangesParams.none(),
@@ -1943,7 +1918,7 @@ interface SubscriptionServiceAsync {
             params: SubscriptionUnschedulePendingPlanChangesParams =
                 SubscriptionUnschedulePendingPlanChangesParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionUnschedulePendingPlanChangesResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             unschedulePendingPlanChanges(
                 params.toBuilder().subscriptionId(subscriptionId).build(),
                 requestOptions,
@@ -1954,26 +1929,26 @@ interface SubscriptionServiceAsync {
             subscriptionId: String,
             params: SubscriptionUnschedulePendingPlanChangesParams =
                 SubscriptionUnschedulePendingPlanChangesParams.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionUnschedulePendingPlanChangesResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             unschedulePendingPlanChanges(subscriptionId, params, RequestOptions.none())
 
         /** @see [unschedulePendingPlanChanges] */
         fun unschedulePendingPlanChanges(
             params: SubscriptionUnschedulePendingPlanChangesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionUnschedulePendingPlanChangesResponse>>
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>>
 
         /** @see [unschedulePendingPlanChanges] */
         fun unschedulePendingPlanChanges(
             params: SubscriptionUnschedulePendingPlanChangesParams
-        ): CompletableFuture<HttpResponseFor<SubscriptionUnschedulePendingPlanChangesResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             unschedulePendingPlanChanges(params, RequestOptions.none())
 
         /** @see [unschedulePendingPlanChanges] */
         fun unschedulePendingPlanChanges(
             subscriptionId: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<SubscriptionUnschedulePendingPlanChangesResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             unschedulePendingPlanChanges(
                 subscriptionId,
                 SubscriptionUnschedulePendingPlanChangesParams.none(),
@@ -1988,7 +1963,7 @@ interface SubscriptionServiceAsync {
         fun updateFixedFeeQuantity(
             subscriptionId: String,
             params: SubscriptionUpdateFixedFeeQuantityParams,
-        ): CompletableFuture<HttpResponseFor<SubscriptionUpdateFixedFeeQuantityResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             updateFixedFeeQuantity(subscriptionId, params, RequestOptions.none())
 
         /** @see [updateFixedFeeQuantity] */
@@ -1996,7 +1971,7 @@ interface SubscriptionServiceAsync {
             subscriptionId: String,
             params: SubscriptionUpdateFixedFeeQuantityParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionUpdateFixedFeeQuantityResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             updateFixedFeeQuantity(
                 params.toBuilder().subscriptionId(subscriptionId).build(),
                 requestOptions,
@@ -2005,14 +1980,14 @@ interface SubscriptionServiceAsync {
         /** @see [updateFixedFeeQuantity] */
         fun updateFixedFeeQuantity(
             params: SubscriptionUpdateFixedFeeQuantityParams
-        ): CompletableFuture<HttpResponseFor<SubscriptionUpdateFixedFeeQuantityResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             updateFixedFeeQuantity(params, RequestOptions.none())
 
         /** @see [updateFixedFeeQuantity] */
         fun updateFixedFeeQuantity(
             params: SubscriptionUpdateFixedFeeQuantityParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionUpdateFixedFeeQuantityResponse>>
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>>
 
         /**
          * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/update_trial`, but
@@ -2021,7 +1996,7 @@ interface SubscriptionServiceAsync {
         fun updateTrial(
             subscriptionId: String,
             params: SubscriptionUpdateTrialParams,
-        ): CompletableFuture<HttpResponseFor<SubscriptionUpdateTrialResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             updateTrial(subscriptionId, params, RequestOptions.none())
 
         /** @see [updateTrial] */
@@ -2029,19 +2004,19 @@ interface SubscriptionServiceAsync {
             subscriptionId: String,
             params: SubscriptionUpdateTrialParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionUpdateTrialResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             updateTrial(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
 
         /** @see [updateTrial] */
         fun updateTrial(
             params: SubscriptionUpdateTrialParams
-        ): CompletableFuture<HttpResponseFor<SubscriptionUpdateTrialResponse>> =
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> =
             updateTrial(params, RequestOptions.none())
 
         /** @see [updateTrial] */
         fun updateTrial(
             params: SubscriptionUpdateTrialParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SubscriptionUpdateTrialResponse>>
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>>
     }
 }

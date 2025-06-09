@@ -31,7 +31,7 @@ private constructor(
     private val createdAt: JsonField<OffsetDateTime>,
     private val creditNoteNumber: JsonField<String>,
     private val creditNotePdf: JsonField<String>,
-    private val customer: JsonField<Customer>,
+    private val customer: JsonField<CustomerMinified>,
     private val invoiceId: JsonField<String>,
     private val lineItems: JsonField<List<LineItem>>,
     private val maximumAmountAdjustment: JsonField<MaximumAmountAdjustment>,
@@ -58,7 +58,9 @@ private constructor(
         @JsonProperty("credit_note_pdf")
         @ExcludeMissing
         creditNotePdf: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("customer") @ExcludeMissing customer: JsonField<Customer> = JsonMissing.of(),
+        @JsonProperty("customer")
+        @ExcludeMissing
+        customer: JsonField<CustomerMinified> = JsonMissing.of(),
         @JsonProperty("invoice_id") @ExcludeMissing invoiceId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("line_items")
         @ExcludeMissing
@@ -136,7 +138,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun customer(): Customer = customer.getRequired("customer")
+    fun customer(): CustomerMinified = customer.getRequired("customer")
 
     /**
      * The id of the invoice resource that this credit note is applied to.
@@ -264,7 +266,9 @@ private constructor(
      *
      * Unlike [customer], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("customer") @ExcludeMissing fun _customer(): JsonField<Customer> = customer
+    @JsonProperty("customer")
+    @ExcludeMissing
+    fun _customer(): JsonField<CustomerMinified> = customer
 
     /**
      * Returns the raw JSON value of [invoiceId].
@@ -399,7 +403,7 @@ private constructor(
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var creditNoteNumber: JsonField<String>? = null
         private var creditNotePdf: JsonField<String>? = null
-        private var customer: JsonField<Customer>? = null
+        private var customer: JsonField<CustomerMinified>? = null
         private var invoiceId: JsonField<String>? = null
         private var lineItems: JsonField<MutableList<LineItem>>? = null
         private var maximumAmountAdjustment: JsonField<MaximumAmountAdjustment>? = null
@@ -491,16 +495,16 @@ private constructor(
             this.creditNotePdf = creditNotePdf
         }
 
-        fun customer(customer: Customer) = customer(JsonField.of(customer))
+        fun customer(customer: CustomerMinified) = customer(JsonField.of(customer))
 
         /**
          * Sets [Builder.customer] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.customer] with a well-typed [Customer] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.customer] with a well-typed [CustomerMinified] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun customer(customer: JsonField<Customer>) = apply { this.customer = customer }
+        fun customer(customer: JsonField<CustomerMinified>) = apply { this.customer = customer }
 
         /** The id of the invoice resource that this credit note is applied to. */
         fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
@@ -809,212 +813,6 @@ private constructor(
             (type.asKnown().getOrNull()?.validity() ?: 0) +
             (if (voidedAt.asKnown().isPresent) 1 else 0) +
             (discounts.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
-
-    class Customer
-    private constructor(
-        private val id: JsonField<String>,
-        private val externalCustomerId: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("external_customer_id")
-            @ExcludeMissing
-            externalCustomerId: JsonField<String> = JsonMissing.of(),
-        ) : this(id, externalCustomerId, mutableMapOf())
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun id(): String = id.getRequired("id")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun externalCustomerId(): Optional<String> =
-            externalCustomerId.getOptional("external_customer_id")
-
-        /**
-         * Returns the raw JSON value of [id].
-         *
-         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
-
-        /**
-         * Returns the raw JSON value of [externalCustomerId].
-         *
-         * Unlike [externalCustomerId], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("external_customer_id")
-        @ExcludeMissing
-        fun _externalCustomerId(): JsonField<String> = externalCustomerId
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Customer].
-             *
-             * The following fields are required:
-             * ```java
-             * .id()
-             * .externalCustomerId()
-             * ```
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Customer]. */
-        class Builder internal constructor() {
-
-            private var id: JsonField<String>? = null
-            private var externalCustomerId: JsonField<String>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(customer: Customer) = apply {
-                id = customer.id
-                externalCustomerId = customer.externalCustomerId
-                additionalProperties = customer.additionalProperties.toMutableMap()
-            }
-
-            fun id(id: String) = id(JsonField.of(id))
-
-            /**
-             * Sets [Builder.id] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun externalCustomerId(externalCustomerId: String?) =
-                externalCustomerId(JsonField.ofNullable(externalCustomerId))
-
-            /**
-             * Alias for calling [Builder.externalCustomerId] with
-             * `externalCustomerId.orElse(null)`.
-             */
-            fun externalCustomerId(externalCustomerId: Optional<String>) =
-                externalCustomerId(externalCustomerId.getOrNull())
-
-            /**
-             * Sets [Builder.externalCustomerId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.externalCustomerId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun externalCustomerId(externalCustomerId: JsonField<String>) = apply {
-                this.externalCustomerId = externalCustomerId
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Customer].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .id()
-             * .externalCustomerId()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): Customer =
-                Customer(
-                    checkRequired("id", id),
-                    checkRequired("externalCustomerId", externalCustomerId),
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): Customer = apply {
-            if (validated) {
-                return@apply
-            }
-
-            id()
-            externalCustomerId()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: OrbInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            (if (id.asKnown().isPresent) 1 else 0) +
-                (if (externalCustomerId.asKnown().isPresent) 1 else 0)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Customer && id == other.id && externalCustomerId == other.externalCustomerId && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, externalCustomerId, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Customer{id=$id, externalCustomerId=$externalCustomerId, additionalProperties=$additionalProperties}"
-    }
 
     class LineItem
     private constructor(
@@ -1467,270 +1265,6 @@ private constructor(
                 (if (subtotal.asKnown().isPresent) 1 else 0) +
                 (taxAmounts.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (discounts.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
-
-        class TaxAmount
-        private constructor(
-            private val amount: JsonField<String>,
-            private val taxRateDescription: JsonField<String>,
-            private val taxRatePercentage: JsonField<String>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("amount")
-                @ExcludeMissing
-                amount: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("tax_rate_description")
-                @ExcludeMissing
-                taxRateDescription: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("tax_rate_percentage")
-                @ExcludeMissing
-                taxRatePercentage: JsonField<String> = JsonMissing.of(),
-            ) : this(amount, taxRateDescription, taxRatePercentage, mutableMapOf())
-
-            /**
-             * The amount of additional tax incurred by this tax rate.
-             *
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
-            fun amount(): String = amount.getRequired("amount")
-
-            /**
-             * The human-readable description of the applied tax rate.
-             *
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
-            fun taxRateDescription(): String =
-                taxRateDescription.getRequired("tax_rate_description")
-
-            /**
-             * The tax rate percentage, out of 100.
-             *
-             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-             *   server responded with an unexpected value).
-             */
-            fun taxRatePercentage(): Optional<String> =
-                taxRatePercentage.getOptional("tax_rate_percentage")
-
-            /**
-             * Returns the raw JSON value of [amount].
-             *
-             * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<String> = amount
-
-            /**
-             * Returns the raw JSON value of [taxRateDescription].
-             *
-             * Unlike [taxRateDescription], this method doesn't throw if the JSON field has an
-             * unexpected type.
-             */
-            @JsonProperty("tax_rate_description")
-            @ExcludeMissing
-            fun _taxRateDescription(): JsonField<String> = taxRateDescription
-
-            /**
-             * Returns the raw JSON value of [taxRatePercentage].
-             *
-             * Unlike [taxRatePercentage], this method doesn't throw if the JSON field has an
-             * unexpected type.
-             */
-            @JsonProperty("tax_rate_percentage")
-            @ExcludeMissing
-            fun _taxRatePercentage(): JsonField<String> = taxRatePercentage
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [TaxAmount].
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .amount()
-                 * .taxRateDescription()
-                 * .taxRatePercentage()
-                 * ```
-                 */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [TaxAmount]. */
-            class Builder internal constructor() {
-
-                private var amount: JsonField<String>? = null
-                private var taxRateDescription: JsonField<String>? = null
-                private var taxRatePercentage: JsonField<String>? = null
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(taxAmount: TaxAmount) = apply {
-                    amount = taxAmount.amount
-                    taxRateDescription = taxAmount.taxRateDescription
-                    taxRatePercentage = taxAmount.taxRatePercentage
-                    additionalProperties = taxAmount.additionalProperties.toMutableMap()
-                }
-
-                /** The amount of additional tax incurred by this tax rate. */
-                fun amount(amount: String) = amount(JsonField.of(amount))
-
-                /**
-                 * Sets [Builder.amount] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.amount] with a well-typed [String] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
-                fun amount(amount: JsonField<String>) = apply { this.amount = amount }
-
-                /** The human-readable description of the applied tax rate. */
-                fun taxRateDescription(taxRateDescription: String) =
-                    taxRateDescription(JsonField.of(taxRateDescription))
-
-                /**
-                 * Sets [Builder.taxRateDescription] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.taxRateDescription] with a well-typed [String]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
-                 */
-                fun taxRateDescription(taxRateDescription: JsonField<String>) = apply {
-                    this.taxRateDescription = taxRateDescription
-                }
-
-                /** The tax rate percentage, out of 100. */
-                fun taxRatePercentage(taxRatePercentage: String?) =
-                    taxRatePercentage(JsonField.ofNullable(taxRatePercentage))
-
-                /**
-                 * Alias for calling [Builder.taxRatePercentage] with
-                 * `taxRatePercentage.orElse(null)`.
-                 */
-                fun taxRatePercentage(taxRatePercentage: Optional<String>) =
-                    taxRatePercentage(taxRatePercentage.getOrNull())
-
-                /**
-                 * Sets [Builder.taxRatePercentage] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.taxRatePercentage] with a well-typed [String]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
-                 */
-                fun taxRatePercentage(taxRatePercentage: JsonField<String>) = apply {
-                    this.taxRatePercentage = taxRatePercentage
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [TaxAmount].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .amount()
-                 * .taxRateDescription()
-                 * .taxRatePercentage()
-                 * ```
-                 *
-                 * @throws IllegalStateException if any required field is unset.
-                 */
-                fun build(): TaxAmount =
-                    TaxAmount(
-                        checkRequired("amount", amount),
-                        checkRequired("taxRateDescription", taxRateDescription),
-                        checkRequired("taxRatePercentage", taxRatePercentage),
-                        additionalProperties.toMutableMap(),
-                    )
-            }
-
-            private var validated: Boolean = false
-
-            fun validate(): TaxAmount = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                amount()
-                taxRateDescription()
-                taxRatePercentage()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: OrbInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                (if (amount.asKnown().isPresent) 1 else 0) +
-                    (if (taxRateDescription.asKnown().isPresent) 1 else 0) +
-                    (if (taxRatePercentage.asKnown().isPresent) 1 else 0)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is TaxAmount && amount == other.amount && taxRateDescription == other.taxRateDescription && taxRatePercentage == other.taxRatePercentage && additionalProperties == other.additionalProperties /* spotless:on */
-            }
-
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(amount, taxRateDescription, taxRatePercentage, additionalProperties) }
-            /* spotless:on */
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "TaxAmount{amount=$amount, taxRateDescription=$taxRateDescription, taxRatePercentage=$taxRatePercentage, additionalProperties=$additionalProperties}"
-        }
 
         class Discount
         private constructor(

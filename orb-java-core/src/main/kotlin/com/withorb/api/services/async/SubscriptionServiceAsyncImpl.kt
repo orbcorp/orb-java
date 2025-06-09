@@ -16,11 +16,10 @@ import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.core.http.json
 import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepareAsync
+import com.withorb.api.models.MutatedSubscription
 import com.withorb.api.models.Subscription
 import com.withorb.api.models.SubscriptionCancelParams
-import com.withorb.api.models.SubscriptionCancelResponse
 import com.withorb.api.models.SubscriptionCreateParams
-import com.withorb.api.models.SubscriptionCreateResponse
 import com.withorb.api.models.SubscriptionFetchCostsParams
 import com.withorb.api.models.SubscriptionFetchCostsResponse
 import com.withorb.api.models.SubscriptionFetchParams
@@ -31,24 +30,15 @@ import com.withorb.api.models.SubscriptionFetchUsageParams
 import com.withorb.api.models.SubscriptionListPageAsync
 import com.withorb.api.models.SubscriptionListParams
 import com.withorb.api.models.SubscriptionPriceIntervalsParams
-import com.withorb.api.models.SubscriptionPriceIntervalsResponse
 import com.withorb.api.models.SubscriptionRedeemCouponParams
-import com.withorb.api.models.SubscriptionRedeemCouponResponse
 import com.withorb.api.models.SubscriptionSchedulePlanChangeParams
-import com.withorb.api.models.SubscriptionSchedulePlanChangeResponse
 import com.withorb.api.models.SubscriptionTriggerPhaseParams
-import com.withorb.api.models.SubscriptionTriggerPhaseResponse
 import com.withorb.api.models.SubscriptionUnscheduleCancellationParams
-import com.withorb.api.models.SubscriptionUnscheduleCancellationResponse
 import com.withorb.api.models.SubscriptionUnscheduleFixedFeeQuantityUpdatesParams
-import com.withorb.api.models.SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse
 import com.withorb.api.models.SubscriptionUnschedulePendingPlanChangesParams
-import com.withorb.api.models.SubscriptionUnschedulePendingPlanChangesResponse
 import com.withorb.api.models.SubscriptionUpdateFixedFeeQuantityParams
-import com.withorb.api.models.SubscriptionUpdateFixedFeeQuantityResponse
 import com.withorb.api.models.SubscriptionUpdateParams
 import com.withorb.api.models.SubscriptionUpdateTrialParams
-import com.withorb.api.models.SubscriptionUpdateTrialResponse
 import com.withorb.api.models.SubscriptionUsage
 import com.withorb.api.models.Subscriptions
 import java.util.concurrent.CompletableFuture
@@ -66,7 +56,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
     override fun create(
         params: SubscriptionCreateParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<SubscriptionCreateResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         // post /subscriptions
         withRawResponse().create(params, requestOptions).thenApply { it.parse() }
 
@@ -87,7 +77,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
     override fun cancel(
         params: SubscriptionCancelParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<SubscriptionCancelResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         // post /subscriptions/{subscription_id}/cancel
         withRawResponse().cancel(params, requestOptions).thenApply { it.parse() }
 
@@ -122,42 +112,42 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
     override fun priceIntervals(
         params: SubscriptionPriceIntervalsParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<SubscriptionPriceIntervalsResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         // post /subscriptions/{subscription_id}/price_intervals
         withRawResponse().priceIntervals(params, requestOptions).thenApply { it.parse() }
 
     override fun redeemCoupon(
         params: SubscriptionRedeemCouponParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<SubscriptionRedeemCouponResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         // post /subscriptions/{subscription_id}/redeem_coupon
         withRawResponse().redeemCoupon(params, requestOptions).thenApply { it.parse() }
 
     override fun schedulePlanChange(
         params: SubscriptionSchedulePlanChangeParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<SubscriptionSchedulePlanChangeResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         // post /subscriptions/{subscription_id}/schedule_plan_change
         withRawResponse().schedulePlanChange(params, requestOptions).thenApply { it.parse() }
 
     override fun triggerPhase(
         params: SubscriptionTriggerPhaseParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<SubscriptionTriggerPhaseResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         // post /subscriptions/{subscription_id}/trigger_phase
         withRawResponse().triggerPhase(params, requestOptions).thenApply { it.parse() }
 
     override fun unscheduleCancellation(
         params: SubscriptionUnscheduleCancellationParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<SubscriptionUnscheduleCancellationResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         // post /subscriptions/{subscription_id}/unschedule_cancellation
         withRawResponse().unscheduleCancellation(params, requestOptions).thenApply { it.parse() }
 
     override fun unscheduleFixedFeeQuantityUpdates(
         params: SubscriptionUnscheduleFixedFeeQuantityUpdatesParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         // post /subscriptions/{subscription_id}/unschedule_fixed_fee_quantity_updates
         withRawResponse().unscheduleFixedFeeQuantityUpdates(params, requestOptions).thenApply {
             it.parse()
@@ -166,7 +156,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
     override fun unschedulePendingPlanChanges(
         params: SubscriptionUnschedulePendingPlanChangesParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<SubscriptionUnschedulePendingPlanChangesResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         // post /subscriptions/{subscription_id}/unschedule_pending_plan_changes
         withRawResponse().unschedulePendingPlanChanges(params, requestOptions).thenApply {
             it.parse()
@@ -175,14 +165,14 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
     override fun updateFixedFeeQuantity(
         params: SubscriptionUpdateFixedFeeQuantityParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<SubscriptionUpdateFixedFeeQuantityResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         // post /subscriptions/{subscription_id}/update_fixed_fee_quantity
         withRawResponse().updateFixedFeeQuantity(params, requestOptions).thenApply { it.parse() }
 
     override fun updateTrial(
         params: SubscriptionUpdateTrialParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<SubscriptionUpdateTrialResponse> =
+    ): CompletableFuture<MutatedSubscription> =
         // post /subscriptions/{subscription_id}/update_trial
         withRawResponse().updateTrial(params, requestOptions).thenApply { it.parse() }
 
@@ -191,14 +181,14 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
-        private val createHandler: Handler<SubscriptionCreateResponse> =
-            jsonHandler<SubscriptionCreateResponse>(clientOptions.jsonMapper)
+        private val createHandler: Handler<MutatedSubscription> =
+            jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun create(
             params: SubscriptionCreateParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<SubscriptionCreateResponse>> {
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -292,14 +282,14 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                 }
         }
 
-        private val cancelHandler: Handler<SubscriptionCancelResponse> =
-            jsonHandler<SubscriptionCancelResponse>(clientOptions.jsonMapper)
+        private val cancelHandler: Handler<MutatedSubscription> =
+            jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun cancel(
             params: SubscriptionCancelParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<SubscriptionCancelResponse>> {
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("subscriptionId", params.subscriptionId().getOrNull())
@@ -464,14 +454,14 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                 }
         }
 
-        private val priceIntervalsHandler: Handler<SubscriptionPriceIntervalsResponse> =
-            jsonHandler<SubscriptionPriceIntervalsResponse>(clientOptions.jsonMapper)
+        private val priceIntervalsHandler: Handler<MutatedSubscription> =
+            jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun priceIntervals(
             params: SubscriptionPriceIntervalsParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<SubscriptionPriceIntervalsResponse>> {
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("subscriptionId", params.subscriptionId().getOrNull())
@@ -498,14 +488,14 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                 }
         }
 
-        private val redeemCouponHandler: Handler<SubscriptionRedeemCouponResponse> =
-            jsonHandler<SubscriptionRedeemCouponResponse>(clientOptions.jsonMapper)
+        private val redeemCouponHandler: Handler<MutatedSubscription> =
+            jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun redeemCoupon(
             params: SubscriptionRedeemCouponParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<SubscriptionRedeemCouponResponse>> {
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("subscriptionId", params.subscriptionId().getOrNull())
@@ -532,14 +522,14 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                 }
         }
 
-        private val schedulePlanChangeHandler: Handler<SubscriptionSchedulePlanChangeResponse> =
-            jsonHandler<SubscriptionSchedulePlanChangeResponse>(clientOptions.jsonMapper)
+        private val schedulePlanChangeHandler: Handler<MutatedSubscription> =
+            jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun schedulePlanChange(
             params: SubscriptionSchedulePlanChangeParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<SubscriptionSchedulePlanChangeResponse>> {
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("subscriptionId", params.subscriptionId().getOrNull())
@@ -566,14 +556,14 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                 }
         }
 
-        private val triggerPhaseHandler: Handler<SubscriptionTriggerPhaseResponse> =
-            jsonHandler<SubscriptionTriggerPhaseResponse>(clientOptions.jsonMapper)
+        private val triggerPhaseHandler: Handler<MutatedSubscription> =
+            jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun triggerPhase(
             params: SubscriptionTriggerPhaseParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<SubscriptionTriggerPhaseResponse>> {
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("subscriptionId", params.subscriptionId().getOrNull())
@@ -600,15 +590,14 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                 }
         }
 
-        private val unscheduleCancellationHandler:
-            Handler<SubscriptionUnscheduleCancellationResponse> =
-            jsonHandler<SubscriptionUnscheduleCancellationResponse>(clientOptions.jsonMapper)
+        private val unscheduleCancellationHandler: Handler<MutatedSubscription> =
+            jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun unscheduleCancellation(
             params: SubscriptionUnscheduleCancellationParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<SubscriptionUnscheduleCancellationResponse>> {
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("subscriptionId", params.subscriptionId().getOrNull())
@@ -639,19 +628,14 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                 }
         }
 
-        private val unscheduleFixedFeeQuantityUpdatesHandler:
-            Handler<SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse> =
-            jsonHandler<SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse>(
-                    clientOptions.jsonMapper
-                )
+        private val unscheduleFixedFeeQuantityUpdatesHandler: Handler<MutatedSubscription> =
+            jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun unscheduleFixedFeeQuantityUpdates(
             params: SubscriptionUnscheduleFixedFeeQuantityUpdatesParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<
-            HttpResponseFor<SubscriptionUnscheduleFixedFeeQuantityUpdatesResponse>
-        > {
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("subscriptionId", params.subscriptionId().getOrNull())
@@ -682,15 +666,14 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                 }
         }
 
-        private val unschedulePendingPlanChangesHandler:
-            Handler<SubscriptionUnschedulePendingPlanChangesResponse> =
-            jsonHandler<SubscriptionUnschedulePendingPlanChangesResponse>(clientOptions.jsonMapper)
+        private val unschedulePendingPlanChangesHandler: Handler<MutatedSubscription> =
+            jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun unschedulePendingPlanChanges(
             params: SubscriptionUnschedulePendingPlanChangesParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<SubscriptionUnschedulePendingPlanChangesResponse>> {
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("subscriptionId", params.subscriptionId().getOrNull())
@@ -721,15 +704,14 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                 }
         }
 
-        private val updateFixedFeeQuantityHandler:
-            Handler<SubscriptionUpdateFixedFeeQuantityResponse> =
-            jsonHandler<SubscriptionUpdateFixedFeeQuantityResponse>(clientOptions.jsonMapper)
+        private val updateFixedFeeQuantityHandler: Handler<MutatedSubscription> =
+            jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun updateFixedFeeQuantity(
             params: SubscriptionUpdateFixedFeeQuantityParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<SubscriptionUpdateFixedFeeQuantityResponse>> {
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("subscriptionId", params.subscriptionId().getOrNull())
@@ -760,14 +742,14 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                 }
         }
 
-        private val updateTrialHandler: Handler<SubscriptionUpdateTrialResponse> =
-            jsonHandler<SubscriptionUpdateTrialResponse>(clientOptions.jsonMapper)
+        private val updateTrialHandler: Handler<MutatedSubscription> =
+            jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun updateTrial(
             params: SubscriptionUpdateTrialParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<SubscriptionUpdateTrialResponse>> {
+        ): CompletableFuture<HttpResponseFor<MutatedSubscription>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("subscriptionId", params.subscriptionId().getOrNull())
