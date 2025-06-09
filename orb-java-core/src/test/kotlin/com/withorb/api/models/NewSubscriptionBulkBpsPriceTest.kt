@@ -38,11 +38,6 @@ internal class NewSubscriptionBulkBpsPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
-                .unitConversionRateConfig(
-                    NewSubscriptionBulkBpsPrice.ConversionRateConfig.Unit.UnitConfig.builder()
-                        .unitAmount("unit_amount")
-                        .build()
-                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
@@ -96,19 +91,6 @@ internal class NewSubscriptionBulkBpsPriceTest {
                     .build()
             )
         assertThat(newSubscriptionBulkBpsPrice.conversionRate()).contains(0.0)
-        assertThat(newSubscriptionBulkBpsPrice.conversionRateConfig())
-            .contains(
-                NewSubscriptionBulkBpsPrice.ConversionRateConfig.ofUnit(
-                    NewSubscriptionBulkBpsPrice.ConversionRateConfig.Unit.builder()
-                        .unitConfig(
-                            NewSubscriptionBulkBpsPrice.ConversionRateConfig.Unit.UnitConfig
-                                .builder()
-                                .unitAmount("unit_amount")
-                                .build()
-                        )
-                        .build()
-                )
-            )
         assertThat(newSubscriptionBulkBpsPrice.currency()).contains("currency")
         assertThat(newSubscriptionBulkBpsPrice.dimensionalPriceConfiguration())
             .contains(
@@ -166,11 +148,6 @@ internal class NewSubscriptionBulkBpsPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
-                .unitConversionRateConfig(
-                    NewSubscriptionBulkBpsPrice.ConversionRateConfig.Unit.UnitConfig.builder()
-                        .unitAmount("unit_amount")
-                        .build()
-                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()

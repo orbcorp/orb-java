@@ -32,11 +32,6 @@ internal class NewPlanMaxGroupTieredPackagePriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
-                .unitConversionRateConfig(
-                    NewPlanMaxGroupTieredPackagePrice.ConversionRateConfig.Unit.UnitConfig.builder()
-                        .unitAmount("unit_amount")
-                        .build()
-                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
@@ -84,19 +79,6 @@ internal class NewPlanMaxGroupTieredPackagePriceTest {
                     .build()
             )
         assertThat(newPlanMaxGroupTieredPackagePrice.conversionRate()).contains(0.0)
-        assertThat(newPlanMaxGroupTieredPackagePrice.conversionRateConfig())
-            .contains(
-                NewPlanMaxGroupTieredPackagePrice.ConversionRateConfig.ofUnit(
-                    NewPlanMaxGroupTieredPackagePrice.ConversionRateConfig.Unit.builder()
-                        .unitConfig(
-                            NewPlanMaxGroupTieredPackagePrice.ConversionRateConfig.Unit.UnitConfig
-                                .builder()
-                                .unitAmount("unit_amount")
-                                .build()
-                        )
-                        .build()
-                )
-            )
         assertThat(newPlanMaxGroupTieredPackagePrice.currency()).contains("currency")
         assertThat(newPlanMaxGroupTieredPackagePrice.dimensionalPriceConfiguration())
             .contains(
@@ -148,11 +130,6 @@ internal class NewPlanMaxGroupTieredPackagePriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
-                .unitConversionRateConfig(
-                    NewPlanMaxGroupTieredPackagePrice.ConversionRateConfig.Unit.UnitConfig.builder()
-                        .unitAmount("unit_amount")
-                        .build()
-                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()

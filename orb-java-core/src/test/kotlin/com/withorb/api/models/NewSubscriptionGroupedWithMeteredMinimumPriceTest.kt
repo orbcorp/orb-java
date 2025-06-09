@@ -36,13 +36,6 @@ internal class NewSubscriptionGroupedWithMeteredMinimumPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
-                .unitConversionRateConfig(
-                    NewSubscriptionGroupedWithMeteredMinimumPrice.ConversionRateConfig.Unit
-                        .UnitConfig
-                        .builder()
-                        .unitAmount("unit_amount")
-                        .build()
-                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
@@ -94,21 +87,6 @@ internal class NewSubscriptionGroupedWithMeteredMinimumPriceTest {
                     .build()
             )
         assertThat(newSubscriptionGroupedWithMeteredMinimumPrice.conversionRate()).contains(0.0)
-        assertThat(newSubscriptionGroupedWithMeteredMinimumPrice.conversionRateConfig())
-            .contains(
-                NewSubscriptionGroupedWithMeteredMinimumPrice.ConversionRateConfig.ofUnit(
-                    NewSubscriptionGroupedWithMeteredMinimumPrice.ConversionRateConfig.Unit
-                        .builder()
-                        .unitConfig(
-                            NewSubscriptionGroupedWithMeteredMinimumPrice.ConversionRateConfig.Unit
-                                .UnitConfig
-                                .builder()
-                                .unitAmount("unit_amount")
-                                .build()
-                        )
-                        .build()
-                )
-            )
         assertThat(newSubscriptionGroupedWithMeteredMinimumPrice.currency()).contains("currency")
         assertThat(newSubscriptionGroupedWithMeteredMinimumPrice.dimensionalPriceConfiguration())
             .contains(
@@ -166,13 +144,6 @@ internal class NewSubscriptionGroupedWithMeteredMinimumPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
-                .unitConversionRateConfig(
-                    NewSubscriptionGroupedWithMeteredMinimumPrice.ConversionRateConfig.Unit
-                        .UnitConfig
-                        .builder()
-                        .unitAmount("unit_amount")
-                        .build()
-                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()

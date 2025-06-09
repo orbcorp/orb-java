@@ -34,11 +34,6 @@ internal class NewSubscriptionBulkPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
-                .unitConversionRateConfig(
-                    NewSubscriptionBulkPrice.ConversionRateConfig.Unit.UnitConfig.builder()
-                        .unitAmount("unit_amount")
-                        .build()
-                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
@@ -86,18 +81,6 @@ internal class NewSubscriptionBulkPriceTest {
                     .build()
             )
         assertThat(newSubscriptionBulkPrice.conversionRate()).contains(0.0)
-        assertThat(newSubscriptionBulkPrice.conversionRateConfig())
-            .contains(
-                NewSubscriptionBulkPrice.ConversionRateConfig.ofUnit(
-                    NewSubscriptionBulkPrice.ConversionRateConfig.Unit.builder()
-                        .unitConfig(
-                            NewSubscriptionBulkPrice.ConversionRateConfig.Unit.UnitConfig.builder()
-                                .unitAmount("unit_amount")
-                                .build()
-                        )
-                        .build()
-                )
-            )
         assertThat(newSubscriptionBulkPrice.currency()).contains("currency")
         assertThat(newSubscriptionBulkPrice.dimensionalPriceConfiguration())
             .contains(
@@ -151,11 +134,6 @@ internal class NewSubscriptionBulkPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
-                .unitConversionRateConfig(
-                    NewSubscriptionBulkPrice.ConversionRateConfig.Unit.UnitConfig.builder()
-                        .unitAmount("unit_amount")
-                        .build()
-                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()

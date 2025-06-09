@@ -29,11 +29,6 @@ internal class NewFloatingBpsPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
-                .unitConversionRateConfig(
-                    NewFloatingBpsPrice.ConversionRateConfig.Unit.UnitConfig.builder()
-                        .unitAmount("unit_amount")
-                        .build()
-                )
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
                         .addDimensionValue("string")
@@ -74,18 +69,6 @@ internal class NewFloatingBpsPriceTest {
                     .build()
             )
         assertThat(newFloatingBpsPrice.conversionRate()).contains(0.0)
-        assertThat(newFloatingBpsPrice.conversionRateConfig())
-            .contains(
-                NewFloatingBpsPrice.ConversionRateConfig.ofUnit(
-                    NewFloatingBpsPrice.ConversionRateConfig.Unit.builder()
-                        .unitConfig(
-                            NewFloatingBpsPrice.ConversionRateConfig.Unit.UnitConfig.builder()
-                                .unitAmount("unit_amount")
-                                .build()
-                        )
-                        .build()
-                )
-            )
         assertThat(newFloatingBpsPrice.dimensionalPriceConfiguration())
             .contains(
                 NewDimensionalPriceConfiguration.builder()
@@ -132,11 +115,6 @@ internal class NewFloatingBpsPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
-                .unitConversionRateConfig(
-                    NewFloatingBpsPrice.ConversionRateConfig.Unit.UnitConfig.builder()
-                        .unitAmount("unit_amount")
-                        .build()
-                )
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
                         .addDimensionValue("string")
