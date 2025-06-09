@@ -34,6 +34,12 @@ internal class NewSubscriptionThresholdTotalAmountPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    NewSubscriptionThresholdTotalAmountPrice.ConversionRateConfig.Unit.UnitConfig
+                        .builder()
+                        .unitAmount("unit_amount")
+                        .build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
@@ -82,6 +88,20 @@ internal class NewSubscriptionThresholdTotalAmountPriceTest {
                     .build()
             )
         assertThat(newSubscriptionThresholdTotalAmountPrice.conversionRate()).contains(0.0)
+        assertThat(newSubscriptionThresholdTotalAmountPrice.conversionRateConfig())
+            .contains(
+                NewSubscriptionThresholdTotalAmountPrice.ConversionRateConfig.ofUnit(
+                    NewSubscriptionThresholdTotalAmountPrice.ConversionRateConfig.Unit.builder()
+                        .unitConfig(
+                            NewSubscriptionThresholdTotalAmountPrice.ConversionRateConfig.Unit
+                                .UnitConfig
+                                .builder()
+                                .unitAmount("unit_amount")
+                                .build()
+                        )
+                        .build()
+                )
+            )
         assertThat(newSubscriptionThresholdTotalAmountPrice.currency()).contains("currency")
         assertThat(newSubscriptionThresholdTotalAmountPrice.dimensionalPriceConfiguration())
             .contains(
@@ -136,6 +156,12 @@ internal class NewSubscriptionThresholdTotalAmountPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    NewSubscriptionThresholdTotalAmountPrice.ConversionRateConfig.Unit.UnitConfig
+                        .builder()
+                        .unitAmount("unit_amount")
+                        .build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()

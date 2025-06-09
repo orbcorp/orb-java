@@ -37,6 +37,13 @@ internal class NewSubscriptionScalableMatrixWithUnitPricingPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    NewSubscriptionScalableMatrixWithUnitPricingPrice.ConversionRateConfig.Unit
+                        .UnitConfig
+                        .builder()
+                        .unitAmount("unit_amount")
+                        .build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
@@ -94,6 +101,22 @@ internal class NewSubscriptionScalableMatrixWithUnitPricingPriceTest {
                     .build()
             )
         assertThat(newSubscriptionScalableMatrixWithUnitPricingPrice.conversionRate()).contains(0.0)
+        assertThat(newSubscriptionScalableMatrixWithUnitPricingPrice.conversionRateConfig())
+            .contains(
+                NewSubscriptionScalableMatrixWithUnitPricingPrice.ConversionRateConfig.ofUnit(
+                    NewSubscriptionScalableMatrixWithUnitPricingPrice.ConversionRateConfig.Unit
+                        .builder()
+                        .unitConfig(
+                            NewSubscriptionScalableMatrixWithUnitPricingPrice.ConversionRateConfig
+                                .Unit
+                                .UnitConfig
+                                .builder()
+                                .unitAmount("unit_amount")
+                                .build()
+                        )
+                        .build()
+                )
+            )
         assertThat(newSubscriptionScalableMatrixWithUnitPricingPrice.currency())
             .contains("currency")
         assertThat(
@@ -157,6 +180,13 @@ internal class NewSubscriptionScalableMatrixWithUnitPricingPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    NewSubscriptionScalableMatrixWithUnitPricingPrice.ConversionRateConfig.Unit
+                        .UnitConfig
+                        .builder()
+                        .unitAmount("unit_amount")
+                        .build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()

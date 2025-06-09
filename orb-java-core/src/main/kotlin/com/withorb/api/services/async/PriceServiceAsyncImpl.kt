@@ -21,6 +21,8 @@ import com.withorb.api.models.PriceCreateParams
 import com.withorb.api.models.PriceEvaluateMultipleParams
 import com.withorb.api.models.PriceEvaluateMultipleResponse
 import com.withorb.api.models.PriceEvaluateParams
+import com.withorb.api.models.PriceEvaluatePreviewEventsParams
+import com.withorb.api.models.PriceEvaluatePreviewEventsResponse
 import com.withorb.api.models.PriceEvaluateResponse
 import com.withorb.api.models.PriceFetchParams
 import com.withorb.api.models.PriceListPageAsync
@@ -81,6 +83,13 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
     ): CompletableFuture<PriceEvaluateMultipleResponse> =
         // post /prices/evaluate
         withRawResponse().evaluateMultiple(params, requestOptions).thenApply { it.parse() }
+
+    override fun evaluatePreviewEvents(
+        params: PriceEvaluatePreviewEventsParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<PriceEvaluatePreviewEventsResponse> =
+        // post /prices/evaluate_preview_events
+        withRawResponse().evaluatePreviewEvents(params, requestOptions).thenApply { it.parse() }
 
     override fun fetch(
         params: PriceFetchParams,
@@ -258,6 +267,37 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
                     response.parseable {
                         response
                             .use { evaluateMultipleHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val evaluatePreviewEventsHandler: Handler<PriceEvaluatePreviewEventsResponse> =
+            jsonHandler<PriceEvaluatePreviewEventsResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun evaluatePreviewEvents(
+            params: PriceEvaluatePreviewEventsParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<PriceEvaluatePreviewEventsResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("prices", "evaluate_preview_events")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { evaluatePreviewEventsHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()
