@@ -84,6 +84,7 @@ private constructor(
 
     /**
      * The date from which the top-up is active. If unspecified, the top-up is active immediately.
+     * This should not be more than 10 days in the past.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
@@ -309,7 +310,7 @@ private constructor(
 
         /**
          * The date from which the top-up is active. If unspecified, the top-up is active
-         * immediately.
+         * immediately. This should not be more than 10 days in the past.
          */
         fun activeFrom(activeFrom: OffsetDateTime?) = apply { body.activeFrom(activeFrom) }
 
@@ -619,7 +620,7 @@ private constructor(
 
         /**
          * The date from which the top-up is active. If unspecified, the top-up is active
-         * immediately.
+         * immediately. This should not be more than 10 days in the past.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -843,7 +844,7 @@ private constructor(
 
             /**
              * The date from which the top-up is active. If unspecified, the top-up is active
-             * immediately.
+             * immediately. This should not be more than 10 days in the past.
              */
             fun activeFrom(activeFrom: OffsetDateTime?) =
                 activeFrom(JsonField.ofNullable(activeFrom))
@@ -1070,8 +1071,9 @@ private constructor(
         fun memo(): Optional<String> = memo.getOptional("memo")
 
         /**
-         * If true, new credit blocks created by this top-up will require that the corresponding
-         * invoice is paid before they can be drawn down from.
+         * When true, credit blocks created by this top-up will require that the corresponding
+         * invoice is paid before they are drawn down from. If any topup block is pending payment,
+         * further automatic top-ups will be paused until the invoice is paid or voided.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -1206,8 +1208,10 @@ private constructor(
             fun memo(memo: JsonField<String>) = apply { this.memo = memo }
 
             /**
-             * If true, new credit blocks created by this top-up will require that the corresponding
-             * invoice is paid before they can be drawn down from.
+             * When true, credit blocks created by this top-up will require that the corresponding
+             * invoice is paid before they are drawn down from. If any topup block is pending
+             * payment, further automatic top-ups will be paused until the invoice is paid or
+             * voided.
              */
             fun requireSuccessfulPayment(requireSuccessfulPayment: Boolean) =
                 requireSuccessfulPayment(JsonField.of(requireSuccessfulPayment))

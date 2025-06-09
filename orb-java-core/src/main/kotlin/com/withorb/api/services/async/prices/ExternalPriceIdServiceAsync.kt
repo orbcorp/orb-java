@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async.prices
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Price
@@ -98,12 +97,10 @@ interface ExternalPriceIdServiceAsync {
          * Returns a raw HTTP response for `put /prices/external_price_id/{external_price_id}`, but
          * is otherwise the same as [ExternalPriceIdServiceAsync.update].
          */
-        @MustBeClosed
         fun update(externalPriceId: String): CompletableFuture<HttpResponseFor<Price>> =
             update(externalPriceId, PriceExternalPriceIdUpdateParams.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             externalPriceId: String,
             params: PriceExternalPriceIdUpdateParams = PriceExternalPriceIdUpdateParams.none(),
@@ -112,7 +109,6 @@ interface ExternalPriceIdServiceAsync {
             update(params.toBuilder().externalPriceId(externalPriceId).build(), requestOptions)
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             externalPriceId: String,
             params: PriceExternalPriceIdUpdateParams = PriceExternalPriceIdUpdateParams.none(),
@@ -120,20 +116,17 @@ interface ExternalPriceIdServiceAsync {
             update(externalPriceId, params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             params: PriceExternalPriceIdUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Price>>
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             params: PriceExternalPriceIdUpdateParams
         ): CompletableFuture<HttpResponseFor<Price>> = update(params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             externalPriceId: String,
             requestOptions: RequestOptions,
@@ -144,12 +137,10 @@ interface ExternalPriceIdServiceAsync {
          * Returns a raw HTTP response for `get /prices/external_price_id/{external_price_id}`, but
          * is otherwise the same as [ExternalPriceIdServiceAsync.fetch].
          */
-        @MustBeClosed
         fun fetch(externalPriceId: String): CompletableFuture<HttpResponseFor<Price>> =
             fetch(externalPriceId, PriceExternalPriceIdFetchParams.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             externalPriceId: String,
             params: PriceExternalPriceIdFetchParams = PriceExternalPriceIdFetchParams.none(),
@@ -158,7 +149,6 @@ interface ExternalPriceIdServiceAsync {
             fetch(params.toBuilder().externalPriceId(externalPriceId).build(), requestOptions)
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             externalPriceId: String,
             params: PriceExternalPriceIdFetchParams = PriceExternalPriceIdFetchParams.none(),
@@ -166,20 +156,17 @@ interface ExternalPriceIdServiceAsync {
             fetch(externalPriceId, params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             params: PriceExternalPriceIdFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Price>>
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             params: PriceExternalPriceIdFetchParams
         ): CompletableFuture<HttpResponseFor<Price>> = fetch(params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             externalPriceId: String,
             requestOptions: RequestOptions,

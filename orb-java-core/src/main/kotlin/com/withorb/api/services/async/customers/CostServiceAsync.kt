@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async.customers
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CustomerCostListByExternalIdParams
@@ -325,12 +324,10 @@ interface CostServiceAsync {
          * Returns a raw HTTP response for `get /customers/{customer_id}/costs`, but is otherwise
          * the same as [CostServiceAsync.list].
          */
-        @MustBeClosed
         fun list(customerId: String): CompletableFuture<HttpResponseFor<CustomerCostListResponse>> =
             list(customerId, CustomerCostListParams.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             customerId: String,
             params: CustomerCostListParams = CustomerCostListParams.none(),
@@ -339,7 +336,6 @@ interface CostServiceAsync {
             list(params.toBuilder().customerId(customerId).build(), requestOptions)
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             customerId: String,
             params: CustomerCostListParams = CustomerCostListParams.none(),
@@ -347,21 +343,18 @@ interface CostServiceAsync {
             list(customerId, params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: CustomerCostListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CustomerCostListResponse>>
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: CustomerCostListParams
         ): CompletableFuture<HttpResponseFor<CustomerCostListResponse>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             customerId: String,
             requestOptions: RequestOptions,
@@ -373,14 +366,12 @@ interface CostServiceAsync {
          * /customers/external_customer_id/{external_customer_id}/costs`, but is otherwise the same
          * as [CostServiceAsync.listByExternalId].
          */
-        @MustBeClosed
         fun listByExternalId(
             externalCustomerId: String
         ): CompletableFuture<HttpResponseFor<CustomerCostListByExternalIdResponse>> =
             listByExternalId(externalCustomerId, CustomerCostListByExternalIdParams.none())
 
         /** @see [listByExternalId] */
-        @MustBeClosed
         fun listByExternalId(
             externalCustomerId: String,
             params: CustomerCostListByExternalIdParams = CustomerCostListByExternalIdParams.none(),
@@ -392,7 +383,6 @@ interface CostServiceAsync {
             )
 
         /** @see [listByExternalId] */
-        @MustBeClosed
         fun listByExternalId(
             externalCustomerId: String,
             params: CustomerCostListByExternalIdParams = CustomerCostListByExternalIdParams.none(),
@@ -400,21 +390,18 @@ interface CostServiceAsync {
             listByExternalId(externalCustomerId, params, RequestOptions.none())
 
         /** @see [listByExternalId] */
-        @MustBeClosed
         fun listByExternalId(
             params: CustomerCostListByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CustomerCostListByExternalIdResponse>>
 
         /** @see [listByExternalId] */
-        @MustBeClosed
         fun listByExternalId(
             params: CustomerCostListByExternalIdParams
         ): CompletableFuture<HttpResponseFor<CustomerCostListByExternalIdResponse>> =
             listByExternalId(params, RequestOptions.none())
 
         /** @see [listByExternalId] */
-        @MustBeClosed
         fun listByExternalId(
             externalCustomerId: String,
             requestOptions: RequestOptions,

@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Alert
@@ -306,12 +305,10 @@ interface AlertServiceAsync {
          * Returns a raw HTTP response for `get /alerts/{alert_id}`, but is otherwise the same as
          * [AlertServiceAsync.retrieve].
          */
-        @MustBeClosed
         fun retrieve(alertId: String): CompletableFuture<HttpResponseFor<Alert>> =
             retrieve(alertId, AlertRetrieveParams.none())
 
         /** @see [retrieve] */
-        @MustBeClosed
         fun retrieve(
             alertId: String,
             params: AlertRetrieveParams = AlertRetrieveParams.none(),
@@ -320,7 +317,6 @@ interface AlertServiceAsync {
             retrieve(params.toBuilder().alertId(alertId).build(), requestOptions)
 
         /** @see [retrieve] */
-        @MustBeClosed
         fun retrieve(
             alertId: String,
             params: AlertRetrieveParams = AlertRetrieveParams.none(),
@@ -328,19 +324,16 @@ interface AlertServiceAsync {
             retrieve(alertId, params, RequestOptions.none())
 
         /** @see [retrieve] */
-        @MustBeClosed
         fun retrieve(
             params: AlertRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Alert>>
 
         /** @see [retrieve] */
-        @MustBeClosed
         fun retrieve(params: AlertRetrieveParams): CompletableFuture<HttpResponseFor<Alert>> =
             retrieve(params, RequestOptions.none())
 
         /** @see [retrieve] */
-        @MustBeClosed
         fun retrieve(
             alertId: String,
             requestOptions: RequestOptions,
@@ -351,7 +344,6 @@ interface AlertServiceAsync {
          * Returns a raw HTTP response for `put /alerts/{alert_configuration_id}`, but is otherwise
          * the same as [AlertServiceAsync.update].
          */
-        @MustBeClosed
         fun update(
             alertConfigurationId: String,
             params: AlertUpdateParams,
@@ -359,7 +351,6 @@ interface AlertServiceAsync {
             update(alertConfigurationId, params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             alertConfigurationId: String,
             params: AlertUpdateParams,
@@ -371,12 +362,10 @@ interface AlertServiceAsync {
             )
 
         /** @see [update] */
-        @MustBeClosed
         fun update(params: AlertUpdateParams): CompletableFuture<HttpResponseFor<Alert>> =
             update(params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             params: AlertUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -386,26 +375,22 @@ interface AlertServiceAsync {
          * Returns a raw HTTP response for `get /alerts`, but is otherwise the same as
          * [AlertServiceAsync.list].
          */
-        @MustBeClosed
         fun list(): CompletableFuture<HttpResponseFor<AlertListPageAsync>> =
             list(AlertListParams.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: AlertListParams = AlertListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<AlertListPageAsync>>
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: AlertListParams = AlertListParams.none()
         ): CompletableFuture<HttpResponseFor<AlertListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<AlertListPageAsync>> =
@@ -415,7 +400,6 @@ interface AlertServiceAsync {
          * Returns a raw HTTP response for `post /alerts/customer_id/{customer_id}`, but is
          * otherwise the same as [AlertServiceAsync.createForCustomer].
          */
-        @MustBeClosed
         fun createForCustomer(
             customerId: String,
             params: AlertCreateForCustomerParams,
@@ -423,7 +407,6 @@ interface AlertServiceAsync {
             createForCustomer(customerId, params, RequestOptions.none())
 
         /** @see [createForCustomer] */
-        @MustBeClosed
         fun createForCustomer(
             customerId: String,
             params: AlertCreateForCustomerParams,
@@ -432,14 +415,12 @@ interface AlertServiceAsync {
             createForCustomer(params.toBuilder().customerId(customerId).build(), requestOptions)
 
         /** @see [createForCustomer] */
-        @MustBeClosed
         fun createForCustomer(
             params: AlertCreateForCustomerParams
         ): CompletableFuture<HttpResponseFor<Alert>> =
             createForCustomer(params, RequestOptions.none())
 
         /** @see [createForCustomer] */
-        @MustBeClosed
         fun createForCustomer(
             params: AlertCreateForCustomerParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -450,7 +431,6 @@ interface AlertServiceAsync {
          * /alerts/external_customer_id/{external_customer_id}`, but is otherwise the same as
          * [AlertServiceAsync.createForExternalCustomer].
          */
-        @MustBeClosed
         fun createForExternalCustomer(
             externalCustomerId: String,
             params: AlertCreateForExternalCustomerParams,
@@ -458,7 +438,6 @@ interface AlertServiceAsync {
             createForExternalCustomer(externalCustomerId, params, RequestOptions.none())
 
         /** @see [createForExternalCustomer] */
-        @MustBeClosed
         fun createForExternalCustomer(
             externalCustomerId: String,
             params: AlertCreateForExternalCustomerParams,
@@ -470,14 +449,12 @@ interface AlertServiceAsync {
             )
 
         /** @see [createForExternalCustomer] */
-        @MustBeClosed
         fun createForExternalCustomer(
             params: AlertCreateForExternalCustomerParams
         ): CompletableFuture<HttpResponseFor<Alert>> =
             createForExternalCustomer(params, RequestOptions.none())
 
         /** @see [createForExternalCustomer] */
-        @MustBeClosed
         fun createForExternalCustomer(
             params: AlertCreateForExternalCustomerParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -487,7 +464,6 @@ interface AlertServiceAsync {
          * Returns a raw HTTP response for `post /alerts/subscription_id/{subscription_id}`, but is
          * otherwise the same as [AlertServiceAsync.createForSubscription].
          */
-        @MustBeClosed
         fun createForSubscription(
             subscriptionId: String,
             params: AlertCreateForSubscriptionParams,
@@ -495,7 +471,6 @@ interface AlertServiceAsync {
             createForSubscription(subscriptionId, params, RequestOptions.none())
 
         /** @see [createForSubscription] */
-        @MustBeClosed
         fun createForSubscription(
             subscriptionId: String,
             params: AlertCreateForSubscriptionParams,
@@ -507,14 +482,12 @@ interface AlertServiceAsync {
             )
 
         /** @see [createForSubscription] */
-        @MustBeClosed
         fun createForSubscription(
             params: AlertCreateForSubscriptionParams
         ): CompletableFuture<HttpResponseFor<Alert>> =
             createForSubscription(params, RequestOptions.none())
 
         /** @see [createForSubscription] */
-        @MustBeClosed
         fun createForSubscription(
             params: AlertCreateForSubscriptionParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -524,12 +497,10 @@ interface AlertServiceAsync {
          * Returns a raw HTTP response for `post /alerts/{alert_configuration_id}/disable`, but is
          * otherwise the same as [AlertServiceAsync.disable].
          */
-        @MustBeClosed
         fun disable(alertConfigurationId: String): CompletableFuture<HttpResponseFor<Alert>> =
             disable(alertConfigurationId, AlertDisableParams.none())
 
         /** @see [disable] */
-        @MustBeClosed
         fun disable(
             alertConfigurationId: String,
             params: AlertDisableParams = AlertDisableParams.none(),
@@ -541,7 +512,6 @@ interface AlertServiceAsync {
             )
 
         /** @see [disable] */
-        @MustBeClosed
         fun disable(
             alertConfigurationId: String,
             params: AlertDisableParams = AlertDisableParams.none(),
@@ -549,19 +519,16 @@ interface AlertServiceAsync {
             disable(alertConfigurationId, params, RequestOptions.none())
 
         /** @see [disable] */
-        @MustBeClosed
         fun disable(
             params: AlertDisableParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Alert>>
 
         /** @see [disable] */
-        @MustBeClosed
         fun disable(params: AlertDisableParams): CompletableFuture<HttpResponseFor<Alert>> =
             disable(params, RequestOptions.none())
 
         /** @see [disable] */
-        @MustBeClosed
         fun disable(
             alertConfigurationId: String,
             requestOptions: RequestOptions,
@@ -572,12 +539,10 @@ interface AlertServiceAsync {
          * Returns a raw HTTP response for `post /alerts/{alert_configuration_id}/enable`, but is
          * otherwise the same as [AlertServiceAsync.enable].
          */
-        @MustBeClosed
         fun enable(alertConfigurationId: String): CompletableFuture<HttpResponseFor<Alert>> =
             enable(alertConfigurationId, AlertEnableParams.none())
 
         /** @see [enable] */
-        @MustBeClosed
         fun enable(
             alertConfigurationId: String,
             params: AlertEnableParams = AlertEnableParams.none(),
@@ -589,7 +554,6 @@ interface AlertServiceAsync {
             )
 
         /** @see [enable] */
-        @MustBeClosed
         fun enable(
             alertConfigurationId: String,
             params: AlertEnableParams = AlertEnableParams.none(),
@@ -597,19 +561,16 @@ interface AlertServiceAsync {
             enable(alertConfigurationId, params, RequestOptions.none())
 
         /** @see [enable] */
-        @MustBeClosed
         fun enable(
             params: AlertEnableParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Alert>>
 
         /** @see [enable] */
-        @MustBeClosed
         fun enable(params: AlertEnableParams): CompletableFuture<HttpResponseFor<Alert>> =
             enable(params, RequestOptions.none())
 
         /** @see [enable] */
-        @MustBeClosed
         fun enable(
             alertConfigurationId: String,
             requestOptions: RequestOptions,

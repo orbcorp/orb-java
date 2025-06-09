@@ -1,5 +1,39 @@
 # Changelog
 
+## 1.0.0 (2025-06-09)
+
+Full Changelog: [v0.57.0...v1.0.0](https://github.com/orbcorp/orb-java/compare/v0.57.0...v1.0.0)
+
+### ⚠ BREAKING CHANGES
+
+* **client:** breaking change to re-use types
+
+### Features
+
+* **api:** api update ([70f55e5](https://github.com/orbcorp/orb-java/commit/70f55e57fd7acb1d5058f4770b0e222a6aaf4fcc))
+* **api:** api update ([180d51e](https://github.com/orbcorp/orb-java/commit/180d51ed43302de208c9f4208664f6a455bd5978))
+* **api:** api update ([6d3367a](https://github.com/orbcorp/orb-java/commit/6d3367a305cf01dbb74c513b64a4f737b615b8d9))
+* **api:** api update ([0bfa7ad](https://github.com/orbcorp/orb-java/commit/0bfa7ad4505968ced36fbaed8ab015de46c64760))
+* **api:** api update ([616608c](https://github.com/orbcorp/orb-java/commit/616608cb60c88dee8de7580c2abb2031f5f6205c))
+* **api:** api update ([7bbb55e](https://github.com/orbcorp/orb-java/commit/7bbb55e038c687ab12f6db551693033fe96e6bdd))
+* **api:** api update ([7f05af6](https://github.com/orbcorp/orb-java/commit/7f05af623a35433d841f0d333ba7b53fa4adb693))
+* **api:** manual updates ([0efca0a](https://github.com/orbcorp/orb-java/commit/0efca0a760f1f7db7ce5cd7388d02f378645e9f2))
+* **api:** manual updates ([a419c35](https://github.com/orbcorp/orb-java/commit/a419c35477d728f555315d0151a788d361f67813))
+* **client:** breaking change to re-use types ([ad6e081](https://github.com/orbcorp/orb-java/commit/ad6e081eb0c059369d5a11863d9a4d0fd7f6749c))
+
+
+### Bug Fixes
+
+* **internal:** cleaning up custom code ([a646246](https://github.com/orbcorp/orb-java/commit/a646246bf46caba04761d1dbdcbf0f2254a802de))
+* **internal:** fix typing error ([31cc02e](https://github.com/orbcorp/orb-java/commit/31cc02e9ab39fd0f6292f73d43914f626c3dad16))
+
+
+### Chores
+
+* **internal:** codegen related update ([0907df6](https://github.com/orbcorp/orb-java/commit/0907df61778f4c5aee9f24a6d5e7a5b4d30c5d43))
+* **internal:** codegen related update ([2a0fdab](https://github.com/orbcorp/orb-java/commit/2a0fdabe411a2d31333ad84e843b8f173428b168))
+* **internal:** codegen related update ([1ce04bd](https://github.com/orbcorp/orb-java/commit/1ce04bdccc4ef3026fb794df0c9ecf658e328278))
+
 ## 0.57.0 (2025-05-22)
 
 Full Changelog: [v0.56.0...v0.57.0](https://github.com/orbcorp/orb-java/compare/v0.56.0...v0.57.0)

@@ -2,10 +2,10 @@
 
 package com.withorb.api.services.async
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Item
+import com.withorb.api.models.ItemArchiveParams
 import com.withorb.api.models.ItemCreateParams
 import com.withorb.api.models.ItemFetchParams
 import com.withorb.api.models.ItemListPageAsync
@@ -77,6 +77,36 @@ interface ItemServiceAsync {
     fun list(requestOptions: RequestOptions): CompletableFuture<ItemListPageAsync> =
         list(ItemListParams.none(), requestOptions)
 
+    /** Archive item */
+    fun archive(itemId: String): CompletableFuture<Item> = archive(itemId, ItemArchiveParams.none())
+
+    /** @see [archive] */
+    fun archive(
+        itemId: String,
+        params: ItemArchiveParams = ItemArchiveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Item> = archive(params.toBuilder().itemId(itemId).build(), requestOptions)
+
+    /** @see [archive] */
+    fun archive(
+        itemId: String,
+        params: ItemArchiveParams = ItemArchiveParams.none(),
+    ): CompletableFuture<Item> = archive(itemId, params, RequestOptions.none())
+
+    /** @see [archive] */
+    fun archive(
+        params: ItemArchiveParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Item>
+
+    /** @see [archive] */
+    fun archive(params: ItemArchiveParams): CompletableFuture<Item> =
+        archive(params, RequestOptions.none())
+
+    /** @see [archive] */
+    fun archive(itemId: String, requestOptions: RequestOptions): CompletableFuture<Item> =
+        archive(itemId, ItemArchiveParams.none(), requestOptions)
+
     /** This endpoint returns an item identified by its item_id. */
     fun fetch(itemId: String): CompletableFuture<Item> = fetch(itemId, ItemFetchParams.none())
 
@@ -114,12 +144,10 @@ interface ItemServiceAsync {
          * Returns a raw HTTP response for `post /items`, but is otherwise the same as
          * [ItemServiceAsync.create].
          */
-        @MustBeClosed
         fun create(params: ItemCreateParams): CompletableFuture<HttpResponseFor<Item>> =
             create(params, RequestOptions.none())
 
         /** @see [create] */
-        @MustBeClosed
         fun create(
             params: ItemCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -129,12 +157,10 @@ interface ItemServiceAsync {
          * Returns a raw HTTP response for `put /items/{item_id}`, but is otherwise the same as
          * [ItemServiceAsync.update].
          */
-        @MustBeClosed
         fun update(itemId: String): CompletableFuture<HttpResponseFor<Item>> =
             update(itemId, ItemUpdateParams.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             itemId: String,
             params: ItemUpdateParams = ItemUpdateParams.none(),
@@ -143,26 +169,22 @@ interface ItemServiceAsync {
             update(params.toBuilder().itemId(itemId).build(), requestOptions)
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             itemId: String,
             params: ItemUpdateParams = ItemUpdateParams.none(),
         ): CompletableFuture<HttpResponseFor<Item>> = update(itemId, params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             params: ItemUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Item>>
 
         /** @see [update] */
-        @MustBeClosed
         fun update(params: ItemUpdateParams): CompletableFuture<HttpResponseFor<Item>> =
             update(params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             itemId: String,
             requestOptions: RequestOptions,
@@ -173,41 +195,73 @@ interface ItemServiceAsync {
          * Returns a raw HTTP response for `get /items`, but is otherwise the same as
          * [ItemServiceAsync.list].
          */
-        @MustBeClosed
         fun list(): CompletableFuture<HttpResponseFor<ItemListPageAsync>> =
             list(ItemListParams.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: ItemListParams = ItemListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<ItemListPageAsync>>
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: ItemListParams = ItemListParams.none()
         ): CompletableFuture<HttpResponseFor<ItemListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<ItemListPageAsync>> =
             list(ItemListParams.none(), requestOptions)
 
         /**
+         * Returns a raw HTTP response for `post /items/{item_id}/archive`, but is otherwise the
+         * same as [ItemServiceAsync.archive].
+         */
+        fun archive(itemId: String): CompletableFuture<HttpResponseFor<Item>> =
+            archive(itemId, ItemArchiveParams.none())
+
+        /** @see [archive] */
+        fun archive(
+            itemId: String,
+            params: ItemArchiveParams = ItemArchiveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Item>> =
+            archive(params.toBuilder().itemId(itemId).build(), requestOptions)
+
+        /** @see [archive] */
+        fun archive(
+            itemId: String,
+            params: ItemArchiveParams = ItemArchiveParams.none(),
+        ): CompletableFuture<HttpResponseFor<Item>> = archive(itemId, params, RequestOptions.none())
+
+        /** @see [archive] */
+        fun archive(
+            params: ItemArchiveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Item>>
+
+        /** @see [archive] */
+        fun archive(params: ItemArchiveParams): CompletableFuture<HttpResponseFor<Item>> =
+            archive(params, RequestOptions.none())
+
+        /** @see [archive] */
+        fun archive(
+            itemId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Item>> =
+            archive(itemId, ItemArchiveParams.none(), requestOptions)
+
+        /**
          * Returns a raw HTTP response for `get /items/{item_id}`, but is otherwise the same as
          * [ItemServiceAsync.fetch].
          */
-        @MustBeClosed
         fun fetch(itemId: String): CompletableFuture<HttpResponseFor<Item>> =
             fetch(itemId, ItemFetchParams.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             itemId: String,
             params: ItemFetchParams = ItemFetchParams.none(),
@@ -216,26 +270,22 @@ interface ItemServiceAsync {
             fetch(params.toBuilder().itemId(itemId).build(), requestOptions)
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             itemId: String,
             params: ItemFetchParams = ItemFetchParams.none(),
         ): CompletableFuture<HttpResponseFor<Item>> = fetch(itemId, params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             params: ItemFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Item>>
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(params: ItemFetchParams): CompletableFuture<HttpResponseFor<Item>> =
             fetch(params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             itemId: String,
             requestOptions: RequestOptions,

@@ -31,7 +31,7 @@ internal class SubscriptionFetchScheduleResponseTest {
         assertThat(subscriptionFetchScheduleResponse.endDate())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(subscriptionFetchScheduleResponse.plan())
-            .isEqualTo(
+            .contains(
                 SubscriptionFetchScheduleResponse.Plan.builder()
                     .id("m2t5akQeh2obwxeU")
                     .externalPlanId("m2t5akQeh2obwxeU")

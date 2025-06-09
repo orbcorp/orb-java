@@ -18,12 +18,12 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
     @Test
     fun ofIncrement() {
         val increment =
-            CustomerCreditLedgerCreateEntryResponse.Increment.builder()
+            IncrementLedgerEntry.builder()
                 .id("id")
                 .amount(0.0)
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .creditBlock(
-                    CustomerCreditLedgerCreateEntryResponse.Increment.CreditBlock.builder()
+                    AffectedBlock.builder()
                         .id("id")
                         .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .perUnitCostBasis("per_unit_cost_basis")
@@ -31,23 +31,415 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
                 )
                 .currency("currency")
                 .customer(
-                    CustomerCreditLedgerCreateEntryResponse.Increment.Customer.builder()
+                    CustomerMinified.builder()
                         .id("id")
                         .externalCustomerId("external_customer_id")
                         .build()
                 )
                 .description("description")
                 .endingBalance(0.0)
-                .entryStatus(
-                    CustomerCreditLedgerCreateEntryResponse.Increment.EntryStatus.COMMITTED
-                )
+                .entryStatus(IncrementLedgerEntry.EntryStatus.COMMITTED)
+                .entryType(IncrementLedgerEntry.EntryType.INCREMENT)
                 .ledgerSequenceNumber(0L)
                 .metadata(
-                    CustomerCreditLedgerCreateEntryResponse.Increment.Metadata.builder()
+                    IncrementLedgerEntry.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
                 .startingBalance(0.0)
+                .addCreatedInvoice(
+                    Invoice.builder()
+                        .id("id")
+                        .amountDue("8.00")
+                        .autoCollection(
+                            Invoice.AutoCollection.builder()
+                                .enabled(true)
+                                .nextAttemptAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .numAttempts(0L)
+                                .previouslyAttemptedAt(
+                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                )
+                                .build()
+                        )
+                        .billingAddress(
+                            Address.builder()
+                                .city("city")
+                                .country("country")
+                                .line1("line1")
+                                .line2("line2")
+                                .postalCode("postal_code")
+                                .state("state")
+                                .build()
+                        )
+                        .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
+                        .addCreditNote(
+                            Invoice.CreditNote.builder()
+                                .id("id")
+                                .creditNoteNumber("credit_note_number")
+                                .memo("memo")
+                                .reason("reason")
+                                .total("total")
+                                .type("type")
+                                .voidedAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
+                                .build()
+                        )
+                        .currency("USD")
+                        .customer(
+                            CustomerMinified.builder()
+                                .id("id")
+                                .externalCustomerId("external_customer_id")
+                                .build()
+                        )
+                        .addCustomerBalanceTransaction(
+                            Invoice.CustomerBalanceTransaction.builder()
+                                .id("cgZa3SXcsPTVyC4Y")
+                                .action(
+                                    Invoice.CustomerBalanceTransaction.Action.APPLIED_TO_INVOICE
+                                )
+                                .amount("11.00")
+                                .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
+                                .creditNote(CreditNoteTiny.builder().id("id").build())
+                                .description("An optional description")
+                                .endingBalance("22.00")
+                                .invoice(InvoiceTiny.builder().id("gXcsPTVyC4YZa3Sc").build())
+                                .startingBalance("33.00")
+                                .type(Invoice.CustomerBalanceTransaction.Type.INCREMENT)
+                                .build()
+                        )
+                        .customerTaxId(
+                            CustomerTaxId.builder()
+                                .country(CustomerTaxId.Country.AD)
+                                .type(CustomerTaxId.Type.AD_NRT)
+                                .value("value")
+                                .build()
+                        )
+                        .discount(JsonValue.from(mapOf<String, Any>()))
+                        .addDiscount(
+                            PercentageDiscount.builder()
+                                .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                                .percentageDiscount(0.15)
+                                .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                                .addFilter(
+                                    TransformPriceFilter.builder()
+                                        .field(TransformPriceFilter.Field.PRICE_ID)
+                                        .operator(TransformPriceFilter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
+                                .reason("reason")
+                                .build()
+                        )
+                        .dueDate(OffsetDateTime.parse("2022-05-30T07:00:00+00:00"))
+                        .eligibleToIssueAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .hostedInvoiceUrl("hosted_invoice_url")
+                        .invoiceDate(OffsetDateTime.parse("2022-05-01T07:00:00+00:00"))
+                        .invoiceNumber("JYEFHK-00001")
+                        .invoicePdf(
+                            "https://assets.withorb.com/invoice/rUHdhmg45vY45DX/qEAeuYePaphGMdFb"
+                        )
+                        .invoiceSource(Invoice.InvoiceSource.SUBSCRIPTION)
+                        .issueFailedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .issuedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .addLineItem(
+                            Invoice.LineItem.builder()
+                                .id("id")
+                                .adjustedSubtotal("5.00")
+                                .addAdjustment(
+                                    MonetaryUsageDiscountAdjustment.builder()
+                                        .id("id")
+                                        .adjustmentType(
+                                            MonetaryUsageDiscountAdjustment.AdjustmentType
+                                                .USAGE_DISCOUNT
+                                        )
+                                        .amount("amount")
+                                        .addAppliesToPriceId("string")
+                                        .addFilter(
+                                            TransformPriceFilter.builder()
+                                                .field(TransformPriceFilter.Field.PRICE_ID)
+                                                .operator(TransformPriceFilter.Operator.INCLUDES)
+                                                .addValue("string")
+                                                .build()
+                                        )
+                                        .isInvoiceLevel(true)
+                                        .reason("reason")
+                                        .usageDiscount(0.0)
+                                        .build()
+                                )
+                                .amount("7.00")
+                                .creditsApplied("6.00")
+                                .discount(
+                                    PercentageDiscount.builder()
+                                        .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                                        .percentageDiscount(0.15)
+                                        .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                        .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                                        .addFilter(
+                                            TransformPriceFilter.builder()
+                                                .field(TransformPriceFilter.Field.PRICE_ID)
+                                                .operator(TransformPriceFilter.Operator.INCLUDES)
+                                                .addValue("string")
+                                                .build()
+                                        )
+                                        .reason("reason")
+                                        .build()
+                                )
+                                .endDate(OffsetDateTime.parse("2022-02-01T08:00:00+00:00"))
+                                .filter("filter")
+                                .grouping("grouping")
+                                .maximum(
+                                    Maximum.builder()
+                                        .addAppliesToPriceId("string")
+                                        .addFilter(
+                                            TransformPriceFilter.builder()
+                                                .field(TransformPriceFilter.Field.PRICE_ID)
+                                                .operator(TransformPriceFilter.Operator.INCLUDES)
+                                                .addValue("string")
+                                                .build()
+                                        )
+                                        .maximumAmount("maximum_amount")
+                                        .build()
+                                )
+                                .maximumAmount("maximum_amount")
+                                .minimum(
+                                    Minimum.builder()
+                                        .addAppliesToPriceId("string")
+                                        .addFilter(
+                                            TransformPriceFilter.builder()
+                                                .field(TransformPriceFilter.Field.PRICE_ID)
+                                                .operator(TransformPriceFilter.Operator.INCLUDES)
+                                                .addValue("string")
+                                                .build()
+                                        )
+                                        .minimumAmount("minimum_amount")
+                                        .build()
+                                )
+                                .minimumAmount("minimum_amount")
+                                .name("Fixed Fee")
+                                .partiallyInvoicedAmount("4.00")
+                                .price(
+                                    Price.Unit.builder()
+                                        .id("id")
+                                        .billableMetric(
+                                            BillableMetricTiny.builder().id("id").build()
+                                        )
+                                        .billingCycleConfiguration(
+                                            BillingCycleConfiguration.builder()
+                                                .duration(0L)
+                                                .durationUnit(
+                                                    BillingCycleConfiguration.DurationUnit.DAY
+                                                )
+                                                .build()
+                                        )
+                                        .cadence(Price.Unit.Cadence.ONE_TIME)
+                                        .conversionRate(0.0)
+                                        .unitConversionRateConfig(
+                                            ConversionRateUnitConfig.builder()
+                                                .unitAmount("unit_amount")
+                                                .build()
+                                        )
+                                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                        .creditAllocation(
+                                            Allocation.builder()
+                                                .allowsRollover(true)
+                                                .currency("currency")
+                                                .customExpiration(
+                                                    CustomExpiration.builder()
+                                                        .duration(0L)
+                                                        .durationUnit(
+                                                            CustomExpiration.DurationUnit.DAY
+                                                        )
+                                                        .build()
+                                                )
+                                                .build()
+                                        )
+                                        .currency("currency")
+                                        .discount(
+                                            PercentageDiscount.builder()
+                                                .discountType(
+                                                    PercentageDiscount.DiscountType.PERCENTAGE
+                                                )
+                                                .percentageDiscount(0.15)
+                                                .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                                                .addFilter(
+                                                    TransformPriceFilter.builder()
+                                                        .field(TransformPriceFilter.Field.PRICE_ID)
+                                                        .operator(
+                                                            TransformPriceFilter.Operator.INCLUDES
+                                                        )
+                                                        .addValue("string")
+                                                        .build()
+                                                )
+                                                .reason("reason")
+                                                .build()
+                                        )
+                                        .externalPriceId("external_price_id")
+                                        .fixedPriceQuantity(0.0)
+                                        .invoicingCycleConfiguration(
+                                            BillingCycleConfiguration.builder()
+                                                .duration(0L)
+                                                .durationUnit(
+                                                    BillingCycleConfiguration.DurationUnit.DAY
+                                                )
+                                                .build()
+                                        )
+                                        .item(ItemSlim.builder().id("id").name("name").build())
+                                        .maximum(
+                                            Maximum.builder()
+                                                .addAppliesToPriceId("string")
+                                                .addFilter(
+                                                    TransformPriceFilter.builder()
+                                                        .field(TransformPriceFilter.Field.PRICE_ID)
+                                                        .operator(
+                                                            TransformPriceFilter.Operator.INCLUDES
+                                                        )
+                                                        .addValue("string")
+                                                        .build()
+                                                )
+                                                .maximumAmount("maximum_amount")
+                                                .build()
+                                        )
+                                        .maximumAmount("maximum_amount")
+                                        .metadata(
+                                            Price.Unit.Metadata.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string"),
+                                                )
+                                                .build()
+                                        )
+                                        .minimum(
+                                            Minimum.builder()
+                                                .addAppliesToPriceId("string")
+                                                .addFilter(
+                                                    TransformPriceFilter.builder()
+                                                        .field(TransformPriceFilter.Field.PRICE_ID)
+                                                        .operator(
+                                                            TransformPriceFilter.Operator.INCLUDES
+                                                        )
+                                                        .addValue("string")
+                                                        .build()
+                                                )
+                                                .minimumAmount("minimum_amount")
+                                                .build()
+                                        )
+                                        .minimumAmount("minimum_amount")
+                                        .name("name")
+                                        .planPhaseOrder(0L)
+                                        .priceType(Price.Unit.PriceType.USAGE_PRICE)
+                                        .unitConfig(
+                                            UnitConfig.builder().unitAmount("unit_amount").build()
+                                        )
+                                        .dimensionalPriceConfiguration(
+                                            DimensionalPriceConfiguration.builder()
+                                                .addDimensionValue("string")
+                                                .dimensionalPriceGroupId(
+                                                    "dimensional_price_group_id"
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .quantity(1.0)
+                                .startDate(OffsetDateTime.parse("2022-02-01T08:00:00+00:00"))
+                                .addSubLineItem(
+                                    MatrixSubLineItem.builder()
+                                        .amount("9.00")
+                                        .grouping(
+                                            SubLineItemGrouping.builder()
+                                                .key("region")
+                                                .value("west")
+                                                .build()
+                                        )
+                                        .matrixConfig(
+                                            SubLineItemMatrixConfig.builder()
+                                                .addDimensionValue("string")
+                                                .build()
+                                        )
+                                        .name("Tier One")
+                                        .quantity(5.0)
+                                        .type(MatrixSubLineItem.Type.MATRIX)
+                                        .build()
+                                )
+                                .subtotal("9.00")
+                                .addTaxAmount(
+                                    TaxAmount.builder()
+                                        .amount("amount")
+                                        .taxRateDescription("tax_rate_description")
+                                        .taxRatePercentage("tax_rate_percentage")
+                                        .build()
+                                )
+                                .addUsageCustomerId("string")
+                                .build()
+                        )
+                        .maximum(
+                            Maximum.builder()
+                                .addAppliesToPriceId("string")
+                                .addFilter(
+                                    TransformPriceFilter.builder()
+                                        .field(TransformPriceFilter.Field.PRICE_ID)
+                                        .operator(TransformPriceFilter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
+                                .maximumAmount("maximum_amount")
+                                .build()
+                        )
+                        .maximumAmount("maximum_amount")
+                        .memo("memo")
+                        .metadata(
+                            Invoice.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .minimum(
+                            Minimum.builder()
+                                .addAppliesToPriceId("string")
+                                .addFilter(
+                                    TransformPriceFilter.builder()
+                                        .field(TransformPriceFilter.Field.PRICE_ID)
+                                        .operator(TransformPriceFilter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
+                                .minimumAmount("minimum_amount")
+                                .build()
+                        )
+                        .minimumAmount("minimum_amount")
+                        .paidAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .addPaymentAttempt(
+                            Invoice.PaymentAttempt.builder()
+                                .id("id")
+                                .amount("amount")
+                                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .paymentProvider(Invoice.PaymentAttempt.PaymentProvider.STRIPE)
+                                .paymentProviderId("payment_provider_id")
+                                .succeeded(true)
+                                .build()
+                        )
+                        .paymentFailedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentStartedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .scheduledIssueAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .shippingAddress(
+                            Address.builder()
+                                .city("city")
+                                .country("country")
+                                .line1("line1")
+                                .line2("line2")
+                                .postalCode("postal_code")
+                                .state("state")
+                                .build()
+                        )
+                        .status(Invoice.Status.ISSUED)
+                        .subscription(SubscriptionMinified.builder().id("VDGsT23osdLb84KD").build())
+                        .subtotal("8.00")
+                        .syncFailedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .total("8.00")
+                        .voidedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .willAutoIssue(true)
+                        .build()
+                )
                 .build()
 
         val customerCreditLedgerCreateEntryResponse =
@@ -67,12 +459,12 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
         val jsonMapper = jsonMapper()
         val customerCreditLedgerCreateEntryResponse =
             CustomerCreditLedgerCreateEntryResponse.ofIncrement(
-                CustomerCreditLedgerCreateEntryResponse.Increment.builder()
+                IncrementLedgerEntry.builder()
                     .id("id")
                     .amount(0.0)
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .creditBlock(
-                        CustomerCreditLedgerCreateEntryResponse.Increment.CreditBlock.builder()
+                        AffectedBlock.builder()
                             .id("id")
                             .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .perUnitCostBasis("per_unit_cost_basis")
@@ -80,23 +472,440 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
                     )
                     .currency("currency")
                     .customer(
-                        CustomerCreditLedgerCreateEntryResponse.Increment.Customer.builder()
+                        CustomerMinified.builder()
                             .id("id")
                             .externalCustomerId("external_customer_id")
                             .build()
                     )
                     .description("description")
                     .endingBalance(0.0)
-                    .entryStatus(
-                        CustomerCreditLedgerCreateEntryResponse.Increment.EntryStatus.COMMITTED
-                    )
+                    .entryStatus(IncrementLedgerEntry.EntryStatus.COMMITTED)
+                    .entryType(IncrementLedgerEntry.EntryType.INCREMENT)
                     .ledgerSequenceNumber(0L)
                     .metadata(
-                        CustomerCreditLedgerCreateEntryResponse.Increment.Metadata.builder()
+                        IncrementLedgerEntry.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
                     .startingBalance(0.0)
+                    .addCreatedInvoice(
+                        Invoice.builder()
+                            .id("id")
+                            .amountDue("8.00")
+                            .autoCollection(
+                                Invoice.AutoCollection.builder()
+                                    .enabled(true)
+                                    .nextAttemptAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .numAttempts(0L)
+                                    .previouslyAttemptedAt(
+                                        OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                    )
+                                    .build()
+                            )
+                            .billingAddress(
+                                Address.builder()
+                                    .city("city")
+                                    .country("country")
+                                    .line1("line1")
+                                    .line2("line2")
+                                    .postalCode("postal_code")
+                                    .state("state")
+                                    .build()
+                            )
+                            .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
+                            .addCreditNote(
+                                Invoice.CreditNote.builder()
+                                    .id("id")
+                                    .creditNoteNumber("credit_note_number")
+                                    .memo("memo")
+                                    .reason("reason")
+                                    .total("total")
+                                    .type("type")
+                                    .voidedAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
+                                    .build()
+                            )
+                            .currency("USD")
+                            .customer(
+                                CustomerMinified.builder()
+                                    .id("id")
+                                    .externalCustomerId("external_customer_id")
+                                    .build()
+                            )
+                            .addCustomerBalanceTransaction(
+                                Invoice.CustomerBalanceTransaction.builder()
+                                    .id("cgZa3SXcsPTVyC4Y")
+                                    .action(
+                                        Invoice.CustomerBalanceTransaction.Action.APPLIED_TO_INVOICE
+                                    )
+                                    .amount("11.00")
+                                    .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
+                                    .creditNote(CreditNoteTiny.builder().id("id").build())
+                                    .description("An optional description")
+                                    .endingBalance("22.00")
+                                    .invoice(InvoiceTiny.builder().id("gXcsPTVyC4YZa3Sc").build())
+                                    .startingBalance("33.00")
+                                    .type(Invoice.CustomerBalanceTransaction.Type.INCREMENT)
+                                    .build()
+                            )
+                            .customerTaxId(
+                                CustomerTaxId.builder()
+                                    .country(CustomerTaxId.Country.AD)
+                                    .type(CustomerTaxId.Type.AD_NRT)
+                                    .value("value")
+                                    .build()
+                            )
+                            .discount(JsonValue.from(mapOf<String, Any>()))
+                            .addDiscount(
+                                PercentageDiscount.builder()
+                                    .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                                    .percentageDiscount(0.15)
+                                    .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                    .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                                    .addFilter(
+                                        TransformPriceFilter.builder()
+                                            .field(TransformPriceFilter.Field.PRICE_ID)
+                                            .operator(TransformPriceFilter.Operator.INCLUDES)
+                                            .addValue("string")
+                                            .build()
+                                    )
+                                    .reason("reason")
+                                    .build()
+                            )
+                            .dueDate(OffsetDateTime.parse("2022-05-30T07:00:00+00:00"))
+                            .eligibleToIssueAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .hostedInvoiceUrl("hosted_invoice_url")
+                            .invoiceDate(OffsetDateTime.parse("2022-05-01T07:00:00+00:00"))
+                            .invoiceNumber("JYEFHK-00001")
+                            .invoicePdf(
+                                "https://assets.withorb.com/invoice/rUHdhmg45vY45DX/qEAeuYePaphGMdFb"
+                            )
+                            .invoiceSource(Invoice.InvoiceSource.SUBSCRIPTION)
+                            .issueFailedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .issuedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .addLineItem(
+                                Invoice.LineItem.builder()
+                                    .id("id")
+                                    .adjustedSubtotal("5.00")
+                                    .addAdjustment(
+                                        MonetaryUsageDiscountAdjustment.builder()
+                                            .id("id")
+                                            .adjustmentType(
+                                                MonetaryUsageDiscountAdjustment.AdjustmentType
+                                                    .USAGE_DISCOUNT
+                                            )
+                                            .amount("amount")
+                                            .addAppliesToPriceId("string")
+                                            .addFilter(
+                                                TransformPriceFilter.builder()
+                                                    .field(TransformPriceFilter.Field.PRICE_ID)
+                                                    .operator(
+                                                        TransformPriceFilter.Operator.INCLUDES
+                                                    )
+                                                    .addValue("string")
+                                                    .build()
+                                            )
+                                            .isInvoiceLevel(true)
+                                            .reason("reason")
+                                            .usageDiscount(0.0)
+                                            .build()
+                                    )
+                                    .amount("7.00")
+                                    .creditsApplied("6.00")
+                                    .discount(
+                                        PercentageDiscount.builder()
+                                            .discountType(
+                                                PercentageDiscount.DiscountType.PERCENTAGE
+                                            )
+                                            .percentageDiscount(0.15)
+                                            .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                            .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                                            .addFilter(
+                                                TransformPriceFilter.builder()
+                                                    .field(TransformPriceFilter.Field.PRICE_ID)
+                                                    .operator(
+                                                        TransformPriceFilter.Operator.INCLUDES
+                                                    )
+                                                    .addValue("string")
+                                                    .build()
+                                            )
+                                            .reason("reason")
+                                            .build()
+                                    )
+                                    .endDate(OffsetDateTime.parse("2022-02-01T08:00:00+00:00"))
+                                    .filter("filter")
+                                    .grouping("grouping")
+                                    .maximum(
+                                        Maximum.builder()
+                                            .addAppliesToPriceId("string")
+                                            .addFilter(
+                                                TransformPriceFilter.builder()
+                                                    .field(TransformPriceFilter.Field.PRICE_ID)
+                                                    .operator(
+                                                        TransformPriceFilter.Operator.INCLUDES
+                                                    )
+                                                    .addValue("string")
+                                                    .build()
+                                            )
+                                            .maximumAmount("maximum_amount")
+                                            .build()
+                                    )
+                                    .maximumAmount("maximum_amount")
+                                    .minimum(
+                                        Minimum.builder()
+                                            .addAppliesToPriceId("string")
+                                            .addFilter(
+                                                TransformPriceFilter.builder()
+                                                    .field(TransformPriceFilter.Field.PRICE_ID)
+                                                    .operator(
+                                                        TransformPriceFilter.Operator.INCLUDES
+                                                    )
+                                                    .addValue("string")
+                                                    .build()
+                                            )
+                                            .minimumAmount("minimum_amount")
+                                            .build()
+                                    )
+                                    .minimumAmount("minimum_amount")
+                                    .name("Fixed Fee")
+                                    .partiallyInvoicedAmount("4.00")
+                                    .price(
+                                        Price.Unit.builder()
+                                            .id("id")
+                                            .billableMetric(
+                                                BillableMetricTiny.builder().id("id").build()
+                                            )
+                                            .billingCycleConfiguration(
+                                                BillingCycleConfiguration.builder()
+                                                    .duration(0L)
+                                                    .durationUnit(
+                                                        BillingCycleConfiguration.DurationUnit.DAY
+                                                    )
+                                                    .build()
+                                            )
+                                            .cadence(Price.Unit.Cadence.ONE_TIME)
+                                            .conversionRate(0.0)
+                                            .unitConversionRateConfig(
+                                                ConversionRateUnitConfig.builder()
+                                                    .unitAmount("unit_amount")
+                                                    .build()
+                                            )
+                                            .createdAt(
+                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            )
+                                            .creditAllocation(
+                                                Allocation.builder()
+                                                    .allowsRollover(true)
+                                                    .currency("currency")
+                                                    .customExpiration(
+                                                        CustomExpiration.builder()
+                                                            .duration(0L)
+                                                            .durationUnit(
+                                                                CustomExpiration.DurationUnit.DAY
+                                                            )
+                                                            .build()
+                                                    )
+                                                    .build()
+                                            )
+                                            .currency("currency")
+                                            .discount(
+                                                PercentageDiscount.builder()
+                                                    .discountType(
+                                                        PercentageDiscount.DiscountType.PERCENTAGE
+                                                    )
+                                                    .percentageDiscount(0.15)
+                                                    .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                                    .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                                                    .addFilter(
+                                                        TransformPriceFilter.builder()
+                                                            .field(
+                                                                TransformPriceFilter.Field.PRICE_ID
+                                                            )
+                                                            .operator(
+                                                                TransformPriceFilter.Operator
+                                                                    .INCLUDES
+                                                            )
+                                                            .addValue("string")
+                                                            .build()
+                                                    )
+                                                    .reason("reason")
+                                                    .build()
+                                            )
+                                            .externalPriceId("external_price_id")
+                                            .fixedPriceQuantity(0.0)
+                                            .invoicingCycleConfiguration(
+                                                BillingCycleConfiguration.builder()
+                                                    .duration(0L)
+                                                    .durationUnit(
+                                                        BillingCycleConfiguration.DurationUnit.DAY
+                                                    )
+                                                    .build()
+                                            )
+                                            .item(ItemSlim.builder().id("id").name("name").build())
+                                            .maximum(
+                                                Maximum.builder()
+                                                    .addAppliesToPriceId("string")
+                                                    .addFilter(
+                                                        TransformPriceFilter.builder()
+                                                            .field(
+                                                                TransformPriceFilter.Field.PRICE_ID
+                                                            )
+                                                            .operator(
+                                                                TransformPriceFilter.Operator
+                                                                    .INCLUDES
+                                                            )
+                                                            .addValue("string")
+                                                            .build()
+                                                    )
+                                                    .maximumAmount("maximum_amount")
+                                                    .build()
+                                            )
+                                            .maximumAmount("maximum_amount")
+                                            .metadata(
+                                                Price.Unit.Metadata.builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("string"),
+                                                    )
+                                                    .build()
+                                            )
+                                            .minimum(
+                                                Minimum.builder()
+                                                    .addAppliesToPriceId("string")
+                                                    .addFilter(
+                                                        TransformPriceFilter.builder()
+                                                            .field(
+                                                                TransformPriceFilter.Field.PRICE_ID
+                                                            )
+                                                            .operator(
+                                                                TransformPriceFilter.Operator
+                                                                    .INCLUDES
+                                                            )
+                                                            .addValue("string")
+                                                            .build()
+                                                    )
+                                                    .minimumAmount("minimum_amount")
+                                                    .build()
+                                            )
+                                            .minimumAmount("minimum_amount")
+                                            .name("name")
+                                            .planPhaseOrder(0L)
+                                            .priceType(Price.Unit.PriceType.USAGE_PRICE)
+                                            .unitConfig(
+                                                UnitConfig.builder()
+                                                    .unitAmount("unit_amount")
+                                                    .build()
+                                            )
+                                            .dimensionalPriceConfiguration(
+                                                DimensionalPriceConfiguration.builder()
+                                                    .addDimensionValue("string")
+                                                    .dimensionalPriceGroupId(
+                                                        "dimensional_price_group_id"
+                                                    )
+                                                    .build()
+                                            )
+                                            .build()
+                                    )
+                                    .quantity(1.0)
+                                    .startDate(OffsetDateTime.parse("2022-02-01T08:00:00+00:00"))
+                                    .addSubLineItem(
+                                        MatrixSubLineItem.builder()
+                                            .amount("9.00")
+                                            .grouping(
+                                                SubLineItemGrouping.builder()
+                                                    .key("region")
+                                                    .value("west")
+                                                    .build()
+                                            )
+                                            .matrixConfig(
+                                                SubLineItemMatrixConfig.builder()
+                                                    .addDimensionValue("string")
+                                                    .build()
+                                            )
+                                            .name("Tier One")
+                                            .quantity(5.0)
+                                            .type(MatrixSubLineItem.Type.MATRIX)
+                                            .build()
+                                    )
+                                    .subtotal("9.00")
+                                    .addTaxAmount(
+                                        TaxAmount.builder()
+                                            .amount("amount")
+                                            .taxRateDescription("tax_rate_description")
+                                            .taxRatePercentage("tax_rate_percentage")
+                                            .build()
+                                    )
+                                    .addUsageCustomerId("string")
+                                    .build()
+                            )
+                            .maximum(
+                                Maximum.builder()
+                                    .addAppliesToPriceId("string")
+                                    .addFilter(
+                                        TransformPriceFilter.builder()
+                                            .field(TransformPriceFilter.Field.PRICE_ID)
+                                            .operator(TransformPriceFilter.Operator.INCLUDES)
+                                            .addValue("string")
+                                            .build()
+                                    )
+                                    .maximumAmount("maximum_amount")
+                                    .build()
+                            )
+                            .maximumAmount("maximum_amount")
+                            .memo("memo")
+                            .metadata(
+                                Invoice.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
+                            .minimum(
+                                Minimum.builder()
+                                    .addAppliesToPriceId("string")
+                                    .addFilter(
+                                        TransformPriceFilter.builder()
+                                            .field(TransformPriceFilter.Field.PRICE_ID)
+                                            .operator(TransformPriceFilter.Operator.INCLUDES)
+                                            .addValue("string")
+                                            .build()
+                                    )
+                                    .minimumAmount("minimum_amount")
+                                    .build()
+                            )
+                            .minimumAmount("minimum_amount")
+                            .paidAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .addPaymentAttempt(
+                                Invoice.PaymentAttempt.builder()
+                                    .id("id")
+                                    .amount("amount")
+                                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .paymentProvider(Invoice.PaymentAttempt.PaymentProvider.STRIPE)
+                                    .paymentProviderId("payment_provider_id")
+                                    .succeeded(true)
+                                    .build()
+                            )
+                            .paymentFailedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentStartedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .scheduledIssueAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .shippingAddress(
+                                Address.builder()
+                                    .city("city")
+                                    .country("country")
+                                    .line1("line1")
+                                    .line2("line2")
+                                    .postalCode("postal_code")
+                                    .state("state")
+                                    .build()
+                            )
+                            .status(Invoice.Status.ISSUED)
+                            .subscription(
+                                SubscriptionMinified.builder().id("VDGsT23osdLb84KD").build()
+                            )
+                            .subtotal("8.00")
+                            .syncFailedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .total("8.00")
+                            .voidedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .willAutoIssue(true)
+                            .build()
+                    )
                     .build()
             )
 
@@ -113,12 +922,12 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
     @Test
     fun ofDecrement() {
         val decrement =
-            CustomerCreditLedgerCreateEntryResponse.Decrement.builder()
+            DecrementLedgerEntry.builder()
                 .id("id")
                 .amount(0.0)
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .creditBlock(
-                    CustomerCreditLedgerCreateEntryResponse.Decrement.CreditBlock.builder()
+                    AffectedBlock.builder()
                         .id("id")
                         .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .perUnitCostBasis("per_unit_cost_basis")
@@ -126,19 +935,18 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
                 )
                 .currency("currency")
                 .customer(
-                    CustomerCreditLedgerCreateEntryResponse.Decrement.Customer.builder()
+                    CustomerMinified.builder()
                         .id("id")
                         .externalCustomerId("external_customer_id")
                         .build()
                 )
                 .description("description")
                 .endingBalance(0.0)
-                .entryStatus(
-                    CustomerCreditLedgerCreateEntryResponse.Decrement.EntryStatus.COMMITTED
-                )
+                .entryStatus(DecrementLedgerEntry.EntryStatus.COMMITTED)
+                .entryType(DecrementLedgerEntry.EntryType.DECREMENT)
                 .ledgerSequenceNumber(0L)
                 .metadata(
-                    CustomerCreditLedgerCreateEntryResponse.Decrement.Metadata.builder()
+                    DecrementLedgerEntry.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -165,12 +973,12 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
         val jsonMapper = jsonMapper()
         val customerCreditLedgerCreateEntryResponse =
             CustomerCreditLedgerCreateEntryResponse.ofDecrement(
-                CustomerCreditLedgerCreateEntryResponse.Decrement.builder()
+                DecrementLedgerEntry.builder()
                     .id("id")
                     .amount(0.0)
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .creditBlock(
-                        CustomerCreditLedgerCreateEntryResponse.Decrement.CreditBlock.builder()
+                        AffectedBlock.builder()
                             .id("id")
                             .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .perUnitCostBasis("per_unit_cost_basis")
@@ -178,19 +986,18 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
                     )
                     .currency("currency")
                     .customer(
-                        CustomerCreditLedgerCreateEntryResponse.Decrement.Customer.builder()
+                        CustomerMinified.builder()
                             .id("id")
                             .externalCustomerId("external_customer_id")
                             .build()
                     )
                     .description("description")
                     .endingBalance(0.0)
-                    .entryStatus(
-                        CustomerCreditLedgerCreateEntryResponse.Decrement.EntryStatus.COMMITTED
-                    )
+                    .entryStatus(DecrementLedgerEntry.EntryStatus.COMMITTED)
+                    .entryType(DecrementLedgerEntry.EntryType.DECREMENT)
                     .ledgerSequenceNumber(0L)
                     .metadata(
-                        CustomerCreditLedgerCreateEntryResponse.Decrement.Metadata.builder()
+                        DecrementLedgerEntry.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -214,12 +1021,12 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
     @Test
     fun ofExpirationChange() {
         val expirationChange =
-            CustomerCreditLedgerCreateEntryResponse.ExpirationChange.builder()
+            ExpirationChangeLedgerEntry.builder()
                 .id("id")
                 .amount(0.0)
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .creditBlock(
-                    CustomerCreditLedgerCreateEntryResponse.ExpirationChange.CreditBlock.builder()
+                    AffectedBlock.builder()
                         .id("id")
                         .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .perUnitCostBasis("per_unit_cost_basis")
@@ -227,19 +1034,18 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
                 )
                 .currency("currency")
                 .customer(
-                    CustomerCreditLedgerCreateEntryResponse.ExpirationChange.Customer.builder()
+                    CustomerMinified.builder()
                         .id("id")
                         .externalCustomerId("external_customer_id")
                         .build()
                 )
                 .description("description")
                 .endingBalance(0.0)
-                .entryStatus(
-                    CustomerCreditLedgerCreateEntryResponse.ExpirationChange.EntryStatus.COMMITTED
-                )
+                .entryStatus(ExpirationChangeLedgerEntry.EntryStatus.COMMITTED)
+                .entryType(ExpirationChangeLedgerEntry.EntryType.EXPIRATION_CHANGE)
                 .ledgerSequenceNumber(0L)
                 .metadata(
-                    CustomerCreditLedgerCreateEntryResponse.ExpirationChange.Metadata.builder()
+                    ExpirationChangeLedgerEntry.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -265,13 +1071,12 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
         val jsonMapper = jsonMapper()
         val customerCreditLedgerCreateEntryResponse =
             CustomerCreditLedgerCreateEntryResponse.ofExpirationChange(
-                CustomerCreditLedgerCreateEntryResponse.ExpirationChange.builder()
+                ExpirationChangeLedgerEntry.builder()
                     .id("id")
                     .amount(0.0)
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .creditBlock(
-                        CustomerCreditLedgerCreateEntryResponse.ExpirationChange.CreditBlock
-                            .builder()
+                        AffectedBlock.builder()
                             .id("id")
                             .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .perUnitCostBasis("per_unit_cost_basis")
@@ -279,20 +1084,18 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
                     )
                     .currency("currency")
                     .customer(
-                        CustomerCreditLedgerCreateEntryResponse.ExpirationChange.Customer.builder()
+                        CustomerMinified.builder()
                             .id("id")
                             .externalCustomerId("external_customer_id")
                             .build()
                     )
                     .description("description")
                     .endingBalance(0.0)
-                    .entryStatus(
-                        CustomerCreditLedgerCreateEntryResponse.ExpirationChange.EntryStatus
-                            .COMMITTED
-                    )
+                    .entryStatus(ExpirationChangeLedgerEntry.EntryStatus.COMMITTED)
+                    .entryType(ExpirationChangeLedgerEntry.EntryType.EXPIRATION_CHANGE)
                     .ledgerSequenceNumber(0L)
                     .metadata(
-                        CustomerCreditLedgerCreateEntryResponse.ExpirationChange.Metadata.builder()
+                        ExpirationChangeLedgerEntry.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -314,12 +1117,12 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
     @Test
     fun ofCreditBlockExpiry() {
         val creditBlockExpiry =
-            CustomerCreditLedgerCreateEntryResponse.CreditBlockExpiry.builder()
+            CreditBlockExpiryLedgerEntry.builder()
                 .id("id")
                 .amount(0.0)
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .creditBlock(
-                    CustomerCreditLedgerCreateEntryResponse.CreditBlockExpiry.CreditBlock.builder()
+                    AffectedBlock.builder()
                         .id("id")
                         .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .perUnitCostBasis("per_unit_cost_basis")
@@ -327,19 +1130,18 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
                 )
                 .currency("currency")
                 .customer(
-                    CustomerCreditLedgerCreateEntryResponse.CreditBlockExpiry.Customer.builder()
+                    CustomerMinified.builder()
                         .id("id")
                         .externalCustomerId("external_customer_id")
                         .build()
                 )
                 .description("description")
                 .endingBalance(0.0)
-                .entryStatus(
-                    CustomerCreditLedgerCreateEntryResponse.CreditBlockExpiry.EntryStatus.COMMITTED
-                )
+                .entryStatus(CreditBlockExpiryLedgerEntry.EntryStatus.COMMITTED)
+                .entryType(CreditBlockExpiryLedgerEntry.EntryType.CREDIT_BLOCK_EXPIRY)
                 .ledgerSequenceNumber(0L)
                 .metadata(
-                    CustomerCreditLedgerCreateEntryResponse.CreditBlockExpiry.Metadata.builder()
+                    CreditBlockExpiryLedgerEntry.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -364,13 +1166,12 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
         val jsonMapper = jsonMapper()
         val customerCreditLedgerCreateEntryResponse =
             CustomerCreditLedgerCreateEntryResponse.ofCreditBlockExpiry(
-                CustomerCreditLedgerCreateEntryResponse.CreditBlockExpiry.builder()
+                CreditBlockExpiryLedgerEntry.builder()
                     .id("id")
                     .amount(0.0)
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .creditBlock(
-                        CustomerCreditLedgerCreateEntryResponse.CreditBlockExpiry.CreditBlock
-                            .builder()
+                        AffectedBlock.builder()
                             .id("id")
                             .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .perUnitCostBasis("per_unit_cost_basis")
@@ -378,20 +1179,18 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
                     )
                     .currency("currency")
                     .customer(
-                        CustomerCreditLedgerCreateEntryResponse.CreditBlockExpiry.Customer.builder()
+                        CustomerMinified.builder()
                             .id("id")
                             .externalCustomerId("external_customer_id")
                             .build()
                     )
                     .description("description")
                     .endingBalance(0.0)
-                    .entryStatus(
-                        CustomerCreditLedgerCreateEntryResponse.CreditBlockExpiry.EntryStatus
-                            .COMMITTED
-                    )
+                    .entryStatus(CreditBlockExpiryLedgerEntry.EntryStatus.COMMITTED)
+                    .entryType(CreditBlockExpiryLedgerEntry.EntryType.CREDIT_BLOCK_EXPIRY)
                     .ledgerSequenceNumber(0L)
                     .metadata(
-                        CustomerCreditLedgerCreateEntryResponse.CreditBlockExpiry.Metadata.builder()
+                        CreditBlockExpiryLedgerEntry.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -412,12 +1211,12 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
     @Test
     fun ofVoid() {
         val void_ =
-            CustomerCreditLedgerCreateEntryResponse.Void.builder()
+            VoidLedgerEntry.builder()
                 .id("id")
                 .amount(0.0)
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .creditBlock(
-                    CustomerCreditLedgerCreateEntryResponse.Void.CreditBlock.builder()
+                    AffectedBlock.builder()
                         .id("id")
                         .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .perUnitCostBasis("per_unit_cost_basis")
@@ -425,17 +1224,18 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
                 )
                 .currency("currency")
                 .customer(
-                    CustomerCreditLedgerCreateEntryResponse.Void.Customer.builder()
+                    CustomerMinified.builder()
                         .id("id")
                         .externalCustomerId("external_customer_id")
                         .build()
                 )
                 .description("description")
                 .endingBalance(0.0)
-                .entryStatus(CustomerCreditLedgerCreateEntryResponse.Void.EntryStatus.COMMITTED)
+                .entryStatus(VoidLedgerEntry.EntryStatus.COMMITTED)
+                .entryType(VoidLedgerEntry.EntryType.VOID)
                 .ledgerSequenceNumber(0L)
                 .metadata(
-                    CustomerCreditLedgerCreateEntryResponse.Void.Metadata.builder()
+                    VoidLedgerEntry.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -461,12 +1261,12 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
         val jsonMapper = jsonMapper()
         val customerCreditLedgerCreateEntryResponse =
             CustomerCreditLedgerCreateEntryResponse.ofVoid(
-                CustomerCreditLedgerCreateEntryResponse.Void.builder()
+                VoidLedgerEntry.builder()
                     .id("id")
                     .amount(0.0)
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .creditBlock(
-                        CustomerCreditLedgerCreateEntryResponse.Void.CreditBlock.builder()
+                        AffectedBlock.builder()
                             .id("id")
                             .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .perUnitCostBasis("per_unit_cost_basis")
@@ -474,17 +1274,18 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
                     )
                     .currency("currency")
                     .customer(
-                        CustomerCreditLedgerCreateEntryResponse.Void.Customer.builder()
+                        CustomerMinified.builder()
                             .id("id")
                             .externalCustomerId("external_customer_id")
                             .build()
                     )
                     .description("description")
                     .endingBalance(0.0)
-                    .entryStatus(CustomerCreditLedgerCreateEntryResponse.Void.EntryStatus.COMMITTED)
+                    .entryStatus(VoidLedgerEntry.EntryStatus.COMMITTED)
+                    .entryType(VoidLedgerEntry.EntryType.VOID)
                     .ledgerSequenceNumber(0L)
                     .metadata(
-                        CustomerCreditLedgerCreateEntryResponse.Void.Metadata.builder()
+                        VoidLedgerEntry.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -507,12 +1308,12 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
     @Test
     fun ofVoidInitiated() {
         val voidInitiated =
-            CustomerCreditLedgerCreateEntryResponse.VoidInitiated.builder()
+            VoidInitiatedLedgerEntry.builder()
                 .id("id")
                 .amount(0.0)
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .creditBlock(
-                    CustomerCreditLedgerCreateEntryResponse.VoidInitiated.CreditBlock.builder()
+                    AffectedBlock.builder()
                         .id("id")
                         .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .perUnitCostBasis("per_unit_cost_basis")
@@ -520,19 +1321,18 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
                 )
                 .currency("currency")
                 .customer(
-                    CustomerCreditLedgerCreateEntryResponse.VoidInitiated.Customer.builder()
+                    CustomerMinified.builder()
                         .id("id")
                         .externalCustomerId("external_customer_id")
                         .build()
                 )
                 .description("description")
                 .endingBalance(0.0)
-                .entryStatus(
-                    CustomerCreditLedgerCreateEntryResponse.VoidInitiated.EntryStatus.COMMITTED
-                )
+                .entryStatus(VoidInitiatedLedgerEntry.EntryStatus.COMMITTED)
+                .entryType(VoidInitiatedLedgerEntry.EntryType.VOID_INITIATED)
                 .ledgerSequenceNumber(0L)
                 .metadata(
-                    CustomerCreditLedgerCreateEntryResponse.VoidInitiated.Metadata.builder()
+                    VoidInitiatedLedgerEntry.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -559,12 +1359,12 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
         val jsonMapper = jsonMapper()
         val customerCreditLedgerCreateEntryResponse =
             CustomerCreditLedgerCreateEntryResponse.ofVoidInitiated(
-                CustomerCreditLedgerCreateEntryResponse.VoidInitiated.builder()
+                VoidInitiatedLedgerEntry.builder()
                     .id("id")
                     .amount(0.0)
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .creditBlock(
-                        CustomerCreditLedgerCreateEntryResponse.VoidInitiated.CreditBlock.builder()
+                        AffectedBlock.builder()
                             .id("id")
                             .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .perUnitCostBasis("per_unit_cost_basis")
@@ -572,19 +1372,18 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
                     )
                     .currency("currency")
                     .customer(
-                        CustomerCreditLedgerCreateEntryResponse.VoidInitiated.Customer.builder()
+                        CustomerMinified.builder()
                             .id("id")
                             .externalCustomerId("external_customer_id")
                             .build()
                     )
                     .description("description")
                     .endingBalance(0.0)
-                    .entryStatus(
-                        CustomerCreditLedgerCreateEntryResponse.VoidInitiated.EntryStatus.COMMITTED
-                    )
+                    .entryStatus(VoidInitiatedLedgerEntry.EntryStatus.COMMITTED)
+                    .entryType(VoidInitiatedLedgerEntry.EntryType.VOID_INITIATED)
                     .ledgerSequenceNumber(0L)
                     .metadata(
-                        CustomerCreditLedgerCreateEntryResponse.VoidInitiated.Metadata.builder()
+                        VoidInitiatedLedgerEntry.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -608,12 +1407,12 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
     @Test
     fun ofAmendment() {
         val amendment =
-            CustomerCreditLedgerCreateEntryResponse.Amendment.builder()
+            AmendmentLedgerEntry.builder()
                 .id("id")
                 .amount(0.0)
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .creditBlock(
-                    CustomerCreditLedgerCreateEntryResponse.Amendment.CreditBlock.builder()
+                    AffectedBlock.builder()
                         .id("id")
                         .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .perUnitCostBasis("per_unit_cost_basis")
@@ -621,19 +1420,18 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
                 )
                 .currency("currency")
                 .customer(
-                    CustomerCreditLedgerCreateEntryResponse.Amendment.Customer.builder()
+                    CustomerMinified.builder()
                         .id("id")
                         .externalCustomerId("external_customer_id")
                         .build()
                 )
                 .description("description")
                 .endingBalance(0.0)
-                .entryStatus(
-                    CustomerCreditLedgerCreateEntryResponse.Amendment.EntryStatus.COMMITTED
-                )
+                .entryStatus(AmendmentLedgerEntry.EntryStatus.COMMITTED)
+                .entryType(AmendmentLedgerEntry.EntryType.AMENDMENT)
                 .ledgerSequenceNumber(0L)
                 .metadata(
-                    CustomerCreditLedgerCreateEntryResponse.Amendment.Metadata.builder()
+                    AmendmentLedgerEntry.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -657,12 +1455,12 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
         val jsonMapper = jsonMapper()
         val customerCreditLedgerCreateEntryResponse =
             CustomerCreditLedgerCreateEntryResponse.ofAmendment(
-                CustomerCreditLedgerCreateEntryResponse.Amendment.builder()
+                AmendmentLedgerEntry.builder()
                     .id("id")
                     .amount(0.0)
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .creditBlock(
-                        CustomerCreditLedgerCreateEntryResponse.Amendment.CreditBlock.builder()
+                        AffectedBlock.builder()
                             .id("id")
                             .expiryDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .perUnitCostBasis("per_unit_cost_basis")
@@ -670,19 +1468,18 @@ internal class CustomerCreditLedgerCreateEntryResponseTest {
                     )
                     .currency("currency")
                     .customer(
-                        CustomerCreditLedgerCreateEntryResponse.Amendment.Customer.builder()
+                        CustomerMinified.builder()
                             .id("id")
                             .externalCustomerId("external_customer_id")
                             .build()
                     )
                     .description("description")
                     .endingBalance(0.0)
-                    .entryStatus(
-                        CustomerCreditLedgerCreateEntryResponse.Amendment.EntryStatus.COMMITTED
-                    )
+                    .entryStatus(AmendmentLedgerEntry.EntryStatus.COMMITTED)
+                    .entryType(AmendmentLedgerEntry.EntryType.AMENDMENT)
                     .ledgerSequenceNumber(0L)
                     .metadata(
-                        CustomerCreditLedgerCreateEntryResponse.Amendment.Metadata.builder()
+                        AmendmentLedgerEntry.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )

@@ -82,7 +82,7 @@ private constructor(
 
     /**
      * The date that the quantity change should take effect, localized to the customer's timezone.
-     * Ifthis parameter is not passed in, the quantity change is effective according to
+     * If this parameter is not passed in, the quantity change is effective according to
      * `change_option`.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
@@ -265,7 +265,7 @@ private constructor(
 
         /**
          * The date that the quantity change should take effect, localized to the customer's
-         * timezone. Ifthis parameter is not passed in, the quantity change is effective according
+         * timezone. If this parameter is not passed in, the quantity change is effective according
          * to `change_option`.
          */
         fun effectiveDate(effectiveDate: LocalDate?) = apply { body.effectiveDate(effectiveDate) }
@@ -507,7 +507,7 @@ private constructor(
 
         /**
          * The date that the quantity change should take effect, localized to the customer's
-         * timezone. Ifthis parameter is not passed in, the quantity change is effective according
+         * timezone. If this parameter is not passed in, the quantity change is effective according
          * to `change_option`.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -682,7 +682,7 @@ private constructor(
 
             /**
              * The date that the quantity change should take effect, localized to the customer's
-             * timezone. Ifthis parameter is not passed in, the quantity change is effective
+             * timezone. If this parameter is not passed in, the quantity change is effective
              * according to `change_option`.
              */
             fun effectiveDate(effectiveDate: LocalDate?) =

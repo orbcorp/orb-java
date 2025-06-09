@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.InvoiceLineItemCreateParams
@@ -40,14 +39,12 @@ interface InvoiceLineItemServiceAsync {
          * Returns a raw HTTP response for `post /invoice_line_items`, but is otherwise the same as
          * [InvoiceLineItemServiceAsync.create].
          */
-        @MustBeClosed
         fun create(
             params: InvoiceLineItemCreateParams
         ): CompletableFuture<HttpResponseFor<InvoiceLineItemCreateResponse>> =
             create(params, RequestOptions.none())
 
         /** @see [create] */
-        @MustBeClosed
         fun create(
             params: InvoiceLineItemCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),

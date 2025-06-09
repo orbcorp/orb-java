@@ -14,10 +14,9 @@ internal class CustomerUpdateParamsTest {
         CustomerUpdateParams.builder()
             .customerId("customer_id")
             .accountingSyncConfiguration(
-                CustomerUpdateParams.AccountingSyncConfiguration.builder()
+                NewAccountingSyncConfiguration.builder()
                     .addAccountingProvider(
-                        CustomerUpdateParams.AccountingSyncConfiguration.AccountingProvider
-                            .builder()
+                        AccountingProviderConfig.builder()
                             .externalProviderId("external_provider_id")
                             .providerType("provider_type")
                             .build()
@@ -28,7 +27,7 @@ internal class CustomerUpdateParamsTest {
             .addAdditionalEmail("string")
             .autoCollection(true)
             .billingAddress(
-                CustomerUpdateParams.BillingAddress.builder()
+                AddressInput.builder()
                     .city("city")
                     .country("country")
                     .line1("line1")
@@ -42,7 +41,7 @@ internal class CustomerUpdateParamsTest {
             .emailDelivery(true)
             .externalCustomerId("external_customer_id")
             .hierarchy(
-                CustomerUpdateParams.Hierarchy.builder()
+                CustomerHierarchyConfig.builder()
                     .addChildCustomerId("string")
                     .parentCustomerId("parent_customer_id")
                     .build()
@@ -55,11 +54,9 @@ internal class CustomerUpdateParamsTest {
             .name("name")
             .paymentProvider(CustomerUpdateParams.PaymentProvider.QUICKBOOKS)
             .paymentProviderId("payment_provider_id")
-            .reportingConfiguration(
-                CustomerUpdateParams.ReportingConfiguration.builder().exempt(true).build()
-            )
+            .reportingConfiguration(NewReportingConfiguration.builder().exempt(true).build())
             .shippingAddress(
-                CustomerUpdateParams.ShippingAddress.builder()
+                AddressInput.builder()
                     .city("city")
                     .country("country")
                     .line1("line1")
@@ -69,15 +66,16 @@ internal class CustomerUpdateParamsTest {
                     .build()
             )
             .taxConfiguration(
-                CustomerUpdateParams.TaxConfiguration.Avalara.builder()
+                NewAvalaraTaxConfiguration.builder()
                     .taxExempt(true)
+                    .taxProvider(NewAvalaraTaxConfiguration.TaxProvider.AVALARA)
                     .taxExemptionCode("tax_exemption_code")
                     .build()
             )
             .taxId(
-                CustomerUpdateParams.TaxId.builder()
-                    .country(CustomerUpdateParams.TaxId.Country.AD)
-                    .type(CustomerUpdateParams.TaxId.Type.AD_NRT)
+                CustomerTaxId.builder()
+                    .country(CustomerTaxId.Country.AD)
+                    .type(CustomerTaxId.Type.AD_NRT)
                     .value("value")
                     .build()
             )
@@ -99,10 +97,9 @@ internal class CustomerUpdateParamsTest {
             CustomerUpdateParams.builder()
                 .customerId("customer_id")
                 .accountingSyncConfiguration(
-                    CustomerUpdateParams.AccountingSyncConfiguration.builder()
+                    NewAccountingSyncConfiguration.builder()
                         .addAccountingProvider(
-                            CustomerUpdateParams.AccountingSyncConfiguration.AccountingProvider
-                                .builder()
+                            AccountingProviderConfig.builder()
                                 .externalProviderId("external_provider_id")
                                 .providerType("provider_type")
                                 .build()
@@ -113,7 +110,7 @@ internal class CustomerUpdateParamsTest {
                 .addAdditionalEmail("string")
                 .autoCollection(true)
                 .billingAddress(
-                    CustomerUpdateParams.BillingAddress.builder()
+                    AddressInput.builder()
                         .city("city")
                         .country("country")
                         .line1("line1")
@@ -127,7 +124,7 @@ internal class CustomerUpdateParamsTest {
                 .emailDelivery(true)
                 .externalCustomerId("external_customer_id")
                 .hierarchy(
-                    CustomerUpdateParams.Hierarchy.builder()
+                    CustomerHierarchyConfig.builder()
                         .addChildCustomerId("string")
                         .parentCustomerId("parent_customer_id")
                         .build()
@@ -140,11 +137,9 @@ internal class CustomerUpdateParamsTest {
                 .name("name")
                 .paymentProvider(CustomerUpdateParams.PaymentProvider.QUICKBOOKS)
                 .paymentProviderId("payment_provider_id")
-                .reportingConfiguration(
-                    CustomerUpdateParams.ReportingConfiguration.builder().exempt(true).build()
-                )
+                .reportingConfiguration(NewReportingConfiguration.builder().exempt(true).build())
                 .shippingAddress(
-                    CustomerUpdateParams.ShippingAddress.builder()
+                    AddressInput.builder()
                         .city("city")
                         .country("country")
                         .line1("line1")
@@ -154,15 +149,16 @@ internal class CustomerUpdateParamsTest {
                         .build()
                 )
                 .taxConfiguration(
-                    CustomerUpdateParams.TaxConfiguration.Avalara.builder()
+                    NewAvalaraTaxConfiguration.builder()
                         .taxExempt(true)
+                        .taxProvider(NewAvalaraTaxConfiguration.TaxProvider.AVALARA)
                         .taxExemptionCode("tax_exemption_code")
                         .build()
                 )
                 .taxId(
-                    CustomerUpdateParams.TaxId.builder()
-                        .country(CustomerUpdateParams.TaxId.Country.AD)
-                        .type(CustomerUpdateParams.TaxId.Type.AD_NRT)
+                    CustomerTaxId.builder()
+                        .country(CustomerTaxId.Country.AD)
+                        .type(CustomerTaxId.Type.AD_NRT)
                         .value("value")
                         .build()
                 )
@@ -172,10 +168,9 @@ internal class CustomerUpdateParamsTest {
 
         assertThat(body.accountingSyncConfiguration())
             .contains(
-                CustomerUpdateParams.AccountingSyncConfiguration.builder()
+                NewAccountingSyncConfiguration.builder()
                     .addAccountingProvider(
-                        CustomerUpdateParams.AccountingSyncConfiguration.AccountingProvider
-                            .builder()
+                        AccountingProviderConfig.builder()
                             .externalProviderId("external_provider_id")
                             .providerType("provider_type")
                             .build()
@@ -187,7 +182,7 @@ internal class CustomerUpdateParamsTest {
         assertThat(body.autoCollection()).contains(true)
         assertThat(body.billingAddress())
             .contains(
-                CustomerUpdateParams.BillingAddress.builder()
+                AddressInput.builder()
                     .city("city")
                     .country("country")
                     .line1("line1")
@@ -202,7 +197,7 @@ internal class CustomerUpdateParamsTest {
         assertThat(body.externalCustomerId()).contains("external_customer_id")
         assertThat(body.hierarchy())
             .contains(
-                CustomerUpdateParams.Hierarchy.builder()
+                CustomerHierarchyConfig.builder()
                     .addChildCustomerId("string")
                     .parentCustomerId("parent_customer_id")
                     .build()
@@ -217,10 +212,10 @@ internal class CustomerUpdateParamsTest {
         assertThat(body.paymentProvider()).contains(CustomerUpdateParams.PaymentProvider.QUICKBOOKS)
         assertThat(body.paymentProviderId()).contains("payment_provider_id")
         assertThat(body.reportingConfiguration())
-            .contains(CustomerUpdateParams.ReportingConfiguration.builder().exempt(true).build())
+            .contains(NewReportingConfiguration.builder().exempt(true).build())
         assertThat(body.shippingAddress())
             .contains(
-                CustomerUpdateParams.ShippingAddress.builder()
+                AddressInput.builder()
                     .city("city")
                     .country("country")
                     .line1("line1")
@@ -232,17 +227,18 @@ internal class CustomerUpdateParamsTest {
         assertThat(body.taxConfiguration())
             .contains(
                 CustomerUpdateParams.TaxConfiguration.ofAvalara(
-                    CustomerUpdateParams.TaxConfiguration.Avalara.builder()
+                    NewAvalaraTaxConfiguration.builder()
                         .taxExempt(true)
+                        .taxProvider(NewAvalaraTaxConfiguration.TaxProvider.AVALARA)
                         .taxExemptionCode("tax_exemption_code")
                         .build()
                 )
             )
         assertThat(body.taxId())
             .contains(
-                CustomerUpdateParams.TaxId.builder()
-                    .country(CustomerUpdateParams.TaxId.Country.AD)
-                    .type(CustomerUpdateParams.TaxId.Type.AD_NRT)
+                CustomerTaxId.builder()
+                    .country(CustomerTaxId.Country.AD)
+                    .type(CustomerTaxId.Type.AD_NRT)
                     .value("value")
                     .build()
             )

@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CreditNote
@@ -96,12 +95,10 @@ interface CreditNoteServiceAsync {
          * Returns a raw HTTP response for `post /credit_notes`, but is otherwise the same as
          * [CreditNoteServiceAsync.create].
          */
-        @MustBeClosed
         fun create(params: CreditNoteCreateParams): CompletableFuture<HttpResponseFor<CreditNote>> =
             create(params, RequestOptions.none())
 
         /** @see [create] */
-        @MustBeClosed
         fun create(
             params: CreditNoteCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -111,26 +108,22 @@ interface CreditNoteServiceAsync {
          * Returns a raw HTTP response for `get /credit_notes`, but is otherwise the same as
          * [CreditNoteServiceAsync.list].
          */
-        @MustBeClosed
         fun list(): CompletableFuture<HttpResponseFor<CreditNoteListPageAsync>> =
             list(CreditNoteListParams.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: CreditNoteListParams = CreditNoteListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CreditNoteListPageAsync>>
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: CreditNoteListParams = CreditNoteListParams.none()
         ): CompletableFuture<HttpResponseFor<CreditNoteListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<CreditNoteListPageAsync>> =
@@ -140,12 +133,10 @@ interface CreditNoteServiceAsync {
          * Returns a raw HTTP response for `get /credit_notes/{credit_note_id}`, but is otherwise
          * the same as [CreditNoteServiceAsync.fetch].
          */
-        @MustBeClosed
         fun fetch(creditNoteId: String): CompletableFuture<HttpResponseFor<CreditNote>> =
             fetch(creditNoteId, CreditNoteFetchParams.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             creditNoteId: String,
             params: CreditNoteFetchParams = CreditNoteFetchParams.none(),
@@ -154,7 +145,6 @@ interface CreditNoteServiceAsync {
             fetch(params.toBuilder().creditNoteId(creditNoteId).build(), requestOptions)
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             creditNoteId: String,
             params: CreditNoteFetchParams = CreditNoteFetchParams.none(),
@@ -162,19 +152,16 @@ interface CreditNoteServiceAsync {
             fetch(creditNoteId, params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             params: CreditNoteFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CreditNote>>
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(params: CreditNoteFetchParams): CompletableFuture<HttpResponseFor<CreditNote>> =
             fetch(params, RequestOptions.none())
 
         /** @see [fetch] */
-        @MustBeClosed
         fun fetch(
             creditNoteId: String,
             requestOptions: RequestOptions,

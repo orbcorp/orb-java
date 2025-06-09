@@ -25,10 +25,10 @@ private constructor(
     private val action: JsonField<Action>,
     private val amount: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
-    private val creditNote: JsonField<CreditNote>,
+    private val creditNote: JsonField<CreditNoteTiny>,
     private val description: JsonField<String>,
     private val endingBalance: JsonField<String>,
-    private val invoice: JsonField<Invoice>,
+    private val invoice: JsonField<InvoiceTiny>,
     private val startingBalance: JsonField<String>,
     private val type: JsonField<Type>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -44,14 +44,14 @@ private constructor(
         createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("credit_note")
         @ExcludeMissing
-        creditNote: JsonField<CreditNote> = JsonMissing.of(),
+        creditNote: JsonField<CreditNoteTiny> = JsonMissing.of(),
         @JsonProperty("description")
         @ExcludeMissing
         description: JsonField<String> = JsonMissing.of(),
         @JsonProperty("ending_balance")
         @ExcludeMissing
         endingBalance: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("invoice") @ExcludeMissing invoice: JsonField<Invoice> = JsonMissing.of(),
+        @JsonProperty("invoice") @ExcludeMissing invoice: JsonField<InvoiceTiny> = JsonMissing.of(),
         @JsonProperty("starting_balance")
         @ExcludeMissing
         startingBalance: JsonField<String> = JsonMissing.of(),
@@ -104,7 +104,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun creditNote(): Optional<CreditNote> = creditNote.getOptional("credit_note")
+    fun creditNote(): Optional<CreditNoteTiny> = creditNote.getOptional("credit_note")
 
     /**
      * An optional description provided for manual customer balance adjustments.
@@ -126,7 +126,7 @@ private constructor(
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun invoice(): Optional<Invoice> = invoice.getOptional("invoice")
+    fun invoice(): Optional<InvoiceTiny> = invoice.getOptional("invoice")
 
     /**
      * The original value of the customer's balance prior to the transaction, in the customer's
@@ -180,7 +180,7 @@ private constructor(
      */
     @JsonProperty("credit_note")
     @ExcludeMissing
-    fun _creditNote(): JsonField<CreditNote> = creditNote
+    fun _creditNote(): JsonField<CreditNoteTiny> = creditNote
 
     /**
      * Returns the raw JSON value of [description].
@@ -203,7 +203,7 @@ private constructor(
      *
      * Unlike [invoice], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("invoice") @ExcludeMissing fun _invoice(): JsonField<Invoice> = invoice
+    @JsonProperty("invoice") @ExcludeMissing fun _invoice(): JsonField<InvoiceTiny> = invoice
 
     /**
      * Returns the raw JSON value of [startingBalance].
@@ -263,10 +263,10 @@ private constructor(
         private var action: JsonField<Action>? = null
         private var amount: JsonField<String>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
-        private var creditNote: JsonField<CreditNote>? = null
+        private var creditNote: JsonField<CreditNoteTiny>? = null
         private var description: JsonField<String>? = null
         private var endingBalance: JsonField<String>? = null
-        private var invoice: JsonField<Invoice>? = null
+        private var invoice: JsonField<InvoiceTiny>? = null
         private var startingBalance: JsonField<String>? = null
         private var type: JsonField<Type>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -333,19 +333,21 @@ private constructor(
          */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
-        fun creditNote(creditNote: CreditNote?) = creditNote(JsonField.ofNullable(creditNote))
+        fun creditNote(creditNote: CreditNoteTiny?) = creditNote(JsonField.ofNullable(creditNote))
 
         /** Alias for calling [Builder.creditNote] with `creditNote.orElse(null)`. */
-        fun creditNote(creditNote: Optional<CreditNote>) = creditNote(creditNote.getOrNull())
+        fun creditNote(creditNote: Optional<CreditNoteTiny>) = creditNote(creditNote.getOrNull())
 
         /**
          * Sets [Builder.creditNote] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.creditNote] with a well-typed [CreditNote] value
+         * You should usually call [Builder.creditNote] with a well-typed [CreditNoteTiny] value
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun creditNote(creditNote: JsonField<CreditNote>) = apply { this.creditNote = creditNote }
+        fun creditNote(creditNote: JsonField<CreditNoteTiny>) = apply {
+            this.creditNote = creditNote
+        }
 
         /** An optional description provided for manual customer balance adjustments. */
         fun description(description: String?) = description(JsonField.ofNullable(description))
@@ -379,18 +381,19 @@ private constructor(
             this.endingBalance = endingBalance
         }
 
-        fun invoice(invoice: Invoice?) = invoice(JsonField.ofNullable(invoice))
+        fun invoice(invoice: InvoiceTiny?) = invoice(JsonField.ofNullable(invoice))
 
         /** Alias for calling [Builder.invoice] with `invoice.orElse(null)`. */
-        fun invoice(invoice: Optional<Invoice>) = invoice(invoice.getOrNull())
+        fun invoice(invoice: Optional<InvoiceTiny>) = invoice(invoice.getOrNull())
 
         /**
          * Sets [Builder.invoice] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.invoice] with a well-typed [Invoice] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.invoice] with a well-typed [InvoiceTiny] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun invoice(invoice: JsonField<Invoice>) = apply { this.invoice = invoice }
+        fun invoice(invoice: JsonField<InvoiceTiny>) = apply { this.invoice = invoice }
 
         /**
          * The original value of the customer's balance prior to the transaction, in the customer's
@@ -686,314 +689,6 @@ private constructor(
         override fun hashCode() = value.hashCode()
 
         override fun toString() = value.toString()
-    }
-
-    class CreditNote
-    private constructor(
-        private val id: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of()
-        ) : this(id, mutableMapOf())
-
-        /**
-         * The id of the Credit note
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun id(): String = id.getRequired("id")
-
-        /**
-         * Returns the raw JSON value of [id].
-         *
-         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [CreditNote].
-             *
-             * The following fields are required:
-             * ```java
-             * .id()
-             * ```
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [CreditNote]. */
-        class Builder internal constructor() {
-
-            private var id: JsonField<String>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(creditNote: CreditNote) = apply {
-                id = creditNote.id
-                additionalProperties = creditNote.additionalProperties.toMutableMap()
-            }
-
-            /** The id of the Credit note */
-            fun id(id: String) = id(JsonField.of(id))
-
-            /**
-             * Sets [Builder.id] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [CreditNote].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .id()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): CreditNote =
-                CreditNote(checkRequired("id", id), additionalProperties.toMutableMap())
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): CreditNote = apply {
-            if (validated) {
-                return@apply
-            }
-
-            id()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: OrbInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic internal fun validity(): Int = (if (id.asKnown().isPresent) 1 else 0)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is CreditNote && id == other.id && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "CreditNote{id=$id, additionalProperties=$additionalProperties}"
-    }
-
-    class Invoice
-    private constructor(
-        private val id: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of()
-        ) : this(id, mutableMapOf())
-
-        /**
-         * The Invoice id
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun id(): String = id.getRequired("id")
-
-        /**
-         * Returns the raw JSON value of [id].
-         *
-         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Invoice].
-             *
-             * The following fields are required:
-             * ```java
-             * .id()
-             * ```
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Invoice]. */
-        class Builder internal constructor() {
-
-            private var id: JsonField<String>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(invoice: Invoice) = apply {
-                id = invoice.id
-                additionalProperties = invoice.additionalProperties.toMutableMap()
-            }
-
-            /** The Invoice id */
-            fun id(id: String) = id(JsonField.of(id))
-
-            /**
-             * Sets [Builder.id] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Invoice].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .id()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): Invoice =
-                Invoice(checkRequired("id", id), additionalProperties.toMutableMap())
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): Invoice = apply {
-            if (validated) {
-                return@apply
-            }
-
-            id()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: OrbInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic internal fun validity(): Int = (if (id.asKnown().isPresent) 1 else 0)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Invoice && id == other.id && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "Invoice{id=$id, additionalProperties=$additionalProperties}"
     }
 
     class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {

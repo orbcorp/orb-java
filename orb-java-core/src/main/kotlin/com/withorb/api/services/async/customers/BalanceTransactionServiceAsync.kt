@@ -2,7 +2,6 @@
 
 package com.withorb.api.services.async.customers
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CustomerBalanceTransactionCreateParams
@@ -68,12 +67,6 @@ interface BalanceTransactionServiceAsync {
      * This endpoint retrieves all customer balance transactions in reverse chronological order for
      * a single customer, providing a complete audit trail of all adjustments and invoice
      * applications.
-     *
-     * ## Eligibility
-     *
-     * The customer balance can only be applied to invoices or adjusted manually if invoices are not
-     * synced to a separate invoicing provider. If a payment gateway such as Stripe is used, the
-     * balance will be applied to the invoice before forwarding payment to the gateway.
      */
     fun list(customerId: String): CompletableFuture<CustomerBalanceTransactionListPageAsync> =
         list(customerId, CustomerBalanceTransactionListParams.none())
@@ -122,7 +115,6 @@ interface BalanceTransactionServiceAsync {
          * Returns a raw HTTP response for `post /customers/{customer_id}/balance_transactions`, but
          * is otherwise the same as [BalanceTransactionServiceAsync.create].
          */
-        @MustBeClosed
         fun create(
             customerId: String,
             params: CustomerBalanceTransactionCreateParams,
@@ -130,7 +122,6 @@ interface BalanceTransactionServiceAsync {
             create(customerId, params, RequestOptions.none())
 
         /** @see [create] */
-        @MustBeClosed
         fun create(
             customerId: String,
             params: CustomerBalanceTransactionCreateParams,
@@ -139,14 +130,12 @@ interface BalanceTransactionServiceAsync {
             create(params.toBuilder().customerId(customerId).build(), requestOptions)
 
         /** @see [create] */
-        @MustBeClosed
         fun create(
             params: CustomerBalanceTransactionCreateParams
         ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionCreateResponse>> =
             create(params, RequestOptions.none())
 
         /** @see [create] */
-        @MustBeClosed
         fun create(
             params: CustomerBalanceTransactionCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -156,14 +145,12 @@ interface BalanceTransactionServiceAsync {
          * Returns a raw HTTP response for `get /customers/{customer_id}/balance_transactions`, but
          * is otherwise the same as [BalanceTransactionServiceAsync.list].
          */
-        @MustBeClosed
         fun list(
             customerId: String
         ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionListPageAsync>> =
             list(customerId, CustomerBalanceTransactionListParams.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             customerId: String,
             params: CustomerBalanceTransactionListParams =
@@ -173,7 +160,6 @@ interface BalanceTransactionServiceAsync {
             list(params.toBuilder().customerId(customerId).build(), requestOptions)
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             customerId: String,
             params: CustomerBalanceTransactionListParams =
@@ -182,21 +168,18 @@ interface BalanceTransactionServiceAsync {
             list(customerId, params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: CustomerBalanceTransactionListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionListPageAsync>>
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: CustomerBalanceTransactionListParams
         ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             customerId: String,
             requestOptions: RequestOptions,
