@@ -34,6 +34,9 @@ internal class NewSubscriptionCumulativeGroupedBulkPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
@@ -82,6 +85,17 @@ internal class NewSubscriptionCumulativeGroupedBulkPriceTest {
                     .build()
             )
         assertThat(newSubscriptionCumulativeGroupedBulkPrice.conversionRate()).contains(0.0)
+        assertThat(newSubscriptionCumulativeGroupedBulkPrice.conversionRateConfig())
+            .contains(
+                NewSubscriptionCumulativeGroupedBulkPrice.ConversionRateConfig.ofUnit(
+                    UnitConversionRateConfig.builder()
+                        .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
+                        .unitConfig(
+                            ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                        )
+                        .build()
+                )
+            )
         assertThat(newSubscriptionCumulativeGroupedBulkPrice.currency()).contains("currency")
         assertThat(newSubscriptionCumulativeGroupedBulkPrice.dimensionalPriceConfiguration())
             .contains(
@@ -136,6 +150,9 @@ internal class NewSubscriptionCumulativeGroupedBulkPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()

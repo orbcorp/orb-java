@@ -34,6 +34,9 @@ internal class NewSubscriptionMaxGroupTieredPackagePriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
@@ -82,6 +85,17 @@ internal class NewSubscriptionMaxGroupTieredPackagePriceTest {
                     .build()
             )
         assertThat(newSubscriptionMaxGroupTieredPackagePrice.conversionRate()).contains(0.0)
+        assertThat(newSubscriptionMaxGroupTieredPackagePrice.conversionRateConfig())
+            .contains(
+                NewSubscriptionMaxGroupTieredPackagePrice.ConversionRateConfig.ofUnit(
+                    UnitConversionRateConfig.builder()
+                        .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
+                        .unitConfig(
+                            ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                        )
+                        .build()
+                )
+            )
         assertThat(newSubscriptionMaxGroupTieredPackagePrice.currency()).contains("currency")
         assertThat(newSubscriptionMaxGroupTieredPackagePrice.dimensionalPriceConfiguration())
             .contains(
@@ -136,6 +150,9 @@ internal class NewSubscriptionMaxGroupTieredPackagePriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()

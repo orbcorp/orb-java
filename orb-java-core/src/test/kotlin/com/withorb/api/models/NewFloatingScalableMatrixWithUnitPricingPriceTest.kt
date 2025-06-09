@@ -38,6 +38,9 @@ internal class NewFloatingScalableMatrixWithUnitPricingPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
                         .addDimensionValue("string")
@@ -91,6 +94,17 @@ internal class NewFloatingScalableMatrixWithUnitPricingPriceTest {
                     .build()
             )
         assertThat(newFloatingScalableMatrixWithUnitPricingPrice.conversionRate()).contains(0.0)
+        assertThat(newFloatingScalableMatrixWithUnitPricingPrice.conversionRateConfig())
+            .contains(
+                NewFloatingScalableMatrixWithUnitPricingPrice.ConversionRateConfig.ofUnit(
+                    UnitConversionRateConfig.builder()
+                        .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
+                        .unitConfig(
+                            ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                        )
+                        .build()
+                )
+            )
         assertThat(newFloatingScalableMatrixWithUnitPricingPrice.dimensionalPriceConfiguration())
             .contains(
                 NewDimensionalPriceConfiguration.builder()
@@ -147,6 +161,9 @@ internal class NewFloatingScalableMatrixWithUnitPricingPriceTest {
                         .build()
                 )
                 .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
                         .addDimensionValue("string")
