@@ -72,6 +72,7 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdS
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("plans", "external_plan_id", params._pathParam(0), "versions")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -105,6 +106,7 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdS
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments(
                         "plans",
                         "external_plan_id",
@@ -143,6 +145,7 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdS
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments(
                         "plans",
                         "external_plan_id",

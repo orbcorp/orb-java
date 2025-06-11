@@ -106,6 +106,7 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("prices")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -136,6 +137,7 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("prices", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -164,6 +166,7 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("prices")
                     .build()
                     .prepare(clientOptions, params)
@@ -201,6 +204,7 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("prices", params._pathParam(0), "evaluate")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -229,6 +233,7 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("prices", "evaluate")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -257,6 +262,7 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("prices", "evaluate_preview_events")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -287,6 +293,7 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("prices", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)
