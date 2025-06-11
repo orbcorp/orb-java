@@ -92,6 +92,7 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("coupons")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -123,6 +124,7 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("coupons")
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -163,6 +165,7 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("coupons", params._pathParam(0), "archive")
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
@@ -196,6 +199,7 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("coupons", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)

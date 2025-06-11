@@ -85,6 +85,7 @@ class LedgerServiceAsyncImpl internal constructor(private val clientOptions: Cli
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("customers", params._pathParam(0), "credits", "ledger")
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -126,6 +127,7 @@ class LedgerServiceAsyncImpl internal constructor(private val clientOptions: Cli
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("customers", params._pathParam(0), "credits", "ledger_entry")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -163,6 +165,7 @@ class LedgerServiceAsyncImpl internal constructor(private val clientOptions: Cli
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments(
                         "customers",
                         "external_customer_id",
@@ -204,6 +207,7 @@ class LedgerServiceAsyncImpl internal constructor(private val clientOptions: Cli
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments(
                         "customers",
                         "external_customer_id",
