@@ -2,6 +2,7 @@
 
 package com.withorb.api.services.async.customers
 
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CustomerCostListByExternalIdParams
@@ -9,6 +10,7 @@ import com.withorb.api.models.CustomerCostListByExternalIdResponse
 import com.withorb.api.models.CustomerCostListParams
 import com.withorb.api.models.CustomerCostListResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface CostServiceAsync {
 
@@ -16,6 +18,13 @@ interface CostServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): CostServiceAsync
 
     /**
      * This endpoint is used to fetch a day-by-day snapshot of a customer's costs in Orb, calculated
@@ -319,6 +328,13 @@ interface CostServiceAsync {
 
     /** A view of [CostServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): CostServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /customers/{customer_id}/costs`, but is otherwise

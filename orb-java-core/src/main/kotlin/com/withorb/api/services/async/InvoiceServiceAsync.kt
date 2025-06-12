@@ -2,6 +2,7 @@
 
 package com.withorb.api.services.async
 
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Invoice
@@ -17,6 +18,7 @@ import com.withorb.api.models.InvoicePayParams
 import com.withorb.api.models.InvoiceUpdateParams
 import com.withorb.api.models.InvoiceVoidInvoiceParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface InvoiceServiceAsync {
 
@@ -24,6 +26,13 @@ interface InvoiceServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): InvoiceServiceAsync
 
     /** This endpoint is used to create a one-off invoice for a customer. */
     fun create(params: InvoiceCreateParams): CompletableFuture<Invoice> =
@@ -296,6 +305,15 @@ interface InvoiceServiceAsync {
      * A view of [InvoiceServiceAsync] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): InvoiceServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /invoices`, but is otherwise the same as

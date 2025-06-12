@@ -22,6 +22,7 @@ import com.withorb.api.models.CustomerBalanceTransactionListPageAsync
 import com.withorb.api.models.CustomerBalanceTransactionListPageResponse
 import com.withorb.api.models.CustomerBalanceTransactionListParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class BalanceTransactionServiceAsyncImpl
@@ -32,6 +33,13 @@ internal constructor(private val clientOptions: ClientOptions) : BalanceTransact
     }
 
     override fun withRawResponse(): BalanceTransactionServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(
+        modifier: Consumer<ClientOptions.Builder>
+    ): BalanceTransactionServiceAsync =
+        BalanceTransactionServiceAsyncImpl(
+            clientOptions.toBuilder().apply(modifier::accept).build()
+        )
 
     override fun create(
         params: CustomerBalanceTransactionCreateParams,
@@ -51,6 +59,13 @@ internal constructor(private val clientOptions: ClientOptions) : BalanceTransact
         BalanceTransactionServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): BalanceTransactionServiceAsync.WithRawResponse =
+            BalanceTransactionServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<CustomerBalanceTransactionCreateResponse> =
             jsonHandler<CustomerBalanceTransactionCreateResponse>(clientOptions.jsonMapper)

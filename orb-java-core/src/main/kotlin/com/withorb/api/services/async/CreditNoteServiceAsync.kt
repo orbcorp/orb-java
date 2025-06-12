@@ -2,6 +2,7 @@
 
 package com.withorb.api.services.async
 
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CreditNote
@@ -10,6 +11,7 @@ import com.withorb.api.models.CreditNoteFetchParams
 import com.withorb.api.models.CreditNoteListPageAsync
 import com.withorb.api.models.CreditNoteListParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface CreditNoteServiceAsync {
 
@@ -17,6 +19,13 @@ interface CreditNoteServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): CreditNoteServiceAsync
 
     /** This endpoint is used to create a single [`Credit Note`](/invoicing/credit-notes). */
     fun create(params: CreditNoteCreateParams): CompletableFuture<CreditNote> =
@@ -90,6 +99,15 @@ interface CreditNoteServiceAsync {
      * method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): CreditNoteServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /credit_notes`, but is otherwise the same as

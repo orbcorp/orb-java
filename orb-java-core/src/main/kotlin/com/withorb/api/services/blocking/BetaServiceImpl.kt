@@ -23,6 +23,7 @@ import com.withorb.api.models.Plan
 import com.withorb.api.models.PlanVersion
 import com.withorb.api.services.blocking.beta.ExternalPlanIdService
 import com.withorb.api.services.blocking.beta.ExternalPlanIdServiceImpl
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class BetaServiceImpl internal constructor(private val clientOptions: ClientOptions) : BetaService {
@@ -36,6 +37,9 @@ class BetaServiceImpl internal constructor(private val clientOptions: ClientOpti
     }
 
     override fun withRawResponse(): BetaService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): BetaService =
+        BetaServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun externalPlanId(): ExternalPlanIdService = externalPlanId
 
@@ -68,6 +72,13 @@ class BetaServiceImpl internal constructor(private val clientOptions: ClientOpti
         private val externalPlanId: ExternalPlanIdService.WithRawResponse by lazy {
             ExternalPlanIdServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): BetaService.WithRawResponse =
+            BetaServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun externalPlanId(): ExternalPlanIdService.WithRawResponse = externalPlanId
 

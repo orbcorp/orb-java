@@ -18,6 +18,7 @@ import com.withorb.api.core.prepareAsync
 import com.withorb.api.models.DimensionalPriceGroup
 import com.withorb.api.models.DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class ExternalDimensionalPriceGroupIdServiceAsyncImpl
@@ -32,6 +33,13 @@ internal constructor(private val clientOptions: ClientOptions) :
     override fun withRawResponse(): ExternalDimensionalPriceGroupIdServiceAsync.WithRawResponse =
         withRawResponse
 
+    override fun withOptions(
+        modifier: Consumer<ClientOptions.Builder>
+    ): ExternalDimensionalPriceGroupIdServiceAsync =
+        ExternalDimensionalPriceGroupIdServiceAsyncImpl(
+            clientOptions.toBuilder().apply(modifier::accept).build()
+        )
+
     override fun retrieve(
         params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams,
         requestOptions: RequestOptions,
@@ -44,6 +52,13 @@ internal constructor(private val clientOptions: ClientOptions) :
         ExternalDimensionalPriceGroupIdServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ExternalDimensionalPriceGroupIdServiceAsync.WithRawResponse =
+            ExternalDimensionalPriceGroupIdServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val retrieveHandler: Handler<DimensionalPriceGroup> =
             jsonHandler<DimensionalPriceGroup>(clientOptions.jsonMapper)

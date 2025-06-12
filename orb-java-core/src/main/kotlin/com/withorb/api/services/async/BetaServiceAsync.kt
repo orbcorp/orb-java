@@ -2,6 +2,7 @@
 
 package com.withorb.api.services.async
 
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.BetaCreatePlanVersionParams
@@ -11,6 +12,7 @@ import com.withorb.api.models.Plan
 import com.withorb.api.models.PlanVersion
 import com.withorb.api.services.async.beta.ExternalPlanIdServiceAsync
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface BetaServiceAsync {
 
@@ -18,6 +20,13 @@ interface BetaServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): BetaServiceAsync
 
     fun externalPlanId(): ExternalPlanIdServiceAsync
 
@@ -111,6 +120,13 @@ interface BetaServiceAsync {
 
     /** A view of [BetaServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): BetaServiceAsync.WithRawResponse
 
         fun externalPlanId(): ExternalPlanIdServiceAsync.WithRawResponse
 

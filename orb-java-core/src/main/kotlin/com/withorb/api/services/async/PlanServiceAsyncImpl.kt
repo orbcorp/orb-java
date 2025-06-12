@@ -26,6 +26,7 @@ import com.withorb.api.models.PlanUpdateParams
 import com.withorb.api.services.async.plans.ExternalPlanIdServiceAsync
 import com.withorb.api.services.async.plans.ExternalPlanIdServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class PlanServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -40,6 +41,9 @@ class PlanServiceAsyncImpl internal constructor(private val clientOptions: Clien
     }
 
     override fun withRawResponse(): PlanServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PlanServiceAsync =
+        PlanServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun externalPlanId(): ExternalPlanIdServiceAsync = externalPlanId
 
@@ -79,6 +83,13 @@ class PlanServiceAsyncImpl internal constructor(private val clientOptions: Clien
         private val externalPlanId: ExternalPlanIdServiceAsync.WithRawResponse by lazy {
             ExternalPlanIdServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): PlanServiceAsync.WithRawResponse =
+            PlanServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun externalPlanId(): ExternalPlanIdServiceAsync.WithRawResponse = externalPlanId
 

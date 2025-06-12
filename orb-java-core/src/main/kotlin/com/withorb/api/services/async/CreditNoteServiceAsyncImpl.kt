@@ -23,6 +23,7 @@ import com.withorb.api.models.CreditNoteListPageAsync
 import com.withorb.api.models.CreditNoteListPageResponse
 import com.withorb.api.models.CreditNoteListParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class CreditNoteServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -33,6 +34,9 @@ class CreditNoteServiceAsyncImpl internal constructor(private val clientOptions:
     }
 
     override fun withRawResponse(): CreditNoteServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): CreditNoteServiceAsync =
+        CreditNoteServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
         params: CreditNoteCreateParams,
@@ -59,6 +63,13 @@ class CreditNoteServiceAsyncImpl internal constructor(private val clientOptions:
         CreditNoteServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): CreditNoteServiceAsync.WithRawResponse =
+            CreditNoteServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<CreditNote> =
             jsonHandler<CreditNote>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

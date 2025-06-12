@@ -31,6 +31,7 @@ import com.withorb.api.models.CustomerCreditTopUpListPageAsync
 import com.withorb.api.models.CustomerCreditTopUpListPageResponse
 import com.withorb.api.models.CustomerCreditTopUpListParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class TopUpServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -41,6 +42,9 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
     }
 
     override fun withRawResponse(): TopUpServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): TopUpServiceAsync =
+        TopUpServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
         params: CustomerCreditTopUpCreateParams,
@@ -88,6 +92,13 @@ class TopUpServiceAsyncImpl internal constructor(private val clientOptions: Clie
         TopUpServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): TopUpServiceAsync.WithRawResponse =
+            TopUpServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<CustomerCreditTopUpCreateResponse> =
             jsonHandler<CustomerCreditTopUpCreateResponse>(clientOptions.jsonMapper)

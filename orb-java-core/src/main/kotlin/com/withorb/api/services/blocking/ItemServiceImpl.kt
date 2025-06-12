@@ -24,6 +24,7 @@ import com.withorb.api.models.ItemListPage
 import com.withorb.api.models.ItemListPageResponse
 import com.withorb.api.models.ItemListParams
 import com.withorb.api.models.ItemUpdateParams
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class ItemServiceImpl internal constructor(private val clientOptions: ClientOptions) : ItemService {
@@ -33,6 +34,9 @@ class ItemServiceImpl internal constructor(private val clientOptions: ClientOpti
     }
 
     override fun withRawResponse(): ItemService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ItemService =
+        ItemServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(params: ItemCreateParams, requestOptions: RequestOptions): Item =
         // post /items
@@ -58,6 +62,13 @@ class ItemServiceImpl internal constructor(private val clientOptions: ClientOpti
         ItemService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ItemService.WithRawResponse =
+            ItemServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<Item> =
             jsonHandler<Item>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

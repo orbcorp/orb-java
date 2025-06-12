@@ -25,6 +25,7 @@ import com.withorb.api.models.DimensionalPriceGroups
 import com.withorb.api.services.async.dimensionalPriceGroups.ExternalDimensionalPriceGroupIdServiceAsync
 import com.withorb.api.services.async.dimensionalPriceGroups.ExternalDimensionalPriceGroupIdServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class DimensionalPriceGroupServiceAsyncImpl
@@ -41,6 +42,13 @@ internal constructor(private val clientOptions: ClientOptions) : DimensionalPric
 
     override fun withRawResponse(): DimensionalPriceGroupServiceAsync.WithRawResponse =
         withRawResponse
+
+    override fun withOptions(
+        modifier: Consumer<ClientOptions.Builder>
+    ): DimensionalPriceGroupServiceAsync =
+        DimensionalPriceGroupServiceAsyncImpl(
+            clientOptions.toBuilder().apply(modifier::accept).build()
+        )
 
     override fun externalDimensionalPriceGroupId(): ExternalDimensionalPriceGroupIdServiceAsync =
         externalDimensionalPriceGroupId
@@ -75,6 +83,13 @@ internal constructor(private val clientOptions: ClientOptions) : DimensionalPric
             ExternalDimensionalPriceGroupIdServiceAsync.WithRawResponse by lazy {
             ExternalDimensionalPriceGroupIdServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): DimensionalPriceGroupServiceAsync.WithRawResponse =
+            DimensionalPriceGroupServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun externalDimensionalPriceGroupId():
             ExternalDimensionalPriceGroupIdServiceAsync.WithRawResponse =

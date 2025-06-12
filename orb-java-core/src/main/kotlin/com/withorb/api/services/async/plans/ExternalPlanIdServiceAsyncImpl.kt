@@ -20,6 +20,7 @@ import com.withorb.api.models.Plan
 import com.withorb.api.models.PlanExternalPlanIdFetchParams
 import com.withorb.api.models.PlanExternalPlanIdUpdateParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class ExternalPlanIdServiceAsyncImpl
@@ -30,6 +31,11 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdS
     }
 
     override fun withRawResponse(): ExternalPlanIdServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(
+        modifier: Consumer<ClientOptions.Builder>
+    ): ExternalPlanIdServiceAsync =
+        ExternalPlanIdServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun update(
         params: PlanExternalPlanIdUpdateParams,
@@ -49,6 +55,13 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdS
         ExternalPlanIdServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ExternalPlanIdServiceAsync.WithRawResponse =
+            ExternalPlanIdServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val updateHandler: Handler<Plan> =
             jsonHandler<Plan>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

@@ -26,6 +26,7 @@ import com.withorb.api.models.CustomerCreditLedgerListByExternalIdParams
 import com.withorb.api.models.CustomerCreditLedgerListPage
 import com.withorb.api.models.CustomerCreditLedgerListPageResponse
 import com.withorb.api.models.CustomerCreditLedgerListParams
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class LedgerServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -36,6 +37,9 @@ class LedgerServiceImpl internal constructor(private val clientOptions: ClientOp
     }
 
     override fun withRawResponse(): LedgerService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): LedgerService =
+        LedgerServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun list(
         params: CustomerCreditLedgerListParams,
@@ -69,6 +73,13 @@ class LedgerServiceImpl internal constructor(private val clientOptions: ClientOp
         LedgerService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): LedgerService.WithRawResponse =
+            LedgerServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val listHandler: Handler<CustomerCreditLedgerListPageResponse> =
             jsonHandler<CustomerCreditLedgerListPageResponse>(clientOptions.jsonMapper)

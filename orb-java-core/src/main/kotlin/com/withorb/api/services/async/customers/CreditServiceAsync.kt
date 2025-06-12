@@ -2,6 +2,7 @@
 
 package com.withorb.api.services.async.customers
 
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CustomerCreditListByExternalIdPageAsync
@@ -11,6 +12,7 @@ import com.withorb.api.models.CustomerCreditListParams
 import com.withorb.api.services.async.customers.credits.LedgerServiceAsync
 import com.withorb.api.services.async.customers.credits.TopUpServiceAsync
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface CreditServiceAsync {
 
@@ -18,6 +20,13 @@ interface CreditServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): CreditServiceAsync
 
     fun ledger(): LedgerServiceAsync
 
@@ -126,6 +135,15 @@ interface CreditServiceAsync {
      * A view of [CreditServiceAsync] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): CreditServiceAsync.WithRawResponse
 
         fun ledger(): LedgerServiceAsync.WithRawResponse
 

@@ -32,6 +32,7 @@ import com.withorb.api.models.PriceUpdateParams
 import com.withorb.api.services.async.prices.ExternalPriceIdServiceAsync
 import com.withorb.api.services.async.prices.ExternalPriceIdServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class PriceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -46,6 +47,9 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
     }
 
     override fun withRawResponse(): PriceServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PriceServiceAsync =
+        PriceServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun externalPriceId(): ExternalPriceIdServiceAsync = externalPriceId
 
@@ -106,6 +110,13 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
         private val externalPriceId: ExternalPriceIdServiceAsync.WithRawResponse by lazy {
             ExternalPriceIdServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): PriceServiceAsync.WithRawResponse =
+            PriceServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun externalPriceId(): ExternalPriceIdServiceAsync.WithRawResponse =
             externalPriceId

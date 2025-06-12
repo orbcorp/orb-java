@@ -17,6 +17,7 @@ import com.withorb.api.core.prepareAsync
 import com.withorb.api.models.EventVolumeListParams
 import com.withorb.api.models.EventVolumes
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 class VolumeServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     VolumeServiceAsync {
@@ -26,6 +27,9 @@ class VolumeServiceAsyncImpl internal constructor(private val clientOptions: Cli
     }
 
     override fun withRawResponse(): VolumeServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): VolumeServiceAsync =
+        VolumeServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun list(
         params: EventVolumeListParams,
@@ -38,6 +42,13 @@ class VolumeServiceAsyncImpl internal constructor(private val clientOptions: Cli
         VolumeServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): VolumeServiceAsync.WithRawResponse =
+            VolumeServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val listHandler: Handler<EventVolumes> =
             jsonHandler<EventVolumes>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

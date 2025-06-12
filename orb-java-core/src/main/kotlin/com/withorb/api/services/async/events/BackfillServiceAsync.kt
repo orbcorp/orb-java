@@ -2,6 +2,7 @@
 
 package com.withorb.api.services.async.events
 
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.EventBackfillCloseParams
@@ -15,6 +16,7 @@ import com.withorb.api.models.EventBackfillListParams
 import com.withorb.api.models.EventBackfillRevertParams
 import com.withorb.api.models.EventBackfillRevertResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface BackfillServiceAsync {
 
@@ -22,6 +24,13 @@ interface BackfillServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): BackfillServiceAsync
 
     /**
      * Creating the backfill enables adding or replacing past events, even those that are older than
@@ -210,6 +219,15 @@ interface BackfillServiceAsync {
      * A view of [BackfillServiceAsync] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): BackfillServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /events/backfills`, but is otherwise the same as

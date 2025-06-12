@@ -30,6 +30,7 @@ import com.withorb.api.models.InvoicePayParams
 import com.withorb.api.models.InvoiceUpdateParams
 import com.withorb.api.models.InvoiceVoidInvoiceParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class InvoiceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -40,6 +41,9 @@ class InvoiceServiceAsyncImpl internal constructor(private val clientOptions: Cl
     }
 
     override fun withRawResponse(): InvoiceServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): InvoiceServiceAsync =
+        InvoiceServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
         params: InvoiceCreateParams,
@@ -108,6 +112,13 @@ class InvoiceServiceAsyncImpl internal constructor(private val clientOptions: Cl
         InvoiceServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): InvoiceServiceAsync.WithRawResponse =
+            InvoiceServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<Invoice> =
             jsonHandler<Invoice>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

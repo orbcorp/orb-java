@@ -38,6 +38,7 @@ import com.withorb.api.services.blocking.TopLevelService
 import com.withorb.api.services.blocking.TopLevelServiceImpl
 import com.withorb.api.services.blocking.WebhookService
 import com.withorb.api.services.blocking.WebhookServiceImpl
+import java.util.function.Consumer
 
 class OrbClientImpl(private val clientOptions: ClientOptions) : OrbClient {
 
@@ -107,6 +108,9 @@ class OrbClientImpl(private val clientOptions: ClientOptions) : OrbClient {
     override fun async(): OrbClientAsync = async
 
     override fun withRawResponse(): OrbClient.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): OrbClient =
+        OrbClientImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun topLevel(): TopLevelService = topLevel
 
@@ -210,6 +214,13 @@ class OrbClientImpl(private val clientOptions: ClientOptions) : OrbClient {
         private val subscriptionChanges: SubscriptionChangeService.WithRawResponse by lazy {
             SubscriptionChangeServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): OrbClient.WithRawResponse =
+            OrbClientImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun topLevel(): TopLevelService.WithRawResponse = topLevel
 

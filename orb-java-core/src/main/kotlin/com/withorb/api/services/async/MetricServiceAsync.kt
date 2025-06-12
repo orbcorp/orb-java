@@ -2,6 +2,7 @@
 
 package com.withorb.api.services.async
 
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.BillableMetric
@@ -11,6 +12,7 @@ import com.withorb.api.models.MetricListPageAsync
 import com.withorb.api.models.MetricListParams
 import com.withorb.api.models.MetricUpdateParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface MetricServiceAsync {
 
@@ -18,6 +20,13 @@ interface MetricServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): MetricServiceAsync
 
     /**
      * This endpoint is used to create a [metric](/core-concepts###metric) using a SQL string. See
@@ -132,6 +141,15 @@ interface MetricServiceAsync {
      * A view of [MetricServiceAsync] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): MetricServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /metrics`, but is otherwise the same as

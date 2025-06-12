@@ -16,6 +16,7 @@ import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepare
 import com.withorb.api.models.EventVolumeListParams
 import com.withorb.api.models.EventVolumes
+import java.util.function.Consumer
 
 class VolumeServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     VolumeService {
@@ -26,6 +27,9 @@ class VolumeServiceImpl internal constructor(private val clientOptions: ClientOp
 
     override fun withRawResponse(): VolumeService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): VolumeService =
+        VolumeServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     override fun list(params: EventVolumeListParams, requestOptions: RequestOptions): EventVolumes =
         // get /events/volume
         withRawResponse().list(params, requestOptions).parse()
@@ -34,6 +38,13 @@ class VolumeServiceImpl internal constructor(private val clientOptions: ClientOp
         VolumeService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): VolumeService.WithRawResponse =
+            VolumeServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val listHandler: Handler<EventVolumes> =
             jsonHandler<EventVolumes>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

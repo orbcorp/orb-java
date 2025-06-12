@@ -25,6 +25,7 @@ import com.withorb.api.services.blocking.customers.credits.LedgerService
 import com.withorb.api.services.blocking.customers.credits.LedgerServiceImpl
 import com.withorb.api.services.blocking.customers.credits.TopUpService
 import com.withorb.api.services.blocking.customers.credits.TopUpServiceImpl
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class CreditServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -39,6 +40,9 @@ class CreditServiceImpl internal constructor(private val clientOptions: ClientOp
     private val topUps: TopUpService by lazy { TopUpServiceImpl(clientOptions) }
 
     override fun withRawResponse(): CreditService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): CreditService =
+        CreditServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun ledger(): LedgerService = ledger
 
@@ -70,6 +74,13 @@ class CreditServiceImpl internal constructor(private val clientOptions: ClientOp
         private val topUps: TopUpService.WithRawResponse by lazy {
             TopUpServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): CreditService.WithRawResponse =
+            CreditServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun ledger(): LedgerService.WithRawResponse = ledger
 
