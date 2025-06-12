@@ -36,6 +36,7 @@ import com.withorb.api.services.async.SubscriptionServiceAsync
 import com.withorb.api.services.async.SubscriptionServiceAsyncImpl
 import com.withorb.api.services.async.TopLevelServiceAsync
 import com.withorb.api.services.async.TopLevelServiceAsyncImpl
+import java.util.function.Consumer
 
 class OrbClientAsyncImpl(private val clientOptions: ClientOptions) : OrbClientAsync {
 
@@ -115,6 +116,9 @@ class OrbClientAsyncImpl(private val clientOptions: ClientOptions) : OrbClientAs
     override fun sync(): OrbClient = sync
 
     override fun withRawResponse(): OrbClientAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): OrbClientAsync =
+        OrbClientAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun topLevel(): TopLevelServiceAsync = topLevel
 
@@ -218,6 +222,13 @@ class OrbClientAsyncImpl(private val clientOptions: ClientOptions) : OrbClientAs
         private val subscriptionChanges: SubscriptionChangeServiceAsync.WithRawResponse by lazy {
             SubscriptionChangeServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): OrbClientAsync.WithRawResponse =
+            OrbClientAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun topLevel(): TopLevelServiceAsync.WithRawResponse = topLevel
 

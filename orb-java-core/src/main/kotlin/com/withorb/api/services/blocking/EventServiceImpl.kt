@@ -28,6 +28,7 @@ import com.withorb.api.services.blocking.events.BackfillService
 import com.withorb.api.services.blocking.events.BackfillServiceImpl
 import com.withorb.api.services.blocking.events.VolumeService
 import com.withorb.api.services.blocking.events.VolumeServiceImpl
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class EventServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -42,6 +43,9 @@ class EventServiceImpl internal constructor(private val clientOptions: ClientOpt
     private val volume: VolumeService by lazy { VolumeServiceImpl(clientOptions) }
 
     override fun withRawResponse(): EventService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): EventService =
+        EventServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun backfills(): BackfillService = backfills
 
@@ -87,6 +91,13 @@ class EventServiceImpl internal constructor(private val clientOptions: ClientOpt
         private val volume: VolumeService.WithRawResponse by lazy {
             VolumeServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): EventService.WithRawResponse =
+            EventServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun backfills(): BackfillService.WithRawResponse = backfills
 

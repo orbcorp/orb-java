@@ -22,6 +22,7 @@ import com.withorb.api.models.CreditNoteFetchParams
 import com.withorb.api.models.CreditNoteListPage
 import com.withorb.api.models.CreditNoteListPageResponse
 import com.withorb.api.models.CreditNoteListParams
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class CreditNoteServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -32,6 +33,9 @@ class CreditNoteServiceImpl internal constructor(private val clientOptions: Clie
     }
 
     override fun withRawResponse(): CreditNoteService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): CreditNoteService =
+        CreditNoteServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
         params: CreditNoteCreateParams,
@@ -55,6 +59,13 @@ class CreditNoteServiceImpl internal constructor(private val clientOptions: Clie
         CreditNoteService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): CreditNoteService.WithRawResponse =
+            CreditNoteServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<CreditNote> =
             jsonHandler<CreditNote>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

@@ -27,6 +27,7 @@ import com.withorb.api.models.EventBackfillListPageResponse
 import com.withorb.api.models.EventBackfillListParams
 import com.withorb.api.models.EventBackfillRevertParams
 import com.withorb.api.models.EventBackfillRevertResponse
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class BackfillServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -37,6 +38,9 @@ class BackfillServiceImpl internal constructor(private val clientOptions: Client
     }
 
     override fun withRawResponse(): BackfillService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): BackfillService =
+        BackfillServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
         params: EventBackfillCreateParams,
@@ -77,6 +81,13 @@ class BackfillServiceImpl internal constructor(private val clientOptions: Client
         BackfillService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): BackfillService.WithRawResponse =
+            BackfillServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<EventBackfillCreateResponse> =
             jsonHandler<EventBackfillCreateResponse>(clientOptions.jsonMapper)

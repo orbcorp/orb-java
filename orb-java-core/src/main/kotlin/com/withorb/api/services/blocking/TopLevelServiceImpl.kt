@@ -16,6 +16,7 @@ import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepare
 import com.withorb.api.models.TopLevelPingParams
 import com.withorb.api.models.TopLevelPingResponse
+import java.util.function.Consumer
 
 class TopLevelServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     TopLevelService {
@@ -25,6 +26,9 @@ class TopLevelServiceImpl internal constructor(private val clientOptions: Client
     }
 
     override fun withRawResponse(): TopLevelService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): TopLevelService =
+        TopLevelServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun ping(
         params: TopLevelPingParams,
@@ -37,6 +41,13 @@ class TopLevelServiceImpl internal constructor(private val clientOptions: Client
         TopLevelService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): TopLevelService.WithRawResponse =
+            TopLevelServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val pingHandler: Handler<TopLevelPingResponse> =
             jsonHandler<TopLevelPingResponse>(clientOptions.jsonMapper)

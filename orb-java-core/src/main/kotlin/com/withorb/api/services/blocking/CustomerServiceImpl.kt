@@ -36,6 +36,7 @@ import com.withorb.api.services.blocking.customers.CostService
 import com.withorb.api.services.blocking.customers.CostServiceImpl
 import com.withorb.api.services.blocking.customers.CreditService
 import com.withorb.api.services.blocking.customers.CreditServiceImpl
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class CustomerServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -54,6 +55,9 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
     }
 
     override fun withRawResponse(): CustomerService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): CustomerService =
+        CustomerServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun costs(): CostService = costs
 
@@ -132,6 +136,13 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
         private val balanceTransactions: BalanceTransactionService.WithRawResponse by lazy {
             BalanceTransactionServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): CustomerService.WithRawResponse =
+            CustomerServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun costs(): CostService.WithRawResponse = costs
 

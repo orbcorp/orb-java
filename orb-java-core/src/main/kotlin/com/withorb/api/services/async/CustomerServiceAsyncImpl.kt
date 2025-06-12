@@ -37,6 +37,7 @@ import com.withorb.api.services.async.customers.CostServiceAsyncImpl
 import com.withorb.api.services.async.customers.CreditServiceAsync
 import com.withorb.api.services.async.customers.CreditServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class CustomerServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -55,6 +56,9 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
     }
 
     override fun withRawResponse(): CustomerServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): CustomerServiceAsync =
+        CustomerServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun costs(): CostServiceAsync = costs
 
@@ -144,6 +148,13 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
         private val balanceTransactions: BalanceTransactionServiceAsync.WithRawResponse by lazy {
             BalanceTransactionServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): CustomerServiceAsync.WithRawResponse =
+            CustomerServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun costs(): CostServiceAsync.WithRawResponse = costs
 

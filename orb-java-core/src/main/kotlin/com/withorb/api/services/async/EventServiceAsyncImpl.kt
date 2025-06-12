@@ -29,6 +29,7 @@ import com.withorb.api.services.async.events.BackfillServiceAsyncImpl
 import com.withorb.api.services.async.events.VolumeServiceAsync
 import com.withorb.api.services.async.events.VolumeServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class EventServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -43,6 +44,9 @@ class EventServiceAsyncImpl internal constructor(private val clientOptions: Clie
     private val volume: VolumeServiceAsync by lazy { VolumeServiceAsyncImpl(clientOptions) }
 
     override fun withRawResponse(): EventServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): EventServiceAsync =
+        EventServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun backfills(): BackfillServiceAsync = backfills
 
@@ -88,6 +92,13 @@ class EventServiceAsyncImpl internal constructor(private val clientOptions: Clie
         private val volume: VolumeServiceAsync.WithRawResponse by lazy {
             VolumeServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): EventServiceAsync.WithRawResponse =
+            EventServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun backfills(): BackfillServiceAsync.WithRawResponse = backfills
 

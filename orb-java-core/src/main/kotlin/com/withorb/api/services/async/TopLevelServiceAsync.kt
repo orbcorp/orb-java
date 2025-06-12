@@ -2,11 +2,13 @@
 
 package com.withorb.api.services.async
 
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.TopLevelPingParams
 import com.withorb.api.models.TopLevelPingResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface TopLevelServiceAsync {
 
@@ -14,6 +16,13 @@ interface TopLevelServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): TopLevelServiceAsync
 
     /**
      * This endpoint allows you to test your connection to the Orb API and check the validity of
@@ -44,6 +53,15 @@ interface TopLevelServiceAsync {
      * A view of [TopLevelServiceAsync] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): TopLevelServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /ping`, but is otherwise the same as

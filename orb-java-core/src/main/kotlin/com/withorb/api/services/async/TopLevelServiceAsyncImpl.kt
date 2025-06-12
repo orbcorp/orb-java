@@ -17,6 +17,7 @@ import com.withorb.api.core.prepareAsync
 import com.withorb.api.models.TopLevelPingParams
 import com.withorb.api.models.TopLevelPingResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 class TopLevelServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     TopLevelServiceAsync {
@@ -26,6 +27,9 @@ class TopLevelServiceAsyncImpl internal constructor(private val clientOptions: C
     }
 
     override fun withRawResponse(): TopLevelServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): TopLevelServiceAsync =
+        TopLevelServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun ping(
         params: TopLevelPingParams,
@@ -38,6 +42,13 @@ class TopLevelServiceAsyncImpl internal constructor(private val clientOptions: C
         TopLevelServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): TopLevelServiceAsync.WithRawResponse =
+            TopLevelServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val pingHandler: Handler<TopLevelPingResponse> =
             jsonHandler<TopLevelPingResponse>(clientOptions.jsonMapper)

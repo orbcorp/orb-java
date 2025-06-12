@@ -19,6 +19,7 @@ import com.withorb.api.core.prepare
 import com.withorb.api.models.Price
 import com.withorb.api.models.PriceExternalPriceIdFetchParams
 import com.withorb.api.models.PriceExternalPriceIdUpdateParams
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class ExternalPriceIdServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -29,6 +30,9 @@ class ExternalPriceIdServiceImpl internal constructor(private val clientOptions:
     }
 
     override fun withRawResponse(): ExternalPriceIdService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ExternalPriceIdService =
+        ExternalPriceIdServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun update(
         params: PriceExternalPriceIdUpdateParams,
@@ -48,6 +52,13 @@ class ExternalPriceIdServiceImpl internal constructor(private val clientOptions:
         ExternalPriceIdService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ExternalPriceIdService.WithRawResponse =
+            ExternalPriceIdServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val updateHandler: Handler<Price> =
             jsonHandler<Price>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

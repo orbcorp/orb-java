@@ -3,6 +3,7 @@
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CreditNote
@@ -10,6 +11,7 @@ import com.withorb.api.models.CreditNoteCreateParams
 import com.withorb.api.models.CreditNoteFetchParams
 import com.withorb.api.models.CreditNoteListPage
 import com.withorb.api.models.CreditNoteListParams
+import java.util.function.Consumer
 
 interface CreditNoteService {
 
@@ -17,6 +19,13 @@ interface CreditNoteService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): CreditNoteService
 
     /** This endpoint is used to create a single [`Credit Note`](/invoicing/credit-notes). */
     fun create(params: CreditNoteCreateParams): CreditNote = create(params, RequestOptions.none())
@@ -82,6 +91,15 @@ interface CreditNoteService {
 
     /** A view of [CreditNoteService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): CreditNoteService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /credit_notes`, but is otherwise the same as

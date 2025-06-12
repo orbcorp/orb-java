@@ -21,6 +21,7 @@ import com.withorb.api.models.BetaExternalPlanIdFetchPlanVersionParams
 import com.withorb.api.models.BetaExternalPlanIdSetDefaultPlanVersionParams
 import com.withorb.api.models.Plan
 import com.withorb.api.models.PlanVersion
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class ExternalPlanIdServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -31,6 +32,9 @@ class ExternalPlanIdServiceImpl internal constructor(private val clientOptions: 
     }
 
     override fun withRawResponse(): ExternalPlanIdService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ExternalPlanIdService =
+        ExternalPlanIdServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun createPlanVersion(
         params: BetaExternalPlanIdCreatePlanVersionParams,
@@ -57,6 +61,13 @@ class ExternalPlanIdServiceImpl internal constructor(private val clientOptions: 
         ExternalPlanIdService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ExternalPlanIdService.WithRawResponse =
+            ExternalPlanIdServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createPlanVersionHandler: Handler<PlanVersion> =
             jsonHandler<PlanVersion>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

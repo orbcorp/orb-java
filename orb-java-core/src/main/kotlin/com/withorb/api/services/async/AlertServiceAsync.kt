@@ -2,6 +2,7 @@
 
 package com.withorb.api.services.async
 
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Alert
@@ -15,6 +16,7 @@ import com.withorb.api.models.AlertListParams
 import com.withorb.api.models.AlertRetrieveParams
 import com.withorb.api.models.AlertUpdateParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface AlertServiceAsync {
 
@@ -22,6 +24,13 @@ interface AlertServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): AlertServiceAsync
 
     /** This endpoint retrieves an alert by its ID. */
     fun retrieve(alertId: String): CompletableFuture<Alert> =
@@ -300,6 +309,15 @@ interface AlertServiceAsync {
 
     /** A view of [AlertServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): AlertServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /alerts/{alert_id}`, but is otherwise the same as

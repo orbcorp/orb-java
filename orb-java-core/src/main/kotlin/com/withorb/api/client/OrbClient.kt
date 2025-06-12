@@ -2,6 +2,7 @@
 
 package com.withorb.api.client
 
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.services.blocking.AlertService
 import com.withorb.api.services.blocking.BetaService
 import com.withorb.api.services.blocking.CouponService
@@ -18,6 +19,7 @@ import com.withorb.api.services.blocking.PriceService
 import com.withorb.api.services.blocking.SubscriptionChangeService
 import com.withorb.api.services.blocking.SubscriptionService
 import com.withorb.api.services.blocking.TopLevelService
+import java.util.function.Consumer
 
 /**
  * A client for interacting with the Orb REST API synchronously. You can also switch to asynchronous
@@ -47,6 +49,13 @@ interface OrbClient {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): OrbClient
 
     fun topLevel(): TopLevelService
 
@@ -95,6 +104,13 @@ interface OrbClient {
 
     /** A view of [OrbClient] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): OrbClient.WithRawResponse
 
         fun topLevel(): TopLevelService.WithRawResponse
 

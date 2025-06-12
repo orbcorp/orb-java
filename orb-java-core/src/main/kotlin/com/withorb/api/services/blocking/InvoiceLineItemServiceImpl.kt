@@ -17,6 +17,7 @@ import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepare
 import com.withorb.api.models.InvoiceLineItemCreateParams
 import com.withorb.api.models.InvoiceLineItemCreateResponse
+import java.util.function.Consumer
 
 class InvoiceLineItemServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     InvoiceLineItemService {
@@ -26,6 +27,9 @@ class InvoiceLineItemServiceImpl internal constructor(private val clientOptions:
     }
 
     override fun withRawResponse(): InvoiceLineItemService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): InvoiceLineItemService =
+        InvoiceLineItemServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
         params: InvoiceLineItemCreateParams,
@@ -38,6 +42,13 @@ class InvoiceLineItemServiceImpl internal constructor(private val clientOptions:
         InvoiceLineItemService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): InvoiceLineItemService.WithRawResponse =
+            InvoiceLineItemServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<InvoiceLineItemCreateResponse> =
             jsonHandler<InvoiceLineItemCreateResponse>(clientOptions.jsonMapper)

@@ -21,6 +21,7 @@ import com.withorb.api.models.CustomerBalanceTransactionCreateResponse
 import com.withorb.api.models.CustomerBalanceTransactionListPage
 import com.withorb.api.models.CustomerBalanceTransactionListPageResponse
 import com.withorb.api.models.CustomerBalanceTransactionListParams
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class BalanceTransactionServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -31,6 +32,9 @@ class BalanceTransactionServiceImpl internal constructor(private val clientOptio
     }
 
     override fun withRawResponse(): BalanceTransactionService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): BalanceTransactionService =
+        BalanceTransactionServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
         params: CustomerBalanceTransactionCreateParams,
@@ -50,6 +54,13 @@ class BalanceTransactionServiceImpl internal constructor(private val clientOptio
         BalanceTransactionService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): BalanceTransactionService.WithRawResponse =
+            BalanceTransactionServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<CustomerBalanceTransactionCreateResponse> =
             jsonHandler<CustomerBalanceTransactionCreateResponse>(clientOptions.jsonMapper)

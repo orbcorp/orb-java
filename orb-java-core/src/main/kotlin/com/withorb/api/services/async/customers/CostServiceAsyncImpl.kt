@@ -20,6 +20,7 @@ import com.withorb.api.models.CustomerCostListByExternalIdResponse
 import com.withorb.api.models.CustomerCostListParams
 import com.withorb.api.models.CustomerCostListResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class CostServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -30,6 +31,9 @@ class CostServiceAsyncImpl internal constructor(private val clientOptions: Clien
     }
 
     override fun withRawResponse(): CostServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): CostServiceAsync =
+        CostServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun list(
         params: CustomerCostListParams,
@@ -49,6 +53,13 @@ class CostServiceAsyncImpl internal constructor(private val clientOptions: Clien
         CostServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): CostServiceAsync.WithRawResponse =
+            CostServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val listHandler: Handler<CustomerCostListResponse> =
             jsonHandler<CustomerCostListResponse>(clientOptions.jsonMapper)

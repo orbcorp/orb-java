@@ -41,6 +41,7 @@ import com.withorb.api.models.SubscriptionUpdateParams
 import com.withorb.api.models.SubscriptionUpdateTrialParams
 import com.withorb.api.models.SubscriptionUsage
 import com.withorb.api.models.Subscriptions
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class SubscriptionServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -51,6 +52,9 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
     }
 
     override fun withRawResponse(): SubscriptionService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): SubscriptionService =
+        SubscriptionServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
         params: SubscriptionCreateParams,
@@ -175,6 +179,13 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
         SubscriptionService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): SubscriptionService.WithRawResponse =
+            SubscriptionServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<MutatedSubscription> =
             jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)

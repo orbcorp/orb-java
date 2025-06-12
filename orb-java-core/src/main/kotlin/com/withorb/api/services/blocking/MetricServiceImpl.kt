@@ -23,6 +23,7 @@ import com.withorb.api.models.MetricListPage
 import com.withorb.api.models.MetricListPageResponse
 import com.withorb.api.models.MetricListParams
 import com.withorb.api.models.MetricUpdateParams
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class MetricServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -33,6 +34,9 @@ class MetricServiceImpl internal constructor(private val clientOptions: ClientOp
     }
 
     override fun withRawResponse(): MetricService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): MetricService =
+        MetricServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
         params: MetricCreateParams,
@@ -60,6 +64,13 @@ class MetricServiceImpl internal constructor(private val clientOptions: ClientOp
         MetricService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): MetricService.WithRawResponse =
+            MetricServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<BillableMetric> =
             jsonHandler<BillableMetric>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

@@ -26,6 +26,7 @@ import com.withorb.api.services.async.customers.credits.LedgerServiceAsyncImpl
 import com.withorb.api.services.async.customers.credits.TopUpServiceAsync
 import com.withorb.api.services.async.customers.credits.TopUpServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class CreditServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -40,6 +41,9 @@ class CreditServiceAsyncImpl internal constructor(private val clientOptions: Cli
     private val topUps: TopUpServiceAsync by lazy { TopUpServiceAsyncImpl(clientOptions) }
 
     override fun withRawResponse(): CreditServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): CreditServiceAsync =
+        CreditServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun ledger(): LedgerServiceAsync = ledger
 
@@ -71,6 +75,13 @@ class CreditServiceAsyncImpl internal constructor(private val clientOptions: Cli
         private val topUps: TopUpServiceAsync.WithRawResponse by lazy {
             TopUpServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): CreditServiceAsync.WithRawResponse =
+            CreditServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun ledger(): LedgerServiceAsync.WithRawResponse = ledger
 

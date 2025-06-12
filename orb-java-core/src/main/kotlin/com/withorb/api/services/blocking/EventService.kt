@@ -3,6 +3,7 @@
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.EventDeprecateParams
@@ -15,6 +16,7 @@ import com.withorb.api.models.EventUpdateParams
 import com.withorb.api.models.EventUpdateResponse
 import com.withorb.api.services.blocking.events.BackfillService
 import com.withorb.api.services.blocking.events.VolumeService
+import java.util.function.Consumer
 
 interface EventService {
 
@@ -22,6 +24,13 @@ interface EventService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): EventService
 
     fun backfills(): BackfillService
 
@@ -382,6 +391,13 @@ interface EventService {
 
     /** A view of [EventService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): EventService.WithRawResponse
 
         fun backfills(): BackfillService.WithRawResponse
 

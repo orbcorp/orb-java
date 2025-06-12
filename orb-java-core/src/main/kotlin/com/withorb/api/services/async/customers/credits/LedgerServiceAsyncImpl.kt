@@ -27,6 +27,7 @@ import com.withorb.api.models.CustomerCreditLedgerListPageAsync
 import com.withorb.api.models.CustomerCreditLedgerListPageResponse
 import com.withorb.api.models.CustomerCreditLedgerListParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class LedgerServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -37,6 +38,9 @@ class LedgerServiceAsyncImpl internal constructor(private val clientOptions: Cli
     }
 
     override fun withRawResponse(): LedgerServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): LedgerServiceAsync =
+        LedgerServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun list(
         params: CustomerCreditLedgerListParams,
@@ -70,6 +74,13 @@ class LedgerServiceAsyncImpl internal constructor(private val clientOptions: Cli
         LedgerServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): LedgerServiceAsync.WithRawResponse =
+            LedgerServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val listHandler: Handler<CustomerCreditLedgerListPageResponse> =
             jsonHandler<CustomerCreditLedgerListPageResponse>(clientOptions.jsonMapper)
