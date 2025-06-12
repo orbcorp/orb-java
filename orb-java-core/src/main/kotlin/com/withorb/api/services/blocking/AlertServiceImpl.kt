@@ -27,6 +27,7 @@ import com.withorb.api.models.AlertListPageResponse
 import com.withorb.api.models.AlertListParams
 import com.withorb.api.models.AlertRetrieveParams
 import com.withorb.api.models.AlertUpdateParams
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class AlertServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -37,6 +38,9 @@ class AlertServiceImpl internal constructor(private val clientOptions: ClientOpt
     }
 
     override fun withRawResponse(): AlertService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): AlertService =
+        AlertServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun retrieve(params: AlertRetrieveParams, requestOptions: RequestOptions): Alert =
         // get /alerts/{alert_id}
@@ -83,6 +87,13 @@ class AlertServiceImpl internal constructor(private val clientOptions: ClientOpt
         AlertService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): AlertService.WithRawResponse =
+            AlertServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val retrieveHandler: Handler<Alert> =
             jsonHandler<Alert>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

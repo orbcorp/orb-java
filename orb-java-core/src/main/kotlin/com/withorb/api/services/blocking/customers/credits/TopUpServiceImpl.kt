@@ -30,6 +30,7 @@ import com.withorb.api.models.CustomerCreditTopUpListByExternalIdParams
 import com.withorb.api.models.CustomerCreditTopUpListPage
 import com.withorb.api.models.CustomerCreditTopUpListPageResponse
 import com.withorb.api.models.CustomerCreditTopUpListParams
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class TopUpServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -40,6 +41,9 @@ class TopUpServiceImpl internal constructor(private val clientOptions: ClientOpt
     }
 
     override fun withRawResponse(): TopUpService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): TopUpService =
+        TopUpServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
         params: CustomerCreditTopUpCreateParams,
@@ -86,6 +90,13 @@ class TopUpServiceImpl internal constructor(private val clientOptions: ClientOpt
         TopUpService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): TopUpService.WithRawResponse =
+            TopUpServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<CustomerCreditTopUpCreateResponse> =
             jsonHandler<CustomerCreditTopUpCreateResponse>(clientOptions.jsonMapper)

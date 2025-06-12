@@ -3,6 +3,7 @@
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.DimensionalPriceGroup
@@ -11,6 +12,7 @@ import com.withorb.api.models.DimensionalPriceGroupListPage
 import com.withorb.api.models.DimensionalPriceGroupListParams
 import com.withorb.api.models.DimensionalPriceGroupRetrieveParams
 import com.withorb.api.services.blocking.dimensionalPriceGroups.ExternalDimensionalPriceGroupIdService
+import java.util.function.Consumer
 
 interface DimensionalPriceGroupService {
 
@@ -18,6 +20,13 @@ interface DimensionalPriceGroupService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): DimensionalPriceGroupService
 
     fun externalDimensionalPriceGroupId(): ExternalDimensionalPriceGroupIdService
 
@@ -104,6 +113,15 @@ interface DimensionalPriceGroupService {
      * method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): DimensionalPriceGroupService.WithRawResponse
 
         fun externalDimensionalPriceGroupId():
             ExternalDimensionalPriceGroupIdService.WithRawResponse

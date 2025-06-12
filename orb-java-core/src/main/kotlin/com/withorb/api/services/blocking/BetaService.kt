@@ -3,6 +3,7 @@
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.BetaCreatePlanVersionParams
@@ -11,6 +12,7 @@ import com.withorb.api.models.BetaSetDefaultPlanVersionParams
 import com.withorb.api.models.Plan
 import com.withorb.api.models.PlanVersion
 import com.withorb.api.services.blocking.beta.ExternalPlanIdService
+import java.util.function.Consumer
 
 interface BetaService {
 
@@ -18,6 +20,13 @@ interface BetaService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): BetaService
 
     fun externalPlanId(): ExternalPlanIdService
 
@@ -102,6 +111,13 @@ interface BetaService {
 
     /** A view of [BetaService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): BetaService.WithRawResponse
 
         fun externalPlanId(): ExternalPlanIdService.WithRawResponse
 

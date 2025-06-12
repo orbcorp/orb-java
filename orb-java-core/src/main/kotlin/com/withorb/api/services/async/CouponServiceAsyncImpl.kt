@@ -26,6 +26,7 @@ import com.withorb.api.models.CouponListParams
 import com.withorb.api.services.async.coupons.SubscriptionServiceAsync
 import com.withorb.api.services.async.coupons.SubscriptionServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class CouponServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -40,6 +41,9 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
     }
 
     override fun withRawResponse(): CouponServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): CouponServiceAsync =
+        CouponServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun subscriptions(): SubscriptionServiceAsync = subscriptions
 
@@ -79,6 +83,13 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
         private val subscriptions: SubscriptionServiceAsync.WithRawResponse by lazy {
             SubscriptionServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): CouponServiceAsync.WithRawResponse =
+            CouponServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun subscriptions(): SubscriptionServiceAsync.WithRawResponse = subscriptions
 

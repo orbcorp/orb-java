@@ -3,6 +3,7 @@
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.SubscriptionChangeApplyParams
@@ -11,6 +12,7 @@ import com.withorb.api.models.SubscriptionChangeCancelParams
 import com.withorb.api.models.SubscriptionChangeCancelResponse
 import com.withorb.api.models.SubscriptionChangeRetrieveParams
 import com.withorb.api.models.SubscriptionChangeRetrieveResponse
+import java.util.function.Consumer
 
 interface SubscriptionChangeService {
 
@@ -18,6 +20,13 @@ interface SubscriptionChangeService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): SubscriptionChangeService
 
     /**
      * This endpoint returns a subscription change given an identifier.
@@ -154,6 +163,15 @@ interface SubscriptionChangeService {
      * method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): SubscriptionChangeService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /subscription_changes/{subscription_change_id}`, but

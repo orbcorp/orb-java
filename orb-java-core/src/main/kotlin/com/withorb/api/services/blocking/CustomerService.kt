@@ -3,6 +3,7 @@
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponseFor
@@ -20,6 +21,7 @@ import com.withorb.api.models.CustomerUpdateParams
 import com.withorb.api.services.blocking.customers.BalanceTransactionService
 import com.withorb.api.services.blocking.customers.CostService
 import com.withorb.api.services.blocking.customers.CreditService
+import java.util.function.Consumer
 
 interface CustomerService {
 
@@ -27,6 +29,13 @@ interface CustomerService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): CustomerService
 
     fun costs(): CostService
 
@@ -375,6 +384,13 @@ interface CustomerService {
 
     /** A view of [CustomerService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): CustomerService.WithRawResponse
 
         fun costs(): CostService.WithRawResponse
 

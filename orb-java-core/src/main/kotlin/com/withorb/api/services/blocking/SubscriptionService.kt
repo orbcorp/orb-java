@@ -3,6 +3,7 @@
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.MutatedSubscription
@@ -28,6 +29,7 @@ import com.withorb.api.models.SubscriptionUpdateFixedFeeQuantityParams
 import com.withorb.api.models.SubscriptionUpdateParams
 import com.withorb.api.models.SubscriptionUpdateTrialParams
 import com.withorb.api.models.SubscriptionUsage
+import java.util.function.Consumer
 
 interface SubscriptionService {
 
@@ -35,6 +37,13 @@ interface SubscriptionService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): SubscriptionService
 
     /**
      * A subscription represents the purchase of a plan by a customer. The customer is identified by
@@ -1326,6 +1335,15 @@ interface SubscriptionService {
      * A view of [SubscriptionService] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): SubscriptionService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /subscriptions`, but is otherwise the same as

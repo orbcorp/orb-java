@@ -2,11 +2,13 @@
 
 package com.withorb.api.services.async.dimensionalPriceGroups
 
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.DimensionalPriceGroup
 import com.withorb.api.models.DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface ExternalDimensionalPriceGroupIdServiceAsync {
 
@@ -14,6 +16,15 @@ interface ExternalDimensionalPriceGroupIdServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(
+        modifier: Consumer<ClientOptions.Builder>
+    ): ExternalDimensionalPriceGroupIdServiceAsync
 
     /** Fetch dimensional price group by external ID */
     fun retrieve(
@@ -74,6 +85,15 @@ interface ExternalDimensionalPriceGroupIdServiceAsync {
      * responses for each method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ExternalDimensionalPriceGroupIdServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get

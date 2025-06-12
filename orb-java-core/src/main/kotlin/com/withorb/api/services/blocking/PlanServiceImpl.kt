@@ -25,6 +25,7 @@ import com.withorb.api.models.PlanListParams
 import com.withorb.api.models.PlanUpdateParams
 import com.withorb.api.services.blocking.plans.ExternalPlanIdService
 import com.withorb.api.services.blocking.plans.ExternalPlanIdServiceImpl
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class PlanServiceImpl internal constructor(private val clientOptions: ClientOptions) : PlanService {
@@ -38,6 +39,9 @@ class PlanServiceImpl internal constructor(private val clientOptions: ClientOpti
     }
 
     override fun withRawResponse(): PlanService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PlanService =
+        PlanServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun externalPlanId(): ExternalPlanIdService = externalPlanId
 
@@ -65,6 +69,13 @@ class PlanServiceImpl internal constructor(private val clientOptions: ClientOpti
         private val externalPlanId: ExternalPlanIdService.WithRawResponse by lazy {
             ExternalPlanIdServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): PlanService.WithRawResponse =
+            PlanServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun externalPlanId(): ExternalPlanIdService.WithRawResponse = externalPlanId
 

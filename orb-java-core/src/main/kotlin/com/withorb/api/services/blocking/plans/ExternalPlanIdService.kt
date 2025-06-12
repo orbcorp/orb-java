@@ -3,11 +3,13 @@
 package com.withorb.api.services.blocking.plans
 
 import com.google.errorprone.annotations.MustBeClosed
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Plan
 import com.withorb.api.models.PlanExternalPlanIdFetchParams
 import com.withorb.api.models.PlanExternalPlanIdUpdateParams
+import java.util.function.Consumer
 
 interface ExternalPlanIdService {
 
@@ -15,6 +17,13 @@ interface ExternalPlanIdService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): ExternalPlanIdService
 
     /**
      * This endpoint can be used to update the `external_plan_id`, and `metadata` of an existing
@@ -102,6 +111,15 @@ interface ExternalPlanIdService {
      * A view of [ExternalPlanIdService] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ExternalPlanIdService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `put /plans/external_plan_id/{external_plan_id}`, but is

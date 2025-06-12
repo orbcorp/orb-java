@@ -25,6 +25,7 @@ import com.withorb.api.models.ItemListPageResponse
 import com.withorb.api.models.ItemListParams
 import com.withorb.api.models.ItemUpdateParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class ItemServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -35,6 +36,9 @@ class ItemServiceAsyncImpl internal constructor(private val clientOptions: Clien
     }
 
     override fun withRawResponse(): ItemServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ItemServiceAsync =
+        ItemServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
         params: ItemCreateParams,
@@ -75,6 +79,13 @@ class ItemServiceAsyncImpl internal constructor(private val clientOptions: Clien
         ItemServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ItemServiceAsync.WithRawResponse =
+            ItemServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<Item> =
             jsonHandler<Item>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

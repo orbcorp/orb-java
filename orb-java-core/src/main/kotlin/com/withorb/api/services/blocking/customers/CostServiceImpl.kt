@@ -19,6 +19,7 @@ import com.withorb.api.models.CustomerCostListByExternalIdParams
 import com.withorb.api.models.CustomerCostListByExternalIdResponse
 import com.withorb.api.models.CustomerCostListParams
 import com.withorb.api.models.CustomerCostListResponse
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class CostServiceImpl internal constructor(private val clientOptions: ClientOptions) : CostService {
@@ -28,6 +29,9 @@ class CostServiceImpl internal constructor(private val clientOptions: ClientOpti
     }
 
     override fun withRawResponse(): CostService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): CostService =
+        CostServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun list(
         params: CustomerCostListParams,
@@ -47,6 +51,13 @@ class CostServiceImpl internal constructor(private val clientOptions: ClientOpti
         CostService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): CostService.WithRawResponse =
+            CostServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val listHandler: Handler<CustomerCostListResponse> =
             jsonHandler<CustomerCostListResponse>(clientOptions.jsonMapper)

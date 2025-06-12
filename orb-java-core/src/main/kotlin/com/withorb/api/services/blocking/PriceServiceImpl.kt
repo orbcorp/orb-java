@@ -31,6 +31,7 @@ import com.withorb.api.models.PriceListParams
 import com.withorb.api.models.PriceUpdateParams
 import com.withorb.api.services.blocking.prices.ExternalPriceIdService
 import com.withorb.api.services.blocking.prices.ExternalPriceIdServiceImpl
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class PriceServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -45,6 +46,9 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
     }
 
     override fun withRawResponse(): PriceService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PriceService =
+        PriceServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun externalPriceId(): ExternalPriceIdService = externalPriceId
 
@@ -93,6 +97,13 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
         private val externalPriceId: ExternalPriceIdService.WithRawResponse by lazy {
             ExternalPriceIdServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): PriceService.WithRawResponse =
+            PriceServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun externalPriceId(): ExternalPriceIdService.WithRawResponse = externalPriceId
 

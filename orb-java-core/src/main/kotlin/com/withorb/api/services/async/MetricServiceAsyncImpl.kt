@@ -24,6 +24,7 @@ import com.withorb.api.models.MetricListPageResponse
 import com.withorb.api.models.MetricListParams
 import com.withorb.api.models.MetricUpdateParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class MetricServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -34,6 +35,9 @@ class MetricServiceAsyncImpl internal constructor(private val clientOptions: Cli
     }
 
     override fun withRawResponse(): MetricServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): MetricServiceAsync =
+        MetricServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
         params: MetricCreateParams,
@@ -67,6 +71,13 @@ class MetricServiceAsyncImpl internal constructor(private val clientOptions: Cli
         MetricServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): MetricServiceAsync.WithRawResponse =
+            MetricServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<BillableMetric> =
             jsonHandler<BillableMetric>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

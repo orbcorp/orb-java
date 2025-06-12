@@ -3,12 +3,14 @@
 package com.withorb.api.services.blocking.customers
 
 import com.google.errorprone.annotations.MustBeClosed
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CustomerBalanceTransactionCreateParams
 import com.withorb.api.models.CustomerBalanceTransactionCreateResponse
 import com.withorb.api.models.CustomerBalanceTransactionListPage
 import com.withorb.api.models.CustomerBalanceTransactionListParams
+import java.util.function.Consumer
 
 interface BalanceTransactionService {
 
@@ -16,6 +18,13 @@ interface BalanceTransactionService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): BalanceTransactionService
 
     /**
      * Creates an immutable balance transaction that updates the customer's balance and returns back
@@ -105,6 +114,15 @@ interface BalanceTransactionService {
      * method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): BalanceTransactionService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /customers/{customer_id}/balance_transactions`, but

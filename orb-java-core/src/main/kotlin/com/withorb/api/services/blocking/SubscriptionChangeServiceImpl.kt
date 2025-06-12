@@ -22,6 +22,7 @@ import com.withorb.api.models.SubscriptionChangeCancelParams
 import com.withorb.api.models.SubscriptionChangeCancelResponse
 import com.withorb.api.models.SubscriptionChangeRetrieveParams
 import com.withorb.api.models.SubscriptionChangeRetrieveResponse
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class SubscriptionChangeServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -32,6 +33,9 @@ class SubscriptionChangeServiceImpl internal constructor(private val clientOptio
     }
 
     override fun withRawResponse(): SubscriptionChangeService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): SubscriptionChangeService =
+        SubscriptionChangeServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun retrieve(
         params: SubscriptionChangeRetrieveParams,
@@ -58,6 +62,13 @@ class SubscriptionChangeServiceImpl internal constructor(private val clientOptio
         SubscriptionChangeService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): SubscriptionChangeService.WithRawResponse =
+            SubscriptionChangeServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val retrieveHandler: Handler<SubscriptionChangeRetrieveResponse> =
             jsonHandler<SubscriptionChangeRetrieveResponse>(clientOptions.jsonMapper)

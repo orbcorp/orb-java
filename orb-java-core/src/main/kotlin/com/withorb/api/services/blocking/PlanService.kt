@@ -3,6 +3,7 @@
 package com.withorb.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Plan
@@ -12,6 +13,7 @@ import com.withorb.api.models.PlanListPage
 import com.withorb.api.models.PlanListParams
 import com.withorb.api.models.PlanUpdateParams
 import com.withorb.api.services.blocking.plans.ExternalPlanIdService
+import java.util.function.Consumer
 
 interface PlanService {
 
@@ -19,6 +21,13 @@ interface PlanService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): PlanService
 
     fun externalPlanId(): ExternalPlanIdService
 
@@ -128,6 +137,13 @@ interface PlanService {
 
     /** A view of [PlanService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): PlanService.WithRawResponse
 
         fun externalPlanId(): ExternalPlanIdService.WithRawResponse
 
