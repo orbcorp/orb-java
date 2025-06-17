@@ -57,6 +57,7 @@ internal class NewPlanThresholdTotalAmountPriceTest {
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
+                .referenceId("reference_id")
                 .build()
 
         assertThat(newPlanThresholdTotalAmountPrice.cadence())
@@ -118,6 +119,7 @@ internal class NewPlanThresholdTotalAmountPriceTest {
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
+        assertThat(newPlanThresholdTotalAmountPrice.referenceId()).contains("reference_id")
     }
 
     @Test
@@ -168,6 +170,7 @@ internal class NewPlanThresholdTotalAmountPriceTest {
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
+                .referenceId("reference_id")
                 .build()
 
         val roundtrippedNewPlanThresholdTotalAmountPrice =
