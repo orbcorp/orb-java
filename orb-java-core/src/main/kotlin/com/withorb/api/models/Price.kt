@@ -1024,6 +1024,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val unitConfig: JsonField<UnitConfig>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -1086,6 +1087,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("unit_config")
             @ExcludeMissing
             unitConfig: JsonField<UnitConfig> = JsonMissing.of(),
@@ -1117,6 +1121,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             unitConfig,
             dimensionalPriceConfiguration,
             mutableMapOf(),
@@ -1277,6 +1282,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -1496,6 +1510,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [unitConfig].
          *
          * Unlike [unitConfig], this method doesn't throw if the JSON field has an unexpected type.
@@ -1556,6 +1580,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .unitConfig()
              * ```
              */
@@ -1588,6 +1613,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var unitConfig: JsonField<UnitConfig>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
@@ -1618,6 +1644,7 @@ private constructor(
                 name = unit.name
                 planPhaseOrder = unit.planPhaseOrder
                 priceType = unit.priceType
+                replacesPriceId = unit.replacesPriceId
                 unitConfig = unit.unitConfig
                 dimensionalPriceConfiguration = unit.dimensionalPriceConfiguration
                 additionalProperties = unit.additionalProperties.toMutableMap()
@@ -2137,6 +2164,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun unitConfig(unitConfig: UnitConfig) = unitConfig(JsonField.of(unitConfig))
 
             /**
@@ -2221,6 +2270,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .unitConfig()
              * ```
              *
@@ -2251,6 +2301,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     checkRequired("unitConfig", unitConfig),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
@@ -2291,6 +2342,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             unitConfig().validate()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
@@ -2335,6 +2387,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (unitConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -2915,17 +2968,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Unit && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && unitConfig == other.unitConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Unit && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && unitConfig == other.unitConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, unitConfig, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, unitConfig, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Unit{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, unitConfig=$unitConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "Unit{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, unitConfig=$unitConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class Package
@@ -2954,6 +3007,7 @@ private constructor(
         private val packageConfig: JsonField<PackageConfig>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -3018,6 +3072,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("dimensional_price_configuration")
             @ExcludeMissing
             dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
@@ -3047,6 +3104,7 @@ private constructor(
             packageConfig,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             dimensionalPriceConfiguration,
             mutableMapOf(),
         )
@@ -3212,6 +3270,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -3435,6 +3502,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [dimensionalPriceConfiguration].
          *
          * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
@@ -3487,6 +3564,7 @@ private constructor(
              * .packageConfig()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -3519,6 +3597,7 @@ private constructor(
             private var packageConfig: JsonField<PackageConfig>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -3549,6 +3628,7 @@ private constructor(
                 packageConfig = package_.packageConfig
                 planPhaseOrder = package_.planPhaseOrder
                 priceType = package_.priceType
+                replacesPriceId = package_.replacesPriceId
                 dimensionalPriceConfiguration = package_.dimensionalPriceConfiguration
                 additionalProperties = package_.additionalProperties.toMutableMap()
             }
@@ -4081,6 +4161,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: DimensionalPriceConfiguration?
             ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
@@ -4153,6 +4255,7 @@ private constructor(
              * .packageConfig()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -4183,6 +4286,7 @@ private constructor(
                     checkRequired("packageConfig", packageConfig),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
                 )
@@ -4223,6 +4327,7 @@ private constructor(
             packageConfig().validate()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
         }
@@ -4267,6 +4372,7 @@ private constructor(
                 (packageConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
         class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -4846,17 +4952,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Package && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && packageConfig == other.packageConfig && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Package && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && packageConfig == other.packageConfig && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, packageConfig, planPhaseOrder, priceType, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, packageConfig, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Package{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, packageConfig=$packageConfig, planPhaseOrder=$planPhaseOrder, priceType=$priceType, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "Package{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, packageConfig=$packageConfig, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class Matrix
@@ -4885,6 +4991,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -4949,6 +5056,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("dimensional_price_configuration")
             @ExcludeMissing
             dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
@@ -4978,6 +5088,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             dimensionalPriceConfiguration,
             mutableMapOf(),
         )
@@ -5143,6 +5254,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -5366,6 +5486,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [dimensionalPriceConfiguration].
          *
          * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
@@ -5418,6 +5548,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -5450,6 +5581,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -5480,6 +5612,7 @@ private constructor(
                 name = matrix.name
                 planPhaseOrder = matrix.planPhaseOrder
                 priceType = matrix.priceType
+                replacesPriceId = matrix.replacesPriceId
                 dimensionalPriceConfiguration = matrix.dimensionalPriceConfiguration
                 additionalProperties = matrix.additionalProperties.toMutableMap()
             }
@@ -6011,6 +6144,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: DimensionalPriceConfiguration?
             ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
@@ -6083,6 +6238,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -6113,6 +6269,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
                 )
@@ -6153,6 +6310,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
         }
@@ -6197,6 +6355,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
         class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -6776,17 +6935,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Matrix && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && matrixConfig == other.matrixConfig && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Matrix && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && matrixConfig == other.matrixConfig && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, matrixConfig, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, matrixConfig, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Matrix{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, matrixConfig=$matrixConfig, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "Matrix{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, matrixConfig=$matrixConfig, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class Tiered
@@ -6814,6 +6973,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val tieredConfig: JsonField<TieredConfig>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -6876,6 +7036,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("tiered_config")
             @ExcludeMissing
             tieredConfig: JsonField<TieredConfig> = JsonMissing.of(),
@@ -6907,6 +7070,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             tieredConfig,
             dimensionalPriceConfiguration,
             mutableMapOf(),
@@ -7067,6 +7231,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -7286,6 +7459,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [tieredConfig].
          *
          * Unlike [tieredConfig], this method doesn't throw if the JSON field has an unexpected
@@ -7347,6 +7530,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .tieredConfig()
              * ```
              */
@@ -7379,6 +7563,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var tieredConfig: JsonField<TieredConfig>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
@@ -7409,6 +7594,7 @@ private constructor(
                 name = tiered.name
                 planPhaseOrder = tiered.planPhaseOrder
                 priceType = tiered.priceType
+                replacesPriceId = tiered.replacesPriceId
                 tieredConfig = tiered.tieredConfig
                 dimensionalPriceConfiguration = tiered.dimensionalPriceConfiguration
                 additionalProperties = tiered.additionalProperties.toMutableMap()
@@ -7928,6 +8114,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun tieredConfig(tieredConfig: TieredConfig) = tieredConfig(JsonField.of(tieredConfig))
 
             /**
@@ -8012,6 +8220,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .tieredConfig()
              * ```
              *
@@ -8042,6 +8251,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     checkRequired("tieredConfig", tieredConfig),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
@@ -8082,6 +8292,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             tieredConfig().validate()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
@@ -8126,6 +8337,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (tieredConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -8706,17 +8918,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Tiered && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && tieredConfig == other.tieredConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Tiered && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && tieredConfig == other.tieredConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, tieredConfig, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, tieredConfig, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Tiered{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, tieredConfig=$tieredConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "Tiered{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, tieredConfig=$tieredConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class TieredBps
@@ -8744,6 +8956,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val tieredBpsConfig: JsonField<TieredBpsConfig>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -8806,6 +9019,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("tiered_bps_config")
             @ExcludeMissing
             tieredBpsConfig: JsonField<TieredBpsConfig> = JsonMissing.of(),
@@ -8837,6 +9053,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             tieredBpsConfig,
             dimensionalPriceConfiguration,
             mutableMapOf(),
@@ -8997,6 +9214,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -9216,6 +9442,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [tieredBpsConfig].
          *
          * Unlike [tieredBpsConfig], this method doesn't throw if the JSON field has an unexpected
@@ -9277,6 +9513,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .tieredBpsConfig()
              * ```
              */
@@ -9309,6 +9546,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var tieredBpsConfig: JsonField<TieredBpsConfig>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
@@ -9339,6 +9577,7 @@ private constructor(
                 name = tieredBps.name
                 planPhaseOrder = tieredBps.planPhaseOrder
                 priceType = tieredBps.priceType
+                replacesPriceId = tieredBps.replacesPriceId
                 tieredBpsConfig = tieredBps.tieredBpsConfig
                 dimensionalPriceConfiguration = tieredBps.dimensionalPriceConfiguration
                 additionalProperties = tieredBps.additionalProperties.toMutableMap()
@@ -9858,6 +10097,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun tieredBpsConfig(tieredBpsConfig: TieredBpsConfig) =
                 tieredBpsConfig(JsonField.of(tieredBpsConfig))
 
@@ -9943,6 +10204,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .tieredBpsConfig()
              * ```
              *
@@ -9973,6 +10235,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     checkRequired("tieredBpsConfig", tieredBpsConfig),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
@@ -10013,6 +10276,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             tieredBpsConfig().validate()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
@@ -10057,6 +10321,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (tieredBpsConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -10637,17 +10902,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is TieredBps && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && tieredBpsConfig == other.tieredBpsConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is TieredBps && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && tieredBpsConfig == other.tieredBpsConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, tieredBpsConfig, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, tieredBpsConfig, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "TieredBps{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, tieredBpsConfig=$tieredBpsConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "TieredBps{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, tieredBpsConfig=$tieredBpsConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class Bps
@@ -10676,6 +10941,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -10740,6 +11006,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("dimensional_price_configuration")
             @ExcludeMissing
             dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
@@ -10769,6 +11038,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             dimensionalPriceConfiguration,
             mutableMapOf(),
         )
@@ -10934,6 +11204,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -11156,6 +11435,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [dimensionalPriceConfiguration].
          *
          * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
@@ -11208,6 +11497,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -11240,6 +11530,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -11270,6 +11561,7 @@ private constructor(
                 name = bps.name
                 planPhaseOrder = bps.planPhaseOrder
                 priceType = bps.priceType
+                replacesPriceId = bps.replacesPriceId
                 dimensionalPriceConfiguration = bps.dimensionalPriceConfiguration
                 additionalProperties = bps.additionalProperties.toMutableMap()
             }
@@ -11799,6 +12091,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: DimensionalPriceConfiguration?
             ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
@@ -11871,6 +12185,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -11901,6 +12216,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
                 )
@@ -11941,6 +12257,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
         }
@@ -11985,6 +12302,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
         class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -12564,17 +12882,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Bps && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && bpsConfig == other.bpsConfig && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Bps && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && bpsConfig == other.bpsConfig && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, bpsConfig, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, bpsConfig, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Bps{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, bpsConfig=$bpsConfig, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "Bps{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, bpsConfig=$bpsConfig, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class BulkBps
@@ -12603,6 +12921,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -12667,6 +12986,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("dimensional_price_configuration")
             @ExcludeMissing
             dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
@@ -12696,6 +13018,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             dimensionalPriceConfiguration,
             mutableMapOf(),
         )
@@ -12861,6 +13184,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -13084,6 +13416,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [dimensionalPriceConfiguration].
          *
          * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
@@ -13136,6 +13478,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -13168,6 +13511,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -13198,6 +13542,7 @@ private constructor(
                 name = bulkBps.name
                 planPhaseOrder = bulkBps.planPhaseOrder
                 priceType = bulkBps.priceType
+                replacesPriceId = bulkBps.replacesPriceId
                 dimensionalPriceConfiguration = bulkBps.dimensionalPriceConfiguration
                 additionalProperties = bulkBps.additionalProperties.toMutableMap()
             }
@@ -13730,6 +14075,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: DimensionalPriceConfiguration?
             ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
@@ -13802,6 +14169,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -13832,6 +14200,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
                 )
@@ -13872,6 +14241,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
         }
@@ -13916,6 +14286,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
         class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -14495,17 +14866,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is BulkBps && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && bulkBpsConfig == other.bulkBpsConfig && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is BulkBps && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && bulkBpsConfig == other.bulkBpsConfig && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, bulkBpsConfig, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, bulkBpsConfig, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "BulkBps{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, bulkBpsConfig=$bulkBpsConfig, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "BulkBps{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, bulkBpsConfig=$bulkBpsConfig, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class Bulk
@@ -14534,6 +14905,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -14598,6 +14970,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("dimensional_price_configuration")
             @ExcludeMissing
             dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
@@ -14627,6 +15002,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             dimensionalPriceConfiguration,
             mutableMapOf(),
         )
@@ -14792,6 +15168,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -15014,6 +15399,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [dimensionalPriceConfiguration].
          *
          * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
@@ -15066,6 +15461,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -15098,6 +15494,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -15128,6 +15525,7 @@ private constructor(
                 name = bulk.name
                 planPhaseOrder = bulk.planPhaseOrder
                 priceType = bulk.priceType
+                replacesPriceId = bulk.replacesPriceId
                 dimensionalPriceConfiguration = bulk.dimensionalPriceConfiguration
                 additionalProperties = bulk.additionalProperties.toMutableMap()
             }
@@ -15659,6 +16057,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: DimensionalPriceConfiguration?
             ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
@@ -15731,6 +16151,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -15761,6 +16182,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
                 )
@@ -15801,6 +16223,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
         }
@@ -15845,6 +16268,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
         class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -16424,17 +16848,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Bulk && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && bulkConfig == other.bulkConfig && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Bulk && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && bulkConfig == other.bulkConfig && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, bulkConfig, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, bulkConfig, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Bulk{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, bulkConfig=$bulkConfig, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "Bulk{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, bulkConfig=$bulkConfig, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class ThresholdTotalAmount
@@ -16462,6 +16886,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val thresholdTotalAmountConfig: JsonField<ThresholdTotalAmountConfig>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -16524,6 +16949,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("threshold_total_amount_config")
             @ExcludeMissing
             thresholdTotalAmountConfig: JsonField<ThresholdTotalAmountConfig> = JsonMissing.of(),
@@ -16555,6 +16983,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             thresholdTotalAmountConfig,
             dimensionalPriceConfiguration,
             mutableMapOf(),
@@ -16715,6 +17144,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -16935,6 +17373,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [thresholdTotalAmountConfig].
          *
          * Unlike [thresholdTotalAmountConfig], this method doesn't throw if the JSON field has an
@@ -16997,6 +17445,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .thresholdTotalAmountConfig()
              * ```
              */
@@ -17029,6 +17478,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var thresholdTotalAmountConfig: JsonField<ThresholdTotalAmountConfig>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
@@ -17059,6 +17509,7 @@ private constructor(
                 name = thresholdTotalAmount.name
                 planPhaseOrder = thresholdTotalAmount.planPhaseOrder
                 priceType = thresholdTotalAmount.priceType
+                replacesPriceId = thresholdTotalAmount.replacesPriceId
                 thresholdTotalAmountConfig = thresholdTotalAmount.thresholdTotalAmountConfig
                 dimensionalPriceConfiguration = thresholdTotalAmount.dimensionalPriceConfiguration
                 additionalProperties = thresholdTotalAmount.additionalProperties.toMutableMap()
@@ -17578,6 +18029,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun thresholdTotalAmountConfig(thresholdTotalAmountConfig: ThresholdTotalAmountConfig) =
                 thresholdTotalAmountConfig(JsonField.of(thresholdTotalAmountConfig))
 
@@ -17663,6 +18136,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .thresholdTotalAmountConfig()
              * ```
              *
@@ -17693,6 +18167,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     checkRequired("thresholdTotalAmountConfig", thresholdTotalAmountConfig),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
@@ -17733,6 +18208,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             thresholdTotalAmountConfig().validate()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
@@ -17777,6 +18253,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (thresholdTotalAmountConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -18467,17 +18944,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ThresholdTotalAmount && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && thresholdTotalAmountConfig == other.thresholdTotalAmountConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ThresholdTotalAmount && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && thresholdTotalAmountConfig == other.thresholdTotalAmountConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, thresholdTotalAmountConfig, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, thresholdTotalAmountConfig, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ThresholdTotalAmount{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, thresholdTotalAmountConfig=$thresholdTotalAmountConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "ThresholdTotalAmount{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, thresholdTotalAmountConfig=$thresholdTotalAmountConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class TieredPackage
@@ -18505,6 +18982,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val tieredPackageConfig: JsonField<TieredPackageConfig>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -18567,6 +19045,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("tiered_package_config")
             @ExcludeMissing
             tieredPackageConfig: JsonField<TieredPackageConfig> = JsonMissing.of(),
@@ -18598,6 +19079,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             tieredPackageConfig,
             dimensionalPriceConfiguration,
             mutableMapOf(),
@@ -18758,6 +19240,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -18978,6 +19469,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [tieredPackageConfig].
          *
          * Unlike [tieredPackageConfig], this method doesn't throw if the JSON field has an
@@ -19039,6 +19540,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .tieredPackageConfig()
              * ```
              */
@@ -19071,6 +19573,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var tieredPackageConfig: JsonField<TieredPackageConfig>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
@@ -19101,6 +19604,7 @@ private constructor(
                 name = tieredPackage.name
                 planPhaseOrder = tieredPackage.planPhaseOrder
                 priceType = tieredPackage.priceType
+                replacesPriceId = tieredPackage.replacesPriceId
                 tieredPackageConfig = tieredPackage.tieredPackageConfig
                 dimensionalPriceConfiguration = tieredPackage.dimensionalPriceConfiguration
                 additionalProperties = tieredPackage.additionalProperties.toMutableMap()
@@ -19620,6 +20124,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun tieredPackageConfig(tieredPackageConfig: TieredPackageConfig) =
                 tieredPackageConfig(JsonField.of(tieredPackageConfig))
 
@@ -19705,6 +20231,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .tieredPackageConfig()
              * ```
              *
@@ -19735,6 +20262,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     checkRequired("tieredPackageConfig", tieredPackageConfig),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
@@ -19775,6 +20303,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             tieredPackageConfig().validate()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
@@ -19819,6 +20348,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (tieredPackageConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -20507,17 +21037,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is TieredPackage && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && tieredPackageConfig == other.tieredPackageConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is TieredPackage && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && tieredPackageConfig == other.tieredPackageConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, tieredPackageConfig, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, tieredPackageConfig, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "TieredPackage{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, tieredPackageConfig=$tieredPackageConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "TieredPackage{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, tieredPackageConfig=$tieredPackageConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class GroupedTiered
@@ -20546,6 +21076,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -20610,6 +21141,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("dimensional_price_configuration")
             @ExcludeMissing
             dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
@@ -20639,6 +21173,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             dimensionalPriceConfiguration,
             mutableMapOf(),
         )
@@ -20805,6 +21340,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -21028,6 +21572,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [dimensionalPriceConfiguration].
          *
          * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
@@ -21080,6 +21634,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -21112,6 +21667,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -21142,6 +21698,7 @@ private constructor(
                 name = groupedTiered.name
                 planPhaseOrder = groupedTiered.planPhaseOrder
                 priceType = groupedTiered.priceType
+                replacesPriceId = groupedTiered.replacesPriceId
                 dimensionalPriceConfiguration = groupedTiered.dimensionalPriceConfiguration
                 additionalProperties = groupedTiered.additionalProperties.toMutableMap()
             }
@@ -21674,6 +22231,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: DimensionalPriceConfiguration?
             ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
@@ -21746,6 +22325,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -21776,6 +22356,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
                 )
@@ -21816,6 +22397,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
         }
@@ -21860,6 +22442,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
         class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -22547,17 +23130,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is GroupedTiered && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && groupedTieredConfig == other.groupedTieredConfig && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is GroupedTiered && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && groupedTieredConfig == other.groupedTieredConfig && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, groupedTieredConfig, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, groupedTieredConfig, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "GroupedTiered{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedTieredConfig=$groupedTieredConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "GroupedTiered{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedTieredConfig=$groupedTieredConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class TieredWithMinimum
@@ -22585,6 +23168,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val tieredWithMinimumConfig: JsonField<TieredWithMinimumConfig>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -22647,6 +23231,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("tiered_with_minimum_config")
             @ExcludeMissing
             tieredWithMinimumConfig: JsonField<TieredWithMinimumConfig> = JsonMissing.of(),
@@ -22678,6 +23265,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             tieredWithMinimumConfig,
             dimensionalPriceConfiguration,
             mutableMapOf(),
@@ -22838,6 +23426,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -23058,6 +23655,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [tieredWithMinimumConfig].
          *
          * Unlike [tieredWithMinimumConfig], this method doesn't throw if the JSON field has an
@@ -23119,6 +23726,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .tieredWithMinimumConfig()
              * ```
              */
@@ -23151,6 +23759,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var tieredWithMinimumConfig: JsonField<TieredWithMinimumConfig>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
@@ -23181,6 +23790,7 @@ private constructor(
                 name = tieredWithMinimum.name
                 planPhaseOrder = tieredWithMinimum.planPhaseOrder
                 priceType = tieredWithMinimum.priceType
+                replacesPriceId = tieredWithMinimum.replacesPriceId
                 tieredWithMinimumConfig = tieredWithMinimum.tieredWithMinimumConfig
                 dimensionalPriceConfiguration = tieredWithMinimum.dimensionalPriceConfiguration
                 additionalProperties = tieredWithMinimum.additionalProperties.toMutableMap()
@@ -23700,6 +24310,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun tieredWithMinimumConfig(tieredWithMinimumConfig: TieredWithMinimumConfig) =
                 tieredWithMinimumConfig(JsonField.of(tieredWithMinimumConfig))
 
@@ -23785,6 +24417,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .tieredWithMinimumConfig()
              * ```
              *
@@ -23815,6 +24448,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     checkRequired("tieredWithMinimumConfig", tieredWithMinimumConfig),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
@@ -23855,6 +24489,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             tieredWithMinimumConfig().validate()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
@@ -23899,6 +24534,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (tieredWithMinimumConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -24589,17 +25225,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is TieredWithMinimum && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && tieredWithMinimumConfig == other.tieredWithMinimumConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is TieredWithMinimum && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && tieredWithMinimumConfig == other.tieredWithMinimumConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, tieredWithMinimumConfig, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, tieredWithMinimumConfig, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "TieredWithMinimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, tieredWithMinimumConfig=$tieredWithMinimumConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "TieredWithMinimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, tieredWithMinimumConfig=$tieredWithMinimumConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class TieredPackageWithMinimum
@@ -24627,6 +25263,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val tieredPackageWithMinimumConfig: JsonField<TieredPackageWithMinimumConfig>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -24689,6 +25326,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("tiered_package_with_minimum_config")
             @ExcludeMissing
             tieredPackageWithMinimumConfig: JsonField<TieredPackageWithMinimumConfig> =
@@ -24721,6 +25361,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             tieredPackageWithMinimumConfig,
             dimensionalPriceConfiguration,
             mutableMapOf(),
@@ -24881,6 +25522,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -25101,6 +25751,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [tieredPackageWithMinimumConfig].
          *
          * Unlike [tieredPackageWithMinimumConfig], this method doesn't throw if the JSON field has
@@ -25163,6 +25823,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .tieredPackageWithMinimumConfig()
              * ```
              */
@@ -25195,6 +25856,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var tieredPackageWithMinimumConfig: JsonField<TieredPackageWithMinimumConfig>? =
                 null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
@@ -25226,6 +25888,7 @@ private constructor(
                 name = tieredPackageWithMinimum.name
                 planPhaseOrder = tieredPackageWithMinimum.planPhaseOrder
                 priceType = tieredPackageWithMinimum.priceType
+                replacesPriceId = tieredPackageWithMinimum.replacesPriceId
                 tieredPackageWithMinimumConfig =
                     tieredPackageWithMinimum.tieredPackageWithMinimumConfig
                 dimensionalPriceConfiguration =
@@ -25747,6 +26410,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun tieredPackageWithMinimumConfig(
                 tieredPackageWithMinimumConfig: TieredPackageWithMinimumConfig
             ) = tieredPackageWithMinimumConfig(JsonField.of(tieredPackageWithMinimumConfig))
@@ -25833,6 +26518,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .tieredPackageWithMinimumConfig()
              * ```
              *
@@ -25863,6 +26549,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     checkRequired("tieredPackageWithMinimumConfig", tieredPackageWithMinimumConfig),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
@@ -25903,6 +26590,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             tieredPackageWithMinimumConfig().validate()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
@@ -25949,6 +26637,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (tieredPackageWithMinimumConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -26640,17 +27329,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is TieredPackageWithMinimum && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && tieredPackageWithMinimumConfig == other.tieredPackageWithMinimumConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is TieredPackageWithMinimum && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && tieredPackageWithMinimumConfig == other.tieredPackageWithMinimumConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, tieredPackageWithMinimumConfig, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, tieredPackageWithMinimumConfig, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "TieredPackageWithMinimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, tieredPackageWithMinimumConfig=$tieredPackageWithMinimumConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "TieredPackageWithMinimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, tieredPackageWithMinimumConfig=$tieredPackageWithMinimumConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class PackageWithAllocation
@@ -26679,6 +27368,7 @@ private constructor(
         private val packageWithAllocationConfig: JsonField<PackageWithAllocationConfig>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -26743,6 +27433,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("dimensional_price_configuration")
             @ExcludeMissing
             dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
@@ -26772,6 +27465,7 @@ private constructor(
             packageWithAllocationConfig,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             dimensionalPriceConfiguration,
             mutableMapOf(),
         )
@@ -26938,6 +27632,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -27162,6 +27865,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [dimensionalPriceConfiguration].
          *
          * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
@@ -27214,6 +27927,7 @@ private constructor(
              * .packageWithAllocationConfig()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -27246,6 +27960,7 @@ private constructor(
             private var packageWithAllocationConfig: JsonField<PackageWithAllocationConfig>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -27276,6 +27991,7 @@ private constructor(
                 packageWithAllocationConfig = packageWithAllocation.packageWithAllocationConfig
                 planPhaseOrder = packageWithAllocation.planPhaseOrder
                 priceType = packageWithAllocation.priceType
+                replacesPriceId = packageWithAllocation.replacesPriceId
                 dimensionalPriceConfiguration = packageWithAllocation.dimensionalPriceConfiguration
                 additionalProperties = packageWithAllocation.additionalProperties.toMutableMap()
             }
@@ -27809,6 +28525,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: DimensionalPriceConfiguration?
             ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
@@ -27881,6 +28619,7 @@ private constructor(
              * .packageWithAllocationConfig()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -27911,6 +28650,7 @@ private constructor(
                     checkRequired("packageWithAllocationConfig", packageWithAllocationConfig),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
                 )
@@ -27951,6 +28691,7 @@ private constructor(
             packageWithAllocationConfig().validate()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
         }
@@ -27995,6 +28736,7 @@ private constructor(
                 (packageWithAllocationConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
         class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -28685,17 +29427,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is PackageWithAllocation && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && packageWithAllocationConfig == other.packageWithAllocationConfig && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is PackageWithAllocation && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && packageWithAllocationConfig == other.packageWithAllocationConfig && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, packageWithAllocationConfig, planPhaseOrder, priceType, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, packageWithAllocationConfig, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "PackageWithAllocation{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, packageWithAllocationConfig=$packageWithAllocationConfig, planPhaseOrder=$planPhaseOrder, priceType=$priceType, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "PackageWithAllocation{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, packageWithAllocationConfig=$packageWithAllocationConfig, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class UnitWithPercent
@@ -28723,6 +29465,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val unitWithPercentConfig: JsonField<UnitWithPercentConfig>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -28785,6 +29528,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("unit_with_percent_config")
             @ExcludeMissing
             unitWithPercentConfig: JsonField<UnitWithPercentConfig> = JsonMissing.of(),
@@ -28816,6 +29562,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             unitWithPercentConfig,
             dimensionalPriceConfiguration,
             mutableMapOf(),
@@ -28976,6 +29723,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -29196,6 +29952,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [unitWithPercentConfig].
          *
          * Unlike [unitWithPercentConfig], this method doesn't throw if the JSON field has an
@@ -29257,6 +30023,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .unitWithPercentConfig()
              * ```
              */
@@ -29289,6 +30056,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var unitWithPercentConfig: JsonField<UnitWithPercentConfig>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
@@ -29319,6 +30087,7 @@ private constructor(
                 name = unitWithPercent.name
                 planPhaseOrder = unitWithPercent.planPhaseOrder
                 priceType = unitWithPercent.priceType
+                replacesPriceId = unitWithPercent.replacesPriceId
                 unitWithPercentConfig = unitWithPercent.unitWithPercentConfig
                 dimensionalPriceConfiguration = unitWithPercent.dimensionalPriceConfiguration
                 additionalProperties = unitWithPercent.additionalProperties.toMutableMap()
@@ -29838,6 +30607,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun unitWithPercentConfig(unitWithPercentConfig: UnitWithPercentConfig) =
                 unitWithPercentConfig(JsonField.of(unitWithPercentConfig))
 
@@ -29924,6 +30715,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .unitWithPercentConfig()
              * ```
              *
@@ -29954,6 +30746,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     checkRequired("unitWithPercentConfig", unitWithPercentConfig),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
@@ -29994,6 +30787,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             unitWithPercentConfig().validate()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
@@ -30038,6 +30832,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (unitWithPercentConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -30727,17 +31522,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is UnitWithPercent && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && unitWithPercentConfig == other.unitWithPercentConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is UnitWithPercent && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && unitWithPercentConfig == other.unitWithPercentConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, unitWithPercentConfig, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, unitWithPercentConfig, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "UnitWithPercent{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, unitWithPercentConfig=$unitWithPercentConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "UnitWithPercent{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, unitWithPercentConfig=$unitWithPercentConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class MatrixWithAllocation
@@ -30766,6 +31561,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -30830,6 +31626,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("dimensional_price_configuration")
             @ExcludeMissing
             dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
@@ -30859,6 +31658,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             dimensionalPriceConfiguration,
             mutableMapOf(),
         )
@@ -31025,6 +31825,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -31249,6 +32058,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [dimensionalPriceConfiguration].
          *
          * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
@@ -31301,6 +32120,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -31333,6 +32153,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -31363,6 +32184,7 @@ private constructor(
                 name = matrixWithAllocation.name
                 planPhaseOrder = matrixWithAllocation.planPhaseOrder
                 priceType = matrixWithAllocation.priceType
+                replacesPriceId = matrixWithAllocation.replacesPriceId
                 dimensionalPriceConfiguration = matrixWithAllocation.dimensionalPriceConfiguration
                 additionalProperties = matrixWithAllocation.additionalProperties.toMutableMap()
             }
@@ -31895,6 +32717,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: DimensionalPriceConfiguration?
             ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
@@ -31967,6 +32811,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -31997,6 +32842,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
                 )
@@ -32037,6 +32883,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
         }
@@ -32081,6 +32928,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
         class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -32660,17 +33508,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is MatrixWithAllocation && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && matrixWithAllocationConfig == other.matrixWithAllocationConfig && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is MatrixWithAllocation && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && matrixWithAllocationConfig == other.matrixWithAllocationConfig && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, matrixWithAllocationConfig, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, matrixWithAllocationConfig, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "MatrixWithAllocation{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, matrixWithAllocationConfig=$matrixWithAllocationConfig, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "MatrixWithAllocation{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, matrixWithAllocationConfig=$matrixWithAllocationConfig, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class TieredWithProration
@@ -32698,6 +33546,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val tieredWithProrationConfig: JsonField<TieredWithProrationConfig>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -32760,6 +33609,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("tiered_with_proration_config")
             @ExcludeMissing
             tieredWithProrationConfig: JsonField<TieredWithProrationConfig> = JsonMissing.of(),
@@ -32791,6 +33643,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             tieredWithProrationConfig,
             dimensionalPriceConfiguration,
             mutableMapOf(),
@@ -32951,6 +33804,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -33171,6 +34033,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [tieredWithProrationConfig].
          *
          * Unlike [tieredWithProrationConfig], this method doesn't throw if the JSON field has an
@@ -33233,6 +34105,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .tieredWithProrationConfig()
              * ```
              */
@@ -33265,6 +34138,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var tieredWithProrationConfig: JsonField<TieredWithProrationConfig>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
@@ -33295,6 +34169,7 @@ private constructor(
                 name = tieredWithProration.name
                 planPhaseOrder = tieredWithProration.planPhaseOrder
                 priceType = tieredWithProration.priceType
+                replacesPriceId = tieredWithProration.replacesPriceId
                 tieredWithProrationConfig = tieredWithProration.tieredWithProrationConfig
                 dimensionalPriceConfiguration = tieredWithProration.dimensionalPriceConfiguration
                 additionalProperties = tieredWithProration.additionalProperties.toMutableMap()
@@ -33814,6 +34689,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun tieredWithProrationConfig(tieredWithProrationConfig: TieredWithProrationConfig) =
                 tieredWithProrationConfig(JsonField.of(tieredWithProrationConfig))
 
@@ -33899,6 +34796,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .tieredWithProrationConfig()
              * ```
              *
@@ -33929,6 +34827,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     checkRequired("tieredWithProrationConfig", tieredWithProrationConfig),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
@@ -33969,6 +34868,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             tieredWithProrationConfig().validate()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
@@ -34013,6 +34913,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (tieredWithProrationConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -34703,17 +35604,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is TieredWithProration && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && tieredWithProrationConfig == other.tieredWithProrationConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is TieredWithProration && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && tieredWithProrationConfig == other.tieredWithProrationConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, tieredWithProrationConfig, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, tieredWithProrationConfig, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "TieredWithProration{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, tieredWithProrationConfig=$tieredWithProrationConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "TieredWithProration{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, tieredWithProrationConfig=$tieredWithProrationConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class UnitWithProration
@@ -34741,6 +35642,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val unitWithProrationConfig: JsonField<UnitWithProrationConfig>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -34803,6 +35705,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("unit_with_proration_config")
             @ExcludeMissing
             unitWithProrationConfig: JsonField<UnitWithProrationConfig> = JsonMissing.of(),
@@ -34834,6 +35739,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             unitWithProrationConfig,
             dimensionalPriceConfiguration,
             mutableMapOf(),
@@ -34994,6 +35900,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -35214,6 +36129,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [unitWithProrationConfig].
          *
          * Unlike [unitWithProrationConfig], this method doesn't throw if the JSON field has an
@@ -35275,6 +36200,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .unitWithProrationConfig()
              * ```
              */
@@ -35307,6 +36233,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var unitWithProrationConfig: JsonField<UnitWithProrationConfig>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
@@ -35337,6 +36264,7 @@ private constructor(
                 name = unitWithProration.name
                 planPhaseOrder = unitWithProration.planPhaseOrder
                 priceType = unitWithProration.priceType
+                replacesPriceId = unitWithProration.replacesPriceId
                 unitWithProrationConfig = unitWithProration.unitWithProrationConfig
                 dimensionalPriceConfiguration = unitWithProration.dimensionalPriceConfiguration
                 additionalProperties = unitWithProration.additionalProperties.toMutableMap()
@@ -35856,6 +36784,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun unitWithProrationConfig(unitWithProrationConfig: UnitWithProrationConfig) =
                 unitWithProrationConfig(JsonField.of(unitWithProrationConfig))
 
@@ -35941,6 +36891,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .unitWithProrationConfig()
              * ```
              *
@@ -35971,6 +36922,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     checkRequired("unitWithProrationConfig", unitWithProrationConfig),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
@@ -36011,6 +36963,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             unitWithProrationConfig().validate()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
@@ -36055,6 +37008,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (unitWithProrationConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -36745,17 +37699,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is UnitWithProration && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && unitWithProrationConfig == other.unitWithProrationConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is UnitWithProration && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && unitWithProrationConfig == other.unitWithProrationConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, unitWithProrationConfig, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, unitWithProrationConfig, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "UnitWithProration{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, unitWithProrationConfig=$unitWithProrationConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "UnitWithProration{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, unitWithProrationConfig=$unitWithProrationConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class GroupedAllocation
@@ -36784,6 +37738,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -36848,6 +37803,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("dimensional_price_configuration")
             @ExcludeMissing
             dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
@@ -36877,6 +37835,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             dimensionalPriceConfiguration,
             mutableMapOf(),
         )
@@ -37043,6 +38002,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -37266,6 +38234,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [dimensionalPriceConfiguration].
          *
          * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
@@ -37318,6 +38296,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -37350,6 +38329,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -37380,6 +38360,7 @@ private constructor(
                 name = groupedAllocation.name
                 planPhaseOrder = groupedAllocation.planPhaseOrder
                 priceType = groupedAllocation.priceType
+                replacesPriceId = groupedAllocation.replacesPriceId
                 dimensionalPriceConfiguration = groupedAllocation.dimensionalPriceConfiguration
                 additionalProperties = groupedAllocation.additionalProperties.toMutableMap()
             }
@@ -37912,6 +38893,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: DimensionalPriceConfiguration?
             ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
@@ -37984,6 +38987,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -38014,6 +39018,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
                 )
@@ -38054,6 +39059,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
         }
@@ -38098,6 +39104,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
         class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -38787,17 +39794,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is GroupedAllocation && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && groupedAllocationConfig == other.groupedAllocationConfig && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is GroupedAllocation && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && groupedAllocationConfig == other.groupedAllocationConfig && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, groupedAllocationConfig, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, groupedAllocationConfig, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "GroupedAllocation{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedAllocationConfig=$groupedAllocationConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "GroupedAllocation{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedAllocationConfig=$groupedAllocationConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class GroupedWithProratedMinimum
@@ -38826,6 +39833,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -38891,6 +39899,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("dimensional_price_configuration")
             @ExcludeMissing
             dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
@@ -38920,6 +39931,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             dimensionalPriceConfiguration,
             mutableMapOf(),
         )
@@ -39086,6 +40098,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -39310,6 +40331,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [dimensionalPriceConfiguration].
          *
          * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
@@ -39363,6 +40394,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -39397,6 +40429,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -39428,6 +40461,7 @@ private constructor(
                 name = groupedWithProratedMinimum.name
                 planPhaseOrder = groupedWithProratedMinimum.planPhaseOrder
                 priceType = groupedWithProratedMinimum.priceType
+                replacesPriceId = groupedWithProratedMinimum.replacesPriceId
                 dimensionalPriceConfiguration =
                     groupedWithProratedMinimum.dimensionalPriceConfiguration
                 additionalProperties =
@@ -39963,6 +40997,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: DimensionalPriceConfiguration?
             ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
@@ -40035,6 +41091,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -40068,6 +41125,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
                 )
@@ -40108,6 +41166,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
         }
@@ -40154,6 +41213,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
         class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -40845,17 +41905,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is GroupedWithProratedMinimum && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && groupedWithProratedMinimumConfig == other.groupedWithProratedMinimumConfig && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is GroupedWithProratedMinimum && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && groupedWithProratedMinimumConfig == other.groupedWithProratedMinimumConfig && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, groupedWithProratedMinimumConfig, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, groupedWithProratedMinimumConfig, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "GroupedWithProratedMinimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedWithProratedMinimumConfig=$groupedWithProratedMinimumConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "GroupedWithProratedMinimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedWithProratedMinimumConfig=$groupedWithProratedMinimumConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class GroupedWithMeteredMinimum
@@ -40884,6 +41944,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -40949,6 +42010,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("dimensional_price_configuration")
             @ExcludeMissing
             dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
@@ -40978,6 +42042,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             dimensionalPriceConfiguration,
             mutableMapOf(),
         )
@@ -41144,6 +42209,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -41368,6 +42442,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [dimensionalPriceConfiguration].
          *
          * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
@@ -41421,6 +42505,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -41455,6 +42540,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -41486,6 +42572,7 @@ private constructor(
                 name = groupedWithMeteredMinimum.name
                 planPhaseOrder = groupedWithMeteredMinimum.planPhaseOrder
                 priceType = groupedWithMeteredMinimum.priceType
+                replacesPriceId = groupedWithMeteredMinimum.replacesPriceId
                 dimensionalPriceConfiguration =
                     groupedWithMeteredMinimum.dimensionalPriceConfiguration
                 additionalProperties = groupedWithMeteredMinimum.additionalProperties.toMutableMap()
@@ -42020,6 +43107,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: DimensionalPriceConfiguration?
             ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
@@ -42092,6 +43201,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -42125,6 +43235,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
                 )
@@ -42165,6 +43276,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
         }
@@ -42211,6 +43323,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
         class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -42902,17 +44015,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is GroupedWithMeteredMinimum && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && groupedWithMeteredMinimumConfig == other.groupedWithMeteredMinimumConfig && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is GroupedWithMeteredMinimum && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && groupedWithMeteredMinimumConfig == other.groupedWithMeteredMinimumConfig && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, groupedWithMeteredMinimumConfig, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, groupedWithMeteredMinimumConfig, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "GroupedWithMeteredMinimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedWithMeteredMinimumConfig=$groupedWithMeteredMinimumConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "GroupedWithMeteredMinimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedWithMeteredMinimumConfig=$groupedWithMeteredMinimumConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class MatrixWithDisplayName
@@ -42941,6 +44054,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -43005,6 +44119,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("dimensional_price_configuration")
             @ExcludeMissing
             dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
@@ -43034,6 +44151,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             dimensionalPriceConfiguration,
             mutableMapOf(),
         )
@@ -43200,6 +44318,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -43424,6 +44551,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [dimensionalPriceConfiguration].
          *
          * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
@@ -43476,6 +44613,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -43508,6 +44646,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -43538,6 +44677,7 @@ private constructor(
                 name = matrixWithDisplayName.name
                 planPhaseOrder = matrixWithDisplayName.planPhaseOrder
                 priceType = matrixWithDisplayName.priceType
+                replacesPriceId = matrixWithDisplayName.replacesPriceId
                 dimensionalPriceConfiguration = matrixWithDisplayName.dimensionalPriceConfiguration
                 additionalProperties = matrixWithDisplayName.additionalProperties.toMutableMap()
             }
@@ -44071,6 +45211,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: DimensionalPriceConfiguration?
             ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
@@ -44143,6 +45305,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -44173,6 +45336,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
                 )
@@ -44213,6 +45377,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
         }
@@ -44257,6 +45422,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
         class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -44947,17 +46113,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is MatrixWithDisplayName && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && matrixWithDisplayNameConfig == other.matrixWithDisplayNameConfig && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is MatrixWithDisplayName && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && matrixWithDisplayNameConfig == other.matrixWithDisplayNameConfig && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, matrixWithDisplayNameConfig, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, matrixWithDisplayNameConfig, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "MatrixWithDisplayName{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, matrixWithDisplayNameConfig=$matrixWithDisplayNameConfig, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "MatrixWithDisplayName{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, matrixWithDisplayNameConfig=$matrixWithDisplayNameConfig, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class BulkWithProration
@@ -44986,6 +46152,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -45050,6 +46217,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("dimensional_price_configuration")
             @ExcludeMissing
             dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
@@ -45079,6 +46249,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             dimensionalPriceConfiguration,
             mutableMapOf(),
         )
@@ -45245,6 +46416,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -45468,6 +46648,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [dimensionalPriceConfiguration].
          *
          * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
@@ -45520,6 +46710,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -45552,6 +46743,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -45582,6 +46774,7 @@ private constructor(
                 name = bulkWithProration.name
                 planPhaseOrder = bulkWithProration.planPhaseOrder
                 priceType = bulkWithProration.priceType
+                replacesPriceId = bulkWithProration.replacesPriceId
                 dimensionalPriceConfiguration = bulkWithProration.dimensionalPriceConfiguration
                 additionalProperties = bulkWithProration.additionalProperties.toMutableMap()
             }
@@ -46114,6 +47307,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: DimensionalPriceConfiguration?
             ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
@@ -46186,6 +47401,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -46216,6 +47432,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
                 )
@@ -46256,6 +47473,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
         }
@@ -46300,6 +47518,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
         class BulkWithProrationConfig
@@ -46989,17 +48208,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is BulkWithProration && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && bulkWithProrationConfig == other.bulkWithProrationConfig && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is BulkWithProration && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && bulkWithProrationConfig == other.bulkWithProrationConfig && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, bulkWithProrationConfig, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, bulkWithProrationConfig, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "BulkWithProration{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, bulkWithProrationConfig=$bulkWithProrationConfig, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "BulkWithProration{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, bulkWithProrationConfig=$bulkWithProrationConfig, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class GroupedTieredPackage
@@ -47028,6 +48247,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -47092,6 +48312,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("dimensional_price_configuration")
             @ExcludeMissing
             dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
@@ -47121,6 +48344,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             dimensionalPriceConfiguration,
             mutableMapOf(),
         )
@@ -47287,6 +48511,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -47511,6 +48744,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [dimensionalPriceConfiguration].
          *
          * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
@@ -47563,6 +48806,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -47595,6 +48839,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -47625,6 +48870,7 @@ private constructor(
                 name = groupedTieredPackage.name
                 planPhaseOrder = groupedTieredPackage.planPhaseOrder
                 priceType = groupedTieredPackage.priceType
+                replacesPriceId = groupedTieredPackage.replacesPriceId
                 dimensionalPriceConfiguration = groupedTieredPackage.dimensionalPriceConfiguration
                 additionalProperties = groupedTieredPackage.additionalProperties.toMutableMap()
             }
@@ -48157,6 +49403,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: DimensionalPriceConfiguration?
             ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
@@ -48229,6 +49497,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -48259,6 +49528,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
                 )
@@ -48299,6 +49569,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
         }
@@ -48343,6 +49614,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
         class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -49032,17 +50304,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is GroupedTieredPackage && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && groupedTieredPackageConfig == other.groupedTieredPackageConfig && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is GroupedTieredPackage && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && groupedTieredPackageConfig == other.groupedTieredPackageConfig && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, groupedTieredPackageConfig, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, groupedTieredPackageConfig, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "GroupedTieredPackage{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedTieredPackageConfig=$groupedTieredPackageConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "GroupedTieredPackage{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedTieredPackageConfig=$groupedTieredPackageConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class MaxGroupTieredPackage
@@ -49071,6 +50343,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -49135,6 +50408,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("dimensional_price_configuration")
             @ExcludeMissing
             dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
@@ -49164,6 +50440,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             dimensionalPriceConfiguration,
             mutableMapOf(),
         )
@@ -49330,6 +50607,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -49554,6 +50840,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [dimensionalPriceConfiguration].
          *
          * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
@@ -49606,6 +50902,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -49638,6 +50935,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -49668,6 +50966,7 @@ private constructor(
                 name = maxGroupTieredPackage.name
                 planPhaseOrder = maxGroupTieredPackage.planPhaseOrder
                 priceType = maxGroupTieredPackage.priceType
+                replacesPriceId = maxGroupTieredPackage.replacesPriceId
                 dimensionalPriceConfiguration = maxGroupTieredPackage.dimensionalPriceConfiguration
                 additionalProperties = maxGroupTieredPackage.additionalProperties.toMutableMap()
             }
@@ -50201,6 +51500,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: DimensionalPriceConfiguration?
             ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
@@ -50273,6 +51594,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -50303,6 +51625,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
                 )
@@ -50343,6 +51666,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
         }
@@ -50387,6 +51711,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
         class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -51077,17 +52402,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is MaxGroupTieredPackage && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maxGroupTieredPackageConfig == other.maxGroupTieredPackageConfig && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is MaxGroupTieredPackage && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maxGroupTieredPackageConfig == other.maxGroupTieredPackageConfig && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maxGroupTieredPackageConfig, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maxGroupTieredPackageConfig, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "MaxGroupTieredPackage{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maxGroupTieredPackageConfig=$maxGroupTieredPackageConfig, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "MaxGroupTieredPackage{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maxGroupTieredPackageConfig=$maxGroupTieredPackageConfig, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class ScalableMatrixWithUnitPricing
@@ -51115,6 +52440,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val scalableMatrixWithUnitPricingConfig:
             JsonField<ScalableMatrixWithUnitPricingConfig>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
@@ -51178,6 +52504,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("scalable_matrix_with_unit_pricing_config")
             @ExcludeMissing
             scalableMatrixWithUnitPricingConfig: JsonField<ScalableMatrixWithUnitPricingConfig> =
@@ -51210,6 +52539,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             scalableMatrixWithUnitPricingConfig,
             dimensionalPriceConfiguration,
             mutableMapOf(),
@@ -51370,6 +52700,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -51592,6 +52931,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [scalableMatrixWithUnitPricingConfig].
          *
          * Unlike [scalableMatrixWithUnitPricingConfig], this method doesn't throw if the JSON field
@@ -51655,6 +53004,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .scalableMatrixWithUnitPricingConfig()
              * ```
              */
@@ -51687,6 +53037,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var scalableMatrixWithUnitPricingConfig:
                 JsonField<ScalableMatrixWithUnitPricingConfig>? =
                 null
@@ -51722,6 +53073,7 @@ private constructor(
                     name = scalableMatrixWithUnitPricing.name
                     planPhaseOrder = scalableMatrixWithUnitPricing.planPhaseOrder
                     priceType = scalableMatrixWithUnitPricing.priceType
+                    replacesPriceId = scalableMatrixWithUnitPricing.replacesPriceId
                     scalableMatrixWithUnitPricingConfig =
                         scalableMatrixWithUnitPricing.scalableMatrixWithUnitPricingConfig
                     dimensionalPriceConfiguration =
@@ -52244,6 +53596,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun scalableMatrixWithUnitPricingConfig(
                 scalableMatrixWithUnitPricingConfig: ScalableMatrixWithUnitPricingConfig
             ) =
@@ -52335,6 +53709,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .scalableMatrixWithUnitPricingConfig()
              * ```
              *
@@ -52365,6 +53740,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     checkRequired(
                         "scalableMatrixWithUnitPricingConfig",
                         scalableMatrixWithUnitPricingConfig,
@@ -52408,6 +53784,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             scalableMatrixWithUnitPricingConfig().validate()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
@@ -52454,6 +53831,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (scalableMatrixWithUnitPricingConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -53146,17 +54524,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ScalableMatrixWithUnitPricing && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && scalableMatrixWithUnitPricingConfig == other.scalableMatrixWithUnitPricingConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ScalableMatrixWithUnitPricing && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && scalableMatrixWithUnitPricingConfig == other.scalableMatrixWithUnitPricingConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, scalableMatrixWithUnitPricingConfig, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, scalableMatrixWithUnitPricingConfig, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ScalableMatrixWithUnitPricing{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, scalableMatrixWithUnitPricingConfig=$scalableMatrixWithUnitPricingConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "ScalableMatrixWithUnitPricing{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, scalableMatrixWithUnitPricingConfig=$scalableMatrixWithUnitPricingConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class ScalableMatrixWithTieredPricing
@@ -53184,6 +54562,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val scalableMatrixWithTieredPricingConfig:
             JsonField<ScalableMatrixWithTieredPricingConfig>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
@@ -53247,6 +54626,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("scalable_matrix_with_tiered_pricing_config")
             @ExcludeMissing
             scalableMatrixWithTieredPricingConfig:
@@ -53280,6 +54662,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             scalableMatrixWithTieredPricingConfig,
             dimensionalPriceConfiguration,
             mutableMapOf(),
@@ -53440,6 +54823,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -53662,6 +55054,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [scalableMatrixWithTieredPricingConfig].
          *
          * Unlike [scalableMatrixWithTieredPricingConfig], this method doesn't throw if the JSON
@@ -53725,6 +55127,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .scalableMatrixWithTieredPricingConfig()
              * ```
              */
@@ -53757,6 +55160,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var scalableMatrixWithTieredPricingConfig:
                 JsonField<ScalableMatrixWithTieredPricingConfig>? =
                 null
@@ -53792,6 +55196,7 @@ private constructor(
                     name = scalableMatrixWithTieredPricing.name
                     planPhaseOrder = scalableMatrixWithTieredPricing.planPhaseOrder
                     priceType = scalableMatrixWithTieredPricing.priceType
+                    replacesPriceId = scalableMatrixWithTieredPricing.replacesPriceId
                     scalableMatrixWithTieredPricingConfig =
                         scalableMatrixWithTieredPricing.scalableMatrixWithTieredPricingConfig
                     dimensionalPriceConfiguration =
@@ -54314,6 +55719,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun scalableMatrixWithTieredPricingConfig(
                 scalableMatrixWithTieredPricingConfig: ScalableMatrixWithTieredPricingConfig
             ) =
@@ -54406,6 +55833,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * .scalableMatrixWithTieredPricingConfig()
              * ```
              *
@@ -54436,6 +55864,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     checkRequired(
                         "scalableMatrixWithTieredPricingConfig",
                         scalableMatrixWithTieredPricingConfig,
@@ -54479,6 +55908,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             scalableMatrixWithTieredPricingConfig().validate()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
@@ -54525,6 +55955,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (scalableMatrixWithTieredPricingConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -55217,17 +56648,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ScalableMatrixWithTieredPricing && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && scalableMatrixWithTieredPricingConfig == other.scalableMatrixWithTieredPricingConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ScalableMatrixWithTieredPricing && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && scalableMatrixWithTieredPricingConfig == other.scalableMatrixWithTieredPricingConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, scalableMatrixWithTieredPricingConfig, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, scalableMatrixWithTieredPricingConfig, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ScalableMatrixWithTieredPricing{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, scalableMatrixWithTieredPricingConfig=$scalableMatrixWithTieredPricingConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "ScalableMatrixWithTieredPricing{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, scalableMatrixWithTieredPricingConfig=$scalableMatrixWithTieredPricingConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class CumulativeGroupedBulk
@@ -55256,6 +56687,7 @@ private constructor(
         private val name: JsonField<String>,
         private val planPhaseOrder: JsonField<Long>,
         private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
         private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -55320,6 +56752,9 @@ private constructor(
             @JsonProperty("price_type")
             @ExcludeMissing
             priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("dimensional_price_configuration")
             @ExcludeMissing
             dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
@@ -55349,6 +56784,7 @@ private constructor(
             name,
             planPhaseOrder,
             priceType,
+            replacesPriceId,
             dimensionalPriceConfiguration,
             mutableMapOf(),
         )
@@ -55515,6 +56951,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -55739,6 +57184,16 @@ private constructor(
         fun _priceType(): JsonField<PriceType> = priceType
 
         /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
          * Returns the raw JSON value of [dimensionalPriceConfiguration].
          *
          * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
@@ -55791,6 +57246,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -55823,6 +57279,7 @@ private constructor(
             private var name: JsonField<String>? = null
             private var planPhaseOrder: JsonField<Long>? = null
             private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
             private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -55853,6 +57310,7 @@ private constructor(
                 name = cumulativeGroupedBulk.name
                 planPhaseOrder = cumulativeGroupedBulk.planPhaseOrder
                 priceType = cumulativeGroupedBulk.priceType
+                replacesPriceId = cumulativeGroupedBulk.replacesPriceId
                 dimensionalPriceConfiguration = cumulativeGroupedBulk.dimensionalPriceConfiguration
                 additionalProperties = cumulativeGroupedBulk.additionalProperties.toMutableMap()
             }
@@ -56386,6 +57844,28 @@ private constructor(
              */
             fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
 
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
             fun dimensionalPriceConfiguration(
                 dimensionalPriceConfiguration: DimensionalPriceConfiguration?
             ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
@@ -56458,6 +57938,7 @@ private constructor(
              * .name()
              * .planPhaseOrder()
              * .priceType()
+             * .replacesPriceId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -56488,6 +57969,7 @@ private constructor(
                     checkRequired("name", name),
                     checkRequired("planPhaseOrder", planPhaseOrder),
                     checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
                     dimensionalPriceConfiguration,
                     additionalProperties.toMutableMap(),
                 )
@@ -56528,6 +58010,7 @@ private constructor(
             name()
             planPhaseOrder()
             priceType().validate()
+            replacesPriceId()
             dimensionalPriceConfiguration().ifPresent { it.validate() }
             validated = true
         }
@@ -56572,6 +58055,7 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
                 (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
         class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -57262,16 +58746,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CumulativeGroupedBulk && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && cumulativeGroupedBulkConfig == other.cumulativeGroupedBulkConfig && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CumulativeGroupedBulk && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && cumulativeGroupedBulkConfig == other.cumulativeGroupedBulkConfig && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, cumulativeGroupedBulkConfig, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, dimensionalPriceConfiguration, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, cumulativeGroupedBulkConfig, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CumulativeGroupedBulk{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, cumulativeGroupedBulkConfig=$cumulativeGroupedBulkConfig, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "CumulativeGroupedBulk{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, cumulativeGroupedBulkConfig=$cumulativeGroupedBulkConfig, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 }

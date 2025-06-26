@@ -27,6 +27,7 @@ internal class MonetaryAmountDiscountAdjustmentTest {
                 )
                 .isInvoiceLevel(true)
                 .reason("reason")
+                .replacesAdjustmentId("replaces_adjustment_id")
                 .build()
 
         assertThat(monetaryAmountDiscountAdjustment.id()).isEqualTo("id")
@@ -45,6 +46,8 @@ internal class MonetaryAmountDiscountAdjustmentTest {
             )
         assertThat(monetaryAmountDiscountAdjustment.isInvoiceLevel()).isEqualTo(true)
         assertThat(monetaryAmountDiscountAdjustment.reason()).contains("reason")
+        assertThat(monetaryAmountDiscountAdjustment.replacesAdjustmentId())
+            .contains("replaces_adjustment_id")
     }
 
     @Test
@@ -66,6 +69,7 @@ internal class MonetaryAmountDiscountAdjustmentTest {
                 )
                 .isInvoiceLevel(true)
                 .reason("reason")
+                .replacesAdjustmentId("replaces_adjustment_id")
                 .build()
 
         val roundtrippedMonetaryAmountDiscountAdjustment =
