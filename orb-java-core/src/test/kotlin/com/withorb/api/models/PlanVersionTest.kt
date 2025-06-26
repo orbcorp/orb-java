@@ -33,6 +33,7 @@ internal class PlanVersionTest {
                         .isInvoiceLevel(true)
                         .planPhaseOrder(0L)
                         .reason("reason")
+                        .replacesAdjustmentId("replaces_adjustment_id")
                         .usageDiscount(0.0)
                         .build()
                 )
@@ -137,6 +138,7 @@ internal class PlanVersionTest {
                         .name("name")
                         .planPhaseOrder(0L)
                         .priceType(Price.Unit.PriceType.USAGE_PRICE)
+                        .replacesPriceId("replaces_price_id")
                         .unitConfig(UnitConfig.builder().unitAmount("unit_amount").build())
                         .dimensionalPriceConfiguration(
                             DimensionalPriceConfiguration.builder()
@@ -168,6 +170,7 @@ internal class PlanVersionTest {
                         .isInvoiceLevel(true)
                         .planPhaseOrder(0L)
                         .reason("reason")
+                        .replacesAdjustmentId("replaces_adjustment_id")
                         .usageDiscount(0.0)
                         .build()
                 )
@@ -277,6 +280,7 @@ internal class PlanVersionTest {
                         .name("name")
                         .planPhaseOrder(0L)
                         .priceType(Price.Unit.PriceType.USAGE_PRICE)
+                        .replacesPriceId("replaces_price_id")
                         .unitConfig(UnitConfig.builder().unitAmount("unit_amount").build())
                         .dimensionalPriceConfiguration(
                             DimensionalPriceConfiguration.builder()
@@ -312,6 +316,7 @@ internal class PlanVersionTest {
                         .isInvoiceLevel(true)
                         .planPhaseOrder(0L)
                         .reason("reason")
+                        .replacesAdjustmentId("replaces_adjustment_id")
                         .usageDiscount(0.0)
                         .build()
                 )
@@ -416,6 +421,7 @@ internal class PlanVersionTest {
                         .name("name")
                         .planPhaseOrder(0L)
                         .priceType(Price.Unit.PriceType.USAGE_PRICE)
+                        .replacesPriceId("replaces_price_id")
                         .unitConfig(UnitConfig.builder().unitAmount("unit_amount").build())
                         .dimensionalPriceConfiguration(
                             DimensionalPriceConfiguration.builder()
