@@ -20,7 +20,6 @@ import com.withorb.api.services.blocking.SubscriptionChangeService
 import com.withorb.api.services.blocking.SubscriptionService
 import com.withorb.api.services.blocking.TopLevelService
 import com.withorb.api.services.blocking.WebhookService
-
 import java.util.function.Consumer
 
 /**
