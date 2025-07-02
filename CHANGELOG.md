@@ -1,5 +1,37 @@
 # Changelog
 
+## 1.1.0 (2025-07-02)
+
+Full Changelog: [v1.0.0...v1.1.0](https://github.com/orbcorp/orb-java/compare/v1.0.0...v1.1.0)
+
+### Features
+
+* **api:** api update ([91c85d4](https://github.com/orbcorp/orb-java/commit/91c85d496a9d4e2f7597a52f193df49012bfe53b))
+* **api:** api update ([e58761c](https://github.com/orbcorp/orb-java/commit/e58761cd2e36bfa66ec1f17d05428acf2299653a))
+* **api:** api update ([83c2707](https://github.com/orbcorp/orb-java/commit/83c2707bc9dd85f14df2c31e2837fd6c43e3349e))
+* **api:** api update ([614dfad](https://github.com/orbcorp/orb-java/commit/614dfad8313393787778319ff46860ad2c548aa5))
+* **client:** add a `withOptions` method ([744d7a6](https://github.com/orbcorp/orb-java/commit/744d7a67931d92a891bea1ff58140de71fca9eb8))
+* **client:** implement per-endpoint base URL support ([6172f77](https://github.com/orbcorp/orb-java/commit/6172f770b4a6ccbb41f5748aee9164f8071036d7))
+
+
+### Bug Fixes
+
+* **ci:** release-doctor — report correct token name ([d631afb](https://github.com/orbcorp/orb-java/commit/d631afbee08819fa5febba75d799ebbbc688f0b9))
+* **client:** bump max requests per host to max requests (5 -&gt; 64) ([5576ea4](https://github.com/orbcorp/orb-java/commit/5576ea4d94771c0003e8f13d503cbef46a7c8221))
+* **client:** don't close client on `withOptions` usage when original is gc'd ([002c10d](https://github.com/orbcorp/orb-java/commit/002c10dd581d1e95da9431baf6c157c878db04d8))
+
+
+### Chores
+
+* **ci:** enable for pull requests ([ecdbbd4](https://github.com/orbcorp/orb-java/commit/ecdbbd4212a2bcb27d7ec96013d3a6487751372c))
+* **ci:** only run for pushes and fork pull requests ([cbc078a](https://github.com/orbcorp/orb-java/commit/cbc078ac5bf69fbfa3c6f165441f58cb4d493c93))
+* fix formatting ([fe0ad84](https://github.com/orbcorp/orb-java/commit/fe0ad84fdeb583979218fddfc2e17d7aeab19421))
+
+
+### Refactors
+
+* **internal:** minor `ClientOptionsTest` change ([d7614c8](https://github.com/orbcorp/orb-java/commit/d7614c8bb5048cfb430094f7ae3cc877a0627aad))
+
 ## 1.0.0 (2025-06-09)
 
 Full Changelog: [v0.57.0...v1.0.0](https://github.com/orbcorp/orb-java/compare/v0.57.0...v1.0.0)
