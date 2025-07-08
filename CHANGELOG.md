@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.1 (2025-07-08)
+
+Full Changelog: [v1.3.0...v1.3.1](https://github.com/orbcorp/orb-java/compare/v1.3.0...v1.3.1)
+
+### Chores
+
+* **ci:** ensure docs generation always succeeds ([00866a5](https://github.com/orbcorp/orb-java/commit/00866a557ba12a39d7899bc3bc0a2950094ad355))
+
 ## 1.3.0 (2025-07-08)
 
 Full Changelog: [v1.2.0...v1.3.0](https://github.com/orbcorp/orb-java/compare/v1.2.0...v1.3.0)
