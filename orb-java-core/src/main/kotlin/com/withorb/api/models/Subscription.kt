@@ -295,7 +295,8 @@ private constructor(
         defaultInvoiceMemo.getOptional("default_invoice_memo")
 
     /**
-     * The discount intervals for this subscription sorted by the start_date.
+     * The discount intervals for this subscription sorted by the start_date. This field is
+     * deprecated in favor of `adjustment_intervals`.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -327,7 +328,8 @@ private constructor(
         invoicingThreshold.getOptional("invoicing_threshold")
 
     /**
-     * The maximum intervals for this subscription sorted by the start_date.
+     * The maximum intervals for this subscription sorted by the start_date. This field is
+     * deprecated in favor of `adjustment_intervals`.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -347,7 +349,8 @@ private constructor(
     fun metadata(): Metadata = metadata.getRequired("metadata")
 
     /**
-     * The minimum intervals for this subscription sorted by the start_date.
+     * The minimum intervals for this subscription sorted by the start_date. This field is
+     * deprecated in favor of `adjustment_intervals`.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -1042,7 +1045,10 @@ private constructor(
             this.defaultInvoiceMemo = defaultInvoiceMemo
         }
 
-        /** The discount intervals for this subscription sorted by the start_date. */
+        /**
+         * The discount intervals for this subscription sorted by the start_date. This field is
+         * deprecated in favor of `adjustment_intervals`.
+         */
         @Deprecated("deprecated")
         fun discountIntervals(discountIntervals: List<DiscountInterval>) =
             discountIntervals(JsonField.of(discountIntervals))
@@ -1154,7 +1160,10 @@ private constructor(
             this.invoicingThreshold = invoicingThreshold
         }
 
-        /** The maximum intervals for this subscription sorted by the start_date. */
+        /**
+         * The maximum intervals for this subscription sorted by the start_date. This field is
+         * deprecated in favor of `adjustment_intervals`.
+         */
         @Deprecated("deprecated")
         fun maximumIntervals(maximumIntervals: List<MaximumInterval>) =
             maximumIntervals(JsonField.of(maximumIntervals))
@@ -1200,7 +1209,10 @@ private constructor(
          */
         fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
-        /** The minimum intervals for this subscription sorted by the start_date. */
+        /**
+         * The minimum intervals for this subscription sorted by the start_date. This field is
+         * deprecated in favor of `adjustment_intervals`.
+         */
         @Deprecated("deprecated")
         fun minimumIntervals(minimumIntervals: List<MinimumInterval>) =
             minimumIntervals(JsonField.of(minimumIntervals))

@@ -19,6 +19,7 @@ internal class PriceEvaluateMultipleParamsTest {
             .externalCustomerId("external_customer_id")
             .addPriceEvaluation(
                 PriceEvaluateMultipleParams.PriceEvaluation.builder()
+                    .externalPriceId("external_price_id")
                     .filter("my_numeric_property > 100 AND my_other_property = 'bar'")
                     .addGroupingKey("case when my_event_type = 'foo' then true else false end")
                     .price(
@@ -82,6 +83,7 @@ internal class PriceEvaluateMultipleParamsTest {
                 .externalCustomerId("external_customer_id")
                 .addPriceEvaluation(
                     PriceEvaluateMultipleParams.PriceEvaluation.builder()
+                        .externalPriceId("external_price_id")
                         .filter("my_numeric_property > 100 AND my_other_property = 'bar'")
                         .addGroupingKey("case when my_event_type = 'foo' then true else false end")
                         .price(
@@ -146,6 +148,7 @@ internal class PriceEvaluateMultipleParamsTest {
         assertThat(body.priceEvaluations().getOrNull())
             .containsExactly(
                 PriceEvaluateMultipleParams.PriceEvaluation.builder()
+                    .externalPriceId("external_price_id")
                     .filter("my_numeric_property > 100 AND my_other_property = 'bar'")
                     .addGroupingKey("case when my_event_type = 'foo' then true else false end")
                     .price(
