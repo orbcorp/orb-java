@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.5.0 (2025-07-16)
+
+Full Changelog: [v1.4.0...v1.5.0](https://github.com/orbcorp/orb-java/compare/v1.4.0...v1.5.0)
+
+### Features
+
+* **api:** api update ([9eba618](https://github.com/orbcorp/orb-java/commit/9eba618b98aef66e37c29e9f8084ba6a4a9efd6b))
+
+
+### Chores
+
+* **internal:** allow running specific example from cli ([88917ff](https://github.com/orbcorp/orb-java/commit/88917ff0c50ec4aa1ad8ec59d34ba452fe783979))
+
 ## 1.4.0 (2025-07-16)
 
 Full Changelog: [v1.3.0...v1.4.0](https://github.com/orbcorp/orb-java/compare/v1.3.0...v1.4.0)
