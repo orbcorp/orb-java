@@ -5491,7 +5491,7 @@ private constructor(
         fun billingCycleDay(): Optional<Long> = billingCycleDay.getOptional("billing_cycle_day")
 
         /**
-         * The updated end date of this price interval. If not specified, the start date will not be
+         * The updated end date of this price interval. If not specified, the end date will not be
          * updated.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -5703,8 +5703,8 @@ private constructor(
             }
 
             /**
-             * The updated end date of this price interval. If not specified, the start date will
-             * not be updated.
+             * The updated end date of this price interval. If not specified, the end date will not
+             * be updated.
              */
             fun endDate(endDate: EndDate?) = endDate(JsonField.ofNullable(endDate))
 
@@ -5947,7 +5947,7 @@ private constructor(
                 (usageCustomerIds.asKnown().getOrNull()?.size ?: 0)
 
         /**
-         * The updated end date of this price interval. If not specified, the start date will not be
+         * The updated end date of this price interval. If not specified, the end date will not be
          * updated.
          */
         @JsonDeserialize(using = EndDate.Deserializer::class)
@@ -6581,8 +6581,8 @@ private constructor(
             adjustmentIntervalId.getRequired("adjustment_interval_id")
 
         /**
-         * The updated end date of this adjustment interval. If not specified, the start date will
-         * not be updated.
+         * The updated end date of this adjustment interval. If not specified, the end date will not
+         * be updated.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -6681,8 +6681,8 @@ private constructor(
             }
 
             /**
-             * The updated end date of this adjustment interval. If not specified, the start date
-             * will not be updated.
+             * The updated end date of this adjustment interval. If not specified, the end date will
+             * not be updated.
              */
             fun endDate(endDate: EndDate?) = endDate(JsonField.ofNullable(endDate))
 
@@ -6807,8 +6807,8 @@ private constructor(
                 (startDate.asKnown().getOrNull()?.validity() ?: 0)
 
         /**
-         * The updated end date of this adjustment interval. If not specified, the start date will
-         * not be updated.
+         * The updated end date of this adjustment interval. If not specified, the end date will not
+         * be updated.
          */
         @JsonDeserialize(using = EndDate.Deserializer::class)
         @JsonSerialize(using = EndDate.Serializer::class)

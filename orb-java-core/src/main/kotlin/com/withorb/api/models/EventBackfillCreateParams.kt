@@ -60,7 +60,7 @@ private constructor(
 
     /**
      * The (exclusive) end of the usage timeframe affected by this backfill. By default, Orb allows
-     * backfills up to 10 days in duration at a time. Reach out to discuss extending this limit and
+     * backfills up to 31 days in duration at a time. Reach out to discuss extending this limit and
      * your use case.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -70,7 +70,7 @@ private constructor(
 
     /**
      * The (inclusive) start of the usage timeframe affected by this backfill. By default, Orb
-     * allows backfills up to 10 days in duration at a time. Reach out to discuss extending this
+     * allows backfills up to 31 days in duration at a time. Reach out to discuss extending this
      * limit and your use case.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -228,7 +228,7 @@ private constructor(
 
         /**
          * The (exclusive) end of the usage timeframe affected by this backfill. By default, Orb
-         * allows backfills up to 10 days in duration at a time. Reach out to discuss extending this
+         * allows backfills up to 31 days in duration at a time. Reach out to discuss extending this
          * limit and your use case.
          */
         fun timeframeEnd(timeframeEnd: OffsetDateTime) = apply { body.timeframeEnd(timeframeEnd) }
@@ -246,7 +246,7 @@ private constructor(
 
         /**
          * The (inclusive) start of the usage timeframe affected by this backfill. By default, Orb
-         * allows backfills up to 10 days in duration at a time. Reach out to discuss extending this
+         * allows backfills up to 31 days in duration at a time. Reach out to discuss extending this
          * limit and your use case.
          */
         fun timeframeStart(timeframeStart: OffsetDateTime) = apply {
@@ -560,7 +560,7 @@ private constructor(
 
         /**
          * The (exclusive) end of the usage timeframe affected by this backfill. By default, Orb
-         * allows backfills up to 10 days in duration at a time. Reach out to discuss extending this
+         * allows backfills up to 31 days in duration at a time. Reach out to discuss extending this
          * limit and your use case.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -570,7 +570,7 @@ private constructor(
 
         /**
          * The (inclusive) start of the usage timeframe affected by this backfill. By default, Orb
-         * allows backfills up to 10 days in duration at a time. Reach out to discuss extending this
+         * allows backfills up to 31 days in duration at a time. Reach out to discuss extending this
          * limit and your use case.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -747,7 +747,7 @@ private constructor(
 
             /**
              * The (exclusive) end of the usage timeframe affected by this backfill. By default, Orb
-             * allows backfills up to 10 days in duration at a time. Reach out to discuss extending
+             * allows backfills up to 31 days in duration at a time. Reach out to discuss extending
              * this limit and your use case.
              */
             fun timeframeEnd(timeframeEnd: OffsetDateTime) =
@@ -766,7 +766,7 @@ private constructor(
 
             /**
              * The (inclusive) start of the usage timeframe affected by this backfill. By default,
-             * Orb allows backfills up to 10 days in duration at a time. Reach out to discuss
+             * Orb allows backfills up to 31 days in duration at a time. Reach out to discuss
              * extending this limit and your use case.
              */
             fun timeframeStart(timeframeStart: OffsetDateTime) =

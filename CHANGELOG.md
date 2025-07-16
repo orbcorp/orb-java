@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.4.0 (2025-07-16)
+
+Full Changelog: [v1.3.0...v1.4.0](https://github.com/orbcorp/orb-java/compare/v1.3.0...v1.4.0)
+
+### Features
+
+* **api:** api update ([b80c170](https://github.com/orbcorp/orb-java/commit/b80c170203b1bbe44da7121d69d245ca6b5db2b8))
+* **api:** api update ([52612a7](https://github.com/orbcorp/orb-java/commit/52612a73768f17c76ccfff8e5dacf9457dd08c0d))
+
+
+### Chores
+
+* **ci:** bump `actions/setup-java` to v4 ([ee43b24](https://github.com/orbcorp/orb-java/commit/ee43b240c6ca6968cca70b7c6db999c7de19b2bd))
+* **ci:** ensure docs generation always succeeds ([00866a5](https://github.com/orbcorp/orb-java/commit/00866a557ba12a39d7899bc3bc0a2950094ad355))
+
 ## 1.3.0 (2025-07-08)
 
 Full Changelog: [v1.2.0...v1.3.0](https://github.com/orbcorp/orb-java/compare/v1.2.0...v1.3.0)

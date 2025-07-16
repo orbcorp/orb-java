@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import java.time.LocalDate
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -14,10 +15,14 @@ internal class CreditNoteCreateParamsTest {
                 CreditNoteCreateParams.LineItem.builder()
                     .amount("amount")
                     .invoiceLineItemId("4khy3nwzktxv7")
+                    .endDate(LocalDate.parse("2023-01-31"))
+                    .startDate(LocalDate.parse("2023-01-01"))
                     .build()
             )
             .reason(CreditNoteCreateParams.Reason.DUPLICATE)
+            .endDate(LocalDate.parse("2023-01-31"))
             .memo("An optional memo for my credit note.")
+            .startDate(LocalDate.parse("2023-01-01"))
             .build()
     }
 
@@ -29,10 +34,14 @@ internal class CreditNoteCreateParamsTest {
                     CreditNoteCreateParams.LineItem.builder()
                         .amount("amount")
                         .invoiceLineItemId("4khy3nwzktxv7")
+                        .endDate(LocalDate.parse("2023-01-31"))
+                        .startDate(LocalDate.parse("2023-01-01"))
                         .build()
                 )
                 .reason(CreditNoteCreateParams.Reason.DUPLICATE)
+                .endDate(LocalDate.parse("2023-01-31"))
                 .memo("An optional memo for my credit note.")
+                .startDate(LocalDate.parse("2023-01-01"))
                 .build()
 
         val body = params._body()
@@ -42,10 +51,14 @@ internal class CreditNoteCreateParamsTest {
                 CreditNoteCreateParams.LineItem.builder()
                     .amount("amount")
                     .invoiceLineItemId("4khy3nwzktxv7")
+                    .endDate(LocalDate.parse("2023-01-31"))
+                    .startDate(LocalDate.parse("2023-01-01"))
                     .build()
             )
         assertThat(body.reason()).isEqualTo(CreditNoteCreateParams.Reason.DUPLICATE)
+        assertThat(body.endDate()).contains(LocalDate.parse("2023-01-31"))
         assertThat(body.memo()).contains("An optional memo for my credit note.")
+        assertThat(body.startDate()).contains(LocalDate.parse("2023-01-01"))
     }
 
     @Test

@@ -18,12 +18,35 @@ import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
+import java.time.LocalDate
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** This endpoint is used to create a single [`Credit Note`](/invoicing/credit-notes). */
+/**
+ * This endpoint is used to create a single [`Credit Note`](/invoicing/credit-notes).
+ *
+ * The credit note service period configuration supports two explicit modes:
+ * 1. Global service periods: Specify start_date and end_date at the credit note level. These dates
+ *    will be applied to all line items uniformly.
+ * 2. Individual service periods: Specify start_date and end_date for each line item. When using
+ *    this mode, ALL line items must have individual periods specified.
+ * 3. Default behavior: If no service periods are specified (neither global nor individual), the
+ *    original invoice line item service periods will be used.
+ *
+ * Note: Mixing global and individual service periods in the same request is not allowed to prevent
+ * confusion.
+ *
+ * Service period dates are normalized to the start of the day in the customer's timezone to ensure
+ * consistent handling across different timezones.
+ *
+ * Date Format: Use start_date and end_date with format "YYYY-MM-DD" (e.g., "2023-09-22") to match
+ * other Orb APIs like /v1/invoice_line_items.
+ *
+ * Note: Both start_date and end_date are inclusive - the service period will cover both the start
+ * date and end date completely (from start of start_date to end of end_date).
+ */
 class CreditNoteCreateParams
 private constructor(
     private val body: Body,
@@ -46,12 +69,32 @@ private constructor(
     fun reason(): Reason = body.reason()
 
     /**
+     * An optional date string to specify the global credit note service period end date in the
+     * customer's timezone. This will be applied to all line items. If not provided, line items will
+     * use their original invoice line item service periods. This date is inclusive.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun endDate(): Optional<LocalDate> = body.endDate()
+
+    /**
      * An optional memo to attach to the credit note.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
     fun memo(): Optional<String> = body.memo()
+
+    /**
+     * An optional date string to specify the global credit note service period end date in the
+     * customer's timezone. This will be applied to all line items. If not provided, line items will
+     * use their original invoice line item service periods. This date is inclusive.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun startDate(): Optional<LocalDate> = body.startDate()
 
     /**
      * Returns the raw JSON value of [lineItems].
@@ -68,11 +111,25 @@ private constructor(
     fun _reason(): JsonField<Reason> = body._reason()
 
     /**
+     * Returns the raw JSON value of [endDate].
+     *
+     * Unlike [endDate], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _endDate(): JsonField<LocalDate> = body._endDate()
+
+    /**
      * Returns the raw JSON value of [memo].
      *
      * Unlike [memo], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _memo(): JsonField<String> = body._memo()
+
+    /**
+     * Returns the raw JSON value of [startDate].
+     *
+     * Unlike [startDate], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _startDate(): JsonField<LocalDate> = body._startDate()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -117,7 +174,10 @@ private constructor(
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [lineItems]
          * - [reason]
+         * - [endDate]
          * - [memo]
+         * - [startDate]
+         * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
@@ -150,6 +210,25 @@ private constructor(
          */
         fun reason(reason: JsonField<Reason>) = apply { body.reason(reason) }
 
+        /**
+         * An optional date string to specify the global credit note service period end date in the
+         * customer's timezone. This will be applied to all line items. If not provided, line items
+         * will use their original invoice line item service periods. This date is inclusive.
+         */
+        fun endDate(endDate: LocalDate?) = apply { body.endDate(endDate) }
+
+        /** Alias for calling [Builder.endDate] with `endDate.orElse(null)`. */
+        fun endDate(endDate: Optional<LocalDate>) = endDate(endDate.getOrNull())
+
+        /**
+         * Sets [Builder.endDate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.endDate] with a well-typed [LocalDate] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun endDate(endDate: JsonField<LocalDate>) = apply { body.endDate(endDate) }
+
         /** An optional memo to attach to the credit note. */
         fun memo(memo: String?) = apply { body.memo(memo) }
 
@@ -163,6 +242,25 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun memo(memo: JsonField<String>) = apply { body.memo(memo) }
+
+        /**
+         * An optional date string to specify the global credit note service period end date in the
+         * customer's timezone. This will be applied to all line items. If not provided, line items
+         * will use their original invoice line item service periods. This date is inclusive.
+         */
+        fun startDate(startDate: LocalDate?) = apply { body.startDate(startDate) }
+
+        /** Alias for calling [Builder.startDate] with `startDate.orElse(null)`. */
+        fun startDate(startDate: Optional<LocalDate>) = startDate(startDate.getOrNull())
+
+        /**
+         * Sets [Builder.startDate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.startDate] with a well-typed [LocalDate] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun startDate(startDate: JsonField<LocalDate>) = apply { body.startDate(startDate) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -312,7 +410,9 @@ private constructor(
     private constructor(
         private val lineItems: JsonField<List<LineItem>>,
         private val reason: JsonField<Reason>,
+        private val endDate: JsonField<LocalDate>,
         private val memo: JsonField<String>,
+        private val startDate: JsonField<LocalDate>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -322,8 +422,14 @@ private constructor(
             @ExcludeMissing
             lineItems: JsonField<List<LineItem>> = JsonMissing.of(),
             @JsonProperty("reason") @ExcludeMissing reason: JsonField<Reason> = JsonMissing.of(),
+            @JsonProperty("end_date")
+            @ExcludeMissing
+            endDate: JsonField<LocalDate> = JsonMissing.of(),
             @JsonProperty("memo") @ExcludeMissing memo: JsonField<String> = JsonMissing.of(),
-        ) : this(lineItems, reason, memo, mutableMapOf())
+            @JsonProperty("start_date")
+            @ExcludeMissing
+            startDate: JsonField<LocalDate> = JsonMissing.of(),
+        ) : this(lineItems, reason, endDate, memo, startDate, mutableMapOf())
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -340,12 +446,32 @@ private constructor(
         fun reason(): Reason = reason.getRequired("reason")
 
         /**
+         * An optional date string to specify the global credit note service period end date in the
+         * customer's timezone. This will be applied to all line items. If not provided, line items
+         * will use their original invoice line item service periods. This date is inclusive.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun endDate(): Optional<LocalDate> = endDate.getOptional("end_date")
+
+        /**
          * An optional memo to attach to the credit note.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun memo(): Optional<String> = memo.getOptional("memo")
+
+        /**
+         * An optional date string to specify the global credit note service period end date in the
+         * customer's timezone. This will be applied to all line items. If not provided, line items
+         * will use their original invoice line item service periods. This date is inclusive.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun startDate(): Optional<LocalDate> = startDate.getOptional("start_date")
 
         /**
          * Returns the raw JSON value of [lineItems].
@@ -364,11 +490,27 @@ private constructor(
         @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<Reason> = reason
 
         /**
+         * Returns the raw JSON value of [endDate].
+         *
+         * Unlike [endDate], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("end_date") @ExcludeMissing fun _endDate(): JsonField<LocalDate> = endDate
+
+        /**
          * Returns the raw JSON value of [memo].
          *
          * Unlike [memo], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("memo") @ExcludeMissing fun _memo(): JsonField<String> = memo
+
+        /**
+         * Returns the raw JSON value of [startDate].
+         *
+         * Unlike [startDate], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("start_date")
+        @ExcludeMissing
+        fun _startDate(): JsonField<LocalDate> = startDate
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -401,14 +543,18 @@ private constructor(
 
             private var lineItems: JsonField<MutableList<LineItem>>? = null
             private var reason: JsonField<Reason>? = null
+            private var endDate: JsonField<LocalDate> = JsonMissing.of()
             private var memo: JsonField<String> = JsonMissing.of()
+            private var startDate: JsonField<LocalDate> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(body: Body) = apply {
                 lineItems = body.lineItems.map { it.toMutableList() }
                 reason = body.reason
+                endDate = body.endDate
                 memo = body.memo
+                startDate = body.startDate
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -449,6 +595,26 @@ private constructor(
              */
             fun reason(reason: JsonField<Reason>) = apply { this.reason = reason }
 
+            /**
+             * An optional date string to specify the global credit note service period end date in
+             * the customer's timezone. This will be applied to all line items. If not provided,
+             * line items will use their original invoice line item service periods. This date is
+             * inclusive.
+             */
+            fun endDate(endDate: LocalDate?) = endDate(JsonField.ofNullable(endDate))
+
+            /** Alias for calling [Builder.endDate] with `endDate.orElse(null)`. */
+            fun endDate(endDate: Optional<LocalDate>) = endDate(endDate.getOrNull())
+
+            /**
+             * Sets [Builder.endDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.endDate] with a well-typed [LocalDate] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun endDate(endDate: JsonField<LocalDate>) = apply { this.endDate = endDate }
+
             /** An optional memo to attach to the credit note. */
             fun memo(memo: String?) = memo(JsonField.ofNullable(memo))
 
@@ -463,6 +629,26 @@ private constructor(
              * value.
              */
             fun memo(memo: JsonField<String>) = apply { this.memo = memo }
+
+            /**
+             * An optional date string to specify the global credit note service period end date in
+             * the customer's timezone. This will be applied to all line items. If not provided,
+             * line items will use their original invoice line item service periods. This date is
+             * inclusive.
+             */
+            fun startDate(startDate: LocalDate?) = startDate(JsonField.ofNullable(startDate))
+
+            /** Alias for calling [Builder.startDate] with `startDate.orElse(null)`. */
+            fun startDate(startDate: Optional<LocalDate>) = startDate(startDate.getOrNull())
+
+            /**
+             * Sets [Builder.startDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.startDate] with a well-typed [LocalDate] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun startDate(startDate: JsonField<LocalDate>) = apply { this.startDate = startDate }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -500,7 +686,9 @@ private constructor(
                 Body(
                     checkRequired("lineItems", lineItems).map { it.toImmutable() },
                     checkRequired("reason", reason),
+                    endDate,
                     memo,
+                    startDate,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -514,7 +702,9 @@ private constructor(
 
             lineItems().forEach { it.validate() }
             reason().validate()
+            endDate()
             memo()
+            startDate()
             validated = true
         }
 
@@ -536,30 +726,34 @@ private constructor(
         internal fun validity(): Int =
             (lineItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (reason.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (memo.asKnown().isPresent) 1 else 0)
+                (if (endDate.asKnown().isPresent) 1 else 0) +
+                (if (memo.asKnown().isPresent) 1 else 0) +
+                (if (startDate.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Body && lineItems == other.lineItems && reason == other.reason && memo == other.memo && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && lineItems == other.lineItems && reason == other.reason && endDate == other.endDate && memo == other.memo && startDate == other.startDate && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(lineItems, reason, memo, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(lineItems, reason, endDate, memo, startDate, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{lineItems=$lineItems, reason=$reason, memo=$memo, additionalProperties=$additionalProperties}"
+            "Body{lineItems=$lineItems, reason=$reason, endDate=$endDate, memo=$memo, startDate=$startDate, additionalProperties=$additionalProperties}"
     }
 
     class LineItem
     private constructor(
         private val amount: JsonField<String>,
         private val invoiceLineItemId: JsonField<String>,
+        private val endDate: JsonField<LocalDate>,
+        private val startDate: JsonField<LocalDate>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -569,7 +763,13 @@ private constructor(
             @JsonProperty("invoice_line_item_id")
             @ExcludeMissing
             invoiceLineItemId: JsonField<String> = JsonMissing.of(),
-        ) : this(amount, invoiceLineItemId, mutableMapOf())
+            @JsonProperty("end_date")
+            @ExcludeMissing
+            endDate: JsonField<LocalDate> = JsonMissing.of(),
+            @JsonProperty("start_date")
+            @ExcludeMissing
+            startDate: JsonField<LocalDate> = JsonMissing.of(),
+        ) : this(amount, invoiceLineItemId, endDate, startDate, mutableMapOf())
 
         /**
          * The total amount in the invoice's currency to credit this line item.
@@ -588,6 +788,28 @@ private constructor(
         fun invoiceLineItemId(): String = invoiceLineItemId.getRequired("invoice_line_item_id")
 
         /**
+         * An optional date string to specify this line item's credit note service period end date
+         * in the customer's timezone. If provided, this will be used for this specific line item.
+         * If not provided, will use the global end_date if available, otherwise defaults to the
+         * original invoice line item's end date. This date is inclusive.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun endDate(): Optional<LocalDate> = endDate.getOptional("end_date")
+
+        /**
+         * An optional date string to specify this line item's credit note service period start date
+         * in the customer's timezone. If provided, this will be used for this specific line item.
+         * If not provided, will use the global start_date if available, otherwise defaults to the
+         * original invoice line item's start date. This date is inclusive.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun startDate(): Optional<LocalDate> = startDate.getOptional("start_date")
+
+        /**
          * Returns the raw JSON value of [amount].
          *
          * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
@@ -603,6 +825,22 @@ private constructor(
         @JsonProperty("invoice_line_item_id")
         @ExcludeMissing
         fun _invoiceLineItemId(): JsonField<String> = invoiceLineItemId
+
+        /**
+         * Returns the raw JSON value of [endDate].
+         *
+         * Unlike [endDate], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("end_date") @ExcludeMissing fun _endDate(): JsonField<LocalDate> = endDate
+
+        /**
+         * Returns the raw JSON value of [startDate].
+         *
+         * Unlike [startDate], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("start_date")
+        @ExcludeMissing
+        fun _startDate(): JsonField<LocalDate> = startDate
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -635,12 +873,16 @@ private constructor(
 
             private var amount: JsonField<String>? = null
             private var invoiceLineItemId: JsonField<String>? = null
+            private var endDate: JsonField<LocalDate> = JsonMissing.of()
+            private var startDate: JsonField<LocalDate> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(lineItem: LineItem) = apply {
                 amount = lineItem.amount
                 invoiceLineItemId = lineItem.invoiceLineItemId
+                endDate = lineItem.endDate
+                startDate = lineItem.startDate
                 additionalProperties = lineItem.additionalProperties.toMutableMap()
             }
 
@@ -670,6 +912,46 @@ private constructor(
             fun invoiceLineItemId(invoiceLineItemId: JsonField<String>) = apply {
                 this.invoiceLineItemId = invoiceLineItemId
             }
+
+            /**
+             * An optional date string to specify this line item's credit note service period end
+             * date in the customer's timezone. If provided, this will be used for this specific
+             * line item. If not provided, will use the global end_date if available, otherwise
+             * defaults to the original invoice line item's end date. This date is inclusive.
+             */
+            fun endDate(endDate: LocalDate?) = endDate(JsonField.ofNullable(endDate))
+
+            /** Alias for calling [Builder.endDate] with `endDate.orElse(null)`. */
+            fun endDate(endDate: Optional<LocalDate>) = endDate(endDate.getOrNull())
+
+            /**
+             * Sets [Builder.endDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.endDate] with a well-typed [LocalDate] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun endDate(endDate: JsonField<LocalDate>) = apply { this.endDate = endDate }
+
+            /**
+             * An optional date string to specify this line item's credit note service period start
+             * date in the customer's timezone. If provided, this will be used for this specific
+             * line item. If not provided, will use the global start_date if available, otherwise
+             * defaults to the original invoice line item's start date. This date is inclusive.
+             */
+            fun startDate(startDate: LocalDate?) = startDate(JsonField.ofNullable(startDate))
+
+            /** Alias for calling [Builder.startDate] with `startDate.orElse(null)`. */
+            fun startDate(startDate: Optional<LocalDate>) = startDate(startDate.getOrNull())
+
+            /**
+             * Sets [Builder.startDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.startDate] with a well-typed [LocalDate] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun startDate(startDate: JsonField<LocalDate>) = apply { this.startDate = startDate }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -707,6 +989,8 @@ private constructor(
                 LineItem(
                     checkRequired("amount", amount),
                     checkRequired("invoiceLineItemId", invoiceLineItemId),
+                    endDate,
+                    startDate,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -720,6 +1004,8 @@ private constructor(
 
             amount()
             invoiceLineItemId()
+            endDate()
+            startDate()
             validated = true
         }
 
@@ -740,24 +1026,26 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (if (amount.asKnown().isPresent) 1 else 0) +
-                (if (invoiceLineItemId.asKnown().isPresent) 1 else 0)
+                (if (invoiceLineItemId.asKnown().isPresent) 1 else 0) +
+                (if (endDate.asKnown().isPresent) 1 else 0) +
+                (if (startDate.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is LineItem && amount == other.amount && invoiceLineItemId == other.invoiceLineItemId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is LineItem && amount == other.amount && invoiceLineItemId == other.invoiceLineItemId && endDate == other.endDate && startDate == other.startDate && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(amount, invoiceLineItemId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(amount, invoiceLineItemId, endDate, startDate, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "LineItem{amount=$amount, invoiceLineItemId=$invoiceLineItemId, additionalProperties=$additionalProperties}"
+            "LineItem{amount=$amount, invoiceLineItemId=$invoiceLineItemId, endDate=$endDate, startDate=$startDate, additionalProperties=$additionalProperties}"
     }
 
     /** An optional reason for the credit note. */
