@@ -17,5 +17,12 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 application {
-    mainClass = "com.withorb.api.example.Main"
+    // Use `./gradlew :orb-java-example:run` to run `Main`
+    // Use `./gradlew :orb-java-example:run -Dexample=Something` to run `SomethingExample`
+    mainClass = "com.withorb.api.example.${
+        if (project.hasProperty("example"))
+            "${project.property("example")}Example"
+        else
+            "Main"
+    }"
 }
