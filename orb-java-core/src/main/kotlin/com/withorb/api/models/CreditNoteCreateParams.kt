@@ -69,9 +69,10 @@ private constructor(
     fun reason(): Reason = body.reason()
 
     /**
-     * An optional date string to specify the global credit note service period end date in the
-     * customer's timezone. This will be applied to all line items. If not provided, line items will
-     * use their original invoice line item service periods. This date is inclusive.
+     * A date string to specify the global credit note service period end date in the customer's
+     * timezone. This will be applied to all line items that don't have their own individual service
+     * periods specified. If not provided, line items will use their original invoice line item
+     * service periods. This date is inclusive.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
@@ -87,9 +88,10 @@ private constructor(
     fun memo(): Optional<String> = body.memo()
 
     /**
-     * An optional date string to specify the global credit note service period end date in the
-     * customer's timezone. This will be applied to all line items. If not provided, line items will
-     * use their original invoice line item service periods. This date is inclusive.
+     * A date string to specify the global credit note service period start date in the customer's
+     * timezone. This will be applied to all line items that don't have their own individual service
+     * periods specified. If not provided, line items will use their original invoice line item
+     * service periods. This date is inclusive.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
@@ -211,9 +213,10 @@ private constructor(
         fun reason(reason: JsonField<Reason>) = apply { body.reason(reason) }
 
         /**
-         * An optional date string to specify the global credit note service period end date in the
-         * customer's timezone. This will be applied to all line items. If not provided, line items
-         * will use their original invoice line item service periods. This date is inclusive.
+         * A date string to specify the global credit note service period end date in the customer's
+         * timezone. This will be applied to all line items that don't have their own individual
+         * service periods specified. If not provided, line items will use their original invoice
+         * line item service periods. This date is inclusive.
          */
         fun endDate(endDate: LocalDate?) = apply { body.endDate(endDate) }
 
@@ -244,9 +247,10 @@ private constructor(
         fun memo(memo: JsonField<String>) = apply { body.memo(memo) }
 
         /**
-         * An optional date string to specify the global credit note service period end date in the
-         * customer's timezone. This will be applied to all line items. If not provided, line items
-         * will use their original invoice line item service periods. This date is inclusive.
+         * A date string to specify the global credit note service period start date in the
+         * customer's timezone. This will be applied to all line items that don't have their own
+         * individual service periods specified. If not provided, line items will use their original
+         * invoice line item service periods. This date is inclusive.
          */
         fun startDate(startDate: LocalDate?) = apply { body.startDate(startDate) }
 
@@ -446,9 +450,10 @@ private constructor(
         fun reason(): Reason = reason.getRequired("reason")
 
         /**
-         * An optional date string to specify the global credit note service period end date in the
-         * customer's timezone. This will be applied to all line items. If not provided, line items
-         * will use their original invoice line item service periods. This date is inclusive.
+         * A date string to specify the global credit note service period end date in the customer's
+         * timezone. This will be applied to all line items that don't have their own individual
+         * service periods specified. If not provided, line items will use their original invoice
+         * line item service periods. This date is inclusive.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -464,9 +469,10 @@ private constructor(
         fun memo(): Optional<String> = memo.getOptional("memo")
 
         /**
-         * An optional date string to specify the global credit note service period end date in the
-         * customer's timezone. This will be applied to all line items. If not provided, line items
-         * will use their original invoice line item service periods. This date is inclusive.
+         * A date string to specify the global credit note service period start date in the
+         * customer's timezone. This will be applied to all line items that don't have their own
+         * individual service periods specified. If not provided, line items will use their original
+         * invoice line item service periods. This date is inclusive.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -596,10 +602,10 @@ private constructor(
             fun reason(reason: JsonField<Reason>) = apply { this.reason = reason }
 
             /**
-             * An optional date string to specify the global credit note service period end date in
-             * the customer's timezone. This will be applied to all line items. If not provided,
-             * line items will use their original invoice line item service periods. This date is
-             * inclusive.
+             * A date string to specify the global credit note service period end date in the
+             * customer's timezone. This will be applied to all line items that don't have their own
+             * individual service periods specified. If not provided, line items will use their
+             * original invoice line item service periods. This date is inclusive.
              */
             fun endDate(endDate: LocalDate?) = endDate(JsonField.ofNullable(endDate))
 
@@ -631,10 +637,10 @@ private constructor(
             fun memo(memo: JsonField<String>) = apply { this.memo = memo }
 
             /**
-             * An optional date string to specify the global credit note service period end date in
-             * the customer's timezone. This will be applied to all line items. If not provided,
-             * line items will use their original invoice line item service periods. This date is
-             * inclusive.
+             * A date string to specify the global credit note service period start date in the
+             * customer's timezone. This will be applied to all line items that don't have their own
+             * individual service periods specified. If not provided, line items will use their
+             * original invoice line item service periods. This date is inclusive.
              */
             fun startDate(startDate: LocalDate?) = startDate(JsonField.ofNullable(startDate))
 
@@ -788,10 +794,10 @@ private constructor(
         fun invoiceLineItemId(): String = invoiceLineItemId.getRequired("invoice_line_item_id")
 
         /**
-         * An optional date string to specify this line item's credit note service period end date
-         * in the customer's timezone. If provided, this will be used for this specific line item.
-         * If not provided, will use the global end_date if available, otherwise defaults to the
-         * original invoice line item's end date. This date is inclusive.
+         * A date string to specify this line item's credit note service period end date in the
+         * customer's timezone. If provided, this will be used for this specific line item. If not
+         * provided, will use the global end_date if available, otherwise defaults to the original
+         * invoice line item's end date. This date is inclusive.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -799,10 +805,10 @@ private constructor(
         fun endDate(): Optional<LocalDate> = endDate.getOptional("end_date")
 
         /**
-         * An optional date string to specify this line item's credit note service period start date
-         * in the customer's timezone. If provided, this will be used for this specific line item.
-         * If not provided, will use the global start_date if available, otherwise defaults to the
-         * original invoice line item's start date. This date is inclusive.
+         * A date string to specify this line item's credit note service period start date in the
+         * customer's timezone. If provided, this will be used for this specific line item. If not
+         * provided, will use the global start_date if available, otherwise defaults to the original
+         * invoice line item's start date. This date is inclusive.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -914,10 +920,10 @@ private constructor(
             }
 
             /**
-             * An optional date string to specify this line item's credit note service period end
-             * date in the customer's timezone. If provided, this will be used for this specific
-             * line item. If not provided, will use the global end_date if available, otherwise
-             * defaults to the original invoice line item's end date. This date is inclusive.
+             * A date string to specify this line item's credit note service period end date in the
+             * customer's timezone. If provided, this will be used for this specific line item. If
+             * not provided, will use the global end_date if available, otherwise defaults to the
+             * original invoice line item's end date. This date is inclusive.
              */
             fun endDate(endDate: LocalDate?) = endDate(JsonField.ofNullable(endDate))
 
@@ -934,10 +940,10 @@ private constructor(
             fun endDate(endDate: JsonField<LocalDate>) = apply { this.endDate = endDate }
 
             /**
-             * An optional date string to specify this line item's credit note service period start
-             * date in the customer's timezone. If provided, this will be used for this specific
-             * line item. If not provided, will use the global start_date if available, otherwise
-             * defaults to the original invoice line item's start date. This date is inclusive.
+             * A date string to specify this line item's credit note service period start date in
+             * the customer's timezone. If provided, this will be used for this specific line item.
+             * If not provided, will use the global start_date if available, otherwise defaults to
+             * the original invoice line item's start date. This date is inclusive.
              */
             fun startDate(startDate: LocalDate?) = startDate(JsonField.ofNullable(startDate))
 
