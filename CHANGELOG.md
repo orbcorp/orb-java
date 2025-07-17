@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.1 (2025-07-17)
+
+Full Changelog: [v1.5.0...v1.5.1](https://github.com/orbcorp/orb-java/compare/v1.5.0...v1.5.1)
+
+### Bug Fixes
+
+* **client:** ensure error handling always occurs ([833326e](https://github.com/orbcorp/orb-java/commit/833326e6f35b4b8575002fc31f89f8292343a9e0))
+
 ## 1.5.0 (2025-07-16)
 
 Full Changelog: [v1.4.0...v1.5.0](https://github.com/orbcorp/orb-java/compare/v1.4.0...v1.5.0)
