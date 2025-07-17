@@ -3,14 +3,14 @@
 package com.withorb.api.services.async
 
 import com.withorb.api.core.ClientOptions
-import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.checkRequired
+import com.withorb.api.core.handlers.errorBodyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
-import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
+import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponse.Handler
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.core.http.json
@@ -78,7 +78,8 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         CouponServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         private val subscriptions: SubscriptionServiceAsync.WithRawResponse by lazy {
             SubscriptionServiceAsyncImpl.WithRawResponseImpl(clientOptions)
@@ -93,8 +94,7 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
 
         override fun subscriptions(): SubscriptionServiceAsync.WithRawResponse = subscriptions
 
-        private val createHandler: Handler<Coupon> =
-            jsonHandler<Coupon>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val createHandler: Handler<Coupon> = jsonHandler<Coupon>(clientOptions.jsonMapper)
 
         override fun create(
             params: CouponCreateParams,
@@ -112,7 +112,7 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { createHandler.handle(it) }
                             .also {
@@ -126,7 +126,6 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
 
         private val listHandler: Handler<CouponListPageResponse> =
             jsonHandler<CouponListPageResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun list(
             params: CouponListParams,
@@ -143,7 +142,7 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { listHandler.handle(it) }
                             .also {
@@ -163,8 +162,7 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 }
         }
 
-        private val archiveHandler: Handler<Coupon> =
-            jsonHandler<Coupon>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val archiveHandler: Handler<Coupon> = jsonHandler<Coupon>(clientOptions.jsonMapper)
 
         override fun archive(
             params: CouponArchiveParams,
@@ -185,7 +183,7 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { archiveHandler.handle(it) }
                             .also {
@@ -197,8 +195,7 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 }
         }
 
-        private val fetchHandler: Handler<Coupon> =
-            jsonHandler<Coupon>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val fetchHandler: Handler<Coupon> = jsonHandler<Coupon>(clientOptions.jsonMapper)
 
         override fun fetch(
             params: CouponFetchParams,
@@ -218,7 +215,7 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { fetchHandler.handle(it) }
                             .also {

@@ -3,14 +3,14 @@
 package com.withorb.api.services.blocking
 
 import com.withorb.api.core.ClientOptions
-import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.checkRequired
+import com.withorb.api.core.handlers.errorBodyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
-import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
+import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponse.Handler
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.core.http.json
@@ -92,7 +92,8 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         PriceService.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         private val externalPriceId: ExternalPriceIdService.WithRawResponse by lazy {
             ExternalPriceIdServiceImpl.WithRawResponseImpl(clientOptions)
@@ -107,8 +108,7 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
 
         override fun externalPriceId(): ExternalPriceIdService.WithRawResponse = externalPriceId
 
-        private val createHandler: Handler<Price> =
-            jsonHandler<Price>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val createHandler: Handler<Price> = jsonHandler<Price>(clientOptions.jsonMapper)
 
         override fun create(
             params: PriceCreateParams,
@@ -124,7 +124,7 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { createHandler.handle(it) }
                     .also {
@@ -135,8 +135,7 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
             }
         }
 
-        private val updateHandler: Handler<Price> =
-            jsonHandler<Price>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val updateHandler: Handler<Price> = jsonHandler<Price>(clientOptions.jsonMapper)
 
         override fun update(
             params: PriceUpdateParams,
@@ -155,7 +154,7 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { updateHandler.handle(it) }
                     .also {
@@ -168,7 +167,6 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
 
         private val listHandler: Handler<PriceListPageResponse> =
             jsonHandler<PriceListPageResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun list(
             params: PriceListParams,
@@ -183,7 +181,7 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { listHandler.handle(it) }
                     .also {
@@ -203,7 +201,6 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
 
         private val evaluateHandler: Handler<PriceEvaluateResponse> =
             jsonHandler<PriceEvaluateResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun evaluate(
             params: PriceEvaluateParams,
@@ -222,7 +219,7 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { evaluateHandler.handle(it) }
                     .also {
@@ -235,7 +232,6 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
 
         private val evaluateMultipleHandler: Handler<PriceEvaluateMultipleResponse> =
             jsonHandler<PriceEvaluateMultipleResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun evaluateMultiple(
             params: PriceEvaluateMultipleParams,
@@ -251,7 +247,7 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { evaluateMultipleHandler.handle(it) }
                     .also {
@@ -264,7 +260,6 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
 
         private val evaluatePreviewEventsHandler: Handler<PriceEvaluatePreviewEventsResponse> =
             jsonHandler<PriceEvaluatePreviewEventsResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun evaluatePreviewEvents(
             params: PriceEvaluatePreviewEventsParams,
@@ -280,7 +275,7 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { evaluatePreviewEventsHandler.handle(it) }
                     .also {
@@ -291,8 +286,7 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
             }
         }
 
-        private val fetchHandler: Handler<Price> =
-            jsonHandler<Price>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val fetchHandler: Handler<Price> = jsonHandler<Price>(clientOptions.jsonMapper)
 
         override fun fetch(
             params: PriceFetchParams,
@@ -310,7 +304,7 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { fetchHandler.handle(it) }
                     .also {

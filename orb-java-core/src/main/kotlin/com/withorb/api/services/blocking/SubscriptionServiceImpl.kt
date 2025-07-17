@@ -3,14 +3,14 @@
 package com.withorb.api.services.blocking
 
 import com.withorb.api.core.ClientOptions
-import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.checkRequired
+import com.withorb.api.core.handlers.errorBodyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
-import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
+import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponse.Handler
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.core.http.json
@@ -178,7 +178,8 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         SubscriptionService.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
@@ -189,7 +190,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val createHandler: Handler<MutatedSubscription> =
             jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun create(
             params: SubscriptionCreateParams,
@@ -205,7 +205,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { createHandler.handle(it) }
                     .also {
@@ -217,7 +217,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
         }
 
         private val updateHandler: Handler<Subscription> =
-            jsonHandler<Subscription>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<Subscription>(clientOptions.jsonMapper)
 
         override fun update(
             params: SubscriptionUpdateParams,
@@ -236,7 +236,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { updateHandler.handle(it) }
                     .also {
@@ -248,7 +248,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
         }
 
         private val listHandler: Handler<Subscriptions> =
-            jsonHandler<Subscriptions>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<Subscriptions>(clientOptions.jsonMapper)
 
         override fun list(
             params: SubscriptionListParams,
@@ -263,7 +263,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { listHandler.handle(it) }
                     .also {
@@ -283,7 +283,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val cancelHandler: Handler<MutatedSubscription> =
             jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun cancel(
             params: SubscriptionCancelParams,
@@ -302,7 +301,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { cancelHandler.handle(it) }
                     .also {
@@ -314,7 +313,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
         }
 
         private val fetchHandler: Handler<Subscription> =
-            jsonHandler<Subscription>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<Subscription>(clientOptions.jsonMapper)
 
         override fun fetch(
             params: SubscriptionFetchParams,
@@ -332,7 +331,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { fetchHandler.handle(it) }
                     .also {
@@ -345,7 +344,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val fetchCostsHandler: Handler<SubscriptionFetchCostsResponse> =
             jsonHandler<SubscriptionFetchCostsResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun fetchCosts(
             params: SubscriptionFetchCostsParams,
@@ -363,7 +361,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { fetchCostsHandler.handle(it) }
                     .also {
@@ -376,7 +374,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val fetchScheduleHandler: Handler<SubscriptionFetchSchedulePageResponse> =
             jsonHandler<SubscriptionFetchSchedulePageResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun fetchSchedule(
             params: SubscriptionFetchScheduleParams,
@@ -394,7 +391,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { fetchScheduleHandler.handle(it) }
                     .also {
@@ -413,7 +410,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
         }
 
         private val fetchUsageHandler: Handler<SubscriptionUsage> =
-            jsonHandler<SubscriptionUsage>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<SubscriptionUsage>(clientOptions.jsonMapper)
 
         override fun fetchUsage(
             params: SubscriptionFetchUsageParams,
@@ -431,7 +428,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { fetchUsageHandler.handle(it) }
                     .also {
@@ -444,7 +441,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val priceIntervalsHandler: Handler<MutatedSubscription> =
             jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun priceIntervals(
             params: SubscriptionPriceIntervalsParams,
@@ -463,7 +459,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { priceIntervalsHandler.handle(it) }
                     .also {
@@ -476,7 +472,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val redeemCouponHandler: Handler<MutatedSubscription> =
             jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun redeemCoupon(
             params: SubscriptionRedeemCouponParams,
@@ -495,7 +490,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { redeemCouponHandler.handle(it) }
                     .also {
@@ -508,7 +503,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val schedulePlanChangeHandler: Handler<MutatedSubscription> =
             jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun schedulePlanChange(
             params: SubscriptionSchedulePlanChangeParams,
@@ -527,7 +521,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { schedulePlanChangeHandler.handle(it) }
                     .also {
@@ -540,7 +534,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val triggerPhaseHandler: Handler<MutatedSubscription> =
             jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun triggerPhase(
             params: SubscriptionTriggerPhaseParams,
@@ -559,7 +552,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { triggerPhaseHandler.handle(it) }
                     .also {
@@ -572,7 +565,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val unscheduleCancellationHandler: Handler<MutatedSubscription> =
             jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun unscheduleCancellation(
             params: SubscriptionUnscheduleCancellationParams,
@@ -595,7 +587,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { unscheduleCancellationHandler.handle(it) }
                     .also {
@@ -608,7 +600,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val unscheduleFixedFeeQuantityUpdatesHandler: Handler<MutatedSubscription> =
             jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun unscheduleFixedFeeQuantityUpdates(
             params: SubscriptionUnscheduleFixedFeeQuantityUpdatesParams,
@@ -631,7 +622,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { unscheduleFixedFeeQuantityUpdatesHandler.handle(it) }
                     .also {
@@ -644,7 +635,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val unschedulePendingPlanChangesHandler: Handler<MutatedSubscription> =
             jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun unschedulePendingPlanChanges(
             params: SubscriptionUnschedulePendingPlanChangesParams,
@@ -667,7 +657,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { unschedulePendingPlanChangesHandler.handle(it) }
                     .also {
@@ -680,7 +670,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val updateFixedFeeQuantityHandler: Handler<MutatedSubscription> =
             jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun updateFixedFeeQuantity(
             params: SubscriptionUpdateFixedFeeQuantityParams,
@@ -703,7 +692,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { updateFixedFeeQuantityHandler.handle(it) }
                     .also {
@@ -716,7 +705,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val updateTrialHandler: Handler<MutatedSubscription> =
             jsonHandler<MutatedSubscription>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun updateTrial(
             params: SubscriptionUpdateTrialParams,
@@ -735,7 +723,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { updateTrialHandler.handle(it) }
                     .also {

@@ -3,14 +3,14 @@
 package com.withorb.api.services.blocking
 
 import com.withorb.api.core.ClientOptions
-import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.checkRequired
+import com.withorb.api.core.handlers.errorBodyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
-import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
+import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponse.Handler
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.core.http.json
@@ -82,7 +82,8 @@ class EventServiceImpl internal constructor(private val clientOptions: ClientOpt
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         EventService.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         private val backfills: BackfillService.WithRawResponse by lazy {
             BackfillServiceImpl.WithRawResponseImpl(clientOptions)
@@ -105,7 +106,6 @@ class EventServiceImpl internal constructor(private val clientOptions: ClientOpt
 
         private val updateHandler: Handler<EventUpdateResponse> =
             jsonHandler<EventUpdateResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun update(
             params: EventUpdateParams,
@@ -124,7 +124,7 @@ class EventServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { updateHandler.handle(it) }
                     .also {
@@ -137,7 +137,6 @@ class EventServiceImpl internal constructor(private val clientOptions: ClientOpt
 
         private val deprecateHandler: Handler<EventDeprecateResponse> =
             jsonHandler<EventDeprecateResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun deprecate(
             params: EventDeprecateParams,
@@ -156,7 +155,7 @@ class EventServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { deprecateHandler.handle(it) }
                     .also {
@@ -169,7 +168,6 @@ class EventServiceImpl internal constructor(private val clientOptions: ClientOpt
 
         private val ingestHandler: Handler<EventIngestResponse> =
             jsonHandler<EventIngestResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun ingest(
             params: EventIngestParams,
@@ -185,7 +183,7 @@ class EventServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { ingestHandler.handle(it) }
                     .also {
@@ -198,7 +196,6 @@ class EventServiceImpl internal constructor(private val clientOptions: ClientOpt
 
         private val searchHandler: Handler<EventSearchResponse> =
             jsonHandler<EventSearchResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun search(
             params: EventSearchParams,
@@ -214,7 +211,7 @@ class EventServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { searchHandler.handle(it) }
                     .also {
