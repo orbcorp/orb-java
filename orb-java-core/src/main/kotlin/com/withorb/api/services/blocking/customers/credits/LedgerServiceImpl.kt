@@ -3,14 +3,14 @@
 package com.withorb.api.services.blocking.customers.credits
 
 import com.withorb.api.core.ClientOptions
-import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.checkRequired
+import com.withorb.api.core.handlers.errorBodyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
-import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
+import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponse.Handler
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.core.http.json
@@ -72,7 +72,8 @@ class LedgerServiceImpl internal constructor(private val clientOptions: ClientOp
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         LedgerService.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
@@ -83,7 +84,6 @@ class LedgerServiceImpl internal constructor(private val clientOptions: ClientOp
 
         private val listHandler: Handler<CustomerCreditLedgerListPageResponse> =
             jsonHandler<CustomerCreditLedgerListPageResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun list(
             params: CustomerCreditLedgerListParams,
@@ -101,7 +101,7 @@ class LedgerServiceImpl internal constructor(private val clientOptions: ClientOp
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { listHandler.handle(it) }
                     .also {
@@ -121,7 +121,6 @@ class LedgerServiceImpl internal constructor(private val clientOptions: ClientOp
 
         private val createEntryHandler: Handler<CustomerCreditLedgerCreateEntryResponse> =
             jsonHandler<CustomerCreditLedgerCreateEntryResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun createEntry(
             params: CustomerCreditLedgerCreateEntryParams,
@@ -140,7 +139,7 @@ class LedgerServiceImpl internal constructor(private val clientOptions: ClientOp
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { createEntryHandler.handle(it) }
                     .also {
@@ -154,9 +153,8 @@ class LedgerServiceImpl internal constructor(private val clientOptions: ClientOp
         private val createEntryByExternalIdHandler:
             Handler<CustomerCreditLedgerCreateEntryByExternalIdResponse> =
             jsonHandler<CustomerCreditLedgerCreateEntryByExternalIdResponse>(
-                    clientOptions.jsonMapper
-                )
-                .withErrorHandler(errorHandler)
+                clientOptions.jsonMapper
+            )
 
         override fun createEntryByExternalId(
             params: CustomerCreditLedgerCreateEntryByExternalIdParams,
@@ -181,7 +179,7 @@ class LedgerServiceImpl internal constructor(private val clientOptions: ClientOp
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { createEntryByExternalIdHandler.handle(it) }
                     .also {
@@ -195,7 +193,6 @@ class LedgerServiceImpl internal constructor(private val clientOptions: ClientOp
         private val listByExternalIdHandler:
             Handler<CustomerCreditLedgerListByExternalIdPageResponse> =
             jsonHandler<CustomerCreditLedgerListByExternalIdPageResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun listByExternalId(
             params: CustomerCreditLedgerListByExternalIdParams,
@@ -219,7 +216,7 @@ class LedgerServiceImpl internal constructor(private val clientOptions: ClientOp
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { listByExternalIdHandler.handle(it) }
                     .also {

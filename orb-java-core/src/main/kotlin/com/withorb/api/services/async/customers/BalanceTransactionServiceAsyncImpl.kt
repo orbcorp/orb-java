@@ -3,14 +3,14 @@
 package com.withorb.api.services.async.customers
 
 import com.withorb.api.core.ClientOptions
-import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.checkRequired
+import com.withorb.api.core.handlers.errorBodyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
-import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
+import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponse.Handler
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.core.http.json
@@ -58,7 +58,8 @@ internal constructor(private val clientOptions: ClientOptions) : BalanceTransact
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         BalanceTransactionServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
@@ -69,7 +70,6 @@ internal constructor(private val clientOptions: ClientOptions) : BalanceTransact
 
         private val createHandler: Handler<CustomerBalanceTransactionCreateResponse> =
             jsonHandler<CustomerBalanceTransactionCreateResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun create(
             params: CustomerBalanceTransactionCreateParams,
@@ -90,7 +90,7 @@ internal constructor(private val clientOptions: ClientOptions) : BalanceTransact
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { createHandler.handle(it) }
                             .also {
@@ -104,7 +104,6 @@ internal constructor(private val clientOptions: ClientOptions) : BalanceTransact
 
         private val listHandler: Handler<CustomerBalanceTransactionListPageResponse> =
             jsonHandler<CustomerBalanceTransactionListPageResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun list(
             params: CustomerBalanceTransactionListParams,
@@ -124,7 +123,7 @@ internal constructor(private val clientOptions: ClientOptions) : BalanceTransact
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { listHandler.handle(it) }
                             .also {

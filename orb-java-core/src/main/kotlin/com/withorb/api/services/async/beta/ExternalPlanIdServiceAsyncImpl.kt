@@ -3,14 +3,14 @@
 package com.withorb.api.services.async.beta
 
 import com.withorb.api.core.ClientOptions
-import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.checkRequired
+import com.withorb.api.core.handlers.errorBodyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
-import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
+import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponse.Handler
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.core.http.json
@@ -63,7 +63,8 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdS
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ExternalPlanIdServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
@@ -73,7 +74,7 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdS
             )
 
         private val createPlanVersionHandler: Handler<PlanVersion> =
-            jsonHandler<PlanVersion>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<PlanVersion>(clientOptions.jsonMapper)
 
         override fun createPlanVersion(
             params: BetaExternalPlanIdCreatePlanVersionParams,
@@ -94,7 +95,7 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdS
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { createPlanVersionHandler.handle(it) }
                             .also {
@@ -107,7 +108,7 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdS
         }
 
         private val fetchPlanVersionHandler: Handler<PlanVersion> =
-            jsonHandler<PlanVersion>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<PlanVersion>(clientOptions.jsonMapper)
 
         override fun fetchPlanVersion(
             params: BetaExternalPlanIdFetchPlanVersionParams,
@@ -133,7 +134,7 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdS
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { fetchPlanVersionHandler.handle(it) }
                             .also {
@@ -146,7 +147,7 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdS
         }
 
         private val setDefaultPlanVersionHandler: Handler<Plan> =
-            jsonHandler<Plan>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<Plan>(clientOptions.jsonMapper)
 
         override fun setDefaultPlanVersion(
             params: BetaExternalPlanIdSetDefaultPlanVersionParams,
@@ -172,7 +173,7 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdS
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { setDefaultPlanVersionHandler.handle(it) }
                             .also {

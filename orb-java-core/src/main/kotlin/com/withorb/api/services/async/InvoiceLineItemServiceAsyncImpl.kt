@@ -3,13 +3,13 @@
 package com.withorb.api.services.async
 
 import com.withorb.api.core.ClientOptions
-import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
+import com.withorb.api.core.handlers.errorBodyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
-import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
+import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponse.Handler
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.core.http.json
@@ -44,7 +44,8 @@ internal constructor(private val clientOptions: ClientOptions) : InvoiceLineItem
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         InvoiceLineItemServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
@@ -55,7 +56,6 @@ internal constructor(private val clientOptions: ClientOptions) : InvoiceLineItem
 
         private val createHandler: Handler<InvoiceLineItemCreateResponse> =
             jsonHandler<InvoiceLineItemCreateResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun create(
             params: InvoiceLineItemCreateParams,
@@ -73,7 +73,7 @@ internal constructor(private val clientOptions: ClientOptions) : InvoiceLineItem
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { createHandler.handle(it) }
                             .also {

@@ -3,14 +3,14 @@
 package com.withorb.api.services.blocking
 
 import com.withorb.api.core.ClientOptions
-import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.checkRequired
+import com.withorb.api.core.handlers.errorBodyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
-import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
+import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponse.Handler
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.core.http.json
@@ -61,7 +61,8 @@ class ItemServiceImpl internal constructor(private val clientOptions: ClientOpti
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ItemService.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
@@ -70,8 +71,7 @@ class ItemServiceImpl internal constructor(private val clientOptions: ClientOpti
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        private val createHandler: Handler<Item> =
-            jsonHandler<Item>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val createHandler: Handler<Item> = jsonHandler<Item>(clientOptions.jsonMapper)
 
         override fun create(
             params: ItemCreateParams,
@@ -87,7 +87,7 @@ class ItemServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { createHandler.handle(it) }
                     .also {
@@ -98,8 +98,7 @@ class ItemServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val updateHandler: Handler<Item> =
-            jsonHandler<Item>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val updateHandler: Handler<Item> = jsonHandler<Item>(clientOptions.jsonMapper)
 
         override fun update(
             params: ItemUpdateParams,
@@ -118,7 +117,7 @@ class ItemServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { updateHandler.handle(it) }
                     .also {
@@ -131,7 +130,6 @@ class ItemServiceImpl internal constructor(private val clientOptions: ClientOpti
 
         private val listHandler: Handler<ItemListPageResponse> =
             jsonHandler<ItemListPageResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun list(
             params: ItemListParams,
@@ -146,7 +144,7 @@ class ItemServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { listHandler.handle(it) }
                     .also {
@@ -164,8 +162,7 @@ class ItemServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val archiveHandler: Handler<Item> =
-            jsonHandler<Item>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val archiveHandler: Handler<Item> = jsonHandler<Item>(clientOptions.jsonMapper)
 
         override fun archive(
             params: ItemArchiveParams,
@@ -184,7 +181,7 @@ class ItemServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { archiveHandler.handle(it) }
                     .also {
@@ -195,8 +192,7 @@ class ItemServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val fetchHandler: Handler<Item> =
-            jsonHandler<Item>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val fetchHandler: Handler<Item> = jsonHandler<Item>(clientOptions.jsonMapper)
 
         override fun fetch(
             params: ItemFetchParams,
@@ -214,7 +210,7 @@ class ItemServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { fetchHandler.handle(it) }
                     .also {

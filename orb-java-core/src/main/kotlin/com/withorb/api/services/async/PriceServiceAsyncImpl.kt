@@ -3,14 +3,14 @@
 package com.withorb.api.services.async
 
 import com.withorb.api.core.ClientOptions
-import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.checkRequired
+import com.withorb.api.core.handlers.errorBodyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
-import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
+import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponse.Handler
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.core.http.json
@@ -105,7 +105,8 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         PriceServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         private val externalPriceId: ExternalPriceIdServiceAsync.WithRawResponse by lazy {
             ExternalPriceIdServiceAsyncImpl.WithRawResponseImpl(clientOptions)
@@ -121,8 +122,7 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
         override fun externalPriceId(): ExternalPriceIdServiceAsync.WithRawResponse =
             externalPriceId
 
-        private val createHandler: Handler<Price> =
-            jsonHandler<Price>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val createHandler: Handler<Price> = jsonHandler<Price>(clientOptions.jsonMapper)
 
         override fun create(
             params: PriceCreateParams,
@@ -140,7 +140,7 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { createHandler.handle(it) }
                             .also {
@@ -152,8 +152,7 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val updateHandler: Handler<Price> =
-            jsonHandler<Price>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val updateHandler: Handler<Price> = jsonHandler<Price>(clientOptions.jsonMapper)
 
         override fun update(
             params: PriceUpdateParams,
@@ -174,7 +173,7 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { updateHandler.handle(it) }
                             .also {
@@ -188,7 +187,6 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
         private val listHandler: Handler<PriceListPageResponse> =
             jsonHandler<PriceListPageResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun list(
             params: PriceListParams,
@@ -205,7 +203,7 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { listHandler.handle(it) }
                             .also {
@@ -227,7 +225,6 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
         private val evaluateHandler: Handler<PriceEvaluateResponse> =
             jsonHandler<PriceEvaluateResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun evaluate(
             params: PriceEvaluateParams,
@@ -248,7 +245,7 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { evaluateHandler.handle(it) }
                             .also {
@@ -262,7 +259,6 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
         private val evaluateMultipleHandler: Handler<PriceEvaluateMultipleResponse> =
             jsonHandler<PriceEvaluateMultipleResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun evaluateMultiple(
             params: PriceEvaluateMultipleParams,
@@ -280,7 +276,7 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { evaluateMultipleHandler.handle(it) }
                             .also {
@@ -294,7 +290,6 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
         private val evaluatePreviewEventsHandler: Handler<PriceEvaluatePreviewEventsResponse> =
             jsonHandler<PriceEvaluatePreviewEventsResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun evaluatePreviewEvents(
             params: PriceEvaluatePreviewEventsParams,
@@ -312,7 +307,7 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { evaluatePreviewEventsHandler.handle(it) }
                             .also {
@@ -324,8 +319,7 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val fetchHandler: Handler<Price> =
-            jsonHandler<Price>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val fetchHandler: Handler<Price> = jsonHandler<Price>(clientOptions.jsonMapper)
 
         override fun fetch(
             params: PriceFetchParams,
@@ -345,7 +339,7 @@ class PriceServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { fetchHandler.handle(it) }
                             .also {
