@@ -3,14 +3,14 @@
 package com.withorb.api.services.async
 
 import com.withorb.api.core.ClientOptions
-import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.checkRequired
+import com.withorb.api.core.handlers.errorBodyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
-import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
+import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponse.Handler
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.core.http.json
@@ -77,7 +77,8 @@ internal constructor(private val clientOptions: ClientOptions) : DimensionalPric
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         DimensionalPriceGroupServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         private val externalDimensionalPriceGroupId:
             ExternalDimensionalPriceGroupIdServiceAsync.WithRawResponse by lazy {
@@ -97,7 +98,6 @@ internal constructor(private val clientOptions: ClientOptions) : DimensionalPric
 
         private val createHandler: Handler<DimensionalPriceGroup> =
             jsonHandler<DimensionalPriceGroup>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun create(
             params: DimensionalPriceGroupCreateParams,
@@ -115,7 +115,7 @@ internal constructor(private val clientOptions: ClientOptions) : DimensionalPric
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { createHandler.handle(it) }
                             .also {
@@ -129,7 +129,6 @@ internal constructor(private val clientOptions: ClientOptions) : DimensionalPric
 
         private val retrieveHandler: Handler<DimensionalPriceGroup> =
             jsonHandler<DimensionalPriceGroup>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun retrieve(
             params: DimensionalPriceGroupRetrieveParams,
@@ -149,7 +148,7 @@ internal constructor(private val clientOptions: ClientOptions) : DimensionalPric
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { retrieveHandler.handle(it) }
                             .also {
@@ -163,7 +162,6 @@ internal constructor(private val clientOptions: ClientOptions) : DimensionalPric
 
         private val listHandler: Handler<DimensionalPriceGroups> =
             jsonHandler<DimensionalPriceGroups>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun list(
             params: DimensionalPriceGroupListParams,
@@ -180,7 +178,7 @@ internal constructor(private val clientOptions: ClientOptions) : DimensionalPric
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { listHandler.handle(it) }
                             .also {

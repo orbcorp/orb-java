@@ -3,14 +3,14 @@
 package com.withorb.api.services.blocking
 
 import com.withorb.api.core.ClientOptions
-import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.checkRequired
+import com.withorb.api.core.handlers.errorBodyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
-import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
+import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponse.Handler
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.core.http.json
@@ -63,7 +63,8 @@ class MetricServiceImpl internal constructor(private val clientOptions: ClientOp
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         MetricService.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
@@ -73,7 +74,7 @@ class MetricServiceImpl internal constructor(private val clientOptions: ClientOp
             )
 
         private val createHandler: Handler<BillableMetric> =
-            jsonHandler<BillableMetric>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<BillableMetric>(clientOptions.jsonMapper)
 
         override fun create(
             params: MetricCreateParams,
@@ -89,7 +90,7 @@ class MetricServiceImpl internal constructor(private val clientOptions: ClientOp
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { createHandler.handle(it) }
                     .also {
@@ -101,7 +102,7 @@ class MetricServiceImpl internal constructor(private val clientOptions: ClientOp
         }
 
         private val updateHandler: Handler<BillableMetric> =
-            jsonHandler<BillableMetric>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<BillableMetric>(clientOptions.jsonMapper)
 
         override fun update(
             params: MetricUpdateParams,
@@ -120,7 +121,7 @@ class MetricServiceImpl internal constructor(private val clientOptions: ClientOp
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { updateHandler.handle(it) }
                     .also {
@@ -133,7 +134,6 @@ class MetricServiceImpl internal constructor(private val clientOptions: ClientOp
 
         private val listHandler: Handler<MetricListPageResponse> =
             jsonHandler<MetricListPageResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun list(
             params: MetricListParams,
@@ -148,7 +148,7 @@ class MetricServiceImpl internal constructor(private val clientOptions: ClientOp
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { listHandler.handle(it) }
                     .also {
@@ -167,7 +167,7 @@ class MetricServiceImpl internal constructor(private val clientOptions: ClientOp
         }
 
         private val fetchHandler: Handler<BillableMetric> =
-            jsonHandler<BillableMetric>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<BillableMetric>(clientOptions.jsonMapper)
 
         override fun fetch(
             params: MetricFetchParams,
@@ -185,7 +185,7 @@ class MetricServiceImpl internal constructor(private val clientOptions: ClientOp
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { fetchHandler.handle(it) }
                     .also {

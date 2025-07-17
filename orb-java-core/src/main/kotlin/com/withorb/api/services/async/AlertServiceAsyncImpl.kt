@@ -3,14 +3,14 @@
 package com.withorb.api.services.async
 
 import com.withorb.api.core.ClientOptions
-import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.checkRequired
+import com.withorb.api.core.handlers.errorBodyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
-import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
+import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponse.Handler
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.core.http.json
@@ -102,7 +102,8 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         AlertServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
@@ -111,8 +112,7 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        private val retrieveHandler: Handler<Alert> =
-            jsonHandler<Alert>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val retrieveHandler: Handler<Alert> = jsonHandler<Alert>(clientOptions.jsonMapper)
 
         override fun retrieve(
             params: AlertRetrieveParams,
@@ -132,7 +132,7 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { retrieveHandler.handle(it) }
                             .also {
@@ -144,8 +144,7 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val updateHandler: Handler<Alert> =
-            jsonHandler<Alert>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val updateHandler: Handler<Alert> = jsonHandler<Alert>(clientOptions.jsonMapper)
 
         override fun update(
             params: AlertUpdateParams,
@@ -166,7 +165,7 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { updateHandler.handle(it) }
                             .also {
@@ -180,7 +179,6 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
         private val listHandler: Handler<AlertListPageResponse> =
             jsonHandler<AlertListPageResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun list(
             params: AlertListParams,
@@ -197,7 +195,7 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { listHandler.handle(it) }
                             .also {
@@ -218,7 +216,7 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
         }
 
         private val createForCustomerHandler: Handler<Alert> =
-            jsonHandler<Alert>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<Alert>(clientOptions.jsonMapper)
 
         override fun createForCustomer(
             params: AlertCreateForCustomerParams,
@@ -239,7 +237,7 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { createForCustomerHandler.handle(it) }
                             .also {
@@ -252,7 +250,7 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
         }
 
         private val createForExternalCustomerHandler: Handler<Alert> =
-            jsonHandler<Alert>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<Alert>(clientOptions.jsonMapper)
 
         override fun createForExternalCustomer(
             params: AlertCreateForExternalCustomerParams,
@@ -273,7 +271,7 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { createForExternalCustomerHandler.handle(it) }
                             .also {
@@ -286,7 +284,7 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
         }
 
         private val createForSubscriptionHandler: Handler<Alert> =
-            jsonHandler<Alert>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<Alert>(clientOptions.jsonMapper)
 
         override fun createForSubscription(
             params: AlertCreateForSubscriptionParams,
@@ -307,7 +305,7 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { createForSubscriptionHandler.handle(it) }
                             .also {
@@ -319,8 +317,7 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val disableHandler: Handler<Alert> =
-            jsonHandler<Alert>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val disableHandler: Handler<Alert> = jsonHandler<Alert>(clientOptions.jsonMapper)
 
         override fun disable(
             params: AlertDisableParams,
@@ -341,7 +338,7 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { disableHandler.handle(it) }
                             .also {
@@ -353,8 +350,7 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val enableHandler: Handler<Alert> =
-            jsonHandler<Alert>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val enableHandler: Handler<Alert> = jsonHandler<Alert>(clientOptions.jsonMapper)
 
         override fun enable(
             params: AlertEnableParams,
@@ -375,7 +371,7 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { enableHandler.handle(it) }
                             .also {

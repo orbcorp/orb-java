@@ -3,13 +3,12 @@
 package com.withorb.api.services.async
 
 import com.withorb.api.core.ClientOptions
-import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.handlers.emptyHandler
+import com.withorb.api.core.handlers.errorBodyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
-import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
 import com.withorb.api.core.http.HttpResponse
@@ -135,7 +134,8 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         CustomerServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         private val costs: CostServiceAsync.WithRawResponse by lazy {
             CostServiceAsyncImpl.WithRawResponseImpl(clientOptions)
@@ -164,7 +164,7 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
             balanceTransactions
 
         private val createHandler: Handler<Customer> =
-            jsonHandler<Customer>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<Customer>(clientOptions.jsonMapper)
 
         override fun create(
             params: CustomerCreateParams,
@@ -182,7 +182,7 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { createHandler.handle(it) }
                             .also {
@@ -195,7 +195,7 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
         }
 
         private val updateHandler: Handler<Customer> =
-            jsonHandler<Customer>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<Customer>(clientOptions.jsonMapper)
 
         override fun update(
             params: CustomerUpdateParams,
@@ -216,7 +216,7 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { updateHandler.handle(it) }
                             .also {
@@ -230,7 +230,6 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
 
         private val listHandler: Handler<CustomerListPageResponse> =
             jsonHandler<CustomerListPageResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun list(
             params: CustomerListParams,
@@ -247,7 +246,7 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { listHandler.handle(it) }
                             .also {
@@ -267,7 +266,7 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
                 }
         }
 
-        private val deleteHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
+        private val deleteHandler: Handler<Void?> = emptyHandler()
 
         override fun delete(
             params: CustomerDeleteParams,
@@ -288,12 +287,14 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable { response.use { deleteHandler.handle(it) } }
+                    errorHandler.handle(response).parseable {
+                        response.use { deleteHandler.handle(it) }
+                    }
                 }
         }
 
         private val fetchHandler: Handler<Customer> =
-            jsonHandler<Customer>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<Customer>(clientOptions.jsonMapper)
 
         override fun fetch(
             params: CustomerFetchParams,
@@ -313,7 +314,7 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { fetchHandler.handle(it) }
                             .also {
@@ -326,7 +327,7 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
         }
 
         private val fetchByExternalIdHandler: Handler<Customer> =
-            jsonHandler<Customer>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<Customer>(clientOptions.jsonMapper)
 
         override fun fetchByExternalId(
             params: CustomerFetchByExternalIdParams,
@@ -346,7 +347,7 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { fetchByExternalIdHandler.handle(it) }
                             .also {
@@ -358,8 +359,7 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
                 }
         }
 
-        private val syncPaymentMethodsFromGatewayHandler: Handler<Void?> =
-            emptyHandler().withErrorHandler(errorHandler)
+        private val syncPaymentMethodsFromGatewayHandler: Handler<Void?> = emptyHandler()
 
         override fun syncPaymentMethodsFromGateway(
             params: CustomerSyncPaymentMethodsFromGatewayParams,
@@ -384,14 +384,14 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response.use { syncPaymentMethodsFromGatewayHandler.handle(it) }
                     }
                 }
         }
 
         private val syncPaymentMethodsFromGatewayByExternalCustomerIdHandler: Handler<Void?> =
-            emptyHandler().withErrorHandler(errorHandler)
+            emptyHandler()
 
         override fun syncPaymentMethodsFromGatewayByExternalCustomerId(
             params: CustomerSyncPaymentMethodsFromGatewayByExternalCustomerIdParams,
@@ -417,7 +417,7 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response.use {
                             syncPaymentMethodsFromGatewayByExternalCustomerIdHandler.handle(it)
                         }
@@ -426,7 +426,7 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
         }
 
         private val updateByExternalIdHandler: Handler<Customer> =
-            jsonHandler<Customer>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<Customer>(clientOptions.jsonMapper)
 
         override fun updateByExternalId(
             params: CustomerUpdateByExternalIdParams,
@@ -447,7 +447,7 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { updateByExternalIdHandler.handle(it) }
                             .also {

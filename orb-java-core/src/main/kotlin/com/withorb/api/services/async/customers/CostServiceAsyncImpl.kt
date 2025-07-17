@@ -3,14 +3,14 @@
 package com.withorb.api.services.async.customers
 
 import com.withorb.api.core.ClientOptions
-import com.withorb.api.core.JsonValue
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.checkRequired
+import com.withorb.api.core.handlers.errorBodyHandler
 import com.withorb.api.core.handlers.errorHandler
 import com.withorb.api.core.handlers.jsonHandler
-import com.withorb.api.core.handlers.withErrorHandler
 import com.withorb.api.core.http.HttpMethod
 import com.withorb.api.core.http.HttpRequest
+import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponse.Handler
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.core.http.parseable
@@ -52,7 +52,8 @@ class CostServiceAsyncImpl internal constructor(private val clientOptions: Clien
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         CostServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
@@ -63,7 +64,6 @@ class CostServiceAsyncImpl internal constructor(private val clientOptions: Clien
 
         private val listHandler: Handler<CustomerCostListResponse> =
             jsonHandler<CustomerCostListResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun list(
             params: CustomerCostListParams,
@@ -83,7 +83,7 @@ class CostServiceAsyncImpl internal constructor(private val clientOptions: Clien
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { listHandler.handle(it) }
                             .also {
@@ -97,7 +97,6 @@ class CostServiceAsyncImpl internal constructor(private val clientOptions: Clien
 
         private val listByExternalIdHandler: Handler<CustomerCostListByExternalIdResponse> =
             jsonHandler<CustomerCostListByExternalIdResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun listByExternalId(
             params: CustomerCostListByExternalIdParams,
@@ -122,7 +121,7 @@ class CostServiceAsyncImpl internal constructor(private val clientOptions: Clien
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { listByExternalIdHandler.handle(it) }
                             .also {
