@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.7.0 (2025-07-21)
+
+Full Changelog: [v1.6.0...v1.7.0](https://github.com/orbcorp/orb-java/compare/v1.6.0...v1.7.0)
+
+### Features
+
+* **api:** api update ([b20980d](https://github.com/orbcorp/orb-java/commit/b20980d5162e0a0e584c6e977aaa5be5c0075211))
+* **client:** add https config options ([15ac3d4](https://github.com/orbcorp/orb-java/commit/15ac3d448fcd79c2ea22344642242dc09692fbe0))
+* **client:** allow configuring env via system properties ([c32c0d2](https://github.com/orbcorp/orb-java/commit/c32c0d240b8bf8b095bfce12461d34ea4f4a2460))
+
+
+### Chores
+
+* **internal:** refactor delegating from client to options ([12282fa](https://github.com/orbcorp/orb-java/commit/12282facf5a825f400e54331b80927859062ea32))
+
 ## 1.6.0 (2025-07-17)
 
 Full Changelog: [v1.5.1...v1.6.0](https://github.com/orbcorp/orb-java/compare/v1.5.1...v1.6.0)
