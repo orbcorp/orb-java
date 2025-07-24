@@ -136,7 +136,7 @@ private constructor(
 
     fun externalCustomerId(): Optional<String> = Optional.ofNullable(externalCustomerId)
 
-    /** The currency to use. */
+    /** The currency or custom pricing unit to use. */
     fun currency(): Optional<String> = Optional.ofNullable(currency)
 
     /** Costs returned are exclusive of `timeframe_end`. */
@@ -205,7 +205,7 @@ private constructor(
         fun externalCustomerId(externalCustomerId: Optional<String>) =
             externalCustomerId(externalCustomerId.getOrNull())
 
-        /** The currency to use. */
+        /** The currency or custom pricing unit to use. */
         fun currency(currency: String?) = apply { this.currency = currency }
 
         /** Alias for calling [Builder.currency] with `currency.orElse(null)`. */
