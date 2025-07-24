@@ -63,8 +63,10 @@ private constructor(
     /** Fetch alerts scoped to this subscription_id */
     fun subscriptionId(): Optional<String> = Optional.ofNullable(subscriptionId)
 
+    /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
 
+    /** Additional query param to send with the request. */
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
     fun toBuilder() = Builder().from(this)
