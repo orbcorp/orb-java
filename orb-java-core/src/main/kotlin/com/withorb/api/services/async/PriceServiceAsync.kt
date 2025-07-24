@@ -52,7 +52,7 @@ interface PriceServiceAsync {
     fun create(params: PriceCreateParams): CompletableFuture<Price> =
         create(params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: PriceCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -65,7 +65,7 @@ interface PriceServiceAsync {
     fun update(priceId: String): CompletableFuture<Price> =
         update(priceId, PriceUpdateParams.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         priceId: String,
         params: PriceUpdateParams = PriceUpdateParams.none(),
@@ -73,23 +73,23 @@ interface PriceServiceAsync {
     ): CompletableFuture<Price> =
         update(params.toBuilder().priceId(priceId).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         priceId: String,
         params: PriceUpdateParams = PriceUpdateParams.none(),
     ): CompletableFuture<Price> = update(priceId, params, RequestOptions.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         params: PriceUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Price>
 
-    /** @see [update] */
+    /** @see update */
     fun update(params: PriceUpdateParams): CompletableFuture<Price> =
         update(params, RequestOptions.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(priceId: String, requestOptions: RequestOptions): CompletableFuture<Price> =
         update(priceId, PriceUpdateParams.none(), requestOptions)
 
@@ -99,18 +99,18 @@ interface PriceServiceAsync {
      */
     fun list(): CompletableFuture<PriceListPageAsync> = list(PriceListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: PriceListParams = PriceListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<PriceListPageAsync>
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: PriceListParams = PriceListParams.none()
     ): CompletableFuture<PriceListPageAsync> = list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): CompletableFuture<PriceListPageAsync> =
         list(PriceListParams.none(), requestOptions)
 
@@ -141,7 +141,7 @@ interface PriceServiceAsync {
         params: PriceEvaluateParams,
     ): CompletableFuture<PriceEvaluateResponse> = evaluate(priceId, params, RequestOptions.none())
 
-    /** @see [evaluate] */
+    /** @see evaluate */
     fun evaluate(
         priceId: String,
         params: PriceEvaluateParams,
@@ -149,11 +149,11 @@ interface PriceServiceAsync {
     ): CompletableFuture<PriceEvaluateResponse> =
         evaluate(params.toBuilder().priceId(priceId).build(), requestOptions)
 
-    /** @see [evaluate] */
+    /** @see evaluate */
     fun evaluate(params: PriceEvaluateParams): CompletableFuture<PriceEvaluateResponse> =
         evaluate(params, RequestOptions.none())
 
-    /** @see [evaluate] */
+    /** @see evaluate */
     fun evaluate(
         params: PriceEvaluateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -190,7 +190,7 @@ interface PriceServiceAsync {
     ): CompletableFuture<PriceEvaluateMultipleResponse> =
         evaluateMultiple(params, RequestOptions.none())
 
-    /** @see [evaluateMultiple] */
+    /** @see evaluateMultiple */
     fun evaluateMultiple(
         params: PriceEvaluateMultipleParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -218,7 +218,7 @@ interface PriceServiceAsync {
     ): CompletableFuture<PriceEvaluatePreviewEventsResponse> =
         evaluatePreviewEvents(params, RequestOptions.none())
 
-    /** @see [evaluatePreviewEvents] */
+    /** @see evaluatePreviewEvents */
     fun evaluatePreviewEvents(
         params: PriceEvaluatePreviewEventsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -227,30 +227,30 @@ interface PriceServiceAsync {
     /** This endpoint returns a price given an identifier. */
     fun fetch(priceId: String): CompletableFuture<Price> = fetch(priceId, PriceFetchParams.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         priceId: String,
         params: PriceFetchParams = PriceFetchParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Price> = fetch(params.toBuilder().priceId(priceId).build(), requestOptions)
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         priceId: String,
         params: PriceFetchParams = PriceFetchParams.none(),
     ): CompletableFuture<Price> = fetch(priceId, params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         params: PriceFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Price>
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(params: PriceFetchParams): CompletableFuture<Price> =
         fetch(params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(priceId: String, requestOptions: RequestOptions): CompletableFuture<Price> =
         fetch(priceId, PriceFetchParams.none(), requestOptions)
 
@@ -275,7 +275,7 @@ interface PriceServiceAsync {
         fun create(params: PriceCreateParams): CompletableFuture<HttpResponseFor<Price>> =
             create(params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         fun create(
             params: PriceCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -288,7 +288,7 @@ interface PriceServiceAsync {
         fun update(priceId: String): CompletableFuture<HttpResponseFor<Price>> =
             update(priceId, PriceUpdateParams.none())
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             priceId: String,
             params: PriceUpdateParams = PriceUpdateParams.none(),
@@ -296,24 +296,24 @@ interface PriceServiceAsync {
         ): CompletableFuture<HttpResponseFor<Price>> =
             update(params.toBuilder().priceId(priceId).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             priceId: String,
             params: PriceUpdateParams = PriceUpdateParams.none(),
         ): CompletableFuture<HttpResponseFor<Price>> =
             update(priceId, params, RequestOptions.none())
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             params: PriceUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Price>>
 
-        /** @see [update] */
+        /** @see update */
         fun update(params: PriceUpdateParams): CompletableFuture<HttpResponseFor<Price>> =
             update(params, RequestOptions.none())
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             priceId: String,
             requestOptions: RequestOptions,
@@ -327,19 +327,19 @@ interface PriceServiceAsync {
         fun list(): CompletableFuture<HttpResponseFor<PriceListPageAsync>> =
             list(PriceListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: PriceListParams = PriceListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<PriceListPageAsync>>
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: PriceListParams = PriceListParams.none()
         ): CompletableFuture<HttpResponseFor<PriceListPageAsync>> =
             list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<PriceListPageAsync>> =
@@ -355,7 +355,7 @@ interface PriceServiceAsync {
         ): CompletableFuture<HttpResponseFor<PriceEvaluateResponse>> =
             evaluate(priceId, params, RequestOptions.none())
 
-        /** @see [evaluate] */
+        /** @see evaluate */
         fun evaluate(
             priceId: String,
             params: PriceEvaluateParams,
@@ -363,13 +363,13 @@ interface PriceServiceAsync {
         ): CompletableFuture<HttpResponseFor<PriceEvaluateResponse>> =
             evaluate(params.toBuilder().priceId(priceId).build(), requestOptions)
 
-        /** @see [evaluate] */
+        /** @see evaluate */
         fun evaluate(
             params: PriceEvaluateParams
         ): CompletableFuture<HttpResponseFor<PriceEvaluateResponse>> =
             evaluate(params, RequestOptions.none())
 
-        /** @see [evaluate] */
+        /** @see evaluate */
         fun evaluate(
             params: PriceEvaluateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -384,7 +384,7 @@ interface PriceServiceAsync {
         ): CompletableFuture<HttpResponseFor<PriceEvaluateMultipleResponse>> =
             evaluateMultiple(params, RequestOptions.none())
 
-        /** @see [evaluateMultiple] */
+        /** @see evaluateMultiple */
         fun evaluateMultiple(
             params: PriceEvaluateMultipleParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -399,7 +399,7 @@ interface PriceServiceAsync {
         ): CompletableFuture<HttpResponseFor<PriceEvaluatePreviewEventsResponse>> =
             evaluatePreviewEvents(params, RequestOptions.none())
 
-        /** @see [evaluatePreviewEvents] */
+        /** @see evaluatePreviewEvents */
         fun evaluatePreviewEvents(
             params: PriceEvaluatePreviewEventsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -412,7 +412,7 @@ interface PriceServiceAsync {
         fun fetch(priceId: String): CompletableFuture<HttpResponseFor<Price>> =
             fetch(priceId, PriceFetchParams.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             priceId: String,
             params: PriceFetchParams = PriceFetchParams.none(),
@@ -420,23 +420,23 @@ interface PriceServiceAsync {
         ): CompletableFuture<HttpResponseFor<Price>> =
             fetch(params.toBuilder().priceId(priceId).build(), requestOptions)
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             priceId: String,
             params: PriceFetchParams = PriceFetchParams.none(),
         ): CompletableFuture<HttpResponseFor<Price>> = fetch(priceId, params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             params: PriceFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Price>>
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(params: PriceFetchParams): CompletableFuture<HttpResponseFor<Price>> =
             fetch(params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             priceId: String,
             requestOptions: RequestOptions,

@@ -32,7 +32,7 @@ interface InvoiceLineItemServiceAsync {
         params: InvoiceLineItemCreateParams
     ): CompletableFuture<InvoiceLineItemCreateResponse> = create(params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: InvoiceLineItemCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -62,7 +62,7 @@ interface InvoiceLineItemServiceAsync {
         ): CompletableFuture<HttpResponseFor<InvoiceLineItemCreateResponse>> =
             create(params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         fun create(
             params: InvoiceLineItemCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),

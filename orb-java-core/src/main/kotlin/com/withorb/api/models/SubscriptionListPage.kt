@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [SubscriptionService.list] */
+/** @see SubscriptionService.list */
 class SubscriptionListPage
 private constructor(
     private val service: SubscriptionService,
@@ -21,14 +21,14 @@ private constructor(
     /**
      * Delegates to [Subscriptions], but gracefully handles missing data.
      *
-     * @see [Subscriptions.data]
+     * @see Subscriptions.data
      */
     fun data(): List<Subscription> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [Subscriptions], but gracefully handles missing data.
      *
-     * @see [Subscriptions.paginationMetadata]
+     * @see Subscriptions.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

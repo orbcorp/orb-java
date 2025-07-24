@@ -41,7 +41,7 @@ interface SubscriptionChangeService {
     fun retrieve(subscriptionChangeId: String): SubscriptionChangeRetrieveResponse =
         retrieve(subscriptionChangeId, SubscriptionChangeRetrieveParams.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         subscriptionChangeId: String,
         params: SubscriptionChangeRetrieveParams = SubscriptionChangeRetrieveParams.none(),
@@ -52,24 +52,24 @@ interface SubscriptionChangeService {
             requestOptions,
         )
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         subscriptionChangeId: String,
         params: SubscriptionChangeRetrieveParams = SubscriptionChangeRetrieveParams.none(),
     ): SubscriptionChangeRetrieveResponse =
         retrieve(subscriptionChangeId, params, RequestOptions.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: SubscriptionChangeRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionChangeRetrieveResponse
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(params: SubscriptionChangeRetrieveParams): SubscriptionChangeRetrieveResponse =
         retrieve(params, RequestOptions.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         subscriptionChangeId: String,
         requestOptions: RequestOptions,
@@ -84,7 +84,7 @@ interface SubscriptionChangeService {
     fun apply(subscriptionChangeId: String): SubscriptionChangeApplyResponse =
         apply(subscriptionChangeId, SubscriptionChangeApplyParams.none())
 
-    /** @see [apply] */
+    /** @see apply */
     fun apply(
         subscriptionChangeId: String,
         params: SubscriptionChangeApplyParams = SubscriptionChangeApplyParams.none(),
@@ -92,23 +92,23 @@ interface SubscriptionChangeService {
     ): SubscriptionChangeApplyResponse =
         apply(params.toBuilder().subscriptionChangeId(subscriptionChangeId).build(), requestOptions)
 
-    /** @see [apply] */
+    /** @see apply */
     fun apply(
         subscriptionChangeId: String,
         params: SubscriptionChangeApplyParams = SubscriptionChangeApplyParams.none(),
     ): SubscriptionChangeApplyResponse = apply(subscriptionChangeId, params, RequestOptions.none())
 
-    /** @see [apply] */
+    /** @see apply */
     fun apply(
         params: SubscriptionChangeApplyParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionChangeApplyResponse
 
-    /** @see [apply] */
+    /** @see apply */
     fun apply(params: SubscriptionChangeApplyParams): SubscriptionChangeApplyResponse =
         apply(params, RequestOptions.none())
 
-    /** @see [apply] */
+    /** @see apply */
     fun apply(
         subscriptionChangeId: String,
         requestOptions: RequestOptions,
@@ -123,7 +123,7 @@ interface SubscriptionChangeService {
     fun cancel(subscriptionChangeId: String): SubscriptionChangeCancelResponse =
         cancel(subscriptionChangeId, SubscriptionChangeCancelParams.none())
 
-    /** @see [cancel] */
+    /** @see cancel */
     fun cancel(
         subscriptionChangeId: String,
         params: SubscriptionChangeCancelParams = SubscriptionChangeCancelParams.none(),
@@ -134,24 +134,24 @@ interface SubscriptionChangeService {
             requestOptions,
         )
 
-    /** @see [cancel] */
+    /** @see cancel */
     fun cancel(
         subscriptionChangeId: String,
         params: SubscriptionChangeCancelParams = SubscriptionChangeCancelParams.none(),
     ): SubscriptionChangeCancelResponse =
         cancel(subscriptionChangeId, params, RequestOptions.none())
 
-    /** @see [cancel] */
+    /** @see cancel */
     fun cancel(
         params: SubscriptionChangeCancelParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionChangeCancelResponse
 
-    /** @see [cancel] */
+    /** @see cancel */
     fun cancel(params: SubscriptionChangeCancelParams): SubscriptionChangeCancelResponse =
         cancel(params, RequestOptions.none())
 
-    /** @see [cancel] */
+    /** @see cancel */
     fun cancel(
         subscriptionChangeId: String,
         requestOptions: RequestOptions,
@@ -183,7 +183,7 @@ interface SubscriptionChangeService {
         ): HttpResponseFor<SubscriptionChangeRetrieveResponse> =
             retrieve(subscriptionChangeId, SubscriptionChangeRetrieveParams.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             subscriptionChangeId: String,
@@ -195,7 +195,7 @@ interface SubscriptionChangeService {
                 requestOptions,
             )
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             subscriptionChangeId: String,
@@ -203,21 +203,21 @@ interface SubscriptionChangeService {
         ): HttpResponseFor<SubscriptionChangeRetrieveResponse> =
             retrieve(subscriptionChangeId, params, RequestOptions.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: SubscriptionChangeRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionChangeRetrieveResponse>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: SubscriptionChangeRetrieveParams
         ): HttpResponseFor<SubscriptionChangeRetrieveResponse> =
             retrieve(params, RequestOptions.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             subscriptionChangeId: String,
@@ -234,7 +234,7 @@ interface SubscriptionChangeService {
         fun apply(subscriptionChangeId: String): HttpResponseFor<SubscriptionChangeApplyResponse> =
             apply(subscriptionChangeId, SubscriptionChangeApplyParams.none())
 
-        /** @see [apply] */
+        /** @see apply */
         @MustBeClosed
         fun apply(
             subscriptionChangeId: String,
@@ -246,7 +246,7 @@ interface SubscriptionChangeService {
                 requestOptions,
             )
 
-        /** @see [apply] */
+        /** @see apply */
         @MustBeClosed
         fun apply(
             subscriptionChangeId: String,
@@ -254,20 +254,20 @@ interface SubscriptionChangeService {
         ): HttpResponseFor<SubscriptionChangeApplyResponse> =
             apply(subscriptionChangeId, params, RequestOptions.none())
 
-        /** @see [apply] */
+        /** @see apply */
         @MustBeClosed
         fun apply(
             params: SubscriptionChangeApplyParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionChangeApplyResponse>
 
-        /** @see [apply] */
+        /** @see apply */
         @MustBeClosed
         fun apply(
             params: SubscriptionChangeApplyParams
         ): HttpResponseFor<SubscriptionChangeApplyResponse> = apply(params, RequestOptions.none())
 
-        /** @see [apply] */
+        /** @see apply */
         @MustBeClosed
         fun apply(
             subscriptionChangeId: String,
@@ -286,7 +286,7 @@ interface SubscriptionChangeService {
         ): HttpResponseFor<SubscriptionChangeCancelResponse> =
             cancel(subscriptionChangeId, SubscriptionChangeCancelParams.none())
 
-        /** @see [cancel] */
+        /** @see cancel */
         @MustBeClosed
         fun cancel(
             subscriptionChangeId: String,
@@ -298,7 +298,7 @@ interface SubscriptionChangeService {
                 requestOptions,
             )
 
-        /** @see [cancel] */
+        /** @see cancel */
         @MustBeClosed
         fun cancel(
             subscriptionChangeId: String,
@@ -306,20 +306,20 @@ interface SubscriptionChangeService {
         ): HttpResponseFor<SubscriptionChangeCancelResponse> =
             cancel(subscriptionChangeId, params, RequestOptions.none())
 
-        /** @see [cancel] */
+        /** @see cancel */
         @MustBeClosed
         fun cancel(
             params: SubscriptionChangeCancelParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionChangeCancelResponse>
 
-        /** @see [cancel] */
+        /** @see cancel */
         @MustBeClosed
         fun cancel(
             params: SubscriptionChangeCancelParams
         ): HttpResponseFor<SubscriptionChangeCancelResponse> = cancel(params, RequestOptions.none())
 
-        /** @see [cancel] */
+        /** @see cancel */
         @MustBeClosed
         fun cancel(
             subscriptionChangeId: String,

@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [TopUpServiceAsync.listByExternalId] */
+/** @see TopUpServiceAsync.listByExternalId */
 class CustomerCreditTopUpListByExternalIdPageAsync
 private constructor(
     private val service: TopUpServiceAsync,
@@ -25,7 +25,7 @@ private constructor(
      * Delegates to [CustomerCreditTopUpListByExternalIdPageResponse], but gracefully handles
      * missing data.
      *
-     * @see [CustomerCreditTopUpListByExternalIdPageResponse.data]
+     * @see CustomerCreditTopUpListByExternalIdPageResponse.data
      */
     fun data(): List<CustomerCreditTopUpListByExternalIdResponse> =
         response._data().getOptional("data").getOrNull() ?: emptyList()
@@ -34,7 +34,7 @@ private constructor(
      * Delegates to [CustomerCreditTopUpListByExternalIdPageResponse], but gracefully handles
      * missing data.
      *
-     * @see [CustomerCreditTopUpListByExternalIdPageResponse.paginationMetadata]
+     * @see CustomerCreditTopUpListByExternalIdPageResponse.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [LedgerService.listByExternalId] */
+/** @see LedgerService.listByExternalId */
 class CustomerCreditLedgerListByExternalIdPage
 private constructor(
     private val service: LedgerService,
@@ -22,7 +22,7 @@ private constructor(
      * Delegates to [CustomerCreditLedgerListByExternalIdPageResponse], but gracefully handles
      * missing data.
      *
-     * @see [CustomerCreditLedgerListByExternalIdPageResponse.data]
+     * @see CustomerCreditLedgerListByExternalIdPageResponse.data
      */
     fun data(): List<CustomerCreditLedgerListByExternalIdResponse> =
         response._data().getOptional("data").getOrNull() ?: emptyList()
@@ -31,7 +31,7 @@ private constructor(
      * Delegates to [CustomerCreditLedgerListByExternalIdPageResponse], but gracefully handles
      * missing data.
      *
-     * @see [CustomerCreditLedgerListByExternalIdPageResponse.paginationMetadata]
+     * @see CustomerCreditLedgerListByExternalIdPageResponse.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

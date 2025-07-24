@@ -43,7 +43,7 @@ interface DimensionalPriceGroupServiceAsync {
         params: DimensionalPriceGroupCreateParams
     ): CompletableFuture<DimensionalPriceGroup> = create(params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: DimensionalPriceGroupCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -53,7 +53,7 @@ interface DimensionalPriceGroupServiceAsync {
     fun retrieve(dimensionalPriceGroupId: String): CompletableFuture<DimensionalPriceGroup> =
         retrieve(dimensionalPriceGroupId, DimensionalPriceGroupRetrieveParams.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         dimensionalPriceGroupId: String,
         params: DimensionalPriceGroupRetrieveParams = DimensionalPriceGroupRetrieveParams.none(),
@@ -64,25 +64,25 @@ interface DimensionalPriceGroupServiceAsync {
             requestOptions,
         )
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         dimensionalPriceGroupId: String,
         params: DimensionalPriceGroupRetrieveParams = DimensionalPriceGroupRetrieveParams.none(),
     ): CompletableFuture<DimensionalPriceGroup> =
         retrieve(dimensionalPriceGroupId, params, RequestOptions.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: DimensionalPriceGroupRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<DimensionalPriceGroup>
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: DimensionalPriceGroupRetrieveParams
     ): CompletableFuture<DimensionalPriceGroup> = retrieve(params, RequestOptions.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         dimensionalPriceGroupId: String,
         requestOptions: RequestOptions,
@@ -97,18 +97,18 @@ interface DimensionalPriceGroupServiceAsync {
     fun list(): CompletableFuture<DimensionalPriceGroupListPageAsync> =
         list(DimensionalPriceGroupListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<DimensionalPriceGroupListPageAsync>
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none()
     ): CompletableFuture<DimensionalPriceGroupListPageAsync> = list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         requestOptions: RequestOptions
     ): CompletableFuture<DimensionalPriceGroupListPageAsync> =
@@ -141,7 +141,7 @@ interface DimensionalPriceGroupServiceAsync {
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
             create(params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         fun create(
             params: DimensionalPriceGroupCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -157,7 +157,7 @@ interface DimensionalPriceGroupServiceAsync {
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
             retrieve(dimensionalPriceGroupId, DimensionalPriceGroupRetrieveParams.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             dimensionalPriceGroupId: String,
             params: DimensionalPriceGroupRetrieveParams =
@@ -169,26 +169,26 @@ interface DimensionalPriceGroupServiceAsync {
                 requestOptions,
             )
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             dimensionalPriceGroupId: String,
             params: DimensionalPriceGroupRetrieveParams = DimensionalPriceGroupRetrieveParams.none(),
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
             retrieve(dimensionalPriceGroupId, params, RequestOptions.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             params: DimensionalPriceGroupRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             params: DimensionalPriceGroupRetrieveParams
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
             retrieve(params, RequestOptions.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             dimensionalPriceGroupId: String,
             requestOptions: RequestOptions,
@@ -206,19 +206,19 @@ interface DimensionalPriceGroupServiceAsync {
         fun list(): CompletableFuture<HttpResponseFor<DimensionalPriceGroupListPageAsync>> =
             list(DimensionalPriceGroupListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroupListPageAsync>>
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none()
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroupListPageAsync>> =
             list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroupListPageAsync>> =

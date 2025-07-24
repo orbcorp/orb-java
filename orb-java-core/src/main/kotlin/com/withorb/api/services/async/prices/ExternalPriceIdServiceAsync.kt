@@ -32,7 +32,7 @@ interface ExternalPriceIdServiceAsync {
     fun update(externalPriceId: String): CompletableFuture<Price> =
         update(externalPriceId, PriceExternalPriceIdUpdateParams.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         externalPriceId: String,
         params: PriceExternalPriceIdUpdateParams = PriceExternalPriceIdUpdateParams.none(),
@@ -40,23 +40,23 @@ interface ExternalPriceIdServiceAsync {
     ): CompletableFuture<Price> =
         update(params.toBuilder().externalPriceId(externalPriceId).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         externalPriceId: String,
         params: PriceExternalPriceIdUpdateParams = PriceExternalPriceIdUpdateParams.none(),
     ): CompletableFuture<Price> = update(externalPriceId, params, RequestOptions.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         params: PriceExternalPriceIdUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Price>
 
-    /** @see [update] */
+    /** @see update */
     fun update(params: PriceExternalPriceIdUpdateParams): CompletableFuture<Price> =
         update(params, RequestOptions.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(externalPriceId: String, requestOptions: RequestOptions): CompletableFuture<Price> =
         update(externalPriceId, PriceExternalPriceIdUpdateParams.none(), requestOptions)
 
@@ -68,7 +68,7 @@ interface ExternalPriceIdServiceAsync {
     fun fetch(externalPriceId: String): CompletableFuture<Price> =
         fetch(externalPriceId, PriceExternalPriceIdFetchParams.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         externalPriceId: String,
         params: PriceExternalPriceIdFetchParams = PriceExternalPriceIdFetchParams.none(),
@@ -76,23 +76,23 @@ interface ExternalPriceIdServiceAsync {
     ): CompletableFuture<Price> =
         fetch(params.toBuilder().externalPriceId(externalPriceId).build(), requestOptions)
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         externalPriceId: String,
         params: PriceExternalPriceIdFetchParams = PriceExternalPriceIdFetchParams.none(),
     ): CompletableFuture<Price> = fetch(externalPriceId, params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         params: PriceExternalPriceIdFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Price>
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(params: PriceExternalPriceIdFetchParams): CompletableFuture<Price> =
         fetch(params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(externalPriceId: String, requestOptions: RequestOptions): CompletableFuture<Price> =
         fetch(externalPriceId, PriceExternalPriceIdFetchParams.none(), requestOptions)
 
@@ -118,7 +118,7 @@ interface ExternalPriceIdServiceAsync {
         fun update(externalPriceId: String): CompletableFuture<HttpResponseFor<Price>> =
             update(externalPriceId, PriceExternalPriceIdUpdateParams.none())
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             externalPriceId: String,
             params: PriceExternalPriceIdUpdateParams = PriceExternalPriceIdUpdateParams.none(),
@@ -126,25 +126,25 @@ interface ExternalPriceIdServiceAsync {
         ): CompletableFuture<HttpResponseFor<Price>> =
             update(params.toBuilder().externalPriceId(externalPriceId).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             externalPriceId: String,
             params: PriceExternalPriceIdUpdateParams = PriceExternalPriceIdUpdateParams.none(),
         ): CompletableFuture<HttpResponseFor<Price>> =
             update(externalPriceId, params, RequestOptions.none())
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             params: PriceExternalPriceIdUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Price>>
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             params: PriceExternalPriceIdUpdateParams
         ): CompletableFuture<HttpResponseFor<Price>> = update(params, RequestOptions.none())
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             externalPriceId: String,
             requestOptions: RequestOptions,
@@ -158,7 +158,7 @@ interface ExternalPriceIdServiceAsync {
         fun fetch(externalPriceId: String): CompletableFuture<HttpResponseFor<Price>> =
             fetch(externalPriceId, PriceExternalPriceIdFetchParams.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             externalPriceId: String,
             params: PriceExternalPriceIdFetchParams = PriceExternalPriceIdFetchParams.none(),
@@ -166,25 +166,25 @@ interface ExternalPriceIdServiceAsync {
         ): CompletableFuture<HttpResponseFor<Price>> =
             fetch(params.toBuilder().externalPriceId(externalPriceId).build(), requestOptions)
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             externalPriceId: String,
             params: PriceExternalPriceIdFetchParams = PriceExternalPriceIdFetchParams.none(),
         ): CompletableFuture<HttpResponseFor<Price>> =
             fetch(externalPriceId, params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             params: PriceExternalPriceIdFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Price>>
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             params: PriceExternalPriceIdFetchParams
         ): CompletableFuture<HttpResponseFor<Price>> = fetch(params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             externalPriceId: String,
             requestOptions: RequestOptions,

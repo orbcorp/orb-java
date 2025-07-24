@@ -65,7 +65,7 @@ interface BackfillService {
     fun create(params: EventBackfillCreateParams): EventBackfillCreateResponse =
         create(params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: EventBackfillCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -81,18 +81,18 @@ interface BackfillService {
      */
     fun list(): EventBackfillListPage = list(EventBackfillListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: EventBackfillListParams = EventBackfillListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): EventBackfillListPage
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: EventBackfillListParams = EventBackfillListParams.none()
     ): EventBackfillListPage = list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): EventBackfillListPage =
         list(EventBackfillListParams.none(), requestOptions)
 
@@ -104,7 +104,7 @@ interface BackfillService {
     fun close(backfillId: String): EventBackfillCloseResponse =
         close(backfillId, EventBackfillCloseParams.none())
 
-    /** @see [close] */
+    /** @see close */
     fun close(
         backfillId: String,
         params: EventBackfillCloseParams = EventBackfillCloseParams.none(),
@@ -112,23 +112,23 @@ interface BackfillService {
     ): EventBackfillCloseResponse =
         close(params.toBuilder().backfillId(backfillId).build(), requestOptions)
 
-    /** @see [close] */
+    /** @see close */
     fun close(
         backfillId: String,
         params: EventBackfillCloseParams = EventBackfillCloseParams.none(),
     ): EventBackfillCloseResponse = close(backfillId, params, RequestOptions.none())
 
-    /** @see [close] */
+    /** @see close */
     fun close(
         params: EventBackfillCloseParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): EventBackfillCloseResponse
 
-    /** @see [close] */
+    /** @see close */
     fun close(params: EventBackfillCloseParams): EventBackfillCloseResponse =
         close(params, RequestOptions.none())
 
-    /** @see [close] */
+    /** @see close */
     fun close(backfillId: String, requestOptions: RequestOptions): EventBackfillCloseResponse =
         close(backfillId, EventBackfillCloseParams.none(), requestOptions)
 
@@ -136,7 +136,7 @@ interface BackfillService {
     fun fetch(backfillId: String): EventBackfillFetchResponse =
         fetch(backfillId, EventBackfillFetchParams.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         backfillId: String,
         params: EventBackfillFetchParams = EventBackfillFetchParams.none(),
@@ -144,23 +144,23 @@ interface BackfillService {
     ): EventBackfillFetchResponse =
         fetch(params.toBuilder().backfillId(backfillId).build(), requestOptions)
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         backfillId: String,
         params: EventBackfillFetchParams = EventBackfillFetchParams.none(),
     ): EventBackfillFetchResponse = fetch(backfillId, params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         params: EventBackfillFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): EventBackfillFetchResponse
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(params: EventBackfillFetchParams): EventBackfillFetchResponse =
         fetch(params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(backfillId: String, requestOptions: RequestOptions): EventBackfillFetchResponse =
         fetch(backfillId, EventBackfillFetchParams.none(), requestOptions)
 
@@ -175,7 +175,7 @@ interface BackfillService {
     fun revert(backfillId: String): EventBackfillRevertResponse =
         revert(backfillId, EventBackfillRevertParams.none())
 
-    /** @see [revert] */
+    /** @see revert */
     fun revert(
         backfillId: String,
         params: EventBackfillRevertParams = EventBackfillRevertParams.none(),
@@ -183,23 +183,23 @@ interface BackfillService {
     ): EventBackfillRevertResponse =
         revert(params.toBuilder().backfillId(backfillId).build(), requestOptions)
 
-    /** @see [revert] */
+    /** @see revert */
     fun revert(
         backfillId: String,
         params: EventBackfillRevertParams = EventBackfillRevertParams.none(),
     ): EventBackfillRevertResponse = revert(backfillId, params, RequestOptions.none())
 
-    /** @see [revert] */
+    /** @see revert */
     fun revert(
         params: EventBackfillRevertParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): EventBackfillRevertResponse
 
-    /** @see [revert] */
+    /** @see revert */
     fun revert(params: EventBackfillRevertParams): EventBackfillRevertResponse =
         revert(params, RequestOptions.none())
 
-    /** @see [revert] */
+    /** @see revert */
     fun revert(backfillId: String, requestOptions: RequestOptions): EventBackfillRevertResponse =
         revert(backfillId, EventBackfillRevertParams.none(), requestOptions)
 
@@ -222,7 +222,7 @@ interface BackfillService {
             params: EventBackfillCreateParams
         ): HttpResponseFor<EventBackfillCreateResponse> = create(params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         @MustBeClosed
         fun create(
             params: EventBackfillCreateParams,
@@ -236,20 +236,20 @@ interface BackfillService {
         @MustBeClosed
         fun list(): HttpResponseFor<EventBackfillListPage> = list(EventBackfillListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             params: EventBackfillListParams = EventBackfillListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<EventBackfillListPage>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             params: EventBackfillListParams = EventBackfillListParams.none()
         ): HttpResponseFor<EventBackfillListPage> = list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<EventBackfillListPage> =
             list(EventBackfillListParams.none(), requestOptions)
@@ -262,7 +262,7 @@ interface BackfillService {
         fun close(backfillId: String): HttpResponseFor<EventBackfillCloseResponse> =
             close(backfillId, EventBackfillCloseParams.none())
 
-        /** @see [close] */
+        /** @see close */
         @MustBeClosed
         fun close(
             backfillId: String,
@@ -271,7 +271,7 @@ interface BackfillService {
         ): HttpResponseFor<EventBackfillCloseResponse> =
             close(params.toBuilder().backfillId(backfillId).build(), requestOptions)
 
-        /** @see [close] */
+        /** @see close */
         @MustBeClosed
         fun close(
             backfillId: String,
@@ -279,19 +279,19 @@ interface BackfillService {
         ): HttpResponseFor<EventBackfillCloseResponse> =
             close(backfillId, params, RequestOptions.none())
 
-        /** @see [close] */
+        /** @see close */
         @MustBeClosed
         fun close(
             params: EventBackfillCloseParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<EventBackfillCloseResponse>
 
-        /** @see [close] */
+        /** @see close */
         @MustBeClosed
         fun close(params: EventBackfillCloseParams): HttpResponseFor<EventBackfillCloseResponse> =
             close(params, RequestOptions.none())
 
-        /** @see [close] */
+        /** @see close */
         @MustBeClosed
         fun close(
             backfillId: String,
@@ -307,7 +307,7 @@ interface BackfillService {
         fun fetch(backfillId: String): HttpResponseFor<EventBackfillFetchResponse> =
             fetch(backfillId, EventBackfillFetchParams.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(
             backfillId: String,
@@ -316,7 +316,7 @@ interface BackfillService {
         ): HttpResponseFor<EventBackfillFetchResponse> =
             fetch(params.toBuilder().backfillId(backfillId).build(), requestOptions)
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(
             backfillId: String,
@@ -324,19 +324,19 @@ interface BackfillService {
         ): HttpResponseFor<EventBackfillFetchResponse> =
             fetch(backfillId, params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(
             params: EventBackfillFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<EventBackfillFetchResponse>
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(params: EventBackfillFetchParams): HttpResponseFor<EventBackfillFetchResponse> =
             fetch(params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(
             backfillId: String,
@@ -352,7 +352,7 @@ interface BackfillService {
         fun revert(backfillId: String): HttpResponseFor<EventBackfillRevertResponse> =
             revert(backfillId, EventBackfillRevertParams.none())
 
-        /** @see [revert] */
+        /** @see revert */
         @MustBeClosed
         fun revert(
             backfillId: String,
@@ -361,7 +361,7 @@ interface BackfillService {
         ): HttpResponseFor<EventBackfillRevertResponse> =
             revert(params.toBuilder().backfillId(backfillId).build(), requestOptions)
 
-        /** @see [revert] */
+        /** @see revert */
         @MustBeClosed
         fun revert(
             backfillId: String,
@@ -369,20 +369,20 @@ interface BackfillService {
         ): HttpResponseFor<EventBackfillRevertResponse> =
             revert(backfillId, params, RequestOptions.none())
 
-        /** @see [revert] */
+        /** @see revert */
         @MustBeClosed
         fun revert(
             params: EventBackfillRevertParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<EventBackfillRevertResponse>
 
-        /** @see [revert] */
+        /** @see revert */
         @MustBeClosed
         fun revert(
             params: EventBackfillRevertParams
         ): HttpResponseFor<EventBackfillRevertResponse> = revert(params, RequestOptions.none())
 
-        /** @see [revert] */
+        /** @see revert */
         @MustBeClosed
         fun revert(
             backfillId: String,

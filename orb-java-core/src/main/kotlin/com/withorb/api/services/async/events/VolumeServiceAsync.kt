@@ -40,7 +40,7 @@ interface VolumeServiceAsync {
     fun list(params: EventVolumeListParams): CompletableFuture<EventVolumes> =
         list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: EventVolumeListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -67,7 +67,7 @@ interface VolumeServiceAsync {
         fun list(params: EventVolumeListParams): CompletableFuture<HttpResponseFor<EventVolumes>> =
             list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: EventVolumeListParams,
             requestOptions: RequestOptions = RequestOptions.none(),

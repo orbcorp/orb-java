@@ -37,7 +37,7 @@ interface CouponService {
      */
     fun create(params: CouponCreateParams): Coupon = create(params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: CouponCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -53,17 +53,17 @@ interface CouponService {
      */
     fun list(): CouponListPage = list(CouponListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: CouponListParams = CouponListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CouponListPage
 
-    /** @see [list] */
+    /** @see list */
     fun list(params: CouponListParams = CouponListParams.none()): CouponListPage =
         list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): CouponListPage =
         list(CouponListParams.none(), requestOptions)
 
@@ -74,29 +74,29 @@ interface CouponService {
      */
     fun archive(couponId: String): Coupon = archive(couponId, CouponArchiveParams.none())
 
-    /** @see [archive] */
+    /** @see archive */
     fun archive(
         couponId: String,
         params: CouponArchiveParams = CouponArchiveParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Coupon = archive(params.toBuilder().couponId(couponId).build(), requestOptions)
 
-    /** @see [archive] */
+    /** @see archive */
     fun archive(
         couponId: String,
         params: CouponArchiveParams = CouponArchiveParams.none(),
     ): Coupon = archive(couponId, params, RequestOptions.none())
 
-    /** @see [archive] */
+    /** @see archive */
     fun archive(
         params: CouponArchiveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Coupon
 
-    /** @see [archive] */
+    /** @see archive */
     fun archive(params: CouponArchiveParams): Coupon = archive(params, RequestOptions.none())
 
-    /** @see [archive] */
+    /** @see archive */
     fun archive(couponId: String, requestOptions: RequestOptions): Coupon =
         archive(couponId, CouponArchiveParams.none(), requestOptions)
 
@@ -106,27 +106,27 @@ interface CouponService {
      */
     fun fetch(couponId: String): Coupon = fetch(couponId, CouponFetchParams.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         couponId: String,
         params: CouponFetchParams = CouponFetchParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Coupon = fetch(params.toBuilder().couponId(couponId).build(), requestOptions)
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(couponId: String, params: CouponFetchParams = CouponFetchParams.none()): Coupon =
         fetch(couponId, params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         params: CouponFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Coupon
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(params: CouponFetchParams): Coupon = fetch(params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(couponId: String, requestOptions: RequestOptions): Coupon =
         fetch(couponId, CouponFetchParams.none(), requestOptions)
 
@@ -150,7 +150,7 @@ interface CouponService {
         fun create(params: CouponCreateParams): HttpResponseFor<Coupon> =
             create(params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         @MustBeClosed
         fun create(
             params: CouponCreateParams,
@@ -163,20 +163,20 @@ interface CouponService {
          */
         @MustBeClosed fun list(): HttpResponseFor<CouponListPage> = list(CouponListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             params: CouponListParams = CouponListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CouponListPage>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             params: CouponListParams = CouponListParams.none()
         ): HttpResponseFor<CouponListPage> = list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<CouponListPage> =
             list(CouponListParams.none(), requestOptions)
@@ -189,7 +189,7 @@ interface CouponService {
         fun archive(couponId: String): HttpResponseFor<Coupon> =
             archive(couponId, CouponArchiveParams.none())
 
-        /** @see [archive] */
+        /** @see archive */
         @MustBeClosed
         fun archive(
             couponId: String,
@@ -198,26 +198,26 @@ interface CouponService {
         ): HttpResponseFor<Coupon> =
             archive(params.toBuilder().couponId(couponId).build(), requestOptions)
 
-        /** @see [archive] */
+        /** @see archive */
         @MustBeClosed
         fun archive(
             couponId: String,
             params: CouponArchiveParams = CouponArchiveParams.none(),
         ): HttpResponseFor<Coupon> = archive(couponId, params, RequestOptions.none())
 
-        /** @see [archive] */
+        /** @see archive */
         @MustBeClosed
         fun archive(
             params: CouponArchiveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Coupon>
 
-        /** @see [archive] */
+        /** @see archive */
         @MustBeClosed
         fun archive(params: CouponArchiveParams): HttpResponseFor<Coupon> =
             archive(params, RequestOptions.none())
 
-        /** @see [archive] */
+        /** @see archive */
         @MustBeClosed
         fun archive(couponId: String, requestOptions: RequestOptions): HttpResponseFor<Coupon> =
             archive(couponId, CouponArchiveParams.none(), requestOptions)
@@ -230,7 +230,7 @@ interface CouponService {
         fun fetch(couponId: String): HttpResponseFor<Coupon> =
             fetch(couponId, CouponFetchParams.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(
             couponId: String,
@@ -239,26 +239,26 @@ interface CouponService {
         ): HttpResponseFor<Coupon> =
             fetch(params.toBuilder().couponId(couponId).build(), requestOptions)
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(
             couponId: String,
             params: CouponFetchParams = CouponFetchParams.none(),
         ): HttpResponseFor<Coupon> = fetch(couponId, params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(
             params: CouponFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Coupon>
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(params: CouponFetchParams): HttpResponseFor<Coupon> =
             fetch(params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(couponId: String, requestOptions: RequestOptions): HttpResponseFor<Coupon> =
             fetch(couponId, CouponFetchParams.none(), requestOptions)

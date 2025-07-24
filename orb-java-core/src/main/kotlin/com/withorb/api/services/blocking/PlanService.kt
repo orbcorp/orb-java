@@ -34,7 +34,7 @@ interface PlanService {
     /** This endpoint allows creation of plans including their prices. */
     fun create(params: PlanCreateParams): Plan = create(params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: PlanCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -48,27 +48,27 @@ interface PlanService {
      */
     fun update(planId: String): Plan = update(planId, PlanUpdateParams.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         planId: String,
         params: PlanUpdateParams = PlanUpdateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Plan = update(params.toBuilder().planId(planId).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     fun update(planId: String, params: PlanUpdateParams = PlanUpdateParams.none()): Plan =
         update(planId, params, RequestOptions.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         params: PlanUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Plan
 
-    /** @see [update] */
+    /** @see update */
     fun update(params: PlanUpdateParams): Plan = update(params, RequestOptions.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(planId: String, requestOptions: RequestOptions): Plan =
         update(planId, PlanUpdateParams.none(), requestOptions)
 
@@ -80,17 +80,17 @@ interface PlanService {
      */
     fun list(): PlanListPage = list(PlanListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: PlanListParams = PlanListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PlanListPage
 
-    /** @see [list] */
+    /** @see list */
     fun list(params: PlanListParams = PlanListParams.none()): PlanListPage =
         list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): PlanListPage =
         list(PlanListParams.none(), requestOptions)
 
@@ -114,24 +114,24 @@ interface PlanService {
      */
     fun fetch(planId: String): Plan = fetch(planId, PlanFetchParams.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         planId: String,
         params: PlanFetchParams = PlanFetchParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Plan = fetch(params.toBuilder().planId(planId).build(), requestOptions)
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(planId: String, params: PlanFetchParams = PlanFetchParams.none()): Plan =
         fetch(planId, params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(params: PlanFetchParams, requestOptions: RequestOptions = RequestOptions.none()): Plan
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(params: PlanFetchParams): Plan = fetch(params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(planId: String, requestOptions: RequestOptions): Plan =
         fetch(planId, PlanFetchParams.none(), requestOptions)
 
@@ -155,7 +155,7 @@ interface PlanService {
         fun create(params: PlanCreateParams): HttpResponseFor<Plan> =
             create(params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         @MustBeClosed
         fun create(
             params: PlanCreateParams,
@@ -169,7 +169,7 @@ interface PlanService {
         @MustBeClosed
         fun update(planId: String): HttpResponseFor<Plan> = update(planId, PlanUpdateParams.none())
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(
             planId: String,
@@ -177,26 +177,26 @@ interface PlanService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Plan> = update(params.toBuilder().planId(planId).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(
             planId: String,
             params: PlanUpdateParams = PlanUpdateParams.none(),
         ): HttpResponseFor<Plan> = update(planId, params, RequestOptions.none())
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(
             params: PlanUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Plan>
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(params: PlanUpdateParams): HttpResponseFor<Plan> =
             update(params, RequestOptions.none())
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(planId: String, requestOptions: RequestOptions): HttpResponseFor<Plan> =
             update(planId, PlanUpdateParams.none(), requestOptions)
@@ -207,19 +207,19 @@ interface PlanService {
          */
         @MustBeClosed fun list(): HttpResponseFor<PlanListPage> = list(PlanListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             params: PlanListParams = PlanListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<PlanListPage>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(params: PlanListParams = PlanListParams.none()): HttpResponseFor<PlanListPage> =
             list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<PlanListPage> =
             list(PlanListParams.none(), requestOptions)
@@ -231,7 +231,7 @@ interface PlanService {
         @MustBeClosed
         fun fetch(planId: String): HttpResponseFor<Plan> = fetch(planId, PlanFetchParams.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(
             planId: String,
@@ -239,26 +239,26 @@ interface PlanService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Plan> = fetch(params.toBuilder().planId(planId).build(), requestOptions)
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(
             planId: String,
             params: PlanFetchParams = PlanFetchParams.none(),
         ): HttpResponseFor<Plan> = fetch(planId, params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(
             params: PlanFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Plan>
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(params: PlanFetchParams): HttpResponseFor<Plan> =
             fetch(params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(planId: String, requestOptions: RequestOptions): HttpResponseFor<Plan> =
             fetch(planId, PlanFetchParams.none(), requestOptions)

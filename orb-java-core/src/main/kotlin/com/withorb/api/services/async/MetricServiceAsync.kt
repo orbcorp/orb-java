@@ -36,7 +36,7 @@ interface MetricServiceAsync {
     fun create(params: MetricCreateParams): CompletableFuture<BillableMetric> =
         create(params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: MetricCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -49,7 +49,7 @@ interface MetricServiceAsync {
     fun update(metricId: String): CompletableFuture<BillableMetric> =
         update(metricId, MetricUpdateParams.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         metricId: String,
         params: MetricUpdateParams = MetricUpdateParams.none(),
@@ -57,23 +57,23 @@ interface MetricServiceAsync {
     ): CompletableFuture<BillableMetric> =
         update(params.toBuilder().metricId(metricId).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         metricId: String,
         params: MetricUpdateParams = MetricUpdateParams.none(),
     ): CompletableFuture<BillableMetric> = update(metricId, params, RequestOptions.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         params: MetricUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BillableMetric>
 
-    /** @see [update] */
+    /** @see update */
     fun update(params: MetricUpdateParams): CompletableFuture<BillableMetric> =
         update(params, RequestOptions.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         metricId: String,
         requestOptions: RequestOptions,
@@ -87,18 +87,18 @@ interface MetricServiceAsync {
      */
     fun list(): CompletableFuture<MetricListPageAsync> = list(MetricListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: MetricListParams = MetricListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<MetricListPageAsync>
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: MetricListParams = MetricListParams.none()
     ): CompletableFuture<MetricListPageAsync> = list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): CompletableFuture<MetricListPageAsync> =
         list(MetricListParams.none(), requestOptions)
 
@@ -109,7 +109,7 @@ interface MetricServiceAsync {
     fun fetch(metricId: String): CompletableFuture<BillableMetric> =
         fetch(metricId, MetricFetchParams.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         metricId: String,
         params: MetricFetchParams = MetricFetchParams.none(),
@@ -117,23 +117,23 @@ interface MetricServiceAsync {
     ): CompletableFuture<BillableMetric> =
         fetch(params.toBuilder().metricId(metricId).build(), requestOptions)
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         metricId: String,
         params: MetricFetchParams = MetricFetchParams.none(),
     ): CompletableFuture<BillableMetric> = fetch(metricId, params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         params: MetricFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BillableMetric>
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(params: MetricFetchParams): CompletableFuture<BillableMetric> =
         fetch(params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(metricId: String, requestOptions: RequestOptions): CompletableFuture<BillableMetric> =
         fetch(metricId, MetricFetchParams.none(), requestOptions)
 
@@ -158,7 +158,7 @@ interface MetricServiceAsync {
         fun create(params: MetricCreateParams): CompletableFuture<HttpResponseFor<BillableMetric>> =
             create(params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         fun create(
             params: MetricCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -171,7 +171,7 @@ interface MetricServiceAsync {
         fun update(metricId: String): CompletableFuture<HttpResponseFor<BillableMetric>> =
             update(metricId, MetricUpdateParams.none())
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             metricId: String,
             params: MetricUpdateParams = MetricUpdateParams.none(),
@@ -179,24 +179,24 @@ interface MetricServiceAsync {
         ): CompletableFuture<HttpResponseFor<BillableMetric>> =
             update(params.toBuilder().metricId(metricId).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             metricId: String,
             params: MetricUpdateParams = MetricUpdateParams.none(),
         ): CompletableFuture<HttpResponseFor<BillableMetric>> =
             update(metricId, params, RequestOptions.none())
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             params: MetricUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BillableMetric>>
 
-        /** @see [update] */
+        /** @see update */
         fun update(params: MetricUpdateParams): CompletableFuture<HttpResponseFor<BillableMetric>> =
             update(params, RequestOptions.none())
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             metricId: String,
             requestOptions: RequestOptions,
@@ -210,19 +210,19 @@ interface MetricServiceAsync {
         fun list(): CompletableFuture<HttpResponseFor<MetricListPageAsync>> =
             list(MetricListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: MetricListParams = MetricListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<MetricListPageAsync>>
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: MetricListParams = MetricListParams.none()
         ): CompletableFuture<HttpResponseFor<MetricListPageAsync>> =
             list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<MetricListPageAsync>> =
@@ -235,7 +235,7 @@ interface MetricServiceAsync {
         fun fetch(metricId: String): CompletableFuture<HttpResponseFor<BillableMetric>> =
             fetch(metricId, MetricFetchParams.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             metricId: String,
             params: MetricFetchParams = MetricFetchParams.none(),
@@ -243,24 +243,24 @@ interface MetricServiceAsync {
         ): CompletableFuture<HttpResponseFor<BillableMetric>> =
             fetch(params.toBuilder().metricId(metricId).build(), requestOptions)
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             metricId: String,
             params: MetricFetchParams = MetricFetchParams.none(),
         ): CompletableFuture<HttpResponseFor<BillableMetric>> =
             fetch(metricId, params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             params: MetricFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BillableMetric>>
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(params: MetricFetchParams): CompletableFuture<HttpResponseFor<BillableMetric>> =
             fetch(params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             metricId: String,
             requestOptions: RequestOptions,
