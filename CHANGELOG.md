@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.8.0 (2025-07-24)
+
+Full Changelog: [v1.7.0...v1.8.0](https://github.com/orbcorp/orb-java/compare/v1.7.0...v1.8.0)
+
+### Features
+
+* **api:** api update ([d9b5f74](https://github.com/orbcorp/orb-java/commit/d9b5f744ddeb6fd8e74ad62bc7e36cf187d3078d))
+* **client:** add `{QueryParams,Headers}#put(String, JsonValue)` methods ([1985d12](https://github.com/orbcorp/orb-java/commit/1985d1259d8f0737819b815e198ee4b3455499ce))
+
+
+### Chores
+
+* **internal:** remove unnecessary `[...]` in `[@see](https://github.com/see)` ([cc42cf6](https://github.com/orbcorp/orb-java/commit/cc42cf60494abf45d48cf3043735349e04787805))
+
+
+### Documentation
+
+* fix missing readme comment ([3c649f1](https://github.com/orbcorp/orb-java/commit/3c649f13490f3f6a9c2ac40f0b13c92671314af3))
+* more code comments ([0fac99b](https://github.com/orbcorp/orb-java/commit/0fac99b1da5ef2ddc8b7a73c3d5aa2601d9a8958))
+
 ## 1.7.0 (2025-07-21)
 
 Full Changelog: [v1.6.0...v1.7.0](https://github.com/orbcorp/orb-java/compare/v1.6.0...v1.7.0)
