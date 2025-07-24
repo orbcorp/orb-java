@@ -39,18 +39,18 @@ interface BetaService {
     fun createPlanVersion(planId: String, params: BetaCreatePlanVersionParams): PlanVersion =
         createPlanVersion(planId, params, RequestOptions.none())
 
-    /** @see [createPlanVersion] */
+    /** @see createPlanVersion */
     fun createPlanVersion(
         planId: String,
         params: BetaCreatePlanVersionParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PlanVersion = createPlanVersion(params.toBuilder().planId(planId).build(), requestOptions)
 
-    /** @see [createPlanVersion] */
+    /** @see createPlanVersion */
     fun createPlanVersion(params: BetaCreatePlanVersionParams): PlanVersion =
         createPlanVersion(params, RequestOptions.none())
 
-    /** @see [createPlanVersion] */
+    /** @see createPlanVersion */
     fun createPlanVersion(
         params: BetaCreatePlanVersionParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -66,18 +66,18 @@ interface BetaService {
     fun fetchPlanVersion(version: String, params: BetaFetchPlanVersionParams): PlanVersion =
         fetchPlanVersion(version, params, RequestOptions.none())
 
-    /** @see [fetchPlanVersion] */
+    /** @see fetchPlanVersion */
     fun fetchPlanVersion(
         version: String,
         params: BetaFetchPlanVersionParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PlanVersion = fetchPlanVersion(params.toBuilder().version(version).build(), requestOptions)
 
-    /** @see [fetchPlanVersion] */
+    /** @see fetchPlanVersion */
     fun fetchPlanVersion(params: BetaFetchPlanVersionParams): PlanVersion =
         fetchPlanVersion(params, RequestOptions.none())
 
-    /** @see [fetchPlanVersion] */
+    /** @see fetchPlanVersion */
     fun fetchPlanVersion(
         params: BetaFetchPlanVersionParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -92,18 +92,18 @@ interface BetaService {
     fun setDefaultPlanVersion(planId: String, params: BetaSetDefaultPlanVersionParams): Plan =
         setDefaultPlanVersion(planId, params, RequestOptions.none())
 
-    /** @see [setDefaultPlanVersion] */
+    /** @see setDefaultPlanVersion */
     fun setDefaultPlanVersion(
         planId: String,
         params: BetaSetDefaultPlanVersionParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Plan = setDefaultPlanVersion(params.toBuilder().planId(planId).build(), requestOptions)
 
-    /** @see [setDefaultPlanVersion] */
+    /** @see setDefaultPlanVersion */
     fun setDefaultPlanVersion(params: BetaSetDefaultPlanVersionParams): Plan =
         setDefaultPlanVersion(params, RequestOptions.none())
 
-    /** @see [setDefaultPlanVersion] */
+    /** @see setDefaultPlanVersion */
     fun setDefaultPlanVersion(
         params: BetaSetDefaultPlanVersionParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -131,7 +131,7 @@ interface BetaService {
             params: BetaCreatePlanVersionParams,
         ): HttpResponseFor<PlanVersion> = createPlanVersion(planId, params, RequestOptions.none())
 
-        /** @see [createPlanVersion] */
+        /** @see createPlanVersion */
         @MustBeClosed
         fun createPlanVersion(
             planId: String,
@@ -140,12 +140,12 @@ interface BetaService {
         ): HttpResponseFor<PlanVersion> =
             createPlanVersion(params.toBuilder().planId(planId).build(), requestOptions)
 
-        /** @see [createPlanVersion] */
+        /** @see createPlanVersion */
         @MustBeClosed
         fun createPlanVersion(params: BetaCreatePlanVersionParams): HttpResponseFor<PlanVersion> =
             createPlanVersion(params, RequestOptions.none())
 
-        /** @see [createPlanVersion] */
+        /** @see createPlanVersion */
         @MustBeClosed
         fun createPlanVersion(
             params: BetaCreatePlanVersionParams,
@@ -162,7 +162,7 @@ interface BetaService {
             params: BetaFetchPlanVersionParams,
         ): HttpResponseFor<PlanVersion> = fetchPlanVersion(version, params, RequestOptions.none())
 
-        /** @see [fetchPlanVersion] */
+        /** @see fetchPlanVersion */
         @MustBeClosed
         fun fetchPlanVersion(
             version: String,
@@ -171,12 +171,12 @@ interface BetaService {
         ): HttpResponseFor<PlanVersion> =
             fetchPlanVersion(params.toBuilder().version(version).build(), requestOptions)
 
-        /** @see [fetchPlanVersion] */
+        /** @see fetchPlanVersion */
         @MustBeClosed
         fun fetchPlanVersion(params: BetaFetchPlanVersionParams): HttpResponseFor<PlanVersion> =
             fetchPlanVersion(params, RequestOptions.none())
 
-        /** @see [fetchPlanVersion] */
+        /** @see fetchPlanVersion */
         @MustBeClosed
         fun fetchPlanVersion(
             params: BetaFetchPlanVersionParams,
@@ -193,7 +193,7 @@ interface BetaService {
             params: BetaSetDefaultPlanVersionParams,
         ): HttpResponseFor<Plan> = setDefaultPlanVersion(planId, params, RequestOptions.none())
 
-        /** @see [setDefaultPlanVersion] */
+        /** @see setDefaultPlanVersion */
         @MustBeClosed
         fun setDefaultPlanVersion(
             planId: String,
@@ -202,12 +202,12 @@ interface BetaService {
         ): HttpResponseFor<Plan> =
             setDefaultPlanVersion(params.toBuilder().planId(planId).build(), requestOptions)
 
-        /** @see [setDefaultPlanVersion] */
+        /** @see setDefaultPlanVersion */
         @MustBeClosed
         fun setDefaultPlanVersion(params: BetaSetDefaultPlanVersionParams): HttpResponseFor<Plan> =
             setDefaultPlanVersion(params, RequestOptions.none())
 
-        /** @see [setDefaultPlanVersion] */
+        /** @see setDefaultPlanVersion */
         @MustBeClosed
         fun setDefaultPlanVersion(
             params: BetaSetDefaultPlanVersionParams,

@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [InvoiceService.list] */
+/** @see InvoiceService.list */
 class InvoiceListPage
 private constructor(
     private val service: InvoiceService,
@@ -21,14 +21,14 @@ private constructor(
     /**
      * Delegates to [InvoiceListPageResponse], but gracefully handles missing data.
      *
-     * @see [InvoiceListPageResponse.data]
+     * @see InvoiceListPageResponse.data
      */
     fun data(): List<Invoice> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [InvoiceListPageResponse], but gracefully handles missing data.
      *
-     * @see [InvoiceListPageResponse.paginationMetadata]
+     * @see InvoiceListPageResponse.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

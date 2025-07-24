@@ -36,7 +36,7 @@ interface BalanceTransactionServiceAsync {
     ): CompletableFuture<CustomerBalanceTransactionCreateResponse> =
         create(customerId, params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         customerId: String,
         params: CustomerBalanceTransactionCreateParams,
@@ -44,13 +44,13 @@ interface BalanceTransactionServiceAsync {
     ): CompletableFuture<CustomerBalanceTransactionCreateResponse> =
         create(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: CustomerBalanceTransactionCreateParams
     ): CompletableFuture<CustomerBalanceTransactionCreateResponse> =
         create(params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: CustomerBalanceTransactionCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -80,7 +80,7 @@ interface BalanceTransactionServiceAsync {
     fun list(customerId: String): CompletableFuture<CustomerBalanceTransactionListPageAsync> =
         list(customerId, CustomerBalanceTransactionListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         params: CustomerBalanceTransactionListParams = CustomerBalanceTransactionListParams.none(),
@@ -88,26 +88,26 @@ interface BalanceTransactionServiceAsync {
     ): CompletableFuture<CustomerBalanceTransactionListPageAsync> =
         list(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         params: CustomerBalanceTransactionListParams = CustomerBalanceTransactionListParams.none(),
     ): CompletableFuture<CustomerBalanceTransactionListPageAsync> =
         list(customerId, params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: CustomerBalanceTransactionListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerBalanceTransactionListPageAsync>
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: CustomerBalanceTransactionListParams
     ): CompletableFuture<CustomerBalanceTransactionListPageAsync> =
         list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         requestOptions: RequestOptions,
@@ -139,7 +139,7 @@ interface BalanceTransactionServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionCreateResponse>> =
             create(customerId, params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         fun create(
             customerId: String,
             params: CustomerBalanceTransactionCreateParams,
@@ -147,13 +147,13 @@ interface BalanceTransactionServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionCreateResponse>> =
             create(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-        /** @see [create] */
+        /** @see create */
         fun create(
             params: CustomerBalanceTransactionCreateParams
         ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionCreateResponse>> =
             create(params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         fun create(
             params: CustomerBalanceTransactionCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -168,7 +168,7 @@ interface BalanceTransactionServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionListPageAsync>> =
             list(customerId, CustomerBalanceTransactionListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             customerId: String,
             params: CustomerBalanceTransactionListParams =
@@ -177,7 +177,7 @@ interface BalanceTransactionServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionListPageAsync>> =
             list(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             customerId: String,
             params: CustomerBalanceTransactionListParams =
@@ -185,19 +185,19 @@ interface BalanceTransactionServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionListPageAsync>> =
             list(customerId, params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: CustomerBalanceTransactionListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionListPageAsync>>
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: CustomerBalanceTransactionListParams
         ): CompletableFuture<HttpResponseFor<CustomerBalanceTransactionListPageAsync>> =
             list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             customerId: String,
             requestOptions: RequestOptions,

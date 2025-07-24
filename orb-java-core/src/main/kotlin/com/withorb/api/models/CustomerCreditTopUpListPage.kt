@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [TopUpService.list] */
+/** @see TopUpService.list */
 class CustomerCreditTopUpListPage
 private constructor(
     private val service: TopUpService,
@@ -21,7 +21,7 @@ private constructor(
     /**
      * Delegates to [CustomerCreditTopUpListPageResponse], but gracefully handles missing data.
      *
-     * @see [CustomerCreditTopUpListPageResponse.data]
+     * @see CustomerCreditTopUpListPageResponse.data
      */
     fun data(): List<CustomerCreditTopUpListResponse> =
         response._data().getOptional("data").getOrNull() ?: emptyList()
@@ -29,7 +29,7 @@ private constructor(
     /**
      * Delegates to [CustomerCreditTopUpListPageResponse], but gracefully handles missing data.
      *
-     * @see [CustomerCreditTopUpListPageResponse.paginationMetadata]
+     * @see CustomerCreditTopUpListPageResponse.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

@@ -112,7 +112,7 @@ interface LedgerServiceAsync {
     fun list(customerId: String): CompletableFuture<CustomerCreditLedgerListPageAsync> =
         list(customerId, CustomerCreditLedgerListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         params: CustomerCreditLedgerListParams = CustomerCreditLedgerListParams.none(),
@@ -120,25 +120,25 @@ interface LedgerServiceAsync {
     ): CompletableFuture<CustomerCreditLedgerListPageAsync> =
         list(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         params: CustomerCreditLedgerListParams = CustomerCreditLedgerListParams.none(),
     ): CompletableFuture<CustomerCreditLedgerListPageAsync> =
         list(customerId, params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: CustomerCreditLedgerListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditLedgerListPageAsync>
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: CustomerCreditLedgerListParams
     ): CompletableFuture<CustomerCreditLedgerListPageAsync> = list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         requestOptions: RequestOptions,
@@ -254,7 +254,7 @@ interface LedgerServiceAsync {
     ): CompletableFuture<CustomerCreditLedgerCreateEntryResponse> =
         createEntry(customerId, params, RequestOptions.none())
 
-    /** @see [createEntry] */
+    /** @see createEntry */
     fun createEntry(
         customerId: String,
         params: CustomerCreditLedgerCreateEntryParams,
@@ -262,13 +262,13 @@ interface LedgerServiceAsync {
     ): CompletableFuture<CustomerCreditLedgerCreateEntryResponse> =
         createEntry(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-    /** @see [createEntry] */
+    /** @see createEntry */
     fun createEntry(
         params: CustomerCreditLedgerCreateEntryParams
     ): CompletableFuture<CustomerCreditLedgerCreateEntryResponse> =
         createEntry(params, RequestOptions.none())
 
-    /** @see [createEntry] */
+    /** @see createEntry */
     fun createEntry(
         params: CustomerCreditLedgerCreateEntryParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -383,7 +383,7 @@ interface LedgerServiceAsync {
     ): CompletableFuture<CustomerCreditLedgerCreateEntryByExternalIdResponse> =
         createEntryByExternalId(externalCustomerId, params, RequestOptions.none())
 
-    /** @see [createEntryByExternalId] */
+    /** @see createEntryByExternalId */
     fun createEntryByExternalId(
         externalCustomerId: String,
         params: CustomerCreditLedgerCreateEntryByExternalIdParams,
@@ -394,13 +394,13 @@ interface LedgerServiceAsync {
             requestOptions,
         )
 
-    /** @see [createEntryByExternalId] */
+    /** @see createEntryByExternalId */
     fun createEntryByExternalId(
         params: CustomerCreditLedgerCreateEntryByExternalIdParams
     ): CompletableFuture<CustomerCreditLedgerCreateEntryByExternalIdResponse> =
         createEntryByExternalId(params, RequestOptions.none())
 
-    /** @see [createEntryByExternalId] */
+    /** @see createEntryByExternalId */
     fun createEntryByExternalId(
         params: CustomerCreditLedgerCreateEntryByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -490,7 +490,7 @@ interface LedgerServiceAsync {
     ): CompletableFuture<CustomerCreditLedgerListByExternalIdPageAsync> =
         listByExternalId(externalCustomerId, CustomerCreditLedgerListByExternalIdParams.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         params: CustomerCreditLedgerListByExternalIdParams =
@@ -502,7 +502,7 @@ interface LedgerServiceAsync {
             requestOptions,
         )
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         params: CustomerCreditLedgerListByExternalIdParams =
@@ -510,19 +510,19 @@ interface LedgerServiceAsync {
     ): CompletableFuture<CustomerCreditLedgerListByExternalIdPageAsync> =
         listByExternalId(externalCustomerId, params, RequestOptions.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         params: CustomerCreditLedgerListByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditLedgerListByExternalIdPageAsync>
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         params: CustomerCreditLedgerListByExternalIdParams
     ): CompletableFuture<CustomerCreditLedgerListByExternalIdPageAsync> =
         listByExternalId(params, RequestOptions.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         requestOptions: RequestOptions,
@@ -556,7 +556,7 @@ interface LedgerServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListPageAsync>> =
             list(customerId, CustomerCreditLedgerListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             customerId: String,
             params: CustomerCreditLedgerListParams = CustomerCreditLedgerListParams.none(),
@@ -564,26 +564,26 @@ interface LedgerServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListPageAsync>> =
             list(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             customerId: String,
             params: CustomerCreditLedgerListParams = CustomerCreditLedgerListParams.none(),
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListPageAsync>> =
             list(customerId, params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: CustomerCreditLedgerListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListPageAsync>>
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: CustomerCreditLedgerListParams
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListPageAsync>> =
             list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             customerId: String,
             requestOptions: RequestOptions,
@@ -600,7 +600,7 @@ interface LedgerServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryResponse>> =
             createEntry(customerId, params, RequestOptions.none())
 
-        /** @see [createEntry] */
+        /** @see createEntry */
         fun createEntry(
             customerId: String,
             params: CustomerCreditLedgerCreateEntryParams,
@@ -608,13 +608,13 @@ interface LedgerServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryResponse>> =
             createEntry(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-        /** @see [createEntry] */
+        /** @see createEntry */
         fun createEntry(
             params: CustomerCreditLedgerCreateEntryParams
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryResponse>> =
             createEntry(params, RequestOptions.none())
 
-        /** @see [createEntry] */
+        /** @see createEntry */
         fun createEntry(
             params: CustomerCreditLedgerCreateEntryParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -631,7 +631,7 @@ interface LedgerServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryByExternalIdResponse>> =
             createEntryByExternalId(externalCustomerId, params, RequestOptions.none())
 
-        /** @see [createEntryByExternalId] */
+        /** @see createEntryByExternalId */
         fun createEntryByExternalId(
             externalCustomerId: String,
             params: CustomerCreditLedgerCreateEntryByExternalIdParams,
@@ -642,13 +642,13 @@ interface LedgerServiceAsync {
                 requestOptions,
             )
 
-        /** @see [createEntryByExternalId] */
+        /** @see createEntryByExternalId */
         fun createEntryByExternalId(
             params: CustomerCreditLedgerCreateEntryByExternalIdParams
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerCreateEntryByExternalIdResponse>> =
             createEntryByExternalId(params, RequestOptions.none())
 
-        /** @see [createEntryByExternalId] */
+        /** @see createEntryByExternalId */
         fun createEntryByExternalId(
             params: CustomerCreditLedgerCreateEntryByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -664,7 +664,7 @@ interface LedgerServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListByExternalIdPageAsync>> =
             listByExternalId(externalCustomerId, CustomerCreditLedgerListByExternalIdParams.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         fun listByExternalId(
             externalCustomerId: String,
             params: CustomerCreditLedgerListByExternalIdParams =
@@ -676,7 +676,7 @@ interface LedgerServiceAsync {
                 requestOptions,
             )
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         fun listByExternalId(
             externalCustomerId: String,
             params: CustomerCreditLedgerListByExternalIdParams =
@@ -684,19 +684,19 @@ interface LedgerServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListByExternalIdPageAsync>> =
             listByExternalId(externalCustomerId, params, RequestOptions.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         fun listByExternalId(
             params: CustomerCreditLedgerListByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListByExternalIdPageAsync>>
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         fun listByExternalId(
             params: CustomerCreditLedgerListByExternalIdParams
         ): CompletableFuture<HttpResponseFor<CustomerCreditLedgerListByExternalIdPageAsync>> =
             listByExternalId(params, RequestOptions.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         fun listByExternalId(
             externalCustomerId: String,
             requestOptions: RequestOptions,

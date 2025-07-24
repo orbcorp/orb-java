@@ -35,7 +35,7 @@ interface PlanServiceAsync {
     fun create(params: PlanCreateParams): CompletableFuture<Plan> =
         create(params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: PlanCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -49,30 +49,30 @@ interface PlanServiceAsync {
      */
     fun update(planId: String): CompletableFuture<Plan> = update(planId, PlanUpdateParams.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         planId: String,
         params: PlanUpdateParams = PlanUpdateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Plan> = update(params.toBuilder().planId(planId).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         planId: String,
         params: PlanUpdateParams = PlanUpdateParams.none(),
     ): CompletableFuture<Plan> = update(planId, params, RequestOptions.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         params: PlanUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Plan>
 
-    /** @see [update] */
+    /** @see update */
     fun update(params: PlanUpdateParams): CompletableFuture<Plan> =
         update(params, RequestOptions.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(planId: String, requestOptions: RequestOptions): CompletableFuture<Plan> =
         update(planId, PlanUpdateParams.none(), requestOptions)
 
@@ -84,17 +84,17 @@ interface PlanServiceAsync {
      */
     fun list(): CompletableFuture<PlanListPageAsync> = list(PlanListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: PlanListParams = PlanListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<PlanListPageAsync>
 
-    /** @see [list] */
+    /** @see list */
     fun list(params: PlanListParams = PlanListParams.none()): CompletableFuture<PlanListPageAsync> =
         list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): CompletableFuture<PlanListPageAsync> =
         list(PlanListParams.none(), requestOptions)
 
@@ -118,30 +118,30 @@ interface PlanServiceAsync {
      */
     fun fetch(planId: String): CompletableFuture<Plan> = fetch(planId, PlanFetchParams.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         planId: String,
         params: PlanFetchParams = PlanFetchParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Plan> = fetch(params.toBuilder().planId(planId).build(), requestOptions)
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         planId: String,
         params: PlanFetchParams = PlanFetchParams.none(),
     ): CompletableFuture<Plan> = fetch(planId, params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         params: PlanFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Plan>
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(params: PlanFetchParams): CompletableFuture<Plan> =
         fetch(params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(planId: String, requestOptions: RequestOptions): CompletableFuture<Plan> =
         fetch(planId, PlanFetchParams.none(), requestOptions)
 
@@ -164,7 +164,7 @@ interface PlanServiceAsync {
         fun create(params: PlanCreateParams): CompletableFuture<HttpResponseFor<Plan>> =
             create(params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         fun create(
             params: PlanCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -177,7 +177,7 @@ interface PlanServiceAsync {
         fun update(planId: String): CompletableFuture<HttpResponseFor<Plan>> =
             update(planId, PlanUpdateParams.none())
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             planId: String,
             params: PlanUpdateParams = PlanUpdateParams.none(),
@@ -185,23 +185,23 @@ interface PlanServiceAsync {
         ): CompletableFuture<HttpResponseFor<Plan>> =
             update(params.toBuilder().planId(planId).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             planId: String,
             params: PlanUpdateParams = PlanUpdateParams.none(),
         ): CompletableFuture<HttpResponseFor<Plan>> = update(planId, params, RequestOptions.none())
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             params: PlanUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Plan>>
 
-        /** @see [update] */
+        /** @see update */
         fun update(params: PlanUpdateParams): CompletableFuture<HttpResponseFor<Plan>> =
             update(params, RequestOptions.none())
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             planId: String,
             requestOptions: RequestOptions,
@@ -215,19 +215,19 @@ interface PlanServiceAsync {
         fun list(): CompletableFuture<HttpResponseFor<PlanListPageAsync>> =
             list(PlanListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: PlanListParams = PlanListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<PlanListPageAsync>>
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: PlanListParams = PlanListParams.none()
         ): CompletableFuture<HttpResponseFor<PlanListPageAsync>> =
             list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<PlanListPageAsync>> =
@@ -240,7 +240,7 @@ interface PlanServiceAsync {
         fun fetch(planId: String): CompletableFuture<HttpResponseFor<Plan>> =
             fetch(planId, PlanFetchParams.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             planId: String,
             params: PlanFetchParams = PlanFetchParams.none(),
@@ -248,23 +248,23 @@ interface PlanServiceAsync {
         ): CompletableFuture<HttpResponseFor<Plan>> =
             fetch(params.toBuilder().planId(planId).build(), requestOptions)
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             planId: String,
             params: PlanFetchParams = PlanFetchParams.none(),
         ): CompletableFuture<HttpResponseFor<Plan>> = fetch(planId, params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             params: PlanFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Plan>>
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(params: PlanFetchParams): CompletableFuture<HttpResponseFor<Plan>> =
             fetch(params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             planId: String,
             requestOptions: RequestOptions,

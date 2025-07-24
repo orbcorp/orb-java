@@ -41,7 +41,7 @@ interface BetaServiceAsync {
         params: BetaCreatePlanVersionParams,
     ): CompletableFuture<PlanVersion> = createPlanVersion(planId, params, RequestOptions.none())
 
-    /** @see [createPlanVersion] */
+    /** @see createPlanVersion */
     fun createPlanVersion(
         planId: String,
         params: BetaCreatePlanVersionParams,
@@ -49,11 +49,11 @@ interface BetaServiceAsync {
     ): CompletableFuture<PlanVersion> =
         createPlanVersion(params.toBuilder().planId(planId).build(), requestOptions)
 
-    /** @see [createPlanVersion] */
+    /** @see createPlanVersion */
     fun createPlanVersion(params: BetaCreatePlanVersionParams): CompletableFuture<PlanVersion> =
         createPlanVersion(params, RequestOptions.none())
 
-    /** @see [createPlanVersion] */
+    /** @see createPlanVersion */
     fun createPlanVersion(
         params: BetaCreatePlanVersionParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -71,7 +71,7 @@ interface BetaServiceAsync {
         params: BetaFetchPlanVersionParams,
     ): CompletableFuture<PlanVersion> = fetchPlanVersion(version, params, RequestOptions.none())
 
-    /** @see [fetchPlanVersion] */
+    /** @see fetchPlanVersion */
     fun fetchPlanVersion(
         version: String,
         params: BetaFetchPlanVersionParams,
@@ -79,11 +79,11 @@ interface BetaServiceAsync {
     ): CompletableFuture<PlanVersion> =
         fetchPlanVersion(params.toBuilder().version(version).build(), requestOptions)
 
-    /** @see [fetchPlanVersion] */
+    /** @see fetchPlanVersion */
     fun fetchPlanVersion(params: BetaFetchPlanVersionParams): CompletableFuture<PlanVersion> =
         fetchPlanVersion(params, RequestOptions.none())
 
-    /** @see [fetchPlanVersion] */
+    /** @see fetchPlanVersion */
     fun fetchPlanVersion(
         params: BetaFetchPlanVersionParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -100,7 +100,7 @@ interface BetaServiceAsync {
         params: BetaSetDefaultPlanVersionParams,
     ): CompletableFuture<Plan> = setDefaultPlanVersion(planId, params, RequestOptions.none())
 
-    /** @see [setDefaultPlanVersion] */
+    /** @see setDefaultPlanVersion */
     fun setDefaultPlanVersion(
         planId: String,
         params: BetaSetDefaultPlanVersionParams,
@@ -108,11 +108,11 @@ interface BetaServiceAsync {
     ): CompletableFuture<Plan> =
         setDefaultPlanVersion(params.toBuilder().planId(planId).build(), requestOptions)
 
-    /** @see [setDefaultPlanVersion] */
+    /** @see setDefaultPlanVersion */
     fun setDefaultPlanVersion(params: BetaSetDefaultPlanVersionParams): CompletableFuture<Plan> =
         setDefaultPlanVersion(params, RequestOptions.none())
 
-    /** @see [setDefaultPlanVersion] */
+    /** @see setDefaultPlanVersion */
     fun setDefaultPlanVersion(
         params: BetaSetDefaultPlanVersionParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -140,7 +140,7 @@ interface BetaServiceAsync {
         ): CompletableFuture<HttpResponseFor<PlanVersion>> =
             createPlanVersion(planId, params, RequestOptions.none())
 
-        /** @see [createPlanVersion] */
+        /** @see createPlanVersion */
         fun createPlanVersion(
             planId: String,
             params: BetaCreatePlanVersionParams,
@@ -148,13 +148,13 @@ interface BetaServiceAsync {
         ): CompletableFuture<HttpResponseFor<PlanVersion>> =
             createPlanVersion(params.toBuilder().planId(planId).build(), requestOptions)
 
-        /** @see [createPlanVersion] */
+        /** @see createPlanVersion */
         fun createPlanVersion(
             params: BetaCreatePlanVersionParams
         ): CompletableFuture<HttpResponseFor<PlanVersion>> =
             createPlanVersion(params, RequestOptions.none())
 
-        /** @see [createPlanVersion] */
+        /** @see createPlanVersion */
         fun createPlanVersion(
             params: BetaCreatePlanVersionParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -170,7 +170,7 @@ interface BetaServiceAsync {
         ): CompletableFuture<HttpResponseFor<PlanVersion>> =
             fetchPlanVersion(version, params, RequestOptions.none())
 
-        /** @see [fetchPlanVersion] */
+        /** @see fetchPlanVersion */
         fun fetchPlanVersion(
             version: String,
             params: BetaFetchPlanVersionParams,
@@ -178,13 +178,13 @@ interface BetaServiceAsync {
         ): CompletableFuture<HttpResponseFor<PlanVersion>> =
             fetchPlanVersion(params.toBuilder().version(version).build(), requestOptions)
 
-        /** @see [fetchPlanVersion] */
+        /** @see fetchPlanVersion */
         fun fetchPlanVersion(
             params: BetaFetchPlanVersionParams
         ): CompletableFuture<HttpResponseFor<PlanVersion>> =
             fetchPlanVersion(params, RequestOptions.none())
 
-        /** @see [fetchPlanVersion] */
+        /** @see fetchPlanVersion */
         fun fetchPlanVersion(
             params: BetaFetchPlanVersionParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -200,7 +200,7 @@ interface BetaServiceAsync {
         ): CompletableFuture<HttpResponseFor<Plan>> =
             setDefaultPlanVersion(planId, params, RequestOptions.none())
 
-        /** @see [setDefaultPlanVersion] */
+        /** @see setDefaultPlanVersion */
         fun setDefaultPlanVersion(
             planId: String,
             params: BetaSetDefaultPlanVersionParams,
@@ -208,13 +208,13 @@ interface BetaServiceAsync {
         ): CompletableFuture<HttpResponseFor<Plan>> =
             setDefaultPlanVersion(params.toBuilder().planId(planId).build(), requestOptions)
 
-        /** @see [setDefaultPlanVersion] */
+        /** @see setDefaultPlanVersion */
         fun setDefaultPlanVersion(
             params: BetaSetDefaultPlanVersionParams
         ): CompletableFuture<HttpResponseFor<Plan>> =
             setDefaultPlanVersion(params, RequestOptions.none())
 
-        /** @see [setDefaultPlanVersion] */
+        /** @see setDefaultPlanVersion */
         fun setDefaultPlanVersion(
             params: BetaSetDefaultPlanVersionParams,
             requestOptions: RequestOptions = RequestOptions.none(),

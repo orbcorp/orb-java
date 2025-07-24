@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [MetricServiceAsync.list] */
+/** @see MetricServiceAsync.list */
 class MetricListPageAsync
 private constructor(
     private val service: MetricServiceAsync,
@@ -24,7 +24,7 @@ private constructor(
     /**
      * Delegates to [MetricListPageResponse], but gracefully handles missing data.
      *
-     * @see [MetricListPageResponse.data]
+     * @see MetricListPageResponse.data
      */
     fun data(): List<BillableMetric> =
         response._data().getOptional("data").getOrNull() ?: emptyList()
@@ -32,7 +32,7 @@ private constructor(
     /**
      * Delegates to [MetricListPageResponse], but gracefully handles missing data.
      *
-     * @see [MetricListPageResponse.paginationMetadata]
+     * @see MetricListPageResponse.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

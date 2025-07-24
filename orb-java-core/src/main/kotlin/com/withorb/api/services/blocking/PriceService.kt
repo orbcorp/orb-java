@@ -51,7 +51,7 @@ interface PriceService {
      */
     fun create(params: PriceCreateParams): Price = create(params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: PriceCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -63,27 +63,27 @@ interface PriceService {
      */
     fun update(priceId: String): Price = update(priceId, PriceUpdateParams.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         priceId: String,
         params: PriceUpdateParams = PriceUpdateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Price = update(params.toBuilder().priceId(priceId).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     fun update(priceId: String, params: PriceUpdateParams = PriceUpdateParams.none()): Price =
         update(priceId, params, RequestOptions.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         params: PriceUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Price
 
-    /** @see [update] */
+    /** @see update */
     fun update(params: PriceUpdateParams): Price = update(params, RequestOptions.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(priceId: String, requestOptions: RequestOptions): Price =
         update(priceId, PriceUpdateParams.none(), requestOptions)
 
@@ -93,17 +93,17 @@ interface PriceService {
      */
     fun list(): PriceListPage = list(PriceListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: PriceListParams = PriceListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PriceListPage
 
-    /** @see [list] */
+    /** @see list */
     fun list(params: PriceListParams = PriceListParams.none()): PriceListPage =
         list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): PriceListPage =
         list(PriceListParams.none(), requestOptions)
 
@@ -132,18 +132,18 @@ interface PriceService {
     fun evaluate(priceId: String, params: PriceEvaluateParams): PriceEvaluateResponse =
         evaluate(priceId, params, RequestOptions.none())
 
-    /** @see [evaluate] */
+    /** @see evaluate */
     fun evaluate(
         priceId: String,
         params: PriceEvaluateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PriceEvaluateResponse = evaluate(params.toBuilder().priceId(priceId).build(), requestOptions)
 
-    /** @see [evaluate] */
+    /** @see evaluate */
     fun evaluate(params: PriceEvaluateParams): PriceEvaluateResponse =
         evaluate(params, RequestOptions.none())
 
-    /** @see [evaluate] */
+    /** @see evaluate */
     fun evaluate(
         params: PriceEvaluateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -178,7 +178,7 @@ interface PriceService {
     fun evaluateMultiple(params: PriceEvaluateMultipleParams): PriceEvaluateMultipleResponse =
         evaluateMultiple(params, RequestOptions.none())
 
-    /** @see [evaluateMultiple] */
+    /** @see evaluateMultiple */
     fun evaluateMultiple(
         params: PriceEvaluateMultipleParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -205,7 +205,7 @@ interface PriceService {
         params: PriceEvaluatePreviewEventsParams
     ): PriceEvaluatePreviewEventsResponse = evaluatePreviewEvents(params, RequestOptions.none())
 
-    /** @see [evaluatePreviewEvents] */
+    /** @see evaluatePreviewEvents */
     fun evaluatePreviewEvents(
         params: PriceEvaluatePreviewEventsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -214,27 +214,27 @@ interface PriceService {
     /** This endpoint returns a price given an identifier. */
     fun fetch(priceId: String): Price = fetch(priceId, PriceFetchParams.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         priceId: String,
         params: PriceFetchParams = PriceFetchParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Price = fetch(params.toBuilder().priceId(priceId).build(), requestOptions)
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(priceId: String, params: PriceFetchParams = PriceFetchParams.none()): Price =
         fetch(priceId, params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         params: PriceFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Price
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(params: PriceFetchParams): Price = fetch(params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(priceId: String, requestOptions: RequestOptions): Price =
         fetch(priceId, PriceFetchParams.none(), requestOptions)
 
@@ -258,7 +258,7 @@ interface PriceService {
         fun create(params: PriceCreateParams): HttpResponseFor<Price> =
             create(params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         @MustBeClosed
         fun create(
             params: PriceCreateParams,
@@ -273,7 +273,7 @@ interface PriceService {
         fun update(priceId: String): HttpResponseFor<Price> =
             update(priceId, PriceUpdateParams.none())
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(
             priceId: String,
@@ -282,26 +282,26 @@ interface PriceService {
         ): HttpResponseFor<Price> =
             update(params.toBuilder().priceId(priceId).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(
             priceId: String,
             params: PriceUpdateParams = PriceUpdateParams.none(),
         ): HttpResponseFor<Price> = update(priceId, params, RequestOptions.none())
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(
             params: PriceUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Price>
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(params: PriceUpdateParams): HttpResponseFor<Price> =
             update(params, RequestOptions.none())
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(priceId: String, requestOptions: RequestOptions): HttpResponseFor<Price> =
             update(priceId, PriceUpdateParams.none(), requestOptions)
@@ -312,19 +312,19 @@ interface PriceService {
          */
         @MustBeClosed fun list(): HttpResponseFor<PriceListPage> = list(PriceListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             params: PriceListParams = PriceListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<PriceListPage>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(params: PriceListParams = PriceListParams.none()): HttpResponseFor<PriceListPage> =
             list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<PriceListPage> =
             list(PriceListParams.none(), requestOptions)
@@ -339,7 +339,7 @@ interface PriceService {
             params: PriceEvaluateParams,
         ): HttpResponseFor<PriceEvaluateResponse> = evaluate(priceId, params, RequestOptions.none())
 
-        /** @see [evaluate] */
+        /** @see evaluate */
         @MustBeClosed
         fun evaluate(
             priceId: String,
@@ -348,12 +348,12 @@ interface PriceService {
         ): HttpResponseFor<PriceEvaluateResponse> =
             evaluate(params.toBuilder().priceId(priceId).build(), requestOptions)
 
-        /** @see [evaluate] */
+        /** @see evaluate */
         @MustBeClosed
         fun evaluate(params: PriceEvaluateParams): HttpResponseFor<PriceEvaluateResponse> =
             evaluate(params, RequestOptions.none())
 
-        /** @see [evaluate] */
+        /** @see evaluate */
         @MustBeClosed
         fun evaluate(
             params: PriceEvaluateParams,
@@ -370,7 +370,7 @@ interface PriceService {
         ): HttpResponseFor<PriceEvaluateMultipleResponse> =
             evaluateMultiple(params, RequestOptions.none())
 
-        /** @see [evaluateMultiple] */
+        /** @see evaluateMultiple */
         @MustBeClosed
         fun evaluateMultiple(
             params: PriceEvaluateMultipleParams,
@@ -387,7 +387,7 @@ interface PriceService {
         ): HttpResponseFor<PriceEvaluatePreviewEventsResponse> =
             evaluatePreviewEvents(params, RequestOptions.none())
 
-        /** @see [evaluatePreviewEvents] */
+        /** @see evaluatePreviewEvents */
         @MustBeClosed
         fun evaluatePreviewEvents(
             params: PriceEvaluatePreviewEventsParams,
@@ -401,7 +401,7 @@ interface PriceService {
         @MustBeClosed
         fun fetch(priceId: String): HttpResponseFor<Price> = fetch(priceId, PriceFetchParams.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(
             priceId: String,
@@ -410,26 +410,26 @@ interface PriceService {
         ): HttpResponseFor<Price> =
             fetch(params.toBuilder().priceId(priceId).build(), requestOptions)
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(
             priceId: String,
             params: PriceFetchParams = PriceFetchParams.none(),
         ): HttpResponseFor<Price> = fetch(priceId, params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(
             params: PriceFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Price>
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(params: PriceFetchParams): HttpResponseFor<Price> =
             fetch(params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         @MustBeClosed
         fun fetch(priceId: String, requestOptions: RequestOptions): HttpResponseFor<Price> =
             fetch(priceId, PriceFetchParams.none(), requestOptions)

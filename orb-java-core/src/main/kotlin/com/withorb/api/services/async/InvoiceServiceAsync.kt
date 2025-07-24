@@ -38,7 +38,7 @@ interface InvoiceServiceAsync {
     fun create(params: InvoiceCreateParams): CompletableFuture<Invoice> =
         create(params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: InvoiceCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -53,7 +53,7 @@ interface InvoiceServiceAsync {
     fun update(invoiceId: String): CompletableFuture<Invoice> =
         update(invoiceId, InvoiceUpdateParams.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         invoiceId: String,
         params: InvoiceUpdateParams = InvoiceUpdateParams.none(),
@@ -61,23 +61,23 @@ interface InvoiceServiceAsync {
     ): CompletableFuture<Invoice> =
         update(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         invoiceId: String,
         params: InvoiceUpdateParams = InvoiceUpdateParams.none(),
     ): CompletableFuture<Invoice> = update(invoiceId, params, RequestOptions.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         params: InvoiceUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Invoice>
 
-    /** @see [update] */
+    /** @see update */
     fun update(params: InvoiceUpdateParams): CompletableFuture<Invoice> =
         update(params, RequestOptions.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(invoiceId: String, requestOptions: RequestOptions): CompletableFuture<Invoice> =
         update(invoiceId, InvoiceUpdateParams.none(), requestOptions)
 
@@ -97,18 +97,18 @@ interface InvoiceServiceAsync {
      */
     fun list(): CompletableFuture<InvoiceListPageAsync> = list(InvoiceListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: InvoiceListParams = InvoiceListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<InvoiceListPageAsync>
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: InvoiceListParams = InvoiceListParams.none()
     ): CompletableFuture<InvoiceListPageAsync> = list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): CompletableFuture<InvoiceListPageAsync> =
         list(InvoiceListParams.none(), requestOptions)
 
@@ -118,7 +118,7 @@ interface InvoiceServiceAsync {
     fun fetch(invoiceId: String): CompletableFuture<Invoice> =
         fetch(invoiceId, InvoiceFetchParams.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         invoiceId: String,
         params: InvoiceFetchParams = InvoiceFetchParams.none(),
@@ -126,23 +126,23 @@ interface InvoiceServiceAsync {
     ): CompletableFuture<Invoice> =
         fetch(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         invoiceId: String,
         params: InvoiceFetchParams = InvoiceFetchParams.none(),
     ): CompletableFuture<Invoice> = fetch(invoiceId, params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(
         params: InvoiceFetchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Invoice>
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(params: InvoiceFetchParams): CompletableFuture<Invoice> =
         fetch(params, RequestOptions.none())
 
-    /** @see [fetch] */
+    /** @see fetch */
     fun fetch(invoiceId: String, requestOptions: RequestOptions): CompletableFuture<Invoice> =
         fetch(invoiceId, InvoiceFetchParams.none(), requestOptions)
 
@@ -155,7 +155,7 @@ interface InvoiceServiceAsync {
     ): CompletableFuture<InvoiceFetchUpcomingResponse> =
         fetchUpcoming(params, RequestOptions.none())
 
-    /** @see [fetchUpcoming] */
+    /** @see fetchUpcoming */
     fun fetchUpcoming(
         params: InvoiceFetchUpcomingParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -171,7 +171,7 @@ interface InvoiceServiceAsync {
     fun issue(invoiceId: String): CompletableFuture<Invoice> =
         issue(invoiceId, InvoiceIssueParams.none())
 
-    /** @see [issue] */
+    /** @see issue */
     fun issue(
         invoiceId: String,
         params: InvoiceIssueParams = InvoiceIssueParams.none(),
@@ -179,23 +179,23 @@ interface InvoiceServiceAsync {
     ): CompletableFuture<Invoice> =
         issue(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
-    /** @see [issue] */
+    /** @see issue */
     fun issue(
         invoiceId: String,
         params: InvoiceIssueParams = InvoiceIssueParams.none(),
     ): CompletableFuture<Invoice> = issue(invoiceId, params, RequestOptions.none())
 
-    /** @see [issue] */
+    /** @see issue */
     fun issue(
         params: InvoiceIssueParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Invoice>
 
-    /** @see [issue] */
+    /** @see issue */
     fun issue(params: InvoiceIssueParams): CompletableFuture<Invoice> =
         issue(params, RequestOptions.none())
 
-    /** @see [issue] */
+    /** @see issue */
     fun issue(invoiceId: String, requestOptions: RequestOptions): CompletableFuture<Invoice> =
         issue(invoiceId, InvoiceIssueParams.none(), requestOptions)
 
@@ -206,7 +206,7 @@ interface InvoiceServiceAsync {
     fun markPaid(invoiceId: String, params: InvoiceMarkPaidParams): CompletableFuture<Invoice> =
         markPaid(invoiceId, params, RequestOptions.none())
 
-    /** @see [markPaid] */
+    /** @see markPaid */
     fun markPaid(
         invoiceId: String,
         params: InvoiceMarkPaidParams,
@@ -214,11 +214,11 @@ interface InvoiceServiceAsync {
     ): CompletableFuture<Invoice> =
         markPaid(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
-    /** @see [markPaid] */
+    /** @see markPaid */
     fun markPaid(params: InvoiceMarkPaidParams): CompletableFuture<Invoice> =
         markPaid(params, RequestOptions.none())
 
-    /** @see [markPaid] */
+    /** @see markPaid */
     fun markPaid(
         params: InvoiceMarkPaidParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -230,7 +230,7 @@ interface InvoiceServiceAsync {
      */
     fun pay(invoiceId: String): CompletableFuture<Invoice> = pay(invoiceId, InvoicePayParams.none())
 
-    /** @see [pay] */
+    /** @see pay */
     fun pay(
         invoiceId: String,
         params: InvoicePayParams = InvoicePayParams.none(),
@@ -238,23 +238,23 @@ interface InvoiceServiceAsync {
     ): CompletableFuture<Invoice> =
         pay(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
-    /** @see [pay] */
+    /** @see pay */
     fun pay(
         invoiceId: String,
         params: InvoicePayParams = InvoicePayParams.none(),
     ): CompletableFuture<Invoice> = pay(invoiceId, params, RequestOptions.none())
 
-    /** @see [pay] */
+    /** @see pay */
     fun pay(
         params: InvoicePayParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Invoice>
 
-    /** @see [pay] */
+    /** @see pay */
     fun pay(params: InvoicePayParams): CompletableFuture<Invoice> =
         pay(params, RequestOptions.none())
 
-    /** @see [pay] */
+    /** @see pay */
     fun pay(invoiceId: String, requestOptions: RequestOptions): CompletableFuture<Invoice> =
         pay(invoiceId, InvoicePayParams.none(), requestOptions)
 
@@ -273,7 +273,7 @@ interface InvoiceServiceAsync {
     fun voidInvoice(invoiceId: String): CompletableFuture<Invoice> =
         voidInvoice(invoiceId, InvoiceVoidInvoiceParams.none())
 
-    /** @see [voidInvoice] */
+    /** @see voidInvoice */
     fun voidInvoice(
         invoiceId: String,
         params: InvoiceVoidInvoiceParams = InvoiceVoidInvoiceParams.none(),
@@ -281,23 +281,23 @@ interface InvoiceServiceAsync {
     ): CompletableFuture<Invoice> =
         voidInvoice(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
-    /** @see [voidInvoice] */
+    /** @see voidInvoice */
     fun voidInvoice(
         invoiceId: String,
         params: InvoiceVoidInvoiceParams = InvoiceVoidInvoiceParams.none(),
     ): CompletableFuture<Invoice> = voidInvoice(invoiceId, params, RequestOptions.none())
 
-    /** @see [voidInvoice] */
+    /** @see voidInvoice */
     fun voidInvoice(
         params: InvoiceVoidInvoiceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Invoice>
 
-    /** @see [voidInvoice] */
+    /** @see voidInvoice */
     fun voidInvoice(params: InvoiceVoidInvoiceParams): CompletableFuture<Invoice> =
         voidInvoice(params, RequestOptions.none())
 
-    /** @see [voidInvoice] */
+    /** @see voidInvoice */
     fun voidInvoice(invoiceId: String, requestOptions: RequestOptions): CompletableFuture<Invoice> =
         voidInvoice(invoiceId, InvoiceVoidInvoiceParams.none(), requestOptions)
 
@@ -322,7 +322,7 @@ interface InvoiceServiceAsync {
         fun create(params: InvoiceCreateParams): CompletableFuture<HttpResponseFor<Invoice>> =
             create(params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         fun create(
             params: InvoiceCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -335,7 +335,7 @@ interface InvoiceServiceAsync {
         fun update(invoiceId: String): CompletableFuture<HttpResponseFor<Invoice>> =
             update(invoiceId, InvoiceUpdateParams.none())
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             invoiceId: String,
             params: InvoiceUpdateParams = InvoiceUpdateParams.none(),
@@ -343,24 +343,24 @@ interface InvoiceServiceAsync {
         ): CompletableFuture<HttpResponseFor<Invoice>> =
             update(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             invoiceId: String,
             params: InvoiceUpdateParams = InvoiceUpdateParams.none(),
         ): CompletableFuture<HttpResponseFor<Invoice>> =
             update(invoiceId, params, RequestOptions.none())
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             params: InvoiceUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Invoice>>
 
-        /** @see [update] */
+        /** @see update */
         fun update(params: InvoiceUpdateParams): CompletableFuture<HttpResponseFor<Invoice>> =
             update(params, RequestOptions.none())
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             invoiceId: String,
             requestOptions: RequestOptions,
@@ -374,19 +374,19 @@ interface InvoiceServiceAsync {
         fun list(): CompletableFuture<HttpResponseFor<InvoiceListPageAsync>> =
             list(InvoiceListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: InvoiceListParams = InvoiceListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<InvoiceListPageAsync>>
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: InvoiceListParams = InvoiceListParams.none()
         ): CompletableFuture<HttpResponseFor<InvoiceListPageAsync>> =
             list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<InvoiceListPageAsync>> =
@@ -399,7 +399,7 @@ interface InvoiceServiceAsync {
         fun fetch(invoiceId: String): CompletableFuture<HttpResponseFor<Invoice>> =
             fetch(invoiceId, InvoiceFetchParams.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             invoiceId: String,
             params: InvoiceFetchParams = InvoiceFetchParams.none(),
@@ -407,24 +407,24 @@ interface InvoiceServiceAsync {
         ): CompletableFuture<HttpResponseFor<Invoice>> =
             fetch(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             invoiceId: String,
             params: InvoiceFetchParams = InvoiceFetchParams.none(),
         ): CompletableFuture<HttpResponseFor<Invoice>> =
             fetch(invoiceId, params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             params: InvoiceFetchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Invoice>>
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(params: InvoiceFetchParams): CompletableFuture<HttpResponseFor<Invoice>> =
             fetch(params, RequestOptions.none())
 
-        /** @see [fetch] */
+        /** @see fetch */
         fun fetch(
             invoiceId: String,
             requestOptions: RequestOptions,
@@ -440,7 +440,7 @@ interface InvoiceServiceAsync {
         ): CompletableFuture<HttpResponseFor<InvoiceFetchUpcomingResponse>> =
             fetchUpcoming(params, RequestOptions.none())
 
-        /** @see [fetchUpcoming] */
+        /** @see fetchUpcoming */
         fun fetchUpcoming(
             params: InvoiceFetchUpcomingParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -453,7 +453,7 @@ interface InvoiceServiceAsync {
         fun issue(invoiceId: String): CompletableFuture<HttpResponseFor<Invoice>> =
             issue(invoiceId, InvoiceIssueParams.none())
 
-        /** @see [issue] */
+        /** @see issue */
         fun issue(
             invoiceId: String,
             params: InvoiceIssueParams = InvoiceIssueParams.none(),
@@ -461,24 +461,24 @@ interface InvoiceServiceAsync {
         ): CompletableFuture<HttpResponseFor<Invoice>> =
             issue(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
-        /** @see [issue] */
+        /** @see issue */
         fun issue(
             invoiceId: String,
             params: InvoiceIssueParams = InvoiceIssueParams.none(),
         ): CompletableFuture<HttpResponseFor<Invoice>> =
             issue(invoiceId, params, RequestOptions.none())
 
-        /** @see [issue] */
+        /** @see issue */
         fun issue(
             params: InvoiceIssueParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Invoice>>
 
-        /** @see [issue] */
+        /** @see issue */
         fun issue(params: InvoiceIssueParams): CompletableFuture<HttpResponseFor<Invoice>> =
             issue(params, RequestOptions.none())
 
-        /** @see [issue] */
+        /** @see issue */
         fun issue(
             invoiceId: String,
             requestOptions: RequestOptions,
@@ -495,7 +495,7 @@ interface InvoiceServiceAsync {
         ): CompletableFuture<HttpResponseFor<Invoice>> =
             markPaid(invoiceId, params, RequestOptions.none())
 
-        /** @see [markPaid] */
+        /** @see markPaid */
         fun markPaid(
             invoiceId: String,
             params: InvoiceMarkPaidParams,
@@ -503,11 +503,11 @@ interface InvoiceServiceAsync {
         ): CompletableFuture<HttpResponseFor<Invoice>> =
             markPaid(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
-        /** @see [markPaid] */
+        /** @see markPaid */
         fun markPaid(params: InvoiceMarkPaidParams): CompletableFuture<HttpResponseFor<Invoice>> =
             markPaid(params, RequestOptions.none())
 
-        /** @see [markPaid] */
+        /** @see markPaid */
         fun markPaid(
             params: InvoiceMarkPaidParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -520,7 +520,7 @@ interface InvoiceServiceAsync {
         fun pay(invoiceId: String): CompletableFuture<HttpResponseFor<Invoice>> =
             pay(invoiceId, InvoicePayParams.none())
 
-        /** @see [pay] */
+        /** @see pay */
         fun pay(
             invoiceId: String,
             params: InvoicePayParams = InvoicePayParams.none(),
@@ -528,24 +528,24 @@ interface InvoiceServiceAsync {
         ): CompletableFuture<HttpResponseFor<Invoice>> =
             pay(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
-        /** @see [pay] */
+        /** @see pay */
         fun pay(
             invoiceId: String,
             params: InvoicePayParams = InvoicePayParams.none(),
         ): CompletableFuture<HttpResponseFor<Invoice>> =
             pay(invoiceId, params, RequestOptions.none())
 
-        /** @see [pay] */
+        /** @see pay */
         fun pay(
             params: InvoicePayParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Invoice>>
 
-        /** @see [pay] */
+        /** @see pay */
         fun pay(params: InvoicePayParams): CompletableFuture<HttpResponseFor<Invoice>> =
             pay(params, RequestOptions.none())
 
-        /** @see [pay] */
+        /** @see pay */
         fun pay(
             invoiceId: String,
             requestOptions: RequestOptions,
@@ -559,7 +559,7 @@ interface InvoiceServiceAsync {
         fun voidInvoice(invoiceId: String): CompletableFuture<HttpResponseFor<Invoice>> =
             voidInvoice(invoiceId, InvoiceVoidInvoiceParams.none())
 
-        /** @see [voidInvoice] */
+        /** @see voidInvoice */
         fun voidInvoice(
             invoiceId: String,
             params: InvoiceVoidInvoiceParams = InvoiceVoidInvoiceParams.none(),
@@ -567,25 +567,25 @@ interface InvoiceServiceAsync {
         ): CompletableFuture<HttpResponseFor<Invoice>> =
             voidInvoice(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
-        /** @see [voidInvoice] */
+        /** @see voidInvoice */
         fun voidInvoice(
             invoiceId: String,
             params: InvoiceVoidInvoiceParams = InvoiceVoidInvoiceParams.none(),
         ): CompletableFuture<HttpResponseFor<Invoice>> =
             voidInvoice(invoiceId, params, RequestOptions.none())
 
-        /** @see [voidInvoice] */
+        /** @see voidInvoice */
         fun voidInvoice(
             params: InvoiceVoidInvoiceParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Invoice>>
 
-        /** @see [voidInvoice] */
+        /** @see voidInvoice */
         fun voidInvoice(
             params: InvoiceVoidInvoiceParams
         ): CompletableFuture<HttpResponseFor<Invoice>> = voidInvoice(params, RequestOptions.none())
 
-        /** @see [voidInvoice] */
+        /** @see voidInvoice */
         fun voidInvoice(
             invoiceId: String,
             requestOptions: RequestOptions,

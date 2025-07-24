@@ -44,7 +44,7 @@ interface CreditService {
     fun list(customerId: String): CustomerCreditListPage =
         list(customerId, CustomerCreditListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         params: CustomerCreditListParams = CustomerCreditListParams.none(),
@@ -52,23 +52,23 @@ interface CreditService {
     ): CustomerCreditListPage =
         list(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         params: CustomerCreditListParams = CustomerCreditListParams.none(),
     ): CustomerCreditListPage = list(customerId, params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: CustomerCreditListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditListPage
 
-    /** @see [list] */
+    /** @see list */
     fun list(params: CustomerCreditListParams): CustomerCreditListPage =
         list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(customerId: String, requestOptions: RequestOptions): CustomerCreditListPage =
         list(customerId, CustomerCreditListParams.none(), requestOptions)
 
@@ -84,7 +84,7 @@ interface CreditService {
     fun listByExternalId(externalCustomerId: String): CustomerCreditListByExternalIdPage =
         listByExternalId(externalCustomerId, CustomerCreditListByExternalIdParams.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         params: CustomerCreditListByExternalIdParams = CustomerCreditListByExternalIdParams.none(),
@@ -95,25 +95,25 @@ interface CreditService {
             requestOptions,
         )
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         params: CustomerCreditListByExternalIdParams = CustomerCreditListByExternalIdParams.none(),
     ): CustomerCreditListByExternalIdPage =
         listByExternalId(externalCustomerId, params, RequestOptions.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         params: CustomerCreditListByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditListByExternalIdPage
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         params: CustomerCreditListByExternalIdParams
     ): CustomerCreditListByExternalIdPage = listByExternalId(params, RequestOptions.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         requestOptions: RequestOptions,
@@ -146,7 +146,7 @@ interface CreditService {
         fun list(customerId: String): HttpResponseFor<CustomerCreditListPage> =
             list(customerId, CustomerCreditListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             customerId: String,
@@ -155,26 +155,26 @@ interface CreditService {
         ): HttpResponseFor<CustomerCreditListPage> =
             list(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             customerId: String,
             params: CustomerCreditListParams = CustomerCreditListParams.none(),
         ): HttpResponseFor<CustomerCreditListPage> = list(customerId, params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             params: CustomerCreditListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CustomerCreditListPage>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(params: CustomerCreditListParams): HttpResponseFor<CustomerCreditListPage> =
             list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             customerId: String,
@@ -193,7 +193,7 @@ interface CreditService {
         ): HttpResponseFor<CustomerCreditListByExternalIdPage> =
             listByExternalId(externalCustomerId, CustomerCreditListByExternalIdParams.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         @MustBeClosed
         fun listByExternalId(
             externalCustomerId: String,
@@ -206,7 +206,7 @@ interface CreditService {
                 requestOptions,
             )
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         @MustBeClosed
         fun listByExternalId(
             externalCustomerId: String,
@@ -215,21 +215,21 @@ interface CreditService {
         ): HttpResponseFor<CustomerCreditListByExternalIdPage> =
             listByExternalId(externalCustomerId, params, RequestOptions.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         @MustBeClosed
         fun listByExternalId(
             params: CustomerCreditListByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CustomerCreditListByExternalIdPage>
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         @MustBeClosed
         fun listByExternalId(
             params: CustomerCreditListByExternalIdParams
         ): HttpResponseFor<CustomerCreditListByExternalIdPage> =
             listByExternalId(params, RequestOptions.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         @MustBeClosed
         fun listByExternalId(
             externalCustomerId: String,

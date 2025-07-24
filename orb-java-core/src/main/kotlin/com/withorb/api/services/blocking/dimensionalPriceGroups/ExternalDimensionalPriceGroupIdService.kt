@@ -33,7 +33,7 @@ interface ExternalDimensionalPriceGroupIdService {
             DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams.none(),
         )
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         externalDimensionalPriceGroupId: String,
         params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams =
@@ -48,7 +48,7 @@ interface ExternalDimensionalPriceGroupIdService {
             requestOptions,
         )
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         externalDimensionalPriceGroupId: String,
         params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams =
@@ -56,18 +56,18 @@ interface ExternalDimensionalPriceGroupIdService {
     ): DimensionalPriceGroup =
         retrieve(externalDimensionalPriceGroupId, params, RequestOptions.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): DimensionalPriceGroup
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams
     ): DimensionalPriceGroup = retrieve(params, RequestOptions.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         externalDimensionalPriceGroupId: String,
         requestOptions: RequestOptions,
@@ -107,7 +107,7 @@ interface ExternalDimensionalPriceGroupIdService {
                 DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams.none(),
             )
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             externalDimensionalPriceGroupId: String,
@@ -123,7 +123,7 @@ interface ExternalDimensionalPriceGroupIdService {
                 requestOptions,
             )
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             externalDimensionalPriceGroupId: String,
@@ -132,20 +132,20 @@ interface ExternalDimensionalPriceGroupIdService {
         ): HttpResponseFor<DimensionalPriceGroup> =
             retrieve(externalDimensionalPriceGroupId, params, RequestOptions.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<DimensionalPriceGroup>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams
         ): HttpResponseFor<DimensionalPriceGroup> = retrieve(params, RequestOptions.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             externalDimensionalPriceGroupId: String,

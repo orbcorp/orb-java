@@ -139,7 +139,7 @@ interface CostServiceAsync {
     fun list(customerId: String): CompletableFuture<CustomerCostListResponse> =
         list(customerId, CustomerCostListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         params: CustomerCostListParams = CustomerCostListParams.none(),
@@ -147,23 +147,23 @@ interface CostServiceAsync {
     ): CompletableFuture<CustomerCostListResponse> =
         list(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         params: CustomerCostListParams = CustomerCostListParams.none(),
     ): CompletableFuture<CustomerCostListResponse> = list(customerId, params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: CustomerCostListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCostListResponse>
 
-    /** @see [list] */
+    /** @see list */
     fun list(params: CustomerCostListParams): CompletableFuture<CustomerCostListResponse> =
         list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         requestOptions: RequestOptions,
@@ -285,7 +285,7 @@ interface CostServiceAsync {
     ): CompletableFuture<CustomerCostListByExternalIdResponse> =
         listByExternalId(externalCustomerId, CustomerCostListByExternalIdParams.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         params: CustomerCostListByExternalIdParams = CustomerCostListByExternalIdParams.none(),
@@ -296,26 +296,26 @@ interface CostServiceAsync {
             requestOptions,
         )
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         params: CustomerCostListByExternalIdParams = CustomerCostListByExternalIdParams.none(),
     ): CompletableFuture<CustomerCostListByExternalIdResponse> =
         listByExternalId(externalCustomerId, params, RequestOptions.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         params: CustomerCostListByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCostListByExternalIdResponse>
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         params: CustomerCostListByExternalIdParams
     ): CompletableFuture<CustomerCostListByExternalIdResponse> =
         listByExternalId(params, RequestOptions.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         requestOptions: RequestOptions,
@@ -343,7 +343,7 @@ interface CostServiceAsync {
         fun list(customerId: String): CompletableFuture<HttpResponseFor<CustomerCostListResponse>> =
             list(customerId, CustomerCostListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             customerId: String,
             params: CustomerCostListParams = CustomerCostListParams.none(),
@@ -351,26 +351,26 @@ interface CostServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerCostListResponse>> =
             list(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             customerId: String,
             params: CustomerCostListParams = CustomerCostListParams.none(),
         ): CompletableFuture<HttpResponseFor<CustomerCostListResponse>> =
             list(customerId, params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: CustomerCostListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CustomerCostListResponse>>
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: CustomerCostListParams
         ): CompletableFuture<HttpResponseFor<CustomerCostListResponse>> =
             list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             customerId: String,
             requestOptions: RequestOptions,
@@ -387,7 +387,7 @@ interface CostServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerCostListByExternalIdResponse>> =
             listByExternalId(externalCustomerId, CustomerCostListByExternalIdParams.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         fun listByExternalId(
             externalCustomerId: String,
             params: CustomerCostListByExternalIdParams = CustomerCostListByExternalIdParams.none(),
@@ -398,26 +398,26 @@ interface CostServiceAsync {
                 requestOptions,
             )
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         fun listByExternalId(
             externalCustomerId: String,
             params: CustomerCostListByExternalIdParams = CustomerCostListByExternalIdParams.none(),
         ): CompletableFuture<HttpResponseFor<CustomerCostListByExternalIdResponse>> =
             listByExternalId(externalCustomerId, params, RequestOptions.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         fun listByExternalId(
             params: CustomerCostListByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CustomerCostListByExternalIdResponse>>
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         fun listByExternalId(
             params: CustomerCostListByExternalIdParams
         ): CompletableFuture<HttpResponseFor<CustomerCostListByExternalIdResponse>> =
             listByExternalId(params, RequestOptions.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         fun listByExternalId(
             externalCustomerId: String,
             requestOptions: RequestOptions,

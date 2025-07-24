@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [DimensionalPriceGroupService.list] */
+/** @see DimensionalPriceGroupService.list */
 class DimensionalPriceGroupListPage
 private constructor(
     private val service: DimensionalPriceGroupService,
@@ -21,7 +21,7 @@ private constructor(
     /**
      * Delegates to [DimensionalPriceGroups], but gracefully handles missing data.
      *
-     * @see [DimensionalPriceGroups.data]
+     * @see DimensionalPriceGroups.data
      */
     fun data(): List<DimensionalPriceGroup> =
         response._data().getOptional("data").getOrNull() ?: emptyList()
@@ -29,7 +29,7 @@ private constructor(
     /**
      * Delegates to [DimensionalPriceGroups], but gracefully handles missing data.
      *
-     * @see [DimensionalPriceGroups.paginationMetadata]
+     * @see DimensionalPriceGroups.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

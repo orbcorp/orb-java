@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [MetricService.list] */
+/** @see MetricService.list */
 class MetricListPage
 private constructor(
     private val service: MetricService,
@@ -21,7 +21,7 @@ private constructor(
     /**
      * Delegates to [MetricListPageResponse], but gracefully handles missing data.
      *
-     * @see [MetricListPageResponse.data]
+     * @see MetricListPageResponse.data
      */
     fun data(): List<BillableMetric> =
         response._data().getOptional("data").getOrNull() ?: emptyList()
@@ -29,7 +29,7 @@ private constructor(
     /**
      * Delegates to [MetricListPageResponse], but gracefully handles missing data.
      *
-     * @see [MetricListPageResponse.paginationMetadata]
+     * @see MetricListPageResponse.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

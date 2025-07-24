@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [SubscriptionService.fetchSchedule] */
+/** @see SubscriptionService.fetchSchedule */
 class SubscriptionFetchSchedulePage
 private constructor(
     private val service: SubscriptionService,
@@ -21,7 +21,7 @@ private constructor(
     /**
      * Delegates to [SubscriptionFetchSchedulePageResponse], but gracefully handles missing data.
      *
-     * @see [SubscriptionFetchSchedulePageResponse.data]
+     * @see SubscriptionFetchSchedulePageResponse.data
      */
     fun data(): List<SubscriptionFetchScheduleResponse> =
         response._data().getOptional("data").getOrNull() ?: emptyList()
@@ -29,7 +29,7 @@ private constructor(
     /**
      * Delegates to [SubscriptionFetchSchedulePageResponse], but gracefully handles missing data.
      *
-     * @see [SubscriptionFetchSchedulePageResponse.paginationMetadata]
+     * @see SubscriptionFetchSchedulePageResponse.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

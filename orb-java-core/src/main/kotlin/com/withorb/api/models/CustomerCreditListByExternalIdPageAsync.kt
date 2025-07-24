@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [CreditServiceAsync.listByExternalId] */
+/** @see CreditServiceAsync.listByExternalId */
 class CustomerCreditListByExternalIdPageAsync
 private constructor(
     private val service: CreditServiceAsync,
@@ -25,7 +25,7 @@ private constructor(
      * Delegates to [CustomerCreditListByExternalIdPageResponse], but gracefully handles missing
      * data.
      *
-     * @see [CustomerCreditListByExternalIdPageResponse.data]
+     * @see CustomerCreditListByExternalIdPageResponse.data
      */
     fun data(): List<CustomerCreditListByExternalIdResponse> =
         response._data().getOptional("data").getOrNull() ?: emptyList()
@@ -34,7 +34,7 @@ private constructor(
      * Delegates to [CustomerCreditListByExternalIdPageResponse], but gracefully handles missing
      * data.
      *
-     * @see [CustomerCreditListByExternalIdPageResponse.paginationMetadata]
+     * @see CustomerCreditListByExternalIdPageResponse.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

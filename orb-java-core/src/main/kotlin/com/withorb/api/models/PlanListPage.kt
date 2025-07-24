@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [PlanService.list] */
+/** @see PlanService.list */
 class PlanListPage
 private constructor(
     private val service: PlanService,
@@ -21,14 +21,14 @@ private constructor(
     /**
      * Delegates to [PlanListPageResponse], but gracefully handles missing data.
      *
-     * @see [PlanListPageResponse.data]
+     * @see PlanListPageResponse.data
      */
     fun data(): List<Plan> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [PlanListPageResponse], but gracefully handles missing data.
      *
-     * @see [PlanListPageResponse.paginationMetadata]
+     * @see PlanListPageResponse.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [ItemServiceAsync.list] */
+/** @see ItemServiceAsync.list */
 class ItemListPageAsync
 private constructor(
     private val service: ItemServiceAsync,
@@ -24,14 +24,14 @@ private constructor(
     /**
      * Delegates to [ItemListPageResponse], but gracefully handles missing data.
      *
-     * @see [ItemListPageResponse.data]
+     * @see ItemListPageResponse.data
      */
     fun data(): List<Item> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [ItemListPageResponse], but gracefully handles missing data.
      *
-     * @see [ItemListPageResponse.paginationMetadata]
+     * @see ItemListPageResponse.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

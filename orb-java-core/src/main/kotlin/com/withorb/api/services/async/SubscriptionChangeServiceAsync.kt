@@ -43,7 +43,7 @@ interface SubscriptionChangeServiceAsync {
     ): CompletableFuture<SubscriptionChangeRetrieveResponse> =
         retrieve(subscriptionChangeId, SubscriptionChangeRetrieveParams.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         subscriptionChangeId: String,
         params: SubscriptionChangeRetrieveParams = SubscriptionChangeRetrieveParams.none(),
@@ -54,26 +54,26 @@ interface SubscriptionChangeServiceAsync {
             requestOptions,
         )
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         subscriptionChangeId: String,
         params: SubscriptionChangeRetrieveParams = SubscriptionChangeRetrieveParams.none(),
     ): CompletableFuture<SubscriptionChangeRetrieveResponse> =
         retrieve(subscriptionChangeId, params, RequestOptions.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: SubscriptionChangeRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionChangeRetrieveResponse>
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: SubscriptionChangeRetrieveParams
     ): CompletableFuture<SubscriptionChangeRetrieveResponse> =
         retrieve(params, RequestOptions.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         subscriptionChangeId: String,
         requestOptions: RequestOptions,
@@ -88,7 +88,7 @@ interface SubscriptionChangeServiceAsync {
     fun apply(subscriptionChangeId: String): CompletableFuture<SubscriptionChangeApplyResponse> =
         apply(subscriptionChangeId, SubscriptionChangeApplyParams.none())
 
-    /** @see [apply] */
+    /** @see apply */
     fun apply(
         subscriptionChangeId: String,
         params: SubscriptionChangeApplyParams = SubscriptionChangeApplyParams.none(),
@@ -96,25 +96,25 @@ interface SubscriptionChangeServiceAsync {
     ): CompletableFuture<SubscriptionChangeApplyResponse> =
         apply(params.toBuilder().subscriptionChangeId(subscriptionChangeId).build(), requestOptions)
 
-    /** @see [apply] */
+    /** @see apply */
     fun apply(
         subscriptionChangeId: String,
         params: SubscriptionChangeApplyParams = SubscriptionChangeApplyParams.none(),
     ): CompletableFuture<SubscriptionChangeApplyResponse> =
         apply(subscriptionChangeId, params, RequestOptions.none())
 
-    /** @see [apply] */
+    /** @see apply */
     fun apply(
         params: SubscriptionChangeApplyParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionChangeApplyResponse>
 
-    /** @see [apply] */
+    /** @see apply */
     fun apply(
         params: SubscriptionChangeApplyParams
     ): CompletableFuture<SubscriptionChangeApplyResponse> = apply(params, RequestOptions.none())
 
-    /** @see [apply] */
+    /** @see apply */
     fun apply(
         subscriptionChangeId: String,
         requestOptions: RequestOptions,
@@ -129,7 +129,7 @@ interface SubscriptionChangeServiceAsync {
     fun cancel(subscriptionChangeId: String): CompletableFuture<SubscriptionChangeCancelResponse> =
         cancel(subscriptionChangeId, SubscriptionChangeCancelParams.none())
 
-    /** @see [cancel] */
+    /** @see cancel */
     fun cancel(
         subscriptionChangeId: String,
         params: SubscriptionChangeCancelParams = SubscriptionChangeCancelParams.none(),
@@ -140,25 +140,25 @@ interface SubscriptionChangeServiceAsync {
             requestOptions,
         )
 
-    /** @see [cancel] */
+    /** @see cancel */
     fun cancel(
         subscriptionChangeId: String,
         params: SubscriptionChangeCancelParams = SubscriptionChangeCancelParams.none(),
     ): CompletableFuture<SubscriptionChangeCancelResponse> =
         cancel(subscriptionChangeId, params, RequestOptions.none())
 
-    /** @see [cancel] */
+    /** @see cancel */
     fun cancel(
         params: SubscriptionChangeCancelParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SubscriptionChangeCancelResponse>
 
-    /** @see [cancel] */
+    /** @see cancel */
     fun cancel(
         params: SubscriptionChangeCancelParams
     ): CompletableFuture<SubscriptionChangeCancelResponse> = cancel(params, RequestOptions.none())
 
-    /** @see [cancel] */
+    /** @see cancel */
     fun cancel(
         subscriptionChangeId: String,
         requestOptions: RequestOptions,
@@ -189,7 +189,7 @@ interface SubscriptionChangeServiceAsync {
         ): CompletableFuture<HttpResponseFor<SubscriptionChangeRetrieveResponse>> =
             retrieve(subscriptionChangeId, SubscriptionChangeRetrieveParams.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             subscriptionChangeId: String,
             params: SubscriptionChangeRetrieveParams = SubscriptionChangeRetrieveParams.none(),
@@ -200,26 +200,26 @@ interface SubscriptionChangeServiceAsync {
                 requestOptions,
             )
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             subscriptionChangeId: String,
             params: SubscriptionChangeRetrieveParams = SubscriptionChangeRetrieveParams.none(),
         ): CompletableFuture<HttpResponseFor<SubscriptionChangeRetrieveResponse>> =
             retrieve(subscriptionChangeId, params, RequestOptions.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             params: SubscriptionChangeRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<SubscriptionChangeRetrieveResponse>>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             params: SubscriptionChangeRetrieveParams
         ): CompletableFuture<HttpResponseFor<SubscriptionChangeRetrieveResponse>> =
             retrieve(params, RequestOptions.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             subscriptionChangeId: String,
             requestOptions: RequestOptions,
@@ -236,7 +236,7 @@ interface SubscriptionChangeServiceAsync {
         ): CompletableFuture<HttpResponseFor<SubscriptionChangeApplyResponse>> =
             apply(subscriptionChangeId, SubscriptionChangeApplyParams.none())
 
-        /** @see [apply] */
+        /** @see apply */
         fun apply(
             subscriptionChangeId: String,
             params: SubscriptionChangeApplyParams = SubscriptionChangeApplyParams.none(),
@@ -247,26 +247,26 @@ interface SubscriptionChangeServiceAsync {
                 requestOptions,
             )
 
-        /** @see [apply] */
+        /** @see apply */
         fun apply(
             subscriptionChangeId: String,
             params: SubscriptionChangeApplyParams = SubscriptionChangeApplyParams.none(),
         ): CompletableFuture<HttpResponseFor<SubscriptionChangeApplyResponse>> =
             apply(subscriptionChangeId, params, RequestOptions.none())
 
-        /** @see [apply] */
+        /** @see apply */
         fun apply(
             params: SubscriptionChangeApplyParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<SubscriptionChangeApplyResponse>>
 
-        /** @see [apply] */
+        /** @see apply */
         fun apply(
             params: SubscriptionChangeApplyParams
         ): CompletableFuture<HttpResponseFor<SubscriptionChangeApplyResponse>> =
             apply(params, RequestOptions.none())
 
-        /** @see [apply] */
+        /** @see apply */
         fun apply(
             subscriptionChangeId: String,
             requestOptions: RequestOptions,
@@ -283,7 +283,7 @@ interface SubscriptionChangeServiceAsync {
         ): CompletableFuture<HttpResponseFor<SubscriptionChangeCancelResponse>> =
             cancel(subscriptionChangeId, SubscriptionChangeCancelParams.none())
 
-        /** @see [cancel] */
+        /** @see cancel */
         fun cancel(
             subscriptionChangeId: String,
             params: SubscriptionChangeCancelParams = SubscriptionChangeCancelParams.none(),
@@ -294,26 +294,26 @@ interface SubscriptionChangeServiceAsync {
                 requestOptions,
             )
 
-        /** @see [cancel] */
+        /** @see cancel */
         fun cancel(
             subscriptionChangeId: String,
             params: SubscriptionChangeCancelParams = SubscriptionChangeCancelParams.none(),
         ): CompletableFuture<HttpResponseFor<SubscriptionChangeCancelResponse>> =
             cancel(subscriptionChangeId, params, RequestOptions.none())
 
-        /** @see [cancel] */
+        /** @see cancel */
         fun cancel(
             params: SubscriptionChangeCancelParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<SubscriptionChangeCancelResponse>>
 
-        /** @see [cancel] */
+        /** @see cancel */
         fun cancel(
             params: SubscriptionChangeCancelParams
         ): CompletableFuture<HttpResponseFor<SubscriptionChangeCancelResponse>> =
             cancel(params, RequestOptions.none())
 
-        /** @see [cancel] */
+        /** @see cancel */
         fun cancel(
             subscriptionChangeId: String,
             requestOptions: RequestOptions,

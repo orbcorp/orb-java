@@ -34,17 +34,17 @@ interface TopLevelService {
      */
     fun ping(): TopLevelPingResponse = ping(TopLevelPingParams.none())
 
-    /** @see [ping] */
+    /** @see ping */
     fun ping(
         params: TopLevelPingParams = TopLevelPingParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TopLevelPingResponse
 
-    /** @see [ping] */
+    /** @see ping */
     fun ping(params: TopLevelPingParams = TopLevelPingParams.none()): TopLevelPingResponse =
         ping(params, RequestOptions.none())
 
-    /** @see [ping] */
+    /** @see ping */
     fun ping(requestOptions: RequestOptions): TopLevelPingResponse =
         ping(TopLevelPingParams.none(), requestOptions)
 
@@ -65,20 +65,20 @@ interface TopLevelService {
         @MustBeClosed
         fun ping(): HttpResponseFor<TopLevelPingResponse> = ping(TopLevelPingParams.none())
 
-        /** @see [ping] */
+        /** @see ping */
         @MustBeClosed
         fun ping(
             params: TopLevelPingParams = TopLevelPingParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<TopLevelPingResponse>
 
-        /** @see [ping] */
+        /** @see ping */
         @MustBeClosed
         fun ping(
             params: TopLevelPingParams = TopLevelPingParams.none()
         ): HttpResponseFor<TopLevelPingResponse> = ping(params, RequestOptions.none())
 
-        /** @see [ping] */
+        /** @see ping */
         @MustBeClosed
         fun ping(requestOptions: RequestOptions): HttpResponseFor<TopLevelPingResponse> =
             ping(TopLevelPingParams.none(), requestOptions)

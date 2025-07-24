@@ -35,7 +35,7 @@ interface ExternalDimensionalPriceGroupIdServiceAsync {
             DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams.none(),
         )
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         externalDimensionalPriceGroupId: String,
         params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams =
@@ -50,7 +50,7 @@ interface ExternalDimensionalPriceGroupIdServiceAsync {
             requestOptions,
         )
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         externalDimensionalPriceGroupId: String,
         params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams =
@@ -58,18 +58,18 @@ interface ExternalDimensionalPriceGroupIdServiceAsync {
     ): CompletableFuture<DimensionalPriceGroup> =
         retrieve(externalDimensionalPriceGroupId, params, RequestOptions.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<DimensionalPriceGroup>
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams
     ): CompletableFuture<DimensionalPriceGroup> = retrieve(params, RequestOptions.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         externalDimensionalPriceGroupId: String,
         requestOptions: RequestOptions,
@@ -108,7 +108,7 @@ interface ExternalDimensionalPriceGroupIdServiceAsync {
                 DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams.none(),
             )
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             externalDimensionalPriceGroupId: String,
             params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams =
@@ -123,7 +123,7 @@ interface ExternalDimensionalPriceGroupIdServiceAsync {
                 requestOptions,
             )
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             externalDimensionalPriceGroupId: String,
             params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams =
@@ -131,19 +131,19 @@ interface ExternalDimensionalPriceGroupIdServiceAsync {
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
             retrieve(externalDimensionalPriceGroupId, params, RequestOptions.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             params: DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams
         ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
             retrieve(params, RequestOptions.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             externalDimensionalPriceGroupId: String,
             requestOptions: RequestOptions,
