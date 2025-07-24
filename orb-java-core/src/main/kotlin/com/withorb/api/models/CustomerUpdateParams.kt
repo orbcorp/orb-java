@@ -104,8 +104,10 @@ private constructor(
     fun emailDelivery(): Optional<Boolean> = body.emailDelivery()
 
     /**
-     * The external customer ID. This can only be set if empty and the customer has no past or
-     * current subscriptions.
+     * The external customer ID. This can only be set if the customer has no existing external
+     * customer ID. Since this action may change usage quantities for all existing subscriptions, it
+     * is disallowed if the customer has issued invoices with usage line items and subject to the
+     * same restrictions as backdated subscription creation.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
@@ -628,8 +630,10 @@ private constructor(
         }
 
         /**
-         * The external customer ID. This can only be set if empty and the customer has no past or
-         * current subscriptions.
+         * The external customer ID. This can only be set if the customer has no existing external
+         * customer ID. Since this action may change usage quantities for all existing
+         * subscriptions, it is disallowed if the customer has issued invoices with usage line items
+         * and subject to the same restrictions as backdated subscription creation.
          */
         fun externalCustomerId(externalCustomerId: String?) = apply {
             body.externalCustomerId(externalCustomerId)
@@ -1280,8 +1284,10 @@ private constructor(
         fun emailDelivery(): Optional<Boolean> = emailDelivery.getOptional("email_delivery")
 
         /**
-         * The external customer ID. This can only be set if empty and the customer has no past or
-         * current subscriptions.
+         * The external customer ID. This can only be set if the customer has no existing external
+         * customer ID. Since this action may change usage quantities for all existing
+         * subscriptions, it is disallowed if the customer has issued invoices with usage line items
+         * and subject to the same restrictions as backdated subscription creation.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -1855,8 +1861,10 @@ private constructor(
             }
 
             /**
-             * The external customer ID. This can only be set if empty and the customer has no past
-             * or current subscriptions.
+             * The external customer ID. This can only be set if the customer has no existing
+             * external customer ID. Since this action may change usage quantities for all existing
+             * subscriptions, it is disallowed if the customer has issued invoices with usage line
+             * items and subject to the same restrictions as backdated subscription creation.
              */
             fun externalCustomerId(externalCustomerId: String?) =
                 externalCustomerId(JsonField.ofNullable(externalCustomerId))
