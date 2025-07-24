@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [CreditNoteService.list] */
+/** @see CreditNoteService.list */
 class CreditNoteListPage
 private constructor(
     private val service: CreditNoteService,
@@ -21,14 +21,14 @@ private constructor(
     /**
      * Delegates to [CreditNoteListPageResponse], but gracefully handles missing data.
      *
-     * @see [CreditNoteListPageResponse.data]
+     * @see CreditNoteListPageResponse.data
      */
     fun data(): List<CreditNote> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [CreditNoteListPageResponse], but gracefully handles missing data.
      *
-     * @see [CreditNoteListPageResponse.paginationMetadata]
+     * @see CreditNoteListPageResponse.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [PriceServiceAsync.list] */
+/** @see PriceServiceAsync.list */
 class PriceListPageAsync
 private constructor(
     private val service: PriceServiceAsync,
@@ -24,14 +24,14 @@ private constructor(
     /**
      * Delegates to [PriceListPageResponse], but gracefully handles missing data.
      *
-     * @see [PriceListPageResponse.data]
+     * @see PriceListPageResponse.data
      */
     fun data(): List<Price> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [PriceListPageResponse], but gracefully handles missing data.
      *
-     * @see [PriceListPageResponse.paginationMetadata]
+     * @see PriceListPageResponse.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

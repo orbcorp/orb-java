@@ -33,7 +33,7 @@ interface SubscriptionService {
     fun list(couponId: String): CouponSubscriptionListPage =
         list(couponId, CouponSubscriptionListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         couponId: String,
         params: CouponSubscriptionListParams = CouponSubscriptionListParams.none(),
@@ -41,23 +41,23 @@ interface SubscriptionService {
     ): CouponSubscriptionListPage =
         list(params.toBuilder().couponId(couponId).build(), requestOptions)
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         couponId: String,
         params: CouponSubscriptionListParams = CouponSubscriptionListParams.none(),
     ): CouponSubscriptionListPage = list(couponId, params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: CouponSubscriptionListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CouponSubscriptionListPage
 
-    /** @see [list] */
+    /** @see list */
     fun list(params: CouponSubscriptionListParams): CouponSubscriptionListPage =
         list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(couponId: String, requestOptions: RequestOptions): CouponSubscriptionListPage =
         list(couponId, CouponSubscriptionListParams.none(), requestOptions)
 
@@ -83,7 +83,7 @@ interface SubscriptionService {
         fun list(couponId: String): HttpResponseFor<CouponSubscriptionListPage> =
             list(couponId, CouponSubscriptionListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             couponId: String,
@@ -92,7 +92,7 @@ interface SubscriptionService {
         ): HttpResponseFor<CouponSubscriptionListPage> =
             list(params.toBuilder().couponId(couponId).build(), requestOptions)
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             couponId: String,
@@ -100,20 +100,20 @@ interface SubscriptionService {
         ): HttpResponseFor<CouponSubscriptionListPage> =
             list(couponId, params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             params: CouponSubscriptionListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CouponSubscriptionListPage>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             params: CouponSubscriptionListParams
         ): HttpResponseFor<CouponSubscriptionListPage> = list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             couponId: String,

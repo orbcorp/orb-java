@@ -42,7 +42,7 @@ interface DimensionalPriceGroupService {
     fun create(params: DimensionalPriceGroupCreateParams): DimensionalPriceGroup =
         create(params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: DimensionalPriceGroupCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -52,7 +52,7 @@ interface DimensionalPriceGroupService {
     fun retrieve(dimensionalPriceGroupId: String): DimensionalPriceGroup =
         retrieve(dimensionalPriceGroupId, DimensionalPriceGroupRetrieveParams.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         dimensionalPriceGroupId: String,
         params: DimensionalPriceGroupRetrieveParams = DimensionalPriceGroupRetrieveParams.none(),
@@ -63,23 +63,23 @@ interface DimensionalPriceGroupService {
             requestOptions,
         )
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         dimensionalPriceGroupId: String,
         params: DimensionalPriceGroupRetrieveParams = DimensionalPriceGroupRetrieveParams.none(),
     ): DimensionalPriceGroup = retrieve(dimensionalPriceGroupId, params, RequestOptions.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: DimensionalPriceGroupRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): DimensionalPriceGroup
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(params: DimensionalPriceGroupRetrieveParams): DimensionalPriceGroup =
         retrieve(params, RequestOptions.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         dimensionalPriceGroupId: String,
         requestOptions: RequestOptions,
@@ -93,18 +93,18 @@ interface DimensionalPriceGroupService {
     /** List dimensional price groups */
     fun list(): DimensionalPriceGroupListPage = list(DimensionalPriceGroupListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): DimensionalPriceGroupListPage
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none()
     ): DimensionalPriceGroupListPage = list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): DimensionalPriceGroupListPage =
         list(DimensionalPriceGroupListParams.none(), requestOptions)
 
@@ -135,7 +135,7 @@ interface DimensionalPriceGroupService {
             params: DimensionalPriceGroupCreateParams
         ): HttpResponseFor<DimensionalPriceGroup> = create(params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         @MustBeClosed
         fun create(
             params: DimensionalPriceGroupCreateParams,
@@ -151,7 +151,7 @@ interface DimensionalPriceGroupService {
         fun retrieve(dimensionalPriceGroupId: String): HttpResponseFor<DimensionalPriceGroup> =
             retrieve(dimensionalPriceGroupId, DimensionalPriceGroupRetrieveParams.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             dimensionalPriceGroupId: String,
@@ -164,7 +164,7 @@ interface DimensionalPriceGroupService {
                 requestOptions,
             )
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             dimensionalPriceGroupId: String,
@@ -172,20 +172,20 @@ interface DimensionalPriceGroupService {
         ): HttpResponseFor<DimensionalPriceGroup> =
             retrieve(dimensionalPriceGroupId, params, RequestOptions.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: DimensionalPriceGroupRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<DimensionalPriceGroup>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: DimensionalPriceGroupRetrieveParams
         ): HttpResponseFor<DimensionalPriceGroup> = retrieve(params, RequestOptions.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             dimensionalPriceGroupId: String,
@@ -205,20 +205,20 @@ interface DimensionalPriceGroupService {
         fun list(): HttpResponseFor<DimensionalPriceGroupListPage> =
             list(DimensionalPriceGroupListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<DimensionalPriceGroupListPage>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             params: DimensionalPriceGroupListParams = DimensionalPriceGroupListParams.none()
         ): HttpResponseFor<DimensionalPriceGroupListPage> = list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<DimensionalPriceGroupListPage> =
             list(DimensionalPriceGroupListParams.none(), requestOptions)

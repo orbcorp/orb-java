@@ -80,7 +80,7 @@ interface EventServiceAsync {
     fun update(eventId: String, params: EventUpdateParams): CompletableFuture<EventUpdateResponse> =
         update(eventId, params, RequestOptions.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         eventId: String,
         params: EventUpdateParams,
@@ -88,11 +88,11 @@ interface EventServiceAsync {
     ): CompletableFuture<EventUpdateResponse> =
         update(params.toBuilder().eventId(eventId).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     fun update(params: EventUpdateParams): CompletableFuture<EventUpdateResponse> =
         update(params, RequestOptions.none())
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         params: EventUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -137,7 +137,7 @@ interface EventServiceAsync {
     fun deprecate(eventId: String): CompletableFuture<EventDeprecateResponse> =
         deprecate(eventId, EventDeprecateParams.none())
 
-    /** @see [deprecate] */
+    /** @see deprecate */
     fun deprecate(
         eventId: String,
         params: EventDeprecateParams = EventDeprecateParams.none(),
@@ -145,23 +145,23 @@ interface EventServiceAsync {
     ): CompletableFuture<EventDeprecateResponse> =
         deprecate(params.toBuilder().eventId(eventId).build(), requestOptions)
 
-    /** @see [deprecate] */
+    /** @see deprecate */
     fun deprecate(
         eventId: String,
         params: EventDeprecateParams = EventDeprecateParams.none(),
     ): CompletableFuture<EventDeprecateResponse> = deprecate(eventId, params, RequestOptions.none())
 
-    /** @see [deprecate] */
+    /** @see deprecate */
     fun deprecate(
         params: EventDeprecateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<EventDeprecateResponse>
 
-    /** @see [deprecate] */
+    /** @see deprecate */
     fun deprecate(params: EventDeprecateParams): CompletableFuture<EventDeprecateResponse> =
         deprecate(params, RequestOptions.none())
 
-    /** @see [deprecate] */
+    /** @see deprecate */
     fun deprecate(
         eventId: String,
         requestOptions: RequestOptions,
@@ -362,7 +362,7 @@ interface EventServiceAsync {
     fun ingest(params: EventIngestParams): CompletableFuture<EventIngestResponse> =
         ingest(params, RequestOptions.none())
 
-    /** @see [ingest] */
+    /** @see ingest */
     fun ingest(
         params: EventIngestParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -387,7 +387,7 @@ interface EventServiceAsync {
     fun search(params: EventSearchParams): CompletableFuture<EventSearchResponse> =
         search(params, RequestOptions.none())
 
-    /** @see [search] */
+    /** @see search */
     fun search(
         params: EventSearchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -419,7 +419,7 @@ interface EventServiceAsync {
         ): CompletableFuture<HttpResponseFor<EventUpdateResponse>> =
             update(eventId, params, RequestOptions.none())
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             eventId: String,
             params: EventUpdateParams,
@@ -427,13 +427,13 @@ interface EventServiceAsync {
         ): CompletableFuture<HttpResponseFor<EventUpdateResponse>> =
             update(params.toBuilder().eventId(eventId).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             params: EventUpdateParams
         ): CompletableFuture<HttpResponseFor<EventUpdateResponse>> =
             update(params, RequestOptions.none())
 
-        /** @see [update] */
+        /** @see update */
         fun update(
             params: EventUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -446,7 +446,7 @@ interface EventServiceAsync {
         fun deprecate(eventId: String): CompletableFuture<HttpResponseFor<EventDeprecateResponse>> =
             deprecate(eventId, EventDeprecateParams.none())
 
-        /** @see [deprecate] */
+        /** @see deprecate */
         fun deprecate(
             eventId: String,
             params: EventDeprecateParams = EventDeprecateParams.none(),
@@ -454,26 +454,26 @@ interface EventServiceAsync {
         ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>> =
             deprecate(params.toBuilder().eventId(eventId).build(), requestOptions)
 
-        /** @see [deprecate] */
+        /** @see deprecate */
         fun deprecate(
             eventId: String,
             params: EventDeprecateParams = EventDeprecateParams.none(),
         ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>> =
             deprecate(eventId, params, RequestOptions.none())
 
-        /** @see [deprecate] */
+        /** @see deprecate */
         fun deprecate(
             params: EventDeprecateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>>
 
-        /** @see [deprecate] */
+        /** @see deprecate */
         fun deprecate(
             params: EventDeprecateParams
         ): CompletableFuture<HttpResponseFor<EventDeprecateResponse>> =
             deprecate(params, RequestOptions.none())
 
-        /** @see [deprecate] */
+        /** @see deprecate */
         fun deprecate(
             eventId: String,
             requestOptions: RequestOptions,
@@ -489,7 +489,7 @@ interface EventServiceAsync {
         ): CompletableFuture<HttpResponseFor<EventIngestResponse>> =
             ingest(params, RequestOptions.none())
 
-        /** @see [ingest] */
+        /** @see ingest */
         fun ingest(
             params: EventIngestParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -504,7 +504,7 @@ interface EventServiceAsync {
         ): CompletableFuture<HttpResponseFor<EventSearchResponse>> =
             search(params, RequestOptions.none())
 
-        /** @see [search] */
+        /** @see search */
         fun search(
             params: EventSearchParams,
             requestOptions: RequestOptions = RequestOptions.none(),

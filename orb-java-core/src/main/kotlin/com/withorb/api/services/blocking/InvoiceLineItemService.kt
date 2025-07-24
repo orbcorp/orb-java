@@ -31,7 +31,7 @@ interface InvoiceLineItemService {
     fun create(params: InvoiceLineItemCreateParams): InvoiceLineItemCreateResponse =
         create(params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: InvoiceLineItemCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -61,7 +61,7 @@ interface InvoiceLineItemService {
             params: InvoiceLineItemCreateParams
         ): HttpResponseFor<InvoiceLineItemCreateResponse> = create(params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         @MustBeClosed
         fun create(
             params: InvoiceLineItemCreateParams,

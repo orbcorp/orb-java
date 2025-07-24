@@ -39,7 +39,7 @@ interface VolumeService {
      */
     fun list(params: EventVolumeListParams): EventVolumes = list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: EventVolumeListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -63,7 +63,7 @@ interface VolumeService {
         fun list(params: EventVolumeListParams): HttpResponseFor<EventVolumes> =
             list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             params: EventVolumeListParams,

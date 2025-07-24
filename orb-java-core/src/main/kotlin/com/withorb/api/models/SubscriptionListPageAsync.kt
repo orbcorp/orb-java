@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [SubscriptionServiceAsync.list] */
+/** @see SubscriptionServiceAsync.list */
 class SubscriptionListPageAsync
 private constructor(
     private val service: SubscriptionServiceAsync,
@@ -24,14 +24,14 @@ private constructor(
     /**
      * Delegates to [Subscriptions], but gracefully handles missing data.
      *
-     * @see [Subscriptions.data]
+     * @see Subscriptions.data
      */
     fun data(): List<Subscription> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [Subscriptions], but gracefully handles missing data.
      *
-     * @see [Subscriptions.paginationMetadata]
+     * @see Subscriptions.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

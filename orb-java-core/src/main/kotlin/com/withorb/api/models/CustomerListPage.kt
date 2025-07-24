@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [CustomerService.list] */
+/** @see CustomerService.list */
 class CustomerListPage
 private constructor(
     private val service: CustomerService,
@@ -21,14 +21,14 @@ private constructor(
     /**
      * Delegates to [CustomerListPageResponse], but gracefully handles missing data.
      *
-     * @see [CustomerListPageResponse.data]
+     * @see CustomerListPageResponse.data
      */
     fun data(): List<Customer> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [CustomerListPageResponse], but gracefully handles missing data.
      *
-     * @see [CustomerListPageResponse.paginationMetadata]
+     * @see CustomerListPageResponse.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

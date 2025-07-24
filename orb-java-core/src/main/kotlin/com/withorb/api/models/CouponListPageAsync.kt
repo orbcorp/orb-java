@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [CouponServiceAsync.list] */
+/** @see CouponServiceAsync.list */
 class CouponListPageAsync
 private constructor(
     private val service: CouponServiceAsync,
@@ -24,14 +24,14 @@ private constructor(
     /**
      * Delegates to [CouponListPageResponse], but gracefully handles missing data.
      *
-     * @see [CouponListPageResponse.data]
+     * @see CouponListPageResponse.data
      */
     fun data(): List<Coupon> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [CouponListPageResponse], but gracefully handles missing data.
      *
-     * @see [CouponListPageResponse.paginationMetadata]
+     * @see CouponListPageResponse.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

@@ -38,7 +38,7 @@ interface ExternalPlanIdService {
         params: BetaExternalPlanIdCreatePlanVersionParams,
     ): PlanVersion = createPlanVersion(externalPlanId, params, RequestOptions.none())
 
-    /** @see [createPlanVersion] */
+    /** @see createPlanVersion */
     fun createPlanVersion(
         externalPlanId: String,
         params: BetaExternalPlanIdCreatePlanVersionParams,
@@ -46,11 +46,11 @@ interface ExternalPlanIdService {
     ): PlanVersion =
         createPlanVersion(params.toBuilder().externalPlanId(externalPlanId).build(), requestOptions)
 
-    /** @see [createPlanVersion] */
+    /** @see createPlanVersion */
     fun createPlanVersion(params: BetaExternalPlanIdCreatePlanVersionParams): PlanVersion =
         createPlanVersion(params, RequestOptions.none())
 
-    /** @see [createPlanVersion] */
+    /** @see createPlanVersion */
     fun createPlanVersion(
         params: BetaExternalPlanIdCreatePlanVersionParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -68,18 +68,18 @@ interface ExternalPlanIdService {
         params: BetaExternalPlanIdFetchPlanVersionParams,
     ): PlanVersion = fetchPlanVersion(version, params, RequestOptions.none())
 
-    /** @see [fetchPlanVersion] */
+    /** @see fetchPlanVersion */
     fun fetchPlanVersion(
         version: String,
         params: BetaExternalPlanIdFetchPlanVersionParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PlanVersion = fetchPlanVersion(params.toBuilder().version(version).build(), requestOptions)
 
-    /** @see [fetchPlanVersion] */
+    /** @see fetchPlanVersion */
     fun fetchPlanVersion(params: BetaExternalPlanIdFetchPlanVersionParams): PlanVersion =
         fetchPlanVersion(params, RequestOptions.none())
 
-    /** @see [fetchPlanVersion] */
+    /** @see fetchPlanVersion */
     fun fetchPlanVersion(
         params: BetaExternalPlanIdFetchPlanVersionParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -96,7 +96,7 @@ interface ExternalPlanIdService {
         params: BetaExternalPlanIdSetDefaultPlanVersionParams,
     ): Plan = setDefaultPlanVersion(externalPlanId, params, RequestOptions.none())
 
-    /** @see [setDefaultPlanVersion] */
+    /** @see setDefaultPlanVersion */
     fun setDefaultPlanVersion(
         externalPlanId: String,
         params: BetaExternalPlanIdSetDefaultPlanVersionParams,
@@ -107,11 +107,11 @@ interface ExternalPlanIdService {
             requestOptions,
         )
 
-    /** @see [setDefaultPlanVersion] */
+    /** @see setDefaultPlanVersion */
     fun setDefaultPlanVersion(params: BetaExternalPlanIdSetDefaultPlanVersionParams): Plan =
         setDefaultPlanVersion(params, RequestOptions.none())
 
-    /** @see [setDefaultPlanVersion] */
+    /** @see setDefaultPlanVersion */
     fun setDefaultPlanVersion(
         params: BetaExternalPlanIdSetDefaultPlanVersionParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -143,7 +143,7 @@ interface ExternalPlanIdService {
         ): HttpResponseFor<PlanVersion> =
             createPlanVersion(externalPlanId, params, RequestOptions.none())
 
-        /** @see [createPlanVersion] */
+        /** @see createPlanVersion */
         @MustBeClosed
         fun createPlanVersion(
             externalPlanId: String,
@@ -155,13 +155,13 @@ interface ExternalPlanIdService {
                 requestOptions,
             )
 
-        /** @see [createPlanVersion] */
+        /** @see createPlanVersion */
         @MustBeClosed
         fun createPlanVersion(
             params: BetaExternalPlanIdCreatePlanVersionParams
         ): HttpResponseFor<PlanVersion> = createPlanVersion(params, RequestOptions.none())
 
-        /** @see [createPlanVersion] */
+        /** @see createPlanVersion */
         @MustBeClosed
         fun createPlanVersion(
             params: BetaExternalPlanIdCreatePlanVersionParams,
@@ -179,7 +179,7 @@ interface ExternalPlanIdService {
             params: BetaExternalPlanIdFetchPlanVersionParams,
         ): HttpResponseFor<PlanVersion> = fetchPlanVersion(version, params, RequestOptions.none())
 
-        /** @see [fetchPlanVersion] */
+        /** @see fetchPlanVersion */
         @MustBeClosed
         fun fetchPlanVersion(
             version: String,
@@ -188,13 +188,13 @@ interface ExternalPlanIdService {
         ): HttpResponseFor<PlanVersion> =
             fetchPlanVersion(params.toBuilder().version(version).build(), requestOptions)
 
-        /** @see [fetchPlanVersion] */
+        /** @see fetchPlanVersion */
         @MustBeClosed
         fun fetchPlanVersion(
             params: BetaExternalPlanIdFetchPlanVersionParams
         ): HttpResponseFor<PlanVersion> = fetchPlanVersion(params, RequestOptions.none())
 
-        /** @see [fetchPlanVersion] */
+        /** @see fetchPlanVersion */
         @MustBeClosed
         fun fetchPlanVersion(
             params: BetaExternalPlanIdFetchPlanVersionParams,
@@ -213,7 +213,7 @@ interface ExternalPlanIdService {
         ): HttpResponseFor<Plan> =
             setDefaultPlanVersion(externalPlanId, params, RequestOptions.none())
 
-        /** @see [setDefaultPlanVersion] */
+        /** @see setDefaultPlanVersion */
         @MustBeClosed
         fun setDefaultPlanVersion(
             externalPlanId: String,
@@ -225,13 +225,13 @@ interface ExternalPlanIdService {
                 requestOptions,
             )
 
-        /** @see [setDefaultPlanVersion] */
+        /** @see setDefaultPlanVersion */
         @MustBeClosed
         fun setDefaultPlanVersion(
             params: BetaExternalPlanIdSetDefaultPlanVersionParams
         ): HttpResponseFor<Plan> = setDefaultPlanVersion(params, RequestOptions.none())
 
-        /** @see [setDefaultPlanVersion] */
+        /** @see setDefaultPlanVersion */
         @MustBeClosed
         fun setDefaultPlanVersion(
             params: BetaExternalPlanIdSetDefaultPlanVersionParams,

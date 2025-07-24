@@ -44,7 +44,7 @@ interface CreditServiceAsync {
     fun list(customerId: String): CompletableFuture<CustomerCreditListPageAsync> =
         list(customerId, CustomerCreditListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         params: CustomerCreditListParams = CustomerCreditListParams.none(),
@@ -52,24 +52,24 @@ interface CreditServiceAsync {
     ): CompletableFuture<CustomerCreditListPageAsync> =
         list(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         params: CustomerCreditListParams = CustomerCreditListParams.none(),
     ): CompletableFuture<CustomerCreditListPageAsync> =
         list(customerId, params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: CustomerCreditListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditListPageAsync>
 
-    /** @see [list] */
+    /** @see list */
     fun list(params: CustomerCreditListParams): CompletableFuture<CustomerCreditListPageAsync> =
         list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         requestOptions: RequestOptions,
@@ -90,7 +90,7 @@ interface CreditServiceAsync {
     ): CompletableFuture<CustomerCreditListByExternalIdPageAsync> =
         listByExternalId(externalCustomerId, CustomerCreditListByExternalIdParams.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         params: CustomerCreditListByExternalIdParams = CustomerCreditListByExternalIdParams.none(),
@@ -101,26 +101,26 @@ interface CreditServiceAsync {
             requestOptions,
         )
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         params: CustomerCreditListByExternalIdParams = CustomerCreditListByExternalIdParams.none(),
     ): CompletableFuture<CustomerCreditListByExternalIdPageAsync> =
         listByExternalId(externalCustomerId, params, RequestOptions.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         params: CustomerCreditListByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CustomerCreditListByExternalIdPageAsync>
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         params: CustomerCreditListByExternalIdParams
     ): CompletableFuture<CustomerCreditListByExternalIdPageAsync> =
         listByExternalId(params, RequestOptions.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         requestOptions: RequestOptions,
@@ -158,7 +158,7 @@ interface CreditServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerCreditListPageAsync>> =
             list(customerId, CustomerCreditListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             customerId: String,
             params: CustomerCreditListParams = CustomerCreditListParams.none(),
@@ -166,26 +166,26 @@ interface CreditServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerCreditListPageAsync>> =
             list(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             customerId: String,
             params: CustomerCreditListParams = CustomerCreditListParams.none(),
         ): CompletableFuture<HttpResponseFor<CustomerCreditListPageAsync>> =
             list(customerId, params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: CustomerCreditListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CustomerCreditListPageAsync>>
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             params: CustomerCreditListParams
         ): CompletableFuture<HttpResponseFor<CustomerCreditListPageAsync>> =
             list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         fun list(
             customerId: String,
             requestOptions: RequestOptions,
@@ -202,7 +202,7 @@ interface CreditServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerCreditListByExternalIdPageAsync>> =
             listByExternalId(externalCustomerId, CustomerCreditListByExternalIdParams.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         fun listByExternalId(
             externalCustomerId: String,
             params: CustomerCreditListByExternalIdParams =
@@ -214,7 +214,7 @@ interface CreditServiceAsync {
                 requestOptions,
             )
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         fun listByExternalId(
             externalCustomerId: String,
             params: CustomerCreditListByExternalIdParams =
@@ -222,19 +222,19 @@ interface CreditServiceAsync {
         ): CompletableFuture<HttpResponseFor<CustomerCreditListByExternalIdPageAsync>> =
             listByExternalId(externalCustomerId, params, RequestOptions.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         fun listByExternalId(
             params: CustomerCreditListByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<CustomerCreditListByExternalIdPageAsync>>
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         fun listByExternalId(
             params: CustomerCreditListByExternalIdParams
         ): CompletableFuture<HttpResponseFor<CustomerCreditListByExternalIdPageAsync>> =
             listByExternalId(params, RequestOptions.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         fun listByExternalId(
             externalCustomerId: String,
             requestOptions: RequestOptions,

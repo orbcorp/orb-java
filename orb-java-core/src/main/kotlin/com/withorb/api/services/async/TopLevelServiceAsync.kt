@@ -34,18 +34,18 @@ interface TopLevelServiceAsync {
      */
     fun ping(): CompletableFuture<TopLevelPingResponse> = ping(TopLevelPingParams.none())
 
-    /** @see [ping] */
+    /** @see ping */
     fun ping(
         params: TopLevelPingParams = TopLevelPingParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<TopLevelPingResponse>
 
-    /** @see [ping] */
+    /** @see ping */
     fun ping(
         params: TopLevelPingParams = TopLevelPingParams.none()
     ): CompletableFuture<TopLevelPingResponse> = ping(params, RequestOptions.none())
 
-    /** @see [ping] */
+    /** @see ping */
     fun ping(requestOptions: RequestOptions): CompletableFuture<TopLevelPingResponse> =
         ping(TopLevelPingParams.none(), requestOptions)
 
@@ -70,19 +70,19 @@ interface TopLevelServiceAsync {
         fun ping(): CompletableFuture<HttpResponseFor<TopLevelPingResponse>> =
             ping(TopLevelPingParams.none())
 
-        /** @see [ping] */
+        /** @see ping */
         fun ping(
             params: TopLevelPingParams = TopLevelPingParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<TopLevelPingResponse>>
 
-        /** @see [ping] */
+        /** @see ping */
         fun ping(
             params: TopLevelPingParams = TopLevelPingParams.none()
         ): CompletableFuture<HttpResponseFor<TopLevelPingResponse>> =
             ping(params, RequestOptions.none())
 
-        /** @see [ping] */
+        /** @see ping */
         fun ping(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<TopLevelPingResponse>> =

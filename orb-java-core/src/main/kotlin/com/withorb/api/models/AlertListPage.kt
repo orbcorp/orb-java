@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [AlertService.list] */
+/** @see AlertService.list */
 class AlertListPage
 private constructor(
     private val service: AlertService,
@@ -21,14 +21,14 @@ private constructor(
     /**
      * Delegates to [AlertListPageResponse], but gracefully handles missing data.
      *
-     * @see [AlertListPageResponse.data]
+     * @see AlertListPageResponse.data
      */
     fun data(): List<Alert> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [AlertListPageResponse], but gracefully handles missing data.
      *
-     * @see [AlertListPageResponse.paginationMetadata]
+     * @see AlertListPageResponse.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")

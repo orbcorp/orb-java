@@ -112,7 +112,7 @@ interface LedgerService {
     fun list(customerId: String): CustomerCreditLedgerListPage =
         list(customerId, CustomerCreditLedgerListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         params: CustomerCreditLedgerListParams = CustomerCreditLedgerListParams.none(),
@@ -120,23 +120,23 @@ interface LedgerService {
     ): CustomerCreditLedgerListPage =
         list(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         params: CustomerCreditLedgerListParams = CustomerCreditLedgerListParams.none(),
     ): CustomerCreditLedgerListPage = list(customerId, params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: CustomerCreditLedgerListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditLedgerListPage
 
-    /** @see [list] */
+    /** @see list */
     fun list(params: CustomerCreditLedgerListParams): CustomerCreditLedgerListPage =
         list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(customerId: String, requestOptions: RequestOptions): CustomerCreditLedgerListPage =
         list(customerId, CustomerCreditLedgerListParams.none(), requestOptions)
 
@@ -249,7 +249,7 @@ interface LedgerService {
     ): CustomerCreditLedgerCreateEntryResponse =
         createEntry(customerId, params, RequestOptions.none())
 
-    /** @see [createEntry] */
+    /** @see createEntry */
     fun createEntry(
         customerId: String,
         params: CustomerCreditLedgerCreateEntryParams,
@@ -257,12 +257,12 @@ interface LedgerService {
     ): CustomerCreditLedgerCreateEntryResponse =
         createEntry(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-    /** @see [createEntry] */
+    /** @see createEntry */
     fun createEntry(
         params: CustomerCreditLedgerCreateEntryParams
     ): CustomerCreditLedgerCreateEntryResponse = createEntry(params, RequestOptions.none())
 
-    /** @see [createEntry] */
+    /** @see createEntry */
     fun createEntry(
         params: CustomerCreditLedgerCreateEntryParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -377,7 +377,7 @@ interface LedgerService {
     ): CustomerCreditLedgerCreateEntryByExternalIdResponse =
         createEntryByExternalId(externalCustomerId, params, RequestOptions.none())
 
-    /** @see [createEntryByExternalId] */
+    /** @see createEntryByExternalId */
     fun createEntryByExternalId(
         externalCustomerId: String,
         params: CustomerCreditLedgerCreateEntryByExternalIdParams,
@@ -388,13 +388,13 @@ interface LedgerService {
             requestOptions,
         )
 
-    /** @see [createEntryByExternalId] */
+    /** @see createEntryByExternalId */
     fun createEntryByExternalId(
         params: CustomerCreditLedgerCreateEntryByExternalIdParams
     ): CustomerCreditLedgerCreateEntryByExternalIdResponse =
         createEntryByExternalId(params, RequestOptions.none())
 
-    /** @see [createEntryByExternalId] */
+    /** @see createEntryByExternalId */
     fun createEntryByExternalId(
         params: CustomerCreditLedgerCreateEntryByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -482,7 +482,7 @@ interface LedgerService {
     fun listByExternalId(externalCustomerId: String): CustomerCreditLedgerListByExternalIdPage =
         listByExternalId(externalCustomerId, CustomerCreditLedgerListByExternalIdParams.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         params: CustomerCreditLedgerListByExternalIdParams =
@@ -494,7 +494,7 @@ interface LedgerService {
             requestOptions,
         )
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         params: CustomerCreditLedgerListByExternalIdParams =
@@ -502,18 +502,18 @@ interface LedgerService {
     ): CustomerCreditLedgerListByExternalIdPage =
         listByExternalId(externalCustomerId, params, RequestOptions.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         params: CustomerCreditLedgerListByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditLedgerListByExternalIdPage
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         params: CustomerCreditLedgerListByExternalIdParams
     ): CustomerCreditLedgerListByExternalIdPage = listByExternalId(params, RequestOptions.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         requestOptions: RequestOptions,
@@ -542,7 +542,7 @@ interface LedgerService {
         fun list(customerId: String): HttpResponseFor<CustomerCreditLedgerListPage> =
             list(customerId, CustomerCreditLedgerListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             customerId: String,
@@ -551,7 +551,7 @@ interface LedgerService {
         ): HttpResponseFor<CustomerCreditLedgerListPage> =
             list(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             customerId: String,
@@ -559,20 +559,20 @@ interface LedgerService {
         ): HttpResponseFor<CustomerCreditLedgerListPage> =
             list(customerId, params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             params: CustomerCreditLedgerListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CustomerCreditLedgerListPage>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             params: CustomerCreditLedgerListParams
         ): HttpResponseFor<CustomerCreditLedgerListPage> = list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             customerId: String,
@@ -591,7 +591,7 @@ interface LedgerService {
         ): HttpResponseFor<CustomerCreditLedgerCreateEntryResponse> =
             createEntry(customerId, params, RequestOptions.none())
 
-        /** @see [createEntry] */
+        /** @see createEntry */
         @MustBeClosed
         fun createEntry(
             customerId: String,
@@ -600,14 +600,14 @@ interface LedgerService {
         ): HttpResponseFor<CustomerCreditLedgerCreateEntryResponse> =
             createEntry(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-        /** @see [createEntry] */
+        /** @see createEntry */
         @MustBeClosed
         fun createEntry(
             params: CustomerCreditLedgerCreateEntryParams
         ): HttpResponseFor<CustomerCreditLedgerCreateEntryResponse> =
             createEntry(params, RequestOptions.none())
 
-        /** @see [createEntry] */
+        /** @see createEntry */
         @MustBeClosed
         fun createEntry(
             params: CustomerCreditLedgerCreateEntryParams,
@@ -626,7 +626,7 @@ interface LedgerService {
         ): HttpResponseFor<CustomerCreditLedgerCreateEntryByExternalIdResponse> =
             createEntryByExternalId(externalCustomerId, params, RequestOptions.none())
 
-        /** @see [createEntryByExternalId] */
+        /** @see createEntryByExternalId */
         @MustBeClosed
         fun createEntryByExternalId(
             externalCustomerId: String,
@@ -638,14 +638,14 @@ interface LedgerService {
                 requestOptions,
             )
 
-        /** @see [createEntryByExternalId] */
+        /** @see createEntryByExternalId */
         @MustBeClosed
         fun createEntryByExternalId(
             params: CustomerCreditLedgerCreateEntryByExternalIdParams
         ): HttpResponseFor<CustomerCreditLedgerCreateEntryByExternalIdResponse> =
             createEntryByExternalId(params, RequestOptions.none())
 
-        /** @see [createEntryByExternalId] */
+        /** @see createEntryByExternalId */
         @MustBeClosed
         fun createEntryByExternalId(
             params: CustomerCreditLedgerCreateEntryByExternalIdParams,
@@ -663,7 +663,7 @@ interface LedgerService {
         ): HttpResponseFor<CustomerCreditLedgerListByExternalIdPage> =
             listByExternalId(externalCustomerId, CustomerCreditLedgerListByExternalIdParams.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         @MustBeClosed
         fun listByExternalId(
             externalCustomerId: String,
@@ -676,7 +676,7 @@ interface LedgerService {
                 requestOptions,
             )
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         @MustBeClosed
         fun listByExternalId(
             externalCustomerId: String,
@@ -685,21 +685,21 @@ interface LedgerService {
         ): HttpResponseFor<CustomerCreditLedgerListByExternalIdPage> =
             listByExternalId(externalCustomerId, params, RequestOptions.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         @MustBeClosed
         fun listByExternalId(
             params: CustomerCreditLedgerListByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CustomerCreditLedgerListByExternalIdPage>
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         @MustBeClosed
         fun listByExternalId(
             params: CustomerCreditLedgerListByExternalIdParams
         ): HttpResponseFor<CustomerCreditLedgerListByExternalIdPage> =
             listByExternalId(params, RequestOptions.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         @MustBeClosed
         fun listByExternalId(
             externalCustomerId: String,

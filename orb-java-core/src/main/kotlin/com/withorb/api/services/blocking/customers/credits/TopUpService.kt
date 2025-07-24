@@ -46,7 +46,7 @@ interface TopUpService {
         params: CustomerCreditTopUpCreateParams,
     ): CustomerCreditTopUpCreateResponse = create(customerId, params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         customerId: String,
         params: CustomerCreditTopUpCreateParams,
@@ -54,11 +54,11 @@ interface TopUpService {
     ): CustomerCreditTopUpCreateResponse =
         create(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-    /** @see [create] */
+    /** @see create */
     fun create(params: CustomerCreditTopUpCreateParams): CustomerCreditTopUpCreateResponse =
         create(params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: CustomerCreditTopUpCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -68,7 +68,7 @@ interface TopUpService {
     fun list(customerId: String): CustomerCreditTopUpListPage =
         list(customerId, CustomerCreditTopUpListParams.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         params: CustomerCreditTopUpListParams = CustomerCreditTopUpListParams.none(),
@@ -76,23 +76,23 @@ interface TopUpService {
     ): CustomerCreditTopUpListPage =
         list(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         customerId: String,
         params: CustomerCreditTopUpListParams = CustomerCreditTopUpListParams.none(),
     ): CustomerCreditTopUpListPage = list(customerId, params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(
         params: CustomerCreditTopUpListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditTopUpListPage
 
-    /** @see [list] */
+    /** @see list */
     fun list(params: CustomerCreditTopUpListParams): CustomerCreditTopUpListPage =
         list(params, RequestOptions.none())
 
-    /** @see [list] */
+    /** @see list */
     fun list(customerId: String, requestOptions: RequestOptions): CustomerCreditTopUpListPage =
         list(customerId, CustomerCreditTopUpListParams.none(), requestOptions)
 
@@ -103,17 +103,17 @@ interface TopUpService {
     fun delete(topUpId: String, params: CustomerCreditTopUpDeleteParams) =
         delete(topUpId, params, RequestOptions.none())
 
-    /** @see [delete] */
+    /** @see delete */
     fun delete(
         topUpId: String,
         params: CustomerCreditTopUpDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ) = delete(params.toBuilder().topUpId(topUpId).build(), requestOptions)
 
-    /** @see [delete] */
+    /** @see delete */
     fun delete(params: CustomerCreditTopUpDeleteParams) = delete(params, RequestOptions.none())
 
-    /** @see [delete] */
+    /** @see delete */
     fun delete(
         params: CustomerCreditTopUpDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -133,7 +133,7 @@ interface TopUpService {
     ): CustomerCreditTopUpCreateByExternalIdResponse =
         createByExternalId(externalCustomerId, params, RequestOptions.none())
 
-    /** @see [createByExternalId] */
+    /** @see createByExternalId */
     fun createByExternalId(
         externalCustomerId: String,
         params: CustomerCreditTopUpCreateByExternalIdParams,
@@ -144,13 +144,13 @@ interface TopUpService {
             requestOptions,
         )
 
-    /** @see [createByExternalId] */
+    /** @see createByExternalId */
     fun createByExternalId(
         params: CustomerCreditTopUpCreateByExternalIdParams
     ): CustomerCreditTopUpCreateByExternalIdResponse =
         createByExternalId(params, RequestOptions.none())
 
-    /** @see [createByExternalId] */
+    /** @see createByExternalId */
     fun createByExternalId(
         params: CustomerCreditTopUpCreateByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -163,18 +163,18 @@ interface TopUpService {
     fun deleteByExternalId(topUpId: String, params: CustomerCreditTopUpDeleteByExternalIdParams) =
         deleteByExternalId(topUpId, params, RequestOptions.none())
 
-    /** @see [deleteByExternalId] */
+    /** @see deleteByExternalId */
     fun deleteByExternalId(
         topUpId: String,
         params: CustomerCreditTopUpDeleteByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ) = deleteByExternalId(params.toBuilder().topUpId(topUpId).build(), requestOptions)
 
-    /** @see [deleteByExternalId] */
+    /** @see deleteByExternalId */
     fun deleteByExternalId(params: CustomerCreditTopUpDeleteByExternalIdParams) =
         deleteByExternalId(params, RequestOptions.none())
 
-    /** @see [deleteByExternalId] */
+    /** @see deleteByExternalId */
     fun deleteByExternalId(
         params: CustomerCreditTopUpDeleteByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -184,7 +184,7 @@ interface TopUpService {
     fun listByExternalId(externalCustomerId: String): CustomerCreditTopUpListByExternalIdPage =
         listByExternalId(externalCustomerId, CustomerCreditTopUpListByExternalIdParams.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         params: CustomerCreditTopUpListByExternalIdParams =
@@ -196,7 +196,7 @@ interface TopUpService {
             requestOptions,
         )
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         params: CustomerCreditTopUpListByExternalIdParams =
@@ -204,18 +204,18 @@ interface TopUpService {
     ): CustomerCreditTopUpListByExternalIdPage =
         listByExternalId(externalCustomerId, params, RequestOptions.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         params: CustomerCreditTopUpListByExternalIdParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerCreditTopUpListByExternalIdPage
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         params: CustomerCreditTopUpListByExternalIdParams
     ): CustomerCreditTopUpListByExternalIdPage = listByExternalId(params, RequestOptions.none())
 
-    /** @see [listByExternalId] */
+    /** @see listByExternalId */
     fun listByExternalId(
         externalCustomerId: String,
         requestOptions: RequestOptions,
@@ -247,7 +247,7 @@ interface TopUpService {
         ): HttpResponseFor<CustomerCreditTopUpCreateResponse> =
             create(customerId, params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         @MustBeClosed
         fun create(
             customerId: String,
@@ -256,14 +256,14 @@ interface TopUpService {
         ): HttpResponseFor<CustomerCreditTopUpCreateResponse> =
             create(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-        /** @see [create] */
+        /** @see create */
         @MustBeClosed
         fun create(
             params: CustomerCreditTopUpCreateParams
         ): HttpResponseFor<CustomerCreditTopUpCreateResponse> =
             create(params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         @MustBeClosed
         fun create(
             params: CustomerCreditTopUpCreateParams,
@@ -278,7 +278,7 @@ interface TopUpService {
         fun list(customerId: String): HttpResponseFor<CustomerCreditTopUpListPage> =
             list(customerId, CustomerCreditTopUpListParams.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             customerId: String,
@@ -287,7 +287,7 @@ interface TopUpService {
         ): HttpResponseFor<CustomerCreditTopUpListPage> =
             list(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             customerId: String,
@@ -295,20 +295,20 @@ interface TopUpService {
         ): HttpResponseFor<CustomerCreditTopUpListPage> =
             list(customerId, params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             params: CustomerCreditTopUpListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CustomerCreditTopUpListPage>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             params: CustomerCreditTopUpListParams
         ): HttpResponseFor<CustomerCreditTopUpListPage> = list(params, RequestOptions.none())
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(
             customerId: String,
@@ -325,7 +325,7 @@ interface TopUpService {
         fun delete(topUpId: String, params: CustomerCreditTopUpDeleteParams): HttpResponse =
             delete(topUpId, params, RequestOptions.none())
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         fun delete(
             topUpId: String,
@@ -333,12 +333,12 @@ interface TopUpService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse = delete(params.toBuilder().topUpId(topUpId).build(), requestOptions)
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         fun delete(params: CustomerCreditTopUpDeleteParams): HttpResponse =
             delete(params, RequestOptions.none())
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         fun delete(
             params: CustomerCreditTopUpDeleteParams,
@@ -357,7 +357,7 @@ interface TopUpService {
         ): HttpResponseFor<CustomerCreditTopUpCreateByExternalIdResponse> =
             createByExternalId(externalCustomerId, params, RequestOptions.none())
 
-        /** @see [createByExternalId] */
+        /** @see createByExternalId */
         @MustBeClosed
         fun createByExternalId(
             externalCustomerId: String,
@@ -369,14 +369,14 @@ interface TopUpService {
                 requestOptions,
             )
 
-        /** @see [createByExternalId] */
+        /** @see createByExternalId */
         @MustBeClosed
         fun createByExternalId(
             params: CustomerCreditTopUpCreateByExternalIdParams
         ): HttpResponseFor<CustomerCreditTopUpCreateByExternalIdResponse> =
             createByExternalId(params, RequestOptions.none())
 
-        /** @see [createByExternalId] */
+        /** @see createByExternalId */
         @MustBeClosed
         fun createByExternalId(
             params: CustomerCreditTopUpCreateByExternalIdParams,
@@ -394,7 +394,7 @@ interface TopUpService {
             params: CustomerCreditTopUpDeleteByExternalIdParams,
         ): HttpResponse = deleteByExternalId(topUpId, params, RequestOptions.none())
 
-        /** @see [deleteByExternalId] */
+        /** @see deleteByExternalId */
         @MustBeClosed
         fun deleteByExternalId(
             topUpId: String,
@@ -403,12 +403,12 @@ interface TopUpService {
         ): HttpResponse =
             deleteByExternalId(params.toBuilder().topUpId(topUpId).build(), requestOptions)
 
-        /** @see [deleteByExternalId] */
+        /** @see deleteByExternalId */
         @MustBeClosed
         fun deleteByExternalId(params: CustomerCreditTopUpDeleteByExternalIdParams): HttpResponse =
             deleteByExternalId(params, RequestOptions.none())
 
-        /** @see [deleteByExternalId] */
+        /** @see deleteByExternalId */
         @MustBeClosed
         fun deleteByExternalId(
             params: CustomerCreditTopUpDeleteByExternalIdParams,
@@ -426,7 +426,7 @@ interface TopUpService {
         ): HttpResponseFor<CustomerCreditTopUpListByExternalIdPage> =
             listByExternalId(externalCustomerId, CustomerCreditTopUpListByExternalIdParams.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         @MustBeClosed
         fun listByExternalId(
             externalCustomerId: String,
@@ -439,7 +439,7 @@ interface TopUpService {
                 requestOptions,
             )
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         @MustBeClosed
         fun listByExternalId(
             externalCustomerId: String,
@@ -448,21 +448,21 @@ interface TopUpService {
         ): HttpResponseFor<CustomerCreditTopUpListByExternalIdPage> =
             listByExternalId(externalCustomerId, params, RequestOptions.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         @MustBeClosed
         fun listByExternalId(
             params: CustomerCreditTopUpListByExternalIdParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CustomerCreditTopUpListByExternalIdPage>
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         @MustBeClosed
         fun listByExternalId(
             params: CustomerCreditTopUpListByExternalIdParams
         ): HttpResponseFor<CustomerCreditTopUpListByExternalIdPage> =
             listByExternalId(params, RequestOptions.none())
 
-        /** @see [listByExternalId] */
+        /** @see listByExternalId */
         @MustBeClosed
         fun listByExternalId(
             externalCustomerId: String,

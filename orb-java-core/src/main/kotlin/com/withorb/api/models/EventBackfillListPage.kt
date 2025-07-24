@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [BackfillService.list] */
+/** @see BackfillService.list */
 class EventBackfillListPage
 private constructor(
     private val service: BackfillService,
@@ -21,7 +21,7 @@ private constructor(
     /**
      * Delegates to [EventBackfillListPageResponse], but gracefully handles missing data.
      *
-     * @see [EventBackfillListPageResponse.data]
+     * @see EventBackfillListPageResponse.data
      */
     fun data(): List<EventBackfillListResponse> =
         response._data().getOptional("data").getOrNull() ?: emptyList()
@@ -29,7 +29,7 @@ private constructor(
     /**
      * Delegates to [EventBackfillListPageResponse], but gracefully handles missing data.
      *
-     * @see [EventBackfillListPageResponse.paginationMetadata]
+     * @see EventBackfillListPageResponse.paginationMetadata
      */
     fun paginationMetadata(): Optional<PaginationMetadata> =
         response._paginationMetadata().getOptional("pagination_metadata")
