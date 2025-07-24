@@ -63,8 +63,10 @@ private constructor(
 
     fun operationTimeLte(): Optional<OffsetDateTime> = Optional.ofNullable(operationTimeLte)
 
+    /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
 
+    /** Additional query param to send with the request. */
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
     fun toBuilder() = Builder().from(this)
