@@ -10,6 +10,7 @@ import com.withorb.api.models.DimensionalPriceGroupCreateParams
 import com.withorb.api.models.DimensionalPriceGroupListPageAsync
 import com.withorb.api.models.DimensionalPriceGroupListParams
 import com.withorb.api.models.DimensionalPriceGroupRetrieveParams
+import com.withorb.api.models.DimensionalPriceGroupUpdateParams
 import com.withorb.api.services.async.dimensionalPriceGroups.ExternalDimensionalPriceGroupIdServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
@@ -92,6 +93,50 @@ interface DimensionalPriceGroupServiceAsync {
             DimensionalPriceGroupRetrieveParams.none(),
             requestOptions,
         )
+
+    /**
+     * This endpoint can be used to update the `external_dimensional_price_group_id` and `metadata`
+     * of an existing dimensional price group. Other fields on a dimensional price group are
+     * currently immutable.
+     */
+    fun update(dimensionalPriceGroupId: String): CompletableFuture<DimensionalPriceGroup> =
+        update(dimensionalPriceGroupId, DimensionalPriceGroupUpdateParams.none())
+
+    /** @see update */
+    fun update(
+        dimensionalPriceGroupId: String,
+        params: DimensionalPriceGroupUpdateParams = DimensionalPriceGroupUpdateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<DimensionalPriceGroup> =
+        update(
+            params.toBuilder().dimensionalPriceGroupId(dimensionalPriceGroupId).build(),
+            requestOptions,
+        )
+
+    /** @see update */
+    fun update(
+        dimensionalPriceGroupId: String,
+        params: DimensionalPriceGroupUpdateParams = DimensionalPriceGroupUpdateParams.none(),
+    ): CompletableFuture<DimensionalPriceGroup> =
+        update(dimensionalPriceGroupId, params, RequestOptions.none())
+
+    /** @see update */
+    fun update(
+        params: DimensionalPriceGroupUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<DimensionalPriceGroup>
+
+    /** @see update */
+    fun update(
+        params: DimensionalPriceGroupUpdateParams
+    ): CompletableFuture<DimensionalPriceGroup> = update(params, RequestOptions.none())
+
+    /** @see update */
+    fun update(
+        dimensionalPriceGroupId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<DimensionalPriceGroup> =
+        update(dimensionalPriceGroupId, DimensionalPriceGroupUpdateParams.none(), requestOptions)
 
     /** List dimensional price groups */
     fun list(): CompletableFuture<DimensionalPriceGroupListPageAsync> =
@@ -196,6 +241,57 @@ interface DimensionalPriceGroupServiceAsync {
             retrieve(
                 dimensionalPriceGroupId,
                 DimensionalPriceGroupRetrieveParams.none(),
+                requestOptions,
+            )
+
+        /**
+         * Returns a raw HTTP response for `put
+         * /dimensional_price_groups/{dimensional_price_group_id}`, but is otherwise the same as
+         * [DimensionalPriceGroupServiceAsync.update].
+         */
+        fun update(
+            dimensionalPriceGroupId: String
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
+            update(dimensionalPriceGroupId, DimensionalPriceGroupUpdateParams.none())
+
+        /** @see update */
+        fun update(
+            dimensionalPriceGroupId: String,
+            params: DimensionalPriceGroupUpdateParams = DimensionalPriceGroupUpdateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
+            update(
+                params.toBuilder().dimensionalPriceGroupId(dimensionalPriceGroupId).build(),
+                requestOptions,
+            )
+
+        /** @see update */
+        fun update(
+            dimensionalPriceGroupId: String,
+            params: DimensionalPriceGroupUpdateParams = DimensionalPriceGroupUpdateParams.none(),
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
+            update(dimensionalPriceGroupId, params, RequestOptions.none())
+
+        /** @see update */
+        fun update(
+            params: DimensionalPriceGroupUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>>
+
+        /** @see update */
+        fun update(
+            params: DimensionalPriceGroupUpdateParams
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
+            update(params, RequestOptions.none())
+
+        /** @see update */
+        fun update(
+            dimensionalPriceGroupId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
+            update(
+                dimensionalPriceGroupId,
+                DimensionalPriceGroupUpdateParams.none(),
                 requestOptions,
             )
 

@@ -21,6 +21,7 @@ import com.withorb.api.models.DimensionalPriceGroupCreateParams
 import com.withorb.api.models.DimensionalPriceGroupListPage
 import com.withorb.api.models.DimensionalPriceGroupListParams
 import com.withorb.api.models.DimensionalPriceGroupRetrieveParams
+import com.withorb.api.models.DimensionalPriceGroupUpdateParams
 import com.withorb.api.models.DimensionalPriceGroups
 import com.withorb.api.services.blocking.dimensionalPriceGroups.ExternalDimensionalPriceGroupIdService
 import com.withorb.api.services.blocking.dimensionalPriceGroups.ExternalDimensionalPriceGroupIdServiceImpl
@@ -61,6 +62,13 @@ internal constructor(private val clientOptions: ClientOptions) : DimensionalPric
     ): DimensionalPriceGroup =
         // get /dimensional_price_groups/{dimensional_price_group_id}
         withRawResponse().retrieve(params, requestOptions).parse()
+
+    override fun update(
+        params: DimensionalPriceGroupUpdateParams,
+        requestOptions: RequestOptions,
+    ): DimensionalPriceGroup =
+        // put /dimensional_price_groups/{dimensional_price_group_id}
+        withRawResponse().update(params, requestOptions).parse()
 
     override fun list(
         params: DimensionalPriceGroupListParams,
@@ -140,6 +148,37 @@ internal constructor(private val clientOptions: ClientOptions) : DimensionalPric
             return errorHandler.handle(response).parseable {
                 response
                     .use { retrieveHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val updateHandler: Handler<DimensionalPriceGroup> =
+            jsonHandler<DimensionalPriceGroup>(clientOptions.jsonMapper)
+
+        override fun update(
+            params: DimensionalPriceGroupUpdateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<DimensionalPriceGroup> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("dimensionalPriceGroupId", params.dimensionalPriceGroupId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("dimensional_price_groups", params._pathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { updateHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()
