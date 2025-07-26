@@ -13,10 +13,12 @@ import com.withorb.api.core.http.HttpRequest
 import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponse.Handler
 import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.core.http.json
 import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepareAsync
 import com.withorb.api.models.DimensionalPriceGroup
 import com.withorb.api.models.DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams
+import com.withorb.api.models.DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
@@ -47,6 +49,14 @@ internal constructor(private val clientOptions: ClientOptions) :
         // get
         // /dimensional_price_groups/external_dimensional_price_group_id/{external_dimensional_price_group_id}
         withRawResponse().retrieve(params, requestOptions).thenApply { it.parse() }
+
+    override fun update(
+        params: DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<DimensionalPriceGroup> =
+        // put
+        // /dimensional_price_groups/external_dimensional_price_group_id/{external_dimensional_price_group_id}
+        withRawResponse().update(params, requestOptions).thenApply { it.parse() }
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ExternalDimensionalPriceGroupIdServiceAsync.WithRawResponse {
@@ -92,6 +102,47 @@ internal constructor(private val clientOptions: ClientOptions) :
                     errorHandler.handle(response).parseable {
                         response
                             .use { retrieveHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val updateHandler: Handler<DimensionalPriceGroup> =
+            jsonHandler<DimensionalPriceGroup>(clientOptions.jsonMapper)
+
+        override fun update(
+            params: DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired(
+                "pathExternalDimensionalPriceGroupId",
+                params.pathExternalDimensionalPriceGroupId().getOrNull(),
+            )
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "dimensional_price_groups",
+                        "external_dimensional_price_group_id",
+                        params._pathParam(0),
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { updateHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()

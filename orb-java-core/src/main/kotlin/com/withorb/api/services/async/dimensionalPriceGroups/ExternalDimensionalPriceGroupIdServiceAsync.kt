@@ -7,6 +7,7 @@ import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.DimensionalPriceGroup
 import com.withorb.api.models.DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams
+import com.withorb.api.models.DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -81,6 +82,64 @@ interface ExternalDimensionalPriceGroupIdServiceAsync {
         )
 
     /**
+     * This endpoint can be used to update the `external_dimensional_price_group_id` and `metadata`
+     * of an existing dimensional price group. Other fields on a dimensional price group are
+     * currently immutable.
+     */
+    fun update(
+        pathExternalDimensionalPriceGroupId: String
+    ): CompletableFuture<DimensionalPriceGroup> =
+        update(
+            pathExternalDimensionalPriceGroupId,
+            DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams.none(),
+        )
+
+    /** @see update */
+    fun update(
+        pathExternalDimensionalPriceGroupId: String,
+        params: DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams =
+            DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<DimensionalPriceGroup> =
+        update(
+            params
+                .toBuilder()
+                .pathExternalDimensionalPriceGroupId(pathExternalDimensionalPriceGroupId)
+                .build(),
+            requestOptions,
+        )
+
+    /** @see update */
+    fun update(
+        pathExternalDimensionalPriceGroupId: String,
+        params: DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams =
+            DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams.none(),
+    ): CompletableFuture<DimensionalPriceGroup> =
+        update(pathExternalDimensionalPriceGroupId, params, RequestOptions.none())
+
+    /** @see update */
+    fun update(
+        params: DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<DimensionalPriceGroup>
+
+    /** @see update */
+    fun update(
+        params: DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams
+    ): CompletableFuture<DimensionalPriceGroup> = update(params, RequestOptions.none())
+
+    /** @see update */
+    fun update(
+        pathExternalDimensionalPriceGroupId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<DimensionalPriceGroup> =
+        update(
+            pathExternalDimensionalPriceGroupId,
+            DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams.none(),
+            requestOptions,
+        )
+
+    /**
      * A view of [ExternalDimensionalPriceGroupIdServiceAsync] that provides access to raw HTTP
      * responses for each method.
      */
@@ -151,6 +210,65 @@ interface ExternalDimensionalPriceGroupIdServiceAsync {
             retrieve(
                 externalDimensionalPriceGroupId,
                 DimensionalPriceGroupExternalDimensionalPriceGroupIdRetrieveParams.none(),
+                requestOptions,
+            )
+
+        /**
+         * Returns a raw HTTP response for `put
+         * /dimensional_price_groups/external_dimensional_price_group_id/{external_dimensional_price_group_id}`,
+         * but is otherwise the same as [ExternalDimensionalPriceGroupIdServiceAsync.update].
+         */
+        fun update(
+            pathExternalDimensionalPriceGroupId: String
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
+            update(
+                pathExternalDimensionalPriceGroupId,
+                DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams.none(),
+            )
+
+        /** @see update */
+        fun update(
+            pathExternalDimensionalPriceGroupId: String,
+            params: DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams =
+                DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
+            update(
+                params
+                    .toBuilder()
+                    .pathExternalDimensionalPriceGroupId(pathExternalDimensionalPriceGroupId)
+                    .build(),
+                requestOptions,
+            )
+
+        /** @see update */
+        fun update(
+            pathExternalDimensionalPriceGroupId: String,
+            params: DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams =
+                DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams.none(),
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
+            update(pathExternalDimensionalPriceGroupId, params, RequestOptions.none())
+
+        /** @see update */
+        fun update(
+            params: DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>>
+
+        /** @see update */
+        fun update(
+            params: DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
+            update(params, RequestOptions.none())
+
+        /** @see update */
+        fun update(
+            pathExternalDimensionalPriceGroupId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<DimensionalPriceGroup>> =
+            update(
+                pathExternalDimensionalPriceGroupId,
+                DimensionalPriceGroupExternalDimensionalPriceGroupIdUpdateParams.none(),
                 requestOptions,
             )
     }
