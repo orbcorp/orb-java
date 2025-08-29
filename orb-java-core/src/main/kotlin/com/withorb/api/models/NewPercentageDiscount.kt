@@ -668,7 +668,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is AdjustmentType && value == other.value /* spotless:on */
+            return other is AdjustmentType && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -787,7 +787,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is AppliesToAll && value == other.value /* spotless:on */
+            return other is AppliesToAll && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -932,7 +932,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+            return other is PriceType && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -945,12 +945,33 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is NewPercentageDiscount && adjustmentType == other.adjustmentType && percentageDiscount == other.percentageDiscount && appliesToAll == other.appliesToAll && appliesToItemIds == other.appliesToItemIds && appliesToPriceIds == other.appliesToPriceIds && currency == other.currency && filters == other.filters && isInvoiceLevel == other.isInvoiceLevel && priceType == other.priceType && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is NewPercentageDiscount &&
+            adjustmentType == other.adjustmentType &&
+            percentageDiscount == other.percentageDiscount &&
+            appliesToAll == other.appliesToAll &&
+            appliesToItemIds == other.appliesToItemIds &&
+            appliesToPriceIds == other.appliesToPriceIds &&
+            currency == other.currency &&
+            filters == other.filters &&
+            isInvoiceLevel == other.isInvoiceLevel &&
+            priceType == other.priceType &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(adjustmentType, percentageDiscount, appliesToAll, appliesToItemIds, appliesToPriceIds, currency, filters, isInvoiceLevel, priceType, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            adjustmentType,
+            percentageDiscount,
+            appliesToAll,
+            appliesToItemIds,
+            appliesToPriceIds,
+            currency,
+            filters,
+            isInvoiceLevel,
+            priceType,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

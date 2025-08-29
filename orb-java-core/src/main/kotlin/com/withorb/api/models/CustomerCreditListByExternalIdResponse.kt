@@ -537,7 +537,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
+            return other is Status && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -550,12 +550,29 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerCreditListByExternalIdResponse && id == other.id && balance == other.balance && effectiveDate == other.effectiveDate && expiryDate == other.expiryDate && maximumInitialBalance == other.maximumInitialBalance && perUnitCostBasis == other.perUnitCostBasis && status == other.status && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is CustomerCreditListByExternalIdResponse &&
+            id == other.id &&
+            balance == other.balance &&
+            effectiveDate == other.effectiveDate &&
+            expiryDate == other.expiryDate &&
+            maximumInitialBalance == other.maximumInitialBalance &&
+            perUnitCostBasis == other.perUnitCostBasis &&
+            status == other.status &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, balance, effectiveDate, expiryDate, maximumInitialBalance, perUnitCostBasis, status, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            balance,
+            effectiveDate,
+            expiryDate,
+            maximumInitialBalance,
+            perUnitCostBasis,
+            status,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 
