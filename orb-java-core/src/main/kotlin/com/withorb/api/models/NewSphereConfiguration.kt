@@ -309,7 +309,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is TaxProvider && value == other.value /* spotless:on */
+            return other is TaxProvider && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -322,12 +322,13 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is NewSphereConfiguration && taxExempt == other.taxExempt && taxProvider == other.taxProvider && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is NewSphereConfiguration &&
+            taxExempt == other.taxExempt &&
+            taxProvider == other.taxProvider &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(taxExempt, taxProvider, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 

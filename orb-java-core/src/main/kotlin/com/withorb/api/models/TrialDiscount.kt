@@ -543,7 +543,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is DiscountType && value == other.value /* spotless:on */
+            return other is DiscountType && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -556,12 +556,27 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is TrialDiscount && discountType == other.discountType && appliesToPriceIds == other.appliesToPriceIds && filters == other.filters && reason == other.reason && trialAmountDiscount == other.trialAmountDiscount && trialPercentageDiscount == other.trialPercentageDiscount && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is TrialDiscount &&
+            discountType == other.discountType &&
+            appliesToPriceIds == other.appliesToPriceIds &&
+            filters == other.filters &&
+            reason == other.reason &&
+            trialAmountDiscount == other.trialAmountDiscount &&
+            trialPercentageDiscount == other.trialPercentageDiscount &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(discountType, appliesToPriceIds, filters, reason, trialAmountDiscount, trialPercentageDiscount, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            discountType,
+            appliesToPriceIds,
+            filters,
+            reason,
+            trialAmountDiscount,
+            trialPercentageDiscount,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

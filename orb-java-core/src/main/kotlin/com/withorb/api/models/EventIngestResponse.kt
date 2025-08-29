@@ -438,12 +438,15 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ValidationFailed && idempotencyKey == other.idempotencyKey && validationErrors == other.validationErrors && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is ValidationFailed &&
+                idempotencyKey == other.idempotencyKey &&
+                validationErrors == other.validationErrors &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(idempotencyKey, validationErrors, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(idempotencyKey, validationErrors, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -668,12 +671,15 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Debug && duplicate == other.duplicate && ingested == other.ingested && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Debug &&
+                duplicate == other.duplicate &&
+                ingested == other.ingested &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(duplicate, ingested, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(duplicate, ingested, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -686,12 +692,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is EventIngestResponse && validationFailed == other.validationFailed && debug == other.debug && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is EventIngestResponse &&
+            validationFailed == other.validationFailed &&
+            debug == other.debug &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(validationFailed, debug, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(validationFailed, debug, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

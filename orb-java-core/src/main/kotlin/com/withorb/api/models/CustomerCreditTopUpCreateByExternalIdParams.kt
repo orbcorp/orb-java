@@ -1011,12 +1011,31 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && amount == other.amount && currency == other.currency && invoiceSettings == other.invoiceSettings && perUnitCostBasis == other.perUnitCostBasis && threshold == other.threshold && activeFrom == other.activeFrom && expiresAfter == other.expiresAfter && expiresAfterUnit == other.expiresAfterUnit && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Body &&
+                amount == other.amount &&
+                currency == other.currency &&
+                invoiceSettings == other.invoiceSettings &&
+                perUnitCostBasis == other.perUnitCostBasis &&
+                threshold == other.threshold &&
+                activeFrom == other.activeFrom &&
+                expiresAfter == other.expiresAfter &&
+                expiresAfterUnit == other.expiresAfterUnit &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(amount, currency, invoiceSettings, perUnitCostBasis, threshold, activeFrom, expiresAfter, expiresAfterUnit, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                amount,
+                currency,
+                invoiceSettings,
+                perUnitCostBasis,
+                threshold,
+                activeFrom,
+                expiresAfter,
+                expiresAfterUnit,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -1311,12 +1330,23 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is InvoiceSettings && autoCollection == other.autoCollection && netTerms == other.netTerms && memo == other.memo && requireSuccessfulPayment == other.requireSuccessfulPayment && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is InvoiceSettings &&
+                autoCollection == other.autoCollection &&
+                netTerms == other.netTerms &&
+                memo == other.memo &&
+                requireSuccessfulPayment == other.requireSuccessfulPayment &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(autoCollection, netTerms, memo, requireSuccessfulPayment, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                autoCollection,
+                netTerms,
+                memo,
+                requireSuccessfulPayment,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -1445,7 +1475,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ExpiresAfterUnit && value == other.value /* spotless:on */
+            return other is ExpiresAfterUnit && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -1458,10 +1488,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerCreditTopUpCreateByExternalIdParams && externalCustomerId == other.externalCustomerId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is CustomerCreditTopUpCreateByExternalIdParams &&
+            externalCustomerId == other.externalCustomerId &&
+            body == other.body &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalCustomerId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(externalCustomerId, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "CustomerCreditTopUpCreateByExternalIdParams{externalCustomerId=$externalCustomerId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

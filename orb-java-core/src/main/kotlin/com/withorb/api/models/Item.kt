@@ -671,7 +671,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ExternalConnectionName && value == other.value /* spotless:on */
+                return other is ExternalConnectionName && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -684,12 +684,15 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ExternalConnection && externalConnectionName == other.externalConnectionName && externalEntityId == other.externalEntityId && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is ExternalConnection &&
+                externalConnectionName == other.externalConnectionName &&
+                externalEntityId == other.externalEntityId &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(externalConnectionName, externalEntityId, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(externalConnectionName, externalEntityId, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -791,12 +794,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Metadata && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -808,12 +809,18 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Item && id == other.id && createdAt == other.createdAt && externalConnections == other.externalConnections && metadata == other.metadata && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is Item &&
+            id == other.id &&
+            createdAt == other.createdAt &&
+            externalConnections == other.externalConnections &&
+            metadata == other.metadata &&
+            name == other.name &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, createdAt, externalConnections, metadata, name, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(id, createdAt, externalConnections, metadata, name, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

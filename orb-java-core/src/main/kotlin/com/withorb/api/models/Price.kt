@@ -591,10 +591,70 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Price && unit == other.unit && package_ == other.package_ && matrix == other.matrix && tiered == other.tiered && tieredBps == other.tieredBps && bps == other.bps && bulkBps == other.bulkBps && bulk == other.bulk && thresholdTotalAmount == other.thresholdTotalAmount && tieredPackage == other.tieredPackage && groupedTiered == other.groupedTiered && tieredWithMinimum == other.tieredWithMinimum && tieredPackageWithMinimum == other.tieredPackageWithMinimum && packageWithAllocation == other.packageWithAllocation && unitWithPercent == other.unitWithPercent && matrixWithAllocation == other.matrixWithAllocation && tieredWithProration == other.tieredWithProration && unitWithProration == other.unitWithProration && groupedAllocation == other.groupedAllocation && groupedWithProratedMinimum == other.groupedWithProratedMinimum && groupedWithMeteredMinimum == other.groupedWithMeteredMinimum && matrixWithDisplayName == other.matrixWithDisplayName && bulkWithProration == other.bulkWithProration && groupedTieredPackage == other.groupedTieredPackage && maxGroupTieredPackage == other.maxGroupTieredPackage && scalableMatrixWithUnitPricing == other.scalableMatrixWithUnitPricing && scalableMatrixWithTieredPricing == other.scalableMatrixWithTieredPricing && cumulativeGroupedBulk == other.cumulativeGroupedBulk && groupedWithMinMaxThresholds == other.groupedWithMinMaxThresholds /* spotless:on */
+        return other is Price &&
+            unit == other.unit &&
+            package_ == other.package_ &&
+            matrix == other.matrix &&
+            tiered == other.tiered &&
+            tieredBps == other.tieredBps &&
+            bps == other.bps &&
+            bulkBps == other.bulkBps &&
+            bulk == other.bulk &&
+            thresholdTotalAmount == other.thresholdTotalAmount &&
+            tieredPackage == other.tieredPackage &&
+            groupedTiered == other.groupedTiered &&
+            tieredWithMinimum == other.tieredWithMinimum &&
+            tieredPackageWithMinimum == other.tieredPackageWithMinimum &&
+            packageWithAllocation == other.packageWithAllocation &&
+            unitWithPercent == other.unitWithPercent &&
+            matrixWithAllocation == other.matrixWithAllocation &&
+            tieredWithProration == other.tieredWithProration &&
+            unitWithProration == other.unitWithProration &&
+            groupedAllocation == other.groupedAllocation &&
+            groupedWithProratedMinimum == other.groupedWithProratedMinimum &&
+            groupedWithMeteredMinimum == other.groupedWithMeteredMinimum &&
+            matrixWithDisplayName == other.matrixWithDisplayName &&
+            bulkWithProration == other.bulkWithProration &&
+            groupedTieredPackage == other.groupedTieredPackage &&
+            maxGroupTieredPackage == other.maxGroupTieredPackage &&
+            scalableMatrixWithUnitPricing == other.scalableMatrixWithUnitPricing &&
+            scalableMatrixWithTieredPricing == other.scalableMatrixWithTieredPricing &&
+            cumulativeGroupedBulk == other.cumulativeGroupedBulk &&
+            groupedWithMinMaxThresholds == other.groupedWithMinMaxThresholds
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, package_, matrix, tiered, tieredBps, bps, bulkBps, bulk, thresholdTotalAmount, tieredPackage, groupedTiered, tieredWithMinimum, tieredPackageWithMinimum, packageWithAllocation, unitWithPercent, matrixWithAllocation, tieredWithProration, unitWithProration, groupedAllocation, groupedWithProratedMinimum, groupedWithMeteredMinimum, matrixWithDisplayName, bulkWithProration, groupedTieredPackage, maxGroupTieredPackage, scalableMatrixWithUnitPricing, scalableMatrixWithTieredPricing, cumulativeGroupedBulk, groupedWithMinMaxThresholds) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(
+            unit,
+            package_,
+            matrix,
+            tiered,
+            tieredBps,
+            bps,
+            bulkBps,
+            bulk,
+            thresholdTotalAmount,
+            tieredPackage,
+            groupedTiered,
+            tieredWithMinimum,
+            tieredPackageWithMinimum,
+            packageWithAllocation,
+            unitWithPercent,
+            matrixWithAllocation,
+            tieredWithProration,
+            unitWithProration,
+            groupedAllocation,
+            groupedWithProratedMinimum,
+            groupedWithMeteredMinimum,
+            matrixWithDisplayName,
+            bulkWithProration,
+            groupedTieredPackage,
+            maxGroupTieredPackage,
+            scalableMatrixWithUnitPricing,
+            scalableMatrixWithTieredPricing,
+            cumulativeGroupedBulk,
+            groupedWithMinMaxThresholds,
+        )
 
     override fun toString(): String =
         when {
@@ -2575,7 +2635,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -2666,10 +2726,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -2862,12 +2922,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -2995,7 +3053,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -3008,12 +3066,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Unit && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && unitConfig == other.unitConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Unit &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                unitConfig == other.unitConfig &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, unitConfig, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                unitConfig,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -4559,7 +4672,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -4650,10 +4763,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -4846,12 +4959,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -4979,7 +5090,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -4992,12 +5103,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Package && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && packageConfig == other.packageConfig && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Package &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                packageConfig == other.packageConfig &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, packageConfig, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                packageConfig,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -6542,7 +6708,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -6633,10 +6799,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -6829,12 +6995,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -6962,7 +7126,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -6975,12 +7139,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Matrix && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && matrixConfig == other.matrixConfig && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Matrix &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                matrixConfig == other.matrixConfig &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, matrixConfig, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                matrixConfig,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -8525,7 +8744,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -8616,10 +8835,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -8812,12 +9031,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -8945,7 +9162,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -8958,12 +9175,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Tiered && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && tieredConfig == other.tieredConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Tiered &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                tieredConfig == other.tieredConfig &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, tieredConfig, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                tieredConfig,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -10509,7 +10781,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -10600,10 +10872,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -10796,12 +11068,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -10929,7 +11199,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -10942,12 +11212,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is TieredBps && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && tieredBpsConfig == other.tieredBpsConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is TieredBps &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                tieredBpsConfig == other.tieredBpsConfig &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, tieredBpsConfig, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                tieredBpsConfig,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -12489,7 +12814,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -12580,10 +12905,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -12776,12 +13101,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -12909,7 +13232,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -12922,12 +13245,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Bps && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && bpsConfig == other.bpsConfig && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Bps &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                bpsConfig == other.bpsConfig &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, bpsConfig, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                bpsConfig,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -14473,7 +14851,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -14564,10 +14942,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -14760,12 +15138,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -14893,7 +15269,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -14906,12 +15282,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is BulkBps && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && bulkBpsConfig == other.bulkBpsConfig && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is BulkBps &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                bulkBpsConfig == other.bulkBpsConfig &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, bulkBpsConfig, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                bulkBpsConfig,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -16455,7 +16886,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -16546,10 +16977,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -16742,12 +17173,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -16875,7 +17304,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -16888,12 +17317,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Bulk && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && bulkConfig == other.bulkConfig && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Bulk &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                bulkConfig == other.bulkConfig &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, bulkConfig, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                bulkConfig,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -18441,7 +18925,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -18532,10 +19016,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -18728,12 +19212,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -18861,7 +19343,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -18966,12 +19448,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ThresholdTotalAmountConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is ThresholdTotalAmountConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -18984,12 +19465,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ThresholdTotalAmount && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && thresholdTotalAmountConfig == other.thresholdTotalAmountConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is ThresholdTotalAmount &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                thresholdTotalAmountConfig == other.thresholdTotalAmountConfig &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, thresholdTotalAmountConfig, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                thresholdTotalAmountConfig,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -20536,7 +21072,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -20627,10 +21163,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -20823,12 +21359,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -20956,7 +21490,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -21059,12 +21593,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is TieredPackageConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is TieredPackageConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -21077,12 +21610,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is TieredPackage && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && tieredPackageConfig == other.tieredPackageConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is TieredPackage &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                tieredPackageConfig == other.tieredPackageConfig &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, tieredPackageConfig, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                tieredPackageConfig,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -22629,7 +23217,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -22720,10 +23308,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -22914,12 +23502,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is GroupedTieredConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is GroupedTieredConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -23024,12 +23611,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -23157,7 +23742,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -23170,12 +23755,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is GroupedTiered && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && groupedTieredConfig == other.groupedTieredConfig && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is GroupedTiered &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                groupedTieredConfig == other.groupedTieredConfig &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, groupedTieredConfig, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                groupedTieredConfig,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -24722,7 +25362,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -24813,10 +25453,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -25009,12 +25649,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -25142,7 +25780,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -25247,12 +25885,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is TieredWithMinimumConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is TieredWithMinimumConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -25265,12 +25902,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is TieredWithMinimum && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && tieredWithMinimumConfig == other.tieredWithMinimumConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is TieredWithMinimum &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                tieredWithMinimumConfig == other.tieredWithMinimumConfig &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, tieredWithMinimumConfig, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                tieredWithMinimumConfig,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -26825,7 +27517,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -26916,10 +27608,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -27112,12 +27804,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -27245,7 +27935,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -27351,12 +28041,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is TieredPackageWithMinimumConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is TieredPackageWithMinimumConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -27369,12 +28058,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is TieredPackageWithMinimum && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && tieredPackageWithMinimumConfig == other.tieredPackageWithMinimumConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is TieredPackageWithMinimum &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                tieredPackageWithMinimumConfig == other.tieredPackageWithMinimumConfig &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, tieredPackageWithMinimumConfig, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                tieredPackageWithMinimumConfig,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -28923,7 +29667,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -29014,10 +29758,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -29210,12 +29954,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -29320,12 +30062,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PackageWithAllocationConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is PackageWithAllocationConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -29454,7 +30195,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -29467,12 +30208,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is PackageWithAllocation && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && packageWithAllocationConfig == other.packageWithAllocationConfig && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is PackageWithAllocation &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                packageWithAllocationConfig == other.packageWithAllocationConfig &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, packageWithAllocationConfig, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                packageWithAllocationConfig,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -31020,7 +31816,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -31111,10 +31907,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -31307,12 +32103,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -31440,7 +32234,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -31544,12 +32338,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is UnitWithPercentConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is UnitWithPercentConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -31562,12 +32355,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is UnitWithPercent && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && unitWithPercentConfig == other.unitWithPercentConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is UnitWithPercent &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                unitWithPercentConfig == other.unitWithPercentConfig &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, unitWithPercentConfig, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                unitWithPercentConfig,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -33115,7 +33963,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -33206,10 +34054,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -33402,12 +34250,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -33535,7 +34381,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -33548,12 +34394,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is MatrixWithAllocation && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && matrixWithAllocationConfig == other.matrixWithAllocationConfig && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is MatrixWithAllocation &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                matrixWithAllocationConfig == other.matrixWithAllocationConfig &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, matrixWithAllocationConfig, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                matrixWithAllocationConfig,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -35101,7 +36002,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -35192,10 +36093,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -35388,12 +36289,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -35521,7 +36420,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -35626,12 +36525,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is TieredWithProrationConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is TieredWithProrationConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -35644,12 +36542,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is TieredWithProration && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && tieredWithProrationConfig == other.tieredWithProrationConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is TieredWithProration &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                tieredWithProrationConfig == other.tieredWithProrationConfig &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, tieredWithProrationConfig, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                tieredWithProrationConfig,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -37196,7 +38149,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -37287,10 +38240,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -37483,12 +38436,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -37616,7 +38567,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -37721,12 +38672,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is UnitWithProrationConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is UnitWithProrationConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -37739,12 +38689,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is UnitWithProration && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && unitWithProrationConfig == other.unitWithProrationConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is UnitWithProration &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                unitWithProrationConfig == other.unitWithProrationConfig &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, unitWithProrationConfig, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                unitWithProrationConfig,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -39291,7 +40296,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -39382,10 +40387,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -39578,12 +40583,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is GroupedAllocationConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is GroupedAllocationConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -39688,12 +40692,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -39821,7 +40823,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -39834,12 +40836,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is GroupedAllocation && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && groupedAllocationConfig == other.groupedAllocationConfig && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is GroupedAllocation &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                groupedAllocationConfig == other.groupedAllocationConfig &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, groupedAllocationConfig, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                groupedAllocationConfig,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -41400,7 +42457,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -41491,10 +42548,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -41689,12 +42746,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is GroupedWithProratedMinimumConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is GroupedWithProratedMinimumConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -41799,12 +42855,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -41932,7 +42986,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -41945,12 +42999,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is GroupedWithProratedMinimum && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && groupedWithProratedMinimumConfig == other.groupedWithProratedMinimumConfig && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is GroupedWithProratedMinimum &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                groupedWithProratedMinimumConfig == other.groupedWithProratedMinimumConfig &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, groupedWithProratedMinimumConfig, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                groupedWithProratedMinimumConfig,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -43510,7 +44619,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -43601,10 +44710,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -43799,12 +44908,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is GroupedWithMeteredMinimumConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is GroupedWithMeteredMinimumConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -43909,12 +45017,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -44042,7 +45148,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -44055,12 +45161,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is GroupedWithMeteredMinimum && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && groupedWithMeteredMinimumConfig == other.groupedWithMeteredMinimumConfig && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is GroupedWithMeteredMinimum &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                groupedWithMeteredMinimumConfig == other.groupedWithMeteredMinimumConfig &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, groupedWithMeteredMinimumConfig, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                groupedWithMeteredMinimumConfig,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -45609,7 +46770,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -45700,10 +46861,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -45897,12 +47058,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is MatrixWithDisplayNameConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is MatrixWithDisplayNameConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -46007,12 +47167,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -46140,7 +47298,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -46153,12 +47311,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is MatrixWithDisplayName && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && matrixWithDisplayNameConfig == other.matrixWithDisplayNameConfig && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is MatrixWithDisplayName &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                matrixWithDisplayNameConfig == other.matrixWithDisplayNameConfig &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, matrixWithDisplayNameConfig, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                matrixWithDisplayNameConfig,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -47658,12 +48871,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is BulkWithProrationConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is BulkWithProrationConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -47815,7 +49027,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -47906,10 +49118,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -48102,12 +49314,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -48235,7 +49445,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -48248,12 +49458,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is BulkWithProration && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && bulkWithProrationConfig == other.bulkWithProrationConfig && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is BulkWithProration &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                bulkWithProrationConfig == other.bulkWithProrationConfig &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, bulkWithProrationConfig, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                bulkWithProrationConfig,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -49801,7 +51066,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -49892,10 +51157,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -50088,12 +51353,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is GroupedTieredPackageConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is GroupedTieredPackageConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -50198,12 +51462,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -50331,7 +51593,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -50344,12 +51606,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is GroupedTieredPackage && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && groupedTieredPackageConfig == other.groupedTieredPackageConfig && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is GroupedTieredPackage &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                groupedTieredPackageConfig == other.groupedTieredPackageConfig &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, groupedTieredPackageConfig, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                groupedTieredPackageConfig,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -51898,7 +53215,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -51989,10 +53306,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -52186,12 +53503,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is MaxGroupTieredPackageConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is MaxGroupTieredPackageConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -52296,12 +53612,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -52429,7 +53743,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -52442,12 +53756,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is MaxGroupTieredPackage && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maxGroupTieredPackageConfig == other.maxGroupTieredPackageConfig && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is MaxGroupTieredPackage &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maxGroupTieredPackageConfig == other.maxGroupTieredPackageConfig &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maxGroupTieredPackageConfig, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maxGroupTieredPackageConfig,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -54019,7 +55388,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -54110,10 +55479,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -54306,12 +55675,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -54439,7 +55806,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -54546,12 +55913,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ScalableMatrixWithUnitPricingConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is ScalableMatrixWithUnitPricingConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -54564,12 +55930,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ScalableMatrixWithUnitPricing && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && scalableMatrixWithUnitPricingConfig == other.scalableMatrixWithUnitPricingConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is ScalableMatrixWithUnitPricing &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                scalableMatrixWithUnitPricingConfig == other.scalableMatrixWithUnitPricingConfig &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, scalableMatrixWithUnitPricingConfig, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                scalableMatrixWithUnitPricingConfig,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -56143,7 +57564,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -56234,10 +57655,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -56430,12 +57851,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -56563,7 +57982,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -56670,12 +58089,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ScalableMatrixWithTieredPricingConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is ScalableMatrixWithTieredPricingConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -56688,12 +58106,68 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ScalableMatrixWithTieredPricing && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && scalableMatrixWithTieredPricingConfig == other.scalableMatrixWithTieredPricingConfig && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is ScalableMatrixWithTieredPricing &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                scalableMatrixWithTieredPricingConfig ==
+                    other.scalableMatrixWithTieredPricingConfig &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, scalableMatrixWithTieredPricingConfig, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                scalableMatrixWithTieredPricingConfig,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -58242,7 +59716,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -58333,10 +59807,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -58530,12 +60004,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is CumulativeGroupedBulkConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is CumulativeGroupedBulkConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -58640,12 +60113,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -58773,7 +60244,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -58786,12 +60257,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CumulativeGroupedBulk && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && cumulativeGroupedBulkConfig == other.cumulativeGroupedBulkConfig && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is CumulativeGroupedBulk &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                cumulativeGroupedBulkConfig == other.cumulativeGroupedBulkConfig &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, cumulativeGroupedBulkConfig, currency, discount, externalPriceId, fixedPriceQuantity, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                cumulativeGroupedBulkConfig,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -60353,7 +61879,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Cadence && value == other.value /* spotless:on */
+                return other is Cadence && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -60444,10 +61970,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ConversionRateConfig && unit == other.unit && tiered == other.tiered /* spotless:on */
+                return other is ConversionRateConfig && unit == other.unit && tiered == other.tiered
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(unit, tiered) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(unit, tiered)
 
             override fun toString(): String =
                 when {
@@ -60642,12 +62168,11 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is GroupedWithMinMaxThresholdsConfig && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is GroupedWithMinMaxThresholdsConfig &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -60752,12 +62277,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Metadata && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -60885,7 +62408,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PriceType && value == other.value /* spotless:on */
+                return other is PriceType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -60898,12 +62421,67 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is GroupedWithMinMaxThresholds && id == other.id && billableMetric == other.billableMetric && billingCycleConfiguration == other.billingCycleConfiguration && cadence == other.cadence && conversionRate == other.conversionRate && conversionRateConfig == other.conversionRateConfig && createdAt == other.createdAt && creditAllocation == other.creditAllocation && currency == other.currency && discount == other.discount && externalPriceId == other.externalPriceId && fixedPriceQuantity == other.fixedPriceQuantity && groupedWithMinMaxThresholdsConfig == other.groupedWithMinMaxThresholdsConfig && invoicingCycleConfiguration == other.invoicingCycleConfiguration && item == other.item && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && modelType == other.modelType && name == other.name && planPhaseOrder == other.planPhaseOrder && priceType == other.priceType && replacesPriceId == other.replacesPriceId && dimensionalPriceConfiguration == other.dimensionalPriceConfiguration && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is GroupedWithMinMaxThresholds &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                groupedWithMinMaxThresholdsConfig == other.groupedWithMinMaxThresholdsConfig &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, billableMetric, billingCycleConfiguration, cadence, conversionRate, conversionRateConfig, createdAt, creditAllocation, currency, discount, externalPriceId, fixedPriceQuantity, groupedWithMinMaxThresholdsConfig, invoicingCycleConfiguration, item, maximum, maximumAmount, metadata, minimum, minimumAmount, modelType, name, planPhaseOrder, priceType, replacesPriceId, dimensionalPriceConfiguration, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                groupedWithMinMaxThresholdsConfig,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
