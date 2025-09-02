@@ -96,7 +96,7 @@ internal class NewPlanScalableMatrixWithTieredPricingPriceTest {
         assertThat(newPlanScalableMatrixWithTieredPricingPrice.conversionRate()).contains(0.0)
         assertThat(newPlanScalableMatrixWithTieredPricingPrice.conversionRateConfig())
             .contains(
-                NewPlanScalableMatrixWithTieredPricingPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

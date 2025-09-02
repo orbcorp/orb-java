@@ -87,7 +87,7 @@ internal class NewPlanTieredPackageWithMinimumPriceTest {
         assertThat(newPlanTieredPackageWithMinimumPrice.conversionRate()).contains(0.0)
         assertThat(newPlanTieredPackageWithMinimumPrice.conversionRateConfig())
             .contains(
-                NewPlanTieredPackageWithMinimumPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

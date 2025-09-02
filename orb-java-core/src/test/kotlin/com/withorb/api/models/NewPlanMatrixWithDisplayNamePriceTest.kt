@@ -85,7 +85,7 @@ internal class NewPlanMatrixWithDisplayNamePriceTest {
         assertThat(newPlanMatrixWithDisplayNamePrice.conversionRate()).contains(0.0)
         assertThat(newPlanMatrixWithDisplayNamePrice.conversionRateConfig())
             .contains(
-                NewPlanMatrixWithDisplayNamePrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

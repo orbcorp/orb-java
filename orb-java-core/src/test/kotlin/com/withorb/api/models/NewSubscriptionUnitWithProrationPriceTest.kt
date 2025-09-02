@@ -85,7 +85,7 @@ internal class NewSubscriptionUnitWithProrationPriceTest {
         assertThat(newSubscriptionUnitWithProrationPrice.conversionRate()).contains(0.0)
         assertThat(newSubscriptionUnitWithProrationPrice.conversionRateConfig())
             .contains(
-                NewSubscriptionUnitWithProrationPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

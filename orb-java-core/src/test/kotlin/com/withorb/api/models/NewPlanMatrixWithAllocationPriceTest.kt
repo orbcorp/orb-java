@@ -101,7 +101,7 @@ internal class NewPlanMatrixWithAllocationPriceTest {
         assertThat(newPlanMatrixWithAllocationPrice.conversionRate()).contains(0.0)
         assertThat(newPlanMatrixWithAllocationPrice.conversionRateConfig())
             .contains(
-                NewPlanMatrixWithAllocationPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

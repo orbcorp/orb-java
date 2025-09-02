@@ -85,7 +85,7 @@ internal class NewFloatingMaxGroupTieredPackagePriceTest {
         assertThat(newFloatingMaxGroupTieredPackagePrice.conversionRate()).contains(0.0)
         assertThat(newFloatingMaxGroupTieredPackagePrice.conversionRateConfig())
             .contains(
-                NewFloatingMaxGroupTieredPackagePrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

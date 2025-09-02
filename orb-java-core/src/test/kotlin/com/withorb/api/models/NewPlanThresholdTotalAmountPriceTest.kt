@@ -85,7 +85,7 @@ internal class NewPlanThresholdTotalAmountPriceTest {
         assertThat(newPlanThresholdTotalAmountPrice.conversionRate()).contains(0.0)
         assertThat(newPlanThresholdTotalAmountPrice.conversionRateConfig())
             .contains(
-                NewPlanThresholdTotalAmountPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

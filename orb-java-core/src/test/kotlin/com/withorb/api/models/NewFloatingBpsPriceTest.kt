@@ -74,7 +74,7 @@ internal class NewFloatingBpsPriceTest {
         assertThat(newFloatingBpsPrice.conversionRate()).contains(0.0)
         assertThat(newFloatingBpsPrice.conversionRateConfig())
             .contains(
-                NewFloatingBpsPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(
