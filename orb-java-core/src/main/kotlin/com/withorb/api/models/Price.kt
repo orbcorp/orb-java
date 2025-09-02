@@ -28,8 +28,8 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
-import kotlin.jvm.optionals.getOrNull
 import kotlin.Unit as KUnit
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * The Price resource represents a price that can be billed on a subscription, resulting in a charge
