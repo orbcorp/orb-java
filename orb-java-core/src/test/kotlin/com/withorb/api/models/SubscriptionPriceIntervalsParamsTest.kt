@@ -94,6 +94,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
             )
             .addAddAdjustment(
                 SubscriptionPriceIntervalsParams.AddAdjustment.builder()
+                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .adjustment(
                         NewPercentageDiscount.builder()
                             .adjustmentType(
@@ -117,7 +118,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
                             .priceType(NewPercentageDiscount.PriceType.USAGE)
                             .build()
                     )
-                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .adjustmentId("h74gfhdjvn7ujokd")
                     .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .build()
             )
@@ -246,6 +247,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
                 )
                 .addAddAdjustment(
                     SubscriptionPriceIntervalsParams.AddAdjustment.builder()
+                        .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .adjustment(
                             NewPercentageDiscount.builder()
                                 .adjustmentType(
@@ -269,7 +271,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
                                 .priceType(NewPercentageDiscount.PriceType.USAGE)
                                 .build()
                         )
-                        .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .adjustmentId("h74gfhdjvn7ujokd")
                         .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
                 )
@@ -384,6 +386,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
         assertThat(body.addAdjustments().getOrNull())
             .containsExactly(
                 SubscriptionPriceIntervalsParams.AddAdjustment.builder()
+                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .adjustment(
                         NewPercentageDiscount.builder()
                             .adjustmentType(
@@ -407,7 +410,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
                             .priceType(NewPercentageDiscount.PriceType.USAGE)
                             .build()
                     )
-                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .adjustmentId("h74gfhdjvn7ujokd")
                     .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .build()
             )

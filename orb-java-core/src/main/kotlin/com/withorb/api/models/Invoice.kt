@@ -3625,6 +3625,8 @@ private constructor(
 
                 @JvmField val EXTERNAL_PAYMENT = of("external_payment")
 
+                @JvmField val SMALL_INVOICE_CARRYOVER = of("small_invoice_carryover")
+
                 @JvmStatic fun of(value: String) = Action(JsonField.of(value))
             }
 
@@ -3639,6 +3641,7 @@ private constructor(
                 CREDIT_NOTE_VOIDED,
                 OVERPAYMENT_REFUND,
                 EXTERNAL_PAYMENT,
+                SMALL_INVOICE_CARRYOVER,
             }
 
             /**
@@ -3660,6 +3663,7 @@ private constructor(
                 CREDIT_NOTE_VOIDED,
                 OVERPAYMENT_REFUND,
                 EXTERNAL_PAYMENT,
+                SMALL_INVOICE_CARRYOVER,
                 /**
                  * An enum member indicating that [Action] was instantiated with an unknown value.
                  */
@@ -3684,6 +3688,7 @@ private constructor(
                     CREDIT_NOTE_VOIDED -> Value.CREDIT_NOTE_VOIDED
                     OVERPAYMENT_REFUND -> Value.OVERPAYMENT_REFUND
                     EXTERNAL_PAYMENT -> Value.EXTERNAL_PAYMENT
+                    SMALL_INVOICE_CARRYOVER -> Value.SMALL_INVOICE_CARRYOVER
                     else -> Value._UNKNOWN
                 }
 
@@ -3707,6 +3712,7 @@ private constructor(
                     CREDIT_NOTE_VOIDED -> Known.CREDIT_NOTE_VOIDED
                     OVERPAYMENT_REFUND -> Known.OVERPAYMENT_REFUND
                     EXTERNAL_PAYMENT -> Known.EXTERNAL_PAYMENT
+                    SMALL_INVOICE_CARRYOVER -> Known.SMALL_INVOICE_CARRYOVER
                     else -> throw OrbInvalidDataException("Unknown Action: $value")
                 }
 
@@ -4342,7 +4348,7 @@ private constructor(
         fun subLineItems(): List<SubLineItem> = subLineItems.getRequired("sub_line_items")
 
         /**
-         * The line amount before before any adjustments.
+         * The line amount before any adjustments.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -5055,15 +5061,6 @@ private constructor(
             /** Alias for calling [price] with `Price.ofTiered(tiered)`. */
             fun price(tiered: Price.Tiered) = price(Price.ofTiered(tiered))
 
-            /** Alias for calling [price] with `Price.ofTieredBps(tieredBps)`. */
-            fun price(tieredBps: Price.TieredBps) = price(Price.ofTieredBps(tieredBps))
-
-            /** Alias for calling [price] with `Price.ofBps(bps)`. */
-            fun price(bps: Price.Bps) = price(Price.ofBps(bps))
-
-            /** Alias for calling [price] with `Price.ofBulkBps(bulkBps)`. */
-            fun price(bulkBps: Price.BulkBps) = price(Price.ofBulkBps(bulkBps))
-
             /** Alias for calling [price] with `Price.ofBulk(bulk)`. */
             fun price(bulk: Price.Bulk) = price(Price.ofBulk(bulk))
 
@@ -5189,6 +5186,9 @@ private constructor(
             fun price(groupedWithMinMaxThresholds: Price.GroupedWithMinMaxThresholds) =
                 price(Price.ofGroupedWithMinMaxThresholds(groupedWithMinMaxThresholds))
 
+            /** Alias for calling [price] with `Price.ofMinimum(minimum)`. */
+            fun price(minimum: Price.Minimum) = price(Price.ofMinimum(minimum))
+
             /** Either the fixed fee quantity or the usage during the service period. */
             fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
@@ -5255,7 +5255,7 @@ private constructor(
             /** Alias for calling [addSubLineItem] with `SubLineItem.ofNull(null_)`. */
             fun addSubLineItem(null_: OtherSubLineItem) = addSubLineItem(SubLineItem.ofNull(null_))
 
-            /** The line amount before before any adjustments. */
+            /** The line amount before any adjustments. */
             fun subtotal(subtotal: String) = subtotal(JsonField.of(subtotal))
 
             /**
@@ -6142,6 +6142,7 @@ private constructor(
         private val createdAt: JsonField<OffsetDateTime>,
         private val paymentProvider: JsonField<PaymentProvider>,
         private val paymentProviderId: JsonField<String>,
+        private val receiptPdf: JsonField<String>,
         private val succeeded: JsonField<Boolean>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -6159,6 +6160,9 @@ private constructor(
             @JsonProperty("payment_provider_id")
             @ExcludeMissing
             paymentProviderId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("receipt_pdf")
+            @ExcludeMissing
+            receiptPdf: JsonField<String> = JsonMissing.of(),
             @JsonProperty("succeeded")
             @ExcludeMissing
             succeeded: JsonField<Boolean> = JsonMissing.of(),
@@ -6168,6 +6172,7 @@ private constructor(
             createdAt,
             paymentProvider,
             paymentProviderId,
+            receiptPdf,
             succeeded,
             mutableMapOf(),
         )
@@ -6213,6 +6218,15 @@ private constructor(
          */
         fun paymentProviderId(): Optional<String> =
             paymentProviderId.getOptional("payment_provider_id")
+
+        /**
+         * URL to the downloadable PDF version of the receipt. This field will be `null` for payment
+         * attempts that did not succeed.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun receiptPdf(): Optional<String> = receiptPdf.getOptional("receipt_pdf")
 
         /**
          * Whether the payment attempt succeeded.
@@ -6266,6 +6280,15 @@ private constructor(
         fun _paymentProviderId(): JsonField<String> = paymentProviderId
 
         /**
+         * Returns the raw JSON value of [receiptPdf].
+         *
+         * Unlike [receiptPdf], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("receipt_pdf")
+        @ExcludeMissing
+        fun _receiptPdf(): JsonField<String> = receiptPdf
+
+        /**
          * Returns the raw JSON value of [succeeded].
          *
          * Unlike [succeeded], this method doesn't throw if the JSON field has an unexpected type.
@@ -6296,6 +6319,7 @@ private constructor(
              * .createdAt()
              * .paymentProvider()
              * .paymentProviderId()
+             * .receiptPdf()
              * .succeeded()
              * ```
              */
@@ -6310,6 +6334,7 @@ private constructor(
             private var createdAt: JsonField<OffsetDateTime>? = null
             private var paymentProvider: JsonField<PaymentProvider>? = null
             private var paymentProviderId: JsonField<String>? = null
+            private var receiptPdf: JsonField<String>? = null
             private var succeeded: JsonField<Boolean>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -6320,6 +6345,7 @@ private constructor(
                 createdAt = paymentAttempt.createdAt
                 paymentProvider = paymentAttempt.paymentProvider
                 paymentProviderId = paymentAttempt.paymentProviderId
+                receiptPdf = paymentAttempt.receiptPdf
                 succeeded = paymentAttempt.succeeded
                 additionalProperties = paymentAttempt.additionalProperties.toMutableMap()
             }
@@ -6402,6 +6428,24 @@ private constructor(
                 this.paymentProviderId = paymentProviderId
             }
 
+            /**
+             * URL to the downloadable PDF version of the receipt. This field will be `null` for
+             * payment attempts that did not succeed.
+             */
+            fun receiptPdf(receiptPdf: String?) = receiptPdf(JsonField.ofNullable(receiptPdf))
+
+            /** Alias for calling [Builder.receiptPdf] with `receiptPdf.orElse(null)`. */
+            fun receiptPdf(receiptPdf: Optional<String>) = receiptPdf(receiptPdf.getOrNull())
+
+            /**
+             * Sets [Builder.receiptPdf] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.receiptPdf] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun receiptPdf(receiptPdf: JsonField<String>) = apply { this.receiptPdf = receiptPdf }
+
             /** Whether the payment attempt succeeded. */
             fun succeeded(succeeded: Boolean) = succeeded(JsonField.of(succeeded))
 
@@ -6445,6 +6489,7 @@ private constructor(
              * .createdAt()
              * .paymentProvider()
              * .paymentProviderId()
+             * .receiptPdf()
              * .succeeded()
              * ```
              *
@@ -6457,6 +6502,7 @@ private constructor(
                     checkRequired("createdAt", createdAt),
                     checkRequired("paymentProvider", paymentProvider),
                     checkRequired("paymentProviderId", paymentProviderId),
+                    checkRequired("receiptPdf", receiptPdf),
                     checkRequired("succeeded", succeeded),
                     additionalProperties.toMutableMap(),
                 )
@@ -6474,6 +6520,7 @@ private constructor(
             createdAt()
             paymentProvider().ifPresent { it.validate() }
             paymentProviderId()
+            receiptPdf()
             succeeded()
             validated = true
         }
@@ -6499,6 +6546,7 @@ private constructor(
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
                 (paymentProvider.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (paymentProviderId.asKnown().isPresent) 1 else 0) +
+                (if (receiptPdf.asKnown().isPresent) 1 else 0) +
                 (if (succeeded.asKnown().isPresent) 1 else 0)
 
         /** The payment provider that attempted to collect the payment. */
@@ -6637,6 +6685,7 @@ private constructor(
                 createdAt == other.createdAt &&
                 paymentProvider == other.paymentProvider &&
                 paymentProviderId == other.paymentProviderId &&
+                receiptPdf == other.receiptPdf &&
                 succeeded == other.succeeded &&
                 additionalProperties == other.additionalProperties
         }
@@ -6648,6 +6697,7 @@ private constructor(
                 createdAt,
                 paymentProvider,
                 paymentProviderId,
+                receiptPdf,
                 succeeded,
                 additionalProperties,
             )
@@ -6656,7 +6706,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "PaymentAttempt{id=$id, amount=$amount, createdAt=$createdAt, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, succeeded=$succeeded, additionalProperties=$additionalProperties}"
+            "PaymentAttempt{id=$id, amount=$amount, createdAt=$createdAt, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, receiptPdf=$receiptPdf, succeeded=$succeeded, additionalProperties=$additionalProperties}"
     }
 
     class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {

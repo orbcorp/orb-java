@@ -202,8 +202,8 @@ interface InvoiceServiceAsync {
         issue(invoiceId, InvoiceIssueParams.none(), requestOptions)
 
     /**
-     * This endpoint allows an invoice's status to be set the `paid` status. This can only be done
-     * to invoices that are in the `issued` status.
+     * This endpoint allows an invoice's status to be set to the `paid` status. This can only be
+     * done to invoices that are in the `issued` or `synced` status.
      */
     fun markPaid(invoiceId: String, params: InvoiceMarkPaidParams): CompletableFuture<Invoice> =
         markPaid(invoiceId, params, RequestOptions.none())
@@ -261,8 +261,8 @@ interface InvoiceServiceAsync {
         pay(invoiceId, InvoicePayParams.none(), requestOptions)
 
     /**
-     * This endpoint allows an invoice's status to be set the `void` status. This can only be done
-     * to invoices that are in the `issued` status.
+     * This endpoint allows an invoice's status to be set to the `void` status. This can only be
+     * done to invoices that are in the `issued` status.
      *
      * If the associated invoice has used the customer balance to change the amount due, the
      * customer balance operation will be reverted. For example, if the invoice used \$10 of

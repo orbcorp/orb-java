@@ -20,6 +20,7 @@ import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
+import com.withorb.api.core.checkKnown
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.getOrThrow
 import com.withorb.api.core.toImmutable
@@ -51,9 +52,6 @@ private constructor(
     private val package_: Package? = null,
     private val matrix: Matrix? = null,
     private val tiered: Tiered? = null,
-    private val tieredBps: TieredBps? = null,
-    private val bps: Bps? = null,
-    private val bulkBps: BulkBps? = null,
     private val bulk: Bulk? = null,
     private val thresholdTotalAmount: ThresholdTotalAmount? = null,
     private val tieredPackage: TieredPackage? = null,
@@ -76,6 +74,7 @@ private constructor(
     private val scalableMatrixWithTieredPricing: ScalableMatrixWithTieredPricing? = null,
     private val cumulativeGroupedBulk: CumulativeGroupedBulk? = null,
     private val groupedWithMinMaxThresholds: GroupedWithMinMaxThresholds? = null,
+    private val minimum: Minimum? = null,
     private val _json: JsonValue? = null,
 ) {
 
@@ -86,12 +85,6 @@ private constructor(
     fun matrix(): Optional<Matrix> = Optional.ofNullable(matrix)
 
     fun tiered(): Optional<Tiered> = Optional.ofNullable(tiered)
-
-    fun tieredBps(): Optional<TieredBps> = Optional.ofNullable(tieredBps)
-
-    fun bps(): Optional<Bps> = Optional.ofNullable(bps)
-
-    fun bulkBps(): Optional<BulkBps> = Optional.ofNullable(bulkBps)
 
     fun bulk(): Optional<Bulk> = Optional.ofNullable(bulk)
 
@@ -151,6 +144,8 @@ private constructor(
     fun groupedWithMinMaxThresholds(): Optional<GroupedWithMinMaxThresholds> =
         Optional.ofNullable(groupedWithMinMaxThresholds)
 
+    fun minimum(): Optional<Minimum> = Optional.ofNullable(minimum)
+
     fun isUnit(): Boolean = unit != null
 
     fun isPackage(): Boolean = package_ != null
@@ -158,12 +153,6 @@ private constructor(
     fun isMatrix(): Boolean = matrix != null
 
     fun isTiered(): Boolean = tiered != null
-
-    fun isTieredBps(): Boolean = tieredBps != null
-
-    fun isBps(): Boolean = bps != null
-
-    fun isBulkBps(): Boolean = bulkBps != null
 
     fun isBulk(): Boolean = bulk != null
 
@@ -209,6 +198,8 @@ private constructor(
 
     fun isGroupedWithMinMaxThresholds(): Boolean = groupedWithMinMaxThresholds != null
 
+    fun isMinimum(): Boolean = minimum != null
+
     fun asUnit(): Unit = unit.getOrThrow("unit")
 
     fun asPackage(): Package = package_.getOrThrow("package_")
@@ -216,12 +207,6 @@ private constructor(
     fun asMatrix(): Matrix = matrix.getOrThrow("matrix")
 
     fun asTiered(): Tiered = tiered.getOrThrow("tiered")
-
-    fun asTieredBps(): TieredBps = tieredBps.getOrThrow("tieredBps")
-
-    fun asBps(): Bps = bps.getOrThrow("bps")
-
-    fun asBulkBps(): BulkBps = bulkBps.getOrThrow("bulkBps")
 
     fun asBulk(): Bulk = bulk.getOrThrow("bulk")
 
@@ -281,6 +266,8 @@ private constructor(
     fun asGroupedWithMinMaxThresholds(): GroupedWithMinMaxThresholds =
         groupedWithMinMaxThresholds.getOrThrow("groupedWithMinMaxThresholds")
 
+    fun asMinimum(): Minimum = minimum.getOrThrow("minimum")
+
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
     fun <T> accept(visitor: Visitor<T>): T =
@@ -289,9 +276,6 @@ private constructor(
             package_ != null -> visitor.visitPackage(package_)
             matrix != null -> visitor.visitMatrix(matrix)
             tiered != null -> visitor.visitTiered(tiered)
-            tieredBps != null -> visitor.visitTieredBps(tieredBps)
-            bps != null -> visitor.visitBps(bps)
-            bulkBps != null -> visitor.visitBulkBps(bulkBps)
             bulk != null -> visitor.visitBulk(bulk)
             thresholdTotalAmount != null -> visitor.visitThresholdTotalAmount(thresholdTotalAmount)
             tieredPackage != null -> visitor.visitTieredPackage(tieredPackage)
@@ -324,6 +308,7 @@ private constructor(
                 visitor.visitCumulativeGroupedBulk(cumulativeGroupedBulk)
             groupedWithMinMaxThresholds != null ->
                 visitor.visitGroupedWithMinMaxThresholds(groupedWithMinMaxThresholds)
+            minimum != null -> visitor.visitMinimum(minimum)
             else -> visitor.unknown(_json)
         }
 
@@ -350,18 +335,6 @@ private constructor(
 
                 override fun visitTiered(tiered: Tiered) {
                     tiered.validate()
-                }
-
-                override fun visitTieredBps(tieredBps: TieredBps) {
-                    tieredBps.validate()
-                }
-
-                override fun visitBps(bps: Bps) {
-                    bps.validate()
-                }
-
-                override fun visitBulkBps(bulkBps: BulkBps) {
-                    bulkBps.validate()
                 }
 
                 override fun visitBulk(bulk: Bulk) {
@@ -471,6 +444,10 @@ private constructor(
                 ) {
                     groupedWithMinMaxThresholds.validate()
                 }
+
+                override fun visitMinimum(minimum: Minimum) {
+                    minimum.validate()
+                }
             }
         )
         validated = true
@@ -500,12 +477,6 @@ private constructor(
                 override fun visitMatrix(matrix: Matrix) = matrix.validity()
 
                 override fun visitTiered(tiered: Tiered) = tiered.validity()
-
-                override fun visitTieredBps(tieredBps: TieredBps) = tieredBps.validity()
-
-                override fun visitBps(bps: Bps) = bps.validity()
-
-                override fun visitBulkBps(bulkBps: BulkBps) = bulkBps.validity()
 
                 override fun visitBulk(bulk: Bulk) = bulk.validity()
 
@@ -582,6 +553,8 @@ private constructor(
                     groupedWithMinMaxThresholds: GroupedWithMinMaxThresholds
                 ) = groupedWithMinMaxThresholds.validity()
 
+                override fun visitMinimum(minimum: Minimum) = minimum.validity()
+
                 override fun unknown(json: JsonValue?) = 0
             }
         )
@@ -596,9 +569,6 @@ private constructor(
             package_ == other.package_ &&
             matrix == other.matrix &&
             tiered == other.tiered &&
-            tieredBps == other.tieredBps &&
-            bps == other.bps &&
-            bulkBps == other.bulkBps &&
             bulk == other.bulk &&
             thresholdTotalAmount == other.thresholdTotalAmount &&
             tieredPackage == other.tieredPackage &&
@@ -620,7 +590,8 @@ private constructor(
             scalableMatrixWithUnitPricing == other.scalableMatrixWithUnitPricing &&
             scalableMatrixWithTieredPricing == other.scalableMatrixWithTieredPricing &&
             cumulativeGroupedBulk == other.cumulativeGroupedBulk &&
-            groupedWithMinMaxThresholds == other.groupedWithMinMaxThresholds
+            groupedWithMinMaxThresholds == other.groupedWithMinMaxThresholds &&
+            minimum == other.minimum
     }
 
     override fun hashCode(): Int =
@@ -629,9 +600,6 @@ private constructor(
             package_,
             matrix,
             tiered,
-            tieredBps,
-            bps,
-            bulkBps,
             bulk,
             thresholdTotalAmount,
             tieredPackage,
@@ -654,6 +622,7 @@ private constructor(
             scalableMatrixWithTieredPricing,
             cumulativeGroupedBulk,
             groupedWithMinMaxThresholds,
+            minimum,
         )
 
     override fun toString(): String =
@@ -662,9 +631,6 @@ private constructor(
             package_ != null -> "Price{package_=$package_}"
             matrix != null -> "Price{matrix=$matrix}"
             tiered != null -> "Price{tiered=$tiered}"
-            tieredBps != null -> "Price{tieredBps=$tieredBps}"
-            bps != null -> "Price{bps=$bps}"
-            bulkBps != null -> "Price{bulkBps=$bulkBps}"
             bulk != null -> "Price{bulk=$bulk}"
             thresholdTotalAmount != null -> "Price{thresholdTotalAmount=$thresholdTotalAmount}"
             tieredPackage != null -> "Price{tieredPackage=$tieredPackage}"
@@ -693,6 +659,7 @@ private constructor(
             cumulativeGroupedBulk != null -> "Price{cumulativeGroupedBulk=$cumulativeGroupedBulk}"
             groupedWithMinMaxThresholds != null ->
                 "Price{groupedWithMinMaxThresholds=$groupedWithMinMaxThresholds}"
+            minimum != null -> "Price{minimum=$minimum}"
             _json != null -> "Price{_unknown=$_json}"
             else -> throw IllegalStateException("Invalid Price")
         }
@@ -706,12 +673,6 @@ private constructor(
         @JvmStatic fun ofMatrix(matrix: Matrix) = Price(matrix = matrix)
 
         @JvmStatic fun ofTiered(tiered: Tiered) = Price(tiered = tiered)
-
-        @JvmStatic fun ofTieredBps(tieredBps: TieredBps) = Price(tieredBps = tieredBps)
-
-        @JvmStatic fun ofBps(bps: Bps) = Price(bps = bps)
-
-        @JvmStatic fun ofBulkBps(bulkBps: BulkBps) = Price(bulkBps = bulkBps)
 
         @JvmStatic fun ofBulk(bulk: Bulk) = Price(bulk = bulk)
 
@@ -799,6 +760,8 @@ private constructor(
         fun ofGroupedWithMinMaxThresholds(
             groupedWithMinMaxThresholds: GroupedWithMinMaxThresholds
         ) = Price(groupedWithMinMaxThresholds = groupedWithMinMaxThresholds)
+
+        @JvmStatic fun ofMinimum(minimum: Minimum) = Price(minimum = minimum)
     }
 
     /** An interface that defines how to map each variant of [Price] to a value of type [T]. */
@@ -811,12 +774,6 @@ private constructor(
         fun visitMatrix(matrix: Matrix): T
 
         fun visitTiered(tiered: Tiered): T
-
-        fun visitTieredBps(tieredBps: TieredBps): T
-
-        fun visitBps(bps: Bps): T
-
-        fun visitBulkBps(bulkBps: BulkBps): T
 
         fun visitBulk(bulk: Bulk): T
 
@@ -870,6 +827,8 @@ private constructor(
             groupedWithMinMaxThresholds: GroupedWithMinMaxThresholds
         ): T
 
+        fun visitMinimum(minimum: Minimum): T
+
         /**
          * Maps an unknown variant of [Price] to a value of type [T].
          *
@@ -909,21 +868,6 @@ private constructor(
                 "tiered" -> {
                     return tryDeserialize(node, jacksonTypeRef<Tiered>())?.let {
                         Price(tiered = it, _json = json)
-                    } ?: Price(_json = json)
-                }
-                "tiered_bps" -> {
-                    return tryDeserialize(node, jacksonTypeRef<TieredBps>())?.let {
-                        Price(tieredBps = it, _json = json)
-                    } ?: Price(_json = json)
-                }
-                "bps" -> {
-                    return tryDeserialize(node, jacksonTypeRef<Bps>())?.let {
-                        Price(bps = it, _json = json)
-                    } ?: Price(_json = json)
-                }
-                "bulk_bps" -> {
-                    return tryDeserialize(node, jacksonTypeRef<BulkBps>())?.let {
-                        Price(bulkBps = it, _json = json)
                     } ?: Price(_json = json)
                 }
                 "bulk" -> {
@@ -1036,6 +980,11 @@ private constructor(
                         ?.let { Price(groupedWithMinMaxThresholds = it, _json = json) }
                         ?: Price(_json = json)
                 }
+                "minimum" -> {
+                    return tryDeserialize(node, jacksonTypeRef<Minimum>())?.let {
+                        Price(minimum = it, _json = json)
+                    } ?: Price(_json = json)
+                }
             }
 
             return Price(_json = json)
@@ -1054,9 +1003,6 @@ private constructor(
                 value.package_ != null -> generator.writeObject(value.package_)
                 value.matrix != null -> generator.writeObject(value.matrix)
                 value.tiered != null -> generator.writeObject(value.tiered)
-                value.tieredBps != null -> generator.writeObject(value.tieredBps)
-                value.bps != null -> generator.writeObject(value.bps)
-                value.bulkBps != null -> generator.writeObject(value.bulkBps)
                 value.bulk != null -> generator.writeObject(value.bulk)
                 value.thresholdTotalAmount != null ->
                     generator.writeObject(value.thresholdTotalAmount)
@@ -1093,6 +1039,7 @@ private constructor(
                     generator.writeObject(value.cumulativeGroupedBulk)
                 value.groupedWithMinMaxThresholds != null ->
                     generator.writeObject(value.groupedWithMinMaxThresholds)
+                value.minimum != null -> generator.writeObject(value.minimum)
                 value._json != null -> generator.writeObject(value._json)
                 else -> throw IllegalStateException("Invalid Price")
             }
@@ -1105,6 +1052,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -1140,6 +1088,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -1202,6 +1153,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -1252,6 +1204,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -1439,6 +1398,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -1662,6 +1631,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -1694,6 +1664,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -1725,6 +1696,7 @@ private constructor(
                 billableMetric = unit.billableMetric
                 billingCycleConfiguration = unit.billingCycleConfiguration
                 cadence = unit.cadence
+                compositePriceFilters = unit.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = unit.conversionRate
                 conversionRateConfig = unit.conversionRateConfig
                 createdAt = unit.createdAt
@@ -1803,6 +1775,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -2352,6 +2359,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -2382,6 +2390,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -2419,6 +2430,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -2468,6 +2480,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -2889,6 +2903,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -2920,6 +2935,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -2949,7 +2965,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Unit{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, unitConfig=$unitConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "Unit{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, unitConfig=$unitConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class Package
@@ -2958,6 +2974,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -2993,6 +3010,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -3055,6 +3075,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -3105,6 +3126,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -3292,6 +3320,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -3516,6 +3554,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -3548,6 +3587,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -3579,6 +3619,7 @@ private constructor(
                 billableMetric = package_.billableMetric
                 billingCycleConfiguration = package_.billingCycleConfiguration
                 cadence = package_.cadence
+                compositePriceFilters = package_.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = package_.conversionRate
                 conversionRateConfig = package_.conversionRateConfig
                 createdAt = package_.createdAt
@@ -3657,6 +3698,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -4207,6 +4283,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -4237,6 +4314,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -4274,6 +4354,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -4323,6 +4404,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -4744,6 +4827,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -4775,6 +4859,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -4804,7 +4889,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Package{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, packageConfig=$packageConfig, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "Package{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, packageConfig=$packageConfig, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class Matrix
@@ -4813,6 +4898,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -4848,6 +4934,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -4910,6 +4999,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -4960,6 +5050,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -5147,6 +5244,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -5371,6 +5478,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -5403,6 +5511,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -5434,6 +5543,7 @@ private constructor(
                 billableMetric = matrix.billableMetric
                 billingCycleConfiguration = matrix.billingCycleConfiguration
                 cadence = matrix.cadence
+                compositePriceFilters = matrix.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = matrix.conversionRate
                 conversionRateConfig = matrix.conversionRateConfig
                 createdAt = matrix.createdAt
@@ -5512,6 +5622,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -6061,6 +6206,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -6091,6 +6237,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -6128,6 +6277,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -6177,6 +6327,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -6598,6 +6750,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -6629,6 +6782,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -6658,7 +6812,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Matrix{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, matrixConfig=$matrixConfig, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "Matrix{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, matrixConfig=$matrixConfig, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class Tiered
@@ -6667,6 +6821,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -6702,6 +6857,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -6764,6 +6922,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -6814,6 +6973,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -7001,6 +7167,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -7225,6 +7401,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -7257,6 +7434,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -7288,6 +7466,7 @@ private constructor(
                 billableMetric = tiered.billableMetric
                 billingCycleConfiguration = tiered.billingCycleConfiguration
                 cadence = tiered.cadence
+                compositePriceFilters = tiered.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = tiered.conversionRate
                 conversionRateConfig = tiered.conversionRateConfig
                 createdAt = tiered.createdAt
@@ -7366,6 +7545,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -7915,6 +8129,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -7945,6 +8160,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -7982,6 +8200,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -8031,6 +8250,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -8452,6 +8673,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -8483,6 +8705,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -8512,5568 +8735,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Tiered{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, tieredConfig=$tieredConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
-    }
-
-    class TieredBps
-    private constructor(
-        private val id: JsonField<String>,
-        private val billableMetric: JsonField<BillableMetricTiny>,
-        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
-        private val cadence: JsonField<Cadence>,
-        private val conversionRate: JsonField<Double>,
-        private val conversionRateConfig: JsonField<ConversionRateConfig>,
-        private val createdAt: JsonField<OffsetDateTime>,
-        private val creditAllocation: JsonField<Allocation>,
-        private val currency: JsonField<String>,
-        private val discount: JsonField<Discount>,
-        private val externalPriceId: JsonField<String>,
-        private val fixedPriceQuantity: JsonField<Double>,
-        private val invoicingCycleConfiguration: JsonField<BillingCycleConfiguration>,
-        private val item: JsonField<ItemSlim>,
-        private val maximum: JsonField<Maximum>,
-        private val maximumAmount: JsonField<String>,
-        private val metadata: JsonField<Metadata>,
-        private val minimum: JsonField<Minimum>,
-        private val minimumAmount: JsonField<String>,
-        private val modelType: JsonValue,
-        private val name: JsonField<String>,
-        private val planPhaseOrder: JsonField<Long>,
-        private val priceType: JsonField<PriceType>,
-        private val replacesPriceId: JsonField<String>,
-        private val tieredBpsConfig: JsonField<TieredBpsConfig>,
-        private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("billable_metric")
-            @ExcludeMissing
-            billableMetric: JsonField<BillableMetricTiny> = JsonMissing.of(),
-            @JsonProperty("billing_cycle_configuration")
-            @ExcludeMissing
-            billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
-            @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            conversionRate: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("conversion_rate_config")
-            @ExcludeMissing
-            conversionRateConfig: JsonField<ConversionRateConfig> = JsonMissing.of(),
-            @JsonProperty("created_at")
-            @ExcludeMissing
-            createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("credit_allocation")
-            @ExcludeMissing
-            creditAllocation: JsonField<Allocation> = JsonMissing.of(),
-            @JsonProperty("currency")
-            @ExcludeMissing
-            currency: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("discount")
-            @ExcludeMissing
-            discount: JsonField<Discount> = JsonMissing.of(),
-            @JsonProperty("external_price_id")
-            @ExcludeMissing
-            externalPriceId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("fixed_price_quantity")
-            @ExcludeMissing
-            fixedPriceQuantity: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("invoicing_cycle_configuration")
-            @ExcludeMissing
-            invoicingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
-            @JsonProperty("item") @ExcludeMissing item: JsonField<ItemSlim> = JsonMissing.of(),
-            @JsonProperty("maximum") @ExcludeMissing maximum: JsonField<Maximum> = JsonMissing.of(),
-            @JsonProperty("maximum_amount")
-            @ExcludeMissing
-            maximumAmount: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            metadata: JsonField<Metadata> = JsonMissing.of(),
-            @JsonProperty("minimum") @ExcludeMissing minimum: JsonField<Minimum> = JsonMissing.of(),
-            @JsonProperty("minimum_amount")
-            @ExcludeMissing
-            minimumAmount: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
-            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("plan_phase_order")
-            @ExcludeMissing
-            planPhaseOrder: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("price_type")
-            @ExcludeMissing
-            priceType: JsonField<PriceType> = JsonMissing.of(),
-            @JsonProperty("replaces_price_id")
-            @ExcludeMissing
-            replacesPriceId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("tiered_bps_config")
-            @ExcludeMissing
-            tieredBpsConfig: JsonField<TieredBpsConfig> = JsonMissing.of(),
-            @JsonProperty("dimensional_price_configuration")
-            @ExcludeMissing
-            dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
-                JsonMissing.of(),
-        ) : this(
-            id,
-            billableMetric,
-            billingCycleConfiguration,
-            cadence,
-            conversionRate,
-            conversionRateConfig,
-            createdAt,
-            creditAllocation,
-            currency,
-            discount,
-            externalPriceId,
-            fixedPriceQuantity,
-            invoicingCycleConfiguration,
-            item,
-            maximum,
-            maximumAmount,
-            metadata,
-            minimum,
-            minimumAmount,
-            modelType,
-            name,
-            planPhaseOrder,
-            priceType,
-            replacesPriceId,
-            tieredBpsConfig,
-            dimensionalPriceConfiguration,
-            mutableMapOf(),
-        )
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun id(): String = id.getRequired("id")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun billableMetric(): Optional<BillableMetricTiny> =
-            billableMetric.getOptional("billable_metric")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun billingCycleConfiguration(): BillingCycleConfiguration =
-            billingCycleConfiguration.getRequired("billing_cycle_configuration")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun cadence(): Cadence = cadence.getRequired("cadence")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun conversionRate(): Optional<Double> = conversionRate.getOptional("conversion_rate")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun conversionRateConfig(): Optional<ConversionRateConfig> =
-            conversionRateConfig.getOptional("conversion_rate_config")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun creditAllocation(): Optional<Allocation> =
-            creditAllocation.getOptional("credit_allocation")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun currency(): String = currency.getRequired("currency")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated")
-        fun discount(): Optional<Discount> = discount.getOptional("discount")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun externalPriceId(): Optional<String> = externalPriceId.getOptional("external_price_id")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun fixedPriceQuantity(): Optional<Double> =
-            fixedPriceQuantity.getOptional("fixed_price_quantity")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun invoicingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-            invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun item(): ItemSlim = item.getRequired("item")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated") fun maximum(): Optional<Maximum> = maximum.getOptional("maximum")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated")
-        fun maximumAmount(): Optional<String> = maximumAmount.getOptional("maximum_amount")
-
-        /**
-         * User specified key-value pairs for the resource. If not present, this defaults to an
-         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
-         * entire metadata mapping can be cleared by setting `metadata` to `null`.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun metadata(): Metadata = metadata.getRequired("metadata")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated") fun minimum(): Optional<Minimum> = minimum.getOptional("minimum")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated")
-        fun minimumAmount(): Optional<String> = minimumAmount.getOptional("minimum_amount")
-
-        /**
-         * Expected to always return the following:
-         * ```java
-         * JsonValue.from("tiered_bps")
-         * ```
-         *
-         * However, this method can be useful for debugging and logging (e.g. if the server
-         * responded with an unexpected value).
-         */
-        @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun name(): String = name.getRequired("name")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun planPhaseOrder(): Optional<Long> = planPhaseOrder.getOptional("plan_phase_order")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun priceType(): PriceType = priceType.getRequired("price_type")
-
-        /**
-         * The price id this price replaces. This price will take the place of the replaced price in
-         * plan version migrations.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun tieredBpsConfig(): TieredBpsConfig = tieredBpsConfig.getRequired("tiered_bps_config")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun dimensionalPriceConfiguration(): Optional<DimensionalPriceConfiguration> =
-            dimensionalPriceConfiguration.getOptional("dimensional_price_configuration")
-
-        /**
-         * Returns the raw JSON value of [id].
-         *
-         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
-
-        /**
-         * Returns the raw JSON value of [billableMetric].
-         *
-         * Unlike [billableMetric], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("billable_metric")
-        @ExcludeMissing
-        fun _billableMetric(): JsonField<BillableMetricTiny> = billableMetric
-
-        /**
-         * Returns the raw JSON value of [billingCycleConfiguration].
-         *
-         * Unlike [billingCycleConfiguration], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("billing_cycle_configuration")
-        @ExcludeMissing
-        fun _billingCycleConfiguration(): JsonField<BillingCycleConfiguration> =
-            billingCycleConfiguration
-
-        /**
-         * Returns the raw JSON value of [cadence].
-         *
-         * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
-
-        /**
-         * Returns the raw JSON value of [conversionRate].
-         *
-         * Unlike [conversionRate], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("conversion_rate")
-        @ExcludeMissing
-        fun _conversionRate(): JsonField<Double> = conversionRate
-
-        /**
-         * Returns the raw JSON value of [conversionRateConfig].
-         *
-         * Unlike [conversionRateConfig], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("conversion_rate_config")
-        @ExcludeMissing
-        fun _conversionRateConfig(): JsonField<ConversionRateConfig> = conversionRateConfig
-
-        /**
-         * Returns the raw JSON value of [createdAt].
-         *
-         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("created_at")
-        @ExcludeMissing
-        fun _createdAt(): JsonField<OffsetDateTime> = createdAt
-
-        /**
-         * Returns the raw JSON value of [creditAllocation].
-         *
-         * Unlike [creditAllocation], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("credit_allocation")
-        @ExcludeMissing
-        fun _creditAllocation(): JsonField<Allocation> = creditAllocation
-
-        /**
-         * Returns the raw JSON value of [currency].
-         *
-         * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
-
-        /**
-         * Returns the raw JSON value of [discount].
-         *
-         * Unlike [discount], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("discount")
-        @ExcludeMissing
-        fun _discount(): JsonField<Discount> = discount
-
-        /**
-         * Returns the raw JSON value of [externalPriceId].
-         *
-         * Unlike [externalPriceId], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("external_price_id")
-        @ExcludeMissing
-        fun _externalPriceId(): JsonField<String> = externalPriceId
-
-        /**
-         * Returns the raw JSON value of [fixedPriceQuantity].
-         *
-         * Unlike [fixedPriceQuantity], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("fixed_price_quantity")
-        @ExcludeMissing
-        fun _fixedPriceQuantity(): JsonField<Double> = fixedPriceQuantity
-
-        /**
-         * Returns the raw JSON value of [invoicingCycleConfiguration].
-         *
-         * Unlike [invoicingCycleConfiguration], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("invoicing_cycle_configuration")
-        @ExcludeMissing
-        fun _invoicingCycleConfiguration(): JsonField<BillingCycleConfiguration> =
-            invoicingCycleConfiguration
-
-        /**
-         * Returns the raw JSON value of [item].
-         *
-         * Unlike [item], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("item") @ExcludeMissing fun _item(): JsonField<ItemSlim> = item
-
-        /**
-         * Returns the raw JSON value of [maximum].
-         *
-         * Unlike [maximum], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("maximum")
-        @ExcludeMissing
-        fun _maximum(): JsonField<Maximum> = maximum
-
-        /**
-         * Returns the raw JSON value of [maximumAmount].
-         *
-         * Unlike [maximumAmount], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("maximum_amount")
-        @ExcludeMissing
-        fun _maximumAmount(): JsonField<String> = maximumAmount
-
-        /**
-         * Returns the raw JSON value of [metadata].
-         *
-         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
-
-        /**
-         * Returns the raw JSON value of [minimum].
-         *
-         * Unlike [minimum], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("minimum")
-        @ExcludeMissing
-        fun _minimum(): JsonField<Minimum> = minimum
-
-        /**
-         * Returns the raw JSON value of [minimumAmount].
-         *
-         * Unlike [minimumAmount], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("minimum_amount")
-        @ExcludeMissing
-        fun _minimumAmount(): JsonField<String> = minimumAmount
-
-        /**
-         * Returns the raw JSON value of [name].
-         *
-         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
-
-        /**
-         * Returns the raw JSON value of [planPhaseOrder].
-         *
-         * Unlike [planPhaseOrder], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("plan_phase_order")
-        @ExcludeMissing
-        fun _planPhaseOrder(): JsonField<Long> = planPhaseOrder
-
-        /**
-         * Returns the raw JSON value of [priceType].
-         *
-         * Unlike [priceType], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("price_type")
-        @ExcludeMissing
-        fun _priceType(): JsonField<PriceType> = priceType
-
-        /**
-         * Returns the raw JSON value of [replacesPriceId].
-         *
-         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("replaces_price_id")
-        @ExcludeMissing
-        fun _replacesPriceId(): JsonField<String> = replacesPriceId
-
-        /**
-         * Returns the raw JSON value of [tieredBpsConfig].
-         *
-         * Unlike [tieredBpsConfig], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("tiered_bps_config")
-        @ExcludeMissing
-        fun _tieredBpsConfig(): JsonField<TieredBpsConfig> = tieredBpsConfig
-
-        /**
-         * Returns the raw JSON value of [dimensionalPriceConfiguration].
-         *
-         * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
-         * an unexpected type.
-         */
-        @JsonProperty("dimensional_price_configuration")
-        @ExcludeMissing
-        fun _dimensionalPriceConfiguration(): JsonField<DimensionalPriceConfiguration> =
-            dimensionalPriceConfiguration
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [TieredBps].
-             *
-             * The following fields are required:
-             * ```java
-             * .id()
-             * .billableMetric()
-             * .billingCycleConfiguration()
-             * .cadence()
-             * .conversionRate()
-             * .conversionRateConfig()
-             * .createdAt()
-             * .creditAllocation()
-             * .currency()
-             * .discount()
-             * .externalPriceId()
-             * .fixedPriceQuantity()
-             * .invoicingCycleConfiguration()
-             * .item()
-             * .maximum()
-             * .maximumAmount()
-             * .metadata()
-             * .minimum()
-             * .minimumAmount()
-             * .name()
-             * .planPhaseOrder()
-             * .priceType()
-             * .replacesPriceId()
-             * .tieredBpsConfig()
-             * ```
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [TieredBps]. */
-        class Builder internal constructor() {
-
-            private var id: JsonField<String>? = null
-            private var billableMetric: JsonField<BillableMetricTiny>? = null
-            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
-            private var cadence: JsonField<Cadence>? = null
-            private var conversionRate: JsonField<Double>? = null
-            private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
-            private var createdAt: JsonField<OffsetDateTime>? = null
-            private var creditAllocation: JsonField<Allocation>? = null
-            private var currency: JsonField<String>? = null
-            private var discount: JsonField<Discount>? = null
-            private var externalPriceId: JsonField<String>? = null
-            private var fixedPriceQuantity: JsonField<Double>? = null
-            private var invoicingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
-            private var item: JsonField<ItemSlim>? = null
-            private var maximum: JsonField<Maximum>? = null
-            private var maximumAmount: JsonField<String>? = null
-            private var metadata: JsonField<Metadata>? = null
-            private var minimum: JsonField<Minimum>? = null
-            private var minimumAmount: JsonField<String>? = null
-            private var modelType: JsonValue = JsonValue.from("tiered_bps")
-            private var name: JsonField<String>? = null
-            private var planPhaseOrder: JsonField<Long>? = null
-            private var priceType: JsonField<PriceType>? = null
-            private var replacesPriceId: JsonField<String>? = null
-            private var tieredBpsConfig: JsonField<TieredBpsConfig>? = null
-            private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
-                JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(tieredBps: TieredBps) = apply {
-                id = tieredBps.id
-                billableMetric = tieredBps.billableMetric
-                billingCycleConfiguration = tieredBps.billingCycleConfiguration
-                cadence = tieredBps.cadence
-                conversionRate = tieredBps.conversionRate
-                conversionRateConfig = tieredBps.conversionRateConfig
-                createdAt = tieredBps.createdAt
-                creditAllocation = tieredBps.creditAllocation
-                currency = tieredBps.currency
-                discount = tieredBps.discount
-                externalPriceId = tieredBps.externalPriceId
-                fixedPriceQuantity = tieredBps.fixedPriceQuantity
-                invoicingCycleConfiguration = tieredBps.invoicingCycleConfiguration
-                item = tieredBps.item
-                maximum = tieredBps.maximum
-                maximumAmount = tieredBps.maximumAmount
-                metadata = tieredBps.metadata
-                minimum = tieredBps.minimum
-                minimumAmount = tieredBps.minimumAmount
-                modelType = tieredBps.modelType
-                name = tieredBps.name
-                planPhaseOrder = tieredBps.planPhaseOrder
-                priceType = tieredBps.priceType
-                replacesPriceId = tieredBps.replacesPriceId
-                tieredBpsConfig = tieredBps.tieredBpsConfig
-                dimensionalPriceConfiguration = tieredBps.dimensionalPriceConfiguration
-                additionalProperties = tieredBps.additionalProperties.toMutableMap()
-            }
-
-            fun id(id: String) = id(JsonField.of(id))
-
-            /**
-             * Sets [Builder.id] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun billableMetric(billableMetric: BillableMetricTiny?) =
-                billableMetric(JsonField.ofNullable(billableMetric))
-
-            /** Alias for calling [Builder.billableMetric] with `billableMetric.orElse(null)`. */
-            fun billableMetric(billableMetric: Optional<BillableMetricTiny>) =
-                billableMetric(billableMetric.getOrNull())
-
-            /**
-             * Sets [Builder.billableMetric] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.billableMetric] with a well-typed
-             * [BillableMetricTiny] value instead. This method is primarily for setting the field to
-             * an undocumented or not yet supported value.
-             */
-            fun billableMetric(billableMetric: JsonField<BillableMetricTiny>) = apply {
-                this.billableMetric = billableMetric
-            }
-
-            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
-                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
-
-            /**
-             * Sets [Builder.billingCycleConfiguration] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.billingCycleConfiguration] with a well-typed
-             * [BillingCycleConfiguration] value instead. This method is primarily for setting the
-             * field to an undocumented or not yet supported value.
-             */
-            fun billingCycleConfiguration(
-                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
-            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
-            fun cadence(cadence: Cadence) = cadence(JsonField.of(cadence))
-
-            /**
-             * Sets [Builder.cadence] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.cadence] with a well-typed [Cadence] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
-
-            fun conversionRate(conversionRate: Double?) =
-                conversionRate(JsonField.ofNullable(conversionRate))
-
-            /**
-             * Alias for [Builder.conversionRate].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
-
-            /** Alias for calling [Builder.conversionRate] with `conversionRate.orElse(null)`. */
-            fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.getOrNull())
-
-            /**
-             * Sets [Builder.conversionRate] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.conversionRate] with a well-typed [Double] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun conversionRate(conversionRate: JsonField<Double>) = apply {
-                this.conversionRate = conversionRate
-            }
-
-            fun conversionRateConfig(conversionRateConfig: ConversionRateConfig?) =
-                conversionRateConfig(JsonField.ofNullable(conversionRateConfig))
-
-            /**
-             * Alias for calling [Builder.conversionRateConfig] with
-             * `conversionRateConfig.orElse(null)`.
-             */
-            fun conversionRateConfig(conversionRateConfig: Optional<ConversionRateConfig>) =
-                conversionRateConfig(conversionRateConfig.getOrNull())
-
-            /**
-             * Sets [Builder.conversionRateConfig] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.conversionRateConfig] with a well-typed
-             * [ConversionRateConfig] value instead. This method is primarily for setting the field
-             * to an undocumented or not yet supported value.
-             */
-            fun conversionRateConfig(conversionRateConfig: JsonField<ConversionRateConfig>) =
-                apply {
-                    this.conversionRateConfig = conversionRateConfig
-                }
-
-            /**
-             * Alias for calling [conversionRateConfig] with `ConversionRateConfig.ofUnit(unit)`.
-             */
-            fun conversionRateConfig(unit: UnitConversionRateConfig) =
-                conversionRateConfig(ConversionRateConfig.ofUnit(unit))
-
-            /**
-             * Alias for calling [conversionRateConfig] with the following:
-             * ```java
-             * UnitConversionRateConfig.builder()
-             *     .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
-             *     .unitConfig(unitConfig)
-             *     .build()
-             * ```
-             */
-            fun unitConversionRateConfig(unitConfig: ConversionRateUnitConfig) =
-                conversionRateConfig(
-                    UnitConversionRateConfig.builder()
-                        .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
-                        .unitConfig(unitConfig)
-                        .build()
-                )
-
-            /**
-             * Alias for calling [conversionRateConfig] with
-             * `ConversionRateConfig.ofTiered(tiered)`.
-             */
-            fun conversionRateConfig(tiered: TieredConversionRateConfig) =
-                conversionRateConfig(ConversionRateConfig.ofTiered(tiered))
-
-            /**
-             * Alias for calling [conversionRateConfig] with the following:
-             * ```java
-             * TieredConversionRateConfig.builder()
-             *     .conversionRateType(TieredConversionRateConfig.ConversionRateType.TIERED)
-             *     .tieredConfig(tieredConfig)
-             *     .build()
-             * ```
-             */
-            fun tieredConversionRateConfig(tieredConfig: ConversionRateTieredConfig) =
-                conversionRateConfig(
-                    TieredConversionRateConfig.builder()
-                        .conversionRateType(TieredConversionRateConfig.ConversionRateType.TIERED)
-                        .tieredConfig(tieredConfig)
-                        .build()
-                )
-
-            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
-
-            /**
-             * Sets [Builder.createdAt] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
-                this.createdAt = createdAt
-            }
-
-            fun creditAllocation(creditAllocation: Allocation?) =
-                creditAllocation(JsonField.ofNullable(creditAllocation))
-
-            /**
-             * Alias for calling [Builder.creditAllocation] with `creditAllocation.orElse(null)`.
-             */
-            fun creditAllocation(creditAllocation: Optional<Allocation>) =
-                creditAllocation(creditAllocation.getOrNull())
-
-            /**
-             * Sets [Builder.creditAllocation] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.creditAllocation] with a well-typed [Allocation]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun creditAllocation(creditAllocation: JsonField<Allocation>) = apply {
-                this.creditAllocation = creditAllocation
-            }
-
-            fun currency(currency: String) = currency(JsonField.of(currency))
-
-            /**
-             * Sets [Builder.currency] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.currency] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
-
-            @Deprecated("deprecated")
-            fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
-
-            /** Alias for calling [Builder.discount] with `discount.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
-
-            /**
-             * Sets [Builder.discount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.discount] with a well-typed [Discount] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
-
-            /** Alias for calling [discount] with `Discount.ofPercentage(percentage)`. */
-            @Deprecated("deprecated")
-            fun discount(percentage: PercentageDiscount) =
-                discount(Discount.ofPercentage(percentage))
-
-            /**
-             * Alias for calling [discount] with the following:
-             * ```java
-             * PercentageDiscount.builder()
-             *     .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
-             *     .percentageDiscount(percentageDiscount)
-             *     .build()
-             * ```
-             */
-            @Deprecated("deprecated")
-            fun percentageDiscount(percentageDiscount: Double) =
-                discount(
-                    PercentageDiscount.builder()
-                        .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
-                        .percentageDiscount(percentageDiscount)
-                        .build()
-                )
-
-            /** Alias for calling [discount] with `Discount.ofTrial(trial)`. */
-            @Deprecated("deprecated")
-            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
-
-            /** Alias for calling [discount] with `Discount.ofUsage(usage)`. */
-            @Deprecated("deprecated")
-            fun discount(usage: UsageDiscount) = discount(Discount.ofUsage(usage))
-
-            /**
-             * Alias for calling [discount] with the following:
-             * ```java
-             * UsageDiscount.builder()
-             *     .discountType(UsageDiscount.DiscountType.USAGE)
-             *     .usageDiscount(usageDiscount)
-             *     .build()
-             * ```
-             */
-            @Deprecated("deprecated")
-            fun usageDiscount(usageDiscount: Double) =
-                discount(
-                    UsageDiscount.builder()
-                        .discountType(UsageDiscount.DiscountType.USAGE)
-                        .usageDiscount(usageDiscount)
-                        .build()
-                )
-
-            /** Alias for calling [discount] with `Discount.ofAmount(amount)`. */
-            @Deprecated("deprecated")
-            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
-
-            /**
-             * Alias for calling [discount] with the following:
-             * ```java
-             * AmountDiscount.builder()
-             *     .discountType(AmountDiscount.DiscountType.AMOUNT)
-             *     .amountDiscount(amountDiscount)
-             *     .build()
-             * ```
-             */
-            @Deprecated("deprecated")
-            fun amountDiscount(amountDiscount: String) =
-                discount(
-                    AmountDiscount.builder()
-                        .discountType(AmountDiscount.DiscountType.AMOUNT)
-                        .amountDiscount(amountDiscount)
-                        .build()
-                )
-
-            fun externalPriceId(externalPriceId: String?) =
-                externalPriceId(JsonField.ofNullable(externalPriceId))
-
-            /** Alias for calling [Builder.externalPriceId] with `externalPriceId.orElse(null)`. */
-            fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.getOrNull())
-
-            /**
-             * Sets [Builder.externalPriceId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.externalPriceId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun externalPriceId(externalPriceId: JsonField<String>) = apply {
-                this.externalPriceId = externalPriceId
-            }
-
-            fun fixedPriceQuantity(fixedPriceQuantity: Double?) =
-                fixedPriceQuantity(JsonField.ofNullable(fixedPriceQuantity))
-
-            /**
-             * Alias for [Builder.fixedPriceQuantity].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun fixedPriceQuantity(fixedPriceQuantity: Double) =
-                fixedPriceQuantity(fixedPriceQuantity as Double?)
-
-            /**
-             * Alias for calling [Builder.fixedPriceQuantity] with
-             * `fixedPriceQuantity.orElse(null)`.
-             */
-            fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
-
-            /**
-             * Sets [Builder.fixedPriceQuantity] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.fixedPriceQuantity] with a well-typed [Double] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
-                this.fixedPriceQuantity = fixedPriceQuantity
-            }
-
-            fun invoicingCycleConfiguration(
-                invoicingCycleConfiguration: BillingCycleConfiguration?
-            ) = invoicingCycleConfiguration(JsonField.ofNullable(invoicingCycleConfiguration))
-
-            /**
-             * Alias for calling [Builder.invoicingCycleConfiguration] with
-             * `invoicingCycleConfiguration.orElse(null)`.
-             */
-            fun invoicingCycleConfiguration(
-                invoicingCycleConfiguration: Optional<BillingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
-
-            /**
-             * Sets [Builder.invoicingCycleConfiguration] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.invoicingCycleConfiguration] with a well-typed
-             * [BillingCycleConfiguration] value instead. This method is primarily for setting the
-             * field to an undocumented or not yet supported value.
-             */
-            fun invoicingCycleConfiguration(
-                invoicingCycleConfiguration: JsonField<BillingCycleConfiguration>
-            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
-
-            fun item(item: ItemSlim) = item(JsonField.of(item))
-
-            /**
-             * Sets [Builder.item] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.item] with a well-typed [ItemSlim] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun item(item: JsonField<ItemSlim>) = apply { this.item = item }
-
-            @Deprecated("deprecated")
-            fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
-
-            /** Alias for calling [Builder.maximum] with `maximum.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
-
-            /**
-             * Sets [Builder.maximum] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.maximum] with a well-typed [Maximum] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
-
-            @Deprecated("deprecated")
-            fun maximumAmount(maximumAmount: String?) =
-                maximumAmount(JsonField.ofNullable(maximumAmount))
-
-            /** Alias for calling [Builder.maximumAmount] with `maximumAmount.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.getOrNull())
-
-            /**
-             * Sets [Builder.maximumAmount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.maximumAmount] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun maximumAmount(maximumAmount: JsonField<String>) = apply {
-                this.maximumAmount = maximumAmount
-            }
-
-            /**
-             * User specified key-value pairs for the resource. If not present, this defaults to an
-             * empty dictionary. Individual keys can be removed by setting the value to `null`, and
-             * the entire metadata mapping can be cleared by setting `metadata` to `null`.
-             */
-            fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
-
-            /**
-             * Sets [Builder.metadata] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
-
-            @Deprecated("deprecated")
-            fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
-
-            /** Alias for calling [Builder.minimum] with `minimum.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
-
-            /**
-             * Sets [Builder.minimum] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.minimum] with a well-typed [Minimum] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
-
-            @Deprecated("deprecated")
-            fun minimumAmount(minimumAmount: String?) =
-                minimumAmount(JsonField.ofNullable(minimumAmount))
-
-            /** Alias for calling [Builder.minimumAmount] with `minimumAmount.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.getOrNull())
-
-            /**
-             * Sets [Builder.minimumAmount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.minimumAmount] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun minimumAmount(minimumAmount: JsonField<String>) = apply {
-                this.minimumAmount = minimumAmount
-            }
-
-            /**
-             * Sets the field to an arbitrary JSON value.
-             *
-             * It is usually unnecessary to call this method because the field defaults to the
-             * following:
-             * ```java
-             * JsonValue.from("tiered_bps")
-             * ```
-             *
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
-
-            fun name(name: String) = name(JsonField.of(name))
-
-            /**
-             * Sets [Builder.name] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.name] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun name(name: JsonField<String>) = apply { this.name = name }
-
-            fun planPhaseOrder(planPhaseOrder: Long?) =
-                planPhaseOrder(JsonField.ofNullable(planPhaseOrder))
-
-            /**
-             * Alias for [Builder.planPhaseOrder].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
-
-            /** Alias for calling [Builder.planPhaseOrder] with `planPhaseOrder.orElse(null)`. */
-            fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.getOrNull())
-
-            /**
-             * Sets [Builder.planPhaseOrder] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.planPhaseOrder] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
-                this.planPhaseOrder = planPhaseOrder
-            }
-
-            fun priceType(priceType: PriceType) = priceType(JsonField.of(priceType))
-
-            /**
-             * Sets [Builder.priceType] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.priceType] with a well-typed [PriceType] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
-
-            /**
-             * The price id this price replaces. This price will take the place of the replaced
-             * price in plan version migrations.
-             */
-            fun replacesPriceId(replacesPriceId: String?) =
-                replacesPriceId(JsonField.ofNullable(replacesPriceId))
-
-            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
-            fun replacesPriceId(replacesPriceId: Optional<String>) =
-                replacesPriceId(replacesPriceId.getOrNull())
-
-            /**
-             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
-                this.replacesPriceId = replacesPriceId
-            }
-
-            fun tieredBpsConfig(tieredBpsConfig: TieredBpsConfig) =
-                tieredBpsConfig(JsonField.of(tieredBpsConfig))
-
-            /**
-             * Sets [Builder.tieredBpsConfig] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.tieredBpsConfig] with a well-typed [TieredBpsConfig]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun tieredBpsConfig(tieredBpsConfig: JsonField<TieredBpsConfig>) = apply {
-                this.tieredBpsConfig = tieredBpsConfig
-            }
-
-            fun dimensionalPriceConfiguration(
-                dimensionalPriceConfiguration: DimensionalPriceConfiguration?
-            ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
-
-            /**
-             * Alias for calling [Builder.dimensionalPriceConfiguration] with
-             * `dimensionalPriceConfiguration.orElse(null)`.
-             */
-            fun dimensionalPriceConfiguration(
-                dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
-
-            /**
-             * Sets [Builder.dimensionalPriceConfiguration] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.dimensionalPriceConfiguration] with a well-typed
-             * [DimensionalPriceConfiguration] value instead. This method is primarily for setting
-             * the field to an undocumented or not yet supported value.
-             */
-            fun dimensionalPriceConfiguration(
-                dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
-            ) = apply { this.dimensionalPriceConfiguration = dimensionalPriceConfiguration }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [TieredBps].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .id()
-             * .billableMetric()
-             * .billingCycleConfiguration()
-             * .cadence()
-             * .conversionRate()
-             * .conversionRateConfig()
-             * .createdAt()
-             * .creditAllocation()
-             * .currency()
-             * .discount()
-             * .externalPriceId()
-             * .fixedPriceQuantity()
-             * .invoicingCycleConfiguration()
-             * .item()
-             * .maximum()
-             * .maximumAmount()
-             * .metadata()
-             * .minimum()
-             * .minimumAmount()
-             * .name()
-             * .planPhaseOrder()
-             * .priceType()
-             * .replacesPriceId()
-             * .tieredBpsConfig()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): TieredBps =
-                TieredBps(
-                    checkRequired("id", id),
-                    checkRequired("billableMetric", billableMetric),
-                    checkRequired("billingCycleConfiguration", billingCycleConfiguration),
-                    checkRequired("cadence", cadence),
-                    checkRequired("conversionRate", conversionRate),
-                    checkRequired("conversionRateConfig", conversionRateConfig),
-                    checkRequired("createdAt", createdAt),
-                    checkRequired("creditAllocation", creditAllocation),
-                    checkRequired("currency", currency),
-                    checkRequired("discount", discount),
-                    checkRequired("externalPriceId", externalPriceId),
-                    checkRequired("fixedPriceQuantity", fixedPriceQuantity),
-                    checkRequired("invoicingCycleConfiguration", invoicingCycleConfiguration),
-                    checkRequired("item", item),
-                    checkRequired("maximum", maximum),
-                    checkRequired("maximumAmount", maximumAmount),
-                    checkRequired("metadata", metadata),
-                    checkRequired("minimum", minimum),
-                    checkRequired("minimumAmount", minimumAmount),
-                    modelType,
-                    checkRequired("name", name),
-                    checkRequired("planPhaseOrder", planPhaseOrder),
-                    checkRequired("priceType", priceType),
-                    checkRequired("replacesPriceId", replacesPriceId),
-                    checkRequired("tieredBpsConfig", tieredBpsConfig),
-                    dimensionalPriceConfiguration,
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): TieredBps = apply {
-            if (validated) {
-                return@apply
-            }
-
-            id()
-            billableMetric().ifPresent { it.validate() }
-            billingCycleConfiguration().validate()
-            cadence().validate()
-            conversionRate()
-            conversionRateConfig().ifPresent { it.validate() }
-            createdAt()
-            creditAllocation().ifPresent { it.validate() }
-            currency()
-            discount().ifPresent { it.validate() }
-            externalPriceId()
-            fixedPriceQuantity()
-            invoicingCycleConfiguration().ifPresent { it.validate() }
-            item().validate()
-            maximum().ifPresent { it.validate() }
-            maximumAmount()
-            metadata().validate()
-            minimum().ifPresent { it.validate() }
-            minimumAmount()
-            _modelType().let {
-                if (it != JsonValue.from("tiered_bps")) {
-                    throw OrbInvalidDataException("'modelType' is invalid, received $it")
-                }
-            }
-            name()
-            planPhaseOrder()
-            priceType().validate()
-            replacesPriceId()
-            tieredBpsConfig().validate()
-            dimensionalPriceConfiguration().ifPresent { it.validate() }
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: OrbInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            (if (id.asKnown().isPresent) 1 else 0) +
-                (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
-                (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
-                (cadence.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (conversionRate.asKnown().isPresent) 1 else 0) +
-                (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (createdAt.asKnown().isPresent) 1 else 0) +
-                (creditAllocation.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (currency.asKnown().isPresent) 1 else 0) +
-                (discount.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (externalPriceId.asKnown().isPresent) 1 else 0) +
-                (if (fixedPriceQuantity.asKnown().isPresent) 1 else 0) +
-                (invoicingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
-                (item.asKnown().getOrNull()?.validity() ?: 0) +
-                (maximum.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (maximumAmount.asKnown().isPresent) 1 else 0) +
-                (metadata.asKnown().getOrNull()?.validity() ?: 0) +
-                (minimum.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (minimumAmount.asKnown().isPresent) 1 else 0) +
-                modelType.let { if (it == JsonValue.from("tiered_bps")) 1 else 0 } +
-                (if (name.asKnown().isPresent) 1 else 0) +
-                (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
-                (priceType.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
-                (tieredBpsConfig.asKnown().getOrNull()?.validity() ?: 0) +
-                (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
-
-        class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
-            Enum {
-
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            companion object {
-
-                @JvmField val ONE_TIME = of("one_time")
-
-                @JvmField val MONTHLY = of("monthly")
-
-                @JvmField val QUARTERLY = of("quarterly")
-
-                @JvmField val SEMI_ANNUAL = of("semi_annual")
-
-                @JvmField val ANNUAL = of("annual")
-
-                @JvmField val CUSTOM = of("custom")
-
-                @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
-            }
-
-            /** An enum containing [Cadence]'s known values. */
-            enum class Known {
-                ONE_TIME,
-                MONTHLY,
-                QUARTERLY,
-                SEMI_ANNUAL,
-                ANNUAL,
-                CUSTOM,
-            }
-
-            /**
-             * An enum containing [Cadence]'s known values, as well as an [_UNKNOWN] member.
-             *
-             * An instance of [Cadence] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
-             * - It was constructed with an arbitrary value using the [of] method.
-             */
-            enum class Value {
-                ONE_TIME,
-                MONTHLY,
-                QUARTERLY,
-                SEMI_ANNUAL,
-                ANNUAL,
-                CUSTOM,
-                /**
-                 * An enum member indicating that [Cadence] was instantiated with an unknown value.
-                 */
-                _UNKNOWN,
-            }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
-             */
-            fun value(): Value =
-                when (this) {
-                    ONE_TIME -> Value.ONE_TIME
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    ANNUAL -> Value.ANNUAL
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
-             *
-             * @throws OrbInvalidDataException if this class instance's value is a not a known
-             *   member.
-             */
-            fun known(): Known =
-                when (this) {
-                    ONE_TIME -> Known.ONE_TIME
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    ANNUAL -> Known.ANNUAL
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
-
-            /**
-             * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
-             *
-             * @throws OrbInvalidDataException if this class instance's value does not have the
-             *   expected primitive type.
-             */
-            fun asString(): String =
-                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
-
-            private var validated: Boolean = false
-
-            fun validate(): Cadence = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                known()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: OrbInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Cadence && value == other.value
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-        }
-
-        /**
-         * User specified key-value pairs for the resource. If not present, this defaults to an
-         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
-         * entire metadata mapping can be cleared by setting `metadata` to `null`.
-         */
-        class Metadata
-        @JsonCreator
-        private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue
-            private val additionalProperties: Map<String, JsonValue>
-        ) {
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [Metadata]. */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [Metadata]. */
-            class Builder internal constructor() {
-
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(metadata: Metadata) = apply {
-                    additionalProperties = metadata.additionalProperties.toMutableMap()
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Metadata].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
-            }
-
-            private var validated: Boolean = false
-
-            fun validate(): Metadata = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: OrbInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Metadata && additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
-        }
-
-        class PriceType @JsonCreator private constructor(private val value: JsonField<String>) :
-            Enum {
-
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            companion object {
-
-                @JvmField val USAGE_PRICE = of("usage_price")
-
-                @JvmField val FIXED_PRICE = of("fixed_price")
-
-                @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
-            }
-
-            /** An enum containing [PriceType]'s known values. */
-            enum class Known {
-                USAGE_PRICE,
-                FIXED_PRICE,
-            }
-
-            /**
-             * An enum containing [PriceType]'s known values, as well as an [_UNKNOWN] member.
-             *
-             * An instance of [PriceType] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
-             * - It was constructed with an arbitrary value using the [of] method.
-             */
-            enum class Value {
-                USAGE_PRICE,
-                FIXED_PRICE,
-                /**
-                 * An enum member indicating that [PriceType] was instantiated with an unknown
-                 * value.
-                 */
-                _UNKNOWN,
-            }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
-             */
-            fun value(): Value =
-                when (this) {
-                    USAGE_PRICE -> Value.USAGE_PRICE
-                    FIXED_PRICE -> Value.FIXED_PRICE
-                    else -> Value._UNKNOWN
-                }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
-             *
-             * @throws OrbInvalidDataException if this class instance's value is a not a known
-             *   member.
-             */
-            fun known(): Known =
-                when (this) {
-                    USAGE_PRICE -> Known.USAGE_PRICE
-                    FIXED_PRICE -> Known.FIXED_PRICE
-                    else -> throw OrbInvalidDataException("Unknown PriceType: $value")
-                }
-
-            /**
-             * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
-             *
-             * @throws OrbInvalidDataException if this class instance's value does not have the
-             *   expected primitive type.
-             */
-            fun asString(): String =
-                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
-
-            private var validated: Boolean = false
-
-            fun validate(): PriceType = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                known()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: OrbInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PriceType && value == other.value
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is TieredBps &&
-                id == other.id &&
-                billableMetric == other.billableMetric &&
-                billingCycleConfiguration == other.billingCycleConfiguration &&
-                cadence == other.cadence &&
-                conversionRate == other.conversionRate &&
-                conversionRateConfig == other.conversionRateConfig &&
-                createdAt == other.createdAt &&
-                creditAllocation == other.creditAllocation &&
-                currency == other.currency &&
-                discount == other.discount &&
-                externalPriceId == other.externalPriceId &&
-                fixedPriceQuantity == other.fixedPriceQuantity &&
-                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
-                item == other.item &&
-                maximum == other.maximum &&
-                maximumAmount == other.maximumAmount &&
-                metadata == other.metadata &&
-                minimum == other.minimum &&
-                minimumAmount == other.minimumAmount &&
-                modelType == other.modelType &&
-                name == other.name &&
-                planPhaseOrder == other.planPhaseOrder &&
-                priceType == other.priceType &&
-                replacesPriceId == other.replacesPriceId &&
-                tieredBpsConfig == other.tieredBpsConfig &&
-                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(
-                id,
-                billableMetric,
-                billingCycleConfiguration,
-                cadence,
-                conversionRate,
-                conversionRateConfig,
-                createdAt,
-                creditAllocation,
-                currency,
-                discount,
-                externalPriceId,
-                fixedPriceQuantity,
-                invoicingCycleConfiguration,
-                item,
-                maximum,
-                maximumAmount,
-                metadata,
-                minimum,
-                minimumAmount,
-                modelType,
-                name,
-                planPhaseOrder,
-                priceType,
-                replacesPriceId,
-                tieredBpsConfig,
-                dimensionalPriceConfiguration,
-                additionalProperties,
-            )
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "TieredBps{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, tieredBpsConfig=$tieredBpsConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
-    }
-
-    class Bps
-    private constructor(
-        private val id: JsonField<String>,
-        private val billableMetric: JsonField<BillableMetricTiny>,
-        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
-        private val bpsConfig: JsonField<BpsConfig>,
-        private val cadence: JsonField<Cadence>,
-        private val conversionRate: JsonField<Double>,
-        private val conversionRateConfig: JsonField<ConversionRateConfig>,
-        private val createdAt: JsonField<OffsetDateTime>,
-        private val creditAllocation: JsonField<Allocation>,
-        private val currency: JsonField<String>,
-        private val discount: JsonField<Discount>,
-        private val externalPriceId: JsonField<String>,
-        private val fixedPriceQuantity: JsonField<Double>,
-        private val invoicingCycleConfiguration: JsonField<BillingCycleConfiguration>,
-        private val item: JsonField<ItemSlim>,
-        private val maximum: JsonField<Maximum>,
-        private val maximumAmount: JsonField<String>,
-        private val metadata: JsonField<Metadata>,
-        private val minimum: JsonField<Minimum>,
-        private val minimumAmount: JsonField<String>,
-        private val modelType: JsonValue,
-        private val name: JsonField<String>,
-        private val planPhaseOrder: JsonField<Long>,
-        private val priceType: JsonField<PriceType>,
-        private val replacesPriceId: JsonField<String>,
-        private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("billable_metric")
-            @ExcludeMissing
-            billableMetric: JsonField<BillableMetricTiny> = JsonMissing.of(),
-            @JsonProperty("billing_cycle_configuration")
-            @ExcludeMissing
-            billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
-            @JsonProperty("bps_config")
-            @ExcludeMissing
-            bpsConfig: JsonField<BpsConfig> = JsonMissing.of(),
-            @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            conversionRate: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("conversion_rate_config")
-            @ExcludeMissing
-            conversionRateConfig: JsonField<ConversionRateConfig> = JsonMissing.of(),
-            @JsonProperty("created_at")
-            @ExcludeMissing
-            createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("credit_allocation")
-            @ExcludeMissing
-            creditAllocation: JsonField<Allocation> = JsonMissing.of(),
-            @JsonProperty("currency")
-            @ExcludeMissing
-            currency: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("discount")
-            @ExcludeMissing
-            discount: JsonField<Discount> = JsonMissing.of(),
-            @JsonProperty("external_price_id")
-            @ExcludeMissing
-            externalPriceId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("fixed_price_quantity")
-            @ExcludeMissing
-            fixedPriceQuantity: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("invoicing_cycle_configuration")
-            @ExcludeMissing
-            invoicingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
-            @JsonProperty("item") @ExcludeMissing item: JsonField<ItemSlim> = JsonMissing.of(),
-            @JsonProperty("maximum") @ExcludeMissing maximum: JsonField<Maximum> = JsonMissing.of(),
-            @JsonProperty("maximum_amount")
-            @ExcludeMissing
-            maximumAmount: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            metadata: JsonField<Metadata> = JsonMissing.of(),
-            @JsonProperty("minimum") @ExcludeMissing minimum: JsonField<Minimum> = JsonMissing.of(),
-            @JsonProperty("minimum_amount")
-            @ExcludeMissing
-            minimumAmount: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
-            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("plan_phase_order")
-            @ExcludeMissing
-            planPhaseOrder: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("price_type")
-            @ExcludeMissing
-            priceType: JsonField<PriceType> = JsonMissing.of(),
-            @JsonProperty("replaces_price_id")
-            @ExcludeMissing
-            replacesPriceId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("dimensional_price_configuration")
-            @ExcludeMissing
-            dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
-                JsonMissing.of(),
-        ) : this(
-            id,
-            billableMetric,
-            billingCycleConfiguration,
-            bpsConfig,
-            cadence,
-            conversionRate,
-            conversionRateConfig,
-            createdAt,
-            creditAllocation,
-            currency,
-            discount,
-            externalPriceId,
-            fixedPriceQuantity,
-            invoicingCycleConfiguration,
-            item,
-            maximum,
-            maximumAmount,
-            metadata,
-            minimum,
-            minimumAmount,
-            modelType,
-            name,
-            planPhaseOrder,
-            priceType,
-            replacesPriceId,
-            dimensionalPriceConfiguration,
-            mutableMapOf(),
-        )
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun id(): String = id.getRequired("id")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun billableMetric(): Optional<BillableMetricTiny> =
-            billableMetric.getOptional("billable_metric")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun billingCycleConfiguration(): BillingCycleConfiguration =
-            billingCycleConfiguration.getRequired("billing_cycle_configuration")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun bpsConfig(): BpsConfig = bpsConfig.getRequired("bps_config")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun cadence(): Cadence = cadence.getRequired("cadence")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun conversionRate(): Optional<Double> = conversionRate.getOptional("conversion_rate")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun conversionRateConfig(): Optional<ConversionRateConfig> =
-            conversionRateConfig.getOptional("conversion_rate_config")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun creditAllocation(): Optional<Allocation> =
-            creditAllocation.getOptional("credit_allocation")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun currency(): String = currency.getRequired("currency")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated")
-        fun discount(): Optional<Discount> = discount.getOptional("discount")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun externalPriceId(): Optional<String> = externalPriceId.getOptional("external_price_id")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun fixedPriceQuantity(): Optional<Double> =
-            fixedPriceQuantity.getOptional("fixed_price_quantity")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun invoicingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-            invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun item(): ItemSlim = item.getRequired("item")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated") fun maximum(): Optional<Maximum> = maximum.getOptional("maximum")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated")
-        fun maximumAmount(): Optional<String> = maximumAmount.getOptional("maximum_amount")
-
-        /**
-         * User specified key-value pairs for the resource. If not present, this defaults to an
-         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
-         * entire metadata mapping can be cleared by setting `metadata` to `null`.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun metadata(): Metadata = metadata.getRequired("metadata")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated") fun minimum(): Optional<Minimum> = minimum.getOptional("minimum")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated")
-        fun minimumAmount(): Optional<String> = minimumAmount.getOptional("minimum_amount")
-
-        /**
-         * Expected to always return the following:
-         * ```java
-         * JsonValue.from("bps")
-         * ```
-         *
-         * However, this method can be useful for debugging and logging (e.g. if the server
-         * responded with an unexpected value).
-         */
-        @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun name(): String = name.getRequired("name")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun planPhaseOrder(): Optional<Long> = planPhaseOrder.getOptional("plan_phase_order")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun priceType(): PriceType = priceType.getRequired("price_type")
-
-        /**
-         * The price id this price replaces. This price will take the place of the replaced price in
-         * plan version migrations.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun dimensionalPriceConfiguration(): Optional<DimensionalPriceConfiguration> =
-            dimensionalPriceConfiguration.getOptional("dimensional_price_configuration")
-
-        /**
-         * Returns the raw JSON value of [id].
-         *
-         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
-
-        /**
-         * Returns the raw JSON value of [billableMetric].
-         *
-         * Unlike [billableMetric], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("billable_metric")
-        @ExcludeMissing
-        fun _billableMetric(): JsonField<BillableMetricTiny> = billableMetric
-
-        /**
-         * Returns the raw JSON value of [billingCycleConfiguration].
-         *
-         * Unlike [billingCycleConfiguration], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("billing_cycle_configuration")
-        @ExcludeMissing
-        fun _billingCycleConfiguration(): JsonField<BillingCycleConfiguration> =
-            billingCycleConfiguration
-
-        /**
-         * Returns the raw JSON value of [bpsConfig].
-         *
-         * Unlike [bpsConfig], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("bps_config")
-        @ExcludeMissing
-        fun _bpsConfig(): JsonField<BpsConfig> = bpsConfig
-
-        /**
-         * Returns the raw JSON value of [cadence].
-         *
-         * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
-
-        /**
-         * Returns the raw JSON value of [conversionRate].
-         *
-         * Unlike [conversionRate], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("conversion_rate")
-        @ExcludeMissing
-        fun _conversionRate(): JsonField<Double> = conversionRate
-
-        /**
-         * Returns the raw JSON value of [conversionRateConfig].
-         *
-         * Unlike [conversionRateConfig], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("conversion_rate_config")
-        @ExcludeMissing
-        fun _conversionRateConfig(): JsonField<ConversionRateConfig> = conversionRateConfig
-
-        /**
-         * Returns the raw JSON value of [createdAt].
-         *
-         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("created_at")
-        @ExcludeMissing
-        fun _createdAt(): JsonField<OffsetDateTime> = createdAt
-
-        /**
-         * Returns the raw JSON value of [creditAllocation].
-         *
-         * Unlike [creditAllocation], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("credit_allocation")
-        @ExcludeMissing
-        fun _creditAllocation(): JsonField<Allocation> = creditAllocation
-
-        /**
-         * Returns the raw JSON value of [currency].
-         *
-         * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
-
-        /**
-         * Returns the raw JSON value of [discount].
-         *
-         * Unlike [discount], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("discount")
-        @ExcludeMissing
-        fun _discount(): JsonField<Discount> = discount
-
-        /**
-         * Returns the raw JSON value of [externalPriceId].
-         *
-         * Unlike [externalPriceId], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("external_price_id")
-        @ExcludeMissing
-        fun _externalPriceId(): JsonField<String> = externalPriceId
-
-        /**
-         * Returns the raw JSON value of [fixedPriceQuantity].
-         *
-         * Unlike [fixedPriceQuantity], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("fixed_price_quantity")
-        @ExcludeMissing
-        fun _fixedPriceQuantity(): JsonField<Double> = fixedPriceQuantity
-
-        /**
-         * Returns the raw JSON value of [invoicingCycleConfiguration].
-         *
-         * Unlike [invoicingCycleConfiguration], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("invoicing_cycle_configuration")
-        @ExcludeMissing
-        fun _invoicingCycleConfiguration(): JsonField<BillingCycleConfiguration> =
-            invoicingCycleConfiguration
-
-        /**
-         * Returns the raw JSON value of [item].
-         *
-         * Unlike [item], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("item") @ExcludeMissing fun _item(): JsonField<ItemSlim> = item
-
-        /**
-         * Returns the raw JSON value of [maximum].
-         *
-         * Unlike [maximum], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("maximum")
-        @ExcludeMissing
-        fun _maximum(): JsonField<Maximum> = maximum
-
-        /**
-         * Returns the raw JSON value of [maximumAmount].
-         *
-         * Unlike [maximumAmount], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("maximum_amount")
-        @ExcludeMissing
-        fun _maximumAmount(): JsonField<String> = maximumAmount
-
-        /**
-         * Returns the raw JSON value of [metadata].
-         *
-         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
-
-        /**
-         * Returns the raw JSON value of [minimum].
-         *
-         * Unlike [minimum], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("minimum")
-        @ExcludeMissing
-        fun _minimum(): JsonField<Minimum> = minimum
-
-        /**
-         * Returns the raw JSON value of [minimumAmount].
-         *
-         * Unlike [minimumAmount], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("minimum_amount")
-        @ExcludeMissing
-        fun _minimumAmount(): JsonField<String> = minimumAmount
-
-        /**
-         * Returns the raw JSON value of [name].
-         *
-         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
-
-        /**
-         * Returns the raw JSON value of [planPhaseOrder].
-         *
-         * Unlike [planPhaseOrder], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("plan_phase_order")
-        @ExcludeMissing
-        fun _planPhaseOrder(): JsonField<Long> = planPhaseOrder
-
-        /**
-         * Returns the raw JSON value of [priceType].
-         *
-         * Unlike [priceType], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("price_type")
-        @ExcludeMissing
-        fun _priceType(): JsonField<PriceType> = priceType
-
-        /**
-         * Returns the raw JSON value of [replacesPriceId].
-         *
-         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("replaces_price_id")
-        @ExcludeMissing
-        fun _replacesPriceId(): JsonField<String> = replacesPriceId
-
-        /**
-         * Returns the raw JSON value of [dimensionalPriceConfiguration].
-         *
-         * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
-         * an unexpected type.
-         */
-        @JsonProperty("dimensional_price_configuration")
-        @ExcludeMissing
-        fun _dimensionalPriceConfiguration(): JsonField<DimensionalPriceConfiguration> =
-            dimensionalPriceConfiguration
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Bps].
-             *
-             * The following fields are required:
-             * ```java
-             * .id()
-             * .billableMetric()
-             * .billingCycleConfiguration()
-             * .bpsConfig()
-             * .cadence()
-             * .conversionRate()
-             * .conversionRateConfig()
-             * .createdAt()
-             * .creditAllocation()
-             * .currency()
-             * .discount()
-             * .externalPriceId()
-             * .fixedPriceQuantity()
-             * .invoicingCycleConfiguration()
-             * .item()
-             * .maximum()
-             * .maximumAmount()
-             * .metadata()
-             * .minimum()
-             * .minimumAmount()
-             * .name()
-             * .planPhaseOrder()
-             * .priceType()
-             * .replacesPriceId()
-             * ```
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Bps]. */
-        class Builder internal constructor() {
-
-            private var id: JsonField<String>? = null
-            private var billableMetric: JsonField<BillableMetricTiny>? = null
-            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
-            private var bpsConfig: JsonField<BpsConfig>? = null
-            private var cadence: JsonField<Cadence>? = null
-            private var conversionRate: JsonField<Double>? = null
-            private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
-            private var createdAt: JsonField<OffsetDateTime>? = null
-            private var creditAllocation: JsonField<Allocation>? = null
-            private var currency: JsonField<String>? = null
-            private var discount: JsonField<Discount>? = null
-            private var externalPriceId: JsonField<String>? = null
-            private var fixedPriceQuantity: JsonField<Double>? = null
-            private var invoicingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
-            private var item: JsonField<ItemSlim>? = null
-            private var maximum: JsonField<Maximum>? = null
-            private var maximumAmount: JsonField<String>? = null
-            private var metadata: JsonField<Metadata>? = null
-            private var minimum: JsonField<Minimum>? = null
-            private var minimumAmount: JsonField<String>? = null
-            private var modelType: JsonValue = JsonValue.from("bps")
-            private var name: JsonField<String>? = null
-            private var planPhaseOrder: JsonField<Long>? = null
-            private var priceType: JsonField<PriceType>? = null
-            private var replacesPriceId: JsonField<String>? = null
-            private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
-                JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(bps: Bps) = apply {
-                id = bps.id
-                billableMetric = bps.billableMetric
-                billingCycleConfiguration = bps.billingCycleConfiguration
-                bpsConfig = bps.bpsConfig
-                cadence = bps.cadence
-                conversionRate = bps.conversionRate
-                conversionRateConfig = bps.conversionRateConfig
-                createdAt = bps.createdAt
-                creditAllocation = bps.creditAllocation
-                currency = bps.currency
-                discount = bps.discount
-                externalPriceId = bps.externalPriceId
-                fixedPriceQuantity = bps.fixedPriceQuantity
-                invoicingCycleConfiguration = bps.invoicingCycleConfiguration
-                item = bps.item
-                maximum = bps.maximum
-                maximumAmount = bps.maximumAmount
-                metadata = bps.metadata
-                minimum = bps.minimum
-                minimumAmount = bps.minimumAmount
-                modelType = bps.modelType
-                name = bps.name
-                planPhaseOrder = bps.planPhaseOrder
-                priceType = bps.priceType
-                replacesPriceId = bps.replacesPriceId
-                dimensionalPriceConfiguration = bps.dimensionalPriceConfiguration
-                additionalProperties = bps.additionalProperties.toMutableMap()
-            }
-
-            fun id(id: String) = id(JsonField.of(id))
-
-            /**
-             * Sets [Builder.id] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun billableMetric(billableMetric: BillableMetricTiny?) =
-                billableMetric(JsonField.ofNullable(billableMetric))
-
-            /** Alias for calling [Builder.billableMetric] with `billableMetric.orElse(null)`. */
-            fun billableMetric(billableMetric: Optional<BillableMetricTiny>) =
-                billableMetric(billableMetric.getOrNull())
-
-            /**
-             * Sets [Builder.billableMetric] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.billableMetric] with a well-typed
-             * [BillableMetricTiny] value instead. This method is primarily for setting the field to
-             * an undocumented or not yet supported value.
-             */
-            fun billableMetric(billableMetric: JsonField<BillableMetricTiny>) = apply {
-                this.billableMetric = billableMetric
-            }
-
-            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
-                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
-
-            /**
-             * Sets [Builder.billingCycleConfiguration] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.billingCycleConfiguration] with a well-typed
-             * [BillingCycleConfiguration] value instead. This method is primarily for setting the
-             * field to an undocumented or not yet supported value.
-             */
-            fun billingCycleConfiguration(
-                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
-            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
-            fun bpsConfig(bpsConfig: BpsConfig) = bpsConfig(JsonField.of(bpsConfig))
-
-            /**
-             * Sets [Builder.bpsConfig] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.bpsConfig] with a well-typed [BpsConfig] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun bpsConfig(bpsConfig: JsonField<BpsConfig>) = apply { this.bpsConfig = bpsConfig }
-
-            fun cadence(cadence: Cadence) = cadence(JsonField.of(cadence))
-
-            /**
-             * Sets [Builder.cadence] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.cadence] with a well-typed [Cadence] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
-
-            fun conversionRate(conversionRate: Double?) =
-                conversionRate(JsonField.ofNullable(conversionRate))
-
-            /**
-             * Alias for [Builder.conversionRate].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
-
-            /** Alias for calling [Builder.conversionRate] with `conversionRate.orElse(null)`. */
-            fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.getOrNull())
-
-            /**
-             * Sets [Builder.conversionRate] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.conversionRate] with a well-typed [Double] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun conversionRate(conversionRate: JsonField<Double>) = apply {
-                this.conversionRate = conversionRate
-            }
-
-            fun conversionRateConfig(conversionRateConfig: ConversionRateConfig?) =
-                conversionRateConfig(JsonField.ofNullable(conversionRateConfig))
-
-            /**
-             * Alias for calling [Builder.conversionRateConfig] with
-             * `conversionRateConfig.orElse(null)`.
-             */
-            fun conversionRateConfig(conversionRateConfig: Optional<ConversionRateConfig>) =
-                conversionRateConfig(conversionRateConfig.getOrNull())
-
-            /**
-             * Sets [Builder.conversionRateConfig] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.conversionRateConfig] with a well-typed
-             * [ConversionRateConfig] value instead. This method is primarily for setting the field
-             * to an undocumented or not yet supported value.
-             */
-            fun conversionRateConfig(conversionRateConfig: JsonField<ConversionRateConfig>) =
-                apply {
-                    this.conversionRateConfig = conversionRateConfig
-                }
-
-            /**
-             * Alias for calling [conversionRateConfig] with `ConversionRateConfig.ofUnit(unit)`.
-             */
-            fun conversionRateConfig(unit: UnitConversionRateConfig) =
-                conversionRateConfig(ConversionRateConfig.ofUnit(unit))
-
-            /**
-             * Alias for calling [conversionRateConfig] with the following:
-             * ```java
-             * UnitConversionRateConfig.builder()
-             *     .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
-             *     .unitConfig(unitConfig)
-             *     .build()
-             * ```
-             */
-            fun unitConversionRateConfig(unitConfig: ConversionRateUnitConfig) =
-                conversionRateConfig(
-                    UnitConversionRateConfig.builder()
-                        .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
-                        .unitConfig(unitConfig)
-                        .build()
-                )
-
-            /**
-             * Alias for calling [conversionRateConfig] with
-             * `ConversionRateConfig.ofTiered(tiered)`.
-             */
-            fun conversionRateConfig(tiered: TieredConversionRateConfig) =
-                conversionRateConfig(ConversionRateConfig.ofTiered(tiered))
-
-            /**
-             * Alias for calling [conversionRateConfig] with the following:
-             * ```java
-             * TieredConversionRateConfig.builder()
-             *     .conversionRateType(TieredConversionRateConfig.ConversionRateType.TIERED)
-             *     .tieredConfig(tieredConfig)
-             *     .build()
-             * ```
-             */
-            fun tieredConversionRateConfig(tieredConfig: ConversionRateTieredConfig) =
-                conversionRateConfig(
-                    TieredConversionRateConfig.builder()
-                        .conversionRateType(TieredConversionRateConfig.ConversionRateType.TIERED)
-                        .tieredConfig(tieredConfig)
-                        .build()
-                )
-
-            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
-
-            /**
-             * Sets [Builder.createdAt] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
-                this.createdAt = createdAt
-            }
-
-            fun creditAllocation(creditAllocation: Allocation?) =
-                creditAllocation(JsonField.ofNullable(creditAllocation))
-
-            /**
-             * Alias for calling [Builder.creditAllocation] with `creditAllocation.orElse(null)`.
-             */
-            fun creditAllocation(creditAllocation: Optional<Allocation>) =
-                creditAllocation(creditAllocation.getOrNull())
-
-            /**
-             * Sets [Builder.creditAllocation] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.creditAllocation] with a well-typed [Allocation]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun creditAllocation(creditAllocation: JsonField<Allocation>) = apply {
-                this.creditAllocation = creditAllocation
-            }
-
-            fun currency(currency: String) = currency(JsonField.of(currency))
-
-            /**
-             * Sets [Builder.currency] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.currency] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
-
-            @Deprecated("deprecated")
-            fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
-
-            /** Alias for calling [Builder.discount] with `discount.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
-
-            /**
-             * Sets [Builder.discount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.discount] with a well-typed [Discount] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
-
-            /** Alias for calling [discount] with `Discount.ofPercentage(percentage)`. */
-            @Deprecated("deprecated")
-            fun discount(percentage: PercentageDiscount) =
-                discount(Discount.ofPercentage(percentage))
-
-            /**
-             * Alias for calling [discount] with the following:
-             * ```java
-             * PercentageDiscount.builder()
-             *     .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
-             *     .percentageDiscount(percentageDiscount)
-             *     .build()
-             * ```
-             */
-            @Deprecated("deprecated")
-            fun percentageDiscount(percentageDiscount: Double) =
-                discount(
-                    PercentageDiscount.builder()
-                        .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
-                        .percentageDiscount(percentageDiscount)
-                        .build()
-                )
-
-            /** Alias for calling [discount] with `Discount.ofTrial(trial)`. */
-            @Deprecated("deprecated")
-            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
-
-            /** Alias for calling [discount] with `Discount.ofUsage(usage)`. */
-            @Deprecated("deprecated")
-            fun discount(usage: UsageDiscount) = discount(Discount.ofUsage(usage))
-
-            /**
-             * Alias for calling [discount] with the following:
-             * ```java
-             * UsageDiscount.builder()
-             *     .discountType(UsageDiscount.DiscountType.USAGE)
-             *     .usageDiscount(usageDiscount)
-             *     .build()
-             * ```
-             */
-            @Deprecated("deprecated")
-            fun usageDiscount(usageDiscount: Double) =
-                discount(
-                    UsageDiscount.builder()
-                        .discountType(UsageDiscount.DiscountType.USAGE)
-                        .usageDiscount(usageDiscount)
-                        .build()
-                )
-
-            /** Alias for calling [discount] with `Discount.ofAmount(amount)`. */
-            @Deprecated("deprecated")
-            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
-
-            /**
-             * Alias for calling [discount] with the following:
-             * ```java
-             * AmountDiscount.builder()
-             *     .discountType(AmountDiscount.DiscountType.AMOUNT)
-             *     .amountDiscount(amountDiscount)
-             *     .build()
-             * ```
-             */
-            @Deprecated("deprecated")
-            fun amountDiscount(amountDiscount: String) =
-                discount(
-                    AmountDiscount.builder()
-                        .discountType(AmountDiscount.DiscountType.AMOUNT)
-                        .amountDiscount(amountDiscount)
-                        .build()
-                )
-
-            fun externalPriceId(externalPriceId: String?) =
-                externalPriceId(JsonField.ofNullable(externalPriceId))
-
-            /** Alias for calling [Builder.externalPriceId] with `externalPriceId.orElse(null)`. */
-            fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.getOrNull())
-
-            /**
-             * Sets [Builder.externalPriceId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.externalPriceId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun externalPriceId(externalPriceId: JsonField<String>) = apply {
-                this.externalPriceId = externalPriceId
-            }
-
-            fun fixedPriceQuantity(fixedPriceQuantity: Double?) =
-                fixedPriceQuantity(JsonField.ofNullable(fixedPriceQuantity))
-
-            /**
-             * Alias for [Builder.fixedPriceQuantity].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun fixedPriceQuantity(fixedPriceQuantity: Double) =
-                fixedPriceQuantity(fixedPriceQuantity as Double?)
-
-            /**
-             * Alias for calling [Builder.fixedPriceQuantity] with
-             * `fixedPriceQuantity.orElse(null)`.
-             */
-            fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
-
-            /**
-             * Sets [Builder.fixedPriceQuantity] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.fixedPriceQuantity] with a well-typed [Double] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
-                this.fixedPriceQuantity = fixedPriceQuantity
-            }
-
-            fun invoicingCycleConfiguration(
-                invoicingCycleConfiguration: BillingCycleConfiguration?
-            ) = invoicingCycleConfiguration(JsonField.ofNullable(invoicingCycleConfiguration))
-
-            /**
-             * Alias for calling [Builder.invoicingCycleConfiguration] with
-             * `invoicingCycleConfiguration.orElse(null)`.
-             */
-            fun invoicingCycleConfiguration(
-                invoicingCycleConfiguration: Optional<BillingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
-
-            /**
-             * Sets [Builder.invoicingCycleConfiguration] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.invoicingCycleConfiguration] with a well-typed
-             * [BillingCycleConfiguration] value instead. This method is primarily for setting the
-             * field to an undocumented or not yet supported value.
-             */
-            fun invoicingCycleConfiguration(
-                invoicingCycleConfiguration: JsonField<BillingCycleConfiguration>
-            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
-
-            fun item(item: ItemSlim) = item(JsonField.of(item))
-
-            /**
-             * Sets [Builder.item] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.item] with a well-typed [ItemSlim] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun item(item: JsonField<ItemSlim>) = apply { this.item = item }
-
-            @Deprecated("deprecated")
-            fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
-
-            /** Alias for calling [Builder.maximum] with `maximum.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
-
-            /**
-             * Sets [Builder.maximum] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.maximum] with a well-typed [Maximum] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
-
-            @Deprecated("deprecated")
-            fun maximumAmount(maximumAmount: String?) =
-                maximumAmount(JsonField.ofNullable(maximumAmount))
-
-            /** Alias for calling [Builder.maximumAmount] with `maximumAmount.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.getOrNull())
-
-            /**
-             * Sets [Builder.maximumAmount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.maximumAmount] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun maximumAmount(maximumAmount: JsonField<String>) = apply {
-                this.maximumAmount = maximumAmount
-            }
-
-            /**
-             * User specified key-value pairs for the resource. If not present, this defaults to an
-             * empty dictionary. Individual keys can be removed by setting the value to `null`, and
-             * the entire metadata mapping can be cleared by setting `metadata` to `null`.
-             */
-            fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
-
-            /**
-             * Sets [Builder.metadata] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
-
-            @Deprecated("deprecated")
-            fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
-
-            /** Alias for calling [Builder.minimum] with `minimum.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
-
-            /**
-             * Sets [Builder.minimum] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.minimum] with a well-typed [Minimum] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
-
-            @Deprecated("deprecated")
-            fun minimumAmount(minimumAmount: String?) =
-                minimumAmount(JsonField.ofNullable(minimumAmount))
-
-            /** Alias for calling [Builder.minimumAmount] with `minimumAmount.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.getOrNull())
-
-            /**
-             * Sets [Builder.minimumAmount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.minimumAmount] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun minimumAmount(minimumAmount: JsonField<String>) = apply {
-                this.minimumAmount = minimumAmount
-            }
-
-            /**
-             * Sets the field to an arbitrary JSON value.
-             *
-             * It is usually unnecessary to call this method because the field defaults to the
-             * following:
-             * ```java
-             * JsonValue.from("bps")
-             * ```
-             *
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
-
-            fun name(name: String) = name(JsonField.of(name))
-
-            /**
-             * Sets [Builder.name] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.name] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun name(name: JsonField<String>) = apply { this.name = name }
-
-            fun planPhaseOrder(planPhaseOrder: Long?) =
-                planPhaseOrder(JsonField.ofNullable(planPhaseOrder))
-
-            /**
-             * Alias for [Builder.planPhaseOrder].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
-
-            /** Alias for calling [Builder.planPhaseOrder] with `planPhaseOrder.orElse(null)`. */
-            fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.getOrNull())
-
-            /**
-             * Sets [Builder.planPhaseOrder] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.planPhaseOrder] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
-                this.planPhaseOrder = planPhaseOrder
-            }
-
-            fun priceType(priceType: PriceType) = priceType(JsonField.of(priceType))
-
-            /**
-             * Sets [Builder.priceType] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.priceType] with a well-typed [PriceType] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
-
-            /**
-             * The price id this price replaces. This price will take the place of the replaced
-             * price in plan version migrations.
-             */
-            fun replacesPriceId(replacesPriceId: String?) =
-                replacesPriceId(JsonField.ofNullable(replacesPriceId))
-
-            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
-            fun replacesPriceId(replacesPriceId: Optional<String>) =
-                replacesPriceId(replacesPriceId.getOrNull())
-
-            /**
-             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
-                this.replacesPriceId = replacesPriceId
-            }
-
-            fun dimensionalPriceConfiguration(
-                dimensionalPriceConfiguration: DimensionalPriceConfiguration?
-            ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
-
-            /**
-             * Alias for calling [Builder.dimensionalPriceConfiguration] with
-             * `dimensionalPriceConfiguration.orElse(null)`.
-             */
-            fun dimensionalPriceConfiguration(
-                dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
-
-            /**
-             * Sets [Builder.dimensionalPriceConfiguration] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.dimensionalPriceConfiguration] with a well-typed
-             * [DimensionalPriceConfiguration] value instead. This method is primarily for setting
-             * the field to an undocumented or not yet supported value.
-             */
-            fun dimensionalPriceConfiguration(
-                dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
-            ) = apply { this.dimensionalPriceConfiguration = dimensionalPriceConfiguration }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Bps].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .id()
-             * .billableMetric()
-             * .billingCycleConfiguration()
-             * .bpsConfig()
-             * .cadence()
-             * .conversionRate()
-             * .conversionRateConfig()
-             * .createdAt()
-             * .creditAllocation()
-             * .currency()
-             * .discount()
-             * .externalPriceId()
-             * .fixedPriceQuantity()
-             * .invoicingCycleConfiguration()
-             * .item()
-             * .maximum()
-             * .maximumAmount()
-             * .metadata()
-             * .minimum()
-             * .minimumAmount()
-             * .name()
-             * .planPhaseOrder()
-             * .priceType()
-             * .replacesPriceId()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): Bps =
-                Bps(
-                    checkRequired("id", id),
-                    checkRequired("billableMetric", billableMetric),
-                    checkRequired("billingCycleConfiguration", billingCycleConfiguration),
-                    checkRequired("bpsConfig", bpsConfig),
-                    checkRequired("cadence", cadence),
-                    checkRequired("conversionRate", conversionRate),
-                    checkRequired("conversionRateConfig", conversionRateConfig),
-                    checkRequired("createdAt", createdAt),
-                    checkRequired("creditAllocation", creditAllocation),
-                    checkRequired("currency", currency),
-                    checkRequired("discount", discount),
-                    checkRequired("externalPriceId", externalPriceId),
-                    checkRequired("fixedPriceQuantity", fixedPriceQuantity),
-                    checkRequired("invoicingCycleConfiguration", invoicingCycleConfiguration),
-                    checkRequired("item", item),
-                    checkRequired("maximum", maximum),
-                    checkRequired("maximumAmount", maximumAmount),
-                    checkRequired("metadata", metadata),
-                    checkRequired("minimum", minimum),
-                    checkRequired("minimumAmount", minimumAmount),
-                    modelType,
-                    checkRequired("name", name),
-                    checkRequired("planPhaseOrder", planPhaseOrder),
-                    checkRequired("priceType", priceType),
-                    checkRequired("replacesPriceId", replacesPriceId),
-                    dimensionalPriceConfiguration,
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): Bps = apply {
-            if (validated) {
-                return@apply
-            }
-
-            id()
-            billableMetric().ifPresent { it.validate() }
-            billingCycleConfiguration().validate()
-            bpsConfig().validate()
-            cadence().validate()
-            conversionRate()
-            conversionRateConfig().ifPresent { it.validate() }
-            createdAt()
-            creditAllocation().ifPresent { it.validate() }
-            currency()
-            discount().ifPresent { it.validate() }
-            externalPriceId()
-            fixedPriceQuantity()
-            invoicingCycleConfiguration().ifPresent { it.validate() }
-            item().validate()
-            maximum().ifPresent { it.validate() }
-            maximumAmount()
-            metadata().validate()
-            minimum().ifPresent { it.validate() }
-            minimumAmount()
-            _modelType().let {
-                if (it != JsonValue.from("bps")) {
-                    throw OrbInvalidDataException("'modelType' is invalid, received $it")
-                }
-            }
-            name()
-            planPhaseOrder()
-            priceType().validate()
-            replacesPriceId()
-            dimensionalPriceConfiguration().ifPresent { it.validate() }
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: OrbInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            (if (id.asKnown().isPresent) 1 else 0) +
-                (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
-                (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
-                (bpsConfig.asKnown().getOrNull()?.validity() ?: 0) +
-                (cadence.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (conversionRate.asKnown().isPresent) 1 else 0) +
-                (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (createdAt.asKnown().isPresent) 1 else 0) +
-                (creditAllocation.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (currency.asKnown().isPresent) 1 else 0) +
-                (discount.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (externalPriceId.asKnown().isPresent) 1 else 0) +
-                (if (fixedPriceQuantity.asKnown().isPresent) 1 else 0) +
-                (invoicingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
-                (item.asKnown().getOrNull()?.validity() ?: 0) +
-                (maximum.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (maximumAmount.asKnown().isPresent) 1 else 0) +
-                (metadata.asKnown().getOrNull()?.validity() ?: 0) +
-                (minimum.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (minimumAmount.asKnown().isPresent) 1 else 0) +
-                modelType.let { if (it == JsonValue.from("bps")) 1 else 0 } +
-                (if (name.asKnown().isPresent) 1 else 0) +
-                (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
-                (priceType.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
-                (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
-
-        class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
-            Enum {
-
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            companion object {
-
-                @JvmField val ONE_TIME = of("one_time")
-
-                @JvmField val MONTHLY = of("monthly")
-
-                @JvmField val QUARTERLY = of("quarterly")
-
-                @JvmField val SEMI_ANNUAL = of("semi_annual")
-
-                @JvmField val ANNUAL = of("annual")
-
-                @JvmField val CUSTOM = of("custom")
-
-                @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
-            }
-
-            /** An enum containing [Cadence]'s known values. */
-            enum class Known {
-                ONE_TIME,
-                MONTHLY,
-                QUARTERLY,
-                SEMI_ANNUAL,
-                ANNUAL,
-                CUSTOM,
-            }
-
-            /**
-             * An enum containing [Cadence]'s known values, as well as an [_UNKNOWN] member.
-             *
-             * An instance of [Cadence] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
-             * - It was constructed with an arbitrary value using the [of] method.
-             */
-            enum class Value {
-                ONE_TIME,
-                MONTHLY,
-                QUARTERLY,
-                SEMI_ANNUAL,
-                ANNUAL,
-                CUSTOM,
-                /**
-                 * An enum member indicating that [Cadence] was instantiated with an unknown value.
-                 */
-                _UNKNOWN,
-            }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
-             */
-            fun value(): Value =
-                when (this) {
-                    ONE_TIME -> Value.ONE_TIME
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    ANNUAL -> Value.ANNUAL
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
-             *
-             * @throws OrbInvalidDataException if this class instance's value is a not a known
-             *   member.
-             */
-            fun known(): Known =
-                when (this) {
-                    ONE_TIME -> Known.ONE_TIME
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    ANNUAL -> Known.ANNUAL
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
-
-            /**
-             * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
-             *
-             * @throws OrbInvalidDataException if this class instance's value does not have the
-             *   expected primitive type.
-             */
-            fun asString(): String =
-                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
-
-            private var validated: Boolean = false
-
-            fun validate(): Cadence = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                known()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: OrbInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Cadence && value == other.value
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-        }
-
-        /**
-         * User specified key-value pairs for the resource. If not present, this defaults to an
-         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
-         * entire metadata mapping can be cleared by setting `metadata` to `null`.
-         */
-        class Metadata
-        @JsonCreator
-        private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue
-            private val additionalProperties: Map<String, JsonValue>
-        ) {
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [Metadata]. */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [Metadata]. */
-            class Builder internal constructor() {
-
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(metadata: Metadata) = apply {
-                    additionalProperties = metadata.additionalProperties.toMutableMap()
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Metadata].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
-            }
-
-            private var validated: Boolean = false
-
-            fun validate(): Metadata = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: OrbInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Metadata && additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
-        }
-
-        class PriceType @JsonCreator private constructor(private val value: JsonField<String>) :
-            Enum {
-
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            companion object {
-
-                @JvmField val USAGE_PRICE = of("usage_price")
-
-                @JvmField val FIXED_PRICE = of("fixed_price")
-
-                @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
-            }
-
-            /** An enum containing [PriceType]'s known values. */
-            enum class Known {
-                USAGE_PRICE,
-                FIXED_PRICE,
-            }
-
-            /**
-             * An enum containing [PriceType]'s known values, as well as an [_UNKNOWN] member.
-             *
-             * An instance of [PriceType] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
-             * - It was constructed with an arbitrary value using the [of] method.
-             */
-            enum class Value {
-                USAGE_PRICE,
-                FIXED_PRICE,
-                /**
-                 * An enum member indicating that [PriceType] was instantiated with an unknown
-                 * value.
-                 */
-                _UNKNOWN,
-            }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
-             */
-            fun value(): Value =
-                when (this) {
-                    USAGE_PRICE -> Value.USAGE_PRICE
-                    FIXED_PRICE -> Value.FIXED_PRICE
-                    else -> Value._UNKNOWN
-                }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
-             *
-             * @throws OrbInvalidDataException if this class instance's value is a not a known
-             *   member.
-             */
-            fun known(): Known =
-                when (this) {
-                    USAGE_PRICE -> Known.USAGE_PRICE
-                    FIXED_PRICE -> Known.FIXED_PRICE
-                    else -> throw OrbInvalidDataException("Unknown PriceType: $value")
-                }
-
-            /**
-             * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
-             *
-             * @throws OrbInvalidDataException if this class instance's value does not have the
-             *   expected primitive type.
-             */
-            fun asString(): String =
-                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
-
-            private var validated: Boolean = false
-
-            fun validate(): PriceType = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                known()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: OrbInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PriceType && value == other.value
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Bps &&
-                id == other.id &&
-                billableMetric == other.billableMetric &&
-                billingCycleConfiguration == other.billingCycleConfiguration &&
-                bpsConfig == other.bpsConfig &&
-                cadence == other.cadence &&
-                conversionRate == other.conversionRate &&
-                conversionRateConfig == other.conversionRateConfig &&
-                createdAt == other.createdAt &&
-                creditAllocation == other.creditAllocation &&
-                currency == other.currency &&
-                discount == other.discount &&
-                externalPriceId == other.externalPriceId &&
-                fixedPriceQuantity == other.fixedPriceQuantity &&
-                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
-                item == other.item &&
-                maximum == other.maximum &&
-                maximumAmount == other.maximumAmount &&
-                metadata == other.metadata &&
-                minimum == other.minimum &&
-                minimumAmount == other.minimumAmount &&
-                modelType == other.modelType &&
-                name == other.name &&
-                planPhaseOrder == other.planPhaseOrder &&
-                priceType == other.priceType &&
-                replacesPriceId == other.replacesPriceId &&
-                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(
-                id,
-                billableMetric,
-                billingCycleConfiguration,
-                bpsConfig,
-                cadence,
-                conversionRate,
-                conversionRateConfig,
-                createdAt,
-                creditAllocation,
-                currency,
-                discount,
-                externalPriceId,
-                fixedPriceQuantity,
-                invoicingCycleConfiguration,
-                item,
-                maximum,
-                maximumAmount,
-                metadata,
-                minimum,
-                minimumAmount,
-                modelType,
-                name,
-                planPhaseOrder,
-                priceType,
-                replacesPriceId,
-                dimensionalPriceConfiguration,
-                additionalProperties,
-            )
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Bps{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, bpsConfig=$bpsConfig, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
-    }
-
-    class BulkBps
-    private constructor(
-        private val id: JsonField<String>,
-        private val billableMetric: JsonField<BillableMetricTiny>,
-        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
-        private val bulkBpsConfig: JsonField<BulkBpsConfig>,
-        private val cadence: JsonField<Cadence>,
-        private val conversionRate: JsonField<Double>,
-        private val conversionRateConfig: JsonField<ConversionRateConfig>,
-        private val createdAt: JsonField<OffsetDateTime>,
-        private val creditAllocation: JsonField<Allocation>,
-        private val currency: JsonField<String>,
-        private val discount: JsonField<Discount>,
-        private val externalPriceId: JsonField<String>,
-        private val fixedPriceQuantity: JsonField<Double>,
-        private val invoicingCycleConfiguration: JsonField<BillingCycleConfiguration>,
-        private val item: JsonField<ItemSlim>,
-        private val maximum: JsonField<Maximum>,
-        private val maximumAmount: JsonField<String>,
-        private val metadata: JsonField<Metadata>,
-        private val minimum: JsonField<Minimum>,
-        private val minimumAmount: JsonField<String>,
-        private val modelType: JsonValue,
-        private val name: JsonField<String>,
-        private val planPhaseOrder: JsonField<Long>,
-        private val priceType: JsonField<PriceType>,
-        private val replacesPriceId: JsonField<String>,
-        private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("billable_metric")
-            @ExcludeMissing
-            billableMetric: JsonField<BillableMetricTiny> = JsonMissing.of(),
-            @JsonProperty("billing_cycle_configuration")
-            @ExcludeMissing
-            billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
-            @JsonProperty("bulk_bps_config")
-            @ExcludeMissing
-            bulkBpsConfig: JsonField<BulkBpsConfig> = JsonMissing.of(),
-            @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
-            @JsonProperty("conversion_rate")
-            @ExcludeMissing
-            conversionRate: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("conversion_rate_config")
-            @ExcludeMissing
-            conversionRateConfig: JsonField<ConversionRateConfig> = JsonMissing.of(),
-            @JsonProperty("created_at")
-            @ExcludeMissing
-            createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("credit_allocation")
-            @ExcludeMissing
-            creditAllocation: JsonField<Allocation> = JsonMissing.of(),
-            @JsonProperty("currency")
-            @ExcludeMissing
-            currency: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("discount")
-            @ExcludeMissing
-            discount: JsonField<Discount> = JsonMissing.of(),
-            @JsonProperty("external_price_id")
-            @ExcludeMissing
-            externalPriceId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("fixed_price_quantity")
-            @ExcludeMissing
-            fixedPriceQuantity: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("invoicing_cycle_configuration")
-            @ExcludeMissing
-            invoicingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
-            @JsonProperty("item") @ExcludeMissing item: JsonField<ItemSlim> = JsonMissing.of(),
-            @JsonProperty("maximum") @ExcludeMissing maximum: JsonField<Maximum> = JsonMissing.of(),
-            @JsonProperty("maximum_amount")
-            @ExcludeMissing
-            maximumAmount: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            metadata: JsonField<Metadata> = JsonMissing.of(),
-            @JsonProperty("minimum") @ExcludeMissing minimum: JsonField<Minimum> = JsonMissing.of(),
-            @JsonProperty("minimum_amount")
-            @ExcludeMissing
-            minimumAmount: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
-            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("plan_phase_order")
-            @ExcludeMissing
-            planPhaseOrder: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("price_type")
-            @ExcludeMissing
-            priceType: JsonField<PriceType> = JsonMissing.of(),
-            @JsonProperty("replaces_price_id")
-            @ExcludeMissing
-            replacesPriceId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("dimensional_price_configuration")
-            @ExcludeMissing
-            dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
-                JsonMissing.of(),
-        ) : this(
-            id,
-            billableMetric,
-            billingCycleConfiguration,
-            bulkBpsConfig,
-            cadence,
-            conversionRate,
-            conversionRateConfig,
-            createdAt,
-            creditAllocation,
-            currency,
-            discount,
-            externalPriceId,
-            fixedPriceQuantity,
-            invoicingCycleConfiguration,
-            item,
-            maximum,
-            maximumAmount,
-            metadata,
-            minimum,
-            minimumAmount,
-            modelType,
-            name,
-            planPhaseOrder,
-            priceType,
-            replacesPriceId,
-            dimensionalPriceConfiguration,
-            mutableMapOf(),
-        )
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun id(): String = id.getRequired("id")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun billableMetric(): Optional<BillableMetricTiny> =
-            billableMetric.getOptional("billable_metric")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun billingCycleConfiguration(): BillingCycleConfiguration =
-            billingCycleConfiguration.getRequired("billing_cycle_configuration")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun bulkBpsConfig(): BulkBpsConfig = bulkBpsConfig.getRequired("bulk_bps_config")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun cadence(): Cadence = cadence.getRequired("cadence")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun conversionRate(): Optional<Double> = conversionRate.getOptional("conversion_rate")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun conversionRateConfig(): Optional<ConversionRateConfig> =
-            conversionRateConfig.getOptional("conversion_rate_config")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun creditAllocation(): Optional<Allocation> =
-            creditAllocation.getOptional("credit_allocation")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun currency(): String = currency.getRequired("currency")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated")
-        fun discount(): Optional<Discount> = discount.getOptional("discount")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun externalPriceId(): Optional<String> = externalPriceId.getOptional("external_price_id")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun fixedPriceQuantity(): Optional<Double> =
-            fixedPriceQuantity.getOptional("fixed_price_quantity")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun invoicingCycleConfiguration(): Optional<BillingCycleConfiguration> =
-            invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun item(): ItemSlim = item.getRequired("item")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated") fun maximum(): Optional<Maximum> = maximum.getOptional("maximum")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated")
-        fun maximumAmount(): Optional<String> = maximumAmount.getOptional("maximum_amount")
-
-        /**
-         * User specified key-value pairs for the resource. If not present, this defaults to an
-         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
-         * entire metadata mapping can be cleared by setting `metadata` to `null`.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun metadata(): Metadata = metadata.getRequired("metadata")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated") fun minimum(): Optional<Minimum> = minimum.getOptional("minimum")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated")
-        fun minimumAmount(): Optional<String> = minimumAmount.getOptional("minimum_amount")
-
-        /**
-         * Expected to always return the following:
-         * ```java
-         * JsonValue.from("bulk_bps")
-         * ```
-         *
-         * However, this method can be useful for debugging and logging (e.g. if the server
-         * responded with an unexpected value).
-         */
-        @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun name(): String = name.getRequired("name")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun planPhaseOrder(): Optional<Long> = planPhaseOrder.getOptional("plan_phase_order")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun priceType(): PriceType = priceType.getRequired("price_type")
-
-        /**
-         * The price id this price replaces. This price will take the place of the replaced price in
-         * plan version migrations.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
-
-        /**
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun dimensionalPriceConfiguration(): Optional<DimensionalPriceConfiguration> =
-            dimensionalPriceConfiguration.getOptional("dimensional_price_configuration")
-
-        /**
-         * Returns the raw JSON value of [id].
-         *
-         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
-
-        /**
-         * Returns the raw JSON value of [billableMetric].
-         *
-         * Unlike [billableMetric], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("billable_metric")
-        @ExcludeMissing
-        fun _billableMetric(): JsonField<BillableMetricTiny> = billableMetric
-
-        /**
-         * Returns the raw JSON value of [billingCycleConfiguration].
-         *
-         * Unlike [billingCycleConfiguration], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("billing_cycle_configuration")
-        @ExcludeMissing
-        fun _billingCycleConfiguration(): JsonField<BillingCycleConfiguration> =
-            billingCycleConfiguration
-
-        /**
-         * Returns the raw JSON value of [bulkBpsConfig].
-         *
-         * Unlike [bulkBpsConfig], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("bulk_bps_config")
-        @ExcludeMissing
-        fun _bulkBpsConfig(): JsonField<BulkBpsConfig> = bulkBpsConfig
-
-        /**
-         * Returns the raw JSON value of [cadence].
-         *
-         * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
-
-        /**
-         * Returns the raw JSON value of [conversionRate].
-         *
-         * Unlike [conversionRate], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("conversion_rate")
-        @ExcludeMissing
-        fun _conversionRate(): JsonField<Double> = conversionRate
-
-        /**
-         * Returns the raw JSON value of [conversionRateConfig].
-         *
-         * Unlike [conversionRateConfig], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("conversion_rate_config")
-        @ExcludeMissing
-        fun _conversionRateConfig(): JsonField<ConversionRateConfig> = conversionRateConfig
-
-        /**
-         * Returns the raw JSON value of [createdAt].
-         *
-         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("created_at")
-        @ExcludeMissing
-        fun _createdAt(): JsonField<OffsetDateTime> = createdAt
-
-        /**
-         * Returns the raw JSON value of [creditAllocation].
-         *
-         * Unlike [creditAllocation], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("credit_allocation")
-        @ExcludeMissing
-        fun _creditAllocation(): JsonField<Allocation> = creditAllocation
-
-        /**
-         * Returns the raw JSON value of [currency].
-         *
-         * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
-
-        /**
-         * Returns the raw JSON value of [discount].
-         *
-         * Unlike [discount], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("discount")
-        @ExcludeMissing
-        fun _discount(): JsonField<Discount> = discount
-
-        /**
-         * Returns the raw JSON value of [externalPriceId].
-         *
-         * Unlike [externalPriceId], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("external_price_id")
-        @ExcludeMissing
-        fun _externalPriceId(): JsonField<String> = externalPriceId
-
-        /**
-         * Returns the raw JSON value of [fixedPriceQuantity].
-         *
-         * Unlike [fixedPriceQuantity], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("fixed_price_quantity")
-        @ExcludeMissing
-        fun _fixedPriceQuantity(): JsonField<Double> = fixedPriceQuantity
-
-        /**
-         * Returns the raw JSON value of [invoicingCycleConfiguration].
-         *
-         * Unlike [invoicingCycleConfiguration], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("invoicing_cycle_configuration")
-        @ExcludeMissing
-        fun _invoicingCycleConfiguration(): JsonField<BillingCycleConfiguration> =
-            invoicingCycleConfiguration
-
-        /**
-         * Returns the raw JSON value of [item].
-         *
-         * Unlike [item], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("item") @ExcludeMissing fun _item(): JsonField<ItemSlim> = item
-
-        /**
-         * Returns the raw JSON value of [maximum].
-         *
-         * Unlike [maximum], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("maximum")
-        @ExcludeMissing
-        fun _maximum(): JsonField<Maximum> = maximum
-
-        /**
-         * Returns the raw JSON value of [maximumAmount].
-         *
-         * Unlike [maximumAmount], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("maximum_amount")
-        @ExcludeMissing
-        fun _maximumAmount(): JsonField<String> = maximumAmount
-
-        /**
-         * Returns the raw JSON value of [metadata].
-         *
-         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
-
-        /**
-         * Returns the raw JSON value of [minimum].
-         *
-         * Unlike [minimum], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("minimum")
-        @ExcludeMissing
-        fun _minimum(): JsonField<Minimum> = minimum
-
-        /**
-         * Returns the raw JSON value of [minimumAmount].
-         *
-         * Unlike [minimumAmount], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("minimum_amount")
-        @ExcludeMissing
-        fun _minimumAmount(): JsonField<String> = minimumAmount
-
-        /**
-         * Returns the raw JSON value of [name].
-         *
-         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
-
-        /**
-         * Returns the raw JSON value of [planPhaseOrder].
-         *
-         * Unlike [planPhaseOrder], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("plan_phase_order")
-        @ExcludeMissing
-        fun _planPhaseOrder(): JsonField<Long> = planPhaseOrder
-
-        /**
-         * Returns the raw JSON value of [priceType].
-         *
-         * Unlike [priceType], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("price_type")
-        @ExcludeMissing
-        fun _priceType(): JsonField<PriceType> = priceType
-
-        /**
-         * Returns the raw JSON value of [replacesPriceId].
-         *
-         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("replaces_price_id")
-        @ExcludeMissing
-        fun _replacesPriceId(): JsonField<String> = replacesPriceId
-
-        /**
-         * Returns the raw JSON value of [dimensionalPriceConfiguration].
-         *
-         * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
-         * an unexpected type.
-         */
-        @JsonProperty("dimensional_price_configuration")
-        @ExcludeMissing
-        fun _dimensionalPriceConfiguration(): JsonField<DimensionalPriceConfiguration> =
-            dimensionalPriceConfiguration
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [BulkBps].
-             *
-             * The following fields are required:
-             * ```java
-             * .id()
-             * .billableMetric()
-             * .billingCycleConfiguration()
-             * .bulkBpsConfig()
-             * .cadence()
-             * .conversionRate()
-             * .conversionRateConfig()
-             * .createdAt()
-             * .creditAllocation()
-             * .currency()
-             * .discount()
-             * .externalPriceId()
-             * .fixedPriceQuantity()
-             * .invoicingCycleConfiguration()
-             * .item()
-             * .maximum()
-             * .maximumAmount()
-             * .metadata()
-             * .minimum()
-             * .minimumAmount()
-             * .name()
-             * .planPhaseOrder()
-             * .priceType()
-             * .replacesPriceId()
-             * ```
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [BulkBps]. */
-        class Builder internal constructor() {
-
-            private var id: JsonField<String>? = null
-            private var billableMetric: JsonField<BillableMetricTiny>? = null
-            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
-            private var bulkBpsConfig: JsonField<BulkBpsConfig>? = null
-            private var cadence: JsonField<Cadence>? = null
-            private var conversionRate: JsonField<Double>? = null
-            private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
-            private var createdAt: JsonField<OffsetDateTime>? = null
-            private var creditAllocation: JsonField<Allocation>? = null
-            private var currency: JsonField<String>? = null
-            private var discount: JsonField<Discount>? = null
-            private var externalPriceId: JsonField<String>? = null
-            private var fixedPriceQuantity: JsonField<Double>? = null
-            private var invoicingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
-            private var item: JsonField<ItemSlim>? = null
-            private var maximum: JsonField<Maximum>? = null
-            private var maximumAmount: JsonField<String>? = null
-            private var metadata: JsonField<Metadata>? = null
-            private var minimum: JsonField<Minimum>? = null
-            private var minimumAmount: JsonField<String>? = null
-            private var modelType: JsonValue = JsonValue.from("bulk_bps")
-            private var name: JsonField<String>? = null
-            private var planPhaseOrder: JsonField<Long>? = null
-            private var priceType: JsonField<PriceType>? = null
-            private var replacesPriceId: JsonField<String>? = null
-            private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
-                JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(bulkBps: BulkBps) = apply {
-                id = bulkBps.id
-                billableMetric = bulkBps.billableMetric
-                billingCycleConfiguration = bulkBps.billingCycleConfiguration
-                bulkBpsConfig = bulkBps.bulkBpsConfig
-                cadence = bulkBps.cadence
-                conversionRate = bulkBps.conversionRate
-                conversionRateConfig = bulkBps.conversionRateConfig
-                createdAt = bulkBps.createdAt
-                creditAllocation = bulkBps.creditAllocation
-                currency = bulkBps.currency
-                discount = bulkBps.discount
-                externalPriceId = bulkBps.externalPriceId
-                fixedPriceQuantity = bulkBps.fixedPriceQuantity
-                invoicingCycleConfiguration = bulkBps.invoicingCycleConfiguration
-                item = bulkBps.item
-                maximum = bulkBps.maximum
-                maximumAmount = bulkBps.maximumAmount
-                metadata = bulkBps.metadata
-                minimum = bulkBps.minimum
-                minimumAmount = bulkBps.minimumAmount
-                modelType = bulkBps.modelType
-                name = bulkBps.name
-                planPhaseOrder = bulkBps.planPhaseOrder
-                priceType = bulkBps.priceType
-                replacesPriceId = bulkBps.replacesPriceId
-                dimensionalPriceConfiguration = bulkBps.dimensionalPriceConfiguration
-                additionalProperties = bulkBps.additionalProperties.toMutableMap()
-            }
-
-            fun id(id: String) = id(JsonField.of(id))
-
-            /**
-             * Sets [Builder.id] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun billableMetric(billableMetric: BillableMetricTiny?) =
-                billableMetric(JsonField.ofNullable(billableMetric))
-
-            /** Alias for calling [Builder.billableMetric] with `billableMetric.orElse(null)`. */
-            fun billableMetric(billableMetric: Optional<BillableMetricTiny>) =
-                billableMetric(billableMetric.getOrNull())
-
-            /**
-             * Sets [Builder.billableMetric] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.billableMetric] with a well-typed
-             * [BillableMetricTiny] value instead. This method is primarily for setting the field to
-             * an undocumented or not yet supported value.
-             */
-            fun billableMetric(billableMetric: JsonField<BillableMetricTiny>) = apply {
-                this.billableMetric = billableMetric
-            }
-
-            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
-                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
-
-            /**
-             * Sets [Builder.billingCycleConfiguration] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.billingCycleConfiguration] with a well-typed
-             * [BillingCycleConfiguration] value instead. This method is primarily for setting the
-             * field to an undocumented or not yet supported value.
-             */
-            fun billingCycleConfiguration(
-                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
-            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
-
-            fun bulkBpsConfig(bulkBpsConfig: BulkBpsConfig) =
-                bulkBpsConfig(JsonField.of(bulkBpsConfig))
-
-            /**
-             * Sets [Builder.bulkBpsConfig] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.bulkBpsConfig] with a well-typed [BulkBpsConfig]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun bulkBpsConfig(bulkBpsConfig: JsonField<BulkBpsConfig>) = apply {
-                this.bulkBpsConfig = bulkBpsConfig
-            }
-
-            fun cadence(cadence: Cadence) = cadence(JsonField.of(cadence))
-
-            /**
-             * Sets [Builder.cadence] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.cadence] with a well-typed [Cadence] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
-
-            fun conversionRate(conversionRate: Double?) =
-                conversionRate(JsonField.ofNullable(conversionRate))
-
-            /**
-             * Alias for [Builder.conversionRate].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
-
-            /** Alias for calling [Builder.conversionRate] with `conversionRate.orElse(null)`. */
-            fun conversionRate(conversionRate: Optional<Double>) =
-                conversionRate(conversionRate.getOrNull())
-
-            /**
-             * Sets [Builder.conversionRate] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.conversionRate] with a well-typed [Double] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun conversionRate(conversionRate: JsonField<Double>) = apply {
-                this.conversionRate = conversionRate
-            }
-
-            fun conversionRateConfig(conversionRateConfig: ConversionRateConfig?) =
-                conversionRateConfig(JsonField.ofNullable(conversionRateConfig))
-
-            /**
-             * Alias for calling [Builder.conversionRateConfig] with
-             * `conversionRateConfig.orElse(null)`.
-             */
-            fun conversionRateConfig(conversionRateConfig: Optional<ConversionRateConfig>) =
-                conversionRateConfig(conversionRateConfig.getOrNull())
-
-            /**
-             * Sets [Builder.conversionRateConfig] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.conversionRateConfig] with a well-typed
-             * [ConversionRateConfig] value instead. This method is primarily for setting the field
-             * to an undocumented or not yet supported value.
-             */
-            fun conversionRateConfig(conversionRateConfig: JsonField<ConversionRateConfig>) =
-                apply {
-                    this.conversionRateConfig = conversionRateConfig
-                }
-
-            /**
-             * Alias for calling [conversionRateConfig] with `ConversionRateConfig.ofUnit(unit)`.
-             */
-            fun conversionRateConfig(unit: UnitConversionRateConfig) =
-                conversionRateConfig(ConversionRateConfig.ofUnit(unit))
-
-            /**
-             * Alias for calling [conversionRateConfig] with the following:
-             * ```java
-             * UnitConversionRateConfig.builder()
-             *     .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
-             *     .unitConfig(unitConfig)
-             *     .build()
-             * ```
-             */
-            fun unitConversionRateConfig(unitConfig: ConversionRateUnitConfig) =
-                conversionRateConfig(
-                    UnitConversionRateConfig.builder()
-                        .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
-                        .unitConfig(unitConfig)
-                        .build()
-                )
-
-            /**
-             * Alias for calling [conversionRateConfig] with
-             * `ConversionRateConfig.ofTiered(tiered)`.
-             */
-            fun conversionRateConfig(tiered: TieredConversionRateConfig) =
-                conversionRateConfig(ConversionRateConfig.ofTiered(tiered))
-
-            /**
-             * Alias for calling [conversionRateConfig] with the following:
-             * ```java
-             * TieredConversionRateConfig.builder()
-             *     .conversionRateType(TieredConversionRateConfig.ConversionRateType.TIERED)
-             *     .tieredConfig(tieredConfig)
-             *     .build()
-             * ```
-             */
-            fun tieredConversionRateConfig(tieredConfig: ConversionRateTieredConfig) =
-                conversionRateConfig(
-                    TieredConversionRateConfig.builder()
-                        .conversionRateType(TieredConversionRateConfig.ConversionRateType.TIERED)
-                        .tieredConfig(tieredConfig)
-                        .build()
-                )
-
-            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
-
-            /**
-             * Sets [Builder.createdAt] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
-                this.createdAt = createdAt
-            }
-
-            fun creditAllocation(creditAllocation: Allocation?) =
-                creditAllocation(JsonField.ofNullable(creditAllocation))
-
-            /**
-             * Alias for calling [Builder.creditAllocation] with `creditAllocation.orElse(null)`.
-             */
-            fun creditAllocation(creditAllocation: Optional<Allocation>) =
-                creditAllocation(creditAllocation.getOrNull())
-
-            /**
-             * Sets [Builder.creditAllocation] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.creditAllocation] with a well-typed [Allocation]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun creditAllocation(creditAllocation: JsonField<Allocation>) = apply {
-                this.creditAllocation = creditAllocation
-            }
-
-            fun currency(currency: String) = currency(JsonField.of(currency))
-
-            /**
-             * Sets [Builder.currency] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.currency] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
-
-            @Deprecated("deprecated")
-            fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
-
-            /** Alias for calling [Builder.discount] with `discount.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
-
-            /**
-             * Sets [Builder.discount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.discount] with a well-typed [Discount] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
-
-            /** Alias for calling [discount] with `Discount.ofPercentage(percentage)`. */
-            @Deprecated("deprecated")
-            fun discount(percentage: PercentageDiscount) =
-                discount(Discount.ofPercentage(percentage))
-
-            /**
-             * Alias for calling [discount] with the following:
-             * ```java
-             * PercentageDiscount.builder()
-             *     .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
-             *     .percentageDiscount(percentageDiscount)
-             *     .build()
-             * ```
-             */
-            @Deprecated("deprecated")
-            fun percentageDiscount(percentageDiscount: Double) =
-                discount(
-                    PercentageDiscount.builder()
-                        .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
-                        .percentageDiscount(percentageDiscount)
-                        .build()
-                )
-
-            /** Alias for calling [discount] with `Discount.ofTrial(trial)`. */
-            @Deprecated("deprecated")
-            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
-
-            /** Alias for calling [discount] with `Discount.ofUsage(usage)`. */
-            @Deprecated("deprecated")
-            fun discount(usage: UsageDiscount) = discount(Discount.ofUsage(usage))
-
-            /**
-             * Alias for calling [discount] with the following:
-             * ```java
-             * UsageDiscount.builder()
-             *     .discountType(UsageDiscount.DiscountType.USAGE)
-             *     .usageDiscount(usageDiscount)
-             *     .build()
-             * ```
-             */
-            @Deprecated("deprecated")
-            fun usageDiscount(usageDiscount: Double) =
-                discount(
-                    UsageDiscount.builder()
-                        .discountType(UsageDiscount.DiscountType.USAGE)
-                        .usageDiscount(usageDiscount)
-                        .build()
-                )
-
-            /** Alias for calling [discount] with `Discount.ofAmount(amount)`. */
-            @Deprecated("deprecated")
-            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
-
-            /**
-             * Alias for calling [discount] with the following:
-             * ```java
-             * AmountDiscount.builder()
-             *     .discountType(AmountDiscount.DiscountType.AMOUNT)
-             *     .amountDiscount(amountDiscount)
-             *     .build()
-             * ```
-             */
-            @Deprecated("deprecated")
-            fun amountDiscount(amountDiscount: String) =
-                discount(
-                    AmountDiscount.builder()
-                        .discountType(AmountDiscount.DiscountType.AMOUNT)
-                        .amountDiscount(amountDiscount)
-                        .build()
-                )
-
-            fun externalPriceId(externalPriceId: String?) =
-                externalPriceId(JsonField.ofNullable(externalPriceId))
-
-            /** Alias for calling [Builder.externalPriceId] with `externalPriceId.orElse(null)`. */
-            fun externalPriceId(externalPriceId: Optional<String>) =
-                externalPriceId(externalPriceId.getOrNull())
-
-            /**
-             * Sets [Builder.externalPriceId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.externalPriceId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun externalPriceId(externalPriceId: JsonField<String>) = apply {
-                this.externalPriceId = externalPriceId
-            }
-
-            fun fixedPriceQuantity(fixedPriceQuantity: Double?) =
-                fixedPriceQuantity(JsonField.ofNullable(fixedPriceQuantity))
-
-            /**
-             * Alias for [Builder.fixedPriceQuantity].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun fixedPriceQuantity(fixedPriceQuantity: Double) =
-                fixedPriceQuantity(fixedPriceQuantity as Double?)
-
-            /**
-             * Alias for calling [Builder.fixedPriceQuantity] with
-             * `fixedPriceQuantity.orElse(null)`.
-             */
-            fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
-                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
-
-            /**
-             * Sets [Builder.fixedPriceQuantity] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.fixedPriceQuantity] with a well-typed [Double] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
-                this.fixedPriceQuantity = fixedPriceQuantity
-            }
-
-            fun invoicingCycleConfiguration(
-                invoicingCycleConfiguration: BillingCycleConfiguration?
-            ) = invoicingCycleConfiguration(JsonField.ofNullable(invoicingCycleConfiguration))
-
-            /**
-             * Alias for calling [Builder.invoicingCycleConfiguration] with
-             * `invoicingCycleConfiguration.orElse(null)`.
-             */
-            fun invoicingCycleConfiguration(
-                invoicingCycleConfiguration: Optional<BillingCycleConfiguration>
-            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
-
-            /**
-             * Sets [Builder.invoicingCycleConfiguration] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.invoicingCycleConfiguration] with a well-typed
-             * [BillingCycleConfiguration] value instead. This method is primarily for setting the
-             * field to an undocumented or not yet supported value.
-             */
-            fun invoicingCycleConfiguration(
-                invoicingCycleConfiguration: JsonField<BillingCycleConfiguration>
-            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
-
-            fun item(item: ItemSlim) = item(JsonField.of(item))
-
-            /**
-             * Sets [Builder.item] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.item] with a well-typed [ItemSlim] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun item(item: JsonField<ItemSlim>) = apply { this.item = item }
-
-            @Deprecated("deprecated")
-            fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
-
-            /** Alias for calling [Builder.maximum] with `maximum.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
-
-            /**
-             * Sets [Builder.maximum] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.maximum] with a well-typed [Maximum] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
-
-            @Deprecated("deprecated")
-            fun maximumAmount(maximumAmount: String?) =
-                maximumAmount(JsonField.ofNullable(maximumAmount))
-
-            /** Alias for calling [Builder.maximumAmount] with `maximumAmount.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.getOrNull())
-
-            /**
-             * Sets [Builder.maximumAmount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.maximumAmount] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun maximumAmount(maximumAmount: JsonField<String>) = apply {
-                this.maximumAmount = maximumAmount
-            }
-
-            /**
-             * User specified key-value pairs for the resource. If not present, this defaults to an
-             * empty dictionary. Individual keys can be removed by setting the value to `null`, and
-             * the entire metadata mapping can be cleared by setting `metadata` to `null`.
-             */
-            fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
-
-            /**
-             * Sets [Builder.metadata] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
-
-            @Deprecated("deprecated")
-            fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
-
-            /** Alias for calling [Builder.minimum] with `minimum.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
-
-            /**
-             * Sets [Builder.minimum] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.minimum] with a well-typed [Minimum] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
-
-            @Deprecated("deprecated")
-            fun minimumAmount(minimumAmount: String?) =
-                minimumAmount(JsonField.ofNullable(minimumAmount))
-
-            /** Alias for calling [Builder.minimumAmount] with `minimumAmount.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.getOrNull())
-
-            /**
-             * Sets [Builder.minimumAmount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.minimumAmount] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun minimumAmount(minimumAmount: JsonField<String>) = apply {
-                this.minimumAmount = minimumAmount
-            }
-
-            /**
-             * Sets the field to an arbitrary JSON value.
-             *
-             * It is usually unnecessary to call this method because the field defaults to the
-             * following:
-             * ```java
-             * JsonValue.from("bulk_bps")
-             * ```
-             *
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
-
-            fun name(name: String) = name(JsonField.of(name))
-
-            /**
-             * Sets [Builder.name] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.name] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun name(name: JsonField<String>) = apply { this.name = name }
-
-            fun planPhaseOrder(planPhaseOrder: Long?) =
-                planPhaseOrder(JsonField.ofNullable(planPhaseOrder))
-
-            /**
-             * Alias for [Builder.planPhaseOrder].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
-
-            /** Alias for calling [Builder.planPhaseOrder] with `planPhaseOrder.orElse(null)`. */
-            fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
-                planPhaseOrder(planPhaseOrder.getOrNull())
-
-            /**
-             * Sets [Builder.planPhaseOrder] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.planPhaseOrder] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
-                this.planPhaseOrder = planPhaseOrder
-            }
-
-            fun priceType(priceType: PriceType) = priceType(JsonField.of(priceType))
-
-            /**
-             * Sets [Builder.priceType] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.priceType] with a well-typed [PriceType] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
-
-            /**
-             * The price id this price replaces. This price will take the place of the replaced
-             * price in plan version migrations.
-             */
-            fun replacesPriceId(replacesPriceId: String?) =
-                replacesPriceId(JsonField.ofNullable(replacesPriceId))
-
-            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
-            fun replacesPriceId(replacesPriceId: Optional<String>) =
-                replacesPriceId(replacesPriceId.getOrNull())
-
-            /**
-             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
-                this.replacesPriceId = replacesPriceId
-            }
-
-            fun dimensionalPriceConfiguration(
-                dimensionalPriceConfiguration: DimensionalPriceConfiguration?
-            ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
-
-            /**
-             * Alias for calling [Builder.dimensionalPriceConfiguration] with
-             * `dimensionalPriceConfiguration.orElse(null)`.
-             */
-            fun dimensionalPriceConfiguration(
-                dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
-            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
-
-            /**
-             * Sets [Builder.dimensionalPriceConfiguration] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.dimensionalPriceConfiguration] with a well-typed
-             * [DimensionalPriceConfiguration] value instead. This method is primarily for setting
-             * the field to an undocumented or not yet supported value.
-             */
-            fun dimensionalPriceConfiguration(
-                dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
-            ) = apply { this.dimensionalPriceConfiguration = dimensionalPriceConfiguration }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [BulkBps].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .id()
-             * .billableMetric()
-             * .billingCycleConfiguration()
-             * .bulkBpsConfig()
-             * .cadence()
-             * .conversionRate()
-             * .conversionRateConfig()
-             * .createdAt()
-             * .creditAllocation()
-             * .currency()
-             * .discount()
-             * .externalPriceId()
-             * .fixedPriceQuantity()
-             * .invoicingCycleConfiguration()
-             * .item()
-             * .maximum()
-             * .maximumAmount()
-             * .metadata()
-             * .minimum()
-             * .minimumAmount()
-             * .name()
-             * .planPhaseOrder()
-             * .priceType()
-             * .replacesPriceId()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): BulkBps =
-                BulkBps(
-                    checkRequired("id", id),
-                    checkRequired("billableMetric", billableMetric),
-                    checkRequired("billingCycleConfiguration", billingCycleConfiguration),
-                    checkRequired("bulkBpsConfig", bulkBpsConfig),
-                    checkRequired("cadence", cadence),
-                    checkRequired("conversionRate", conversionRate),
-                    checkRequired("conversionRateConfig", conversionRateConfig),
-                    checkRequired("createdAt", createdAt),
-                    checkRequired("creditAllocation", creditAllocation),
-                    checkRequired("currency", currency),
-                    checkRequired("discount", discount),
-                    checkRequired("externalPriceId", externalPriceId),
-                    checkRequired("fixedPriceQuantity", fixedPriceQuantity),
-                    checkRequired("invoicingCycleConfiguration", invoicingCycleConfiguration),
-                    checkRequired("item", item),
-                    checkRequired("maximum", maximum),
-                    checkRequired("maximumAmount", maximumAmount),
-                    checkRequired("metadata", metadata),
-                    checkRequired("minimum", minimum),
-                    checkRequired("minimumAmount", minimumAmount),
-                    modelType,
-                    checkRequired("name", name),
-                    checkRequired("planPhaseOrder", planPhaseOrder),
-                    checkRequired("priceType", priceType),
-                    checkRequired("replacesPriceId", replacesPriceId),
-                    dimensionalPriceConfiguration,
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): BulkBps = apply {
-            if (validated) {
-                return@apply
-            }
-
-            id()
-            billableMetric().ifPresent { it.validate() }
-            billingCycleConfiguration().validate()
-            bulkBpsConfig().validate()
-            cadence().validate()
-            conversionRate()
-            conversionRateConfig().ifPresent { it.validate() }
-            createdAt()
-            creditAllocation().ifPresent { it.validate() }
-            currency()
-            discount().ifPresent { it.validate() }
-            externalPriceId()
-            fixedPriceQuantity()
-            invoicingCycleConfiguration().ifPresent { it.validate() }
-            item().validate()
-            maximum().ifPresent { it.validate() }
-            maximumAmount()
-            metadata().validate()
-            minimum().ifPresent { it.validate() }
-            minimumAmount()
-            _modelType().let {
-                if (it != JsonValue.from("bulk_bps")) {
-                    throw OrbInvalidDataException("'modelType' is invalid, received $it")
-                }
-            }
-            name()
-            planPhaseOrder()
-            priceType().validate()
-            replacesPriceId()
-            dimensionalPriceConfiguration().ifPresent { it.validate() }
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: OrbInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            (if (id.asKnown().isPresent) 1 else 0) +
-                (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
-                (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
-                (bulkBpsConfig.asKnown().getOrNull()?.validity() ?: 0) +
-                (cadence.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (conversionRate.asKnown().isPresent) 1 else 0) +
-                (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (createdAt.asKnown().isPresent) 1 else 0) +
-                (creditAllocation.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (currency.asKnown().isPresent) 1 else 0) +
-                (discount.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (externalPriceId.asKnown().isPresent) 1 else 0) +
-                (if (fixedPriceQuantity.asKnown().isPresent) 1 else 0) +
-                (invoicingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
-                (item.asKnown().getOrNull()?.validity() ?: 0) +
-                (maximum.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (maximumAmount.asKnown().isPresent) 1 else 0) +
-                (metadata.asKnown().getOrNull()?.validity() ?: 0) +
-                (minimum.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (minimumAmount.asKnown().isPresent) 1 else 0) +
-                modelType.let { if (it == JsonValue.from("bulk_bps")) 1 else 0 } +
-                (if (name.asKnown().isPresent) 1 else 0) +
-                (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
-                (priceType.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
-                (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
-
-        class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
-            Enum {
-
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            companion object {
-
-                @JvmField val ONE_TIME = of("one_time")
-
-                @JvmField val MONTHLY = of("monthly")
-
-                @JvmField val QUARTERLY = of("quarterly")
-
-                @JvmField val SEMI_ANNUAL = of("semi_annual")
-
-                @JvmField val ANNUAL = of("annual")
-
-                @JvmField val CUSTOM = of("custom")
-
-                @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
-            }
-
-            /** An enum containing [Cadence]'s known values. */
-            enum class Known {
-                ONE_TIME,
-                MONTHLY,
-                QUARTERLY,
-                SEMI_ANNUAL,
-                ANNUAL,
-                CUSTOM,
-            }
-
-            /**
-             * An enum containing [Cadence]'s known values, as well as an [_UNKNOWN] member.
-             *
-             * An instance of [Cadence] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
-             * - It was constructed with an arbitrary value using the [of] method.
-             */
-            enum class Value {
-                ONE_TIME,
-                MONTHLY,
-                QUARTERLY,
-                SEMI_ANNUAL,
-                ANNUAL,
-                CUSTOM,
-                /**
-                 * An enum member indicating that [Cadence] was instantiated with an unknown value.
-                 */
-                _UNKNOWN,
-            }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
-             */
-            fun value(): Value =
-                when (this) {
-                    ONE_TIME -> Value.ONE_TIME
-                    MONTHLY -> Value.MONTHLY
-                    QUARTERLY -> Value.QUARTERLY
-                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
-                    ANNUAL -> Value.ANNUAL
-                    CUSTOM -> Value.CUSTOM
-                    else -> Value._UNKNOWN
-                }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
-             *
-             * @throws OrbInvalidDataException if this class instance's value is a not a known
-             *   member.
-             */
-            fun known(): Known =
-                when (this) {
-                    ONE_TIME -> Known.ONE_TIME
-                    MONTHLY -> Known.MONTHLY
-                    QUARTERLY -> Known.QUARTERLY
-                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
-                    ANNUAL -> Known.ANNUAL
-                    CUSTOM -> Known.CUSTOM
-                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
-                }
-
-            /**
-             * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
-             *
-             * @throws OrbInvalidDataException if this class instance's value does not have the
-             *   expected primitive type.
-             */
-            fun asString(): String =
-                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
-
-            private var validated: Boolean = false
-
-            fun validate(): Cadence = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                known()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: OrbInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Cadence && value == other.value
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-        }
-
-        /**
-         * User specified key-value pairs for the resource. If not present, this defaults to an
-         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
-         * entire metadata mapping can be cleared by setting `metadata` to `null`.
-         */
-        class Metadata
-        @JsonCreator
-        private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue
-            private val additionalProperties: Map<String, JsonValue>
-        ) {
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [Metadata]. */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [Metadata]. */
-            class Builder internal constructor() {
-
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(metadata: Metadata) = apply {
-                    additionalProperties = metadata.additionalProperties.toMutableMap()
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Metadata].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
-            }
-
-            private var validated: Boolean = false
-
-            fun validate(): Metadata = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: OrbInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Metadata && additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
-        }
-
-        class PriceType @JsonCreator private constructor(private val value: JsonField<String>) :
-            Enum {
-
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            companion object {
-
-                @JvmField val USAGE_PRICE = of("usage_price")
-
-                @JvmField val FIXED_PRICE = of("fixed_price")
-
-                @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
-            }
-
-            /** An enum containing [PriceType]'s known values. */
-            enum class Known {
-                USAGE_PRICE,
-                FIXED_PRICE,
-            }
-
-            /**
-             * An enum containing [PriceType]'s known values, as well as an [_UNKNOWN] member.
-             *
-             * An instance of [PriceType] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
-             * - It was constructed with an arbitrary value using the [of] method.
-             */
-            enum class Value {
-                USAGE_PRICE,
-                FIXED_PRICE,
-                /**
-                 * An enum member indicating that [PriceType] was instantiated with an unknown
-                 * value.
-                 */
-                _UNKNOWN,
-            }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
-             */
-            fun value(): Value =
-                when (this) {
-                    USAGE_PRICE -> Value.USAGE_PRICE
-                    FIXED_PRICE -> Value.FIXED_PRICE
-                    else -> Value._UNKNOWN
-                }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
-             *
-             * @throws OrbInvalidDataException if this class instance's value is a not a known
-             *   member.
-             */
-            fun known(): Known =
-                when (this) {
-                    USAGE_PRICE -> Known.USAGE_PRICE
-                    FIXED_PRICE -> Known.FIXED_PRICE
-                    else -> throw OrbInvalidDataException("Unknown PriceType: $value")
-                }
-
-            /**
-             * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
-             *
-             * @throws OrbInvalidDataException if this class instance's value does not have the
-             *   expected primitive type.
-             */
-            fun asString(): String =
-                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
-
-            private var validated: Boolean = false
-
-            fun validate(): PriceType = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                known()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: OrbInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PriceType && value == other.value
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is BulkBps &&
-                id == other.id &&
-                billableMetric == other.billableMetric &&
-                billingCycleConfiguration == other.billingCycleConfiguration &&
-                bulkBpsConfig == other.bulkBpsConfig &&
-                cadence == other.cadence &&
-                conversionRate == other.conversionRate &&
-                conversionRateConfig == other.conversionRateConfig &&
-                createdAt == other.createdAt &&
-                creditAllocation == other.creditAllocation &&
-                currency == other.currency &&
-                discount == other.discount &&
-                externalPriceId == other.externalPriceId &&
-                fixedPriceQuantity == other.fixedPriceQuantity &&
-                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
-                item == other.item &&
-                maximum == other.maximum &&
-                maximumAmount == other.maximumAmount &&
-                metadata == other.metadata &&
-                minimum == other.minimum &&
-                minimumAmount == other.minimumAmount &&
-                modelType == other.modelType &&
-                name == other.name &&
-                planPhaseOrder == other.planPhaseOrder &&
-                priceType == other.priceType &&
-                replacesPriceId == other.replacesPriceId &&
-                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(
-                id,
-                billableMetric,
-                billingCycleConfiguration,
-                bulkBpsConfig,
-                cadence,
-                conversionRate,
-                conversionRateConfig,
-                createdAt,
-                creditAllocation,
-                currency,
-                discount,
-                externalPriceId,
-                fixedPriceQuantity,
-                invoicingCycleConfiguration,
-                item,
-                maximum,
-                maximumAmount,
-                metadata,
-                minimum,
-                minimumAmount,
-                modelType,
-                name,
-                planPhaseOrder,
-                priceType,
-                replacesPriceId,
-                dimensionalPriceConfiguration,
-                additionalProperties,
-            )
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "BulkBps{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, bulkBpsConfig=$bulkBpsConfig, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "Tiered{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, tieredConfig=$tieredConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class Bulk
@@ -14083,6 +8745,7 @@ private constructor(
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val bulkConfig: JsonField<BulkConfig>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -14120,6 +8783,9 @@ private constructor(
             @ExcludeMissing
             bulkConfig: JsonField<BulkConfig> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -14180,6 +8846,7 @@ private constructor(
             billingCycleConfiguration,
             bulkConfig,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -14235,6 +8902,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -14425,6 +9099,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -14640,6 +9324,7 @@ private constructor(
              * .billingCycleConfiguration()
              * .bulkConfig()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -14672,6 +9357,7 @@ private constructor(
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var bulkConfig: JsonField<BulkConfig>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -14703,6 +9389,7 @@ private constructor(
                 billingCycleConfiguration = bulk.billingCycleConfiguration
                 bulkConfig = bulk.bulkConfig
                 cadence = bulk.cadence
+                compositePriceFilters = bulk.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = bulk.conversionRate
                 conversionRateConfig = bulk.conversionRateConfig
                 createdAt = bulk.createdAt
@@ -14793,6 +9480,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -15330,6 +10052,7 @@ private constructor(
              * .billingCycleConfiguration()
              * .bulkConfig()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -15360,6 +10083,9 @@ private constructor(
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("bulkConfig", bulkConfig),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -15397,6 +10123,7 @@ private constructor(
             billingCycleConfiguration().validate()
             bulkConfig().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -15446,6 +10173,8 @@ private constructor(
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (bulkConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -15867,6 +10596,7 @@ private constructor(
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 bulkConfig == other.bulkConfig &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -15898,6 +10628,7 @@ private constructor(
                 billingCycleConfiguration,
                 bulkConfig,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -15926,7 +10657,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Bulk{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, bulkConfig=$bulkConfig, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "Bulk{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, bulkConfig=$bulkConfig, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class ThresholdTotalAmount
@@ -15935,6 +10666,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -15970,6 +10702,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -16032,6 +10767,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -16082,6 +10818,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -16270,6 +11013,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -16495,6 +11248,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -16527,6 +11281,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -16558,6 +11313,8 @@ private constructor(
                 billableMetric = thresholdTotalAmount.billableMetric
                 billingCycleConfiguration = thresholdTotalAmount.billingCycleConfiguration
                 cadence = thresholdTotalAmount.cadence
+                compositePriceFilters =
+                    thresholdTotalAmount.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = thresholdTotalAmount.conversionRate
                 conversionRateConfig = thresholdTotalAmount.conversionRateConfig
                 createdAt = thresholdTotalAmount.createdAt
@@ -16636,6 +11393,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -17186,6 +11978,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -17216,6 +12009,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -17253,6 +12049,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -17302,6 +12099,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -17832,6 +12631,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -17863,6 +12663,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -17892,7 +12693,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ThresholdTotalAmount{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, thresholdTotalAmountConfig=$thresholdTotalAmountConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "ThresholdTotalAmount{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, thresholdTotalAmountConfig=$thresholdTotalAmountConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class TieredPackage
@@ -17901,6 +12702,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -17936,6 +12738,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -17998,6 +12803,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -18048,6 +12854,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -18236,6 +13049,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -18460,6 +13283,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -18492,6 +13316,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -18523,6 +13348,8 @@ private constructor(
                 billableMetric = tieredPackage.billableMetric
                 billingCycleConfiguration = tieredPackage.billingCycleConfiguration
                 cadence = tieredPackage.cadence
+                compositePriceFilters =
+                    tieredPackage.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = tieredPackage.conversionRate
                 conversionRateConfig = tieredPackage.conversionRateConfig
                 createdAt = tieredPackage.createdAt
@@ -18601,6 +13428,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -19151,6 +14013,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -19181,6 +14044,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -19218,6 +14084,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -19267,6 +14134,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -19795,6 +14664,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -19826,6 +14696,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -19855,7 +14726,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "TieredPackage{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, tieredPackageConfig=$tieredPackageConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "TieredPackage{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, tieredPackageConfig=$tieredPackageConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class GroupedTiered
@@ -19864,6 +14735,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -19899,6 +14771,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -19961,6 +14836,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -20011,6 +14887,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -20199,6 +15082,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -20423,6 +15316,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -20455,6 +15349,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -20486,6 +15381,8 @@ private constructor(
                 billableMetric = groupedTiered.billableMetric
                 billingCycleConfiguration = groupedTiered.billingCycleConfiguration
                 cadence = groupedTiered.cadence
+                compositePriceFilters =
+                    groupedTiered.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = groupedTiered.conversionRate
                 conversionRateConfig = groupedTiered.conversionRateConfig
                 createdAt = groupedTiered.createdAt
@@ -20564,6 +15461,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -21114,6 +16046,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -21144,6 +16077,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -21181,6 +16117,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -21230,6 +16167,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -21758,6 +16697,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -21789,6 +16729,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -21818,7 +16759,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "GroupedTiered{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedTieredConfig=$groupedTieredConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "GroupedTiered{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedTieredConfig=$groupedTieredConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class TieredWithMinimum
@@ -21827,6 +16768,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -21862,6 +16804,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -21924,6 +16869,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -21974,6 +16920,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -22162,6 +17115,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -22386,6 +17349,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -22418,6 +17382,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -22449,6 +17414,8 @@ private constructor(
                 billableMetric = tieredWithMinimum.billableMetric
                 billingCycleConfiguration = tieredWithMinimum.billingCycleConfiguration
                 cadence = tieredWithMinimum.cadence
+                compositePriceFilters =
+                    tieredWithMinimum.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = tieredWithMinimum.conversionRate
                 conversionRateConfig = tieredWithMinimum.conversionRateConfig
                 createdAt = tieredWithMinimum.createdAt
@@ -22527,6 +17494,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -23077,6 +18079,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -23107,6 +18110,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -23144,6 +18150,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -23193,6 +18200,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -23723,6 +18732,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -23754,6 +18764,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -23783,7 +18794,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "TieredWithMinimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, tieredWithMinimumConfig=$tieredWithMinimumConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "TieredWithMinimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, tieredWithMinimumConfig=$tieredWithMinimumConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class TieredPackageWithMinimum
@@ -23792,6 +18803,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -23827,6 +18839,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -23890,6 +18905,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -23940,6 +18956,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -24128,6 +19151,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -24353,6 +19386,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -24385,6 +19419,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -24417,6 +19452,8 @@ private constructor(
                 billableMetric = tieredPackageWithMinimum.billableMetric
                 billingCycleConfiguration = tieredPackageWithMinimum.billingCycleConfiguration
                 cadence = tieredPackageWithMinimum.cadence
+                compositePriceFilters =
+                    tieredPackageWithMinimum.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = tieredPackageWithMinimum.conversionRate
                 conversionRateConfig = tieredPackageWithMinimum.conversionRateConfig
                 createdAt = tieredPackageWithMinimum.createdAt
@@ -24497,6 +19534,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -25048,6 +20120,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -25078,6 +20151,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -25115,6 +20191,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -25164,6 +20241,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -25697,6 +20776,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -25728,6 +20808,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -25757,7 +20838,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "TieredPackageWithMinimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, tieredPackageWithMinimumConfig=$tieredPackageWithMinimumConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "TieredPackageWithMinimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, tieredPackageWithMinimumConfig=$tieredPackageWithMinimumConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class PackageWithAllocation
@@ -25766,6 +20847,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -25801,6 +20883,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -25863,6 +20948,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -25913,6 +20999,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -26101,6 +21194,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -26326,6 +21429,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -26358,6 +21462,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -26389,6 +21494,8 @@ private constructor(
                 billableMetric = packageWithAllocation.billableMetric
                 billingCycleConfiguration = packageWithAllocation.billingCycleConfiguration
                 cadence = packageWithAllocation.cadence
+                compositePriceFilters =
+                    packageWithAllocation.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = packageWithAllocation.conversionRate
                 conversionRateConfig = packageWithAllocation.conversionRateConfig
                 createdAt = packageWithAllocation.createdAt
@@ -26467,6 +21574,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -27018,6 +22160,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -27048,6 +22191,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -27085,6 +22231,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -27134,6 +22281,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -27665,6 +22814,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -27696,6 +22846,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -27725,7 +22876,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "PackageWithAllocation{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, packageWithAllocationConfig=$packageWithAllocationConfig, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "PackageWithAllocation{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, packageWithAllocationConfig=$packageWithAllocationConfig, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class UnitWithPercent
@@ -27734,6 +22885,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -27769,6 +22921,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -27831,6 +22986,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -27881,6 +23037,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -28069,6 +23232,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -28293,6 +23466,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -28325,6 +23499,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -28356,6 +23531,8 @@ private constructor(
                 billableMetric = unitWithPercent.billableMetric
                 billingCycleConfiguration = unitWithPercent.billingCycleConfiguration
                 cadence = unitWithPercent.cadence
+                compositePriceFilters =
+                    unitWithPercent.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = unitWithPercent.conversionRate
                 conversionRateConfig = unitWithPercent.conversionRateConfig
                 createdAt = unitWithPercent.createdAt
@@ -28434,6 +23611,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -28985,6 +24197,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -29015,6 +24228,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -29052,6 +24268,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -29101,6 +24318,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -29630,6 +24849,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -29661,6 +24881,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -29690,7 +24911,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "UnitWithPercent{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, unitWithPercentConfig=$unitWithPercentConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "UnitWithPercent{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, unitWithPercentConfig=$unitWithPercentConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class MatrixWithAllocation
@@ -29699,6 +24920,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -29734,6 +24956,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -29796,6 +25021,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -29846,6 +25072,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -30034,6 +25267,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -30259,6 +25502,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -30291,6 +25535,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -30322,6 +25567,8 @@ private constructor(
                 billableMetric = matrixWithAllocation.billableMetric
                 billingCycleConfiguration = matrixWithAllocation.billingCycleConfiguration
                 cadence = matrixWithAllocation.cadence
+                compositePriceFilters =
+                    matrixWithAllocation.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = matrixWithAllocation.conversionRate
                 conversionRateConfig = matrixWithAllocation.conversionRateConfig
                 createdAt = matrixWithAllocation.createdAt
@@ -30400,6 +25647,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -30950,6 +26232,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -30980,6 +26263,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -31017,6 +26303,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -31066,6 +26353,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -31487,6 +26776,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -31518,6 +26808,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -31547,7 +26838,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "MatrixWithAllocation{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, matrixWithAllocationConfig=$matrixWithAllocationConfig, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "MatrixWithAllocation{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, matrixWithAllocationConfig=$matrixWithAllocationConfig, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class TieredWithProration
@@ -31556,6 +26847,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -31591,6 +26883,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -31653,6 +26948,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -31703,6 +26999,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -31891,6 +27194,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -32116,6 +27429,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -32148,6 +27462,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -32179,6 +27494,8 @@ private constructor(
                 billableMetric = tieredWithProration.billableMetric
                 billingCycleConfiguration = tieredWithProration.billingCycleConfiguration
                 cadence = tieredWithProration.cadence
+                compositePriceFilters =
+                    tieredWithProration.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = tieredWithProration.conversionRate
                 conversionRateConfig = tieredWithProration.conversionRateConfig
                 createdAt = tieredWithProration.createdAt
@@ -32257,6 +27574,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -32807,6 +28159,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -32837,6 +28190,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -32874,6 +28230,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -32923,6 +28280,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -33453,6 +28812,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -33484,6 +28844,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -33513,7 +28874,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "TieredWithProration{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, tieredWithProrationConfig=$tieredWithProrationConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "TieredWithProration{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, tieredWithProrationConfig=$tieredWithProrationConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class UnitWithProration
@@ -33522,6 +28883,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -33557,6 +28919,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -33619,6 +28984,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -33669,6 +29035,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -33857,6 +29230,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -34081,6 +29464,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -34113,6 +29497,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -34144,6 +29529,8 @@ private constructor(
                 billableMetric = unitWithProration.billableMetric
                 billingCycleConfiguration = unitWithProration.billingCycleConfiguration
                 cadence = unitWithProration.cadence
+                compositePriceFilters =
+                    unitWithProration.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = unitWithProration.conversionRate
                 conversionRateConfig = unitWithProration.conversionRateConfig
                 createdAt = unitWithProration.createdAt
@@ -34222,6 +29609,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -34772,6 +30194,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -34802,6 +30225,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -34839,6 +30265,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -34888,6 +30315,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -35418,6 +30847,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -35449,6 +30879,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -35478,7 +30909,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "UnitWithProration{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, unitWithProrationConfig=$unitWithProrationConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "UnitWithProration{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, unitWithProrationConfig=$unitWithProrationConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class GroupedAllocation
@@ -35487,6 +30918,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -35522,6 +30954,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -35584,6 +31019,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -35634,6 +31070,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -35822,6 +31265,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -36046,6 +31499,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -36078,6 +31532,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -36109,6 +31564,8 @@ private constructor(
                 billableMetric = groupedAllocation.billableMetric
                 billingCycleConfiguration = groupedAllocation.billingCycleConfiguration
                 cadence = groupedAllocation.cadence
+                compositePriceFilters =
+                    groupedAllocation.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = groupedAllocation.conversionRate
                 conversionRateConfig = groupedAllocation.conversionRateConfig
                 createdAt = groupedAllocation.createdAt
@@ -36187,6 +31644,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -36737,6 +32229,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -36767,6 +32260,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -36804,6 +32300,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -36853,6 +32350,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -37383,6 +32882,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -37414,6 +32914,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -37443,7 +32944,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "GroupedAllocation{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedAllocationConfig=$groupedAllocationConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "GroupedAllocation{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedAllocationConfig=$groupedAllocationConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class GroupedWithProratedMinimum
@@ -37452,6 +32953,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -37487,6 +32989,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -37550,6 +33055,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -37600,6 +33106,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -37788,6 +33301,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -38014,6 +33537,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -38046,6 +33570,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -38079,6 +33604,8 @@ private constructor(
                 billableMetric = groupedWithProratedMinimum.billableMetric
                 billingCycleConfiguration = groupedWithProratedMinimum.billingCycleConfiguration
                 cadence = groupedWithProratedMinimum.cadence
+                compositePriceFilters =
+                    groupedWithProratedMinimum.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = groupedWithProratedMinimum.conversionRate
                 conversionRateConfig = groupedWithProratedMinimum.conversionRateConfig
                 createdAt = groupedWithProratedMinimum.createdAt
@@ -38160,6 +33687,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -38711,6 +34273,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -38741,6 +34304,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -38781,6 +34347,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -38830,6 +34397,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -39364,6 +34933,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -39395,6 +34965,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -39424,7 +34995,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "GroupedWithProratedMinimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedWithProratedMinimumConfig=$groupedWithProratedMinimumConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "GroupedWithProratedMinimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedWithProratedMinimumConfig=$groupedWithProratedMinimumConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class GroupedWithMeteredMinimum
@@ -39433,6 +35004,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -39468,6 +35040,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -39531,6 +35106,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -39581,6 +35157,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -39769,6 +35352,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -39995,6 +35588,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -40027,6 +35621,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -40060,6 +35655,8 @@ private constructor(
                 billableMetric = groupedWithMeteredMinimum.billableMetric
                 billingCycleConfiguration = groupedWithMeteredMinimum.billingCycleConfiguration
                 cadence = groupedWithMeteredMinimum.cadence
+                compositePriceFilters =
+                    groupedWithMeteredMinimum.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = groupedWithMeteredMinimum.conversionRate
                 conversionRateConfig = groupedWithMeteredMinimum.conversionRateConfig
                 createdAt = groupedWithMeteredMinimum.createdAt
@@ -40140,6 +35737,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -40691,6 +36323,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -40721,6 +36354,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -40761,6 +36397,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -40810,6 +36447,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -41344,6 +36983,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -41375,6 +37015,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -41404,7 +37045,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "GroupedWithMeteredMinimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedWithMeteredMinimumConfig=$groupedWithMeteredMinimumConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "GroupedWithMeteredMinimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedWithMeteredMinimumConfig=$groupedWithMeteredMinimumConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class MatrixWithDisplayName
@@ -41413,6 +37054,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -41448,6 +37090,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -41510,6 +37155,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -41560,6 +37206,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -41748,6 +37401,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -41973,6 +37636,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -42005,6 +37669,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -42036,6 +37701,8 @@ private constructor(
                 billableMetric = matrixWithDisplayName.billableMetric
                 billingCycleConfiguration = matrixWithDisplayName.billingCycleConfiguration
                 cadence = matrixWithDisplayName.cadence
+                compositePriceFilters =
+                    matrixWithDisplayName.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = matrixWithDisplayName.conversionRate
                 conversionRateConfig = matrixWithDisplayName.conversionRateConfig
                 createdAt = matrixWithDisplayName.createdAt
@@ -42114,6 +37781,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -42665,6 +38367,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -42695,6 +38398,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -42732,6 +38438,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -42781,6 +38488,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -43312,6 +39021,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -43343,6 +39053,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -43372,7 +39083,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "MatrixWithDisplayName{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, matrixWithDisplayNameConfig=$matrixWithDisplayNameConfig, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "MatrixWithDisplayName{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, matrixWithDisplayNameConfig=$matrixWithDisplayNameConfig, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class BulkWithProration
@@ -43382,6 +39093,7 @@ private constructor(
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val bulkWithProrationConfig: JsonField<BulkWithProrationConfig>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -43419,6 +39131,9 @@ private constructor(
             @ExcludeMissing
             bulkWithProrationConfig: JsonField<BulkWithProrationConfig> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -43479,6 +39194,7 @@ private constructor(
             billingCycleConfiguration,
             bulkWithProrationConfig,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -43535,6 +39251,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -43726,6 +39449,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -43941,6 +39674,7 @@ private constructor(
              * .billingCycleConfiguration()
              * .bulkWithProrationConfig()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -43973,6 +39707,7 @@ private constructor(
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var bulkWithProrationConfig: JsonField<BulkWithProrationConfig>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -44004,6 +39739,8 @@ private constructor(
                 billingCycleConfiguration = bulkWithProration.billingCycleConfiguration
                 bulkWithProrationConfig = bulkWithProration.bulkWithProrationConfig
                 cadence = bulkWithProration.cadence
+                compositePriceFilters =
+                    bulkWithProration.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = bulkWithProration.conversionRate
                 conversionRateConfig = bulkWithProration.conversionRateConfig
                 createdAt = bulkWithProration.createdAt
@@ -44095,6 +39832,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -44632,6 +40404,7 @@ private constructor(
              * .billingCycleConfiguration()
              * .bulkWithProrationConfig()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -44662,6 +40435,9 @@ private constructor(
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("bulkWithProrationConfig", bulkWithProrationConfig),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -44699,6 +40475,7 @@ private constructor(
             billingCycleConfiguration().validate()
             bulkWithProrationConfig().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -44748,6 +40525,8 @@ private constructor(
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (bulkWithProrationConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -45278,6 +41057,7 @@ private constructor(
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 bulkWithProrationConfig == other.bulkWithProrationConfig &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -45309,6 +41089,7 @@ private constructor(
                 billingCycleConfiguration,
                 bulkWithProrationConfig,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -45337,7 +41118,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "BulkWithProration{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, bulkWithProrationConfig=$bulkWithProrationConfig, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "BulkWithProration{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, bulkWithProrationConfig=$bulkWithProrationConfig, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class GroupedTieredPackage
@@ -45346,6 +41127,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -45381,6 +41163,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -45443,6 +41228,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -45493,6 +41279,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -45681,6 +41474,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -45906,6 +41709,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -45938,6 +41742,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -45969,6 +41774,8 @@ private constructor(
                 billableMetric = groupedTieredPackage.billableMetric
                 billingCycleConfiguration = groupedTieredPackage.billingCycleConfiguration
                 cadence = groupedTieredPackage.cadence
+                compositePriceFilters =
+                    groupedTieredPackage.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = groupedTieredPackage.conversionRate
                 conversionRateConfig = groupedTieredPackage.conversionRateConfig
                 createdAt = groupedTieredPackage.createdAt
@@ -46047,6 +41854,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -46597,6 +42439,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -46627,6 +42470,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -46664,6 +42510,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -46713,6 +42560,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -47243,6 +43092,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -47274,6 +43124,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -47303,7 +43154,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "GroupedTieredPackage{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedTieredPackageConfig=$groupedTieredPackageConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "GroupedTieredPackage{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedTieredPackageConfig=$groupedTieredPackageConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class MaxGroupTieredPackage
@@ -47312,6 +43163,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -47347,6 +43199,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -47409,6 +43264,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -47459,6 +43315,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -47647,6 +43510,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -47872,6 +43745,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -47904,6 +43778,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -47935,6 +43810,8 @@ private constructor(
                 billableMetric = maxGroupTieredPackage.billableMetric
                 billingCycleConfiguration = maxGroupTieredPackage.billingCycleConfiguration
                 cadence = maxGroupTieredPackage.cadence
+                compositePriceFilters =
+                    maxGroupTieredPackage.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = maxGroupTieredPackage.conversionRate
                 conversionRateConfig = maxGroupTieredPackage.conversionRateConfig
                 createdAt = maxGroupTieredPackage.createdAt
@@ -48013,6 +43890,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -48564,6 +44476,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -48594,6 +44507,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -48631,6 +44547,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -48680,6 +44597,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -49211,6 +45130,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -49242,6 +45162,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -49271,7 +45192,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "MaxGroupTieredPackage{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maxGroupTieredPackageConfig=$maxGroupTieredPackageConfig, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "MaxGroupTieredPackage{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maxGroupTieredPackageConfig=$maxGroupTieredPackageConfig, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class ScalableMatrixWithUnitPricing
@@ -49280,6 +45201,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -49316,6 +45238,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -49379,6 +45304,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -49429,6 +45355,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -49619,6 +45552,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -49845,6 +45788,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -49877,6 +45821,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -49912,6 +45857,10 @@ private constructor(
                     billingCycleConfiguration =
                         scalableMatrixWithUnitPricing.billingCycleConfiguration
                     cadence = scalableMatrixWithUnitPricing.cadence
+                    compositePriceFilters =
+                        scalableMatrixWithUnitPricing.compositePriceFilters.map {
+                            it.toMutableList()
+                        }
                     conversionRate = scalableMatrixWithUnitPricing.conversionRate
                     conversionRateConfig = scalableMatrixWithUnitPricing.conversionRateConfig
                     createdAt = scalableMatrixWithUnitPricing.createdAt
@@ -49994,6 +45943,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -50550,6 +46534,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -50580,6 +46565,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -50620,6 +46608,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -50669,6 +46658,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -51203,6 +47194,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -51234,6 +47226,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -51263,7 +47256,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ScalableMatrixWithUnitPricing{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, scalableMatrixWithUnitPricingConfig=$scalableMatrixWithUnitPricingConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "ScalableMatrixWithUnitPricing{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, scalableMatrixWithUnitPricingConfig=$scalableMatrixWithUnitPricingConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class ScalableMatrixWithTieredPricing
@@ -51272,6 +47265,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -51308,6 +47302,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -51372,6 +47369,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -51422,6 +47420,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -51612,6 +47617,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -51838,6 +47853,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -51870,6 +47886,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -51905,6 +47922,10 @@ private constructor(
                     billingCycleConfiguration =
                         scalableMatrixWithTieredPricing.billingCycleConfiguration
                     cadence = scalableMatrixWithTieredPricing.cadence
+                    compositePriceFilters =
+                        scalableMatrixWithTieredPricing.compositePriceFilters.map {
+                            it.toMutableList()
+                        }
                     conversionRate = scalableMatrixWithTieredPricing.conversionRate
                     conversionRateConfig = scalableMatrixWithTieredPricing.conversionRateConfig
                     createdAt = scalableMatrixWithTieredPricing.createdAt
@@ -51987,6 +48008,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -52544,6 +48600,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -52574,6 +48631,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -52614,6 +48674,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -52663,6 +48724,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -53197,6 +49260,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -53229,6 +49293,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -53258,7 +49323,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ScalableMatrixWithTieredPricing{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, scalableMatrixWithTieredPricingConfig=$scalableMatrixWithTieredPricingConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "ScalableMatrixWithTieredPricing{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, scalableMatrixWithTieredPricingConfig=$scalableMatrixWithTieredPricingConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class CumulativeGroupedBulk
@@ -53267,6 +49332,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -53302,6 +49368,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -53364,6 +49433,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -53414,6 +49484,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -53602,6 +49679,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -53827,6 +49914,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -53859,6 +49947,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -53890,6 +49979,8 @@ private constructor(
                 billableMetric = cumulativeGroupedBulk.billableMetric
                 billingCycleConfiguration = cumulativeGroupedBulk.billingCycleConfiguration
                 cadence = cumulativeGroupedBulk.cadence
+                compositePriceFilters =
+                    cumulativeGroupedBulk.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = cumulativeGroupedBulk.conversionRate
                 conversionRateConfig = cumulativeGroupedBulk.conversionRateConfig
                 createdAt = cumulativeGroupedBulk.createdAt
@@ -53968,6 +50059,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -54519,6 +50645,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -54549,6 +50676,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -54586,6 +50716,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -54635,6 +50766,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -55166,6 +51299,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -55197,6 +51331,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -55226,7 +51361,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CumulativeGroupedBulk{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, cumulativeGroupedBulkConfig=$cumulativeGroupedBulkConfig, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "CumulativeGroupedBulk{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, cumulativeGroupedBulkConfig=$cumulativeGroupedBulkConfig, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class GroupedWithMinMaxThresholds
@@ -55235,6 +51370,7 @@ private constructor(
         private val billableMetric: JsonField<BillableMetricTiny>,
         private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
         private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
         private val conversionRate: JsonField<Double>,
         private val conversionRateConfig: JsonField<ConversionRateConfig>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -55270,6 +51406,9 @@ private constructor(
             @ExcludeMissing
             billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
             @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
             @JsonProperty("conversion_rate")
             @ExcludeMissing
             conversionRate: JsonField<Double> = JsonMissing.of(),
@@ -55333,6 +51472,7 @@ private constructor(
             billableMetric,
             billingCycleConfiguration,
             cadence,
+            compositePriceFilters,
             conversionRate,
             conversionRateConfig,
             createdAt,
@@ -55383,6 +51523,13 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -55571,6 +51718,16 @@ private constructor(
          * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
 
         /**
          * Returns the raw JSON value of [conversionRate].
@@ -55797,6 +51954,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -55829,6 +51987,7 @@ private constructor(
             private var billableMetric: JsonField<BillableMetricTiny>? = null
             private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
             private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
             private var conversionRate: JsonField<Double>? = null
             private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
@@ -55862,6 +52021,8 @@ private constructor(
                 billableMetric = groupedWithMinMaxThresholds.billableMetric
                 billingCycleConfiguration = groupedWithMinMaxThresholds.billingCycleConfiguration
                 cadence = groupedWithMinMaxThresholds.cadence
+                compositePriceFilters =
+                    groupedWithMinMaxThresholds.compositePriceFilters.map { it.toMutableList() }
                 conversionRate = groupedWithMinMaxThresholds.conversionRate
                 conversionRateConfig = groupedWithMinMaxThresholds.conversionRateConfig
                 createdAt = groupedWithMinMaxThresholds.createdAt
@@ -55944,6 +52105,41 @@ private constructor(
              * supported value.
              */
             fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
 
             fun conversionRate(conversionRate: Double?) =
                 conversionRate(JsonField.ofNullable(conversionRate))
@@ -56495,6 +52691,7 @@ private constructor(
              * .billableMetric()
              * .billingCycleConfiguration()
              * .cadence()
+             * .compositePriceFilters()
              * .conversionRate()
              * .conversionRateConfig()
              * .createdAt()
@@ -56525,6 +52722,9 @@ private constructor(
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
                     checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
                     checkRequired("conversionRate", conversionRate),
                     checkRequired("conversionRateConfig", conversionRateConfig),
                     checkRequired("createdAt", createdAt),
@@ -56565,6 +52765,7 @@ private constructor(
             billableMetric().ifPresent { it.validate() }
             billingCycleConfiguration().validate()
             cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
             conversionRate()
             conversionRateConfig().ifPresent { it.validate() }
             createdAt()
@@ -56614,6 +52815,8 @@ private constructor(
                 (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
                 (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
                 (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (if (conversionRate.asKnown().isPresent) 1 else 0) +
                 (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -57148,6 +53351,7 @@ private constructor(
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
                 cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
                 conversionRate == other.conversionRate &&
                 conversionRateConfig == other.conversionRateConfig &&
                 createdAt == other.createdAt &&
@@ -57179,6 +53383,7 @@ private constructor(
                 billableMetric,
                 billingCycleConfiguration,
                 cadence,
+                compositePriceFilters,
                 conversionRate,
                 conversionRateConfig,
                 createdAt,
@@ -57208,6 +53413,2156 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "GroupedWithMinMaxThresholds{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedWithMinMaxThresholdsConfig=$groupedWithMinMaxThresholdsConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "GroupedWithMinMaxThresholds{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, groupedWithMinMaxThresholdsConfig=$groupedWithMinMaxThresholdsConfig, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+    }
+
+    class Minimum
+    private constructor(
+        private val id: JsonField<String>,
+        private val billableMetric: JsonField<BillableMetricTiny>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
+        private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
+        private val conversionRate: JsonField<Double>,
+        private val conversionRateConfig: JsonField<ConversionRateConfig>,
+        private val createdAt: JsonField<OffsetDateTime>,
+        private val creditAllocation: JsonField<Allocation>,
+        private val currency: JsonField<String>,
+        private val discount: JsonField<Discount>,
+        private val externalPriceId: JsonField<String>,
+        private val fixedPriceQuantity: JsonField<Double>,
+        private val invoicingCycleConfiguration: JsonField<BillingCycleConfiguration>,
+        private val item: JsonField<ItemSlim>,
+        private val maximum: JsonField<Maximum>,
+        private val maximumAmount: JsonField<String>,
+        private val metadata: JsonField<Metadata>,
+        private val minimum: JsonField<Minimum>,
+        private val minimumAmount: JsonField<String>,
+        private val minimumConfig: JsonField<MinimumConfig>,
+        private val modelType: JsonValue,
+        private val name: JsonField<String>,
+        private val planPhaseOrder: JsonField<Long>,
+        private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
+        private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("billable_metric")
+            @ExcludeMissing
+            billableMetric: JsonField<BillableMetricTiny> = JsonMissing.of(),
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
+            @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
+            @JsonProperty("conversion_rate")
+            @ExcludeMissing
+            conversionRate: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("conversion_rate_config")
+            @ExcludeMissing
+            conversionRateConfig: JsonField<ConversionRateConfig> = JsonMissing.of(),
+            @JsonProperty("created_at")
+            @ExcludeMissing
+            createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("credit_allocation")
+            @ExcludeMissing
+            creditAllocation: JsonField<Allocation> = JsonMissing.of(),
+            @JsonProperty("currency")
+            @ExcludeMissing
+            currency: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("discount")
+            @ExcludeMissing
+            discount: JsonField<Discount> = JsonMissing.of(),
+            @JsonProperty("external_price_id")
+            @ExcludeMissing
+            externalPriceId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("fixed_price_quantity")
+            @ExcludeMissing
+            fixedPriceQuantity: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("invoicing_cycle_configuration")
+            @ExcludeMissing
+            invoicingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
+            @JsonProperty("item") @ExcludeMissing item: JsonField<ItemSlim> = JsonMissing.of(),
+            @JsonProperty("maximum") @ExcludeMissing maximum: JsonField<Maximum> = JsonMissing.of(),
+            @JsonProperty("maximum_amount")
+            @ExcludeMissing
+            maximumAmount: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            metadata: JsonField<Metadata> = JsonMissing.of(),
+            @JsonProperty("minimum") @ExcludeMissing minimum: JsonField<Minimum> = JsonMissing.of(),
+            @JsonProperty("minimum_amount")
+            @ExcludeMissing
+            minimumAmount: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("minimum_config")
+            @ExcludeMissing
+            minimumConfig: JsonField<MinimumConfig> = JsonMissing.of(),
+            @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
+            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("plan_phase_order")
+            @ExcludeMissing
+            planPhaseOrder: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("price_type")
+            @ExcludeMissing
+            priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("dimensional_price_configuration")
+            @ExcludeMissing
+            dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
+                JsonMissing.of(),
+        ) : this(
+            id,
+            billableMetric,
+            billingCycleConfiguration,
+            cadence,
+            compositePriceFilters,
+            conversionRate,
+            conversionRateConfig,
+            createdAt,
+            creditAllocation,
+            currency,
+            discount,
+            externalPriceId,
+            fixedPriceQuantity,
+            invoicingCycleConfiguration,
+            item,
+            maximum,
+            maximumAmount,
+            metadata,
+            minimum,
+            minimumAmount,
+            minimumConfig,
+            modelType,
+            name,
+            planPhaseOrder,
+            priceType,
+            replacesPriceId,
+            dimensionalPriceConfiguration,
+            mutableMapOf(),
+        )
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun id(): String = id.getRequired("id")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun billableMetric(): Optional<BillableMetricTiny> =
+            billableMetric.getOptional("billable_metric")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun billingCycleConfiguration(): BillingCycleConfiguration =
+            billingCycleConfiguration.getRequired("billing_cycle_configuration")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun conversionRate(): Optional<Double> = conversionRate.getOptional("conversion_rate")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun conversionRateConfig(): Optional<ConversionRateConfig> =
+            conversionRateConfig.getOptional("conversion_rate_config")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun creditAllocation(): Optional<Allocation> =
+            creditAllocation.getOptional("credit_allocation")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun currency(): String = currency.getRequired("currency")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        @Deprecated("deprecated")
+        fun discount(): Optional<Discount> = discount.getOptional("discount")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun externalPriceId(): Optional<String> = externalPriceId.getOptional("external_price_id")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun fixedPriceQuantity(): Optional<Double> =
+            fixedPriceQuantity.getOptional("fixed_price_quantity")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun invoicingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun item(): ItemSlim = item.getRequired("item")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        @Deprecated("deprecated") fun maximum(): Optional<Maximum> = maximum.getOptional("maximum")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        @Deprecated("deprecated")
+        fun maximumAmount(): Optional<String> = maximumAmount.getOptional("maximum_amount")
+
+        /**
+         * User specified key-value pairs for the resource. If not present, this defaults to an
+         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
+         * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun metadata(): Metadata = metadata.getRequired("metadata")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        @Deprecated("deprecated") fun minimum(): Optional<Minimum> = minimum.getOptional("minimum")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        @Deprecated("deprecated")
+        fun minimumAmount(): Optional<String> = minimumAmount.getOptional("minimum_amount")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun minimumConfig(): MinimumConfig = minimumConfig.getRequired("minimum_config")
+
+        /**
+         * Expected to always return the following:
+         * ```java
+         * JsonValue.from("minimum")
+         * ```
+         *
+         * However, this method can be useful for debugging and logging (e.g. if the server
+         * responded with an unexpected value).
+         */
+        @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun name(): String = name.getRequired("name")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun planPhaseOrder(): Optional<Long> = planPhaseOrder.getOptional("plan_phase_order")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun dimensionalPriceConfiguration(): Optional<DimensionalPriceConfiguration> =
+            dimensionalPriceConfiguration.getOptional("dimensional_price_configuration")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [billableMetric].
+         *
+         * Unlike [billableMetric], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("billable_metric")
+        @ExcludeMissing
+        fun _billableMetric(): JsonField<BillableMetricTiny> = billableMetric
+
+        /**
+         * Returns the raw JSON value of [billingCycleConfiguration].
+         *
+         * Unlike [billingCycleConfiguration], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration(): JsonField<BillingCycleConfiguration> =
+            billingCycleConfiguration
+
+        /**
+         * Returns the raw JSON value of [cadence].
+         *
+         * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
+
+        /**
+         * Returns the raw JSON value of [conversionRate].
+         *
+         * Unlike [conversionRate], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("conversion_rate")
+        @ExcludeMissing
+        fun _conversionRate(): JsonField<Double> = conversionRate
+
+        /**
+         * Returns the raw JSON value of [conversionRateConfig].
+         *
+         * Unlike [conversionRateConfig], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("conversion_rate_config")
+        @ExcludeMissing
+        fun _conversionRateConfig(): JsonField<ConversionRateConfig> = conversionRateConfig
+
+        /**
+         * Returns the raw JSON value of [createdAt].
+         *
+         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        fun _createdAt(): JsonField<OffsetDateTime> = createdAt
+
+        /**
+         * Returns the raw JSON value of [creditAllocation].
+         *
+         * Unlike [creditAllocation], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("credit_allocation")
+        @ExcludeMissing
+        fun _creditAllocation(): JsonField<Allocation> = creditAllocation
+
+        /**
+         * Returns the raw JSON value of [currency].
+         *
+         * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
+
+        /**
+         * Returns the raw JSON value of [discount].
+         *
+         * Unlike [discount], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @Deprecated("deprecated")
+        @JsonProperty("discount")
+        @ExcludeMissing
+        fun _discount(): JsonField<Discount> = discount
+
+        /**
+         * Returns the raw JSON value of [externalPriceId].
+         *
+         * Unlike [externalPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("external_price_id")
+        @ExcludeMissing
+        fun _externalPriceId(): JsonField<String> = externalPriceId
+
+        /**
+         * Returns the raw JSON value of [fixedPriceQuantity].
+         *
+         * Unlike [fixedPriceQuantity], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("fixed_price_quantity")
+        @ExcludeMissing
+        fun _fixedPriceQuantity(): JsonField<Double> = fixedPriceQuantity
+
+        /**
+         * Returns the raw JSON value of [invoicingCycleConfiguration].
+         *
+         * Unlike [invoicingCycleConfiguration], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        @ExcludeMissing
+        fun _invoicingCycleConfiguration(): JsonField<BillingCycleConfiguration> =
+            invoicingCycleConfiguration
+
+        /**
+         * Returns the raw JSON value of [item].
+         *
+         * Unlike [item], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("item") @ExcludeMissing fun _item(): JsonField<ItemSlim> = item
+
+        /**
+         * Returns the raw JSON value of [maximum].
+         *
+         * Unlike [maximum], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @Deprecated("deprecated")
+        @JsonProperty("maximum")
+        @ExcludeMissing
+        fun _maximum(): JsonField<Maximum> = maximum
+
+        /**
+         * Returns the raw JSON value of [maximumAmount].
+         *
+         * Unlike [maximumAmount], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @Deprecated("deprecated")
+        @JsonProperty("maximum_amount")
+        @ExcludeMissing
+        fun _maximumAmount(): JsonField<String> = maximumAmount
+
+        /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+
+        /**
+         * Returns the raw JSON value of [minimum].
+         *
+         * Unlike [minimum], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @Deprecated("deprecated")
+        @JsonProperty("minimum")
+        @ExcludeMissing
+        fun _minimum(): JsonField<Minimum> = minimum
+
+        /**
+         * Returns the raw JSON value of [minimumAmount].
+         *
+         * Unlike [minimumAmount], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @Deprecated("deprecated")
+        @JsonProperty("minimum_amount")
+        @ExcludeMissing
+        fun _minimumAmount(): JsonField<String> = minimumAmount
+
+        /**
+         * Returns the raw JSON value of [minimumConfig].
+         *
+         * Unlike [minimumConfig], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("minimum_config")
+        @ExcludeMissing
+        fun _minimumConfig(): JsonField<MinimumConfig> = minimumConfig
+
+        /**
+         * Returns the raw JSON value of [name].
+         *
+         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+        /**
+         * Returns the raw JSON value of [planPhaseOrder].
+         *
+         * Unlike [planPhaseOrder], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("plan_phase_order")
+        @ExcludeMissing
+        fun _planPhaseOrder(): JsonField<Long> = planPhaseOrder
+
+        /**
+         * Returns the raw JSON value of [priceType].
+         *
+         * Unlike [priceType], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("price_type")
+        @ExcludeMissing
+        fun _priceType(): JsonField<PriceType> = priceType
+
+        /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
+         * Returns the raw JSON value of [dimensionalPriceConfiguration].
+         *
+         * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
+         * an unexpected type.
+         */
+        @JsonProperty("dimensional_price_configuration")
+        @ExcludeMissing
+        fun _dimensionalPriceConfiguration(): JsonField<DimensionalPriceConfiguration> =
+            dimensionalPriceConfiguration
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Minimum].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .billableMetric()
+             * .billingCycleConfiguration()
+             * .cadence()
+             * .compositePriceFilters()
+             * .conversionRate()
+             * .conversionRateConfig()
+             * .createdAt()
+             * .creditAllocation()
+             * .currency()
+             * .discount()
+             * .externalPriceId()
+             * .fixedPriceQuantity()
+             * .invoicingCycleConfiguration()
+             * .item()
+             * .maximum()
+             * .maximumAmount()
+             * .metadata()
+             * .minimum()
+             * .minimumAmount()
+             * .minimumConfig()
+             * .name()
+             * .planPhaseOrder()
+             * .priceType()
+             * .replacesPriceId()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Minimum]. */
+        class Builder internal constructor() {
+
+            private var id: JsonField<String>? = null
+            private var billableMetric: JsonField<BillableMetricTiny>? = null
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
+            private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
+            private var conversionRate: JsonField<Double>? = null
+            private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
+            private var createdAt: JsonField<OffsetDateTime>? = null
+            private var creditAllocation: JsonField<Allocation>? = null
+            private var currency: JsonField<String>? = null
+            private var discount: JsonField<Discount>? = null
+            private var externalPriceId: JsonField<String>? = null
+            private var fixedPriceQuantity: JsonField<Double>? = null
+            private var invoicingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
+            private var item: JsonField<ItemSlim>? = null
+            private var maximum: JsonField<Maximum>? = null
+            private var maximumAmount: JsonField<String>? = null
+            private var metadata: JsonField<Metadata>? = null
+            private var minimum: JsonField<Minimum>? = null
+            private var minimumAmount: JsonField<String>? = null
+            private var minimumConfig: JsonField<MinimumConfig>? = null
+            private var modelType: JsonValue = JsonValue.from("minimum")
+            private var name: JsonField<String>? = null
+            private var planPhaseOrder: JsonField<Long>? = null
+            private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
+            private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
+                JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(minimum: Minimum) = apply {
+                id = minimum.id
+                billableMetric = minimum.billableMetric
+                billingCycleConfiguration = minimum.billingCycleConfiguration
+                cadence = minimum.cadence
+                compositePriceFilters = minimum.compositePriceFilters.map { it.toMutableList() }
+                conversionRate = minimum.conversionRate
+                conversionRateConfig = minimum.conversionRateConfig
+                createdAt = minimum.createdAt
+                creditAllocation = minimum.creditAllocation
+                currency = minimum.currency
+                discount = minimum.discount
+                externalPriceId = minimum.externalPriceId
+                fixedPriceQuantity = minimum.fixedPriceQuantity
+                invoicingCycleConfiguration = minimum.invoicingCycleConfiguration
+                item = minimum.item
+                maximum = minimum.maximum
+                maximumAmount = minimum.maximumAmount
+                metadata = minimum.metadata
+                this.minimum = minimum.minimum
+                minimumAmount = minimum.minimumAmount
+                minimumConfig = minimum.minimumConfig
+                modelType = minimum.modelType
+                name = minimum.name
+                planPhaseOrder = minimum.planPhaseOrder
+                priceType = minimum.priceType
+                replacesPriceId = minimum.replacesPriceId
+                dimensionalPriceConfiguration = minimum.dimensionalPriceConfiguration
+                additionalProperties = minimum.additionalProperties.toMutableMap()
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun billableMetric(billableMetric: BillableMetricTiny?) =
+                billableMetric(JsonField.ofNullable(billableMetric))
+
+            /** Alias for calling [Builder.billableMetric] with `billableMetric.orElse(null)`. */
+            fun billableMetric(billableMetric: Optional<BillableMetricTiny>) =
+                billableMetric(billableMetric.getOrNull())
+
+            /**
+             * Sets [Builder.billableMetric] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.billableMetric] with a well-typed
+             * [BillableMetricTiny] value instead. This method is primarily for setting the field to
+             * an undocumented or not yet supported value.
+             */
+            fun billableMetric(billableMetric: JsonField<BillableMetricTiny>) = apply {
+                this.billableMetric = billableMetric
+            }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            /**
+             * Sets [Builder.billingCycleConfiguration] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.billingCycleConfiguration] with a well-typed
+             * [BillingCycleConfiguration] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+            fun cadence(cadence: Cadence) = cadence(JsonField.of(cadence))
+
+            /**
+             * Sets [Builder.cadence] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cadence] with a well-typed [Cadence] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
+
+            fun conversionRate(conversionRate: Double?) =
+                conversionRate(JsonField.ofNullable(conversionRate))
+
+            /**
+             * Alias for [Builder.conversionRate].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
+
+            /** Alias for calling [Builder.conversionRate] with `conversionRate.orElse(null)`. */
+            fun conversionRate(conversionRate: Optional<Double>) =
+                conversionRate(conversionRate.getOrNull())
+
+            /**
+             * Sets [Builder.conversionRate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.conversionRate] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun conversionRate(conversionRate: JsonField<Double>) = apply {
+                this.conversionRate = conversionRate
+            }
+
+            fun conversionRateConfig(conversionRateConfig: ConversionRateConfig?) =
+                conversionRateConfig(JsonField.ofNullable(conversionRateConfig))
+
+            /**
+             * Alias for calling [Builder.conversionRateConfig] with
+             * `conversionRateConfig.orElse(null)`.
+             */
+            fun conversionRateConfig(conversionRateConfig: Optional<ConversionRateConfig>) =
+                conversionRateConfig(conversionRateConfig.getOrNull())
+
+            /**
+             * Sets [Builder.conversionRateConfig] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.conversionRateConfig] with a well-typed
+             * [ConversionRateConfig] value instead. This method is primarily for setting the field
+             * to an undocumented or not yet supported value.
+             */
+            fun conversionRateConfig(conversionRateConfig: JsonField<ConversionRateConfig>) =
+                apply {
+                    this.conversionRateConfig = conversionRateConfig
+                }
+
+            /**
+             * Alias for calling [conversionRateConfig] with `ConversionRateConfig.ofUnit(unit)`.
+             */
+            fun conversionRateConfig(unit: UnitConversionRateConfig) =
+                conversionRateConfig(ConversionRateConfig.ofUnit(unit))
+
+            /**
+             * Alias for calling [conversionRateConfig] with the following:
+             * ```java
+             * UnitConversionRateConfig.builder()
+             *     .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
+             *     .unitConfig(unitConfig)
+             *     .build()
+             * ```
+             */
+            fun unitConversionRateConfig(unitConfig: ConversionRateUnitConfig) =
+                conversionRateConfig(
+                    UnitConversionRateConfig.builder()
+                        .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
+                        .unitConfig(unitConfig)
+                        .build()
+                )
+
+            /**
+             * Alias for calling [conversionRateConfig] with
+             * `ConversionRateConfig.ofTiered(tiered)`.
+             */
+            fun conversionRateConfig(tiered: TieredConversionRateConfig) =
+                conversionRateConfig(ConversionRateConfig.ofTiered(tiered))
+
+            /**
+             * Alias for calling [conversionRateConfig] with the following:
+             * ```java
+             * TieredConversionRateConfig.builder()
+             *     .conversionRateType(TieredConversionRateConfig.ConversionRateType.TIERED)
+             *     .tieredConfig(tieredConfig)
+             *     .build()
+             * ```
+             */
+            fun tieredConversionRateConfig(tieredConfig: ConversionRateTieredConfig) =
+                conversionRateConfig(
+                    TieredConversionRateConfig.builder()
+                        .conversionRateType(TieredConversionRateConfig.ConversionRateType.TIERED)
+                        .tieredConfig(tieredConfig)
+                        .build()
+                )
+
+            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+            /**
+             * Sets [Builder.createdAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
+                this.createdAt = createdAt
+            }
+
+            fun creditAllocation(creditAllocation: Allocation?) =
+                creditAllocation(JsonField.ofNullable(creditAllocation))
+
+            /**
+             * Alias for calling [Builder.creditAllocation] with `creditAllocation.orElse(null)`.
+             */
+            fun creditAllocation(creditAllocation: Optional<Allocation>) =
+                creditAllocation(creditAllocation.getOrNull())
+
+            /**
+             * Sets [Builder.creditAllocation] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.creditAllocation] with a well-typed [Allocation]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun creditAllocation(creditAllocation: JsonField<Allocation>) = apply {
+                this.creditAllocation = creditAllocation
+            }
+
+            fun currency(currency: String) = currency(JsonField.of(currency))
+
+            /**
+             * Sets [Builder.currency] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.currency] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
+
+            @Deprecated("deprecated")
+            fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
+
+            /** Alias for calling [Builder.discount] with `discount.orElse(null)`. */
+            @Deprecated("deprecated")
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
+
+            /**
+             * Sets [Builder.discount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.discount] with a well-typed [Discount] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            @Deprecated("deprecated")
+            fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
+
+            /** Alias for calling [discount] with `Discount.ofPercentage(percentage)`. */
+            @Deprecated("deprecated")
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
+
+            /**
+             * Alias for calling [discount] with the following:
+             * ```java
+             * PercentageDiscount.builder()
+             *     .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+             *     .percentageDiscount(percentageDiscount)
+             *     .build()
+             * ```
+             */
+            @Deprecated("deprecated")
+            fun percentageDiscount(percentageDiscount: Double) =
+                discount(
+                    PercentageDiscount.builder()
+                        .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                        .percentageDiscount(percentageDiscount)
+                        .build()
+                )
+
+            /** Alias for calling [discount] with `Discount.ofTrial(trial)`. */
+            @Deprecated("deprecated")
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
+
+            /** Alias for calling [discount] with `Discount.ofUsage(usage)`. */
+            @Deprecated("deprecated")
+            fun discount(usage: UsageDiscount) = discount(Discount.ofUsage(usage))
+
+            /**
+             * Alias for calling [discount] with the following:
+             * ```java
+             * UsageDiscount.builder()
+             *     .discountType(UsageDiscount.DiscountType.USAGE)
+             *     .usageDiscount(usageDiscount)
+             *     .build()
+             * ```
+             */
+            @Deprecated("deprecated")
+            fun usageDiscount(usageDiscount: Double) =
+                discount(
+                    UsageDiscount.builder()
+                        .discountType(UsageDiscount.DiscountType.USAGE)
+                        .usageDiscount(usageDiscount)
+                        .build()
+                )
+
+            /** Alias for calling [discount] with `Discount.ofAmount(amount)`. */
+            @Deprecated("deprecated")
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
+
+            /**
+             * Alias for calling [discount] with the following:
+             * ```java
+             * AmountDiscount.builder()
+             *     .discountType(AmountDiscount.DiscountType.AMOUNT)
+             *     .amountDiscount(amountDiscount)
+             *     .build()
+             * ```
+             */
+            @Deprecated("deprecated")
+            fun amountDiscount(amountDiscount: String) =
+                discount(
+                    AmountDiscount.builder()
+                        .discountType(AmountDiscount.DiscountType.AMOUNT)
+                        .amountDiscount(amountDiscount)
+                        .build()
+                )
+
+            fun externalPriceId(externalPriceId: String?) =
+                externalPriceId(JsonField.ofNullable(externalPriceId))
+
+            /** Alias for calling [Builder.externalPriceId] with `externalPriceId.orElse(null)`. */
+            fun externalPriceId(externalPriceId: Optional<String>) =
+                externalPriceId(externalPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.externalPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.externalPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun externalPriceId(externalPriceId: JsonField<String>) = apply {
+                this.externalPriceId = externalPriceId
+            }
+
+            fun fixedPriceQuantity(fixedPriceQuantity: Double?) =
+                fixedPriceQuantity(JsonField.ofNullable(fixedPriceQuantity))
+
+            /**
+             * Alias for [Builder.fixedPriceQuantity].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+            /**
+             * Alias for calling [Builder.fixedPriceQuantity] with
+             * `fixedPriceQuantity.orElse(null)`.
+             */
+            fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
+
+            /**
+             * Sets [Builder.fixedPriceQuantity] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.fixedPriceQuantity] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
+                this.fixedPriceQuantity = fixedPriceQuantity
+            }
+
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: BillingCycleConfiguration?
+            ) = invoicingCycleConfiguration(JsonField.ofNullable(invoicingCycleConfiguration))
+
+            /**
+             * Alias for calling [Builder.invoicingCycleConfiguration] with
+             * `invoicingCycleConfiguration.orElse(null)`.
+             */
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: Optional<BillingCycleConfiguration>
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
+
+            /**
+             * Sets [Builder.invoicingCycleConfiguration] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.invoicingCycleConfiguration] with a well-typed
+             * [BillingCycleConfiguration] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+            fun item(item: ItemSlim) = item(JsonField.of(item))
+
+            /**
+             * Sets [Builder.item] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.item] with a well-typed [ItemSlim] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun item(item: JsonField<ItemSlim>) = apply { this.item = item }
+
+            @Deprecated("deprecated")
+            fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
+
+            /** Alias for calling [Builder.maximum] with `maximum.orElse(null)`. */
+            @Deprecated("deprecated")
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
+
+            /**
+             * Sets [Builder.maximum] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.maximum] with a well-typed [Maximum] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            @Deprecated("deprecated")
+            fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
+
+            @Deprecated("deprecated")
+            fun maximumAmount(maximumAmount: String?) =
+                maximumAmount(JsonField.ofNullable(maximumAmount))
+
+            /** Alias for calling [Builder.maximumAmount] with `maximumAmount.orElse(null)`. */
+            @Deprecated("deprecated")
+            fun maximumAmount(maximumAmount: Optional<String>) =
+                maximumAmount(maximumAmount.getOrNull())
+
+            /**
+             * Sets [Builder.maximumAmount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.maximumAmount] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            @Deprecated("deprecated")
+            fun maximumAmount(maximumAmount: JsonField<String>) = apply {
+                this.maximumAmount = maximumAmount
+            }
+
+            /**
+             * User specified key-value pairs for the resource. If not present, this defaults to an
+             * empty dictionary. Individual keys can be removed by setting the value to `null`, and
+             * the entire metadata mapping can be cleared by setting `metadata` to `null`.
+             */
+            fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+
+            /**
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
+
+            @Deprecated("deprecated")
+            fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
+
+            /** Alias for calling [Builder.minimum] with `minimum.orElse(null)`. */
+            @Deprecated("deprecated")
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
+
+            /**
+             * Sets [Builder.minimum] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.minimum] with a well-typed [Minimum] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            @Deprecated("deprecated")
+            fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
+
+            @Deprecated("deprecated")
+            fun minimumAmount(minimumAmount: String?) =
+                minimumAmount(JsonField.ofNullable(minimumAmount))
+
+            /** Alias for calling [Builder.minimumAmount] with `minimumAmount.orElse(null)`. */
+            @Deprecated("deprecated")
+            fun minimumAmount(minimumAmount: Optional<String>) =
+                minimumAmount(minimumAmount.getOrNull())
+
+            /**
+             * Sets [Builder.minimumAmount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.minimumAmount] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            @Deprecated("deprecated")
+            fun minimumAmount(minimumAmount: JsonField<String>) = apply {
+                this.minimumAmount = minimumAmount
+            }
+
+            fun minimumConfig(minimumConfig: MinimumConfig) =
+                minimumConfig(JsonField.of(minimumConfig))
+
+            /**
+             * Sets [Builder.minimumConfig] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.minimumConfig] with a well-typed [MinimumConfig]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun minimumConfig(minimumConfig: JsonField<MinimumConfig>) = apply {
+                this.minimumConfig = minimumConfig
+            }
+
+            /**
+             * Sets the field to an arbitrary JSON value.
+             *
+             * It is usually unnecessary to call this method because the field defaults to the
+             * following:
+             * ```java
+             * JsonValue.from("minimum")
+             * ```
+             *
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
+
+            fun name(name: String) = name(JsonField.of(name))
+
+            /**
+             * Sets [Builder.name] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.name] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun name(name: JsonField<String>) = apply { this.name = name }
+
+            fun planPhaseOrder(planPhaseOrder: Long?) =
+                planPhaseOrder(JsonField.ofNullable(planPhaseOrder))
+
+            /**
+             * Alias for [Builder.planPhaseOrder].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
+
+            /** Alias for calling [Builder.planPhaseOrder] with `planPhaseOrder.orElse(null)`. */
+            fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
+                planPhaseOrder(planPhaseOrder.getOrNull())
+
+            /**
+             * Sets [Builder.planPhaseOrder] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.planPhaseOrder] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
+                this.planPhaseOrder = planPhaseOrder
+            }
+
+            fun priceType(priceType: PriceType) = priceType(JsonField.of(priceType))
+
+            /**
+             * Sets [Builder.priceType] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.priceType] with a well-typed [PriceType] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
+
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
+            fun dimensionalPriceConfiguration(
+                dimensionalPriceConfiguration: DimensionalPriceConfiguration?
+            ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
+
+            /**
+             * Alias for calling [Builder.dimensionalPriceConfiguration] with
+             * `dimensionalPriceConfiguration.orElse(null)`.
+             */
+            fun dimensionalPriceConfiguration(
+                dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
+
+            /**
+             * Sets [Builder.dimensionalPriceConfiguration] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.dimensionalPriceConfiguration] with a well-typed
+             * [DimensionalPriceConfiguration] value instead. This method is primarily for setting
+             * the field to an undocumented or not yet supported value.
+             */
+            fun dimensionalPriceConfiguration(
+                dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
+            ) = apply { this.dimensionalPriceConfiguration = dimensionalPriceConfiguration }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Minimum].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .billableMetric()
+             * .billingCycleConfiguration()
+             * .cadence()
+             * .compositePriceFilters()
+             * .conversionRate()
+             * .conversionRateConfig()
+             * .createdAt()
+             * .creditAllocation()
+             * .currency()
+             * .discount()
+             * .externalPriceId()
+             * .fixedPriceQuantity()
+             * .invoicingCycleConfiguration()
+             * .item()
+             * .maximum()
+             * .maximumAmount()
+             * .metadata()
+             * .minimum()
+             * .minimumAmount()
+             * .minimumConfig()
+             * .name()
+             * .planPhaseOrder()
+             * .priceType()
+             * .replacesPriceId()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Minimum =
+                Minimum(
+                    checkRequired("id", id),
+                    checkRequired("billableMetric", billableMetric),
+                    checkRequired("billingCycleConfiguration", billingCycleConfiguration),
+                    checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
+                    checkRequired("conversionRate", conversionRate),
+                    checkRequired("conversionRateConfig", conversionRateConfig),
+                    checkRequired("createdAt", createdAt),
+                    checkRequired("creditAllocation", creditAllocation),
+                    checkRequired("currency", currency),
+                    checkRequired("discount", discount),
+                    checkRequired("externalPriceId", externalPriceId),
+                    checkRequired("fixedPriceQuantity", fixedPriceQuantity),
+                    checkRequired("invoicingCycleConfiguration", invoicingCycleConfiguration),
+                    checkRequired("item", item),
+                    checkRequired("maximum", maximum),
+                    checkRequired("maximumAmount", maximumAmount),
+                    checkRequired("metadata", metadata),
+                    checkRequired("minimum", minimum),
+                    checkRequired("minimumAmount", minimumAmount),
+                    checkRequired("minimumConfig", minimumConfig),
+                    modelType,
+                    checkRequired("name", name),
+                    checkRequired("planPhaseOrder", planPhaseOrder),
+                    checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
+                    dimensionalPriceConfiguration,
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Minimum = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            billableMetric().ifPresent { it.validate() }
+            billingCycleConfiguration().validate()
+            cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
+            conversionRate()
+            conversionRateConfig().ifPresent { it.validate() }
+            createdAt()
+            creditAllocation().ifPresent { it.validate() }
+            currency()
+            discount().ifPresent { it.validate() }
+            externalPriceId()
+            fixedPriceQuantity()
+            invoicingCycleConfiguration().ifPresent { it.validate() }
+            item().validate()
+            maximum().ifPresent { it.validate() }
+            maximumAmount()
+            metadata().validate()
+            minimum().ifPresent { it.validate() }
+            minimumAmount()
+            minimumConfig().validate()
+            _modelType().let {
+                if (it != JsonValue.from("minimum")) {
+                    throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                }
+            }
+            name()
+            planPhaseOrder()
+            priceType().validate()
+            replacesPriceId()
+            dimensionalPriceConfiguration().ifPresent { it.validate() }
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
+                (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
+                (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
+                (if (conversionRate.asKnown().isPresent) 1 else 0) +
+                (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (createdAt.asKnown().isPresent) 1 else 0) +
+                (creditAllocation.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (currency.asKnown().isPresent) 1 else 0) +
+                (discount.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (externalPriceId.asKnown().isPresent) 1 else 0) +
+                (if (fixedPriceQuantity.asKnown().isPresent) 1 else 0) +
+                (invoicingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
+                (item.asKnown().getOrNull()?.validity() ?: 0) +
+                (maximum.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (maximumAmount.asKnown().isPresent) 1 else 0) +
+                (metadata.asKnown().getOrNull()?.validity() ?: 0) +
+                (minimum.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (minimumAmount.asKnown().isPresent) 1 else 0) +
+                (minimumConfig.asKnown().getOrNull()?.validity() ?: 0) +
+                modelType.let { if (it == JsonValue.from("minimum")) 1 else 0 } +
+                (if (name.asKnown().isPresent) 1 else 0) +
+                (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
+                (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
+                (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
+
+        class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val ONE_TIME = of("one_time")
+
+                @JvmField val MONTHLY = of("monthly")
+
+                @JvmField val QUARTERLY = of("quarterly")
+
+                @JvmField val SEMI_ANNUAL = of("semi_annual")
+
+                @JvmField val ANNUAL = of("annual")
+
+                @JvmField val CUSTOM = of("custom")
+
+                @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
+            }
+
+            /** An enum containing [Cadence]'s known values. */
+            enum class Known {
+                ONE_TIME,
+                MONTHLY,
+                QUARTERLY,
+                SEMI_ANNUAL,
+                ANNUAL,
+                CUSTOM,
+            }
+
+            /**
+             * An enum containing [Cadence]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [Cadence] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                ONE_TIME,
+                MONTHLY,
+                QUARTERLY,
+                SEMI_ANNUAL,
+                ANNUAL,
+                CUSTOM,
+                /**
+                 * An enum member indicating that [Cadence] was instantiated with an unknown value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    ONE_TIME -> Value.ONE_TIME
+                    MONTHLY -> Value.MONTHLY
+                    QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                    ANNUAL -> Value.ANNUAL
+                    CUSTOM -> Value.CUSTOM
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    ONE_TIME -> Known.ONE_TIME
+                    MONTHLY -> Known.MONTHLY
+                    QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                    ANNUAL -> Known.ANNUAL
+                    CUSTOM -> Known.CUSTOM
+                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws OrbInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+            private var validated: Boolean = false
+
+            fun validate(): Cadence = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Cadence && value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
+        /**
+         * User specified key-value pairs for the resource. If not present, this defaults to an
+         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
+         * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         */
+        class Metadata
+        @JsonCreator
+        private constructor(
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
+        ) {
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /** Returns a mutable builder for constructing an instance of [Metadata]. */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [Metadata]. */
+            class Builder internal constructor() {
+
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(metadata: Metadata) = apply {
+                    additionalProperties = metadata.additionalProperties.toMutableMap()
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Metadata].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): Metadata = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Metadata && additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
+        }
+
+        class MinimumConfig
+        private constructor(
+            private val minimumAmount: JsonField<String>,
+            private val prorated: JsonField<Boolean>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("minimum_amount")
+                @ExcludeMissing
+                minimumAmount: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("prorated")
+                @ExcludeMissing
+                prorated: JsonField<Boolean> = JsonMissing.of(),
+            ) : this(minimumAmount, prorated, mutableMapOf())
+
+            /**
+             * The minimum amount to apply
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun minimumAmount(): String = minimumAmount.getRequired("minimum_amount")
+
+            /**
+             * By default, subtotals from minimum composite prices are prorated based on the service
+             * period. Set to false to disable proration.
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
+            fun prorated(): Optional<Boolean> = prorated.getOptional("prorated")
+
+            /**
+             * Returns the raw JSON value of [minimumAmount].
+             *
+             * Unlike [minimumAmount], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("minimum_amount")
+            @ExcludeMissing
+            fun _minimumAmount(): JsonField<String> = minimumAmount
+
+            /**
+             * Returns the raw JSON value of [prorated].
+             *
+             * Unlike [prorated], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("prorated") @ExcludeMissing fun _prorated(): JsonField<Boolean> = prorated
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [MinimumConfig].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .minimumAmount()
+                 * ```
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [MinimumConfig]. */
+            class Builder internal constructor() {
+
+                private var minimumAmount: JsonField<String>? = null
+                private var prorated: JsonField<Boolean> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(minimumConfig: MinimumConfig) = apply {
+                    minimumAmount = minimumConfig.minimumAmount
+                    prorated = minimumConfig.prorated
+                    additionalProperties = minimumConfig.additionalProperties.toMutableMap()
+                }
+
+                /** The minimum amount to apply */
+                fun minimumAmount(minimumAmount: String) =
+                    minimumAmount(JsonField.of(minimumAmount))
+
+                /**
+                 * Sets [Builder.minimumAmount] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.minimumAmount] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun minimumAmount(minimumAmount: JsonField<String>) = apply {
+                    this.minimumAmount = minimumAmount
+                }
+
+                /**
+                 * By default, subtotals from minimum composite prices are prorated based on the
+                 * service period. Set to false to disable proration.
+                 */
+                fun prorated(prorated: Boolean?) = prorated(JsonField.ofNullable(prorated))
+
+                /**
+                 * Alias for [Builder.prorated].
+                 *
+                 * This unboxed primitive overload exists for backwards compatibility.
+                 */
+                fun prorated(prorated: Boolean) = prorated(prorated as Boolean?)
+
+                /** Alias for calling [Builder.prorated] with `prorated.orElse(null)`. */
+                fun prorated(prorated: Optional<Boolean>) = prorated(prorated.getOrNull())
+
+                /**
+                 * Sets [Builder.prorated] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.prorated] with a well-typed [Boolean] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun prorated(prorated: JsonField<Boolean>) = apply { this.prorated = prorated }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [MinimumConfig].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .minimumAmount()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): MinimumConfig =
+                    MinimumConfig(
+                        checkRequired("minimumAmount", minimumAmount),
+                        prorated,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): MinimumConfig = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                minimumAmount()
+                prorated()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (minimumAmount.asKnown().isPresent) 1 else 0) +
+                    (if (prorated.asKnown().isPresent) 1 else 0)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is MinimumConfig &&
+                    minimumAmount == other.minimumAmount &&
+                    prorated == other.prorated &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(minimumAmount, prorated, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "MinimumConfig{minimumAmount=$minimumAmount, prorated=$prorated, additionalProperties=$additionalProperties}"
+        }
+
+        class PriceType @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val USAGE_PRICE = of("usage_price")
+
+                @JvmField val FIXED_PRICE = of("fixed_price")
+
+                @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
+            }
+
+            /** An enum containing [PriceType]'s known values. */
+            enum class Known {
+                USAGE_PRICE,
+                FIXED_PRICE,
+            }
+
+            /**
+             * An enum containing [PriceType]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [PriceType] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                USAGE_PRICE,
+                FIXED_PRICE,
+                /**
+                 * An enum member indicating that [PriceType] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    USAGE_PRICE -> Value.USAGE_PRICE
+                    FIXED_PRICE -> Value.FIXED_PRICE
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    USAGE_PRICE -> Known.USAGE_PRICE
+                    FIXED_PRICE -> Known.FIXED_PRICE
+                    else -> throw OrbInvalidDataException("Unknown PriceType: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws OrbInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+            private var validated: Boolean = false
+
+            fun validate(): PriceType = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is PriceType && value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Minimum &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                minimumConfig == other.minimumConfig &&
+                modelType == other.modelType &&
+                name == other.name &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                cadence,
+                compositePriceFilters,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                minimumConfig,
+                modelType,
+                name,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Minimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, minimumConfig=$minimumConfig, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 }

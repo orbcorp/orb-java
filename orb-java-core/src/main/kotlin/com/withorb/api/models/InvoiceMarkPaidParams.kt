@@ -22,8 +22,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * This endpoint allows an invoice's status to be set the `paid` status. This can only be done to
- * invoices that are in the `issued` status.
+ * This endpoint allows an invoice's status to be set to the `paid` status. This can only be done to
+ * invoices that are in the `issued` or `synced` status.
  */
 class InvoiceMarkPaidParams
 private constructor(

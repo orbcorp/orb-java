@@ -12,7 +12,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * This endpoint allows an invoice's status to be set the `void` status. This can only be done to
+ * This endpoint allows an invoice's status to be set to the `void` status. This can only be done to
  * invoices that are in the `issued` status.
  *
  * If the associated invoice has used the customer balance to change the amount due, the customer
