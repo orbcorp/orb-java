@@ -85,7 +85,7 @@ internal class NewFloatingGroupedAllocationPriceTest {
         assertThat(newFloatingGroupedAllocationPrice.conversionRate()).contains(0.0)
         assertThat(newFloatingGroupedAllocationPrice.conversionRateConfig())
             .contains(
-                NewFloatingGroupedAllocationPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

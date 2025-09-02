@@ -90,7 +90,7 @@ internal class NewFloatingTieredPackageWithMinimumPriceTest {
         assertThat(newFloatingTieredPackageWithMinimumPrice.conversionRate()).contains(0.0)
         assertThat(newFloatingTieredPackageWithMinimumPrice.conversionRateConfig())
             .contains(
-                NewFloatingTieredPackageWithMinimumPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

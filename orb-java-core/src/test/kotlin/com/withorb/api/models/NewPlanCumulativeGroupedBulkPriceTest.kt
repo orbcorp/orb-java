@@ -85,7 +85,7 @@ internal class NewPlanCumulativeGroupedBulkPriceTest {
         assertThat(newPlanCumulativeGroupedBulkPrice.conversionRate()).contains(0.0)
         assertThat(newPlanCumulativeGroupedBulkPrice.conversionRateConfig())
             .contains(
-                NewPlanCumulativeGroupedBulkPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

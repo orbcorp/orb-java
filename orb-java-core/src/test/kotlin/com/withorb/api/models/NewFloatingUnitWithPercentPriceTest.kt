@@ -85,7 +85,7 @@ internal class NewFloatingUnitWithPercentPriceTest {
         assertThat(newFloatingUnitWithPercentPrice.conversionRate()).contains(0.0)
         assertThat(newFloatingUnitWithPercentPrice.conversionRateConfig())
             .contains(
-                NewFloatingUnitWithPercentPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

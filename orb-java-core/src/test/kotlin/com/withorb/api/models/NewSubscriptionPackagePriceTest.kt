@@ -80,7 +80,7 @@ internal class NewSubscriptionPackagePriceTest {
         assertThat(newSubscriptionPackagePrice.conversionRate()).contains(0.0)
         assertThat(newSubscriptionPackagePrice.conversionRateConfig())
             .contains(
-                NewSubscriptionPackagePrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

@@ -85,7 +85,7 @@ internal class NewFloatingTieredWithProrationPriceTest {
         assertThat(newFloatingTieredWithProrationPrice.conversionRate()).contains(0.0)
         assertThat(newFloatingTieredWithProrationPrice.conversionRateConfig())
             .contains(
-                NewFloatingTieredWithProrationPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

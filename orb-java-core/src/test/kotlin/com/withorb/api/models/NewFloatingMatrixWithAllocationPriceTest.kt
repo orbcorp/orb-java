@@ -101,7 +101,7 @@ internal class NewFloatingMatrixWithAllocationPriceTest {
         assertThat(newFloatingMatrixWithAllocationPrice.conversionRate()).contains(0.0)
         assertThat(newFloatingMatrixWithAllocationPrice.conversionRateConfig())
             .contains(
-                NewFloatingMatrixWithAllocationPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

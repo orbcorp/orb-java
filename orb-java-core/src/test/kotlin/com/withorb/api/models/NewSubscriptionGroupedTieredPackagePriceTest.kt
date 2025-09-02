@@ -87,7 +87,7 @@ internal class NewSubscriptionGroupedTieredPackagePriceTest {
         assertThat(newSubscriptionGroupedTieredPackagePrice.conversionRate()).contains(0.0)
         assertThat(newSubscriptionGroupedTieredPackagePrice.conversionRateConfig())
             .contains(
-                NewSubscriptionGroupedTieredPackagePrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

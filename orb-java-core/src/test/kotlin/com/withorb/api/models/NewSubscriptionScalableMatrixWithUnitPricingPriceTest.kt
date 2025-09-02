@@ -99,7 +99,7 @@ internal class NewSubscriptionScalableMatrixWithUnitPricingPriceTest {
         assertThat(newSubscriptionScalableMatrixWithUnitPricingPrice.conversionRate()).contains(0.0)
         assertThat(newSubscriptionScalableMatrixWithUnitPricingPrice.conversionRateConfig())
             .contains(
-                NewSubscriptionScalableMatrixWithUnitPricingPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

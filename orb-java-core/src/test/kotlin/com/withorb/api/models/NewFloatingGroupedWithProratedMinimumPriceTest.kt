@@ -92,7 +92,7 @@ internal class NewFloatingGroupedWithProratedMinimumPriceTest {
         assertThat(newFloatingGroupedWithProratedMinimumPrice.conversionRate()).contains(0.0)
         assertThat(newFloatingGroupedWithProratedMinimumPrice.conversionRateConfig())
             .contains(
-                NewFloatingGroupedWithProratedMinimumPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

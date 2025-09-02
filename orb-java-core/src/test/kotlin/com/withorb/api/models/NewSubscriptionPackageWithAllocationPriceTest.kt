@@ -87,7 +87,7 @@ internal class NewSubscriptionPackageWithAllocationPriceTest {
         assertThat(newSubscriptionPackageWithAllocationPrice.conversionRate()).contains(0.0)
         assertThat(newSubscriptionPackageWithAllocationPrice.conversionRateConfig())
             .contains(
-                NewSubscriptionPackageWithAllocationPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

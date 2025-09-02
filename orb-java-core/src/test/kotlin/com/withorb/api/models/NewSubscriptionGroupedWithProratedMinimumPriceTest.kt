@@ -95,7 +95,7 @@ internal class NewSubscriptionGroupedWithProratedMinimumPriceTest {
         assertThat(newSubscriptionGroupedWithProratedMinimumPrice.conversionRate()).contains(0.0)
         assertThat(newSubscriptionGroupedWithProratedMinimumPrice.conversionRateConfig())
             .contains(
-                NewSubscriptionGroupedWithProratedMinimumPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

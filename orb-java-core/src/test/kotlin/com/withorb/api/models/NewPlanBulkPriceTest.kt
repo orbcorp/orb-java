@@ -84,7 +84,7 @@ internal class NewPlanBulkPriceTest {
         assertThat(newPlanBulkPrice.conversionRate()).contains(0.0)
         assertThat(newPlanBulkPrice.conversionRateConfig())
             .contains(
-                NewPlanBulkPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(
