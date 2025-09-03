@@ -18,6 +18,7 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
+/** Configuration for tiered pricing */
 class TieredConfig
 private constructor(
     private val tiers: JsonField<List<Tier>>,

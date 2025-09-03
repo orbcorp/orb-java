@@ -18,6 +18,7 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
+/** Configuration for matrix pricing */
 class MatrixConfig
 private constructor(
     private val defaultUnitAmount: JsonField<String>,
@@ -56,7 +57,7 @@ private constructor(
     fun dimensions(): List<String?> = dimensions.getRequired("dimensions")
 
     /**
-     * Matrix values for specified matrix grouping keys
+     * Matrix values configuration
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -175,7 +176,7 @@ private constructor(
                 }
         }
 
-        /** Matrix values for specified matrix grouping keys */
+        /** Matrix values configuration */
         fun matrixValues(matrixValues: List<MatrixValue>) = matrixValues(JsonField.of(matrixValues))
 
         /**

@@ -18,6 +18,7 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
+/** Configuration for bulk pricing */
 class BulkConfig
 private constructor(
     private val tiers: JsonField<List<BulkTier>>,

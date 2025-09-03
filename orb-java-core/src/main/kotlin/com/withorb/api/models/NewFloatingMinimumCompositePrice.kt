@@ -131,12 +131,16 @@ private constructor(
     fun itemId(): String = itemId.getRequired("item_id")
 
     /**
+     * Configuration for minimum pricing
+     *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun minimumConfig(): MinimumConfig = minimumConfig.getRequired("minimum_config")
 
     /**
+     * The pricing model type
+     *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -515,6 +519,7 @@ private constructor(
          */
         fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
+        /** Configuration for minimum pricing */
         fun minimumConfig(minimumConfig: MinimumConfig) = minimumConfig(JsonField.of(minimumConfig))
 
         /**
@@ -528,6 +533,7 @@ private constructor(
             this.minimumConfig = minimumConfig
         }
 
+        /** The pricing model type */
         fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
 
         /**
@@ -1120,6 +1126,7 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /** Configuration for minimum pricing */
     class MinimumConfig
     private constructor(
         private val minimumAmount: JsonField<String>,
@@ -1146,8 +1153,7 @@ private constructor(
         fun minimumAmount(): String = minimumAmount.getRequired("minimum_amount")
 
         /**
-         * By default, subtotals from minimum composite prices are prorated based on the service
-         * period. Set to false to disable proration.
+         * If true, subtotals from this price are prorated based on the service period
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -1224,21 +1230,8 @@ private constructor(
                 this.minimumAmount = minimumAmount
             }
 
-            /**
-             * By default, subtotals from minimum composite prices are prorated based on the service
-             * period. Set to false to disable proration.
-             */
-            fun prorated(prorated: Boolean?) = prorated(JsonField.ofNullable(prorated))
-
-            /**
-             * Alias for [Builder.prorated].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun prorated(prorated: Boolean) = prorated(prorated as Boolean?)
-
-            /** Alias for calling [Builder.prorated] with `prorated.orElse(null)`. */
-            fun prorated(prorated: Optional<Boolean>) = prorated(prorated.getOrNull())
+            /** If true, subtotals from this price are prorated based on the service period */
+            fun prorated(prorated: Boolean) = prorated(JsonField.of(prorated))
 
             /**
              * Sets [Builder.prorated] to an arbitrary JSON value.
@@ -1340,6 +1333,7 @@ private constructor(
             "MinimumConfig{minimumAmount=$minimumAmount, prorated=$prorated, additionalProperties=$additionalProperties}"
     }
 
+    /** The pricing model type */
     class ModelType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
