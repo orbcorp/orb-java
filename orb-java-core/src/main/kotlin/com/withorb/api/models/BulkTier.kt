@@ -17,6 +17,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** Configuration for a single bulk pricing tier */
 class BulkTier
 private constructor(
     private val unitAmount: JsonField<String>,

@@ -22,6 +22,7 @@ import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.Params
 import com.withorb.api.core.checkKnown
+import com.withorb.api.core.checkRequired
 import com.withorb.api.core.getOrThrow
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
@@ -57,7 +58,8 @@ private constructor(
 
     /**
      * Additional email addresses for this customer. If populated, these email addresses will be
-     * CC'd for customer communications.
+     * CC'd for customer communications. The total number of email addresses (including the primary
+     * email) cannot exceed 50.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
@@ -553,7 +555,8 @@ private constructor(
 
         /**
          * Additional email addresses for this customer. If populated, these email addresses will be
-         * CC'd for customer communications.
+         * CC'd for customer communications. The total number of email addresses (including the
+         * primary email) cannot exceed 50.
          */
         fun additionalEmails(additionalEmails: List<String>?) = apply {
             body.additionalEmails(additionalEmails)
@@ -955,6 +958,23 @@ private constructor(
          */
         fun sphereTaxConfiguration(taxExempt: Boolean) = apply {
             body.sphereTaxConfiguration(taxExempt)
+        }
+
+        /** Alias for calling [taxConfiguration] with `TaxConfiguration.ofNumeral(numeral)`. */
+        fun taxConfiguration(numeral: TaxConfiguration.Numeral) = apply {
+            body.taxConfiguration(numeral)
+        }
+
+        /**
+         * Alias for calling [taxConfiguration] with the following:
+         * ```java
+         * TaxConfiguration.Numeral.builder()
+         *     .taxExempt(taxExempt)
+         *     .build()
+         * ```
+         */
+        fun numeralTaxConfiguration(taxExempt: Boolean) = apply {
+            body.numeralTaxConfiguration(taxExempt)
         }
 
         /**
@@ -1366,7 +1386,8 @@ private constructor(
 
         /**
          * Additional email addresses for this customer. If populated, these email addresses will be
-         * CC'd for customer communications.
+         * CC'd for customer communications. The total number of email addresses (including the
+         * primary email) cannot exceed 50.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -1912,7 +1933,8 @@ private constructor(
 
             /**
              * Additional email addresses for this customer. If populated, these email addresses
-             * will be CC'd for customer communications.
+             * will be CC'd for customer communications. The total number of email addresses
+             * (including the primary email) cannot exceed 50.
              */
             fun additionalEmails(additionalEmails: List<String>?) =
                 additionalEmails(JsonField.ofNullable(additionalEmails))
@@ -2335,6 +2357,21 @@ private constructor(
                         .taxExempt(taxExempt)
                         .build()
                 )
+
+            /** Alias for calling [taxConfiguration] with `TaxConfiguration.ofNumeral(numeral)`. */
+            fun taxConfiguration(numeral: TaxConfiguration.Numeral) =
+                taxConfiguration(TaxConfiguration.ofNumeral(numeral))
+
+            /**
+             * Alias for calling [taxConfiguration] with the following:
+             * ```java
+             * TaxConfiguration.Numeral.builder()
+             *     .taxExempt(taxExempt)
+             *     .build()
+             * ```
+             */
+            fun numeralTaxConfiguration(taxExempt: Boolean) =
+                taxConfiguration(TaxConfiguration.Numeral.builder().taxExempt(taxExempt).build())
 
             /**
              * Tax IDs are commonly required to be displayed on customer invoices, which are added
@@ -2927,6 +2964,7 @@ private constructor(
         private val avalara: NewAvalaraTaxConfiguration? = null,
         private val taxjar: NewTaxJarConfiguration? = null,
         private val sphere: NewSphereConfiguration? = null,
+        private val numeral: Numeral? = null,
         private val _json: JsonValue? = null,
     ) {
 
@@ -2936,17 +2974,23 @@ private constructor(
 
         fun sphere(): Optional<NewSphereConfiguration> = Optional.ofNullable(sphere)
 
+        fun numeral(): Optional<Numeral> = Optional.ofNullable(numeral)
+
         fun isAvalara(): Boolean = avalara != null
 
         fun isTaxjar(): Boolean = taxjar != null
 
         fun isSphere(): Boolean = sphere != null
 
+        fun isNumeral(): Boolean = numeral != null
+
         fun asAvalara(): NewAvalaraTaxConfiguration = avalara.getOrThrow("avalara")
 
         fun asTaxjar(): NewTaxJarConfiguration = taxjar.getOrThrow("taxjar")
 
         fun asSphere(): NewSphereConfiguration = sphere.getOrThrow("sphere")
+
+        fun asNumeral(): Numeral = numeral.getOrThrow("numeral")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
@@ -2955,6 +2999,7 @@ private constructor(
                 avalara != null -> visitor.visitAvalara(avalara)
                 taxjar != null -> visitor.visitTaxjar(taxjar)
                 sphere != null -> visitor.visitSphere(sphere)
+                numeral != null -> visitor.visitNumeral(numeral)
                 else -> visitor.unknown(_json)
             }
 
@@ -2977,6 +3022,10 @@ private constructor(
 
                     override fun visitSphere(sphere: NewSphereConfiguration) {
                         sphere.validate()
+                    }
+
+                    override fun visitNumeral(numeral: Numeral) {
+                        numeral.validate()
                     }
                 }
             )
@@ -3008,6 +3057,8 @@ private constructor(
 
                     override fun visitSphere(sphere: NewSphereConfiguration) = sphere.validity()
 
+                    override fun visitNumeral(numeral: Numeral) = numeral.validity()
+
                     override fun unknown(json: JsonValue?) = 0
                 }
             )
@@ -3020,16 +3071,18 @@ private constructor(
             return other is TaxConfiguration &&
                 avalara == other.avalara &&
                 taxjar == other.taxjar &&
-                sphere == other.sphere
+                sphere == other.sphere &&
+                numeral == other.numeral
         }
 
-        override fun hashCode(): Int = Objects.hash(avalara, taxjar, sphere)
+        override fun hashCode(): Int = Objects.hash(avalara, taxjar, sphere, numeral)
 
         override fun toString(): String =
             when {
                 avalara != null -> "TaxConfiguration{avalara=$avalara}"
                 taxjar != null -> "TaxConfiguration{taxjar=$taxjar}"
                 sphere != null -> "TaxConfiguration{sphere=$sphere}"
+                numeral != null -> "TaxConfiguration{numeral=$numeral}"
                 _json != null -> "TaxConfiguration{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid TaxConfiguration")
             }
@@ -3044,6 +3097,8 @@ private constructor(
 
             @JvmStatic
             fun ofSphere(sphere: NewSphereConfiguration) = TaxConfiguration(sphere = sphere)
+
+            @JvmStatic fun ofNumeral(numeral: Numeral) = TaxConfiguration(numeral = numeral)
         }
 
         /**
@@ -3057,6 +3112,8 @@ private constructor(
             fun visitTaxjar(taxjar: NewTaxJarConfiguration): T
 
             fun visitSphere(sphere: NewSphereConfiguration): T
+
+            fun visitNumeral(numeral: Numeral): T
 
             /**
              * Maps an unknown variant of [TaxConfiguration] to a value of type [T].
@@ -3096,6 +3153,11 @@ private constructor(
                             TaxConfiguration(sphere = it, _json = json)
                         } ?: TaxConfiguration(_json = json)
                     }
+                    "numeral" -> {
+                        return tryDeserialize(node, jacksonTypeRef<Numeral>())?.let {
+                            TaxConfiguration(numeral = it, _json = json)
+                        } ?: TaxConfiguration(_json = json)
+                    }
                 }
 
                 return TaxConfiguration(_json = json)
@@ -3113,10 +3175,220 @@ private constructor(
                     value.avalara != null -> generator.writeObject(value.avalara)
                     value.taxjar != null -> generator.writeObject(value.taxjar)
                     value.sphere != null -> generator.writeObject(value.sphere)
+                    value.numeral != null -> generator.writeObject(value.numeral)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid TaxConfiguration")
                 }
             }
+        }
+
+        class Numeral
+        private constructor(
+            private val taxExempt: JsonField<Boolean>,
+            private val taxProvider: JsonValue,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("tax_exempt")
+                @ExcludeMissing
+                taxExempt: JsonField<Boolean> = JsonMissing.of(),
+                @JsonProperty("tax_provider")
+                @ExcludeMissing
+                taxProvider: JsonValue = JsonMissing.of(),
+            ) : this(taxExempt, taxProvider, mutableMapOf())
+
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun taxExempt(): Boolean = taxExempt.getRequired("tax_exempt")
+
+            /**
+             * Expected to always return the following:
+             * ```java
+             * JsonValue.from("numeral")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
+             */
+            @JsonProperty("tax_provider")
+            @ExcludeMissing
+            fun _taxProvider(): JsonValue = taxProvider
+
+            /**
+             * Returns the raw JSON value of [taxExempt].
+             *
+             * Unlike [taxExempt], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("tax_exempt")
+            @ExcludeMissing
+            fun _taxExempt(): JsonField<Boolean> = taxExempt
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [Numeral].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .taxExempt()
+                 * ```
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [Numeral]. */
+            class Builder internal constructor() {
+
+                private var taxExempt: JsonField<Boolean>? = null
+                private var taxProvider: JsonValue = JsonValue.from("numeral")
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(numeral: Numeral) = apply {
+                    taxExempt = numeral.taxExempt
+                    taxProvider = numeral.taxProvider
+                    additionalProperties = numeral.additionalProperties.toMutableMap()
+                }
+
+                fun taxExempt(taxExempt: Boolean) = taxExempt(JsonField.of(taxExempt))
+
+                /**
+                 * Sets [Builder.taxExempt] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.taxExempt] with a well-typed [Boolean] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun taxExempt(taxExempt: JsonField<Boolean>) = apply { this.taxExempt = taxExempt }
+
+                /**
+                 * Sets the field to an arbitrary JSON value.
+                 *
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```java
+                 * JsonValue.from("numeral")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun taxProvider(taxProvider: JsonValue) = apply { this.taxProvider = taxProvider }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Numeral].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .taxExempt()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): Numeral =
+                    Numeral(
+                        checkRequired("taxExempt", taxExempt),
+                        taxProvider,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): Numeral = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                taxExempt()
+                _taxProvider().let {
+                    if (it != JsonValue.from("numeral")) {
+                        throw OrbInvalidDataException("'taxProvider' is invalid, received $it")
+                    }
+                }
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (taxExempt.asKnown().isPresent) 1 else 0) +
+                    taxProvider.let { if (it == JsonValue.from("numeral")) 1 else 0 }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Numeral &&
+                    taxExempt == other.taxExempt &&
+                    taxProvider == other.taxProvider &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(taxExempt, taxProvider, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "Numeral{taxExempt=$taxExempt, taxProvider=$taxProvider, additionalProperties=$additionalProperties}"
         }
     }
 

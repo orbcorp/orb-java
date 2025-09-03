@@ -128,6 +128,8 @@ private constructor(
     fun itemId(): String = itemId.getRequired("item_id")
 
     /**
+     * Configuration for matrix_with_allocation pricing
+     *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -135,6 +137,8 @@ private constructor(
         matrixWithAllocationConfig.getRequired("matrix_with_allocation_config")
 
     /**
+     * The pricing model type
+     *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -533,6 +537,7 @@ private constructor(
          */
         fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
+        /** Configuration for matrix_with_allocation pricing */
         fun matrixWithAllocationConfig(matrixWithAllocationConfig: MatrixWithAllocationConfig) =
             matrixWithAllocationConfig(JsonField.of(matrixWithAllocationConfig))
 
@@ -547,6 +552,7 @@ private constructor(
             matrixWithAllocationConfig: JsonField<MatrixWithAllocationConfig>
         ) = apply { this.matrixWithAllocationConfig = matrixWithAllocationConfig }
 
+        /** The pricing model type */
         fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
 
         /**
@@ -1176,6 +1182,7 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /** The pricing model type */
     class ModelType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**

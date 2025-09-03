@@ -18,6 +18,7 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
+/** Configuration for a single matrix value */
 class MatrixValue
 private constructor(
     private val dimensionValues: JsonField<List<String?>>,
@@ -36,9 +37,7 @@ private constructor(
     ) : this(dimensionValues, unitAmount, mutableMapOf())
 
     /**
-     * One or two matrix keys to filter usage to this Matrix value by. For example,
-     * ["region", "tier"] could be used to filter cloud usage by a cloud region and an instance
-     * tier.
+     * One or two matrix keys to filter usage to this Matrix value by
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -109,11 +108,7 @@ private constructor(
             additionalProperties = matrixValue.additionalProperties.toMutableMap()
         }
 
-        /**
-         * One or two matrix keys to filter usage to this Matrix value by. For example,
-         * ["region", "tier"] could be used to filter cloud usage by a cloud region and an instance
-         * tier.
-         */
+        /** One or two matrix keys to filter usage to this Matrix value by */
         fun dimensionValues(dimensionValues: List<String?>) =
             dimensionValues(JsonField.of(dimensionValues))
 
