@@ -2787,6 +2787,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -2794,6 +2796,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -2808,6 +2811,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -2826,6 +2830,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -2842,6 +2847,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -4715,6 +4721,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -4722,6 +4730,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -4736,6 +4745,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -4754,6 +4764,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -4770,6 +4781,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -6642,6 +6654,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -6649,6 +6663,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -6663,6 +6678,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -6681,6 +6697,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -6697,6 +6714,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -8571,6 +8589,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -8578,6 +8598,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -8592,6 +8613,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -8610,6 +8632,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -8626,6 +8649,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -10499,6 +10523,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -10506,6 +10532,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -10520,6 +10547,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -10538,6 +10566,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -10554,6 +10583,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -12431,6 +12461,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -12438,6 +12470,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -12452,6 +12485,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -12470,6 +12504,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -12486,6 +12521,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -14825,6 +14861,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -14832,6 +14870,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -14846,6 +14885,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -14864,6 +14904,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -14880,6 +14921,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -17206,6 +17248,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -17213,6 +17257,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -17227,6 +17272,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -17245,6 +17291,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -17261,6 +17308,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -20126,6 +20174,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -20133,6 +20183,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -20147,6 +20198,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -20165,6 +20217,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -20181,6 +20234,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -22065,6 +22119,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -22072,6 +22128,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -22086,6 +22143,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -22104,6 +22162,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -22120,6 +22179,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -24765,6 +24825,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -24772,6 +24834,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -24786,6 +24849,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -24804,6 +24868,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -24820,6 +24885,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -26697,6 +26763,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -26704,6 +26772,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -26718,6 +26787,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -26736,6 +26806,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -26752,6 +26823,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -28844,6 +28916,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -28851,6 +28925,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -28865,6 +28940,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -28883,6 +28959,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -28899,6 +28976,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -30776,6 +30854,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -30783,6 +30863,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -30797,6 +30878,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -30815,6 +30897,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -30831,6 +30914,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -33114,6 +33198,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -33121,6 +33207,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -33135,6 +33222,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -33153,6 +33241,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -33169,6 +33258,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -35485,6 +35575,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -35492,6 +35584,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -35506,6 +35599,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -35524,6 +35618,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -35540,6 +35635,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -37824,6 +37920,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -37831,6 +37929,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -37845,6 +37944,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -37863,6 +37963,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -37879,6 +37980,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -40028,6 +40130,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -40035,6 +40139,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -40049,6 +40154,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -40067,6 +40173,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -40083,6 +40190,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -42869,6 +42977,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -42876,6 +42986,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -42890,6 +43001,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -42908,6 +43020,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -42924,6 +43037,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -45136,6 +45250,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -45143,6 +45259,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -45157,6 +45274,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -45175,6 +45293,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -45191,6 +45310,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -47568,6 +47688,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -47575,6 +47697,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -47589,6 +47712,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -47607,6 +47731,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -47623,6 +47748,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -49997,6 +50123,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -50004,6 +50132,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -50018,6 +50147,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -50036,6 +50166,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -50052,6 +50183,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -52430,6 +52562,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -52437,6 +52571,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -52451,6 +52586,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -52469,6 +52605,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -52485,6 +52622,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -54388,6 +54526,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -54395,6 +54535,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -54409,6 +54550,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -54427,6 +54569,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -54443,6 +54586,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -57029,6 +57173,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -57036,6 +57182,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -57050,6 +57197,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -57068,6 +57216,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -57084,6 +57233,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -60315,6 +60465,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -60322,6 +60474,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -60336,6 +60489,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -60354,6 +60508,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -60370,6 +60525,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
@@ -62457,6 +62613,8 @@ private constructor(
 
                 @JvmField val FIXED_PRICE = of("fixed_price")
 
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
                 @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
             }
 
@@ -62464,6 +62622,7 @@ private constructor(
             enum class Known {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
             }
 
             /**
@@ -62478,6 +62637,7 @@ private constructor(
             enum class Value {
                 USAGE_PRICE,
                 FIXED_PRICE,
+                COMPOSITE_PRICE,
                 /**
                  * An enum member indicating that [PriceType] was instantiated with an unknown
                  * value.
@@ -62496,6 +62656,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Value.USAGE_PRICE
                     FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
                     else -> Value._UNKNOWN
                 }
 
@@ -62512,6 +62673,7 @@ private constructor(
                 when (this) {
                     USAGE_PRICE -> Known.USAGE_PRICE
                     FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
                     else -> throw OrbInvalidDataException("Unknown PriceType: $value")
                 }
 
