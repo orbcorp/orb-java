@@ -813,6 +813,8 @@ private constructor(
 
                 @JvmField val ANROK = of("anrok")
 
+                @JvmField val NUMERAL = of("numeral")
+
                 @JvmStatic fun of(value: String) = ExternalConnectionName(JsonField.of(value))
             }
 
@@ -825,6 +827,7 @@ private constructor(
                 TAXJAR,
                 AVALARA,
                 ANROK,
+                NUMERAL,
             }
 
             /**
@@ -846,6 +849,7 @@ private constructor(
                 TAXJAR,
                 AVALARA,
                 ANROK,
+                NUMERAL,
                 /**
                  * An enum member indicating that [ExternalConnectionName] was instantiated with an
                  * unknown value.
@@ -869,6 +873,7 @@ private constructor(
                     TAXJAR -> Value.TAXJAR
                     AVALARA -> Value.AVALARA
                     ANROK -> Value.ANROK
+                    NUMERAL -> Value.NUMERAL
                     else -> Value._UNKNOWN
                 }
 
@@ -890,6 +895,7 @@ private constructor(
                     TAXJAR -> Known.TAXJAR
                     AVALARA -> Known.AVALARA
                     ANROK -> Known.ANROK
+                    NUMERAL -> Known.NUMERAL
                     else -> throw OrbInvalidDataException("Unknown ExternalConnectionName: $value")
                 }
 
