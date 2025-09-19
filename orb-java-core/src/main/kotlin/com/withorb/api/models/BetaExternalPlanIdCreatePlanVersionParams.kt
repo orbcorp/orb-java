@@ -33,12 +33,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * This API endpoint is in beta and its interface may change. It is recommended for use only in test
- * mode.
- *
- * This endpoint allows the creation of a new plan version for an existing plan.
- */
+/** This endpoint allows the creation of a new plan version for an existing plan. */
 class BetaExternalPlanIdCreatePlanVersionParams
 private constructor(
     private val externalPlanId: String?,
