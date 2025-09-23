@@ -50,7 +50,6 @@ import kotlin.jvm.optionals.getOrNull
  *    credits (based on `amount` and `per_unit_cost_basis`).
  *
  * ## Adding credits
- *
  * Adding credits is done by creating an entry of type `increment`. This requires the caller to
  * specify a number of credits as well as an optional expiry date in `YYYY-MM-DD` format. Orb also
  * recommends specifying a description to assist with auditing. When adding credits, the caller can
@@ -74,7 +73,6 @@ import kotlin.jvm.optionals.getOrNull
  * before adding the remaining amount to the desired credit block.
  *
  * ### Invoicing for credits
- *
  * By default, Orb manipulates the credit ledger but does not charge for credits. However, if you
  * pass `invoice_settings` in the body of this request, Orb will also generate a one-off invoice for
  * the customer for the credits pre-purchase. Note that you _must_ provide the
@@ -82,7 +80,6 @@ import kotlin.jvm.optionals.getOrNull
  * cost basis with the number of credit units added.
  *
  * ## Deducting Credits
- *
  * Orb allows you to deduct credits from a customer by creating an entry of type `decrement`. Orb
  * matches the algorithm for automatic deductions for determining which credit blocks to decrement
  * from. In the case that the deduction leads to multiple ledger entries, the response from this
@@ -100,7 +97,6 @@ import kotlin.jvm.optionals.getOrNull
  * ```
  *
  * ## Changing credits expiry
- *
  * If you'd like to change when existing credits expire, you should create a ledger entry of type
  * `expiration_change`. For this entry, the required parameter `expiry_date` identifies the
  * _originating_ block, and the required parameter `target_expiry_date` identifies when the

@@ -80,7 +80,6 @@ import kotlin.jvm.optionals.getOrNull
  * ```
  *
  * ## Required fields
- *
  * Because events streamed to Orb are meant to be as flexible as possible, there are only a few
  * required fields in every event.
  * - We recommend that `idempotency_key` are unique strings that you generated with V4 UUIDs, but
@@ -110,7 +109,6 @@ import kotlin.jvm.optionals.getOrNull
  * numeric type in the event.
  *
  * ## Determining event timestamp
- *
  * For cases where usage is being reported in real time as it is occurring, timestamp should
  * correspond to the time that usage occurred.
  *
@@ -164,7 +162,6 @@ import kotlin.jvm.optionals.getOrNull
  *   should be retried in their entirety.
  *
  * ## API usage and limits
- *
  * The ingestion API is designed made for real-time streaming ingestion and architected for high
  * throughput. Even if events are later deemed unnecessary or filtered out, we encourage you to log
  * them to Orb if they may be relevant to billing calculations in the future.
@@ -178,7 +175,6 @@ import kotlin.jvm.optionals.getOrNull
  * from initial setup.
  *
  * ## Testing in debug mode
- *
  * The ingestion API supports a debug mode, which returns additional verbose output to indicate
  * which event idempotency keys were newly ingested or duplicates from previous requests. To enable
  * this mode, mark `debug=true` as a query parameter.
@@ -197,7 +193,11 @@ import kotlin.jvm.optionals.getOrNull
  * {
  *   "debug": {
  *     "duplicate": [],
- *     "ingested": ["B7E83HDMfJPAunXW", "SJs5DQJ3TnwSqEZE", "8SivfDsNKwCeAXim"]
+ *     "ingested": [
+ *       "B7E83HDMfJPAunXW",
+ *       "SJs5DQJ3TnwSqEZE",
+ *       "8SivfDsNKwCeAXim"
+ *     ]
  *   },
  *   "validation_failed": []
  * }
