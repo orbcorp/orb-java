@@ -19,7 +19,6 @@ import kotlin.jvm.optionals.getOrNull
  * plan.
  *
  * ## Serialized prices
- *
  * Orb supports a few different pricing models out of the box. Each of these models is serialized
  * differently in a given [Price](/core-concepts#plan-and-price) object. The `model_type` field
  * determines the key for the configuration object that is present. A detailed explanation of price
