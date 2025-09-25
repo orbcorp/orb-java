@@ -19,6 +19,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class NewAccountingSyncConfiguration
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val accountingProviders: JsonField<List<AccountingProviderConfig>>,
     private val excluded: JsonField<Boolean>,

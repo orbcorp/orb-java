@@ -24,6 +24,7 @@ import kotlin.jvm.optionals.getOrNull
  * by the query that transforms raw usage events into meaningful values for your customers.
  */
 class BillableMetric
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val description: JsonField<String>,

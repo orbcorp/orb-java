@@ -21,6 +21,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class NewFloatingGroupedTieredPackagePrice
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val cadence: JsonField<Cadence>,
     private val currency: JsonField<String>,
@@ -1135,6 +1136,7 @@ private constructor(
 
     /** Configuration for grouped_tiered_package pricing */
     class GroupedTieredPackageConfig
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val groupingKey: JsonField<String>,
         private val packageSize: JsonField<String>,
@@ -1382,6 +1384,7 @@ private constructor(
 
         /** Configuration for a single tier */
         class Tier
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val perUnit: JsonField<String>,
             private val tierLowerBound: JsonField<String>,

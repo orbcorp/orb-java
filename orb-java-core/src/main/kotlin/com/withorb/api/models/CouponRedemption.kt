@@ -19,6 +19,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class CouponRedemption
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val couponId: JsonField<String>,
     private val endDate: JsonField<OffsetDateTime>,

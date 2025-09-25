@@ -18,6 +18,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class PerPriceCost
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val price: JsonField<Price>,
     private val priceId: JsonField<String>,

@@ -21,6 +21,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class NewSubscriptionGroupedWithMeteredMinimumPrice
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val cadence: JsonField<Cadence>,
     private val groupedWithMeteredMinimumConfig: JsonField<GroupedWithMeteredMinimumConfig>,
@@ -1191,6 +1192,7 @@ private constructor(
 
     /** Configuration for grouped_with_metered_minimum pricing */
     class GroupedWithMeteredMinimumConfig
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val groupingKey: JsonField<String>,
         private val minimumUnitAmount: JsonField<String>,
@@ -1593,6 +1595,7 @@ private constructor(
 
         /** Configuration for a scaling factor */
         class ScalingFactor
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val scalingFactor: JsonField<String>,
             private val scalingValue: JsonField<String>,
@@ -1813,6 +1816,7 @@ private constructor(
 
         /** Configuration for a unit amount */
         class UnitAmount
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val pricingValue: JsonField<String>,
             private val unitAmount: JsonField<String>,

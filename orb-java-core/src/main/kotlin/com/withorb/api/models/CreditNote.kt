@@ -26,6 +26,7 @@ import kotlin.jvm.optionals.getOrNull
  * a particular invoice.
  */
 class CreditNote
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
@@ -815,6 +816,7 @@ private constructor(
             (discounts.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
     class LineItem
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val amount: JsonField<String>,
@@ -1368,6 +1370,7 @@ private constructor(
                 (if (startTimeInclusive.asKnown().isPresent) 1 else 0)
 
         class Discount
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val id: JsonField<String>,
             private val amountApplied: JsonField<String>,
@@ -1992,6 +1995,7 @@ private constructor(
 
     /** The maximum amount applied on the original invoice */
     class MaximumAmountAdjustment
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val amountApplied: JsonField<String>,
         private val discountType: JsonField<DiscountType>,
@@ -2439,6 +2443,7 @@ private constructor(
         }
 
         class AppliesToPrice
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val id: JsonField<String>,
             private val name: JsonField<String>,
@@ -2925,6 +2930,7 @@ private constructor(
     }
 
     class Discount
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val amountApplied: JsonField<String>,
         private val discountType: JsonField<DiscountType>,
@@ -3372,6 +3378,7 @@ private constructor(
         }
 
         class AppliesToPrice
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val id: JsonField<String>,
             private val name: JsonField<String>,

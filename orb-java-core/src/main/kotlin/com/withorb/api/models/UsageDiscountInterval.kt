@@ -22,6 +22,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class UsageDiscountInterval
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val appliesToPriceIntervalIds: JsonField<List<String>>,
     private val discountType: JsonField<DiscountType>,

@@ -37,6 +37,7 @@ import kotlin.jvm.optionals.getOrNull
  * configure prices in the [Price resource](/reference/price).
  */
 class Plan
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val adjustments: JsonField<List<Adjustment>>,
@@ -1714,6 +1715,7 @@ private constructor(
     }
 
     class BasePlan
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val externalPlanId: JsonField<String>,
@@ -2072,6 +2074,7 @@ private constructor(
     }
 
     class PlanPhase
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val description: JsonField<String>,
@@ -2884,6 +2887,7 @@ private constructor(
     }
 
     class Product
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -3247,6 +3251,7 @@ private constructor(
     }
 
     class TrialConfig
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val trialPeriod: JsonField<Long>,
         private val trialPeriodUnit: JsonField<TrialPeriodUnit>,

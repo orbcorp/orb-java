@@ -21,6 +21,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class NewSubscriptionMatrixWithDisplayNamePrice
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val cadence: JsonField<Cadence>,
     private val itemId: JsonField<String>,
@@ -1186,6 +1187,7 @@ private constructor(
 
     /** Configuration for matrix_with_display_name pricing */
     class MatrixWithDisplayNameConfig
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val dimension: JsonField<String>,
         private val unitAmounts: JsonField<List<UnitAmount>>,
@@ -1387,6 +1389,7 @@ private constructor(
 
         /** Configuration for a unit amount item */
         class UnitAmount
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val dimensionValue: JsonField<String>,
             private val displayName: JsonField<String>,

@@ -18,6 +18,7 @@ import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 class UnitConversionRateConfig
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val conversionRateType: JsonField<ConversionRateType>,
     private val unitConfig: JsonField<ConversionRateUnitConfig>,

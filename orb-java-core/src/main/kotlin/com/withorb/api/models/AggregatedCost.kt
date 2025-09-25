@@ -20,6 +20,7 @@ import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 class AggregatedCost
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val perPriceCosts: JsonField<List<PerPriceCost>>,
     private val subtotal: JsonField<String>,

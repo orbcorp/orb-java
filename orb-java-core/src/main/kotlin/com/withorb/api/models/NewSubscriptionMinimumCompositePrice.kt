@@ -20,6 +20,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class NewSubscriptionMinimumCompositePrice
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val cadence: JsonField<Cadence>,
     private val itemId: JsonField<String>,
@@ -1180,6 +1181,7 @@ private constructor(
 
     /** Configuration for minimum pricing */
     class MinimumConfig
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val minimumAmount: JsonField<String>,
         private val prorated: JsonField<Boolean>,

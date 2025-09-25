@@ -18,6 +18,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class PaginationMetadata
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val hasMore: JsonField<Boolean>,
     private val nextCursor: JsonField<String>,

@@ -21,6 +21,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class NewFloatingCumulativeGroupedBulkPrice
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val cadence: JsonField<Cadence>,
     private val cumulativeGroupedBulkConfig: JsonField<CumulativeGroupedBulkConfig>,
@@ -1135,6 +1136,7 @@ private constructor(
 
     /** Configuration for cumulative_grouped_bulk pricing */
     class CumulativeGroupedBulkConfig
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val dimensionValues: JsonField<List<DimensionValue>>,
         private val group: JsonField<String>,
@@ -1338,6 +1340,7 @@ private constructor(
 
         /** Configuration for a dimension value entry */
         class DimensionValue
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val groupingKey: JsonField<String>,
             private val tierLowerBound: JsonField<String>,

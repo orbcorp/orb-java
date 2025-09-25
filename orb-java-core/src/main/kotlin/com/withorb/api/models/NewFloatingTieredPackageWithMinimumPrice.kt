@@ -21,6 +21,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class NewFloatingTieredPackageWithMinimumPrice
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val cadence: JsonField<Cadence>,
     private val currency: JsonField<String>,
@@ -1259,6 +1260,7 @@ private constructor(
 
     /** Configuration for tiered_package_with_minimum pricing */
     class TieredPackageWithMinimumConfig
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val packageSize: JsonField<Double>,
         private val tiers: JsonField<List<Tier>>,
@@ -1465,6 +1467,7 @@ private constructor(
 
         /** Configuration for a single tier */
         class Tier
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val minimumAmount: JsonField<String>,
             private val perUnit: JsonField<String>,

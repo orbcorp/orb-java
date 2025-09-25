@@ -18,6 +18,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class TopUpInvoiceSettings
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val autoCollection: JsonField<Boolean>,
     private val netTerms: JsonField<Long>,

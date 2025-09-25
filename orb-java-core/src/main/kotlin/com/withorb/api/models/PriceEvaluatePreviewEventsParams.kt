@@ -461,6 +461,7 @@ private constructor(
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val timeframeEnd: JsonField<OffsetDateTime>,
         private val timeframeStart: JsonField<OffsetDateTime>,
@@ -892,6 +893,7 @@ private constructor(
     }
 
     class Event
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val eventName: JsonField<String>,
         private val properties: JsonField<Properties>,
@@ -1360,6 +1362,7 @@ private constructor(
     }
 
     class PriceEvaluation
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val externalPriceId: JsonField<String>,
         private val filter: JsonField<String>,
@@ -3002,6 +3005,7 @@ private constructor(
             }
 
             class GroupedWithMinMaxThresholds
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val cadence: JsonField<Cadence>,
                 private val currency: JsonField<String>,
@@ -4245,6 +4249,7 @@ private constructor(
 
                 /** Configuration for grouped_with_min_max_thresholds pricing */
                 class GroupedWithMinMaxThresholdsConfig
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                 private constructor(
                     private val groupingKey: JsonField<String>,
                     private val maximumCharge: JsonField<String>,

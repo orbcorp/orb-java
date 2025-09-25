@@ -20,6 +20,7 @@ import kotlin.jvm.optionals.getOrNull
 
 /** Configuration for tiered pricing */
 class TieredConfig
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val tiers: JsonField<List<Tier>>,
     private val additionalProperties: MutableMap<String, JsonValue>,

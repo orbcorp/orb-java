@@ -20,6 +20,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class PriceEvaluatePreviewEventsResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val data: JsonField<List<Data>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -174,6 +175,7 @@ private constructor(
         (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
     class Data
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val currency: JsonField<String>,
         private val priceGroups: JsonField<List<EvaluatePriceGroup>>,

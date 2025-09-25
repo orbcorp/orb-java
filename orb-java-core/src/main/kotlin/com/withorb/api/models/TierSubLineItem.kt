@@ -19,6 +19,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class TierSubLineItem
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val amount: JsonField<String>,
     private val grouping: JsonField<SubLineItemGrouping>,
@@ -332,6 +333,7 @@ private constructor(
             (type.asKnown().getOrNull()?.validity() ?: 0)
 
     class TierConfig
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val firstUnit: JsonField<Double>,
         private val lastUnit: JsonField<Double>,

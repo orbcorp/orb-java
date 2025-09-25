@@ -28,6 +28,7 @@ import kotlin.jvm.optionals.getOrNull
  * Alerts created through the API can be scoped to either customers or subscriptions.
  */
 class Alert
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
@@ -616,6 +617,7 @@ private constructor(
 
     /** The metric the alert applies to. */
     class Metric
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -768,6 +770,7 @@ private constructor(
 
     /** The plan the alert applies to. */
     class Plan
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val externalPlanId: JsonField<String>,
@@ -1206,6 +1209,7 @@ private constructor(
 
     /** Alert status is used to determine if an alert is currently in-alert or not. */
     class BalanceAlertStatus
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val inAlert: JsonField<Boolean>,
         private val thresholdValue: JsonField<Double>,

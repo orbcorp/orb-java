@@ -18,6 +18,7 @@ import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 class NewTaxJarConfiguration
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val taxExempt: JsonField<Boolean>,
     private val taxProvider: JsonField<TaxProvider>,

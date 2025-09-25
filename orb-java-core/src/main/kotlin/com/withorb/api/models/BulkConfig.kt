@@ -20,6 +20,7 @@ import kotlin.jvm.optionals.getOrNull
 
 /** Configuration for bulk pricing */
 class BulkConfig
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val tiers: JsonField<List<BulkTier>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
