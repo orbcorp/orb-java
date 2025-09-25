@@ -20,6 +20,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class EventIngestResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val validationFailed: JsonField<List<ValidationFailed>>,
     private val debug: JsonField<Debug>,
@@ -226,6 +227,7 @@ private constructor(
             (debug.asKnown().getOrNull()?.validity() ?: 0)
 
     class ValidationFailed
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val idempotencyKey: JsonField<String>,
         private val validationErrors: JsonField<List<String>>,
@@ -459,6 +461,7 @@ private constructor(
      * ingested and duplicate event idempotency keys.
      */
     class Debug
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val duplicate: JsonField<List<String>>,
         private val ingested: JsonField<List<String>>,

@@ -20,6 +20,7 @@ import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 class TransformPriceFilter
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val field: JsonField<Field>,
     private val operator: JsonField<Operator>,

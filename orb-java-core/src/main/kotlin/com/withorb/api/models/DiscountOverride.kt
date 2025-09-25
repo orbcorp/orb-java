@@ -19,6 +19,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class DiscountOverride
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val discountType: JsonField<DiscountType>,
     private val amountDiscount: JsonField<String>,

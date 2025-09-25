@@ -20,6 +20,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class NewSubscriptionUnitWithPercentPrice
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val cadence: JsonField<Cadence>,
     private val itemId: JsonField<String>,
@@ -1304,6 +1305,7 @@ private constructor(
 
     /** Configuration for unit_with_percent pricing */
     class UnitWithPercentConfig
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val percent: JsonField<String>,
         private val unitAmount: JsonField<String>,

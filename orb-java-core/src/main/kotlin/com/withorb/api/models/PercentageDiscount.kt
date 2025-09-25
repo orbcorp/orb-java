@@ -21,6 +21,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class PercentageDiscount
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val discountType: JsonField<DiscountType>,
     private val percentageDiscount: JsonField<Double>,

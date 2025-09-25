@@ -20,6 +20,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class NewFloatingBulkPrice
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val bulkConfig: JsonField<BulkConfig>,
     private val cadence: JsonField<Cadence>,

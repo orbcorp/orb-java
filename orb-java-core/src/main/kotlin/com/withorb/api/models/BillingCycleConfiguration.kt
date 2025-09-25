@@ -18,6 +18,7 @@ import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 class BillingCycleConfiguration
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val duration: JsonField<Long>,
     private val durationUnit: JsonField<DurationUnit>,

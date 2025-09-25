@@ -21,6 +21,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class NewMinimum
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val adjustmentType: JsonField<AdjustmentType>,
     private val itemId: JsonField<String>,

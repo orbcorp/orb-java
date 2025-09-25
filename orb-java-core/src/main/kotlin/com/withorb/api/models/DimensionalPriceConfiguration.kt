@@ -19,6 +19,7 @@ import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 class DimensionalPriceConfiguration
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val dimensionValues: JsonField<List<String>>,
     private val dimensionalPriceGroupId: JsonField<String>,

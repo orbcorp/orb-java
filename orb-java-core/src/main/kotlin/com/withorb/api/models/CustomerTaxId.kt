@@ -163,6 +163,7 @@ import kotlin.jvm.optionals.getOrNull
  * |Zimbabwe              |`zw_tin`    |Zimbabwe Tax Identification Number                                                                     |
  */
 class CustomerTaxId
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val country: JsonField<Country>,
     private val type: JsonField<Type>,

@@ -32,6 +32,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class ChangedSubscriptionResources
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val createdCreditNotes: JsonField<List<CreditNote>>,
     private val createdInvoices: JsonField<List<CreatedInvoice>>,
@@ -363,6 +364,7 @@ private constructor(
             (voidedInvoices.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
     class CreatedInvoice
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val amountDue: JsonField<String>,
@@ -2757,6 +2759,7 @@ private constructor(
                 (if (willAutoIssue.asKnown().isPresent) 1 else 0)
 
         class AutoCollection
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val enabled: JsonField<Boolean>,
             private val nextAttemptAt: JsonField<OffsetDateTime>,
@@ -3116,6 +3119,7 @@ private constructor(
         }
 
         class CreditNote
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val id: JsonField<String>,
             private val creditNoteNumber: JsonField<String>,
@@ -3529,6 +3533,7 @@ private constructor(
         }
 
         class CustomerBalanceTransaction
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val id: JsonField<String>,
             private val action: JsonField<Action>,
@@ -4558,6 +4563,7 @@ private constructor(
         }
 
         class LineItem
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val id: JsonField<String>,
             private val adjustedSubtotal: JsonField<String>,
@@ -6706,6 +6712,7 @@ private constructor(
         }
 
         class PaymentAttempt
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val id: JsonField<String>,
             private val amount: JsonField<String>,

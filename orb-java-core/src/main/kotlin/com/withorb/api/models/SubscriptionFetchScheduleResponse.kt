@@ -19,6 +19,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class SubscriptionFetchScheduleResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val createdAt: JsonField<OffsetDateTime>,
     private val endDate: JsonField<OffsetDateTime>,
@@ -274,6 +275,7 @@ private constructor(
             (if (startDate.asKnown().isPresent) 1 else 0)
 
     class Plan
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val externalPlanId: JsonField<String>,

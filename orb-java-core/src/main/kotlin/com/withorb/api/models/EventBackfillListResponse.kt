@@ -24,6 +24,7 @@ import kotlin.jvm.optionals.getOrNull
  * timeframe.
  */
 class EventBackfillListResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val closeTime: JsonField<OffsetDateTime>,

@@ -21,6 +21,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class EventSearchResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val data: JsonField<List<Data>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -177,6 +178,7 @@ private constructor(
      * the usage charges for a given billing period.
      */
     class Data
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val customerId: JsonField<String>,

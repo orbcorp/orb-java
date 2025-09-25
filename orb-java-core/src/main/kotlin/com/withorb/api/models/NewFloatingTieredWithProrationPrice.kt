@@ -21,6 +21,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class NewFloatingTieredWithProrationPrice
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val cadence: JsonField<Cadence>,
     private val currency: JsonField<String>,
@@ -1256,6 +1257,7 @@ private constructor(
 
     /** Configuration for tiered_with_proration pricing */
     class TieredWithProrationConfig
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val tiers: JsonField<List<Tier>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -1417,6 +1419,7 @@ private constructor(
 
         /** Configuration for a single tiered with proration tier */
         class Tier
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val tierLowerBound: JsonField<String>,
             private val unitAmount: JsonField<String>,

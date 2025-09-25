@@ -19,6 +19,7 @@ import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 class PriceListPageResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val data: JsonField<List<Price>>,
     private val paginationMetadata: JsonField<PaginationMetadata>,

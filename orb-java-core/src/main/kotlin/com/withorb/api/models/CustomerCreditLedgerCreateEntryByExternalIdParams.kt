@@ -627,6 +627,7 @@ private constructor(
         }
 
         class Increment
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val amount: JsonField<Double>,
             private val entryType: JsonValue,
@@ -1181,6 +1182,7 @@ private constructor(
              * the calculation of the invoice total is done on that basis.
              */
             class InvoiceSettings
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val autoCollection: JsonField<Boolean>,
                 private val netTerms: JsonField<Long>,
@@ -2160,6 +2162,7 @@ private constructor(
         }
 
         class Decrement
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val amount: JsonField<Double>,
             private val entryType: JsonValue,
@@ -2632,6 +2635,7 @@ private constructor(
         }
 
         class ExpirationChange
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val entryType: JsonValue,
             private val targetExpiryDate: JsonField<LocalDate>,
@@ -3268,6 +3272,7 @@ private constructor(
         }
 
         class Void
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val amount: JsonField<Double>,
             private val blockId: JsonField<String>,
@@ -3965,6 +3970,7 @@ private constructor(
         }
 
         class Amendment
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val amount: JsonField<Double>,
             private val blockId: JsonField<String>,

@@ -20,6 +20,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class NewSubscriptionMatrixPrice
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val cadence: JsonField<Cadence>,
     private val itemId: JsonField<String>,

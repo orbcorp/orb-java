@@ -19,6 +19,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class FixedFeeQuantityScheduleEntry
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val endDate: JsonField<OffsetDateTime>,
     private val priceId: JsonField<String>,

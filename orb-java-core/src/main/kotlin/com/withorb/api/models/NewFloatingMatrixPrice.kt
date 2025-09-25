@@ -20,6 +20,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class NewFloatingMatrixPrice
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val cadence: JsonField<Cadence>,
     private val currency: JsonField<String>,

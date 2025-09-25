@@ -1046,6 +1046,7 @@ private constructor(
     }
 
     class Unit
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -3150,6 +3151,7 @@ private constructor(
     }
 
     class Tiered
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -5255,6 +5257,7 @@ private constructor(
     }
 
     class Bulk
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -7359,6 +7362,7 @@ private constructor(
     }
 
     class Package
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -9465,6 +9469,7 @@ private constructor(
     }
 
     class Matrix
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -11570,6 +11575,7 @@ private constructor(
     }
 
     class ThresholdTotalAmount
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -13603,6 +13609,7 @@ private constructor(
 
         /** Configuration for threshold_total_amount pricing */
         class ThresholdTotalAmountConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val consumptionTable: JsonField<List<ConsumptionTable>>,
             private val prorate: JsonField<Boolean>,
@@ -13826,6 +13833,7 @@ private constructor(
 
             /** Configuration for a single threshold */
             class ConsumptionTable
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val threshold: JsonField<String>,
                 private val totalAmount: JsonField<String>,
@@ -14142,6 +14150,7 @@ private constructor(
     }
 
     class TieredPackage
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -16174,6 +16183,7 @@ private constructor(
 
         /** Configuration for tiered_package pricing */
         class TieredPackageConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val packageSize: JsonField<String>,
             private val tiers: JsonField<List<Tier>>,
@@ -16389,6 +16399,7 @@ private constructor(
 
             /** Configuration for a single tier with business logic */
             class Tier
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val perUnit: JsonField<String>,
                 private val tierLowerBound: JsonField<String>,
@@ -16704,6 +16715,7 @@ private constructor(
     }
 
     class TieredWithMinimum
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -18736,6 +18748,7 @@ private constructor(
 
         /** Configuration for tiered_with_minimum pricing */
         class TieredWithMinimumConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val tiers: JsonField<List<Tier>>,
             private val hideZeroAmountTiers: JsonField<Boolean>,
@@ -18986,6 +18999,7 @@ private constructor(
 
             /** Configuration for a single tier */
             class Tier
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val minimumAmount: JsonField<String>,
                 private val tierLowerBound: JsonField<String>,
@@ -19350,6 +19364,7 @@ private constructor(
     }
 
     class GroupedTiered
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -21140,6 +21155,7 @@ private constructor(
 
         /** Configuration for grouped_tiered pricing */
         class GroupedTieredConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val groupingKey: JsonField<String>,
             private val tiers: JsonField<List<Tier>>,
@@ -21350,6 +21366,7 @@ private constructor(
 
             /** Configuration for a single tier */
             class Tier
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val tierLowerBound: JsonField<String>,
                 private val unitAmount: JsonField<String>,
@@ -21909,6 +21926,7 @@ private constructor(
     }
 
     class TieredPackageWithMinimum
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -23949,6 +23967,7 @@ private constructor(
 
         /** Configuration for tiered_package_with_minimum pricing */
         class TieredPackageWithMinimumConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val packageSize: JsonField<Double>,
             private val tiers: JsonField<List<Tier>>,
@@ -24163,6 +24182,7 @@ private constructor(
 
             /** Configuration for a single tier */
             class Tier
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val minimumAmount: JsonField<String>,
                 private val perUnit: JsonField<String>,
@@ -24524,6 +24544,7 @@ private constructor(
     }
 
     class PackageWithAllocation
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -26423,6 +26444,7 @@ private constructor(
 
         /** Configuration for package_with_allocation pricing */
         class PackageWithAllocationConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val allocation: JsonField<String>,
             private val packageAmount: JsonField<String>,
@@ -26902,6 +26924,7 @@ private constructor(
     }
 
     class UnitWithPercent
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -28935,6 +28958,7 @@ private constructor(
 
         /** Configuration for unit_with_percent pricing */
         class UnitWithPercentConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val percent: JsonField<String>,
             private val unitAmount: JsonField<String>,
@@ -29226,6 +29250,7 @@ private constructor(
     }
 
     class MatrixWithAllocation
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -31335,6 +31360,7 @@ private constructor(
     }
 
     class TieredWithProration
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -33368,6 +33394,7 @@ private constructor(
 
         /** Configuration for tiered_with_proration pricing */
         class TieredWithProrationConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val tiers: JsonField<List<Tier>>,
             private val additionalProperties: MutableMap<String, JsonValue>,
@@ -33537,6 +33564,7 @@ private constructor(
 
             /** Configuration for a single tiered with proration tier */
             class Tier
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val tierLowerBound: JsonField<String>,
                 private val unitAmount: JsonField<String>,
@@ -33851,6 +33879,7 @@ private constructor(
     }
 
     class UnitWithProration
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -35883,6 +35912,7 @@ private constructor(
 
         /** Configuration for unit_with_proration pricing */
         class UnitWithProrationConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val unitAmount: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
@@ -36132,6 +36162,7 @@ private constructor(
     }
 
     class GroupedAllocation
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -37922,6 +37953,7 @@ private constructor(
 
         /** Configuration for grouped_allocation pricing */
         class GroupedAllocationConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val allocation: JsonField<String>,
             private val groupingKey: JsonField<String>,
@@ -38507,6 +38539,7 @@ private constructor(
     }
 
     class BulkWithProration
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -40145,6 +40178,7 @@ private constructor(
 
         /** Configuration for bulk_with_proration pricing */
         class BulkWithProrationConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val tiers: JsonField<List<Tier>>,
             private val additionalProperties: MutableMap<String, JsonValue>,
@@ -40310,6 +40344,7 @@ private constructor(
 
             /** Configuration for a single bulk pricing tier with proration */
             class Tier
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val unitAmount: JsonField<String>,
                 private val tierLowerBound: JsonField<String>,
@@ -41023,6 +41058,7 @@ private constructor(
     }
 
     class GroupedWithProratedMinimum
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -42827,6 +42863,7 @@ private constructor(
 
         /** Configuration for grouped_with_prorated_minimum pricing */
         class GroupedWithProratedMinimumConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val groupingKey: JsonField<String>,
             private val minimum: JsonField<String>,
@@ -43404,6 +43441,7 @@ private constructor(
     }
 
     class GroupedWithMeteredMinimum
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -45207,6 +45245,7 @@ private constructor(
 
         /** Configuration for grouped_with_metered_minimum pricing */
         class GroupedWithMeteredMinimumConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val groupingKey: JsonField<String>,
             private val minimumUnitAmount: JsonField<String>,
@@ -45630,6 +45669,7 @@ private constructor(
 
             /** Configuration for a scaling factor */
             class ScalingFactor
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val scalingFactor: JsonField<String>,
                 private val scalingValue: JsonField<String>,
@@ -45851,6 +45891,7 @@ private constructor(
 
             /** Configuration for a unit amount */
             class UnitAmount
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val pricingValue: JsonField<String>,
                 private val unitAmount: JsonField<String>,
@@ -46422,6 +46463,7 @@ private constructor(
     }
 
     class GroupedWithMinMaxThresholds
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -48227,6 +48269,7 @@ private constructor(
 
         /** Configuration for grouped_with_min_max_thresholds pricing */
         class GroupedWithMinMaxThresholdsConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val groupingKey: JsonField<String>,
             private val maximumCharge: JsonField<String>,
@@ -48866,6 +48909,7 @@ private constructor(
     }
 
     class MatrixWithDisplayName
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -50658,6 +50702,7 @@ private constructor(
 
         /** Configuration for matrix_with_display_name pricing */
         class MatrixWithDisplayNameConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val dimension: JsonField<String>,
             private val unitAmounts: JsonField<List<UnitAmount>>,
@@ -50871,6 +50916,7 @@ private constructor(
 
             /** Configuration for a unit amount item */
             class UnitAmount
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val dimensionValue: JsonField<String>,
                 private val displayName: JsonField<String>,
@@ -51475,6 +51521,7 @@ private constructor(
     }
 
     class GroupedTieredPackage
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -53266,6 +53313,7 @@ private constructor(
 
         /** Configuration for grouped_tiered_package pricing */
         class GroupedTieredPackageConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val groupingKey: JsonField<String>,
             private val packageSize: JsonField<String>,
@@ -53523,6 +53571,7 @@ private constructor(
 
             /** Configuration for a single tier */
             class Tier
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val perUnit: JsonField<String>,
                 private val tierLowerBound: JsonField<String>,
@@ -54081,6 +54130,7 @@ private constructor(
     }
 
     class MaxGroupTieredPackage
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -55873,6 +55923,7 @@ private constructor(
 
         /** Configuration for max_group_tiered_package pricing */
         class MaxGroupTieredPackageConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val groupingKey: JsonField<String>,
             private val packageSize: JsonField<String>,
@@ -56131,6 +56182,7 @@ private constructor(
 
             /** Configuration for a single tier */
             class Tier
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val tierLowerBound: JsonField<String>,
                 private val unitAmount: JsonField<String>,
@@ -56691,6 +56743,7 @@ private constructor(
     }
 
     class ScalableMatrixWithUnitPricing
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -58750,6 +58803,7 @@ private constructor(
 
         /** Configuration for scalable_matrix_with_unit_pricing pricing */
         class ScalableMatrixWithUnitPricingConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val firstDimension: JsonField<String>,
             private val matrixScalingFactors: JsonField<List<MatrixScalingFactor>>,
@@ -59120,6 +59174,7 @@ private constructor(
 
             /** Configuration for a single matrix scaling factor */
             class MatrixScalingFactor
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val firstDimensionValue: JsonField<String>,
                 private val scalingFactor: JsonField<String>,
@@ -59507,6 +59562,7 @@ private constructor(
     }
 
     class ScalableMatrixWithTieredPricing
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -61568,6 +61624,7 @@ private constructor(
 
         /** Configuration for scalable_matrix_with_tiered_pricing pricing */
         class ScalableMatrixWithTieredPricingConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val firstDimension: JsonField<String>,
             private val matrixScalingFactors: JsonField<List<MatrixScalingFactor>>,
@@ -61896,6 +61953,7 @@ private constructor(
 
             /** Configuration for a single matrix scaling factor */
             class MatrixScalingFactor
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val firstDimensionValue: JsonField<String>,
                 private val scalingFactor: JsonField<String>,
@@ -62176,6 +62234,7 @@ private constructor(
 
             /** Configuration for a single tier entry with business logic */
             class Tier
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val tierLowerBound: JsonField<String>,
                 private val unitAmount: JsonField<String>,
@@ -62502,6 +62561,7 @@ private constructor(
     }
 
     class CumulativeGroupedBulk
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -64294,6 +64354,7 @@ private constructor(
 
         /** Configuration for cumulative_grouped_bulk pricing */
         class CumulativeGroupedBulkConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val dimensionValues: JsonField<List<DimensionValue>>,
             private val group: JsonField<String>,
@@ -64503,6 +64564,7 @@ private constructor(
 
             /** Configuration for a dimension value entry */
             class DimensionValue
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val groupingKey: JsonField<String>,
                 private val tierLowerBound: JsonField<String>,
@@ -65107,6 +65169,7 @@ private constructor(
     }
 
     class Minimum
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val billableMetric: JsonField<BillableMetricTiny>,
@@ -67002,6 +67065,7 @@ private constructor(
 
         /** Configuration for minimum pricing */
         class MinimumConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val minimumAmount: JsonField<String>,
             private val prorated: JsonField<Boolean>,

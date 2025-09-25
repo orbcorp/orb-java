@@ -19,6 +19,7 @@ import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 class CustomerCreditTopUpListByExternalIdPageResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val data: JsonField<List<CustomerCreditTopUpListByExternalIdResponse>>,
     private val paginationMetadata: JsonField<PaginationMetadata>,

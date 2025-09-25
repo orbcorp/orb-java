@@ -17,6 +17,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class AddressInput
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val city: JsonField<String>,
     private val country: JsonField<String>,

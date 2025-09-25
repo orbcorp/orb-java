@@ -485,6 +485,7 @@ private constructor(
             .build()
 
     class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val events: JsonField<List<Event>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -657,6 +658,7 @@ private constructor(
     }
 
     class Event
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val eventName: JsonField<String>,
         private val idempotencyKey: JsonField<String>,

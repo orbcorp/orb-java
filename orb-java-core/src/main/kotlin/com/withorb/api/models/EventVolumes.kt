@@ -20,6 +20,7 @@ import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 class EventVolumes
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val data: JsonField<List<Data>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -175,6 +176,7 @@ private constructor(
      * the aggregation is the `timestamp` datetime field on events.
      */
     class Data
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val count: JsonField<Long>,
         private val timeframeEnd: JsonField<OffsetDateTime>,

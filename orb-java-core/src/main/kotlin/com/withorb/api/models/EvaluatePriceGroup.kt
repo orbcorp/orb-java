@@ -31,6 +31,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class EvaluatePriceGroup
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val amount: JsonField<String>,
     private val groupingValues: JsonField<List<GroupingValue>>,
