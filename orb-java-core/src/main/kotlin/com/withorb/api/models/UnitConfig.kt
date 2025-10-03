@@ -14,15 +14,12 @@ import com.withorb.api.core.checkRequired
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Collections
 import java.util.Objects
-import java.util.Optional
-import kotlin.jvm.optionals.getOrNull
 
 /** Configuration for unit pricing */
 class UnitConfig
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val unitAmount: JsonField<String>,
-    private val scalingFactor: JsonField<Double>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -30,11 +27,8 @@ private constructor(
     private constructor(
         @JsonProperty("unit_amount")
         @ExcludeMissing
-        unitAmount: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("scaling_factor")
-        @ExcludeMissing
-        scalingFactor: JsonField<Double> = JsonMissing.of(),
-    ) : this(unitAmount, scalingFactor, mutableMapOf())
+        unitAmount: JsonField<String> = JsonMissing.of()
+    ) : this(unitAmount, mutableMapOf())
 
     /**
      * Rate per unit of usage
@@ -45,28 +39,11 @@ private constructor(
     fun unitAmount(): String = unitAmount.getRequired("unit_amount")
 
     /**
-     * Multiplier to scale rated quantity by
-     *
-     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
-     *   responded with an unexpected value).
-     */
-    fun scalingFactor(): Optional<Double> = scalingFactor.getOptional("scaling_factor")
-
-    /**
      * Returns the raw JSON value of [unitAmount].
      *
      * Unlike [unitAmount], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("unit_amount") @ExcludeMissing fun _unitAmount(): JsonField<String> = unitAmount
-
-    /**
-     * Returns the raw JSON value of [scalingFactor].
-     *
-     * Unlike [scalingFactor], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("scaling_factor")
-    @ExcludeMissing
-    fun _scalingFactor(): JsonField<Double> = scalingFactor
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -97,13 +74,11 @@ private constructor(
     class Builder internal constructor() {
 
         private var unitAmount: JsonField<String>? = null
-        private var scalingFactor: JsonField<Double> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(unitConfig: UnitConfig) = apply {
             unitAmount = unitConfig.unitAmount
-            scalingFactor = unitConfig.scalingFactor
             additionalProperties = unitConfig.additionalProperties.toMutableMap()
         }
 
@@ -118,32 +93,6 @@ private constructor(
          * value.
          */
         fun unitAmount(unitAmount: JsonField<String>) = apply { this.unitAmount = unitAmount }
-
-        /** Multiplier to scale rated quantity by */
-        fun scalingFactor(scalingFactor: Double?) =
-            scalingFactor(JsonField.ofNullable(scalingFactor))
-
-        /**
-         * Alias for [Builder.scalingFactor].
-         *
-         * This unboxed primitive overload exists for backwards compatibility.
-         */
-        fun scalingFactor(scalingFactor: Double) = scalingFactor(scalingFactor as Double?)
-
-        /** Alias for calling [Builder.scalingFactor] with `scalingFactor.orElse(null)`. */
-        fun scalingFactor(scalingFactor: Optional<Double>) =
-            scalingFactor(scalingFactor.getOrNull())
-
-        /**
-         * Sets [Builder.scalingFactor] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.scalingFactor] with a well-typed [Double] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun scalingFactor(scalingFactor: JsonField<Double>) = apply {
-            this.scalingFactor = scalingFactor
-        }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -177,11 +126,7 @@ private constructor(
          * @throws IllegalStateException if any required field is unset.
          */
         fun build(): UnitConfig =
-            UnitConfig(
-                checkRequired("unitAmount", unitAmount),
-                scalingFactor,
-                additionalProperties.toMutableMap(),
-            )
+            UnitConfig(checkRequired("unitAmount", unitAmount), additionalProperties.toMutableMap())
     }
 
     private var validated: Boolean = false
@@ -192,7 +137,6 @@ private constructor(
         }
 
         unitAmount()
-        scalingFactor()
         validated = true
     }
 
@@ -209,10 +153,7 @@ private constructor(
      *
      * Used for best match union deserialization.
      */
-    @JvmSynthetic
-    internal fun validity(): Int =
-        (if (unitAmount.asKnown().isPresent) 1 else 0) +
-            (if (scalingFactor.asKnown().isPresent) 1 else 0)
+    @JvmSynthetic internal fun validity(): Int = (if (unitAmount.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -221,16 +162,13 @@ private constructor(
 
         return other is UnitConfig &&
             unitAmount == other.unitAmount &&
-            scalingFactor == other.scalingFactor &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy {
-        Objects.hash(unitAmount, scalingFactor, additionalProperties)
-    }
+    private val hashCode: Int by lazy { Objects.hash(unitAmount, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "UnitConfig{unitAmount=$unitAmount, scalingFactor=$scalingFactor, additionalProperties=$additionalProperties}"
+        "UnitConfig{unitAmount=$unitAmount, additionalProperties=$additionalProperties}"
 }

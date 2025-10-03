@@ -128,12 +128,7 @@ internal class PriceIntervalTest {
                         .planPhaseOrder(0L)
                         .priceType(Price.Unit.PriceType.USAGE_PRICE)
                         .replacesPriceId("replaces_price_id")
-                        .unitConfig(
-                            UnitConfig.builder()
-                                .unitAmount("unit_amount")
-                                .scalingFactor(0.0)
-                                .build()
-                        )
+                        .unitConfig(UnitConfig.builder().unitAmount("unit_amount").build())
                         .dimensionalPriceConfiguration(
                             DimensionalPriceConfiguration.builder()
                                 .addDimensionValue("string")
@@ -264,12 +259,7 @@ internal class PriceIntervalTest {
                         .planPhaseOrder(0L)
                         .priceType(Price.Unit.PriceType.USAGE_PRICE)
                         .replacesPriceId("replaces_price_id")
-                        .unitConfig(
-                            UnitConfig.builder()
-                                .unitAmount("unit_amount")
-                                .scalingFactor(0.0)
-                                .build()
-                        )
+                        .unitConfig(UnitConfig.builder().unitAmount("unit_amount").build())
                         .dimensionalPriceConfiguration(
                             DimensionalPriceConfiguration.builder()
                                 .addDimensionValue("string")
@@ -401,12 +391,7 @@ internal class PriceIntervalTest {
                         .planPhaseOrder(0L)
                         .priceType(Price.Unit.PriceType.USAGE_PRICE)
                         .replacesPriceId("replaces_price_id")
-                        .unitConfig(
-                            UnitConfig.builder()
-                                .unitAmount("unit_amount")
-                                .scalingFactor(0.0)
-                                .build()
-                        )
+                        .unitConfig(UnitConfig.builder().unitAmount("unit_amount").build())
                         .dimensionalPriceConfiguration(
                             DimensionalPriceConfiguration.builder()
                                 .addDimensionValue("string")
