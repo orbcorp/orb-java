@@ -154,6 +154,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -425,6 +426,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -702,6 +704,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -974,6 +977,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -1251,6 +1255,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -1541,6 +1546,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -1838,6 +1844,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -2134,6 +2141,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -2430,6 +2438,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -2727,6 +2736,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -3014,6 +3024,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -3286,6 +3297,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -3564,6 +3576,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -3846,6 +3859,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -4120,6 +4134,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -4391,6 +4406,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -4673,6 +4689,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -4955,6 +4972,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -5245,6 +5263,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -5536,6 +5555,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -5817,6 +5837,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -6107,6 +6128,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -6402,6 +6424,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -6699,6 +6722,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -7013,6 +7037,7 @@ internal class PriceTest {
             .contains(scalableMatrixWithTieredPricing)
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -7320,6 +7345,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).contains(cumulativeGroupedBulk)
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -7599,6 +7625,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).contains(minimum)
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).isEmpty
     }
 
@@ -7710,6 +7737,268 @@ internal class PriceTest {
                     .name("name")
                     .planPhaseOrder(0L)
                     .priceType(Price.Minimum.PriceType.USAGE_PRICE)
+                    .replacesPriceId("replaces_price_id")
+                    .dimensionalPriceConfiguration(
+                        DimensionalPriceConfiguration.builder()
+                            .addDimensionValue("string")
+                            .dimensionalPriceGroupId("dimensional_price_group_id")
+                            .build()
+                    )
+                    .build()
+            )
+
+        val roundtrippedPrice =
+            jsonMapper.readValue(jsonMapper.writeValueAsString(price), jacksonTypeRef<Price>())
+
+        assertThat(roundtrippedPrice).isEqualTo(price)
+    }
+
+    @Test
+    fun ofPercent() {
+        val percent =
+            Price.Percent.builder()
+                .id("id")
+                .billableMetric(BillableMetricTiny.builder().id("id").build())
+                .billingCycleConfiguration(
+                    BillingCycleConfiguration.builder()
+                        .duration(0L)
+                        .durationUnit(BillingCycleConfiguration.DurationUnit.DAY)
+                        .build()
+                )
+                .billingMode(Price.Percent.BillingMode.IN_ADVANCE)
+                .cadence(Price.Percent.Cadence.ONE_TIME)
+                .addCompositePriceFilter(
+                    TransformPriceFilter.builder()
+                        .field(TransformPriceFilter.Field.PRICE_ID)
+                        .operator(TransformPriceFilter.Operator.INCLUDES)
+                        .addValue("string")
+                        .build()
+                )
+                .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .creditAllocation(
+                    Allocation.builder()
+                        .allowsRollover(true)
+                        .currency("currency")
+                        .customExpiration(
+                            CustomExpiration.builder()
+                                .duration(0L)
+                                .durationUnit(CustomExpiration.DurationUnit.DAY)
+                                .build()
+                        )
+                        .build()
+                )
+                .currency("currency")
+                .discount(
+                    PercentageDiscount.builder()
+                        .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                        .percentageDiscount(0.15)
+                        .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                        .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                        .addFilter(
+                            TransformPriceFilter.builder()
+                                .field(TransformPriceFilter.Field.PRICE_ID)
+                                .operator(TransformPriceFilter.Operator.INCLUDES)
+                                .addValue("string")
+                                .build()
+                        )
+                        .reason("reason")
+                        .build()
+                )
+                .externalPriceId("external_price_id")
+                .fixedPriceQuantity(0.0)
+                .invoicingCycleConfiguration(
+                    BillingCycleConfiguration.builder()
+                        .duration(0L)
+                        .durationUnit(BillingCycleConfiguration.DurationUnit.DAY)
+                        .build()
+                )
+                .item(ItemSlim.builder().id("id").name("name").build())
+                .maximum(
+                    Maximum.builder()
+                        .addAppliesToPriceId("string")
+                        .addFilter(
+                            TransformPriceFilter.builder()
+                                .field(TransformPriceFilter.Field.PRICE_ID)
+                                .operator(TransformPriceFilter.Operator.INCLUDES)
+                                .addValue("string")
+                                .build()
+                        )
+                        .maximumAmount("maximum_amount")
+                        .build()
+                )
+                .maximumAmount("maximum_amount")
+                .metadata(
+                    Price.Percent.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
+                .minimum(
+                    Minimum.builder()
+                        .addAppliesToPriceId("string")
+                        .addFilter(
+                            TransformPriceFilter.builder()
+                                .field(TransformPriceFilter.Field.PRICE_ID)
+                                .operator(TransformPriceFilter.Operator.INCLUDES)
+                                .addValue("string")
+                                .build()
+                        )
+                        .minimumAmount("minimum_amount")
+                        .build()
+                )
+                .minimumAmount("minimum_amount")
+                .name("name")
+                .percentConfig(Price.Percent.PercentConfig.builder().percent(0.0).build())
+                .planPhaseOrder(0L)
+                .priceType(Price.Percent.PriceType.USAGE_PRICE)
+                .replacesPriceId("replaces_price_id")
+                .dimensionalPriceConfiguration(
+                    DimensionalPriceConfiguration.builder()
+                        .addDimensionValue("string")
+                        .dimensionalPriceGroupId("dimensional_price_group_id")
+                        .build()
+                )
+                .build()
+
+        val price = Price.ofPercent(percent)
+
+        assertThat(price.unit()).isEmpty
+        assertThat(price.tiered()).isEmpty
+        assertThat(price.bulk()).isEmpty
+        assertThat(price.package_()).isEmpty
+        assertThat(price.matrix()).isEmpty
+        assertThat(price.thresholdTotalAmount()).isEmpty
+        assertThat(price.tieredPackage()).isEmpty
+        assertThat(price.tieredWithMinimum()).isEmpty
+        assertThat(price.groupedTiered()).isEmpty
+        assertThat(price.tieredPackageWithMinimum()).isEmpty
+        assertThat(price.packageWithAllocation()).isEmpty
+        assertThat(price.unitWithPercent()).isEmpty
+        assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredWithProration()).isEmpty
+        assertThat(price.unitWithProration()).isEmpty
+        assertThat(price.groupedAllocation()).isEmpty
+        assertThat(price.bulkWithProration()).isEmpty
+        assertThat(price.groupedWithProratedMinimum()).isEmpty
+        assertThat(price.groupedWithMeteredMinimum()).isEmpty
+        assertThat(price.groupedWithMinMaxThresholds()).isEmpty
+        assertThat(price.matrixWithDisplayName()).isEmpty
+        assertThat(price.groupedTieredPackage()).isEmpty
+        assertThat(price.maxGroupTieredPackage()).isEmpty
+        assertThat(price.scalableMatrixWithUnitPricing()).isEmpty
+        assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
+        assertThat(price.cumulativeGroupedBulk()).isEmpty
+        assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).contains(percent)
+        assertThat(price.eventOutput()).isEmpty
+    }
+
+    @Test
+    fun ofPercentRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val price =
+            Price.ofPercent(
+                Price.Percent.builder()
+                    .id("id")
+                    .billableMetric(BillableMetricTiny.builder().id("id").build())
+                    .billingCycleConfiguration(
+                        BillingCycleConfiguration.builder()
+                            .duration(0L)
+                            .durationUnit(BillingCycleConfiguration.DurationUnit.DAY)
+                            .build()
+                    )
+                    .billingMode(Price.Percent.BillingMode.IN_ADVANCE)
+                    .cadence(Price.Percent.Cadence.ONE_TIME)
+                    .addCompositePriceFilter(
+                        TransformPriceFilter.builder()
+                            .field(TransformPriceFilter.Field.PRICE_ID)
+                            .operator(TransformPriceFilter.Operator.INCLUDES)
+                            .addValue("string")
+                            .build()
+                    )
+                    .conversionRate(0.0)
+                    .unitConversionRateConfig(
+                        ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                    )
+                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .creditAllocation(
+                        Allocation.builder()
+                            .allowsRollover(true)
+                            .currency("currency")
+                            .customExpiration(
+                                CustomExpiration.builder()
+                                    .duration(0L)
+                                    .durationUnit(CustomExpiration.DurationUnit.DAY)
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .currency("currency")
+                    .discount(
+                        PercentageDiscount.builder()
+                            .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                            .percentageDiscount(0.15)
+                            .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                            .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                            .addFilter(
+                                TransformPriceFilter.builder()
+                                    .field(TransformPriceFilter.Field.PRICE_ID)
+                                    .operator(TransformPriceFilter.Operator.INCLUDES)
+                                    .addValue("string")
+                                    .build()
+                            )
+                            .reason("reason")
+                            .build()
+                    )
+                    .externalPriceId("external_price_id")
+                    .fixedPriceQuantity(0.0)
+                    .invoicingCycleConfiguration(
+                        BillingCycleConfiguration.builder()
+                            .duration(0L)
+                            .durationUnit(BillingCycleConfiguration.DurationUnit.DAY)
+                            .build()
+                    )
+                    .item(ItemSlim.builder().id("id").name("name").build())
+                    .maximum(
+                        Maximum.builder()
+                            .addAppliesToPriceId("string")
+                            .addFilter(
+                                TransformPriceFilter.builder()
+                                    .field(TransformPriceFilter.Field.PRICE_ID)
+                                    .operator(TransformPriceFilter.Operator.INCLUDES)
+                                    .addValue("string")
+                                    .build()
+                            )
+                            .maximumAmount("maximum_amount")
+                            .build()
+                    )
+                    .maximumAmount("maximum_amount")
+                    .metadata(
+                        Price.Percent.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .minimum(
+                        Minimum.builder()
+                            .addAppliesToPriceId("string")
+                            .addFilter(
+                                TransformPriceFilter.builder()
+                                    .field(TransformPriceFilter.Field.PRICE_ID)
+                                    .operator(TransformPriceFilter.Operator.INCLUDES)
+                                    .addValue("string")
+                                    .build()
+                            )
+                            .minimumAmount("minimum_amount")
+                            .build()
+                    )
+                    .minimumAmount("minimum_amount")
+                    .name("name")
+                    .percentConfig(Price.Percent.PercentConfig.builder().percent(0.0).build())
+                    .planPhaseOrder(0L)
+                    .priceType(Price.Percent.PriceType.USAGE_PRICE)
                     .replacesPriceId("replaces_price_id")
                     .dimensionalPriceConfiguration(
                         DimensionalPriceConfiguration.builder()
@@ -7870,6 +8159,7 @@ internal class PriceTest {
         assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
         assertThat(price.cumulativeGroupedBulk()).isEmpty
         assertThat(price.minimum()).isEmpty
+        assertThat(price.percent()).isEmpty
         assertThat(price.eventOutput()).contains(eventOutput)
     }
 

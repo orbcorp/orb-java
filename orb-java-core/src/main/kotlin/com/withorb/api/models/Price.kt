@@ -75,6 +75,7 @@ private constructor(
     private val scalableMatrixWithTieredPricing: ScalableMatrixWithTieredPricing? = null,
     private val cumulativeGroupedBulk: CumulativeGroupedBulk? = null,
     private val minimum: Minimum? = null,
+    private val percent: Percent? = null,
     private val eventOutput: EventOutput? = null,
     private val _json: JsonValue? = null,
 ) {
@@ -147,6 +148,8 @@ private constructor(
 
     fun minimum(): Optional<Minimum> = Optional.ofNullable(minimum)
 
+    fun percent(): Optional<Percent> = Optional.ofNullable(percent)
+
     fun eventOutput(): Optional<EventOutput> = Optional.ofNullable(eventOutput)
 
     fun isUnit(): Boolean = unit != null
@@ -202,6 +205,8 @@ private constructor(
     fun isCumulativeGroupedBulk(): Boolean = cumulativeGroupedBulk != null
 
     fun isMinimum(): Boolean = minimum != null
+
+    fun isPercent(): Boolean = percent != null
 
     fun isEventOutput(): Boolean = eventOutput != null
 
@@ -273,6 +278,8 @@ private constructor(
 
     fun asMinimum(): Minimum = minimum.getOrThrow("minimum")
 
+    fun asPercent(): Percent = percent.getOrThrow("percent")
+
     fun asEventOutput(): EventOutput = eventOutput.getOrThrow("eventOutput")
 
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
@@ -316,6 +323,7 @@ private constructor(
             cumulativeGroupedBulk != null ->
                 visitor.visitCumulativeGroupedBulk(cumulativeGroupedBulk)
             minimum != null -> visitor.visitMinimum(minimum)
+            percent != null -> visitor.visitPercent(percent)
             eventOutput != null -> visitor.visitEventOutput(eventOutput)
             else -> visitor.unknown(_json)
         }
@@ -457,6 +465,10 @@ private constructor(
                     minimum.validate()
                 }
 
+                override fun visitPercent(percent: Percent) {
+                    percent.validate()
+                }
+
                 override fun visitEventOutput(eventOutput: EventOutput) {
                     eventOutput.validate()
                 }
@@ -567,6 +579,8 @@ private constructor(
 
                 override fun visitMinimum(minimum: Minimum) = minimum.validity()
 
+                override fun visitPercent(percent: Percent) = percent.validity()
+
                 override fun visitEventOutput(eventOutput: EventOutput) = eventOutput.validity()
 
                 override fun unknown(json: JsonValue?) = 0
@@ -606,6 +620,7 @@ private constructor(
             scalableMatrixWithTieredPricing == other.scalableMatrixWithTieredPricing &&
             cumulativeGroupedBulk == other.cumulativeGroupedBulk &&
             minimum == other.minimum &&
+            percent == other.percent &&
             eventOutput == other.eventOutput
     }
 
@@ -638,6 +653,7 @@ private constructor(
             scalableMatrixWithTieredPricing,
             cumulativeGroupedBulk,
             minimum,
+            percent,
             eventOutput,
         )
 
@@ -676,6 +692,7 @@ private constructor(
                 "Price{scalableMatrixWithTieredPricing=$scalableMatrixWithTieredPricing}"
             cumulativeGroupedBulk != null -> "Price{cumulativeGroupedBulk=$cumulativeGroupedBulk}"
             minimum != null -> "Price{minimum=$minimum}"
+            percent != null -> "Price{percent=$percent}"
             eventOutput != null -> "Price{eventOutput=$eventOutput}"
             _json != null -> "Price{_unknown=$_json}"
             else -> throw IllegalStateException("Invalid Price")
@@ -780,6 +797,8 @@ private constructor(
 
         @JvmStatic fun ofMinimum(minimum: Minimum) = Price(minimum = minimum)
 
+        @JvmStatic fun ofPercent(percent: Percent) = Price(percent = percent)
+
         @JvmStatic fun ofEventOutput(eventOutput: EventOutput) = Price(eventOutput = eventOutput)
     }
 
@@ -847,6 +866,8 @@ private constructor(
         fun visitCumulativeGroupedBulk(cumulativeGroupedBulk: CumulativeGroupedBulk): T
 
         fun visitMinimum(minimum: Minimum): T
+
+        fun visitPercent(percent: Percent): T
 
         fun visitEventOutput(eventOutput: EventOutput): T
 
@@ -1006,6 +1027,11 @@ private constructor(
                         Price(minimum = it, _json = json)
                     } ?: Price(_json = json)
                 }
+                "percent" -> {
+                    return tryDeserialize(node, jacksonTypeRef<Percent>())?.let {
+                        Price(percent = it, _json = json)
+                    } ?: Price(_json = json)
+                }
                 "event_output" -> {
                     return tryDeserialize(node, jacksonTypeRef<EventOutput>())?.let {
                         Price(eventOutput = it, _json = json)
@@ -1066,6 +1092,7 @@ private constructor(
                 value.cumulativeGroupedBulk != null ->
                     generator.writeObject(value.cumulativeGroupedBulk)
                 value.minimum != null -> generator.writeObject(value.minimum)
+                value.percent != null -> generator.writeObject(value.percent)
                 value.eventOutput != null -> generator.writeObject(value.eventOutput)
                 value._json != null -> generator.writeObject(value._json)
                 else -> throw IllegalStateException("Invalid Price")
@@ -67704,6 +67731,2286 @@ private constructor(
 
         override fun toString() =
             "Minimum{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, billingMode=$billingMode, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, minimumConfig=$minimumConfig, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+    }
+
+    class Percent
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val id: JsonField<String>,
+        private val billableMetric: JsonField<BillableMetricTiny>,
+        private val billingCycleConfiguration: JsonField<BillingCycleConfiguration>,
+        private val billingMode: JsonField<BillingMode>,
+        private val cadence: JsonField<Cadence>,
+        private val compositePriceFilters: JsonField<List<TransformPriceFilter>>,
+        private val conversionRate: JsonField<Double>,
+        private val conversionRateConfig: JsonField<ConversionRateConfig>,
+        private val createdAt: JsonField<OffsetDateTime>,
+        private val creditAllocation: JsonField<Allocation>,
+        private val currency: JsonField<String>,
+        private val discount: JsonField<Discount>,
+        private val externalPriceId: JsonField<String>,
+        private val fixedPriceQuantity: JsonField<Double>,
+        private val invoicingCycleConfiguration: JsonField<BillingCycleConfiguration>,
+        private val item: JsonField<ItemSlim>,
+        private val maximum: JsonField<Maximum>,
+        private val maximumAmount: JsonField<String>,
+        private val metadata: JsonField<Metadata>,
+        private val minimum: JsonField<Minimum>,
+        private val minimumAmount: JsonField<String>,
+        private val modelType: JsonValue,
+        private val name: JsonField<String>,
+        private val percentConfig: JsonField<PercentConfig>,
+        private val planPhaseOrder: JsonField<Long>,
+        private val priceType: JsonField<PriceType>,
+        private val replacesPriceId: JsonField<String>,
+        private val dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("billable_metric")
+            @ExcludeMissing
+            billableMetric: JsonField<BillableMetricTiny> = JsonMissing.of(),
+            @JsonProperty("billing_cycle_configuration")
+            @ExcludeMissing
+            billingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
+            @JsonProperty("billing_mode")
+            @ExcludeMissing
+            billingMode: JsonField<BillingMode> = JsonMissing.of(),
+            @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
+            @JsonProperty("composite_price_filters")
+            @ExcludeMissing
+            compositePriceFilters: JsonField<List<TransformPriceFilter>> = JsonMissing.of(),
+            @JsonProperty("conversion_rate")
+            @ExcludeMissing
+            conversionRate: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("conversion_rate_config")
+            @ExcludeMissing
+            conversionRateConfig: JsonField<ConversionRateConfig> = JsonMissing.of(),
+            @JsonProperty("created_at")
+            @ExcludeMissing
+            createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("credit_allocation")
+            @ExcludeMissing
+            creditAllocation: JsonField<Allocation> = JsonMissing.of(),
+            @JsonProperty("currency")
+            @ExcludeMissing
+            currency: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("discount")
+            @ExcludeMissing
+            discount: JsonField<Discount> = JsonMissing.of(),
+            @JsonProperty("external_price_id")
+            @ExcludeMissing
+            externalPriceId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("fixed_price_quantity")
+            @ExcludeMissing
+            fixedPriceQuantity: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("invoicing_cycle_configuration")
+            @ExcludeMissing
+            invoicingCycleConfiguration: JsonField<BillingCycleConfiguration> = JsonMissing.of(),
+            @JsonProperty("item") @ExcludeMissing item: JsonField<ItemSlim> = JsonMissing.of(),
+            @JsonProperty("maximum") @ExcludeMissing maximum: JsonField<Maximum> = JsonMissing.of(),
+            @JsonProperty("maximum_amount")
+            @ExcludeMissing
+            maximumAmount: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            metadata: JsonField<Metadata> = JsonMissing.of(),
+            @JsonProperty("minimum") @ExcludeMissing minimum: JsonField<Minimum> = JsonMissing.of(),
+            @JsonProperty("minimum_amount")
+            @ExcludeMissing
+            minimumAmount: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("model_type") @ExcludeMissing modelType: JsonValue = JsonMissing.of(),
+            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("percent_config")
+            @ExcludeMissing
+            percentConfig: JsonField<PercentConfig> = JsonMissing.of(),
+            @JsonProperty("plan_phase_order")
+            @ExcludeMissing
+            planPhaseOrder: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("price_type")
+            @ExcludeMissing
+            priceType: JsonField<PriceType> = JsonMissing.of(),
+            @JsonProperty("replaces_price_id")
+            @ExcludeMissing
+            replacesPriceId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("dimensional_price_configuration")
+            @ExcludeMissing
+            dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
+                JsonMissing.of(),
+        ) : this(
+            id,
+            billableMetric,
+            billingCycleConfiguration,
+            billingMode,
+            cadence,
+            compositePriceFilters,
+            conversionRate,
+            conversionRateConfig,
+            createdAt,
+            creditAllocation,
+            currency,
+            discount,
+            externalPriceId,
+            fixedPriceQuantity,
+            invoicingCycleConfiguration,
+            item,
+            maximum,
+            maximumAmount,
+            metadata,
+            minimum,
+            minimumAmount,
+            modelType,
+            name,
+            percentConfig,
+            planPhaseOrder,
+            priceType,
+            replacesPriceId,
+            dimensionalPriceConfiguration,
+            mutableMapOf(),
+        )
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun id(): String = id.getRequired("id")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun billableMetric(): Optional<BillableMetricTiny> =
+            billableMetric.getOptional("billable_metric")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun billingCycleConfiguration(): BillingCycleConfiguration =
+            billingCycleConfiguration.getRequired("billing_cycle_configuration")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun billingMode(): BillingMode = billingMode.getRequired("billing_mode")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun cadence(): Cadence = cadence.getRequired("cadence")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun compositePriceFilters(): Optional<List<TransformPriceFilter>> =
+            compositePriceFilters.getOptional("composite_price_filters")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun conversionRate(): Optional<Double> = conversionRate.getOptional("conversion_rate")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun conversionRateConfig(): Optional<ConversionRateConfig> =
+            conversionRateConfig.getOptional("conversion_rate_config")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun creditAllocation(): Optional<Allocation> =
+            creditAllocation.getOptional("credit_allocation")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun currency(): String = currency.getRequired("currency")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        @Deprecated("deprecated")
+        fun discount(): Optional<Discount> = discount.getOptional("discount")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun externalPriceId(): Optional<String> = externalPriceId.getOptional("external_price_id")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun fixedPriceQuantity(): Optional<Double> =
+            fixedPriceQuantity.getOptional("fixed_price_quantity")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun invoicingCycleConfiguration(): Optional<BillingCycleConfiguration> =
+            invoicingCycleConfiguration.getOptional("invoicing_cycle_configuration")
+
+        /**
+         * A minimal representation of an Item containing only the essential identifying
+         * information.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun item(): ItemSlim = item.getRequired("item")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        @Deprecated("deprecated") fun maximum(): Optional<Maximum> = maximum.getOptional("maximum")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        @Deprecated("deprecated")
+        fun maximumAmount(): Optional<String> = maximumAmount.getOptional("maximum_amount")
+
+        /**
+         * User specified key-value pairs for the resource. If not present, this defaults to an
+         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
+         * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun metadata(): Metadata = metadata.getRequired("metadata")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        @Deprecated("deprecated") fun minimum(): Optional<Minimum> = minimum.getOptional("minimum")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        @Deprecated("deprecated")
+        fun minimumAmount(): Optional<String> = minimumAmount.getOptional("minimum_amount")
+
+        /**
+         * The pricing model type
+         *
+         * Expected to always return the following:
+         * ```java
+         * JsonValue.from("percent")
+         * ```
+         *
+         * However, this method can be useful for debugging and logging (e.g. if the server
+         * responded with an unexpected value).
+         */
+        @JsonProperty("model_type") @ExcludeMissing fun _modelType(): JsonValue = modelType
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun name(): String = name.getRequired("name")
+
+        /**
+         * Configuration for percent pricing
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun percentConfig(): PercentConfig = percentConfig.getRequired("percent_config")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun planPhaseOrder(): Optional<Long> = planPhaseOrder.getOptional("plan_phase_order")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun priceType(): PriceType = priceType.getRequired("price_type")
+
+        /**
+         * The price id this price replaces. This price will take the place of the replaced price in
+         * plan version migrations.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun replacesPriceId(): Optional<String> = replacesPriceId.getOptional("replaces_price_id")
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun dimensionalPriceConfiguration(): Optional<DimensionalPriceConfiguration> =
+            dimensionalPriceConfiguration.getOptional("dimensional_price_configuration")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [billableMetric].
+         *
+         * Unlike [billableMetric], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("billable_metric")
+        @ExcludeMissing
+        fun _billableMetric(): JsonField<BillableMetricTiny> = billableMetric
+
+        /**
+         * Returns the raw JSON value of [billingCycleConfiguration].
+         *
+         * Unlike [billingCycleConfiguration], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("billing_cycle_configuration")
+        @ExcludeMissing
+        fun _billingCycleConfiguration(): JsonField<BillingCycleConfiguration> =
+            billingCycleConfiguration
+
+        /**
+         * Returns the raw JSON value of [billingMode].
+         *
+         * Unlike [billingMode], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("billing_mode")
+        @ExcludeMissing
+        fun _billingMode(): JsonField<BillingMode> = billingMode
+
+        /**
+         * Returns the raw JSON value of [cadence].
+         *
+         * Unlike [cadence], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("cadence") @ExcludeMissing fun _cadence(): JsonField<Cadence> = cadence
+
+        /**
+         * Returns the raw JSON value of [compositePriceFilters].
+         *
+         * Unlike [compositePriceFilters], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("composite_price_filters")
+        @ExcludeMissing
+        fun _compositePriceFilters(): JsonField<List<TransformPriceFilter>> = compositePriceFilters
+
+        /**
+         * Returns the raw JSON value of [conversionRate].
+         *
+         * Unlike [conversionRate], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("conversion_rate")
+        @ExcludeMissing
+        fun _conversionRate(): JsonField<Double> = conversionRate
+
+        /**
+         * Returns the raw JSON value of [conversionRateConfig].
+         *
+         * Unlike [conversionRateConfig], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("conversion_rate_config")
+        @ExcludeMissing
+        fun _conversionRateConfig(): JsonField<ConversionRateConfig> = conversionRateConfig
+
+        /**
+         * Returns the raw JSON value of [createdAt].
+         *
+         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        fun _createdAt(): JsonField<OffsetDateTime> = createdAt
+
+        /**
+         * Returns the raw JSON value of [creditAllocation].
+         *
+         * Unlike [creditAllocation], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("credit_allocation")
+        @ExcludeMissing
+        fun _creditAllocation(): JsonField<Allocation> = creditAllocation
+
+        /**
+         * Returns the raw JSON value of [currency].
+         *
+         * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
+
+        /**
+         * Returns the raw JSON value of [discount].
+         *
+         * Unlike [discount], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @Deprecated("deprecated")
+        @JsonProperty("discount")
+        @ExcludeMissing
+        fun _discount(): JsonField<Discount> = discount
+
+        /**
+         * Returns the raw JSON value of [externalPriceId].
+         *
+         * Unlike [externalPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("external_price_id")
+        @ExcludeMissing
+        fun _externalPriceId(): JsonField<String> = externalPriceId
+
+        /**
+         * Returns the raw JSON value of [fixedPriceQuantity].
+         *
+         * Unlike [fixedPriceQuantity], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("fixed_price_quantity")
+        @ExcludeMissing
+        fun _fixedPriceQuantity(): JsonField<Double> = fixedPriceQuantity
+
+        /**
+         * Returns the raw JSON value of [invoicingCycleConfiguration].
+         *
+         * Unlike [invoicingCycleConfiguration], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("invoicing_cycle_configuration")
+        @ExcludeMissing
+        fun _invoicingCycleConfiguration(): JsonField<BillingCycleConfiguration> =
+            invoicingCycleConfiguration
+
+        /**
+         * Returns the raw JSON value of [item].
+         *
+         * Unlike [item], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("item") @ExcludeMissing fun _item(): JsonField<ItemSlim> = item
+
+        /**
+         * Returns the raw JSON value of [maximum].
+         *
+         * Unlike [maximum], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @Deprecated("deprecated")
+        @JsonProperty("maximum")
+        @ExcludeMissing
+        fun _maximum(): JsonField<Maximum> = maximum
+
+        /**
+         * Returns the raw JSON value of [maximumAmount].
+         *
+         * Unlike [maximumAmount], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @Deprecated("deprecated")
+        @JsonProperty("maximum_amount")
+        @ExcludeMissing
+        fun _maximumAmount(): JsonField<String> = maximumAmount
+
+        /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+
+        /**
+         * Returns the raw JSON value of [minimum].
+         *
+         * Unlike [minimum], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @Deprecated("deprecated")
+        @JsonProperty("minimum")
+        @ExcludeMissing
+        fun _minimum(): JsonField<Minimum> = minimum
+
+        /**
+         * Returns the raw JSON value of [minimumAmount].
+         *
+         * Unlike [minimumAmount], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @Deprecated("deprecated")
+        @JsonProperty("minimum_amount")
+        @ExcludeMissing
+        fun _minimumAmount(): JsonField<String> = minimumAmount
+
+        /**
+         * Returns the raw JSON value of [name].
+         *
+         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+        /**
+         * Returns the raw JSON value of [percentConfig].
+         *
+         * Unlike [percentConfig], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("percent_config")
+        @ExcludeMissing
+        fun _percentConfig(): JsonField<PercentConfig> = percentConfig
+
+        /**
+         * Returns the raw JSON value of [planPhaseOrder].
+         *
+         * Unlike [planPhaseOrder], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("plan_phase_order")
+        @ExcludeMissing
+        fun _planPhaseOrder(): JsonField<Long> = planPhaseOrder
+
+        /**
+         * Returns the raw JSON value of [priceType].
+         *
+         * Unlike [priceType], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("price_type")
+        @ExcludeMissing
+        fun _priceType(): JsonField<PriceType> = priceType
+
+        /**
+         * Returns the raw JSON value of [replacesPriceId].
+         *
+         * Unlike [replacesPriceId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replaces_price_id")
+        @ExcludeMissing
+        fun _replacesPriceId(): JsonField<String> = replacesPriceId
+
+        /**
+         * Returns the raw JSON value of [dimensionalPriceConfiguration].
+         *
+         * Unlike [dimensionalPriceConfiguration], this method doesn't throw if the JSON field has
+         * an unexpected type.
+         */
+        @JsonProperty("dimensional_price_configuration")
+        @ExcludeMissing
+        fun _dimensionalPriceConfiguration(): JsonField<DimensionalPriceConfiguration> =
+            dimensionalPriceConfiguration
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Percent].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .billableMetric()
+             * .billingCycleConfiguration()
+             * .billingMode()
+             * .cadence()
+             * .compositePriceFilters()
+             * .conversionRate()
+             * .conversionRateConfig()
+             * .createdAt()
+             * .creditAllocation()
+             * .currency()
+             * .discount()
+             * .externalPriceId()
+             * .fixedPriceQuantity()
+             * .invoicingCycleConfiguration()
+             * .item()
+             * .maximum()
+             * .maximumAmount()
+             * .metadata()
+             * .minimum()
+             * .minimumAmount()
+             * .name()
+             * .percentConfig()
+             * .planPhaseOrder()
+             * .priceType()
+             * .replacesPriceId()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Percent]. */
+        class Builder internal constructor() {
+
+            private var id: JsonField<String>? = null
+            private var billableMetric: JsonField<BillableMetricTiny>? = null
+            private var billingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
+            private var billingMode: JsonField<BillingMode>? = null
+            private var cadence: JsonField<Cadence>? = null
+            private var compositePriceFilters: JsonField<MutableList<TransformPriceFilter>>? = null
+            private var conversionRate: JsonField<Double>? = null
+            private var conversionRateConfig: JsonField<ConversionRateConfig>? = null
+            private var createdAt: JsonField<OffsetDateTime>? = null
+            private var creditAllocation: JsonField<Allocation>? = null
+            private var currency: JsonField<String>? = null
+            private var discount: JsonField<Discount>? = null
+            private var externalPriceId: JsonField<String>? = null
+            private var fixedPriceQuantity: JsonField<Double>? = null
+            private var invoicingCycleConfiguration: JsonField<BillingCycleConfiguration>? = null
+            private var item: JsonField<ItemSlim>? = null
+            private var maximum: JsonField<Maximum>? = null
+            private var maximumAmount: JsonField<String>? = null
+            private var metadata: JsonField<Metadata>? = null
+            private var minimum: JsonField<Minimum>? = null
+            private var minimumAmount: JsonField<String>? = null
+            private var modelType: JsonValue = JsonValue.from("percent")
+            private var name: JsonField<String>? = null
+            private var percentConfig: JsonField<PercentConfig>? = null
+            private var planPhaseOrder: JsonField<Long>? = null
+            private var priceType: JsonField<PriceType>? = null
+            private var replacesPriceId: JsonField<String>? = null
+            private var dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration> =
+                JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(percent: Percent) = apply {
+                id = percent.id
+                billableMetric = percent.billableMetric
+                billingCycleConfiguration = percent.billingCycleConfiguration
+                billingMode = percent.billingMode
+                cadence = percent.cadence
+                compositePriceFilters = percent.compositePriceFilters.map { it.toMutableList() }
+                conversionRate = percent.conversionRate
+                conversionRateConfig = percent.conversionRateConfig
+                createdAt = percent.createdAt
+                creditAllocation = percent.creditAllocation
+                currency = percent.currency
+                discount = percent.discount
+                externalPriceId = percent.externalPriceId
+                fixedPriceQuantity = percent.fixedPriceQuantity
+                invoicingCycleConfiguration = percent.invoicingCycleConfiguration
+                item = percent.item
+                maximum = percent.maximum
+                maximumAmount = percent.maximumAmount
+                metadata = percent.metadata
+                minimum = percent.minimum
+                minimumAmount = percent.minimumAmount
+                modelType = percent.modelType
+                name = percent.name
+                percentConfig = percent.percentConfig
+                planPhaseOrder = percent.planPhaseOrder
+                priceType = percent.priceType
+                replacesPriceId = percent.replacesPriceId
+                dimensionalPriceConfiguration = percent.dimensionalPriceConfiguration
+                additionalProperties = percent.additionalProperties.toMutableMap()
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun billableMetric(billableMetric: BillableMetricTiny?) =
+                billableMetric(JsonField.ofNullable(billableMetric))
+
+            /** Alias for calling [Builder.billableMetric] with `billableMetric.orElse(null)`. */
+            fun billableMetric(billableMetric: Optional<BillableMetricTiny>) =
+                billableMetric(billableMetric.getOrNull())
+
+            /**
+             * Sets [Builder.billableMetric] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.billableMetric] with a well-typed
+             * [BillableMetricTiny] value instead. This method is primarily for setting the field to
+             * an undocumented or not yet supported value.
+             */
+            fun billableMetric(billableMetric: JsonField<BillableMetricTiny>) = apply {
+                this.billableMetric = billableMetric
+            }
+
+            fun billingCycleConfiguration(billingCycleConfiguration: BillingCycleConfiguration) =
+                billingCycleConfiguration(JsonField.of(billingCycleConfiguration))
+
+            /**
+             * Sets [Builder.billingCycleConfiguration] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.billingCycleConfiguration] with a well-typed
+             * [BillingCycleConfiguration] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun billingCycleConfiguration(
+                billingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.billingCycleConfiguration = billingCycleConfiguration }
+
+            fun billingMode(billingMode: BillingMode) = billingMode(JsonField.of(billingMode))
+
+            /**
+             * Sets [Builder.billingMode] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.billingMode] with a well-typed [BillingMode] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun billingMode(billingMode: JsonField<BillingMode>) = apply {
+                this.billingMode = billingMode
+            }
+
+            fun cadence(cadence: Cadence) = cadence(JsonField.of(cadence))
+
+            /**
+             * Sets [Builder.cadence] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cadence] with a well-typed [Cadence] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun cadence(cadence: JsonField<Cadence>) = apply { this.cadence = cadence }
+
+            fun compositePriceFilters(compositePriceFilters: List<TransformPriceFilter>?) =
+                compositePriceFilters(JsonField.ofNullable(compositePriceFilters))
+
+            /**
+             * Alias for calling [Builder.compositePriceFilters] with
+             * `compositePriceFilters.orElse(null)`.
+             */
+            fun compositePriceFilters(compositePriceFilters: Optional<List<TransformPriceFilter>>) =
+                compositePriceFilters(compositePriceFilters.getOrNull())
+
+            /**
+             * Sets [Builder.compositePriceFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.compositePriceFilters] with a well-typed
+             * `List<TransformPriceFilter>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun compositePriceFilters(
+                compositePriceFilters: JsonField<List<TransformPriceFilter>>
+            ) = apply {
+                this.compositePriceFilters = compositePriceFilters.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TransformPriceFilter] to [compositePriceFilters].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addCompositePriceFilter(compositePriceFilter: TransformPriceFilter) = apply {
+                compositePriceFilters =
+                    (compositePriceFilters ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("compositePriceFilters", it).add(compositePriceFilter)
+                    }
+            }
+
+            fun conversionRate(conversionRate: Double?) =
+                conversionRate(JsonField.ofNullable(conversionRate))
+
+            /**
+             * Alias for [Builder.conversionRate].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun conversionRate(conversionRate: Double) = conversionRate(conversionRate as Double?)
+
+            /** Alias for calling [Builder.conversionRate] with `conversionRate.orElse(null)`. */
+            fun conversionRate(conversionRate: Optional<Double>) =
+                conversionRate(conversionRate.getOrNull())
+
+            /**
+             * Sets [Builder.conversionRate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.conversionRate] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun conversionRate(conversionRate: JsonField<Double>) = apply {
+                this.conversionRate = conversionRate
+            }
+
+            fun conversionRateConfig(conversionRateConfig: ConversionRateConfig?) =
+                conversionRateConfig(JsonField.ofNullable(conversionRateConfig))
+
+            /**
+             * Alias for calling [Builder.conversionRateConfig] with
+             * `conversionRateConfig.orElse(null)`.
+             */
+            fun conversionRateConfig(conversionRateConfig: Optional<ConversionRateConfig>) =
+                conversionRateConfig(conversionRateConfig.getOrNull())
+
+            /**
+             * Sets [Builder.conversionRateConfig] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.conversionRateConfig] with a well-typed
+             * [ConversionRateConfig] value instead. This method is primarily for setting the field
+             * to an undocumented or not yet supported value.
+             */
+            fun conversionRateConfig(conversionRateConfig: JsonField<ConversionRateConfig>) =
+                apply {
+                    this.conversionRateConfig = conversionRateConfig
+                }
+
+            /**
+             * Alias for calling [conversionRateConfig] with `ConversionRateConfig.ofUnit(unit)`.
+             */
+            fun conversionRateConfig(unit: UnitConversionRateConfig) =
+                conversionRateConfig(ConversionRateConfig.ofUnit(unit))
+
+            /**
+             * Alias for calling [conversionRateConfig] with the following:
+             * ```java
+             * UnitConversionRateConfig.builder()
+             *     .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
+             *     .unitConfig(unitConfig)
+             *     .build()
+             * ```
+             */
+            fun unitConversionRateConfig(unitConfig: ConversionRateUnitConfig) =
+                conversionRateConfig(
+                    UnitConversionRateConfig.builder()
+                        .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
+                        .unitConfig(unitConfig)
+                        .build()
+                )
+
+            /**
+             * Alias for calling [conversionRateConfig] with
+             * `ConversionRateConfig.ofTiered(tiered)`.
+             */
+            fun conversionRateConfig(tiered: TieredConversionRateConfig) =
+                conversionRateConfig(ConversionRateConfig.ofTiered(tiered))
+
+            /**
+             * Alias for calling [conversionRateConfig] with the following:
+             * ```java
+             * TieredConversionRateConfig.builder()
+             *     .conversionRateType(TieredConversionRateConfig.ConversionRateType.TIERED)
+             *     .tieredConfig(tieredConfig)
+             *     .build()
+             * ```
+             */
+            fun tieredConversionRateConfig(tieredConfig: ConversionRateTieredConfig) =
+                conversionRateConfig(
+                    TieredConversionRateConfig.builder()
+                        .conversionRateType(TieredConversionRateConfig.ConversionRateType.TIERED)
+                        .tieredConfig(tieredConfig)
+                        .build()
+                )
+
+            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+            /**
+             * Sets [Builder.createdAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
+                this.createdAt = createdAt
+            }
+
+            fun creditAllocation(creditAllocation: Allocation?) =
+                creditAllocation(JsonField.ofNullable(creditAllocation))
+
+            /**
+             * Alias for calling [Builder.creditAllocation] with `creditAllocation.orElse(null)`.
+             */
+            fun creditAllocation(creditAllocation: Optional<Allocation>) =
+                creditAllocation(creditAllocation.getOrNull())
+
+            /**
+             * Sets [Builder.creditAllocation] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.creditAllocation] with a well-typed [Allocation]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun creditAllocation(creditAllocation: JsonField<Allocation>) = apply {
+                this.creditAllocation = creditAllocation
+            }
+
+            fun currency(currency: String) = currency(JsonField.of(currency))
+
+            /**
+             * Sets [Builder.currency] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.currency] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
+
+            @Deprecated("deprecated")
+            fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
+
+            /** Alias for calling [Builder.discount] with `discount.orElse(null)`. */
+            @Deprecated("deprecated")
+            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
+
+            /**
+             * Sets [Builder.discount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.discount] with a well-typed [Discount] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            @Deprecated("deprecated")
+            fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
+
+            /** Alias for calling [discount] with `Discount.ofPercentage(percentage)`. */
+            @Deprecated("deprecated")
+            fun discount(percentage: PercentageDiscount) =
+                discount(Discount.ofPercentage(percentage))
+
+            /**
+             * Alias for calling [discount] with the following:
+             * ```java
+             * PercentageDiscount.builder()
+             *     .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+             *     .percentageDiscount(percentageDiscount)
+             *     .build()
+             * ```
+             */
+            @Deprecated("deprecated")
+            fun percentageDiscount(percentageDiscount: Double) =
+                discount(
+                    PercentageDiscount.builder()
+                        .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                        .percentageDiscount(percentageDiscount)
+                        .build()
+                )
+
+            /** Alias for calling [discount] with `Discount.ofTrial(trial)`. */
+            @Deprecated("deprecated")
+            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
+
+            /** Alias for calling [discount] with `Discount.ofUsage(usage)`. */
+            @Deprecated("deprecated")
+            fun discount(usage: UsageDiscount) = discount(Discount.ofUsage(usage))
+
+            /**
+             * Alias for calling [discount] with the following:
+             * ```java
+             * UsageDiscount.builder()
+             *     .discountType(UsageDiscount.DiscountType.USAGE)
+             *     .usageDiscount(usageDiscount)
+             *     .build()
+             * ```
+             */
+            @Deprecated("deprecated")
+            fun usageDiscount(usageDiscount: Double) =
+                discount(
+                    UsageDiscount.builder()
+                        .discountType(UsageDiscount.DiscountType.USAGE)
+                        .usageDiscount(usageDiscount)
+                        .build()
+                )
+
+            /** Alias for calling [discount] with `Discount.ofAmount(amount)`. */
+            @Deprecated("deprecated")
+            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
+
+            /**
+             * Alias for calling [discount] with the following:
+             * ```java
+             * AmountDiscount.builder()
+             *     .discountType(AmountDiscount.DiscountType.AMOUNT)
+             *     .amountDiscount(amountDiscount)
+             *     .build()
+             * ```
+             */
+            @Deprecated("deprecated")
+            fun amountDiscount(amountDiscount: String) =
+                discount(
+                    AmountDiscount.builder()
+                        .discountType(AmountDiscount.DiscountType.AMOUNT)
+                        .amountDiscount(amountDiscount)
+                        .build()
+                )
+
+            fun externalPriceId(externalPriceId: String?) =
+                externalPriceId(JsonField.ofNullable(externalPriceId))
+
+            /** Alias for calling [Builder.externalPriceId] with `externalPriceId.orElse(null)`. */
+            fun externalPriceId(externalPriceId: Optional<String>) =
+                externalPriceId(externalPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.externalPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.externalPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun externalPriceId(externalPriceId: JsonField<String>) = apply {
+                this.externalPriceId = externalPriceId
+            }
+
+            fun fixedPriceQuantity(fixedPriceQuantity: Double?) =
+                fixedPriceQuantity(JsonField.ofNullable(fixedPriceQuantity))
+
+            /**
+             * Alias for [Builder.fixedPriceQuantity].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun fixedPriceQuantity(fixedPriceQuantity: Double) =
+                fixedPriceQuantity(fixedPriceQuantity as Double?)
+
+            /**
+             * Alias for calling [Builder.fixedPriceQuantity] with
+             * `fixedPriceQuantity.orElse(null)`.
+             */
+            fun fixedPriceQuantity(fixedPriceQuantity: Optional<Double>) =
+                fixedPriceQuantity(fixedPriceQuantity.getOrNull())
+
+            /**
+             * Sets [Builder.fixedPriceQuantity] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.fixedPriceQuantity] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun fixedPriceQuantity(fixedPriceQuantity: JsonField<Double>) = apply {
+                this.fixedPriceQuantity = fixedPriceQuantity
+            }
+
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: BillingCycleConfiguration?
+            ) = invoicingCycleConfiguration(JsonField.ofNullable(invoicingCycleConfiguration))
+
+            /**
+             * Alias for calling [Builder.invoicingCycleConfiguration] with
+             * `invoicingCycleConfiguration.orElse(null)`.
+             */
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: Optional<BillingCycleConfiguration>
+            ) = invoicingCycleConfiguration(invoicingCycleConfiguration.getOrNull())
+
+            /**
+             * Sets [Builder.invoicingCycleConfiguration] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.invoicingCycleConfiguration] with a well-typed
+             * [BillingCycleConfiguration] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun invoicingCycleConfiguration(
+                invoicingCycleConfiguration: JsonField<BillingCycleConfiguration>
+            ) = apply { this.invoicingCycleConfiguration = invoicingCycleConfiguration }
+
+            /**
+             * A minimal representation of an Item containing only the essential identifying
+             * information.
+             */
+            fun item(item: ItemSlim) = item(JsonField.of(item))
+
+            /**
+             * Sets [Builder.item] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.item] with a well-typed [ItemSlim] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun item(item: JsonField<ItemSlim>) = apply { this.item = item }
+
+            @Deprecated("deprecated")
+            fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
+
+            /** Alias for calling [Builder.maximum] with `maximum.orElse(null)`. */
+            @Deprecated("deprecated")
+            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
+
+            /**
+             * Sets [Builder.maximum] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.maximum] with a well-typed [Maximum] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            @Deprecated("deprecated")
+            fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
+
+            @Deprecated("deprecated")
+            fun maximumAmount(maximumAmount: String?) =
+                maximumAmount(JsonField.ofNullable(maximumAmount))
+
+            /** Alias for calling [Builder.maximumAmount] with `maximumAmount.orElse(null)`. */
+            @Deprecated("deprecated")
+            fun maximumAmount(maximumAmount: Optional<String>) =
+                maximumAmount(maximumAmount.getOrNull())
+
+            /**
+             * Sets [Builder.maximumAmount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.maximumAmount] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            @Deprecated("deprecated")
+            fun maximumAmount(maximumAmount: JsonField<String>) = apply {
+                this.maximumAmount = maximumAmount
+            }
+
+            /**
+             * User specified key-value pairs for the resource. If not present, this defaults to an
+             * empty dictionary. Individual keys can be removed by setting the value to `null`, and
+             * the entire metadata mapping can be cleared by setting `metadata` to `null`.
+             */
+            fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+
+            /**
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
+
+            @Deprecated("deprecated")
+            fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
+
+            /** Alias for calling [Builder.minimum] with `minimum.orElse(null)`. */
+            @Deprecated("deprecated")
+            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
+
+            /**
+             * Sets [Builder.minimum] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.minimum] with a well-typed [Minimum] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            @Deprecated("deprecated")
+            fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
+
+            @Deprecated("deprecated")
+            fun minimumAmount(minimumAmount: String?) =
+                minimumAmount(JsonField.ofNullable(minimumAmount))
+
+            /** Alias for calling [Builder.minimumAmount] with `minimumAmount.orElse(null)`. */
+            @Deprecated("deprecated")
+            fun minimumAmount(minimumAmount: Optional<String>) =
+                minimumAmount(minimumAmount.getOrNull())
+
+            /**
+             * Sets [Builder.minimumAmount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.minimumAmount] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            @Deprecated("deprecated")
+            fun minimumAmount(minimumAmount: JsonField<String>) = apply {
+                this.minimumAmount = minimumAmount
+            }
+
+            /**
+             * Sets the field to an arbitrary JSON value.
+             *
+             * It is usually unnecessary to call this method because the field defaults to the
+             * following:
+             * ```java
+             * JsonValue.from("percent")
+             * ```
+             *
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun modelType(modelType: JsonValue) = apply { this.modelType = modelType }
+
+            fun name(name: String) = name(JsonField.of(name))
+
+            /**
+             * Sets [Builder.name] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.name] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun name(name: JsonField<String>) = apply { this.name = name }
+
+            /** Configuration for percent pricing */
+            fun percentConfig(percentConfig: PercentConfig) =
+                percentConfig(JsonField.of(percentConfig))
+
+            /**
+             * Sets [Builder.percentConfig] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.percentConfig] with a well-typed [PercentConfig]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun percentConfig(percentConfig: JsonField<PercentConfig>) = apply {
+                this.percentConfig = percentConfig
+            }
+
+            fun planPhaseOrder(planPhaseOrder: Long?) =
+                planPhaseOrder(JsonField.ofNullable(planPhaseOrder))
+
+            /**
+             * Alias for [Builder.planPhaseOrder].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
+
+            /** Alias for calling [Builder.planPhaseOrder] with `planPhaseOrder.orElse(null)`. */
+            fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
+                planPhaseOrder(planPhaseOrder.getOrNull())
+
+            /**
+             * Sets [Builder.planPhaseOrder] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.planPhaseOrder] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
+                this.planPhaseOrder = planPhaseOrder
+            }
+
+            fun priceType(priceType: PriceType) = priceType(JsonField.of(priceType))
+
+            /**
+             * Sets [Builder.priceType] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.priceType] with a well-typed [PriceType] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun priceType(priceType: JsonField<PriceType>) = apply { this.priceType = priceType }
+
+            /**
+             * The price id this price replaces. This price will take the place of the replaced
+             * price in plan version migrations.
+             */
+            fun replacesPriceId(replacesPriceId: String?) =
+                replacesPriceId(JsonField.ofNullable(replacesPriceId))
+
+            /** Alias for calling [Builder.replacesPriceId] with `replacesPriceId.orElse(null)`. */
+            fun replacesPriceId(replacesPriceId: Optional<String>) =
+                replacesPriceId(replacesPriceId.getOrNull())
+
+            /**
+             * Sets [Builder.replacesPriceId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.replacesPriceId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun replacesPriceId(replacesPriceId: JsonField<String>) = apply {
+                this.replacesPriceId = replacesPriceId
+            }
+
+            fun dimensionalPriceConfiguration(
+                dimensionalPriceConfiguration: DimensionalPriceConfiguration?
+            ) = dimensionalPriceConfiguration(JsonField.ofNullable(dimensionalPriceConfiguration))
+
+            /**
+             * Alias for calling [Builder.dimensionalPriceConfiguration] with
+             * `dimensionalPriceConfiguration.orElse(null)`.
+             */
+            fun dimensionalPriceConfiguration(
+                dimensionalPriceConfiguration: Optional<DimensionalPriceConfiguration>
+            ) = dimensionalPriceConfiguration(dimensionalPriceConfiguration.getOrNull())
+
+            /**
+             * Sets [Builder.dimensionalPriceConfiguration] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.dimensionalPriceConfiguration] with a well-typed
+             * [DimensionalPriceConfiguration] value instead. This method is primarily for setting
+             * the field to an undocumented or not yet supported value.
+             */
+            fun dimensionalPriceConfiguration(
+                dimensionalPriceConfiguration: JsonField<DimensionalPriceConfiguration>
+            ) = apply { this.dimensionalPriceConfiguration = dimensionalPriceConfiguration }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Percent].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .billableMetric()
+             * .billingCycleConfiguration()
+             * .billingMode()
+             * .cadence()
+             * .compositePriceFilters()
+             * .conversionRate()
+             * .conversionRateConfig()
+             * .createdAt()
+             * .creditAllocation()
+             * .currency()
+             * .discount()
+             * .externalPriceId()
+             * .fixedPriceQuantity()
+             * .invoicingCycleConfiguration()
+             * .item()
+             * .maximum()
+             * .maximumAmount()
+             * .metadata()
+             * .minimum()
+             * .minimumAmount()
+             * .name()
+             * .percentConfig()
+             * .planPhaseOrder()
+             * .priceType()
+             * .replacesPriceId()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Percent =
+                Percent(
+                    checkRequired("id", id),
+                    checkRequired("billableMetric", billableMetric),
+                    checkRequired("billingCycleConfiguration", billingCycleConfiguration),
+                    checkRequired("billingMode", billingMode),
+                    checkRequired("cadence", cadence),
+                    checkRequired("compositePriceFilters", compositePriceFilters).map {
+                        it.toImmutable()
+                    },
+                    checkRequired("conversionRate", conversionRate),
+                    checkRequired("conversionRateConfig", conversionRateConfig),
+                    checkRequired("createdAt", createdAt),
+                    checkRequired("creditAllocation", creditAllocation),
+                    checkRequired("currency", currency),
+                    checkRequired("discount", discount),
+                    checkRequired("externalPriceId", externalPriceId),
+                    checkRequired("fixedPriceQuantity", fixedPriceQuantity),
+                    checkRequired("invoicingCycleConfiguration", invoicingCycleConfiguration),
+                    checkRequired("item", item),
+                    checkRequired("maximum", maximum),
+                    checkRequired("maximumAmount", maximumAmount),
+                    checkRequired("metadata", metadata),
+                    checkRequired("minimum", minimum),
+                    checkRequired("minimumAmount", minimumAmount),
+                    modelType,
+                    checkRequired("name", name),
+                    checkRequired("percentConfig", percentConfig),
+                    checkRequired("planPhaseOrder", planPhaseOrder),
+                    checkRequired("priceType", priceType),
+                    checkRequired("replacesPriceId", replacesPriceId),
+                    dimensionalPriceConfiguration,
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Percent = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            billableMetric().ifPresent { it.validate() }
+            billingCycleConfiguration().validate()
+            billingMode().validate()
+            cadence().validate()
+            compositePriceFilters().ifPresent { it.forEach { it.validate() } }
+            conversionRate()
+            conversionRateConfig().ifPresent { it.validate() }
+            createdAt()
+            creditAllocation().ifPresent { it.validate() }
+            currency()
+            discount().ifPresent { it.validate() }
+            externalPriceId()
+            fixedPriceQuantity()
+            invoicingCycleConfiguration().ifPresent { it.validate() }
+            item().validate()
+            maximum().ifPresent { it.validate() }
+            maximumAmount()
+            metadata().validate()
+            minimum().ifPresent { it.validate() }
+            minimumAmount()
+            _modelType().let {
+                if (it != JsonValue.from("percent")) {
+                    throw OrbInvalidDataException("'modelType' is invalid, received $it")
+                }
+            }
+            name()
+            percentConfig().validate()
+            planPhaseOrder()
+            priceType().validate()
+            replacesPriceId()
+            dimensionalPriceConfiguration().ifPresent { it.validate() }
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (billableMetric.asKnown().getOrNull()?.validity() ?: 0) +
+                (billingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
+                (billingMode.asKnown().getOrNull()?.validity() ?: 0) +
+                (cadence.asKnown().getOrNull()?.validity() ?: 0) +
+                (compositePriceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
+                (if (conversionRate.asKnown().isPresent) 1 else 0) +
+                (conversionRateConfig.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (createdAt.asKnown().isPresent) 1 else 0) +
+                (creditAllocation.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (currency.asKnown().isPresent) 1 else 0) +
+                (discount.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (externalPriceId.asKnown().isPresent) 1 else 0) +
+                (if (fixedPriceQuantity.asKnown().isPresent) 1 else 0) +
+                (invoicingCycleConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
+                (item.asKnown().getOrNull()?.validity() ?: 0) +
+                (maximum.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (maximumAmount.asKnown().isPresent) 1 else 0) +
+                (metadata.asKnown().getOrNull()?.validity() ?: 0) +
+                (minimum.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (minimumAmount.asKnown().isPresent) 1 else 0) +
+                modelType.let { if (it == JsonValue.from("percent")) 1 else 0 } +
+                (if (name.asKnown().isPresent) 1 else 0) +
+                (percentConfig.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
+                (priceType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (replacesPriceId.asKnown().isPresent) 1 else 0) +
+                (dimensionalPriceConfiguration.asKnown().getOrNull()?.validity() ?: 0)
+
+        class BillingMode @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val IN_ADVANCE = of("in_advance")
+
+                @JvmField val IN_ARREAR = of("in_arrear")
+
+                @JvmStatic fun of(value: String) = BillingMode(JsonField.of(value))
+            }
+
+            /** An enum containing [BillingMode]'s known values. */
+            enum class Known {
+                IN_ADVANCE,
+                IN_ARREAR,
+            }
+
+            /**
+             * An enum containing [BillingMode]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [BillingMode] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                IN_ADVANCE,
+                IN_ARREAR,
+                /**
+                 * An enum member indicating that [BillingMode] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    IN_ADVANCE -> Value.IN_ADVANCE
+                    IN_ARREAR -> Value.IN_ARREAR
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    IN_ADVANCE -> Known.IN_ADVANCE
+                    IN_ARREAR -> Known.IN_ARREAR
+                    else -> throw OrbInvalidDataException("Unknown BillingMode: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws OrbInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+            private var validated: Boolean = false
+
+            fun validate(): BillingMode = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is BillingMode && value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
+        class Cadence @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val ONE_TIME = of("one_time")
+
+                @JvmField val MONTHLY = of("monthly")
+
+                @JvmField val QUARTERLY = of("quarterly")
+
+                @JvmField val SEMI_ANNUAL = of("semi_annual")
+
+                @JvmField val ANNUAL = of("annual")
+
+                @JvmField val CUSTOM = of("custom")
+
+                @JvmStatic fun of(value: String) = Cadence(JsonField.of(value))
+            }
+
+            /** An enum containing [Cadence]'s known values. */
+            enum class Known {
+                ONE_TIME,
+                MONTHLY,
+                QUARTERLY,
+                SEMI_ANNUAL,
+                ANNUAL,
+                CUSTOM,
+            }
+
+            /**
+             * An enum containing [Cadence]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [Cadence] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                ONE_TIME,
+                MONTHLY,
+                QUARTERLY,
+                SEMI_ANNUAL,
+                ANNUAL,
+                CUSTOM,
+                /**
+                 * An enum member indicating that [Cadence] was instantiated with an unknown value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    ONE_TIME -> Value.ONE_TIME
+                    MONTHLY -> Value.MONTHLY
+                    QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                    ANNUAL -> Value.ANNUAL
+                    CUSTOM -> Value.CUSTOM
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    ONE_TIME -> Known.ONE_TIME
+                    MONTHLY -> Known.MONTHLY
+                    QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                    ANNUAL -> Known.ANNUAL
+                    CUSTOM -> Known.CUSTOM
+                    else -> throw OrbInvalidDataException("Unknown Cadence: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws OrbInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+            private var validated: Boolean = false
+
+            fun validate(): Cadence = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Cadence && value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
+        /**
+         * User specified key-value pairs for the resource. If not present, this defaults to an
+         * empty dictionary. Individual keys can be removed by setting the value to `null`, and the
+         * entire metadata mapping can be cleared by setting `metadata` to `null`.
+         */
+        class Metadata
+        @JsonCreator
+        private constructor(
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
+        ) {
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /** Returns a mutable builder for constructing an instance of [Metadata]. */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [Metadata]. */
+            class Builder internal constructor() {
+
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(metadata: Metadata) = apply {
+                    additionalProperties = metadata.additionalProperties.toMutableMap()
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Metadata].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): Metadata = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Metadata && additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
+        }
+
+        /** Configuration for percent pricing */
+        class PercentConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val percent: JsonField<Double>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("percent")
+                @ExcludeMissing
+                percent: JsonField<Double> = JsonMissing.of()
+            ) : this(percent, mutableMapOf())
+
+            /**
+             * What percent of the component subtotals to charge
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun percent(): Double = percent.getRequired("percent")
+
+            /**
+             * Returns the raw JSON value of [percent].
+             *
+             * Unlike [percent], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("percent") @ExcludeMissing fun _percent(): JsonField<Double> = percent
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [PercentConfig].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .percent()
+                 * ```
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [PercentConfig]. */
+            class Builder internal constructor() {
+
+                private var percent: JsonField<Double>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(percentConfig: PercentConfig) = apply {
+                    percent = percentConfig.percent
+                    additionalProperties = percentConfig.additionalProperties.toMutableMap()
+                }
+
+                /** What percent of the component subtotals to charge */
+                fun percent(percent: Double) = percent(JsonField.of(percent))
+
+                /**
+                 * Sets [Builder.percent] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.percent] with a well-typed [Double] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun percent(percent: JsonField<Double>) = apply { this.percent = percent }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [PercentConfig].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .percent()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): PercentConfig =
+                    PercentConfig(
+                        checkRequired("percent", percent),
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): PercentConfig = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                percent()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = (if (percent.asKnown().isPresent) 1 else 0)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is PercentConfig &&
+                    percent == other.percent &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy { Objects.hash(percent, additionalProperties) }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "PercentConfig{percent=$percent, additionalProperties=$additionalProperties}"
+        }
+
+        class PriceType @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val USAGE_PRICE = of("usage_price")
+
+                @JvmField val FIXED_PRICE = of("fixed_price")
+
+                @JvmField val COMPOSITE_PRICE = of("composite_price")
+
+                @JvmStatic fun of(value: String) = PriceType(JsonField.of(value))
+            }
+
+            /** An enum containing [PriceType]'s known values. */
+            enum class Known {
+                USAGE_PRICE,
+                FIXED_PRICE,
+                COMPOSITE_PRICE,
+            }
+
+            /**
+             * An enum containing [PriceType]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [PriceType] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                USAGE_PRICE,
+                FIXED_PRICE,
+                COMPOSITE_PRICE,
+                /**
+                 * An enum member indicating that [PriceType] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    USAGE_PRICE -> Value.USAGE_PRICE
+                    FIXED_PRICE -> Value.FIXED_PRICE
+                    COMPOSITE_PRICE -> Value.COMPOSITE_PRICE
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    USAGE_PRICE -> Known.USAGE_PRICE
+                    FIXED_PRICE -> Known.FIXED_PRICE
+                    COMPOSITE_PRICE -> Known.COMPOSITE_PRICE
+                    else -> throw OrbInvalidDataException("Unknown PriceType: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws OrbInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+            private var validated: Boolean = false
+
+            fun validate(): PriceType = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is PriceType && value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Percent &&
+                id == other.id &&
+                billableMetric == other.billableMetric &&
+                billingCycleConfiguration == other.billingCycleConfiguration &&
+                billingMode == other.billingMode &&
+                cadence == other.cadence &&
+                compositePriceFilters == other.compositePriceFilters &&
+                conversionRate == other.conversionRate &&
+                conversionRateConfig == other.conversionRateConfig &&
+                createdAt == other.createdAt &&
+                creditAllocation == other.creditAllocation &&
+                currency == other.currency &&
+                discount == other.discount &&
+                externalPriceId == other.externalPriceId &&
+                fixedPriceQuantity == other.fixedPriceQuantity &&
+                invoicingCycleConfiguration == other.invoicingCycleConfiguration &&
+                item == other.item &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                metadata == other.metadata &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                modelType == other.modelType &&
+                name == other.name &&
+                percentConfig == other.percentConfig &&
+                planPhaseOrder == other.planPhaseOrder &&
+                priceType == other.priceType &&
+                replacesPriceId == other.replacesPriceId &&
+                dimensionalPriceConfiguration == other.dimensionalPriceConfiguration &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billableMetric,
+                billingCycleConfiguration,
+                billingMode,
+                cadence,
+                compositePriceFilters,
+                conversionRate,
+                conversionRateConfig,
+                createdAt,
+                creditAllocation,
+                currency,
+                discount,
+                externalPriceId,
+                fixedPriceQuantity,
+                invoicingCycleConfiguration,
+                item,
+                maximum,
+                maximumAmount,
+                metadata,
+                minimum,
+                minimumAmount,
+                modelType,
+                name,
+                percentConfig,
+                planPhaseOrder,
+                priceType,
+                replacesPriceId,
+                dimensionalPriceConfiguration,
+                additionalProperties,
+            )
+        }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Percent{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, billingMode=$billingMode, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, percentConfig=$percentConfig, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class EventOutput
