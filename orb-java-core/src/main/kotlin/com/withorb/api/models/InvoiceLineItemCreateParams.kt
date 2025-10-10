@@ -18,10 +18,21 @@ import com.withorb.api.errors.OrbInvalidDataException
 import java.time.LocalDate
 import java.util.Collections
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This creates a one-off fixed fee invoice line item on an Invoice. This can only be done for
  * invoices that are in a `draft` status.
+ *
+ * The behavior depends on which parameters are provided:
+ * - If `item_id` is provided without `name`: The item is looked up by ID, and the item's name is
+ *   used for the line item.
+ * - If `name` is provided without `item_id`: An item with the given name is searched for in the
+ *   account. If found, that item is used. If not found, a new item is created with that name. The
+ *   new item's name is used for the line item.
+ * - If both `item_id` and `name` are provided: The item is looked up by ID for association, but the
+ *   provided `name` is used for the line item (not the item's name).
  */
 class InvoiceLineItemCreateParams
 private constructor(
@@ -55,15 +66,6 @@ private constructor(
     fun invoiceId(): String = body.invoiceId()
 
     /**
-     * The item name associated with this line item. If an item with the same name exists in Orb,
-     * that item will be associated with the line item.
-     *
-     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
-     *   missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun name(): String = body.name()
-
-    /**
      * The number of units on the line item
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -78,6 +80,29 @@ private constructor(
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun startDate(): LocalDate = body.startDate()
+
+    /**
+     * The id of the item to associate with this line item. If provided without `name`, the item's
+     * name will be used for the price/line item. If provided with `name`, the item will be
+     * associated but `name` will be used for the line item. At least one of `name` or `item_id`
+     * must be provided.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun itemId(): Optional<String> = body.itemId()
+
+    /**
+     * The name to use for the line item. If `item_id` is not provided, Orb will search for an item
+     * with this name. If found, that item will be associated with the line item. If not found, a
+     * new item will be created with this name. If `item_id` is provided, this name will be used for
+     * the line item, but the item association will be based on `item_id`. At least one of `name` or
+     * `item_id` must be provided.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun name(): Optional<String> = body.name()
 
     /**
      * Returns the raw JSON value of [amount].
@@ -101,13 +126,6 @@ private constructor(
     fun _invoiceId(): JsonField<String> = body._invoiceId()
 
     /**
-     * Returns the raw JSON value of [name].
-     *
-     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _name(): JsonField<String> = body._name()
-
-    /**
      * Returns the raw JSON value of [quantity].
      *
      * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
@@ -120,6 +138,20 @@ private constructor(
      * Unlike [startDate], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _startDate(): JsonField<LocalDate> = body._startDate()
+
+    /**
+     * Returns the raw JSON value of [itemId].
+     *
+     * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _itemId(): JsonField<String> = body._itemId()
+
+    /**
+     * Returns the raw JSON value of [name].
+     *
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _name(): JsonField<String> = body._name()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -141,7 +173,6 @@ private constructor(
          * .amount()
          * .endDate()
          * .invoiceId()
-         * .name()
          * .quantity()
          * .startDate()
          * ```
@@ -171,8 +202,8 @@ private constructor(
          * - [amount]
          * - [endDate]
          * - [invoiceId]
-         * - [name]
          * - [quantity]
+         * - [startDate]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -212,20 +243,6 @@ private constructor(
          */
         fun invoiceId(invoiceId: JsonField<String>) = apply { body.invoiceId(invoiceId) }
 
-        /**
-         * The item name associated with this line item. If an item with the same name exists in
-         * Orb, that item will be associated with the line item.
-         */
-        fun name(name: String) = apply { body.name(name) }
-
-        /**
-         * Sets [Builder.name] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.name] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun name(name: JsonField<String>) = apply { body.name(name) }
-
         /** The number of units on the line item */
         fun quantity(quantity: Double) = apply { body.quantity(quantity) }
 
@@ -248,6 +265,45 @@ private constructor(
          * value.
          */
         fun startDate(startDate: JsonField<LocalDate>) = apply { body.startDate(startDate) }
+
+        /**
+         * The id of the item to associate with this line item. If provided without `name`, the
+         * item's name will be used for the price/line item. If provided with `name`, the item will
+         * be associated but `name` will be used for the line item. At least one of `name` or
+         * `item_id` must be provided.
+         */
+        fun itemId(itemId: String?) = apply { body.itemId(itemId) }
+
+        /** Alias for calling [Builder.itemId] with `itemId.orElse(null)`. */
+        fun itemId(itemId: Optional<String>) = itemId(itemId.getOrNull())
+
+        /**
+         * Sets [Builder.itemId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.itemId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun itemId(itemId: JsonField<String>) = apply { body.itemId(itemId) }
+
+        /**
+         * The name to use for the line item. If `item_id` is not provided, Orb will search for an
+         * item with this name. If found, that item will be associated with the line item. If not
+         * found, a new item will be created with this name. If `item_id` is provided, this name
+         * will be used for the line item, but the item association will be based on `item_id`. At
+         * least one of `name` or `item_id` must be provided.
+         */
+        fun name(name: String?) = apply { body.name(name) }
+
+        /** Alias for calling [Builder.name] with `name.orElse(null)`. */
+        fun name(name: Optional<String>) = name(name.getOrNull())
+
+        /**
+         * Sets [Builder.name] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun name(name: JsonField<String>) = apply { body.name(name) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -376,7 +432,6 @@ private constructor(
          * .amount()
          * .endDate()
          * .invoiceId()
-         * .name()
          * .quantity()
          * .startDate()
          * ```
@@ -403,9 +458,10 @@ private constructor(
         private val amount: JsonField<String>,
         private val endDate: JsonField<LocalDate>,
         private val invoiceId: JsonField<String>,
-        private val name: JsonField<String>,
         private val quantity: JsonField<Double>,
         private val startDate: JsonField<LocalDate>,
+        private val itemId: JsonField<String>,
+        private val name: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -418,14 +474,15 @@ private constructor(
             @JsonProperty("invoice_id")
             @ExcludeMissing
             invoiceId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
             @JsonProperty("quantity")
             @ExcludeMissing
             quantity: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("start_date")
             @ExcludeMissing
             startDate: JsonField<LocalDate> = JsonMissing.of(),
-        ) : this(amount, endDate, invoiceId, name, quantity, startDate, mutableMapOf())
+            @JsonProperty("item_id") @ExcludeMissing itemId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        ) : this(amount, endDate, invoiceId, quantity, startDate, itemId, name, mutableMapOf())
 
         /**
          * The total amount in the invoice's currency to add to the line item.
@@ -452,15 +509,6 @@ private constructor(
         fun invoiceId(): String = invoiceId.getRequired("invoice_id")
 
         /**
-         * The item name associated with this line item. If an item with the same name exists in
-         * Orb, that item will be associated with the line item.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun name(): String = name.getRequired("name")
-
-        /**
          * The number of units on the line item
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -475,6 +523,29 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun startDate(): LocalDate = startDate.getRequired("start_date")
+
+        /**
+         * The id of the item to associate with this line item. If provided without `name`, the
+         * item's name will be used for the price/line item. If provided with `name`, the item will
+         * be associated but `name` will be used for the line item. At least one of `name` or
+         * `item_id` must be provided.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun itemId(): Optional<String> = itemId.getOptional("item_id")
+
+        /**
+         * The name to use for the line item. If `item_id` is not provided, Orb will search for an
+         * item with this name. If found, that item will be associated with the line item. If not
+         * found, a new item will be created with this name. If `item_id` is provided, this name
+         * will be used for the line item, but the item association will be based on `item_id`. At
+         * least one of `name` or `item_id` must be provided.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun name(): Optional<String> = name.getOptional("name")
 
         /**
          * Returns the raw JSON value of [amount].
@@ -498,13 +569,6 @@ private constructor(
         @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId(): JsonField<String> = invoiceId
 
         /**
-         * Returns the raw JSON value of [name].
-         *
-         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
-
-        /**
          * Returns the raw JSON value of [quantity].
          *
          * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
@@ -519,6 +583,20 @@ private constructor(
         @JsonProperty("start_date")
         @ExcludeMissing
         fun _startDate(): JsonField<LocalDate> = startDate
+
+        /**
+         * Returns the raw JSON value of [itemId].
+         *
+         * Unlike [itemId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
+
+        /**
+         * Returns the raw JSON value of [name].
+         *
+         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -542,7 +620,6 @@ private constructor(
              * .amount()
              * .endDate()
              * .invoiceId()
-             * .name()
              * .quantity()
              * .startDate()
              * ```
@@ -556,9 +633,10 @@ private constructor(
             private var amount: JsonField<String>? = null
             private var endDate: JsonField<LocalDate>? = null
             private var invoiceId: JsonField<String>? = null
-            private var name: JsonField<String>? = null
             private var quantity: JsonField<Double>? = null
             private var startDate: JsonField<LocalDate>? = null
+            private var itemId: JsonField<String> = JsonMissing.of()
+            private var name: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -566,9 +644,10 @@ private constructor(
                 amount = body.amount
                 endDate = body.endDate
                 invoiceId = body.invoiceId
-                name = body.name
                 quantity = body.quantity
                 startDate = body.startDate
+                itemId = body.itemId
+                name = body.name
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -608,21 +687,6 @@ private constructor(
              */
             fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
 
-            /**
-             * The item name associated with this line item. If an item with the same name exists in
-             * Orb, that item will be associated with the line item.
-             */
-            fun name(name: String) = name(JsonField.of(name))
-
-            /**
-             * Sets [Builder.name] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.name] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun name(name: JsonField<String>) = apply { this.name = name }
-
             /** The number of units on the line item */
             fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
@@ -646,6 +710,47 @@ private constructor(
              * supported value.
              */
             fun startDate(startDate: JsonField<LocalDate>) = apply { this.startDate = startDate }
+
+            /**
+             * The id of the item to associate with this line item. If provided without `name`, the
+             * item's name will be used for the price/line item. If provided with `name`, the item
+             * will be associated but `name` will be used for the line item. At least one of `name`
+             * or `item_id` must be provided.
+             */
+            fun itemId(itemId: String?) = itemId(JsonField.ofNullable(itemId))
+
+            /** Alias for calling [Builder.itemId] with `itemId.orElse(null)`. */
+            fun itemId(itemId: Optional<String>) = itemId(itemId.getOrNull())
+
+            /**
+             * Sets [Builder.itemId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.itemId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
+
+            /**
+             * The name to use for the line item. If `item_id` is not provided, Orb will search for
+             * an item with this name. If found, that item will be associated with the line item. If
+             * not found, a new item will be created with this name. If `item_id` is provided, this
+             * name will be used for the line item, but the item association will be based on
+             * `item_id`. At least one of `name` or `item_id` must be provided.
+             */
+            fun name(name: String?) = name(JsonField.ofNullable(name))
+
+            /** Alias for calling [Builder.name] with `name.orElse(null)`. */
+            fun name(name: Optional<String>) = name(name.getOrNull())
+
+            /**
+             * Sets [Builder.name] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.name] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -676,7 +781,6 @@ private constructor(
              * .amount()
              * .endDate()
              * .invoiceId()
-             * .name()
              * .quantity()
              * .startDate()
              * ```
@@ -688,9 +792,10 @@ private constructor(
                     checkRequired("amount", amount),
                     checkRequired("endDate", endDate),
                     checkRequired("invoiceId", invoiceId),
-                    checkRequired("name", name),
                     checkRequired("quantity", quantity),
                     checkRequired("startDate", startDate),
+                    itemId,
+                    name,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -705,9 +810,10 @@ private constructor(
             amount()
             endDate()
             invoiceId()
-            name()
             quantity()
             startDate()
+            itemId()
+            name()
             validated = true
         }
 
@@ -730,9 +836,10 @@ private constructor(
             (if (amount.asKnown().isPresent) 1 else 0) +
                 (if (endDate.asKnown().isPresent) 1 else 0) +
                 (if (invoiceId.asKnown().isPresent) 1 else 0) +
-                (if (name.asKnown().isPresent) 1 else 0) +
                 (if (quantity.asKnown().isPresent) 1 else 0) +
-                (if (startDate.asKnown().isPresent) 1 else 0)
+                (if (startDate.asKnown().isPresent) 1 else 0) +
+                (if (itemId.asKnown().isPresent) 1 else 0) +
+                (if (name.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -743,9 +850,10 @@ private constructor(
                 amount == other.amount &&
                 endDate == other.endDate &&
                 invoiceId == other.invoiceId &&
-                name == other.name &&
                 quantity == other.quantity &&
                 startDate == other.startDate &&
+                itemId == other.itemId &&
+                name == other.name &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -754,9 +862,10 @@ private constructor(
                 amount,
                 endDate,
                 invoiceId,
-                name,
                 quantity,
                 startDate,
+                itemId,
+                name,
                 additionalProperties,
             )
         }
@@ -764,7 +873,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{amount=$amount, endDate=$endDate, invoiceId=$invoiceId, name=$name, quantity=$quantity, startDate=$startDate, additionalProperties=$additionalProperties}"
+            "Body{amount=$amount, endDate=$endDate, invoiceId=$invoiceId, quantity=$quantity, startDate=$startDate, itemId=$itemId, name=$name, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
