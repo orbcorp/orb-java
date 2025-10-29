@@ -23,6 +23,7 @@ class NewAvalaraTaxConfiguration
 private constructor(
     private val taxExempt: JsonField<Boolean>,
     private val taxProvider: JsonField<TaxProvider>,
+    private val automaticTaxEnabled: JsonField<Boolean>,
     private val taxExemptionCode: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -35,10 +36,13 @@ private constructor(
         @JsonProperty("tax_provider")
         @ExcludeMissing
         taxProvider: JsonField<TaxProvider> = JsonMissing.of(),
+        @JsonProperty("automatic_tax_enabled")
+        @ExcludeMissing
+        automaticTaxEnabled: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("tax_exemption_code")
         @ExcludeMissing
         taxExemptionCode: JsonField<String> = JsonMissing.of(),
-    ) : this(taxExempt, taxProvider, taxExemptionCode, mutableMapOf())
+    ) : this(taxExempt, taxProvider, automaticTaxEnabled, taxExemptionCode, mutableMapOf())
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -51,6 +55,16 @@ private constructor(
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun taxProvider(): TaxProvider = taxProvider.getRequired("tax_provider")
+
+    /**
+     * Whether to automatically calculate tax for this customer. When null, inherits from
+     * account-level setting. When true or false, overrides the account setting.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun automaticTaxEnabled(): Optional<Boolean> =
+        automaticTaxEnabled.getOptional("automatic_tax_enabled")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
@@ -73,6 +87,16 @@ private constructor(
     @JsonProperty("tax_provider")
     @ExcludeMissing
     fun _taxProvider(): JsonField<TaxProvider> = taxProvider
+
+    /**
+     * Returns the raw JSON value of [automaticTaxEnabled].
+     *
+     * Unlike [automaticTaxEnabled], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("automatic_tax_enabled")
+    @ExcludeMissing
+    fun _automaticTaxEnabled(): JsonField<Boolean> = automaticTaxEnabled
 
     /**
      * Returns the raw JSON value of [taxExemptionCode].
@@ -115,6 +139,7 @@ private constructor(
 
         private var taxExempt: JsonField<Boolean>? = null
         private var taxProvider: JsonField<TaxProvider>? = null
+        private var automaticTaxEnabled: JsonField<Boolean> = JsonMissing.of()
         private var taxExemptionCode: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -122,6 +147,7 @@ private constructor(
         internal fun from(newAvalaraTaxConfiguration: NewAvalaraTaxConfiguration) = apply {
             taxExempt = newAvalaraTaxConfiguration.taxExempt
             taxProvider = newAvalaraTaxConfiguration.taxProvider
+            automaticTaxEnabled = newAvalaraTaxConfiguration.automaticTaxEnabled
             taxExemptionCode = newAvalaraTaxConfiguration.taxExemptionCode
             additionalProperties = newAvalaraTaxConfiguration.additionalProperties.toMutableMap()
         }
@@ -148,6 +174,38 @@ private constructor(
          */
         fun taxProvider(taxProvider: JsonField<TaxProvider>) = apply {
             this.taxProvider = taxProvider
+        }
+
+        /**
+         * Whether to automatically calculate tax for this customer. When null, inherits from
+         * account-level setting. When true or false, overrides the account setting.
+         */
+        fun automaticTaxEnabled(automaticTaxEnabled: Boolean?) =
+            automaticTaxEnabled(JsonField.ofNullable(automaticTaxEnabled))
+
+        /**
+         * Alias for [Builder.automaticTaxEnabled].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun automaticTaxEnabled(automaticTaxEnabled: Boolean) =
+            automaticTaxEnabled(automaticTaxEnabled as Boolean?)
+
+        /**
+         * Alias for calling [Builder.automaticTaxEnabled] with `automaticTaxEnabled.orElse(null)`.
+         */
+        fun automaticTaxEnabled(automaticTaxEnabled: Optional<Boolean>) =
+            automaticTaxEnabled(automaticTaxEnabled.getOrNull())
+
+        /**
+         * Sets [Builder.automaticTaxEnabled] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.automaticTaxEnabled] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun automaticTaxEnabled(automaticTaxEnabled: JsonField<Boolean>) = apply {
+            this.automaticTaxEnabled = automaticTaxEnabled
         }
 
         fun taxExemptionCode(taxExemptionCode: String?) =
@@ -204,6 +262,7 @@ private constructor(
             NewAvalaraTaxConfiguration(
                 checkRequired("taxExempt", taxExempt),
                 checkRequired("taxProvider", taxProvider),
+                automaticTaxEnabled,
                 taxExemptionCode,
                 additionalProperties.toMutableMap(),
             )
@@ -218,6 +277,7 @@ private constructor(
 
         taxExempt()
         taxProvider().validate()
+        automaticTaxEnabled()
         taxExemptionCode()
         validated = true
     }
@@ -239,6 +299,7 @@ private constructor(
     internal fun validity(): Int =
         (if (taxExempt.asKnown().isPresent) 1 else 0) +
             (taxProvider.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (automaticTaxEnabled.asKnown().isPresent) 1 else 0) +
             (if (taxExemptionCode.asKnown().isPresent) 1 else 0)
 
     class TaxProvider @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -370,16 +431,23 @@ private constructor(
         return other is NewAvalaraTaxConfiguration &&
             taxExempt == other.taxExempt &&
             taxProvider == other.taxProvider &&
+            automaticTaxEnabled == other.automaticTaxEnabled &&
             taxExemptionCode == other.taxExemptionCode &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(taxExempt, taxProvider, taxExemptionCode, additionalProperties)
+        Objects.hash(
+            taxExempt,
+            taxProvider,
+            automaticTaxEnabled,
+            taxExemptionCode,
+            additionalProperties,
+        )
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "NewAvalaraTaxConfiguration{taxExempt=$taxExempt, taxProvider=$taxProvider, taxExemptionCode=$taxExemptionCode, additionalProperties=$additionalProperties}"
+        "NewAvalaraTaxConfiguration{taxExempt=$taxExempt, taxProvider=$taxProvider, automaticTaxEnabled=$automaticTaxEnabled, taxExemptionCode=$taxExemptionCode, additionalProperties=$additionalProperties}"
 }

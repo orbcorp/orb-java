@@ -4,6 +4,7 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.withorb.api.core.jsonMapper
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -21,6 +22,13 @@ internal class AllocationTest {
                         .durationUnit(CustomExpiration.DurationUnit.DAY)
                         .build()
                 )
+                .addFilter(
+                    Allocation.Filter.builder()
+                        .field(Allocation.Filter.Field.PRICE_ID)
+                        .operator(Allocation.Filter.Operator.INCLUDES)
+                        .addValue("string")
+                        .build()
+                )
                 .build()
 
         assertThat(allocation.allowsRollover()).isEqualTo(true)
@@ -30,6 +38,14 @@ internal class AllocationTest {
                 CustomExpiration.builder()
                     .duration(0L)
                     .durationUnit(CustomExpiration.DurationUnit.DAY)
+                    .build()
+            )
+        assertThat(allocation.filters().getOrNull())
+            .containsExactly(
+                Allocation.Filter.builder()
+                    .field(Allocation.Filter.Field.PRICE_ID)
+                    .operator(Allocation.Filter.Operator.INCLUDES)
+                    .addValue("string")
                     .build()
             )
     }
@@ -45,6 +61,13 @@ internal class AllocationTest {
                     CustomExpiration.builder()
                         .duration(0L)
                         .durationUnit(CustomExpiration.DurationUnit.DAY)
+                        .build()
+                )
+                .addFilter(
+                    Allocation.Filter.builder()
+                        .field(Allocation.Filter.Field.PRICE_ID)
+                        .operator(Allocation.Filter.Operator.INCLUDES)
+                        .addValue("string")
                         .build()
                 )
                 .build()

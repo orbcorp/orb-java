@@ -27,6 +27,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
             .addAdditionalEmail("string")
             .autoCollection(true)
             .autoIssuance(true)
+            .automaticTaxEnabled(true)
             .billingAddress(
                 AddressInput.builder()
                     .city("city")
@@ -70,6 +71,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
                 NewAvalaraTaxConfiguration.builder()
                     .taxExempt(true)
                     .taxProvider(NewAvalaraTaxConfiguration.TaxProvider.AVALARA)
+                    .automaticTaxEnabled(true)
                     .taxExemptionCode("tax_exemption_code")
                     .build()
             )
@@ -111,6 +113,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
                 .addAdditionalEmail("string")
                 .autoCollection(true)
                 .autoIssuance(true)
+                .automaticTaxEnabled(true)
                 .billingAddress(
                     AddressInput.builder()
                         .city("city")
@@ -154,6 +157,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
                     NewAvalaraTaxConfiguration.builder()
                         .taxExempt(true)
                         .taxProvider(NewAvalaraTaxConfiguration.TaxProvider.AVALARA)
+                        .automaticTaxEnabled(true)
                         .taxExemptionCode("tax_exemption_code")
                         .build()
                 )
@@ -183,6 +187,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
         assertThat(body.additionalEmails().getOrNull()).containsExactly("string")
         assertThat(body.autoCollection()).contains(true)
         assertThat(body.autoIssuance()).contains(true)
+        assertThat(body.automaticTaxEnabled()).contains(true)
         assertThat(body.billingAddress())
             .contains(
                 AddressInput.builder()
@@ -234,6 +239,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
                     NewAvalaraTaxConfiguration.builder()
                         .taxExempt(true)
                         .taxProvider(NewAvalaraTaxConfiguration.TaxProvider.AVALARA)
+                        .automaticTaxEnabled(true)
                         .taxExemptionCode("tax_exemption_code")
                         .build()
                 )
