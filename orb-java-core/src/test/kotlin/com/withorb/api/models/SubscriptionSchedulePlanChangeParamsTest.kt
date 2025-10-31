@@ -59,6 +59,13 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                     .build()
                             )
                             .expiresAtEndOfCadence(true)
+                            .addFilter(
+                                NewAllocationPrice.Filter.builder()
+                                    .field(NewAllocationPrice.Filter.Field.ITEM_ID)
+                                    .operator(NewAllocationPrice.Filter.Operator.INCLUDES)
+                                    .addValue("string")
+                                    .build()
+                            )
                             .build()
                     )
                     .addDiscount(
@@ -199,6 +206,13 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                     .build()
                             )
                             .expiresAtEndOfCadence(true)
+                            .addFilter(
+                                NewAllocationPrice.Filter.builder()
+                                    .field(NewAllocationPrice.Filter.Field.ITEM_ID)
+                                    .operator(NewAllocationPrice.Filter.Operator.INCLUDES)
+                                    .addValue("string")
+                                    .build()
+                            )
                             .build()
                     )
                     .addDiscount(
@@ -330,6 +344,13 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                         .build()
                                 )
                                 .expiresAtEndOfCadence(true)
+                                .addFilter(
+                                    NewAllocationPrice.Filter.builder()
+                                        .field(NewAllocationPrice.Filter.Field.ITEM_ID)
+                                        .operator(NewAllocationPrice.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
                                 .build()
                         )
                         .addDiscount(
@@ -472,6 +493,13 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                         .build()
                                 )
                                 .expiresAtEndOfCadence(true)
+                                .addFilter(
+                                    NewAllocationPrice.Filter.builder()
+                                        .field(NewAllocationPrice.Filter.Field.ITEM_ID)
+                                        .operator(NewAllocationPrice.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
                                 .build()
                         )
                         .addDiscount(
@@ -591,6 +619,13 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                     .build()
                             )
                             .expiresAtEndOfCadence(true)
+                            .addFilter(
+                                NewAllocationPrice.Filter.builder()
+                                    .field(NewAllocationPrice.Filter.Field.ITEM_ID)
+                                    .operator(NewAllocationPrice.Filter.Operator.INCLUDES)
+                                    .addValue("string")
+                                    .build()
+                            )
                             .build()
                     )
                     .addDiscount(
@@ -734,6 +769,13 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                     .build()
                             )
                             .expiresAtEndOfCadence(true)
+                            .addFilter(
+                                NewAllocationPrice.Filter.builder()
+                                    .field(NewAllocationPrice.Filter.Field.ITEM_ID)
+                                    .operator(NewAllocationPrice.Filter.Operator.INCLUDES)
+                                    .addValue("string")
+                                    .build()
+                            )
                             .build()
                     )
                     .addDiscount(
