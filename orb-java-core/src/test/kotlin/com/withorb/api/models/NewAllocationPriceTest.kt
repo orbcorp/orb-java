@@ -4,6 +4,7 @@ package com.withorb.api.models
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.withorb.api.core.jsonMapper
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -23,6 +24,13 @@ internal class NewAllocationPriceTest {
                         .build()
                 )
                 .expiresAtEndOfCadence(true)
+                .addFilter(
+                    NewAllocationPrice.Filter.builder()
+                        .field(NewAllocationPrice.Filter.Field.ITEM_ID)
+                        .operator(NewAllocationPrice.Filter.Operator.INCLUDES)
+                        .addValue("string")
+                        .build()
+                )
                 .build()
 
         assertThat(newAllocationPrice.amount()).isEqualTo("10.00")
@@ -36,6 +44,14 @@ internal class NewAllocationPriceTest {
                     .build()
             )
         assertThat(newAllocationPrice.expiresAtEndOfCadence()).contains(true)
+        assertThat(newAllocationPrice.filters().getOrNull())
+            .containsExactly(
+                NewAllocationPrice.Filter.builder()
+                    .field(NewAllocationPrice.Filter.Field.ITEM_ID)
+                    .operator(NewAllocationPrice.Filter.Operator.INCLUDES)
+                    .addValue("string")
+                    .build()
+            )
     }
 
     @Test
@@ -53,6 +69,13 @@ internal class NewAllocationPriceTest {
                         .build()
                 )
                 .expiresAtEndOfCadence(true)
+                .addFilter(
+                    NewAllocationPrice.Filter.builder()
+                        .field(NewAllocationPrice.Filter.Field.ITEM_ID)
+                        .operator(NewAllocationPrice.Filter.Operator.INCLUDES)
+                        .addValue("string")
+                        .build()
+                )
                 .build()
 
         val roundtrippedNewAllocationPrice =
