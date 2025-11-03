@@ -20,12 +20,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * This API endpoint is in beta and its interface may change. It is recommended for use only in test
- * mode.
- *
- * This endpoint allows setting the default version of a plan.
- */
+/** This endpoint allows setting the default version of a plan. */
 class BetaExternalPlanIdSetDefaultPlanVersionParams
 private constructor(
     private val externalPlanId: String?,
