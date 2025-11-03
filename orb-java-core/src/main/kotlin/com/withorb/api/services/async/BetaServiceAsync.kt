@@ -55,9 +55,6 @@ interface BetaServiceAsync {
     ): CompletableFuture<PlanVersion>
 
     /**
-     * This API endpoint is in beta and its interface may change. It is recommended for use only in
-     * test mode.
-     *
      * This endpoint is used to fetch a plan version. It returns the phases, prices, and adjustments
      * present on this version of the plan.
      */
@@ -84,12 +81,7 @@ interface BetaServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<PlanVersion>
 
-    /**
-     * This API endpoint is in beta and its interface may change. It is recommended for use only in
-     * test mode.
-     *
-     * This endpoint allows setting the default version of a plan.
-     */
+    /** This endpoint allows setting the default version of a plan. */
     fun setDefaultPlanVersion(
         planId: String,
         params: BetaSetDefaultPlanVersionParams,
