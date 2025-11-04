@@ -138,7 +138,6 @@ internal class CustomerServiceAsyncTest {
                     .addAdditionalEmail("string")
                     .autoCollection(true)
                     .autoIssuance(true)
-                    .automaticTaxEnabled(true)
                     .billingAddress(
                         AddressInput.builder()
                             .city("city")
@@ -319,7 +318,6 @@ internal class CustomerServiceAsyncTest {
                     .addAdditionalEmail("string")
                     .autoCollection(true)
                     .autoIssuance(true)
-                    .automaticTaxEnabled(true)
                     .billingAddress(
                         AddressInput.builder()
                             .city("city")
