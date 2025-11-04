@@ -27,7 +27,6 @@ internal class CustomerUpdateParamsTest {
             .addAdditionalEmail("string")
             .autoCollection(true)
             .autoIssuance(true)
-            .automaticTaxEnabled(true)
             .billingAddress(
                 AddressInput.builder()
                     .city("city")
@@ -113,7 +112,6 @@ internal class CustomerUpdateParamsTest {
                 .addAdditionalEmail("string")
                 .autoCollection(true)
                 .autoIssuance(true)
-                .automaticTaxEnabled(true)
                 .billingAddress(
                     AddressInput.builder()
                         .city("city")
@@ -187,7 +185,6 @@ internal class CustomerUpdateParamsTest {
         assertThat(body.additionalEmails().getOrNull()).containsExactly("string")
         assertThat(body.autoCollection()).contains(true)
         assertThat(body.autoIssuance()).contains(true)
-        assertThat(body.automaticTaxEnabled()).contains(true)
         assertThat(body.billingAddress())
             .contains(
                 AddressInput.builder()

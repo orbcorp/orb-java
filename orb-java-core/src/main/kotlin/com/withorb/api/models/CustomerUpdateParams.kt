@@ -88,15 +88,6 @@ private constructor(
     fun autoIssuance(): Optional<Boolean> = body.autoIssuance()
 
     /**
-     * Whether automatic tax calculation is enabled for this customer. When null, inherits from
-     * account-level setting. When true or false, overrides the account setting.
-     *
-     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
-     *   responded with an unexpected value).
-     */
-    fun automaticTaxEnabled(): Optional<Boolean> = body.automaticTaxEnabled()
-
-    /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
@@ -384,14 +375,6 @@ private constructor(
     fun _autoIssuance(): JsonField<Boolean> = body._autoIssuance()
 
     /**
-     * Returns the raw JSON value of [automaticTaxEnabled].
-     *
-     * Unlike [automaticTaxEnabled], this method doesn't throw if the JSON field has an unexpected
-     * type.
-     */
-    fun _automaticTaxEnabled(): JsonField<Boolean> = body._automaticTaxEnabled()
-
-    /**
      * Returns the raw JSON value of [billingAddress].
      *
      * Unlike [billingAddress], this method doesn't throw if the JSON field has an unexpected type.
@@ -542,7 +525,7 @@ private constructor(
          * - [additionalEmails]
          * - [autoCollection]
          * - [autoIssuance]
-         * - [automaticTaxEnabled]
+         * - [billingAddress]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -659,39 +642,6 @@ private constructor(
          */
         fun autoIssuance(autoIssuance: JsonField<Boolean>) = apply {
             body.autoIssuance(autoIssuance)
-        }
-
-        /**
-         * Whether automatic tax calculation is enabled for this customer. When null, inherits from
-         * account-level setting. When true or false, overrides the account setting.
-         */
-        fun automaticTaxEnabled(automaticTaxEnabled: Boolean?) = apply {
-            body.automaticTaxEnabled(automaticTaxEnabled)
-        }
-
-        /**
-         * Alias for [Builder.automaticTaxEnabled].
-         *
-         * This unboxed primitive overload exists for backwards compatibility.
-         */
-        fun automaticTaxEnabled(automaticTaxEnabled: Boolean) =
-            automaticTaxEnabled(automaticTaxEnabled as Boolean?)
-
-        /**
-         * Alias for calling [Builder.automaticTaxEnabled] with `automaticTaxEnabled.orElse(null)`.
-         */
-        fun automaticTaxEnabled(automaticTaxEnabled: Optional<Boolean>) =
-            automaticTaxEnabled(automaticTaxEnabled.getOrNull())
-
-        /**
-         * Sets [Builder.automaticTaxEnabled] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.automaticTaxEnabled] with a well-typed [Boolean] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun automaticTaxEnabled(automaticTaxEnabled: JsonField<Boolean>) = apply {
-            body.automaticTaxEnabled(automaticTaxEnabled)
         }
 
         fun billingAddress(billingAddress: AddressInput?) = apply {
@@ -1351,7 +1301,6 @@ private constructor(
         private val additionalEmails: JsonField<List<String>>,
         private val autoCollection: JsonField<Boolean>,
         private val autoIssuance: JsonField<Boolean>,
-        private val automaticTaxEnabled: JsonField<Boolean>,
         private val billingAddress: JsonField<AddressInput>,
         private val currency: JsonField<String>,
         private val email: JsonField<String>,
@@ -1384,9 +1333,6 @@ private constructor(
             @JsonProperty("auto_issuance")
             @ExcludeMissing
             autoIssuance: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("automatic_tax_enabled")
-            @ExcludeMissing
-            automaticTaxEnabled: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("billing_address")
             @ExcludeMissing
             billingAddress: JsonField<AddressInput> = JsonMissing.of(),
@@ -1430,7 +1376,6 @@ private constructor(
             additionalEmails,
             autoCollection,
             autoIssuance,
-            automaticTaxEnabled,
             billingAddress,
             currency,
             email,
@@ -1486,16 +1431,6 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun autoIssuance(): Optional<Boolean> = autoIssuance.getOptional("auto_issuance")
-
-        /**
-         * Whether automatic tax calculation is enabled for this customer. When null, inherits from
-         * account-level setting. When true or false, overrides the account setting.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun automaticTaxEnabled(): Optional<Boolean> =
-            automaticTaxEnabled.getOptional("automatic_tax_enabled")
 
         /**
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -1800,16 +1735,6 @@ private constructor(
         fun _autoIssuance(): JsonField<Boolean> = autoIssuance
 
         /**
-         * Returns the raw JSON value of [automaticTaxEnabled].
-         *
-         * Unlike [automaticTaxEnabled], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("automatic_tax_enabled")
-        @ExcludeMissing
-        fun _automaticTaxEnabled(): JsonField<Boolean> = automaticTaxEnabled
-
-        /**
          * Returns the raw JSON value of [billingAddress].
          *
          * Unlike [billingAddress], this method doesn't throw if the JSON field has an unexpected
@@ -1959,7 +1884,6 @@ private constructor(
             private var additionalEmails: JsonField<MutableList<String>>? = null
             private var autoCollection: JsonField<Boolean> = JsonMissing.of()
             private var autoIssuance: JsonField<Boolean> = JsonMissing.of()
-            private var automaticTaxEnabled: JsonField<Boolean> = JsonMissing.of()
             private var billingAddress: JsonField<AddressInput> = JsonMissing.of()
             private var currency: JsonField<String> = JsonMissing.of()
             private var email: JsonField<String> = JsonMissing.of()
@@ -1983,7 +1907,6 @@ private constructor(
                 additionalEmails = body.additionalEmails.map { it.toMutableList() }
                 autoCollection = body.autoCollection
                 autoIssuance = body.autoIssuance
-                automaticTaxEnabled = body.automaticTaxEnabled
                 billingAddress = body.billingAddress
                 currency = body.currency
                 email = body.email
@@ -2120,39 +2043,6 @@ private constructor(
              */
             fun autoIssuance(autoIssuance: JsonField<Boolean>) = apply {
                 this.autoIssuance = autoIssuance
-            }
-
-            /**
-             * Whether automatic tax calculation is enabled for this customer. When null, inherits
-             * from account-level setting. When true or false, overrides the account setting.
-             */
-            fun automaticTaxEnabled(automaticTaxEnabled: Boolean?) =
-                automaticTaxEnabled(JsonField.ofNullable(automaticTaxEnabled))
-
-            /**
-             * Alias for [Builder.automaticTaxEnabled].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun automaticTaxEnabled(automaticTaxEnabled: Boolean) =
-                automaticTaxEnabled(automaticTaxEnabled as Boolean?)
-
-            /**
-             * Alias for calling [Builder.automaticTaxEnabled] with
-             * `automaticTaxEnabled.orElse(null)`.
-             */
-            fun automaticTaxEnabled(automaticTaxEnabled: Optional<Boolean>) =
-                automaticTaxEnabled(automaticTaxEnabled.getOrNull())
-
-            /**
-             * Sets [Builder.automaticTaxEnabled] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.automaticTaxEnabled] with a well-typed [Boolean]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun automaticTaxEnabled(automaticTaxEnabled: JsonField<Boolean>) = apply {
-                this.automaticTaxEnabled = automaticTaxEnabled
             }
 
             fun billingAddress(billingAddress: AddressInput?) =
@@ -2703,7 +2593,6 @@ private constructor(
                     (additionalEmails ?: JsonMissing.of()).map { it.toImmutable() },
                     autoCollection,
                     autoIssuance,
-                    automaticTaxEnabled,
                     billingAddress,
                     currency,
                     email,
@@ -2733,7 +2622,6 @@ private constructor(
             additionalEmails()
             autoCollection()
             autoIssuance()
-            automaticTaxEnabled()
             billingAddress().ifPresent { it.validate() }
             currency()
             email()
@@ -2771,7 +2659,6 @@ private constructor(
                 (additionalEmails.asKnown().getOrNull()?.size ?: 0) +
                 (if (autoCollection.asKnown().isPresent) 1 else 0) +
                 (if (autoIssuance.asKnown().isPresent) 1 else 0) +
-                (if (automaticTaxEnabled.asKnown().isPresent) 1 else 0) +
                 (billingAddress.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (currency.asKnown().isPresent) 1 else 0) +
                 (if (email.asKnown().isPresent) 1 else 0) +
@@ -2797,7 +2684,6 @@ private constructor(
                 additionalEmails == other.additionalEmails &&
                 autoCollection == other.autoCollection &&
                 autoIssuance == other.autoIssuance &&
-                automaticTaxEnabled == other.automaticTaxEnabled &&
                 billingAddress == other.billingAddress &&
                 currency == other.currency &&
                 email == other.email &&
@@ -2821,7 +2707,6 @@ private constructor(
                 additionalEmails,
                 autoCollection,
                 autoIssuance,
-                automaticTaxEnabled,
                 billingAddress,
                 currency,
                 email,
@@ -2843,7 +2728,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{accountingSyncConfiguration=$accountingSyncConfiguration, additionalEmails=$additionalEmails, autoCollection=$autoCollection, autoIssuance=$autoIssuance, automaticTaxEnabled=$automaticTaxEnabled, billingAddress=$billingAddress, currency=$currency, email=$email, emailDelivery=$emailDelivery, externalCustomerId=$externalCustomerId, hierarchy=$hierarchy, metadata=$metadata, name=$name, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, reportingConfiguration=$reportingConfiguration, shippingAddress=$shippingAddress, taxConfiguration=$taxConfiguration, taxId=$taxId, additionalProperties=$additionalProperties}"
+            "Body{accountingSyncConfiguration=$accountingSyncConfiguration, additionalEmails=$additionalEmails, autoCollection=$autoCollection, autoIssuance=$autoIssuance, billingAddress=$billingAddress, currency=$currency, email=$email, emailDelivery=$emailDelivery, externalCustomerId=$externalCustomerId, hierarchy=$hierarchy, metadata=$metadata, name=$name, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, reportingConfiguration=$reportingConfiguration, shippingAddress=$shippingAddress, taxConfiguration=$taxConfiguration, taxId=$taxId, additionalProperties=$additionalProperties}"
     }
 
     /**
