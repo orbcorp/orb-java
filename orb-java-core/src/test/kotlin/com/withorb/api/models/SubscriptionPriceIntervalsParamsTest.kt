@@ -57,7 +57,12 @@ internal class SubscriptionPriceIntervalsParamsTest {
                             .itemId("item_id")
                             .modelType(NewFloatingUnitPrice.ModelType.UNIT)
                             .name("Annual fee")
-                            .unitConfig(UnitConfig.builder().unitAmount("unit_amount").build())
+                            .unitConfig(
+                                UnitConfig.builder()
+                                    .unitAmount("unit_amount")
+                                    .prorated(true)
+                                    .build()
+                            )
                             .billableMetricId("billable_metric_id")
                             .billedInAdvance(true)
                             .billingCycleConfiguration(
@@ -130,10 +135,12 @@ internal class SubscriptionPriceIntervalsParamsTest {
                     .build()
             )
             .allowInvoiceCreditOrVoid(true)
+            .canDeferBilling(true)
             .addEdit(
                 SubscriptionPriceIntervalsParams.Edit.builder()
                     .priceIntervalId("sdfs6wdjvn7ujokd")
                     .billingCycleDay(0L)
+                    .canDeferBilling(true)
                     .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .filter("my_property > 100 AND my_other_property = 'bar'")
                     .addFixedFeeQuantityTransition(
@@ -215,7 +222,12 @@ internal class SubscriptionPriceIntervalsParamsTest {
                                 .itemId("item_id")
                                 .modelType(NewFloatingUnitPrice.ModelType.UNIT)
                                 .name("Annual fee")
-                                .unitConfig(UnitConfig.builder().unitAmount("unit_amount").build())
+                                .unitConfig(
+                                    UnitConfig.builder()
+                                        .unitAmount("unit_amount")
+                                        .prorated(true)
+                                        .build()
+                                )
                                 .billableMetricId("billable_metric_id")
                                 .billedInAdvance(true)
                                 .billingCycleConfiguration(
@@ -290,10 +302,12 @@ internal class SubscriptionPriceIntervalsParamsTest {
                         .build()
                 )
                 .allowInvoiceCreditOrVoid(true)
+                .canDeferBilling(true)
                 .addEdit(
                     SubscriptionPriceIntervalsParams.Edit.builder()
                         .priceIntervalId("sdfs6wdjvn7ujokd")
                         .billingCycleDay(0L)
+                        .canDeferBilling(true)
                         .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .filter("my_property > 100 AND my_other_property = 'bar'")
                         .addFixedFeeQuantityTransition(
@@ -362,7 +376,12 @@ internal class SubscriptionPriceIntervalsParamsTest {
                             .itemId("item_id")
                             .modelType(NewFloatingUnitPrice.ModelType.UNIT)
                             .name("Annual fee")
-                            .unitConfig(UnitConfig.builder().unitAmount("unit_amount").build())
+                            .unitConfig(
+                                UnitConfig.builder()
+                                    .unitAmount("unit_amount")
+                                    .prorated(true)
+                                    .build()
+                            )
                             .billableMetricId("billable_metric_id")
                             .billedInAdvance(true)
                             .billingCycleConfiguration(
@@ -436,11 +455,13 @@ internal class SubscriptionPriceIntervalsParamsTest {
                     .build()
             )
         assertThat(body.allowInvoiceCreditOrVoid()).contains(true)
+        assertThat(body.canDeferBilling()).contains(true)
         assertThat(body.edit().getOrNull())
             .containsExactly(
                 SubscriptionPriceIntervalsParams.Edit.builder()
                     .priceIntervalId("sdfs6wdjvn7ujokd")
                     .billingCycleDay(0L)
+                    .canDeferBilling(true)
                     .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .filter("my_property > 100 AND my_other_property = 'bar'")
                     .addFixedFeeQuantityTransition(

@@ -16,6 +16,7 @@ import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Collections
 import java.util.Objects
+import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** Configuration for tiered pricing */
@@ -23,13 +24,15 @@ class TieredConfig
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val tiers: JsonField<List<Tier>>,
+    private val prorated: JsonField<Boolean>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("tiers") @ExcludeMissing tiers: JsonField<List<Tier>> = JsonMissing.of()
-    ) : this(tiers, mutableMapOf())
+        @JsonProperty("tiers") @ExcludeMissing tiers: JsonField<List<Tier>> = JsonMissing.of(),
+        @JsonProperty("prorated") @ExcludeMissing prorated: JsonField<Boolean> = JsonMissing.of(),
+    ) : this(tiers, prorated, mutableMapOf())
 
     /**
      * Tiers for rating based on total usage quantities into the specified tier
@@ -40,11 +43,26 @@ private constructor(
     fun tiers(): List<Tier> = tiers.getRequired("tiers")
 
     /**
+     * If true, subtotals from this price are prorated based on the service period
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun prorated(): Optional<Boolean> = prorated.getOptional("prorated")
+
+    /**
      * Returns the raw JSON value of [tiers].
      *
      * Unlike [tiers], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("tiers") @ExcludeMissing fun _tiers(): JsonField<List<Tier>> = tiers
+
+    /**
+     * Returns the raw JSON value of [prorated].
+     *
+     * Unlike [prorated], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("prorated") @ExcludeMissing fun _prorated(): JsonField<Boolean> = prorated
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -75,11 +93,13 @@ private constructor(
     class Builder internal constructor() {
 
         private var tiers: JsonField<MutableList<Tier>>? = null
+        private var prorated: JsonField<Boolean> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(tieredConfig: TieredConfig) = apply {
             tiers = tieredConfig.tiers.map { it.toMutableList() }
+            prorated = tieredConfig.prorated
             additionalProperties = tieredConfig.additionalProperties.toMutableMap()
         }
 
@@ -106,6 +126,18 @@ private constructor(
             tiers =
                 (tiers ?: JsonField.of(mutableListOf())).also { checkKnown("tiers", it).add(tier) }
         }
+
+        /** If true, subtotals from this price are prorated based on the service period */
+        fun prorated(prorated: Boolean) = prorated(JsonField.of(prorated))
+
+        /**
+         * Sets [Builder.prorated] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.prorated] with a well-typed [Boolean] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun prorated(prorated: JsonField<Boolean>) = apply { this.prorated = prorated }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -141,6 +173,7 @@ private constructor(
         fun build(): TieredConfig =
             TieredConfig(
                 checkRequired("tiers", tiers).map { it.toImmutable() },
+                prorated,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -153,6 +186,7 @@ private constructor(
         }
 
         tiers().forEach { it.validate() }
+        prorated()
         validated = true
     }
 
@@ -171,7 +205,8 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (tiers.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+        (tiers.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (prorated.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -180,13 +215,14 @@ private constructor(
 
         return other is TieredConfig &&
             tiers == other.tiers &&
+            prorated == other.prorated &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(tiers, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(tiers, prorated, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "TieredConfig{tiers=$tiers, additionalProperties=$additionalProperties}"
+        "TieredConfig{tiers=$tiers, prorated=$prorated, additionalProperties=$additionalProperties}"
 }
