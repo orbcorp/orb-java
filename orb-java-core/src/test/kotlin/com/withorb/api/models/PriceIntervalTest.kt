@@ -18,6 +18,7 @@ internal class PriceIntervalTest {
             PriceInterval.builder()
                 .id("id")
                 .billingCycleDay(0L)
+                .canDeferBilling(true)
                 .currentBillingPeriodEndDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .currentBillingPeriodStartDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -135,7 +136,9 @@ internal class PriceIntervalTest {
                         .planPhaseOrder(0L)
                         .priceType(Price.Unit.PriceType.USAGE_PRICE)
                         .replacesPriceId("replaces_price_id")
-                        .unitConfig(UnitConfig.builder().unitAmount("unit_amount").build())
+                        .unitConfig(
+                            UnitConfig.builder().unitAmount("unit_amount").prorated(true).build()
+                        )
                         .dimensionalPriceConfiguration(
                             DimensionalPriceConfiguration.builder()
                                 .addDimensionValue("string")
@@ -150,6 +153,7 @@ internal class PriceIntervalTest {
 
         assertThat(priceInterval.id()).isEqualTo("id")
         assertThat(priceInterval.billingCycleDay()).isEqualTo(0L)
+        assertThat(priceInterval.canDeferBilling()).isEqualTo(true)
         assertThat(priceInterval.currentBillingPeriodEndDate())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(priceInterval.currentBillingPeriodStartDate())
@@ -273,7 +277,9 @@ internal class PriceIntervalTest {
                         .planPhaseOrder(0L)
                         .priceType(Price.Unit.PriceType.USAGE_PRICE)
                         .replacesPriceId("replaces_price_id")
-                        .unitConfig(UnitConfig.builder().unitAmount("unit_amount").build())
+                        .unitConfig(
+                            UnitConfig.builder().unitAmount("unit_amount").prorated(true).build()
+                        )
                         .dimensionalPriceConfiguration(
                             DimensionalPriceConfiguration.builder()
                                 .addDimensionValue("string")
@@ -295,6 +301,7 @@ internal class PriceIntervalTest {
             PriceInterval.builder()
                 .id("id")
                 .billingCycleDay(0L)
+                .canDeferBilling(true)
                 .currentBillingPeriodEndDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .currentBillingPeriodStartDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -412,7 +419,9 @@ internal class PriceIntervalTest {
                         .planPhaseOrder(0L)
                         .priceType(Price.Unit.PriceType.USAGE_PRICE)
                         .replacesPriceId("replaces_price_id")
-                        .unitConfig(UnitConfig.builder().unitAmount("unit_amount").build())
+                        .unitConfig(
+                            UnitConfig.builder().unitAmount("unit_amount").prorated(true).build()
+                        )
                         .dimensionalPriceConfiguration(
                             DimensionalPriceConfiguration.builder()
                                 .addDimensionValue("string")
