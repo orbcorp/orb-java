@@ -29,7 +29,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
-import kotlin.Unit as KUnit
+import kotlin.Unit
 import kotlin.jvm.optionals.getOrNull
 
 /**
@@ -48,7 +48,7 @@ import kotlin.jvm.optionals.getOrNull
 @JsonSerialize(using = Price.Serializer::class)
 class Price
 private constructor(
-    private val unit: Unit? = null,
+    private val unit: UnitPrice? = null,
     private val tiered: Tiered? = null,
     private val bulk: Bulk? = null,
     private val bulkWithFilters: BulkWithFilters? = null,
@@ -81,7 +81,7 @@ private constructor(
     private val _json: JsonValue? = null,
 ) {
 
-    fun unit(): Optional<Unit> = Optional.ofNullable(unit)
+    fun unit(): Optional<UnitPrice> = Optional.ofNullable(unit)
 
     fun tiered(): Optional<Tiered> = Optional.ofNullable(tiered)
 
@@ -215,7 +215,7 @@ private constructor(
 
     fun isEventOutput(): Boolean = eventOutput != null
 
-    fun asUnit(): Unit = unit.getOrThrow("unit")
+    fun asUnit(): UnitPrice = unit.getOrThrow("unit")
 
     fun asTiered(): Tiered = tiered.getOrThrow("tiered")
 
@@ -344,8 +344,8 @@ private constructor(
         }
 
         accept(
-            object : Visitor<KUnit> {
-                override fun visitUnit(unit: Unit) {
+            object : Visitor<Unit> {
+                override fun visitUnit(unit: UnitPrice) {
                     unit.validate()
                 }
 
@@ -506,7 +506,7 @@ private constructor(
     internal fun validity(): Int =
         accept(
             object : Visitor<Int> {
-                override fun visitUnit(unit: Unit) = unit.validity()
+                override fun visitUnit(unit: UnitPrice) = unit.validity()
 
                 override fun visitTiered(tiered: Tiered) = tiered.validity()
 
@@ -718,7 +718,7 @@ private constructor(
 
     companion object {
 
-        @JvmStatic fun ofUnit(unit: Unit) = Price(unit = unit)
+        @JvmStatic fun ofUnit(unit: UnitPrice) = Price(unit = unit)
 
         @JvmStatic fun ofTiered(tiered: Tiered) = Price(tiered = tiered)
 
@@ -827,7 +827,7 @@ private constructor(
     /** An interface that defines how to map each variant of [Price] to a value of type [T]. */
     interface Visitor<out T> {
 
-        fun visitUnit(unit: Unit): T
+        fun visitUnit(unit: UnitPrice): T
 
         fun visitTiered(tiered: Tiered): T
 
@@ -917,7 +917,7 @@ private constructor(
 
             when (modelType) {
                 "unit" -> {
-                    return tryDeserialize(node, jacksonTypeRef<Unit>())?.let {
+                    return tryDeserialize(node, jacksonTypeRef<UnitPrice>())?.let {
                         Price(unit = it, _json = json)
                     } ?: Price(_json = json)
                 }
@@ -1130,7 +1130,7 @@ private constructor(
         }
     }
 
-    class Unit
+    class UnitPrice
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
@@ -1735,7 +1735,7 @@ private constructor(
         companion object {
 
             /**
-             * Returns a mutable builder for constructing an instance of [Unit].
+             * Returns a mutable builder for constructing an instance of [UnitPrice].
              *
              * The following fields are required:
              * ```java
@@ -1770,7 +1770,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [Unit]. */
+        /** A builder for [UnitPrice]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -1805,36 +1805,36 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(unit: Unit) = apply {
-                id = unit.id
-                billableMetric = unit.billableMetric
-                billingCycleConfiguration = unit.billingCycleConfiguration
-                billingMode = unit.billingMode
-                cadence = unit.cadence
-                compositePriceFilters = unit.compositePriceFilters.map { it.toMutableList() }
-                conversionRate = unit.conversionRate
-                conversionRateConfig = unit.conversionRateConfig
-                createdAt = unit.createdAt
-                creditAllocation = unit.creditAllocation
-                currency = unit.currency
-                discount = unit.discount
-                externalPriceId = unit.externalPriceId
-                fixedPriceQuantity = unit.fixedPriceQuantity
-                invoicingCycleConfiguration = unit.invoicingCycleConfiguration
-                item = unit.item
-                maximum = unit.maximum
-                maximumAmount = unit.maximumAmount
-                metadata = unit.metadata
-                minimum = unit.minimum
-                minimumAmount = unit.minimumAmount
-                modelType = unit.modelType
-                name = unit.name
-                planPhaseOrder = unit.planPhaseOrder
-                priceType = unit.priceType
-                replacesPriceId = unit.replacesPriceId
-                unitConfig = unit.unitConfig
-                dimensionalPriceConfiguration = unit.dimensionalPriceConfiguration
-                additionalProperties = unit.additionalProperties.toMutableMap()
+            internal fun from(unitPrice: UnitPrice) = apply {
+                id = unitPrice.id
+                billableMetric = unitPrice.billableMetric
+                billingCycleConfiguration = unitPrice.billingCycleConfiguration
+                billingMode = unitPrice.billingMode
+                cadence = unitPrice.cadence
+                compositePriceFilters = unitPrice.compositePriceFilters.map { it.toMutableList() }
+                conversionRate = unitPrice.conversionRate
+                conversionRateConfig = unitPrice.conversionRateConfig
+                createdAt = unitPrice.createdAt
+                creditAllocation = unitPrice.creditAllocation
+                currency = unitPrice.currency
+                discount = unitPrice.discount
+                externalPriceId = unitPrice.externalPriceId
+                fixedPriceQuantity = unitPrice.fixedPriceQuantity
+                invoicingCycleConfiguration = unitPrice.invoicingCycleConfiguration
+                item = unitPrice.item
+                maximum = unitPrice.maximum
+                maximumAmount = unitPrice.maximumAmount
+                metadata = unitPrice.metadata
+                minimum = unitPrice.minimum
+                minimumAmount = unitPrice.minimumAmount
+                modelType = unitPrice.modelType
+                name = unitPrice.name
+                planPhaseOrder = unitPrice.planPhaseOrder
+                priceType = unitPrice.priceType
+                replacesPriceId = unitPrice.replacesPriceId
+                unitConfig = unitPrice.unitConfig
+                dimensionalPriceConfiguration = unitPrice.dimensionalPriceConfiguration
+                additionalProperties = unitPrice.additionalProperties.toMutableMap()
             }
 
             fun id(id: String) = id(JsonField.of(id))
@@ -2482,7 +2482,7 @@ private constructor(
             }
 
             /**
-             * Returns an immutable instance of [Unit].
+             * Returns an immutable instance of [UnitPrice].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              *
@@ -2518,8 +2518,8 @@ private constructor(
              *
              * @throws IllegalStateException if any required field is unset.
              */
-            fun build(): Unit =
-                Unit(
+            fun build(): UnitPrice =
+                UnitPrice(
                     checkRequired("id", id),
                     checkRequired("billableMetric", billableMetric),
                     checkRequired("billingCycleConfiguration", billingCycleConfiguration),
@@ -2556,7 +2556,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Unit = apply {
+        fun validate(): UnitPrice = apply {
             if (validated) {
                 return@apply
             }
@@ -3716,7 +3716,7 @@ private constructor(
                 return true
             }
 
-            return other is Unit &&
+            return other is UnitPrice &&
                 id == other.id &&
                 billableMetric == other.billableMetric &&
                 billingCycleConfiguration == other.billingCycleConfiguration &&
@@ -3785,7 +3785,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Unit{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, billingMode=$billingMode, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, unitConfig=$unitConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
+            "UnitPrice{id=$id, billableMetric=$billableMetric, billingCycleConfiguration=$billingCycleConfiguration, billingMode=$billingMode, cadence=$cadence, compositePriceFilters=$compositePriceFilters, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, createdAt=$createdAt, creditAllocation=$creditAllocation, currency=$currency, discount=$discount, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoicingCycleConfiguration=$invoicingCycleConfiguration, item=$item, maximum=$maximum, maximumAmount=$maximumAmount, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, modelType=$modelType, name=$name, planPhaseOrder=$planPhaseOrder, priceType=$priceType, replacesPriceId=$replacesPriceId, unitConfig=$unitConfig, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class Tiered
