@@ -474,6 +474,7 @@ private constructor(
             (if (perUnitCostBasis.asKnown().isPresent) 1 else 0) +
             (status.asKnown().getOrNull()?.validity() ?: 0)
 
+    /** A PriceFilter that only allows item_id field for block filters. */
     class Filter
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -495,7 +496,7 @@ private constructor(
         ) : this(field, operator, values, mutableMapOf())
 
         /**
-         * The property of the price to filter on.
+         * The property of the price the block applies to. Only item_id is supported.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -582,7 +583,7 @@ private constructor(
                 additionalProperties = filter.additionalProperties.toMutableMap()
             }
 
-            /** The property of the price to filter on. */
+            /** The property of the price the block applies to. Only item_id is supported. */
             fun field(field: Field) = field(JsonField.of(field))
 
             /**
@@ -707,7 +708,7 @@ private constructor(
                 (operator.asKnown().getOrNull()?.validity() ?: 0) +
                 (values.asKnown().getOrNull()?.size ?: 0)
 
-        /** The property of the price to filter on. */
+        /** The property of the price the block applies to. Only item_id is supported. */
         class Field @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
             /**
@@ -722,26 +723,14 @@ private constructor(
 
             companion object {
 
-                @JvmField val PRICE_ID = of("price_id")
-
                 @JvmField val ITEM_ID = of("item_id")
-
-                @JvmField val PRICE_TYPE = of("price_type")
-
-                @JvmField val CURRENCY = of("currency")
-
-                @JvmField val PRICING_UNIT_ID = of("pricing_unit_id")
 
                 @JvmStatic fun of(value: String) = Field(JsonField.of(value))
             }
 
             /** An enum containing [Field]'s known values. */
             enum class Known {
-                PRICE_ID,
-                ITEM_ID,
-                PRICE_TYPE,
-                CURRENCY,
-                PRICING_UNIT_ID,
+                ITEM_ID
             }
 
             /**
@@ -754,11 +743,7 @@ private constructor(
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
-                PRICE_ID,
                 ITEM_ID,
-                PRICE_TYPE,
-                CURRENCY,
-                PRICING_UNIT_ID,
                 /**
                  * An enum member indicating that [Field] was instantiated with an unknown value.
                  */
@@ -774,11 +759,7 @@ private constructor(
              */
             fun value(): Value =
                 when (this) {
-                    PRICE_ID -> Value.PRICE_ID
                     ITEM_ID -> Value.ITEM_ID
-                    PRICE_TYPE -> Value.PRICE_TYPE
-                    CURRENCY -> Value.CURRENCY
-                    PRICING_UNIT_ID -> Value.PRICING_UNIT_ID
                     else -> Value._UNKNOWN
                 }
 
@@ -793,11 +774,7 @@ private constructor(
              */
             fun known(): Known =
                 when (this) {
-                    PRICE_ID -> Known.PRICE_ID
                     ITEM_ID -> Known.ITEM_ID
-                    PRICE_TYPE -> Known.PRICE_TYPE
-                    CURRENCY -> Known.CURRENCY
-                    PRICING_UNIT_ID -> Known.PRICING_UNIT_ID
                     else -> throw OrbInvalidDataException("Unknown Field: $value")
                 }
 
