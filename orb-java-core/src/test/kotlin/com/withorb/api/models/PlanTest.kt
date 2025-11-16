@@ -38,14 +38,6 @@ internal class PlanTest {
                         .usageDiscount(0.0)
                         .build()
                 )
-                .basePlan(
-                    Plan.BasePlan.builder()
-                        .id("m2t5akQeh2obwxeU")
-                        .externalPlanId("m2t5akQeh2obwxeU")
-                        .name("Example plan")
-                        .build()
-                )
-                .basePlanId("base_plan_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .currency("currency")
                 .defaultInvoiceMemo("default_invoice_memo")
@@ -289,6 +281,14 @@ internal class PlanTest {
                         .build()
                 )
                 .version(0L)
+                .basePlan(
+                    Plan.BasePlan.builder()
+                        .id("m2t5akQeh2obwxeU")
+                        .externalPlanId("m2t5akQeh2obwxeU")
+                        .name("Example plan")
+                        .build()
+                )
+                .basePlanId("base_plan_id")
                 .build()
 
         assertThat(plan.id()).isEqualTo("id")
@@ -316,15 +316,6 @@ internal class PlanTest {
                         .build()
                 )
             )
-        assertThat(plan.basePlan())
-            .contains(
-                Plan.BasePlan.builder()
-                    .id("m2t5akQeh2obwxeU")
-                    .externalPlanId("m2t5akQeh2obwxeU")
-                    .name("Example plan")
-                    .build()
-            )
-        assertThat(plan.basePlanId()).contains("base_plan_id")
         assertThat(plan.createdAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(plan.currency()).isEqualTo("currency")
         assertThat(plan.defaultInvoiceMemo()).contains("default_invoice_memo")
@@ -580,6 +571,15 @@ internal class PlanTest {
                     .build()
             )
         assertThat(plan.version()).isEqualTo(0L)
+        assertThat(plan.basePlan())
+            .contains(
+                Plan.BasePlan.builder()
+                    .id("m2t5akQeh2obwxeU")
+                    .externalPlanId("m2t5akQeh2obwxeU")
+                    .name("Example plan")
+                    .build()
+            )
+        assertThat(plan.basePlanId()).contains("base_plan_id")
     }
 
     @Test
@@ -609,14 +609,6 @@ internal class PlanTest {
                         .usageDiscount(0.0)
                         .build()
                 )
-                .basePlan(
-                    Plan.BasePlan.builder()
-                        .id("m2t5akQeh2obwxeU")
-                        .externalPlanId("m2t5akQeh2obwxeU")
-                        .name("Example plan")
-                        .build()
-                )
-                .basePlanId("base_plan_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .currency("currency")
                 .defaultInvoiceMemo("default_invoice_memo")
@@ -860,6 +852,14 @@ internal class PlanTest {
                         .build()
                 )
                 .version(0L)
+                .basePlan(
+                    Plan.BasePlan.builder()
+                        .id("m2t5akQeh2obwxeU")
+                        .externalPlanId("m2t5akQeh2obwxeU")
+                        .name("Example plan")
+                        .build()
+                )
+                .basePlanId("base_plan_id")
                 .build()
 
         val roundtrippedPlan =
