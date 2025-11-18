@@ -14735,8 +14735,8 @@ private constructor(
 
         /**
          * If true, ending an in-arrears price interval mid-cycle will defer billing the final line
-         * itemuntil the next scheduled invoice. If false, it will be billed on its end date. If not
-         * provided, behaviorwill follow account default.
+         * item until the next scheduled invoice. If false, it will be billed on its end date. If
+         * not provided, behavior will follow account default.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -14969,8 +14969,8 @@ private constructor(
 
             /**
              * If true, ending an in-arrears price interval mid-cycle will defer billing the final
-             * line itemuntil the next scheduled invoice. If false, it will be billed on its end
-             * date. If not provided, behaviorwill follow account default.
+             * line item until the next scheduled invoice. If false, it will be billed on its end
+             * date. If not provided, behavior will follow account default.
              */
             fun canDeferBilling(canDeferBilling: Boolean?) =
                 canDeferBilling(JsonField.ofNullable(canDeferBilling))
