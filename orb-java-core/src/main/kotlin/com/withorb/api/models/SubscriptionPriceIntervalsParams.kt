@@ -136,9 +136,7 @@ private constructor(
     fun allowInvoiceCreditOrVoid(): Optional<Boolean> = body.allowInvoiceCreditOrVoid()
 
     /**
-     * If true, ending an in-arrears price interval mid-cycle will defer billing the final line
-     * itemuntil the next scheduled invoice. If false, it will be billed on its end date. If not
-     * provided, behaviorwill follow account default.
+     * If set, the default value to use for added/edited price intervals with an end_date set.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
@@ -342,9 +340,7 @@ private constructor(
         }
 
         /**
-         * If true, ending an in-arrears price interval mid-cycle will defer billing the final line
-         * itemuntil the next scheduled invoice. If false, it will be billed on its end date. If not
-         * provided, behaviorwill follow account default.
+         * If set, the default value to use for added/edited price intervals with an end_date set.
          */
         fun canDeferBilling(canDeferBilling: Boolean?) = apply {
             body.canDeferBilling(canDeferBilling)
@@ -625,9 +621,7 @@ private constructor(
             allowInvoiceCreditOrVoid.getOptional("allow_invoice_credit_or_void")
 
         /**
-         * If true, ending an in-arrears price interval mid-cycle will defer billing the final line
-         * itemuntil the next scheduled invoice. If false, it will be billed on its end date. If not
-         * provided, behaviorwill follow account default.
+         * If set, the default value to use for added/edited price intervals with an end_date set.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -831,9 +825,8 @@ private constructor(
             }
 
             /**
-             * If true, ending an in-arrears price interval mid-cycle will defer billing the final
-             * line itemuntil the next scheduled invoice. If false, it will be billed on its end
-             * date. If not provided, behaviorwill follow account default.
+             * If set, the default value to use for added/edited price intervals with an end_date
+             * set.
              */
             fun canDeferBilling(canDeferBilling: Boolean?) =
                 canDeferBilling(JsonField.ofNullable(canDeferBilling))
@@ -1027,6 +1020,7 @@ private constructor(
     private constructor(
         private val startDate: JsonField<StartDate>,
         private val allocationPrice: JsonField<NewAllocationPrice>,
+        private val canDeferBilling: JsonField<Boolean>,
         private val discounts: JsonField<List<Discount>>,
         private val endDate: JsonField<EndDate>,
         private val externalPriceId: JsonField<String>,
@@ -1048,6 +1042,9 @@ private constructor(
             @JsonProperty("allocation_price")
             @ExcludeMissing
             allocationPrice: JsonField<NewAllocationPrice> = JsonMissing.of(),
+            @JsonProperty("can_defer_billing")
+            @ExcludeMissing
+            canDeferBilling: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("discounts")
             @ExcludeMissing
             discounts: JsonField<List<Discount>> = JsonMissing.of(),
@@ -1076,6 +1073,7 @@ private constructor(
         ) : this(
             startDate,
             allocationPrice,
+            canDeferBilling,
             discounts,
             endDate,
             externalPriceId,
@@ -1106,6 +1104,15 @@ private constructor(
          */
         fun allocationPrice(): Optional<NewAllocationPrice> =
             allocationPrice.getOptional("allocation_price")
+
+        /**
+         * If true, an in-arrears price interval ending mid-cycle will defer billing the final line
+         * item until the next scheduled invoice. If false, it will be billed on its end date.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun canDeferBilling(): Optional<Boolean> = canDeferBilling.getOptional("can_defer_billing")
 
         /**
          * A list of discounts to initialize on the price interval.
@@ -1216,6 +1223,16 @@ private constructor(
         @JsonProperty("allocation_price")
         @ExcludeMissing
         fun _allocationPrice(): JsonField<NewAllocationPrice> = allocationPrice
+
+        /**
+         * Returns the raw JSON value of [canDeferBilling].
+         *
+         * Unlike [canDeferBilling], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("can_defer_billing")
+        @ExcludeMissing
+        fun _canDeferBilling(): JsonField<Boolean> = canDeferBilling
 
         /**
          * Returns the raw JSON value of [discounts].
@@ -1335,6 +1352,7 @@ private constructor(
 
             private var startDate: JsonField<StartDate>? = null
             private var allocationPrice: JsonField<NewAllocationPrice> = JsonMissing.of()
+            private var canDeferBilling: JsonField<Boolean> = JsonMissing.of()
             private var discounts: JsonField<MutableList<Discount>>? = null
             private var endDate: JsonField<EndDate> = JsonMissing.of()
             private var externalPriceId: JsonField<String> = JsonMissing.of()
@@ -1353,6 +1371,7 @@ private constructor(
             internal fun from(add: Add) = apply {
                 startDate = add.startDate
                 allocationPrice = add.allocationPrice
+                canDeferBilling = add.canDeferBilling
                 discounts = add.discounts.map { it.toMutableList() }
                 endDate = add.endDate
                 externalPriceId = add.externalPriceId
@@ -1409,6 +1428,37 @@ private constructor(
              */
             fun allocationPrice(allocationPrice: JsonField<NewAllocationPrice>) = apply {
                 this.allocationPrice = allocationPrice
+            }
+
+            /**
+             * If true, an in-arrears price interval ending mid-cycle will defer billing the final
+             * line item until the next scheduled invoice. If false, it will be billed on its end
+             * date.
+             */
+            fun canDeferBilling(canDeferBilling: Boolean?) =
+                canDeferBilling(JsonField.ofNullable(canDeferBilling))
+
+            /**
+             * Alias for [Builder.canDeferBilling].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun canDeferBilling(canDeferBilling: Boolean) =
+                canDeferBilling(canDeferBilling as Boolean?)
+
+            /** Alias for calling [Builder.canDeferBilling] with `canDeferBilling.orElse(null)`. */
+            fun canDeferBilling(canDeferBilling: Optional<Boolean>) =
+                canDeferBilling(canDeferBilling.getOrNull())
+
+            /**
+             * Sets [Builder.canDeferBilling] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.canDeferBilling] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun canDeferBilling(canDeferBilling: JsonField<Boolean>) = apply {
+                this.canDeferBilling = canDeferBilling
             }
 
             /** A list of discounts to initialize on the price interval. */
@@ -1915,6 +1965,7 @@ private constructor(
                 Add(
                     checkRequired("startDate", startDate),
                     allocationPrice,
+                    canDeferBilling,
                     (discounts ?: JsonMissing.of()).map { it.toImmutable() },
                     endDate,
                     externalPriceId,
@@ -1938,6 +1989,7 @@ private constructor(
 
             startDate().validate()
             allocationPrice().ifPresent { it.validate() }
+            canDeferBilling()
             discounts().ifPresent { it.forEach { it.validate() } }
             endDate().ifPresent { it.validate() }
             externalPriceId()
@@ -1969,6 +2021,7 @@ private constructor(
         internal fun validity(): Int =
             (startDate.asKnown().getOrNull()?.validity() ?: 0) +
                 (allocationPrice.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (canDeferBilling.asKnown().isPresent) 1 else 0) +
                 (discounts.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (endDate.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (externalPriceId.asKnown().isPresent) 1 else 0) +
@@ -13551,6 +13604,7 @@ private constructor(
             return other is Add &&
                 startDate == other.startDate &&
                 allocationPrice == other.allocationPrice &&
+                canDeferBilling == other.canDeferBilling &&
                 discounts == other.discounts &&
                 endDate == other.endDate &&
                 externalPriceId == other.externalPriceId &&
@@ -13568,6 +13622,7 @@ private constructor(
             Objects.hash(
                 startDate,
                 allocationPrice,
+                canDeferBilling,
                 discounts,
                 endDate,
                 externalPriceId,
@@ -13585,7 +13640,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Add{startDate=$startDate, allocationPrice=$allocationPrice, discounts=$discounts, endDate=$endDate, externalPriceId=$externalPriceId, filter=$filter, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, maximumAmount=$maximumAmount, minimumAmount=$minimumAmount, price=$price, priceId=$priceId, usageCustomerIds=$usageCustomerIds, additionalProperties=$additionalProperties}"
+            "Add{startDate=$startDate, allocationPrice=$allocationPrice, canDeferBilling=$canDeferBilling, discounts=$discounts, endDate=$endDate, externalPriceId=$externalPriceId, filter=$filter, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, maximumAmount=$maximumAmount, minimumAmount=$minimumAmount, price=$price, priceId=$priceId, usageCustomerIds=$usageCustomerIds, additionalProperties=$additionalProperties}"
     }
 
     class AddAdjustment
@@ -14734,9 +14789,8 @@ private constructor(
         fun billingCycleDay(): Optional<Long> = billingCycleDay.getOptional("billing_cycle_day")
 
         /**
-         * If true, ending an in-arrears price interval mid-cycle will defer billing the final line
-         * item until the next scheduled invoice. If false, it will be billed on its end date. If
-         * not provided, behavior will follow account default.
+         * If true, an in-arrears price interval ending mid-cycle will defer billing the final line
+         * item until the next scheduled invoice. If false, it will be billed on its end date.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -14968,9 +15022,9 @@ private constructor(
             }
 
             /**
-             * If true, ending an in-arrears price interval mid-cycle will defer billing the final
+             * If true, an in-arrears price interval ending mid-cycle will defer billing the final
              * line item until the next scheduled invoice. If false, it will be billed on its end
-             * date. If not provided, behavior will follow account default.
+             * date.
              */
             fun canDeferBilling(canDeferBilling: Boolean?) =
                 canDeferBilling(JsonField.ofNullable(canDeferBilling))

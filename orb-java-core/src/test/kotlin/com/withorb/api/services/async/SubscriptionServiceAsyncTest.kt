@@ -102,6 +102,8 @@ internal class SubscriptionServiceAsyncTest {
                                             .addValue("string")
                                             .build()
                                     )
+                                    .itemId("item_id")
+                                    .perUnitCostBasis("per_unit_cost_basis")
                                     .build()
                             )
                             .addDiscount(
@@ -271,6 +273,8 @@ internal class SubscriptionServiceAsyncTest {
                                             .addValue("string")
                                             .build()
                                     )
+                                    .itemId("item_id")
+                                    .perUnitCostBasis("per_unit_cost_basis")
                                     .build()
                             )
                             .addDiscount(
@@ -543,8 +547,11 @@ internal class SubscriptionServiceAsyncTest {
                                             .addValue("string")
                                             .build()
                                     )
+                                    .itemId("item_id")
+                                    .perUnitCostBasis("per_unit_cost_basis")
                                     .build()
                             )
+                            .canDeferBilling(true)
                             .addAmountDiscount(0.0)
                             .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .externalPriceId("external_price_id")
@@ -776,6 +783,8 @@ internal class SubscriptionServiceAsyncTest {
                                             .addValue("string")
                                             .build()
                                     )
+                                    .itemId("item_id")
+                                    .perUnitCostBasis("per_unit_cost_basis")
                                     .build()
                             )
                             .addDiscount(
@@ -936,6 +945,8 @@ internal class SubscriptionServiceAsyncTest {
                                             .addValue("string")
                                             .build()
                                     )
+                                    .itemId("item_id")
+                                    .perUnitCostBasis("per_unit_cost_basis")
                                     .build()
                             )
                             .addDiscount(
