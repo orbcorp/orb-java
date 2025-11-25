@@ -31,6 +31,8 @@ internal class NewAllocationPriceTest {
                         .addValue("string")
                         .build()
                 )
+                .itemId("item_id")
+                .perUnitCostBasis("per_unit_cost_basis")
                 .build()
 
         assertThat(newAllocationPrice.amount()).isEqualTo("10.00")
@@ -52,6 +54,8 @@ internal class NewAllocationPriceTest {
                     .addValue("string")
                     .build()
             )
+        assertThat(newAllocationPrice.itemId()).contains("item_id")
+        assertThat(newAllocationPrice.perUnitCostBasis()).contains("per_unit_cost_basis")
     }
 
     @Test
@@ -76,6 +80,8 @@ internal class NewAllocationPriceTest {
                         .addValue("string")
                         .build()
                 )
+                .itemId("item_id")
+                .perUnitCostBasis("per_unit_cost_basis")
                 .build()
 
         val roundtrippedNewAllocationPrice =
