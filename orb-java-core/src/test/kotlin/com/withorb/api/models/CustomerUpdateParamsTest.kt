@@ -53,6 +53,20 @@ internal class CustomerUpdateParamsTest {
                     .build()
             )
             .name("name")
+            .paymentConfiguration(
+                CustomerUpdateParams.PaymentConfiguration.builder()
+                    .addPaymentProvider(
+                        CustomerUpdateParams.PaymentConfiguration.PaymentProvider.builder()
+                            .providerType(
+                                CustomerUpdateParams.PaymentConfiguration.PaymentProvider
+                                    .ProviderType
+                                    .STRIPE
+                            )
+                            .addExcludedPaymentMethodType("string")
+                            .build()
+                    )
+                    .build()
+            )
             .paymentProvider(CustomerUpdateParams.PaymentProvider.QUICKBOOKS)
             .paymentProviderId("payment_provider_id")
             .reportingConfiguration(NewReportingConfiguration.builder().exempt(true).build())
@@ -138,6 +152,20 @@ internal class CustomerUpdateParamsTest {
                         .build()
                 )
                 .name("name")
+                .paymentConfiguration(
+                    CustomerUpdateParams.PaymentConfiguration.builder()
+                        .addPaymentProvider(
+                            CustomerUpdateParams.PaymentConfiguration.PaymentProvider.builder()
+                                .providerType(
+                                    CustomerUpdateParams.PaymentConfiguration.PaymentProvider
+                                        .ProviderType
+                                        .STRIPE
+                                )
+                                .addExcludedPaymentMethodType("string")
+                                .build()
+                        )
+                        .build()
+                )
                 .paymentProvider(CustomerUpdateParams.PaymentProvider.QUICKBOOKS)
                 .paymentProviderId("payment_provider_id")
                 .reportingConfiguration(NewReportingConfiguration.builder().exempt(true).build())
@@ -214,6 +242,21 @@ internal class CustomerUpdateParamsTest {
                     .build()
             )
         assertThat(body.name()).contains("name")
+        assertThat(body.paymentConfiguration())
+            .contains(
+                CustomerUpdateParams.PaymentConfiguration.builder()
+                    .addPaymentProvider(
+                        CustomerUpdateParams.PaymentConfiguration.PaymentProvider.builder()
+                            .providerType(
+                                CustomerUpdateParams.PaymentConfiguration.PaymentProvider
+                                    .ProviderType
+                                    .STRIPE
+                            )
+                            .addExcludedPaymentMethodType("string")
+                            .build()
+                    )
+                    .build()
+            )
         assertThat(body.paymentProvider()).contains(CustomerUpdateParams.PaymentProvider.QUICKBOOKS)
         assertThat(body.paymentProviderId()).contains("payment_provider_id")
         assertThat(body.reportingConfiguration())
