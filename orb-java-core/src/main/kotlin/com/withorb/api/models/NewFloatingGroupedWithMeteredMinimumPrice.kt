@@ -1560,8 +1560,6 @@ private constructor(
             ) : this(scalingFactor, scalingValue, mutableMapOf())
 
             /**
-             * Scaling factor
-             *
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -1569,8 +1567,6 @@ private constructor(
             fun scalingFactor(): String = scalingFactor.getRequired("scaling_factor")
 
             /**
-             * Scaling value
-             *
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -1637,7 +1633,6 @@ private constructor(
                     additionalProperties = scalingFactor.additionalProperties.toMutableMap()
                 }
 
-                /** Scaling factor */
                 fun scalingFactor(scalingFactor: String) =
                     scalingFactor(JsonField.of(scalingFactor))
 
@@ -1652,7 +1647,6 @@ private constructor(
                     this.scalingFactor = scalingFactor
                 }
 
-                /** Scaling value */
                 fun scalingValue(scalingValue: String) = scalingValue(JsonField.of(scalingValue))
 
                 /**
@@ -1781,8 +1775,6 @@ private constructor(
             ) : this(pricingValue, unitAmount, mutableMapOf())
 
             /**
-             * Pricing value
-             *
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -1858,7 +1850,6 @@ private constructor(
                     additionalProperties = unitAmount.additionalProperties.toMutableMap()
                 }
 
-                /** Pricing value */
                 fun pricingValue(pricingValue: String) = pricingValue(JsonField.of(pricingValue))
 
                 /**
