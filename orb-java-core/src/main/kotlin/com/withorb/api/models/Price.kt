@@ -20644,8 +20644,6 @@ private constructor(
                 ) : this(threshold, totalAmount, mutableMapOf())
 
                 /**
-                 * Quantity threshold
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -20721,7 +20719,6 @@ private constructor(
                         additionalProperties = consumptionTable.additionalProperties.toMutableMap()
                     }
 
-                    /** Quantity threshold */
                     fun threshold(threshold: String) = threshold(JsonField.of(threshold))
 
                     /**
@@ -23547,8 +23544,6 @@ private constructor(
             ) : this(packageSize, tiers, mutableMapOf())
 
             /**
-             * Package size
-             *
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -23624,7 +23619,6 @@ private constructor(
                     additionalProperties = tieredPackageConfig.additionalProperties.toMutableMap()
                 }
 
-                /** Package size */
                 fun packageSize(packageSize: String) = packageSize(JsonField.of(packageSize))
 
                 /**
@@ -23772,8 +23766,6 @@ private constructor(
                 fun perUnit(): String = perUnit.getRequired("per_unit")
 
                 /**
-                 * Tier lower bound
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -23852,7 +23844,6 @@ private constructor(
                      */
                     fun perUnit(perUnit: JsonField<String>) = apply { this.perUnit = perUnit }
 
-                    /** Tier lower bound */
                     fun tierLowerBound(tierLowerBound: String) =
                         tierLowerBound(JsonField.of(tierLowerBound))
 
@@ -26920,8 +26911,6 @@ private constructor(
                 ) : this(minimumAmount, tierLowerBound, unitAmount, mutableMapOf())
 
                 /**
-                 * Minimum amount
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -26929,8 +26918,6 @@ private constructor(
                 fun minimumAmount(): String = minimumAmount.getRequired("minimum_amount")
 
                 /**
-                 * Tier lower bound
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -27019,7 +27006,6 @@ private constructor(
                         additionalProperties = tier.additionalProperties.toMutableMap()
                     }
 
-                    /** Minimum amount */
                     fun minimumAmount(minimumAmount: String) =
                         minimumAmount(JsonField.of(minimumAmount))
 
@@ -27034,7 +27020,6 @@ private constructor(
                         this.minimumAmount = minimumAmount
                     }
 
-                    /** Tier lower bound */
                     fun tierLowerBound(tierLowerBound: String) =
                         tierLowerBound(JsonField.of(tierLowerBound))
 
@@ -29836,8 +29821,6 @@ private constructor(
                 ) : this(tierLowerBound, unitAmount, mutableMapOf())
 
                 /**
-                 * Tier lower bound
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -29913,7 +29896,6 @@ private constructor(
                         additionalProperties = tier.additionalProperties.toMutableMap()
                     }
 
-                    /** Tier lower bound */
                     fun tierLowerBound(tierLowerBound: String) =
                         tierLowerBound(JsonField.of(tierLowerBound))
 
@@ -32990,8 +32972,6 @@ private constructor(
             ) : this(packageSize, tiers, mutableMapOf())
 
             /**
-             * Package size
-             *
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -33068,7 +33048,6 @@ private constructor(
                             tieredPackageWithMinimumConfig.additionalProperties.toMutableMap()
                     }
 
-                /** Package size */
                 fun packageSize(packageSize: Double) = packageSize(JsonField.of(packageSize))
 
                 /**
@@ -33209,8 +33188,6 @@ private constructor(
                 ) : this(minimumAmount, perUnit, tierLowerBound, mutableMapOf())
 
                 /**
-                 * Minimum amount
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -33218,8 +33195,6 @@ private constructor(
                 fun minimumAmount(): String = minimumAmount.getRequired("minimum_amount")
 
                 /**
-                 * Price per package
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -33227,8 +33202,6 @@ private constructor(
                 fun perUnit(): String = perUnit.getRequired("per_unit")
 
                 /**
-                 * Tier lower bound
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -33308,7 +33281,6 @@ private constructor(
                         additionalProperties = tier.additionalProperties.toMutableMap()
                     }
 
-                    /** Minimum amount */
                     fun minimumAmount(minimumAmount: String) =
                         minimumAmount(JsonField.of(minimumAmount))
 
@@ -33323,7 +33295,6 @@ private constructor(
                         this.minimumAmount = minimumAmount
                     }
 
-                    /** Price per package */
                     fun perUnit(perUnit: String) = perUnit(JsonField.of(perUnit))
 
                     /**
@@ -33335,7 +33306,6 @@ private constructor(
                      */
                     fun perUnit(perUnit: JsonField<String>) = apply { this.perUnit = perUnit }
 
-                    /** Tier lower bound */
                     fun tierLowerBound(tierLowerBound: String) =
                         tierLowerBound(JsonField.of(tierLowerBound))
 
@@ -36024,8 +35994,6 @@ private constructor(
             ) : this(allocation, packageAmount, packageSize, mutableMapOf())
 
             /**
-             * Usage allocation
-             *
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -36033,8 +36001,6 @@ private constructor(
             fun allocation(): String = allocation.getRequired("allocation")
 
             /**
-             * Price per package
-             *
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -36042,8 +36008,6 @@ private constructor(
             fun packageAmount(): String = packageAmount.getRequired("package_amount")
 
             /**
-             * Package size
-             *
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -36126,7 +36090,6 @@ private constructor(
                             packageWithAllocationConfig.additionalProperties.toMutableMap()
                     }
 
-                /** Usage allocation */
                 fun allocation(allocation: String) = allocation(JsonField.of(allocation))
 
                 /**
@@ -36140,7 +36103,6 @@ private constructor(
                     this.allocation = allocation
                 }
 
-                /** Price per package */
                 fun packageAmount(packageAmount: String) =
                     packageAmount(JsonField.of(packageAmount))
 
@@ -36155,7 +36117,6 @@ private constructor(
                     this.packageAmount = packageAmount
                 }
 
-                /** Package size */
                 fun packageSize(packageSize: String) = packageSize(JsonField.of(packageSize))
 
                 /**
@@ -59669,8 +59630,6 @@ private constructor(
                 ) : this(scalingFactor, scalingValue, mutableMapOf())
 
                 /**
-                 * Scaling factor
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -59678,8 +59637,6 @@ private constructor(
                 fun scalingFactor(): String = scalingFactor.getRequired("scaling_factor")
 
                 /**
-                 * Scaling value
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -59746,7 +59703,6 @@ private constructor(
                         additionalProperties = scalingFactor.additionalProperties.toMutableMap()
                     }
 
-                    /** Scaling factor */
                     fun scalingFactor(scalingFactor: String) =
                         scalingFactor(JsonField.of(scalingFactor))
 
@@ -59761,7 +59717,6 @@ private constructor(
                         this.scalingFactor = scalingFactor
                     }
 
-                    /** Scaling value */
                     fun scalingValue(scalingValue: String) =
                         scalingValue(JsonField.of(scalingValue))
 
@@ -59891,8 +59846,6 @@ private constructor(
                 ) : this(pricingValue, unitAmount, mutableMapOf())
 
                 /**
-                 * Pricing value
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -59968,7 +59921,6 @@ private constructor(
                         additionalProperties = unitAmount.additionalProperties.toMutableMap()
                     }
 
-                    /** Pricing value */
                     fun pricingValue(pricingValue: String) =
                         pricingValue(JsonField.of(pricingValue))
 
@@ -68985,8 +68937,6 @@ private constructor(
             fun groupingKey(): String = groupingKey.getRequired("grouping_key")
 
             /**
-             * Package size
-             *
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -69089,7 +69039,6 @@ private constructor(
                     this.groupingKey = groupingKey
                 }
 
-                /** Package size */
                 fun packageSize(packageSize: String) = packageSize(JsonField.of(packageSize))
 
                 /**
@@ -69230,7 +69179,7 @@ private constructor(
                 ) : this(perUnit, tierLowerBound, mutableMapOf())
 
                 /**
-                 * Price per package
+                 * Per package
                  *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -69239,8 +69188,6 @@ private constructor(
                 fun perUnit(): String = perUnit.getRequired("per_unit")
 
                 /**
-                 * Tier lower bound
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -69307,7 +69254,7 @@ private constructor(
                         additionalProperties = tier.additionalProperties.toMutableMap()
                     }
 
-                    /** Price per package */
+                    /** Per package */
                     fun perUnit(perUnit: String) = perUnit(JsonField.of(perUnit))
 
                     /**
@@ -69319,7 +69266,6 @@ private constructor(
                      */
                     fun perUnit(perUnit: JsonField<String>) = apply { this.perUnit = perUnit }
 
-                    /** Tier lower bound */
                     fun tierLowerBound(tierLowerBound: String) =
                         tierLowerBound(JsonField.of(tierLowerBound))
 
@@ -72148,8 +72094,6 @@ private constructor(
             fun groupingKey(): String = groupingKey.getRequired("grouping_key")
 
             /**
-             * Package size
-             *
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -72254,7 +72198,6 @@ private constructor(
                     this.groupingKey = groupingKey
                 }
 
-                /** Package size */
                 fun packageSize(packageSize: String) = packageSize(JsonField.of(packageSize))
 
                 /**
@@ -72394,8 +72337,6 @@ private constructor(
                 ) : this(tierLowerBound, unitAmount, mutableMapOf())
 
                 /**
-                 * Tier lower bound
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -72471,7 +72412,6 @@ private constructor(
                         additionalProperties = tier.additionalProperties.toMutableMap()
                     }
 
-                    /** Tier lower bound */
                     fun tierLowerBound(tierLowerBound: String) =
                         tierLowerBound(JsonField.of(tierLowerBound))
 
@@ -75943,8 +75883,6 @@ private constructor(
                 ) : this(firstDimensionValue, scalingFactor, secondDimensionValue, mutableMapOf())
 
                 /**
-                 * First dimension value
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -75953,8 +75891,6 @@ private constructor(
                     firstDimensionValue.getRequired("first_dimension_value")
 
                 /**
-                 * Scaling factor
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -75962,8 +75898,6 @@ private constructor(
                 fun scalingFactor(): String = scalingFactor.getRequired("scaling_factor")
 
                 /**
-                 * Second dimension value (optional)
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
@@ -76044,7 +75978,6 @@ private constructor(
                             matrixScalingFactor.additionalProperties.toMutableMap()
                     }
 
-                    /** First dimension value */
                     fun firstDimensionValue(firstDimensionValue: String) =
                         firstDimensionValue(JsonField.of(firstDimensionValue))
 
@@ -76059,7 +75992,6 @@ private constructor(
                         this.firstDimensionValue = firstDimensionValue
                     }
 
-                    /** Scaling factor */
                     fun scalingFactor(scalingFactor: String) =
                         scalingFactor(JsonField.of(scalingFactor))
 
@@ -76074,7 +76006,6 @@ private constructor(
                         this.scalingFactor = scalingFactor
                     }
 
-                    /** Second dimension value (optional) */
                     fun secondDimensionValue(secondDimensionValue: String?) =
                         secondDimensionValue(JsonField.ofNullable(secondDimensionValue))
 
@@ -78969,8 +78900,6 @@ private constructor(
                 matrixScalingFactors.getRequired("matrix_scaling_factors")
 
             /**
-             * Tier pricing structure
-             *
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -79120,7 +79049,6 @@ private constructor(
                         }
                 }
 
-                /** Tier pricing structure */
                 fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
 
                 /**
@@ -79275,8 +79203,6 @@ private constructor(
                 ) : this(firstDimensionValue, scalingFactor, secondDimensionValue, mutableMapOf())
 
                 /**
-                 * First dimension value
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -79285,8 +79211,6 @@ private constructor(
                     firstDimensionValue.getRequired("first_dimension_value")
 
                 /**
-                 * Scaling factor
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -79294,8 +79218,6 @@ private constructor(
                 fun scalingFactor(): String = scalingFactor.getRequired("scaling_factor")
 
                 /**
-                 * Second dimension value (optional)
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
                  *   the server responded with an unexpected value).
                  */
@@ -79376,7 +79298,6 @@ private constructor(
                             matrixScalingFactor.additionalProperties.toMutableMap()
                     }
 
-                    /** First dimension value */
                     fun firstDimensionValue(firstDimensionValue: String) =
                         firstDimensionValue(JsonField.of(firstDimensionValue))
 
@@ -79391,7 +79312,6 @@ private constructor(
                         this.firstDimensionValue = firstDimensionValue
                     }
 
-                    /** Scaling factor */
                     fun scalingFactor(scalingFactor: String) =
                         scalingFactor(JsonField.of(scalingFactor))
 
@@ -79406,7 +79326,6 @@ private constructor(
                         this.scalingFactor = scalingFactor
                     }
 
-                    /** Second dimension value (optional) */
                     fun secondDimensionValue(secondDimensionValue: String?) =
                         secondDimensionValue(JsonField.ofNullable(secondDimensionValue))
 
@@ -79552,8 +79471,6 @@ private constructor(
                 ) : this(tierLowerBound, unitAmount, mutableMapOf())
 
                 /**
-                 * Tier lower bound
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -79561,8 +79478,6 @@ private constructor(
                 fun tierLowerBound(): String = tierLowerBound.getRequired("tier_lower_bound")
 
                 /**
-                 * Per unit amount
-                 *
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
                  *   unexpectedly missing or null (e.g. if the server responded with an unexpected
                  *   value).
@@ -79629,7 +79544,6 @@ private constructor(
                         additionalProperties = tier.additionalProperties.toMutableMap()
                     }
 
-                    /** Tier lower bound */
                     fun tierLowerBound(tierLowerBound: String) =
                         tierLowerBound(JsonField.of(tierLowerBound))
 
@@ -79644,7 +79558,6 @@ private constructor(
                         this.tierLowerBound = tierLowerBound
                     }
 
-                    /** Per unit amount */
                     fun unitAmount(unitAmount: String) = unitAmount(JsonField.of(unitAmount))
 
                     /**
@@ -82233,8 +82146,6 @@ private constructor(
                 dimensionValues.getRequired("dimension_values")
 
             /**
-             * Grouping key name
-             *
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -82329,7 +82240,6 @@ private constructor(
                         }
                 }
 
-                /** Grouping key name */
                 fun group(group: String) = group(JsonField.of(group))
 
                 /**

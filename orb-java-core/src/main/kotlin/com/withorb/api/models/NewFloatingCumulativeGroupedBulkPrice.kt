@@ -1161,8 +1161,6 @@ private constructor(
             dimensionValues.getRequired("dimension_values")
 
         /**
-         * Grouping key name
-         *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -1255,7 +1253,6 @@ private constructor(
                     }
             }
 
-            /** Grouping key name */
             fun group(group: String) = group(JsonField.of(group))
 
             /**

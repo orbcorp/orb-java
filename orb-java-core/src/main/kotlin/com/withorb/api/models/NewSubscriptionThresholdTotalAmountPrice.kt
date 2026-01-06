@@ -1542,8 +1542,6 @@ private constructor(
             ) : this(threshold, totalAmount, mutableMapOf())
 
             /**
-             * Quantity threshold
-             *
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -1619,7 +1617,6 @@ private constructor(
                     additionalProperties = consumptionTable.additionalProperties.toMutableMap()
                 }
 
-                /** Quantity threshold */
                 fun threshold(threshold: String) = threshold(JsonField.of(threshold))
 
                 /**

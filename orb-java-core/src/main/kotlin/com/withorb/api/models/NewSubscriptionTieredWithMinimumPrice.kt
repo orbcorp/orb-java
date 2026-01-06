@@ -1568,8 +1568,6 @@ private constructor(
             ) : this(minimumAmount, tierLowerBound, unitAmount, mutableMapOf())
 
             /**
-             * Minimum amount
-             *
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -1577,8 +1575,6 @@ private constructor(
             fun minimumAmount(): String = minimumAmount.getRequired("minimum_amount")
 
             /**
-             * Tier lower bound
-             *
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -1667,7 +1663,6 @@ private constructor(
                     additionalProperties = tier.additionalProperties.toMutableMap()
                 }
 
-                /** Minimum amount */
                 fun minimumAmount(minimumAmount: String) =
                     minimumAmount(JsonField.of(minimumAmount))
 
@@ -1682,7 +1677,6 @@ private constructor(
                     this.minimumAmount = minimumAmount
                 }
 
-                /** Tier lower bound */
                 fun tierLowerBound(tierLowerBound: String) =
                     tierLowerBound(JsonField.of(tierLowerBound))
 
