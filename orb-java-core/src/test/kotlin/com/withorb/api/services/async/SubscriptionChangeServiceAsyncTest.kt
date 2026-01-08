@@ -29,6 +29,21 @@ internal class SubscriptionChangeServiceAsyncTest {
     }
 
     @Test
+    fun list() {
+        val client =
+            OrbOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val subscriptionChangeServiceAsync = client.subscriptionChanges()
+
+        val pageFuture = subscriptionChangeServiceAsync.list()
+
+        val page = pageFuture.get()
+        page.response().validate()
+    }
+
+    @Test
     fun apply() {
         val client =
             OrbOkHttpClientAsync.builder()
