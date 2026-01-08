@@ -6,6 +6,7 @@ import com.withorb.api.core.ClientOptions
 import com.withorb.api.services.async.AlertServiceAsync
 import com.withorb.api.services.async.BetaServiceAsync
 import com.withorb.api.services.async.CouponServiceAsync
+import com.withorb.api.services.async.CreditBlockServiceAsync
 import com.withorb.api.services.async.CreditNoteServiceAsync
 import com.withorb.api.services.async.CustomerServiceAsync
 import com.withorb.api.services.async.DimensionalPriceGroupServiceAsync
@@ -89,6 +90,8 @@ interface OrbClientAsync {
 
     fun subscriptionChanges(): SubscriptionChangeServiceAsync
 
+    fun creditBlocks(): CreditBlockServiceAsync
+
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -143,5 +146,7 @@ interface OrbClientAsync {
         fun dimensionalPriceGroups(): DimensionalPriceGroupServiceAsync.WithRawResponse
 
         fun subscriptionChanges(): SubscriptionChangeServiceAsync.WithRawResponse
+
+        fun creditBlocks(): CreditBlockServiceAsync.WithRawResponse
     }
 }

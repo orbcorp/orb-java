@@ -10,6 +10,8 @@ import com.withorb.api.models.SubscriptionChangeApplyParams
 import com.withorb.api.models.SubscriptionChangeApplyResponse
 import com.withorb.api.models.SubscriptionChangeCancelParams
 import com.withorb.api.models.SubscriptionChangeCancelResponse
+import com.withorb.api.models.SubscriptionChangeListPage
+import com.withorb.api.models.SubscriptionChangeListParams
 import com.withorb.api.models.SubscriptionChangeRetrieveParams
 import com.withorb.api.models.SubscriptionChangeRetrieveResponse
 import java.util.function.Consumer
@@ -75,6 +77,28 @@ interface SubscriptionChangeService {
         requestOptions: RequestOptions,
     ): SubscriptionChangeRetrieveResponse =
         retrieve(subscriptionChangeId, SubscriptionChangeRetrieveParams.none(), requestOptions)
+
+    /**
+     * This endpoint returns a list of pending subscription changes for a customer. Use the
+     * [Fetch Subscription Change](fetch-subscription-change) endpoint to retrieve the expected
+     * subscription state after the pending change is applied.
+     */
+    fun list(): SubscriptionChangeListPage = list(SubscriptionChangeListParams.none())
+
+    /** @see list */
+    fun list(
+        params: SubscriptionChangeListParams = SubscriptionChangeListParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): SubscriptionChangeListPage
+
+    /** @see list */
+    fun list(
+        params: SubscriptionChangeListParams = SubscriptionChangeListParams.none()
+    ): SubscriptionChangeListPage = list(params, RequestOptions.none())
+
+    /** @see list */
+    fun list(requestOptions: RequestOptions): SubscriptionChangeListPage =
+        list(SubscriptionChangeListParams.none(), requestOptions)
 
     /**
      * Apply a subscription change to perform the intended action. If a positive amount is passed
@@ -224,6 +248,32 @@ interface SubscriptionChangeService {
             requestOptions: RequestOptions,
         ): HttpResponseFor<SubscriptionChangeRetrieveResponse> =
             retrieve(subscriptionChangeId, SubscriptionChangeRetrieveParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /subscription_changes`, but is otherwise the same as
+         * [SubscriptionChangeService.list].
+         */
+        @MustBeClosed
+        fun list(): HttpResponseFor<SubscriptionChangeListPage> =
+            list(SubscriptionChangeListParams.none())
+
+        /** @see list */
+        @MustBeClosed
+        fun list(
+            params: SubscriptionChangeListParams = SubscriptionChangeListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionChangeListPage>
+
+        /** @see list */
+        @MustBeClosed
+        fun list(
+            params: SubscriptionChangeListParams = SubscriptionChangeListParams.none()
+        ): HttpResponseFor<SubscriptionChangeListPage> = list(params, RequestOptions.none())
+
+        /** @see list */
+        @MustBeClosed
+        fun list(requestOptions: RequestOptions): HttpResponseFor<SubscriptionChangeListPage> =
+            list(SubscriptionChangeListParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post
