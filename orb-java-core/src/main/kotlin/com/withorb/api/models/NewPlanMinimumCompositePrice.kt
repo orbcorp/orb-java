@@ -24,7 +24,7 @@ class NewPlanMinimumCompositePrice
 private constructor(
     private val cadence: JsonField<Cadence>,
     private val itemId: JsonField<String>,
-    private val minimumConfig: JsonField<MinimumConfig>,
+    private val minimumCompositeConfig: JsonField<MinimumCompositeConfig>,
     private val modelType: JsonField<ModelType>,
     private val name: JsonField<String>,
     private val billableMetricId: JsonField<String>,
@@ -47,9 +47,9 @@ private constructor(
     private constructor(
         @JsonProperty("cadence") @ExcludeMissing cadence: JsonField<Cadence> = JsonMissing.of(),
         @JsonProperty("item_id") @ExcludeMissing itemId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("minimum_config")
+        @JsonProperty("minimum_composite_config")
         @ExcludeMissing
-        minimumConfig: JsonField<MinimumConfig> = JsonMissing.of(),
+        minimumCompositeConfig: JsonField<MinimumCompositeConfig> = JsonMissing.of(),
         @JsonProperty("model_type")
         @ExcludeMissing
         modelType: JsonField<ModelType> = JsonMissing.of(),
@@ -93,7 +93,7 @@ private constructor(
     ) : this(
         cadence,
         itemId,
-        minimumConfig,
+        minimumCompositeConfig,
         modelType,
         name,
         billableMetricId,
@@ -129,12 +129,13 @@ private constructor(
     fun itemId(): String = itemId.getRequired("item_id")
 
     /**
-     * Configuration for minimum pricing
+     * Configuration for minimum_composite pricing
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun minimumConfig(): MinimumConfig = minimumConfig.getRequired("minimum_config")
+    fun minimumCompositeConfig(): MinimumCompositeConfig =
+        minimumCompositeConfig.getRequired("minimum_composite_config")
 
     /**
      * The pricing model type
@@ -283,13 +284,14 @@ private constructor(
     @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
 
     /**
-     * Returns the raw JSON value of [minimumConfig].
+     * Returns the raw JSON value of [minimumCompositeConfig].
      *
-     * Unlike [minimumConfig], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [minimumCompositeConfig], this method doesn't throw if the JSON field has an
+     * unexpected type.
      */
-    @JsonProperty("minimum_config")
+    @JsonProperty("minimum_composite_config")
     @ExcludeMissing
-    fun _minimumConfig(): JsonField<MinimumConfig> = minimumConfig
+    fun _minimumCompositeConfig(): JsonField<MinimumCompositeConfig> = minimumCompositeConfig
 
     /**
      * Returns the raw JSON value of [modelType].
@@ -449,7 +451,7 @@ private constructor(
          * ```java
          * .cadence()
          * .itemId()
-         * .minimumConfig()
+         * .minimumCompositeConfig()
          * .modelType()
          * .name()
          * ```
@@ -462,7 +464,7 @@ private constructor(
 
         private var cadence: JsonField<Cadence>? = null
         private var itemId: JsonField<String>? = null
-        private var minimumConfig: JsonField<MinimumConfig>? = null
+        private var minimumCompositeConfig: JsonField<MinimumCompositeConfig>? = null
         private var modelType: JsonField<ModelType>? = null
         private var name: JsonField<String>? = null
         private var billableMetricId: JsonField<String> = JsonMissing.of()
@@ -487,7 +489,7 @@ private constructor(
         internal fun from(newPlanMinimumCompositePrice: NewPlanMinimumCompositePrice) = apply {
             cadence = newPlanMinimumCompositePrice.cadence
             itemId = newPlanMinimumCompositePrice.itemId
-            minimumConfig = newPlanMinimumCompositePrice.minimumConfig
+            minimumCompositeConfig = newPlanMinimumCompositePrice.minimumCompositeConfig
             modelType = newPlanMinimumCompositePrice.modelType
             name = newPlanMinimumCompositePrice.name
             billableMetricId = newPlanMinimumCompositePrice.billableMetricId
@@ -529,19 +531,21 @@ private constructor(
          */
         fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
-        /** Configuration for minimum pricing */
-        fun minimumConfig(minimumConfig: MinimumConfig) = minimumConfig(JsonField.of(minimumConfig))
+        /** Configuration for minimum_composite pricing */
+        fun minimumCompositeConfig(minimumCompositeConfig: MinimumCompositeConfig) =
+            minimumCompositeConfig(JsonField.of(minimumCompositeConfig))
 
         /**
-         * Sets [Builder.minimumConfig] to an arbitrary JSON value.
+         * Sets [Builder.minimumCompositeConfig] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.minimumConfig] with a well-typed [MinimumConfig] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.minimumCompositeConfig] with a well-typed
+         * [MinimumCompositeConfig] value instead. This method is primarily for setting the field to
+         * an undocumented or not yet supported value.
          */
-        fun minimumConfig(minimumConfig: JsonField<MinimumConfig>) = apply {
-            this.minimumConfig = minimumConfig
-        }
+        fun minimumCompositeConfig(minimumCompositeConfig: JsonField<MinimumCompositeConfig>) =
+            apply {
+                this.minimumCompositeConfig = minimumCompositeConfig
+            }
 
         /** The pricing model type */
         fun modelType(modelType: ModelType) = modelType(JsonField.of(modelType))
@@ -931,7 +935,7 @@ private constructor(
          * ```java
          * .cadence()
          * .itemId()
-         * .minimumConfig()
+         * .minimumCompositeConfig()
          * .modelType()
          * .name()
          * ```
@@ -942,7 +946,7 @@ private constructor(
             NewPlanMinimumCompositePrice(
                 checkRequired("cadence", cadence),
                 checkRequired("itemId", itemId),
-                checkRequired("minimumConfig", minimumConfig),
+                checkRequired("minimumCompositeConfig", minimumCompositeConfig),
                 checkRequired("modelType", modelType),
                 checkRequired("name", name),
                 billableMetricId,
@@ -971,7 +975,7 @@ private constructor(
 
         cadence().validate()
         itemId()
-        minimumConfig().validate()
+        minimumCompositeConfig().validate()
         modelType().validate()
         name()
         billableMetricId()
@@ -1007,7 +1011,7 @@ private constructor(
     internal fun validity(): Int =
         (cadence.asKnown().getOrNull()?.validity() ?: 0) +
             (if (itemId.asKnown().isPresent) 1 else 0) +
-            (minimumConfig.asKnown().getOrNull()?.validity() ?: 0) +
+            (minimumCompositeConfig.asKnown().getOrNull()?.validity() ?: 0) +
             (modelType.asKnown().getOrNull()?.validity() ?: 0) +
             (if (name.asKnown().isPresent) 1 else 0) +
             (if (billableMetricId.asKnown().isPresent) 1 else 0) +
@@ -1173,8 +1177,8 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    /** Configuration for minimum pricing */
-    class MinimumConfig
+    /** Configuration for minimum_composite pricing */
+    class MinimumCompositeConfig
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val minimumAmount: JsonField<String>,
@@ -1240,7 +1244,7 @@ private constructor(
         companion object {
 
             /**
-             * Returns a mutable builder for constructing an instance of [MinimumConfig].
+             * Returns a mutable builder for constructing an instance of [MinimumCompositeConfig].
              *
              * The following fields are required:
              * ```java
@@ -1250,7 +1254,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [MinimumConfig]. */
+        /** A builder for [MinimumCompositeConfig]. */
         class Builder internal constructor() {
 
             private var minimumAmount: JsonField<String>? = null
@@ -1258,10 +1262,10 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(minimumConfig: MinimumConfig) = apply {
-                minimumAmount = minimumConfig.minimumAmount
-                prorated = minimumConfig.prorated
-                additionalProperties = minimumConfig.additionalProperties.toMutableMap()
+            internal fun from(minimumCompositeConfig: MinimumCompositeConfig) = apply {
+                minimumAmount = minimumCompositeConfig.minimumAmount
+                prorated = minimumCompositeConfig.prorated
+                additionalProperties = minimumCompositeConfig.additionalProperties.toMutableMap()
             }
 
             /** The minimum amount to apply */
@@ -1310,7 +1314,7 @@ private constructor(
             }
 
             /**
-             * Returns an immutable instance of [MinimumConfig].
+             * Returns an immutable instance of [MinimumCompositeConfig].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              *
@@ -1321,8 +1325,8 @@ private constructor(
              *
              * @throws IllegalStateException if any required field is unset.
              */
-            fun build(): MinimumConfig =
-                MinimumConfig(
+            fun build(): MinimumCompositeConfig =
+                MinimumCompositeConfig(
                     checkRequired("minimumAmount", minimumAmount),
                     prorated,
                     additionalProperties.toMutableMap(),
@@ -1331,7 +1335,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): MinimumConfig = apply {
+        fun validate(): MinimumCompositeConfig = apply {
             if (validated) {
                 return@apply
             }
@@ -1365,7 +1369,7 @@ private constructor(
                 return true
             }
 
-            return other is MinimumConfig &&
+            return other is MinimumCompositeConfig &&
                 minimumAmount == other.minimumAmount &&
                 prorated == other.prorated &&
                 additionalProperties == other.additionalProperties
@@ -1378,7 +1382,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "MinimumConfig{minimumAmount=$minimumAmount, prorated=$prorated, additionalProperties=$additionalProperties}"
+            "MinimumCompositeConfig{minimumAmount=$minimumAmount, prorated=$prorated, additionalProperties=$additionalProperties}"
     }
 
     /** The pricing model type */
@@ -1396,14 +1400,14 @@ private constructor(
 
         companion object {
 
-            @JvmField val MINIMUM = of("minimum")
+            @JvmField val MINIMUM_COMPOSITE = of("minimum_composite")
 
             @JvmStatic fun of(value: String) = ModelType(JsonField.of(value))
         }
 
         /** An enum containing [ModelType]'s known values. */
         enum class Known {
-            MINIMUM
+            MINIMUM_COMPOSITE
         }
 
         /**
@@ -1416,7 +1420,7 @@ private constructor(
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
-            MINIMUM,
+            MINIMUM_COMPOSITE,
             /**
              * An enum member indicating that [ModelType] was instantiated with an unknown value.
              */
@@ -1432,7 +1436,7 @@ private constructor(
          */
         fun value(): Value =
             when (this) {
-                MINIMUM -> Value.MINIMUM
+                MINIMUM_COMPOSITE -> Value.MINIMUM_COMPOSITE
                 else -> Value._UNKNOWN
             }
 
@@ -1446,7 +1450,7 @@ private constructor(
          */
         fun known(): Known =
             when (this) {
-                MINIMUM -> Known.MINIMUM
+                MINIMUM_COMPOSITE -> Known.MINIMUM_COMPOSITE
                 else -> throw OrbInvalidDataException("Unknown ModelType: $value")
             }
 
@@ -1614,7 +1618,7 @@ private constructor(
         return other is NewPlanMinimumCompositePrice &&
             cadence == other.cadence &&
             itemId == other.itemId &&
-            minimumConfig == other.minimumConfig &&
+            minimumCompositeConfig == other.minimumCompositeConfig &&
             modelType == other.modelType &&
             name == other.name &&
             billableMetricId == other.billableMetricId &&
@@ -1637,7 +1641,7 @@ private constructor(
         Objects.hash(
             cadence,
             itemId,
-            minimumConfig,
+            minimumCompositeConfig,
             modelType,
             name,
             billableMetricId,
@@ -1660,5 +1664,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "NewPlanMinimumCompositePrice{cadence=$cadence, itemId=$itemId, minimumConfig=$minimumConfig, modelType=$modelType, name=$name, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, currency=$currency, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, referenceId=$referenceId, additionalProperties=$additionalProperties}"
+        "NewPlanMinimumCompositePrice{cadence=$cadence, itemId=$itemId, minimumCompositeConfig=$minimumCompositeConfig, modelType=$modelType, name=$name, billableMetricId=$billableMetricId, billedInAdvance=$billedInAdvance, billingCycleConfiguration=$billingCycleConfiguration, conversionRate=$conversionRate, conversionRateConfig=$conversionRateConfig, currency=$currency, dimensionalPriceConfiguration=$dimensionalPriceConfiguration, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, invoiceGroupingKey=$invoiceGroupingKey, invoicingCycleConfiguration=$invoicingCycleConfiguration, metadata=$metadata, referenceId=$referenceId, additionalProperties=$additionalProperties}"
 }
