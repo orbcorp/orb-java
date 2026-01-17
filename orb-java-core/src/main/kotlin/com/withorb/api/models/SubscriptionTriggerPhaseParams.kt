@@ -318,6 +318,7 @@ private constructor(
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val allowInvoiceCreditOrVoid: JsonField<Boolean>,
         private val effectiveDate: JsonField<LocalDate>,
@@ -526,12 +527,15 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && allowInvoiceCreditOrVoid == other.allowInvoiceCreditOrVoid && effectiveDate == other.effectiveDate && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Body &&
+                allowInvoiceCreditOrVoid == other.allowInvoiceCreditOrVoid &&
+                effectiveDate == other.effectiveDate &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(allowInvoiceCreditOrVoid, effectiveDate, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(allowInvoiceCreditOrVoid, effectiveDate, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -544,10 +548,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionTriggerPhaseParams && subscriptionId == other.subscriptionId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is SubscriptionTriggerPhaseParams &&
+            subscriptionId == other.subscriptionId &&
+            body == other.body &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(subscriptionId, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "SubscriptionTriggerPhaseParams{subscriptionId=$subscriptionId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

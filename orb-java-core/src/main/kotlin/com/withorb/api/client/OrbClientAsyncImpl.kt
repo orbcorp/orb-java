@@ -10,6 +10,8 @@ import com.withorb.api.services.async.BetaServiceAsync
 import com.withorb.api.services.async.BetaServiceAsyncImpl
 import com.withorb.api.services.async.CouponServiceAsync
 import com.withorb.api.services.async.CouponServiceAsyncImpl
+import com.withorb.api.services.async.CreditBlockServiceAsync
+import com.withorb.api.services.async.CreditBlockServiceAsyncImpl
 import com.withorb.api.services.async.CreditNoteServiceAsync
 import com.withorb.api.services.async.CreditNoteServiceAsyncImpl
 import com.withorb.api.services.async.CustomerServiceAsync
@@ -113,6 +115,10 @@ class OrbClientAsyncImpl(private val clientOptions: ClientOptions) : OrbClientAs
         SubscriptionChangeServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
+    private val creditBlocks: CreditBlockServiceAsync by lazy {
+        CreditBlockServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
     override fun sync(): OrbClient = sync
 
     override fun withRawResponse(): OrbClientAsync.WithRawResponse = withRawResponse
@@ -153,7 +159,9 @@ class OrbClientAsyncImpl(private val clientOptions: ClientOptions) : OrbClientAs
 
     override fun subscriptionChanges(): SubscriptionChangeServiceAsync = subscriptionChanges
 
-    override fun close() = clientOptions.httpClient.close()
+    override fun creditBlocks(): CreditBlockServiceAsync = creditBlocks
+
+    override fun close() = clientOptions.close()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         OrbClientAsync.WithRawResponse {
@@ -223,6 +231,10 @@ class OrbClientAsyncImpl(private val clientOptions: ClientOptions) : OrbClientAs
             SubscriptionChangeServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val creditBlocks: CreditBlockServiceAsync.WithRawResponse by lazy {
+            CreditBlockServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
         ): OrbClientAsync.WithRawResponse =
@@ -264,5 +276,7 @@ class OrbClientAsyncImpl(private val clientOptions: ClientOptions) : OrbClientAs
 
         override fun subscriptionChanges(): SubscriptionChangeServiceAsync.WithRawResponse =
             subscriptionChanges
+
+        override fun creditBlocks(): CreditBlockServiceAsync.WithRawResponse = creditBlocks
     }
 }

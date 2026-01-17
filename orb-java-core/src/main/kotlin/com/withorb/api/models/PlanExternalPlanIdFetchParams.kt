@@ -19,7 +19,6 @@ import kotlin.jvm.optionals.getOrNull
  * plan.
  *
  * ## Serialized prices
- *
  * Orb supports a few different pricing models out of the box. Each of these models is serialized
  * differently in a given [Price](/core-concepts#plan-and-price) object. The `model_type` field
  * determines the key for the configuration object that is present. A detailed explanation of price
@@ -199,10 +198,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is PlanExternalPlanIdFetchParams && externalPlanId == other.externalPlanId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is PlanExternalPlanIdFetchParams &&
+            externalPlanId == other.externalPlanId &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalPlanId, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(externalPlanId, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "PlanExternalPlanIdFetchParams{externalPlanId=$externalPlanId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

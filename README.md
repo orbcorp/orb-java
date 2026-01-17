@@ -2,7 +2,7 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.withorb.api/orb-java)](https://central.sonatype.com/artifact/com.withorb.api/orb-java/1.9.0)
+[![Maven Central](https://img.shields.io/maven-central/v/com.withorb.api/orb-java)](https://central.sonatype.com/artifact/com.withorb.api/orb-java/1.10.0)
 
 <!-- x-release-please-end -->
 
@@ -19,7 +19,7 @@ The REST API documentation can be found on [docs.withorb.com](https://docs.witho
 ### Gradle
 
 ```kotlin
-implementation("com.withorb.api:orb-java:1.9.0")
+implementation("com.withorb.api:orb-java:1.10.0")
 ```
 
 ### Maven
@@ -28,7 +28,7 @@ implementation("com.withorb.api:orb-java:1.9.0")
 <dependency>
   <groupId>com.withorb.api</groupId>
   <artifactId>orb-java</artifactId>
-  <version>1.9.0</version>
+  <version>1.10.0</version>
 </dependency>
 ```
 
@@ -231,6 +231,8 @@ The SDK throws custom unchecked exception types:
 
 - [`OrbIoException`](orb-java-core/src/main/kotlin/com/withorb/api/errors/OrbIoException.kt): I/O networking errors.
 
+- [`OrbRetryableException`](orb-java-core/src/main/kotlin/com/withorb/api/errors/OrbRetryableException.kt): Generic error indicating a failure that could be retried by the client.
+
 - [`OrbInvalidDataException`](orb-java-core/src/main/kotlin/com/withorb/api/errors/OrbInvalidDataException.kt): Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
 
 - [`OrbException`](orb-java-core/src/main/kotlin/com/withorb/api/errors/OrbException.kt): Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
@@ -342,13 +344,13 @@ The SDK uses the standard [OkHttp logging interceptor](https://github.com/square
 Enable logging by setting the `ORB_LOG` environment variable to `info`:
 
 ```sh
-$ export ORB_LOG=info
+export ORB_LOG=info
 ```
 
 Or to `debug` for more verbose logging:
 
 ```sh
-$ export ORB_LOG=debug
+export ORB_LOG=debug
 ```
 
 ## Webhook Verification
@@ -361,6 +363,12 @@ both of which will raise an error if the signature is invalid.
 Note that the `body` parameter must be the raw JSON string sent from the server (do not parse it first).
 The `.unwrap()` method can parse this JSON for you.
 
+## ProGuard and R8
+
+Although the SDK uses reflection, it is still usable with [ProGuard](https://github.com/Guardsquare/proguard) and [R8](https://developer.android.com/topic/performance/app-optimization/enable-app-optimization) because `orb-java-core` is published with a [configuration file](orb-java-core/src/main/resources/META-INF/proguard/orb-java-core.pro) containing [keep rules](https://www.guardsquare.com/manual/configuration/usage).
+
+ProGuard and R8 should automatically detect and use the published rules, but you can also manually copy the keep rules if necessary.
+
 ## Jackson
 
 The SDK depends on [Jackson](https://github.com/FasterXML/jackson) for JSON serialization/deserialization. It is compatible with version 2.13.4 or higher, but depends on version 2.18.2 by default.
@@ -371,6 +379,8 @@ If the SDK threw an exception, but you're _certain_ the version is compatible, t
 
 > [!CAUTION]
 > We make no guarantee that the SDK works correctly when the Jackson version check is disabled.
+
+Also note that there are bugs in older Jackson versions that can affect the SDK. We don't work around all Jackson bugs ([example](https://github.com/FasterXML/jackson-databind/issues/3240)) and expect users to upgrade Jackson for those instead.
 
 ## Network options
 

@@ -18,6 +18,7 @@ import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 class CustomExpiration
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val duration: JsonField<Long>,
     private val durationUnit: JsonField<DurationUnit>,
@@ -312,7 +313,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is DurationUnit && value == other.value /* spotless:on */
+            return other is DurationUnit && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -325,12 +326,13 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomExpiration && duration == other.duration && durationUnit == other.durationUnit && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is CustomExpiration &&
+            duration == other.duration &&
+            durationUnit == other.durationUnit &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(duration, durationUnit, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 

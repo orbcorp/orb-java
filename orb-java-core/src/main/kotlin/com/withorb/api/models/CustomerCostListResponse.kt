@@ -19,6 +19,7 @@ import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 class CustomerCostListResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val data: JsonField<List<AggregatedCost>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -177,12 +178,12 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerCostListResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is CustomerCostListResponse &&
+            data == other.data &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(data, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 

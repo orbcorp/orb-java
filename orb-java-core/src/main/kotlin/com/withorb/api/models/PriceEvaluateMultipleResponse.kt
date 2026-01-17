@@ -20,6 +20,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class PriceEvaluateMultipleResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val data: JsonField<List<Data>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -172,6 +173,7 @@ private constructor(
         (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
     class Data
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val currency: JsonField<String>,
         private val priceGroups: JsonField<List<EvaluatePriceGroup>>,
@@ -514,12 +516,25 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && currency == other.currency && priceGroups == other.priceGroups && externalPriceId == other.externalPriceId && inlinePriceIndex == other.inlinePriceIndex && priceId == other.priceId && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Data &&
+                currency == other.currency &&
+                priceGroups == other.priceGroups &&
+                externalPriceId == other.externalPriceId &&
+                inlinePriceIndex == other.inlinePriceIndex &&
+                priceId == other.priceId &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(currency, priceGroups, externalPriceId, inlinePriceIndex, priceId, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                currency,
+                priceGroups,
+                externalPriceId,
+                inlinePriceIndex,
+                priceId,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -532,12 +547,12 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is PriceEvaluateMultipleResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is PriceEvaluateMultipleResponse &&
+            data == other.data &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(data, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 

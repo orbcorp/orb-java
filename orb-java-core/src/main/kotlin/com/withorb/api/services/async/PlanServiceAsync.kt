@@ -12,6 +12,7 @@ import com.withorb.api.models.PlanListPageAsync
 import com.withorb.api.models.PlanListParams
 import com.withorb.api.models.PlanUpdateParams
 import com.withorb.api.services.async.plans.ExternalPlanIdServiceAsync
+import com.withorb.api.services.async.plans.MigrationServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -30,6 +31,8 @@ interface PlanServiceAsync {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): PlanServiceAsync
 
     fun externalPlanId(): ExternalPlanIdServiceAsync
+
+    fun migrations(): MigrationServiceAsync
 
     /** This endpoint allows creation of plans including their prices. */
     fun create(params: PlanCreateParams): CompletableFuture<Plan> =
@@ -104,7 +107,6 @@ interface PlanServiceAsync {
      * configuration, as well as the product that the plan is attached to.
      *
      * ## Serialized prices
-     *
      * Orb supports a few different pricing models out of the box. Each of these models is
      * serialized differently in a given [Price](/core-concepts#plan-and-price) object. The
      * `model_type` field determines the key for the configuration object that is present. A
@@ -112,7 +114,6 @@ interface PlanServiceAsync {
      * [Price schema](/core-concepts#plan-and-price).
      *
      * ## Phases
-     *
      * Orb supports plan phases, also known as contract ramps. For plans with phases, the serialized
      * prices refer to all prices across all phases.
      */
@@ -156,6 +157,8 @@ interface PlanServiceAsync {
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): PlanServiceAsync.WithRawResponse
 
         fun externalPlanId(): ExternalPlanIdServiceAsync.WithRawResponse
+
+        fun migrations(): MigrationServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /plans`, but is otherwise the same as

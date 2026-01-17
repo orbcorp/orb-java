@@ -14,6 +14,7 @@ import com.withorb.api.core.Params
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import com.withorb.api.errors.OrbInvalidDataException
+import java.time.LocalDate
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
@@ -43,7 +44,43 @@ private constructor(
     fun description(): Optional<String> = body.description()
 
     /**
-     * Amount already collected to apply to the customer's balance.
+     * Mark all pending invoices that are payable as paid. If amount is also provided, mark as paid
+     * and credit the difference to the customer's balance.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun markAsPaid(): Optional<Boolean> = body.markAsPaid()
+
+    /**
+     * An optional external ID to associate with the payment. Only applicable when mark_as_paid is
+     * true.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun paymentExternalId(): Optional<String> = body.paymentExternalId()
+
+    /**
+     * Optional notes about the payment. Only applicable when mark_as_paid is true.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun paymentNotes(): Optional<String> = body.paymentNotes()
+
+    /**
+     * A date string to specify the date the payment was received. Only applicable when mark_as_paid
+     * is true. If not provided, defaults to the current date.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun paymentReceivedDate(): Optional<LocalDate> = body.paymentReceivedDate()
+
+    /**
+     * Amount already collected to apply to the customer's balance. If mark_as_paid is also
+     * provided, credit the difference to the customer's balance.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
@@ -56,6 +93,36 @@ private constructor(
      * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _description(): JsonField<String> = body._description()
+
+    /**
+     * Returns the raw JSON value of [markAsPaid].
+     *
+     * Unlike [markAsPaid], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _markAsPaid(): JsonField<Boolean> = body._markAsPaid()
+
+    /**
+     * Returns the raw JSON value of [paymentExternalId].
+     *
+     * Unlike [paymentExternalId], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _paymentExternalId(): JsonField<String> = body._paymentExternalId()
+
+    /**
+     * Returns the raw JSON value of [paymentNotes].
+     *
+     * Unlike [paymentNotes], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _paymentNotes(): JsonField<String> = body._paymentNotes()
+
+    /**
+     * Returns the raw JSON value of [paymentReceivedDate].
+     *
+     * Unlike [paymentReceivedDate], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _paymentReceivedDate(): JsonField<LocalDate> = body._paymentReceivedDate()
 
     /**
      * Returns the raw JSON value of [previouslyCollectedAmount].
@@ -119,7 +186,11 @@ private constructor(
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [description]
-         * - [previouslyCollectedAmount]
+         * - [markAsPaid]
+         * - [paymentExternalId]
+         * - [paymentNotes]
+         * - [paymentReceivedDate]
+         * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
@@ -138,7 +209,100 @@ private constructor(
          */
         fun description(description: JsonField<String>) = apply { body.description(description) }
 
-        /** Amount already collected to apply to the customer's balance. */
+        /**
+         * Mark all pending invoices that are payable as paid. If amount is also provided, mark as
+         * paid and credit the difference to the customer's balance.
+         */
+        fun markAsPaid(markAsPaid: Boolean?) = apply { body.markAsPaid(markAsPaid) }
+
+        /**
+         * Alias for [Builder.markAsPaid].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun markAsPaid(markAsPaid: Boolean) = markAsPaid(markAsPaid as Boolean?)
+
+        /** Alias for calling [Builder.markAsPaid] with `markAsPaid.orElse(null)`. */
+        fun markAsPaid(markAsPaid: Optional<Boolean>) = markAsPaid(markAsPaid.getOrNull())
+
+        /**
+         * Sets [Builder.markAsPaid] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.markAsPaid] with a well-typed [Boolean] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun markAsPaid(markAsPaid: JsonField<Boolean>) = apply { body.markAsPaid(markAsPaid) }
+
+        /**
+         * An optional external ID to associate with the payment. Only applicable when mark_as_paid
+         * is true.
+         */
+        fun paymentExternalId(paymentExternalId: String?) = apply {
+            body.paymentExternalId(paymentExternalId)
+        }
+
+        /** Alias for calling [Builder.paymentExternalId] with `paymentExternalId.orElse(null)`. */
+        fun paymentExternalId(paymentExternalId: Optional<String>) =
+            paymentExternalId(paymentExternalId.getOrNull())
+
+        /**
+         * Sets [Builder.paymentExternalId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.paymentExternalId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun paymentExternalId(paymentExternalId: JsonField<String>) = apply {
+            body.paymentExternalId(paymentExternalId)
+        }
+
+        /** Optional notes about the payment. Only applicable when mark_as_paid is true. */
+        fun paymentNotes(paymentNotes: String?) = apply { body.paymentNotes(paymentNotes) }
+
+        /** Alias for calling [Builder.paymentNotes] with `paymentNotes.orElse(null)`. */
+        fun paymentNotes(paymentNotes: Optional<String>) = paymentNotes(paymentNotes.getOrNull())
+
+        /**
+         * Sets [Builder.paymentNotes] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.paymentNotes] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun paymentNotes(paymentNotes: JsonField<String>) = apply {
+            body.paymentNotes(paymentNotes)
+        }
+
+        /**
+         * A date string to specify the date the payment was received. Only applicable when
+         * mark_as_paid is true. If not provided, defaults to the current date.
+         */
+        fun paymentReceivedDate(paymentReceivedDate: LocalDate?) = apply {
+            body.paymentReceivedDate(paymentReceivedDate)
+        }
+
+        /**
+         * Alias for calling [Builder.paymentReceivedDate] with `paymentReceivedDate.orElse(null)`.
+         */
+        fun paymentReceivedDate(paymentReceivedDate: Optional<LocalDate>) =
+            paymentReceivedDate(paymentReceivedDate.getOrNull())
+
+        /**
+         * Sets [Builder.paymentReceivedDate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.paymentReceivedDate] with a well-typed [LocalDate] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun paymentReceivedDate(paymentReceivedDate: JsonField<LocalDate>) = apply {
+            body.paymentReceivedDate(paymentReceivedDate)
+        }
+
+        /**
+         * Amount already collected to apply to the customer's balance. If mark_as_paid is also
+         * provided, credit the difference to the customer's balance.
+         */
         fun previouslyCollectedAmount(previouslyCollectedAmount: String?) = apply {
             body.previouslyCollectedAmount(previouslyCollectedAmount)
         }
@@ -305,8 +469,13 @@ private constructor(
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val description: JsonField<String>,
+        private val markAsPaid: JsonField<Boolean>,
+        private val paymentExternalId: JsonField<String>,
+        private val paymentNotes: JsonField<String>,
+        private val paymentReceivedDate: JsonField<LocalDate>,
         private val previouslyCollectedAmount: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -316,10 +485,30 @@ private constructor(
             @JsonProperty("description")
             @ExcludeMissing
             description: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("mark_as_paid")
+            @ExcludeMissing
+            markAsPaid: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("payment_external_id")
+            @ExcludeMissing
+            paymentExternalId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("payment_notes")
+            @ExcludeMissing
+            paymentNotes: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("payment_received_date")
+            @ExcludeMissing
+            paymentReceivedDate: JsonField<LocalDate> = JsonMissing.of(),
             @JsonProperty("previously_collected_amount")
             @ExcludeMissing
             previouslyCollectedAmount: JsonField<String> = JsonMissing.of(),
-        ) : this(description, previouslyCollectedAmount, mutableMapOf())
+        ) : this(
+            description,
+            markAsPaid,
+            paymentExternalId,
+            paymentNotes,
+            paymentReceivedDate,
+            previouslyCollectedAmount,
+            mutableMapOf(),
+        )
 
         /**
          * Description to apply to the balance transaction representing this credit.
@@ -330,7 +519,45 @@ private constructor(
         fun description(): Optional<String> = description.getOptional("description")
 
         /**
-         * Amount already collected to apply to the customer's balance.
+         * Mark all pending invoices that are payable as paid. If amount is also provided, mark as
+         * paid and credit the difference to the customer's balance.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun markAsPaid(): Optional<Boolean> = markAsPaid.getOptional("mark_as_paid")
+
+        /**
+         * An optional external ID to associate with the payment. Only applicable when mark_as_paid
+         * is true.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun paymentExternalId(): Optional<String> =
+            paymentExternalId.getOptional("payment_external_id")
+
+        /**
+         * Optional notes about the payment. Only applicable when mark_as_paid is true.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun paymentNotes(): Optional<String> = paymentNotes.getOptional("payment_notes")
+
+        /**
+         * A date string to specify the date the payment was received. Only applicable when
+         * mark_as_paid is true. If not provided, defaults to the current date.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun paymentReceivedDate(): Optional<LocalDate> =
+            paymentReceivedDate.getOptional("payment_received_date")
+
+        /**
+         * Amount already collected to apply to the customer's balance. If mark_as_paid is also
+         * provided, credit the difference to the customer's balance.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -346,6 +573,45 @@ private constructor(
         @JsonProperty("description")
         @ExcludeMissing
         fun _description(): JsonField<String> = description
+
+        /**
+         * Returns the raw JSON value of [markAsPaid].
+         *
+         * Unlike [markAsPaid], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("mark_as_paid")
+        @ExcludeMissing
+        fun _markAsPaid(): JsonField<Boolean> = markAsPaid
+
+        /**
+         * Returns the raw JSON value of [paymentExternalId].
+         *
+         * Unlike [paymentExternalId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("payment_external_id")
+        @ExcludeMissing
+        fun _paymentExternalId(): JsonField<String> = paymentExternalId
+
+        /**
+         * Returns the raw JSON value of [paymentNotes].
+         *
+         * Unlike [paymentNotes], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("payment_notes")
+        @ExcludeMissing
+        fun _paymentNotes(): JsonField<String> = paymentNotes
+
+        /**
+         * Returns the raw JSON value of [paymentReceivedDate].
+         *
+         * Unlike [paymentReceivedDate], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("payment_received_date")
+        @ExcludeMissing
+        fun _paymentReceivedDate(): JsonField<LocalDate> = paymentReceivedDate
 
         /**
          * Returns the raw JSON value of [previouslyCollectedAmount].
@@ -379,12 +645,20 @@ private constructor(
         class Builder internal constructor() {
 
             private var description: JsonField<String> = JsonMissing.of()
+            private var markAsPaid: JsonField<Boolean> = JsonMissing.of()
+            private var paymentExternalId: JsonField<String> = JsonMissing.of()
+            private var paymentNotes: JsonField<String> = JsonMissing.of()
+            private var paymentReceivedDate: JsonField<LocalDate> = JsonMissing.of()
             private var previouslyCollectedAmount: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(body: Body) = apply {
                 description = body.description
+                markAsPaid = body.markAsPaid
+                paymentExternalId = body.paymentExternalId
+                paymentNotes = body.paymentNotes
+                paymentReceivedDate = body.paymentReceivedDate
                 previouslyCollectedAmount = body.previouslyCollectedAmount
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
@@ -406,7 +680,103 @@ private constructor(
                 this.description = description
             }
 
-            /** Amount already collected to apply to the customer's balance. */
+            /**
+             * Mark all pending invoices that are payable as paid. If amount is also provided, mark
+             * as paid and credit the difference to the customer's balance.
+             */
+            fun markAsPaid(markAsPaid: Boolean?) = markAsPaid(JsonField.ofNullable(markAsPaid))
+
+            /**
+             * Alias for [Builder.markAsPaid].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun markAsPaid(markAsPaid: Boolean) = markAsPaid(markAsPaid as Boolean?)
+
+            /** Alias for calling [Builder.markAsPaid] with `markAsPaid.orElse(null)`. */
+            fun markAsPaid(markAsPaid: Optional<Boolean>) = markAsPaid(markAsPaid.getOrNull())
+
+            /**
+             * Sets [Builder.markAsPaid] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.markAsPaid] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun markAsPaid(markAsPaid: JsonField<Boolean>) = apply { this.markAsPaid = markAsPaid }
+
+            /**
+             * An optional external ID to associate with the payment. Only applicable when
+             * mark_as_paid is true.
+             */
+            fun paymentExternalId(paymentExternalId: String?) =
+                paymentExternalId(JsonField.ofNullable(paymentExternalId))
+
+            /**
+             * Alias for calling [Builder.paymentExternalId] with `paymentExternalId.orElse(null)`.
+             */
+            fun paymentExternalId(paymentExternalId: Optional<String>) =
+                paymentExternalId(paymentExternalId.getOrNull())
+
+            /**
+             * Sets [Builder.paymentExternalId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.paymentExternalId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun paymentExternalId(paymentExternalId: JsonField<String>) = apply {
+                this.paymentExternalId = paymentExternalId
+            }
+
+            /** Optional notes about the payment. Only applicable when mark_as_paid is true. */
+            fun paymentNotes(paymentNotes: String?) =
+                paymentNotes(JsonField.ofNullable(paymentNotes))
+
+            /** Alias for calling [Builder.paymentNotes] with `paymentNotes.orElse(null)`. */
+            fun paymentNotes(paymentNotes: Optional<String>) =
+                paymentNotes(paymentNotes.getOrNull())
+
+            /**
+             * Sets [Builder.paymentNotes] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.paymentNotes] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun paymentNotes(paymentNotes: JsonField<String>) = apply {
+                this.paymentNotes = paymentNotes
+            }
+
+            /**
+             * A date string to specify the date the payment was received. Only applicable when
+             * mark_as_paid is true. If not provided, defaults to the current date.
+             */
+            fun paymentReceivedDate(paymentReceivedDate: LocalDate?) =
+                paymentReceivedDate(JsonField.ofNullable(paymentReceivedDate))
+
+            /**
+             * Alias for calling [Builder.paymentReceivedDate] with
+             * `paymentReceivedDate.orElse(null)`.
+             */
+            fun paymentReceivedDate(paymentReceivedDate: Optional<LocalDate>) =
+                paymentReceivedDate(paymentReceivedDate.getOrNull())
+
+            /**
+             * Sets [Builder.paymentReceivedDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.paymentReceivedDate] with a well-typed [LocalDate]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun paymentReceivedDate(paymentReceivedDate: JsonField<LocalDate>) = apply {
+                this.paymentReceivedDate = paymentReceivedDate
+            }
+
+            /**
+             * Amount already collected to apply to the customer's balance. If mark_as_paid is also
+             * provided, credit the difference to the customer's balance.
+             */
             fun previouslyCollectedAmount(previouslyCollectedAmount: String?) =
                 previouslyCollectedAmount(JsonField.ofNullable(previouslyCollectedAmount))
 
@@ -453,7 +823,15 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              */
             fun build(): Body =
-                Body(description, previouslyCollectedAmount, additionalProperties.toMutableMap())
+                Body(
+                    description,
+                    markAsPaid,
+                    paymentExternalId,
+                    paymentNotes,
+                    paymentReceivedDate,
+                    previouslyCollectedAmount,
+                    additionalProperties.toMutableMap(),
+                )
         }
 
         private var validated: Boolean = false
@@ -464,6 +842,10 @@ private constructor(
             }
 
             description()
+            markAsPaid()
+            paymentExternalId()
+            paymentNotes()
+            paymentReceivedDate()
             previouslyCollectedAmount()
             validated = true
         }
@@ -485,6 +867,10 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (if (description.asKnown().isPresent) 1 else 0) +
+                (if (markAsPaid.asKnown().isPresent) 1 else 0) +
+                (if (paymentExternalId.asKnown().isPresent) 1 else 0) +
+                (if (paymentNotes.asKnown().isPresent) 1 else 0) +
+                (if (paymentReceivedDate.asKnown().isPresent) 1 else 0) +
                 (if (previouslyCollectedAmount.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
@@ -492,17 +878,32 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && description == other.description && previouslyCollectedAmount == other.previouslyCollectedAmount && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Body &&
+                description == other.description &&
+                markAsPaid == other.markAsPaid &&
+                paymentExternalId == other.paymentExternalId &&
+                paymentNotes == other.paymentNotes &&
+                paymentReceivedDate == other.paymentReceivedDate &&
+                previouslyCollectedAmount == other.previouslyCollectedAmount &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(description, previouslyCollectedAmount, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                description,
+                markAsPaid,
+                paymentExternalId,
+                paymentNotes,
+                paymentReceivedDate,
+                previouslyCollectedAmount,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{description=$description, previouslyCollectedAmount=$previouslyCollectedAmount, additionalProperties=$additionalProperties}"
+            "Body{description=$description, markAsPaid=$markAsPaid, paymentExternalId=$paymentExternalId, paymentNotes=$paymentNotes, paymentReceivedDate=$paymentReceivedDate, previouslyCollectedAmount=$previouslyCollectedAmount, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -510,10 +911,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionChangeApplyParams && subscriptionChangeId == other.subscriptionChangeId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is SubscriptionChangeApplyParams &&
+            subscriptionChangeId == other.subscriptionChangeId &&
+            body == other.body &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionChangeId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(subscriptionChangeId, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "SubscriptionChangeApplyParams{subscriptionChangeId=$subscriptionChangeId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

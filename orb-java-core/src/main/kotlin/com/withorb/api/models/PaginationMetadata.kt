@@ -18,6 +18,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class PaginationMetadata
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val hasMore: JsonField<Boolean>,
     private val nextCursor: JsonField<String>,
@@ -196,12 +197,13 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is PaginationMetadata && hasMore == other.hasMore && nextCursor == other.nextCursor && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is PaginationMetadata &&
+            hasMore == other.hasMore &&
+            nextCursor == other.nextCursor &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(hasMore, nextCursor, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 

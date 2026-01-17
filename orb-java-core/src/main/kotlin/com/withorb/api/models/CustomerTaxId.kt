@@ -90,9 +90,9 @@ import kotlin.jvm.optionals.getOrNull
  * |Ireland               |`eu_vat`    |European VAT Number                                                                                    |
  * |Israel                |`il_vat`    |Israel VAT                                                                                             |
  * |Italy                 |`eu_vat`    |European VAT Number                                                                                    |
- * |Japan                 |`jp_cn`     |Japanese Corporate Number (_Hōjin Bangō_)                                                              |
- * |Japan                 |`jp_rn`     |Japanese Registered Foreign Businesses' Registration Number (_Tōroku Kokugai Jigyōsha no Tōroku Bangō_)|
- * |Japan                 |`jp_trn`    |Japanese Tax Registration Number (_Tōroku Bangō_)                                                      |
+ * |Japan                 |`jp_cn`     |Japanese Corporate Number (*Hōjin Bangō*)                                                              |
+ * |Japan                 |`jp_rn`     |Japanese Registered Foreign Businesses' Registration Number (*Tōroku Kokugai Jigyōsha no Tōroku Bangō*)|
+ * |Japan                 |`jp_trn`    |Japanese Tax Registration Number (*Tōroku Bangō*)                                                      |
  * |Kazakhstan            |`kz_bin`    |Kazakhstani Business Identification Number                                                             |
  * |Kenya                 |`ke_pin`    |Kenya Revenue Authority Personal Identification Number                                                 |
  * |Kyrgyzstan            |`kg_tin`    |Kyrgyzstan Tax Identification Number                                                                   |
@@ -163,6 +163,7 @@ import kotlin.jvm.optionals.getOrNull
  * |Zimbabwe              |`zw_tin`    |Zimbabwe Tax Identification Number                                                                     |
  */
 class CustomerTaxId
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val country: JsonField<Country>,
     private val type: JsonField<Type>,
@@ -1139,7 +1140,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Country && value == other.value /* spotless:on */
+            return other is Country && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -1911,7 +1912,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Type && value == other.value /* spotless:on */
+            return other is Type && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -1924,12 +1925,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerTaxId && country == other.country && type == other.type && value == other.value && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is CustomerTaxId &&
+            country == other.country &&
+            type == other.type &&
+            value == other.value &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(country, type, value, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 

@@ -35,7 +35,9 @@ private constructor(
     private val cursor: String?,
     private val customerId: List<String>?,
     private val externalCustomerId: List<String>?,
+    private val externalPlanId: String?,
     private val limit: Long?,
+    private val planId: String?,
     private val status: Status?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -59,8 +61,12 @@ private constructor(
 
     fun externalCustomerId(): Optional<List<String>> = Optional.ofNullable(externalCustomerId)
 
+    fun externalPlanId(): Optional<String> = Optional.ofNullable(externalPlanId)
+
     /** The number of items to fetch. Defaults to 20. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
+
+    fun planId(): Optional<String> = Optional.ofNullable(planId)
 
     fun status(): Optional<Status> = Optional.ofNullable(status)
 
@@ -90,7 +96,9 @@ private constructor(
         private var cursor: String? = null
         private var customerId: MutableList<String>? = null
         private var externalCustomerId: MutableList<String>? = null
+        private var externalPlanId: String? = null
         private var limit: Long? = null
+        private var planId: String? = null
         private var status: Status? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -104,7 +112,9 @@ private constructor(
             cursor = subscriptionListParams.cursor
             customerId = subscriptionListParams.customerId?.toMutableList()
             externalCustomerId = subscriptionListParams.externalCustomerId?.toMutableList()
+            externalPlanId = subscriptionListParams.externalPlanId
             limit = subscriptionListParams.limit
+            planId = subscriptionListParams.planId
             status = subscriptionListParams.status
             additionalHeaders = subscriptionListParams.additionalHeaders.toBuilder()
             additionalQueryParams = subscriptionListParams.additionalQueryParams.toBuilder()
@@ -179,6 +189,12 @@ private constructor(
                 (this.externalCustomerId ?: mutableListOf()).apply { add(externalCustomerId) }
         }
 
+        fun externalPlanId(externalPlanId: String?) = apply { this.externalPlanId = externalPlanId }
+
+        /** Alias for calling [Builder.externalPlanId] with `externalPlanId.orElse(null)`. */
+        fun externalPlanId(externalPlanId: Optional<String>) =
+            externalPlanId(externalPlanId.getOrNull())
+
         /** The number of items to fetch. Defaults to 20. */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
@@ -191,6 +207,11 @@ private constructor(
 
         /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
         fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
+
+        fun planId(planId: String?) = apply { this.planId = planId }
+
+        /** Alias for calling [Builder.planId] with `planId.orElse(null)`. */
+        fun planId(planId: Optional<String>) = planId(planId.getOrNull())
 
         fun status(status: Status?) = apply { this.status = status }
 
@@ -309,7 +330,9 @@ private constructor(
                 cursor,
                 customerId?.toImmutable(),
                 externalCustomerId?.toImmutable(),
+                externalPlanId,
                 limit,
+                planId,
                 status,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -336,7 +359,9 @@ private constructor(
                 cursor?.let { put("cursor", it) }
                 customerId?.forEach { put("customer_id[]", it) }
                 externalCustomerId?.forEach { put("external_customer_id[]", it) }
+                externalPlanId?.let { put("external_plan_id", it) }
                 limit?.let { put("limit", it.toString()) }
+                planId?.let { put("plan_id", it) }
                 status?.let { put("status", it.toString()) }
                 putAll(additionalQueryParams)
             }
@@ -464,7 +489,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
+            return other is Status && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -477,11 +502,39 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionListParams && createdAtGt == other.createdAtGt && createdAtGte == other.createdAtGte && createdAtLt == other.createdAtLt && createdAtLte == other.createdAtLte && cursor == other.cursor && customerId == other.customerId && externalCustomerId == other.externalCustomerId && limit == other.limit && status == other.status && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is SubscriptionListParams &&
+            createdAtGt == other.createdAtGt &&
+            createdAtGte == other.createdAtGte &&
+            createdAtLt == other.createdAtLt &&
+            createdAtLte == other.createdAtLte &&
+            cursor == other.cursor &&
+            customerId == other.customerId &&
+            externalCustomerId == other.externalCustomerId &&
+            externalPlanId == other.externalPlanId &&
+            limit == other.limit &&
+            planId == other.planId &&
+            status == other.status &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(createdAtGt, createdAtGte, createdAtLt, createdAtLte, cursor, customerId, externalCustomerId, limit, status, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(
+            createdAtGt,
+            createdAtGte,
+            createdAtLt,
+            createdAtLte,
+            cursor,
+            customerId,
+            externalCustomerId,
+            externalPlanId,
+            limit,
+            planId,
+            status,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "SubscriptionListParams{createdAtGt=$createdAtGt, createdAtGte=$createdAtGte, createdAtLt=$createdAtLt, createdAtLte=$createdAtLte, cursor=$cursor, customerId=$customerId, externalCustomerId=$externalCustomerId, limit=$limit, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "SubscriptionListParams{createdAtGt=$createdAtGt, createdAtGte=$createdAtGte, createdAtLt=$createdAtLt, createdAtLte=$createdAtLte, cursor=$cursor, customerId=$customerId, externalCustomerId=$externalCustomerId, externalPlanId=$externalPlanId, limit=$limit, planId=$planId, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

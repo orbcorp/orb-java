@@ -19,6 +19,7 @@ import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 class CustomerCreditLedgerListPageResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val data: JsonField<List<CustomerCreditLedgerListResponse>>,
     private val paginationMetadata: JsonField<PaginationMetadata>,
@@ -271,12 +272,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerCreditLedgerListPageResponse && data == other.data && paginationMetadata == other.paginationMetadata && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is CustomerCreditLedgerListPageResponse &&
+            data == other.data &&
+            paginationMetadata == other.paginationMetadata &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(data, paginationMetadata, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(data, paginationMetadata, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

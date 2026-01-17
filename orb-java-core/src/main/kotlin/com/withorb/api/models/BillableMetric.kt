@@ -24,6 +24,7 @@ import kotlin.jvm.optionals.getOrNull
  * by the query that transforms raw usage events into meaningful values for your customers.
  */
 class BillableMetric
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val description: JsonField<String>,
@@ -439,12 +440,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Metadata && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -573,7 +572,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
+            return other is Status && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -586,12 +585,19 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is BillableMetric && id == other.id && description == other.description && item == other.item && metadata == other.metadata && name == other.name && status == other.status && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is BillableMetric &&
+            id == other.id &&
+            description == other.description &&
+            item == other.item &&
+            metadata == other.metadata &&
+            name == other.name &&
+            status == other.status &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, description, item, metadata, name, status, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(id, description, item, metadata, name, status, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

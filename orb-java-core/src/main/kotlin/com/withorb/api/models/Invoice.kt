@@ -39,6 +39,7 @@ import kotlin.jvm.optionals.getOrNull
  * cancellation.
  */
 class Invoice
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val amountDue: JsonField<String>,
@@ -369,9 +370,9 @@ private constructor(
      * |Ireland               |`eu_vat`    |European VAT Number                                                                                    |
      * |Israel                |`il_vat`    |Israel VAT                                                                                             |
      * |Italy                 |`eu_vat`    |European VAT Number                                                                                    |
-     * |Japan                 |`jp_cn`     |Japanese Corporate Number (_Hōjin Bangō_)                                                              |
-     * |Japan                 |`jp_rn`     |Japanese Registered Foreign Businesses' Registration Number (_Tōroku Kokugai Jigyōsha no Tōroku Bangō_)|
-     * |Japan                 |`jp_trn`    |Japanese Tax Registration Number (_Tōroku Bangō_)                                                      |
+     * |Japan                 |`jp_cn`     |Japanese Corporate Number (*Hōjin Bangō*)                                                              |
+     * |Japan                 |`jp_rn`     |Japanese Registered Foreign Businesses' Registration Number (*Tōroku Kokugai Jigyōsha no Tōroku Bangō*)|
+     * |Japan                 |`jp_trn`    |Japanese Tax Registration Number (*Tōroku Bangō*)                                                      |
      * |Kazakhstan            |`kz_bin`    |Kazakhstani Business Identification Number                                                             |
      * |Kenya                 |`ke_pin`    |Kenya Revenue Authority Personal Identification Number                                                 |
      * |Kyrgyzstan            |`kg_tin`    |Kyrgyzstan Tax Identification Number                                                                   |
@@ -1412,9 +1413,9 @@ private constructor(
          * |Ireland               |`eu_vat`    |European VAT Number                                                                                    |
          * |Israel                |`il_vat`    |Israel VAT                                                                                             |
          * |Italy                 |`eu_vat`    |European VAT Number                                                                                    |
-         * |Japan                 |`jp_cn`     |Japanese Corporate Number (_Hōjin Bangō_)                                                              |
-         * |Japan                 |`jp_rn`     |Japanese Registered Foreign Businesses' Registration Number (_Tōroku Kokugai Jigyōsha no Tōroku Bangō_)|
-         * |Japan                 |`jp_trn`    |Japanese Tax Registration Number (_Tōroku Bangō_)                                                      |
+         * |Japan                 |`jp_cn`     |Japanese Corporate Number (*Hōjin Bangō*)                                                              |
+         * |Japan                 |`jp_rn`     |Japanese Registered Foreign Businesses' Registration Number (*Tōroku Kokugai Jigyōsha no Tōroku Bangō*)|
+         * |Japan                 |`jp_trn`    |Japanese Tax Registration Number (*Tōroku Bangō*)                                                      |
          * |Kazakhstan            |`kz_bin`    |Kazakhstani Business Identification Number                                                             |
          * |Kenya                 |`ke_pin`    |Kenya Revenue Authority Personal Identification Number                                                 |
          * |Kyrgyzstan            |`kg_tin`    |Kyrgyzstan Tax Identification Number                                                                   |
@@ -2323,6 +2324,7 @@ private constructor(
             (if (willAutoIssue.asKnown().isPresent) 1 else 0)
 
     class AutoCollection
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val enabled: JsonField<Boolean>,
         private val nextAttemptAt: JsonField<OffsetDateTime>,
@@ -2647,12 +2649,23 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is AutoCollection && enabled == other.enabled && nextAttemptAt == other.nextAttemptAt && numAttempts == other.numAttempts && previouslyAttemptedAt == other.previouslyAttemptedAt && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is AutoCollection &&
+                enabled == other.enabled &&
+                nextAttemptAt == other.nextAttemptAt &&
+                numAttempts == other.numAttempts &&
+                previouslyAttemptedAt == other.previouslyAttemptedAt &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(enabled, nextAttemptAt, numAttempts, previouslyAttemptedAt, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                enabled,
+                nextAttemptAt,
+                numAttempts,
+                previouslyAttemptedAt,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -2661,6 +2674,7 @@ private constructor(
     }
 
     class CreditNote
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val creditNoteNumber: JsonField<String>,
@@ -3030,12 +3044,29 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CreditNote && id == other.id && creditNoteNumber == other.creditNoteNumber && memo == other.memo && reason == other.reason && total == other.total && type == other.type && voidedAt == other.voidedAt && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is CreditNote &&
+                id == other.id &&
+                creditNoteNumber == other.creditNoteNumber &&
+                memo == other.memo &&
+                reason == other.reason &&
+                total == other.total &&
+                type == other.type &&
+                voidedAt == other.voidedAt &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, creditNoteNumber, memo, reason, total, type, voidedAt, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                creditNoteNumber,
+                memo,
+                reason,
+                total,
+                type,
+                voidedAt,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -3044,6 +3075,7 @@ private constructor(
     }
 
     class CustomerBalanceTransaction
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val action: JsonField<Action>,
@@ -3597,6 +3629,8 @@ private constructor(
 
                 @JvmField val EXTERNAL_PAYMENT = of("external_payment")
 
+                @JvmField val SMALL_INVOICE_CARRYOVER = of("small_invoice_carryover")
+
                 @JvmStatic fun of(value: String) = Action(JsonField.of(value))
             }
 
@@ -3611,6 +3645,7 @@ private constructor(
                 CREDIT_NOTE_VOIDED,
                 OVERPAYMENT_REFUND,
                 EXTERNAL_PAYMENT,
+                SMALL_INVOICE_CARRYOVER,
             }
 
             /**
@@ -3632,6 +3667,7 @@ private constructor(
                 CREDIT_NOTE_VOIDED,
                 OVERPAYMENT_REFUND,
                 EXTERNAL_PAYMENT,
+                SMALL_INVOICE_CARRYOVER,
                 /**
                  * An enum member indicating that [Action] was instantiated with an unknown value.
                  */
@@ -3656,6 +3692,7 @@ private constructor(
                     CREDIT_NOTE_VOIDED -> Value.CREDIT_NOTE_VOIDED
                     OVERPAYMENT_REFUND -> Value.OVERPAYMENT_REFUND
                     EXTERNAL_PAYMENT -> Value.EXTERNAL_PAYMENT
+                    SMALL_INVOICE_CARRYOVER -> Value.SMALL_INVOICE_CARRYOVER
                     else -> Value._UNKNOWN
                 }
 
@@ -3679,6 +3716,7 @@ private constructor(
                     CREDIT_NOTE_VOIDED -> Known.CREDIT_NOTE_VOIDED
                     OVERPAYMENT_REFUND -> Known.OVERPAYMENT_REFUND
                     EXTERNAL_PAYMENT -> Known.EXTERNAL_PAYMENT
+                    SMALL_INVOICE_CARRYOVER -> Known.SMALL_INVOICE_CARRYOVER
                     else -> throw OrbInvalidDataException("Unknown Action: $value")
                 }
 
@@ -3726,7 +3764,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Action && value == other.value /* spotless:on */
+                return other is Action && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -3851,7 +3889,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Type && value == other.value /* spotless:on */
+                return other is Type && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -3864,12 +3902,35 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CustomerBalanceTransaction && id == other.id && action == other.action && amount == other.amount && createdAt == other.createdAt && creditNote == other.creditNote && description == other.description && endingBalance == other.endingBalance && invoice == other.invoice && startingBalance == other.startingBalance && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is CustomerBalanceTransaction &&
+                id == other.id &&
+                action == other.action &&
+                amount == other.amount &&
+                createdAt == other.createdAt &&
+                creditNote == other.creditNote &&
+                description == other.description &&
+                endingBalance == other.endingBalance &&
+                invoice == other.invoice &&
+                startingBalance == other.startingBalance &&
+                type == other.type &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, action, amount, createdAt, creditNote, description, endingBalance, invoice, startingBalance, type, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                action,
+                amount,
+                createdAt,
+                creditNote,
+                description,
+                endingBalance,
+                invoice,
+                startingBalance,
+                type,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -4003,7 +4064,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is InvoiceSource && value == other.value /* spotless:on */
+            return other is InvoiceSource && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -4012,20 +4073,16 @@ private constructor(
     }
 
     class LineItem
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val adjustedSubtotal: JsonField<String>,
         private val adjustments: JsonField<List<Adjustment>>,
         private val amount: JsonField<String>,
         private val creditsApplied: JsonField<String>,
-        private val discount: JsonField<Discount>,
         private val endDate: JsonField<OffsetDateTime>,
         private val filter: JsonField<String>,
         private val grouping: JsonField<String>,
-        private val maximum: JsonField<Maximum>,
-        private val maximumAmount: JsonField<String>,
-        private val minimum: JsonField<Minimum>,
-        private val minimumAmount: JsonField<String>,
         private val name: JsonField<String>,
         private val partiallyInvoicedAmount: JsonField<String>,
         private val price: JsonField<Price>,
@@ -4051,9 +4108,6 @@ private constructor(
             @JsonProperty("credits_applied")
             @ExcludeMissing
             creditsApplied: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("discount")
-            @ExcludeMissing
-            discount: JsonField<Discount> = JsonMissing.of(),
             @JsonProperty("end_date")
             @ExcludeMissing
             endDate: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -4061,14 +4115,6 @@ private constructor(
             @JsonProperty("grouping")
             @ExcludeMissing
             grouping: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("maximum") @ExcludeMissing maximum: JsonField<Maximum> = JsonMissing.of(),
-            @JsonProperty("maximum_amount")
-            @ExcludeMissing
-            maximumAmount: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("minimum") @ExcludeMissing minimum: JsonField<Minimum> = JsonMissing.of(),
-            @JsonProperty("minimum_amount")
-            @ExcludeMissing
-            minimumAmount: JsonField<String> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
             @JsonProperty("partially_invoiced_amount")
             @ExcludeMissing
@@ -4098,14 +4144,9 @@ private constructor(
             adjustments,
             amount,
             creditsApplied,
-            discount,
             endDate,
             filter,
             grouping,
-            maximum,
-            maximumAmount,
-            minimum,
-            minimumAmount,
             name,
             partiallyInvoicedAmount,
             price,
@@ -4163,15 +4204,6 @@ private constructor(
         fun creditsApplied(): String = creditsApplied.getRequired("credits_applied")
 
         /**
-         * This field is deprecated in favor of `adjustments`
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated")
-        fun discount(): Optional<Discount> = discount.getOptional("discount")
-
-        /**
          * The end date of the range of time applied for this line item's price.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
@@ -4196,40 +4228,6 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun grouping(): Optional<String> = grouping.getOptional("grouping")
-
-        /**
-         * This field is deprecated in favor of `adjustments`.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated") fun maximum(): Optional<Maximum> = maximum.getOptional("maximum")
-
-        /**
-         * This field is deprecated in favor of `adjustments`.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated")
-        fun maximumAmount(): Optional<String> = maximumAmount.getOptional("maximum_amount")
-
-        /**
-         * This field is deprecated in favor of `adjustments`.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated") fun minimum(): Optional<Minimum> = minimum.getOptional("minimum")
-
-        /**
-         * This field is deprecated in favor of `adjustments`.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        @Deprecated("deprecated")
-        fun minimumAmount(): Optional<String> = minimumAmount.getOptional("minimum_amount")
 
         /**
          * The name of the price associated with this line item.
@@ -4291,7 +4289,7 @@ private constructor(
         fun subLineItems(): List<SubLineItem> = subLineItems.getRequired("sub_line_items")
 
         /**
-         * The line amount before before any adjustments.
+         * The line amount before any adjustments.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -4360,16 +4358,6 @@ private constructor(
         fun _creditsApplied(): JsonField<String> = creditsApplied
 
         /**
-         * Returns the raw JSON value of [discount].
-         *
-         * Unlike [discount], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("discount")
-        @ExcludeMissing
-        fun _discount(): JsonField<Discount> = discount
-
-        /**
          * Returns the raw JSON value of [endDate].
          *
          * Unlike [endDate], this method doesn't throw if the JSON field has an unexpected type.
@@ -4391,48 +4379,6 @@ private constructor(
          * Unlike [grouping], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("grouping") @ExcludeMissing fun _grouping(): JsonField<String> = grouping
-
-        /**
-         * Returns the raw JSON value of [maximum].
-         *
-         * Unlike [maximum], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("maximum")
-        @ExcludeMissing
-        fun _maximum(): JsonField<Maximum> = maximum
-
-        /**
-         * Returns the raw JSON value of [maximumAmount].
-         *
-         * Unlike [maximumAmount], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("maximum_amount")
-        @ExcludeMissing
-        fun _maximumAmount(): JsonField<String> = maximumAmount
-
-        /**
-         * Returns the raw JSON value of [minimum].
-         *
-         * Unlike [minimum], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("minimum")
-        @ExcludeMissing
-        fun _minimum(): JsonField<Minimum> = minimum
-
-        /**
-         * Returns the raw JSON value of [minimumAmount].
-         *
-         * Unlike [minimumAmount], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @Deprecated("deprecated")
-        @JsonProperty("minimum_amount")
-        @ExcludeMissing
-        fun _minimumAmount(): JsonField<String> = minimumAmount
 
         /**
          * Returns the raw JSON value of [name].
@@ -4534,14 +4480,9 @@ private constructor(
              * .adjustments()
              * .amount()
              * .creditsApplied()
-             * .discount()
              * .endDate()
              * .filter()
              * .grouping()
-             * .maximum()
-             * .maximumAmount()
-             * .minimum()
-             * .minimumAmount()
              * .name()
              * .partiallyInvoicedAmount()
              * .price()
@@ -4564,14 +4505,9 @@ private constructor(
             private var adjustments: JsonField<MutableList<Adjustment>>? = null
             private var amount: JsonField<String>? = null
             private var creditsApplied: JsonField<String>? = null
-            private var discount: JsonField<Discount>? = null
             private var endDate: JsonField<OffsetDateTime>? = null
             private var filter: JsonField<String>? = null
             private var grouping: JsonField<String>? = null
-            private var maximum: JsonField<Maximum>? = null
-            private var maximumAmount: JsonField<String>? = null
-            private var minimum: JsonField<Minimum>? = null
-            private var minimumAmount: JsonField<String>? = null
             private var name: JsonField<String>? = null
             private var partiallyInvoicedAmount: JsonField<String>? = null
             private var price: JsonField<Price>? = null
@@ -4590,14 +4526,9 @@ private constructor(
                 adjustments = lineItem.adjustments.map { it.toMutableList() }
                 amount = lineItem.amount
                 creditsApplied = lineItem.creditsApplied
-                discount = lineItem.discount
                 endDate = lineItem.endDate
                 filter = lineItem.filter
                 grouping = lineItem.grouping
-                maximum = lineItem.maximum
-                maximumAmount = lineItem.maximumAmount
-                minimum = lineItem.minimum
-                minimumAmount = lineItem.minimumAmount
                 name = lineItem.name
                 partiallyInvoicedAmount = lineItem.partiallyInvoicedAmount
                 price = lineItem.price
@@ -4727,95 +4658,6 @@ private constructor(
                 this.creditsApplied = creditsApplied
             }
 
-            /** This field is deprecated in favor of `adjustments` */
-            @Deprecated("deprecated")
-            fun discount(discount: Discount?) = discount(JsonField.ofNullable(discount))
-
-            /** Alias for calling [Builder.discount] with `discount.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun discount(discount: Optional<Discount>) = discount(discount.getOrNull())
-
-            /**
-             * Sets [Builder.discount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.discount] with a well-typed [Discount] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun discount(discount: JsonField<Discount>) = apply { this.discount = discount }
-
-            /** Alias for calling [discount] with `Discount.ofPercentage(percentage)`. */
-            @Deprecated("deprecated")
-            fun discount(percentage: PercentageDiscount) =
-                discount(Discount.ofPercentage(percentage))
-
-            /**
-             * Alias for calling [discount] with the following:
-             * ```java
-             * PercentageDiscount.builder()
-             *     .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
-             *     .percentageDiscount(percentageDiscount)
-             *     .build()
-             * ```
-             */
-            @Deprecated("deprecated")
-            fun percentageDiscount(percentageDiscount: Double) =
-                discount(
-                    PercentageDiscount.builder()
-                        .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
-                        .percentageDiscount(percentageDiscount)
-                        .build()
-                )
-
-            /** Alias for calling [discount] with `Discount.ofTrial(trial)`. */
-            @Deprecated("deprecated")
-            fun discount(trial: TrialDiscount) = discount(Discount.ofTrial(trial))
-
-            /** Alias for calling [discount] with `Discount.ofUsage(usage)`. */
-            @Deprecated("deprecated")
-            fun discount(usage: UsageDiscount) = discount(Discount.ofUsage(usage))
-
-            /**
-             * Alias for calling [discount] with the following:
-             * ```java
-             * UsageDiscount.builder()
-             *     .discountType(UsageDiscount.DiscountType.USAGE)
-             *     .usageDiscount(usageDiscount)
-             *     .build()
-             * ```
-             */
-            @Deprecated("deprecated")
-            fun usageDiscount(usageDiscount: Double) =
-                discount(
-                    UsageDiscount.builder()
-                        .discountType(UsageDiscount.DiscountType.USAGE)
-                        .usageDiscount(usageDiscount)
-                        .build()
-                )
-
-            /** Alias for calling [discount] with `Discount.ofAmount(amount)`. */
-            @Deprecated("deprecated")
-            fun discount(amount: AmountDiscount) = discount(Discount.ofAmount(amount))
-
-            /**
-             * Alias for calling [discount] with the following:
-             * ```java
-             * AmountDiscount.builder()
-             *     .discountType(AmountDiscount.DiscountType.AMOUNT)
-             *     .amountDiscount(amountDiscount)
-             *     .build()
-             * ```
-             */
-            @Deprecated("deprecated")
-            fun amountDiscount(amountDiscount: String) =
-                discount(
-                    AmountDiscount.builder()
-                        .discountType(AmountDiscount.DiscountType.AMOUNT)
-                        .amountDiscount(amountDiscount)
-                        .build()
-                )
-
             /** The end date of the range of time applied for this line item's price. */
             fun endDate(endDate: OffsetDateTime) = endDate(JsonField.of(endDate))
 
@@ -4861,86 +4703,6 @@ private constructor(
              * supported value.
              */
             fun grouping(grouping: JsonField<String>) = apply { this.grouping = grouping }
-
-            /** This field is deprecated in favor of `adjustments`. */
-            @Deprecated("deprecated")
-            fun maximum(maximum: Maximum?) = maximum(JsonField.ofNullable(maximum))
-
-            /** Alias for calling [Builder.maximum] with `maximum.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun maximum(maximum: Optional<Maximum>) = maximum(maximum.getOrNull())
-
-            /**
-             * Sets [Builder.maximum] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.maximum] with a well-typed [Maximum] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun maximum(maximum: JsonField<Maximum>) = apply { this.maximum = maximum }
-
-            /** This field is deprecated in favor of `adjustments`. */
-            @Deprecated("deprecated")
-            fun maximumAmount(maximumAmount: String?) =
-                maximumAmount(JsonField.ofNullable(maximumAmount))
-
-            /** Alias for calling [Builder.maximumAmount] with `maximumAmount.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun maximumAmount(maximumAmount: Optional<String>) =
-                maximumAmount(maximumAmount.getOrNull())
-
-            /**
-             * Sets [Builder.maximumAmount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.maximumAmount] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun maximumAmount(maximumAmount: JsonField<String>) = apply {
-                this.maximumAmount = maximumAmount
-            }
-
-            /** This field is deprecated in favor of `adjustments`. */
-            @Deprecated("deprecated")
-            fun minimum(minimum: Minimum?) = minimum(JsonField.ofNullable(minimum))
-
-            /** Alias for calling [Builder.minimum] with `minimum.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun minimum(minimum: Optional<Minimum>) = minimum(minimum.getOrNull())
-
-            /**
-             * Sets [Builder.minimum] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.minimum] with a well-typed [Minimum] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun minimum(minimum: JsonField<Minimum>) = apply { this.minimum = minimum }
-
-            /** This field is deprecated in favor of `adjustments`. */
-            @Deprecated("deprecated")
-            fun minimumAmount(minimumAmount: String?) =
-                minimumAmount(JsonField.ofNullable(minimumAmount))
-
-            /** Alias for calling [Builder.minimumAmount] with `minimumAmount.orElse(null)`. */
-            @Deprecated("deprecated")
-            fun minimumAmount(minimumAmount: Optional<String>) =
-                minimumAmount(minimumAmount.getOrNull())
-
-            /**
-             * Sets [Builder.minimumAmount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.minimumAmount] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            @Deprecated("deprecated")
-            fun minimumAmount(minimumAmount: JsonField<String>) = apply {
-                this.minimumAmount = minimumAmount
-            }
 
             /** The name of the price associated with this line item. */
             fun name(name: String) = name(JsonField.of(name))
@@ -4993,28 +4755,23 @@ private constructor(
             fun price(price: JsonField<Price>) = apply { this.price = price }
 
             /** Alias for calling [price] with `Price.ofUnit(unit)`. */
-            fun price(unit: Price.Unit) = price(Price.ofUnit(unit))
+            fun price(unit: Price.UnitPrice) = price(Price.ofUnit(unit))
+
+            /** Alias for calling [price] with `Price.ofTiered(tiered)`. */
+            fun price(tiered: Price.Tiered) = price(Price.ofTiered(tiered))
+
+            /** Alias for calling [price] with `Price.ofBulk(bulk)`. */
+            fun price(bulk: Price.Bulk) = price(Price.ofBulk(bulk))
+
+            /** Alias for calling [price] with `Price.ofBulkWithFilters(bulkWithFilters)`. */
+            fun price(bulkWithFilters: Price.BulkWithFilters) =
+                price(Price.ofBulkWithFilters(bulkWithFilters))
 
             /** Alias for calling [price] with `Price.ofPackage(package_)`. */
             fun price(package_: Price.Package) = price(Price.ofPackage(package_))
 
             /** Alias for calling [price] with `Price.ofMatrix(matrix)`. */
             fun price(matrix: Price.Matrix) = price(Price.ofMatrix(matrix))
-
-            /** Alias for calling [price] with `Price.ofTiered(tiered)`. */
-            fun price(tiered: Price.Tiered) = price(Price.ofTiered(tiered))
-
-            /** Alias for calling [price] with `Price.ofTieredBps(tieredBps)`. */
-            fun price(tieredBps: Price.TieredBps) = price(Price.ofTieredBps(tieredBps))
-
-            /** Alias for calling [price] with `Price.ofBps(bps)`. */
-            fun price(bps: Price.Bps) = price(Price.ofBps(bps))
-
-            /** Alias for calling [price] with `Price.ofBulkBps(bulkBps)`. */
-            fun price(bulkBps: Price.BulkBps) = price(Price.ofBulkBps(bulkBps))
-
-            /** Alias for calling [price] with `Price.ofBulk(bulk)`. */
-            fun price(bulk: Price.Bulk) = price(Price.ofBulk(bulk))
 
             /**
              * Alias for calling [price] with `Price.ofThresholdTotalAmount(thresholdTotalAmount)`.
@@ -5026,13 +4783,13 @@ private constructor(
             fun price(tieredPackage: Price.TieredPackage) =
                 price(Price.ofTieredPackage(tieredPackage))
 
-            /** Alias for calling [price] with `Price.ofGroupedTiered(groupedTiered)`. */
-            fun price(groupedTiered: Price.GroupedTiered) =
-                price(Price.ofGroupedTiered(groupedTiered))
-
             /** Alias for calling [price] with `Price.ofTieredWithMinimum(tieredWithMinimum)`. */
             fun price(tieredWithMinimum: Price.TieredWithMinimum) =
                 price(Price.ofTieredWithMinimum(tieredWithMinimum))
+
+            /** Alias for calling [price] with `Price.ofGroupedTiered(groupedTiered)`. */
+            fun price(groupedTiered: Price.GroupedTiered) =
+                price(Price.ofGroupedTiered(groupedTiered))
 
             /**
              * Alias for calling [price] with
@@ -5072,6 +4829,10 @@ private constructor(
             fun price(groupedAllocation: Price.GroupedAllocation) =
                 price(Price.ofGroupedAllocation(groupedAllocation))
 
+            /** Alias for calling [price] with `Price.ofBulkWithProration(bulkWithProration)`. */
+            fun price(bulkWithProration: Price.BulkWithProration) =
+                price(Price.ofBulkWithProration(bulkWithProration))
+
             /**
              * Alias for calling [price] with
              * `Price.ofGroupedWithProratedMinimum(groupedWithProratedMinimum)`.
@@ -5088,14 +4849,17 @@ private constructor(
 
             /**
              * Alias for calling [price] with
+             * `Price.ofGroupedWithMinMaxThresholds(groupedWithMinMaxThresholds)`.
+             */
+            fun price(groupedWithMinMaxThresholds: Price.GroupedWithMinMaxThresholds) =
+                price(Price.ofGroupedWithMinMaxThresholds(groupedWithMinMaxThresholds))
+
+            /**
+             * Alias for calling [price] with
              * `Price.ofMatrixWithDisplayName(matrixWithDisplayName)`.
              */
             fun price(matrixWithDisplayName: Price.MatrixWithDisplayName) =
                 price(Price.ofMatrixWithDisplayName(matrixWithDisplayName))
-
-            /** Alias for calling [price] with `Price.ofBulkWithProration(bulkWithProration)`. */
-            fun price(bulkWithProration: Price.BulkWithProration) =
-                price(Price.ofBulkWithProration(bulkWithProration))
 
             /**
              * Alias for calling [price] with `Price.ofGroupedTieredPackage(groupedTieredPackage)`.
@@ -5133,10 +4897,20 @@ private constructor(
 
             /**
              * Alias for calling [price] with
-             * `Price.ofGroupedWithMinMaxThresholds(groupedWithMinMaxThresholds)`.
+             * `Price.ofCumulativeGroupedAllocation(cumulativeGroupedAllocation)`.
              */
-            fun price(groupedWithMinMaxThresholds: Price.GroupedWithMinMaxThresholds) =
-                price(Price.ofGroupedWithMinMaxThresholds(groupedWithMinMaxThresholds))
+            fun price(cumulativeGroupedAllocation: Price.CumulativeGroupedAllocation) =
+                price(Price.ofCumulativeGroupedAllocation(cumulativeGroupedAllocation))
+
+            /** Alias for calling [price] with `Price.ofMinimumComposite(minimumComposite)`. */
+            fun price(minimumComposite: Price.MinimumComposite) =
+                price(Price.ofMinimumComposite(minimumComposite))
+
+            /** Alias for calling [price] with `Price.ofPercent(percent)`. */
+            fun price(percent: Price.Percent) = price(Price.ofPercent(percent))
+
+            /** Alias for calling [price] with `Price.ofEventOutput(eventOutput)`. */
+            fun price(eventOutput: Price.EventOutput) = price(Price.ofEventOutput(eventOutput))
 
             /** Either the fixed fee quantity or the usage during the service period. */
             fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
@@ -5204,7 +4978,7 @@ private constructor(
             /** Alias for calling [addSubLineItem] with `SubLineItem.ofNull(null_)`. */
             fun addSubLineItem(null_: OtherSubLineItem) = addSubLineItem(SubLineItem.ofNull(null_))
 
-            /** The line amount before before any adjustments. */
+            /** The line amount before any adjustments. */
             fun subtotal(subtotal: String) = subtotal(JsonField.of(subtotal))
 
             /**
@@ -5309,14 +5083,9 @@ private constructor(
              * .adjustments()
              * .amount()
              * .creditsApplied()
-             * .discount()
              * .endDate()
              * .filter()
              * .grouping()
-             * .maximum()
-             * .maximumAmount()
-             * .minimum()
-             * .minimumAmount()
              * .name()
              * .partiallyInvoicedAmount()
              * .price()
@@ -5337,14 +5106,9 @@ private constructor(
                     checkRequired("adjustments", adjustments).map { it.toImmutable() },
                     checkRequired("amount", amount),
                     checkRequired("creditsApplied", creditsApplied),
-                    checkRequired("discount", discount),
                     checkRequired("endDate", endDate),
                     checkRequired("filter", filter),
                     checkRequired("grouping", grouping),
-                    checkRequired("maximum", maximum),
-                    checkRequired("maximumAmount", maximumAmount),
-                    checkRequired("minimum", minimum),
-                    checkRequired("minimumAmount", minimumAmount),
                     checkRequired("name", name),
                     checkRequired("partiallyInvoicedAmount", partiallyInvoicedAmount),
                     checkRequired("price", price),
@@ -5370,14 +5134,9 @@ private constructor(
             adjustments().forEach { it.validate() }
             amount()
             creditsApplied()
-            discount().ifPresent { it.validate() }
             endDate()
             filter()
             grouping()
-            maximum().ifPresent { it.validate() }
-            maximumAmount()
-            minimum().ifPresent { it.validate() }
-            minimumAmount()
             name()
             partiallyInvoicedAmount()
             price().validate()
@@ -5411,14 +5170,9 @@ private constructor(
                 (adjustments.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (amount.asKnown().isPresent) 1 else 0) +
                 (if (creditsApplied.asKnown().isPresent) 1 else 0) +
-                (discount.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (endDate.asKnown().isPresent) 1 else 0) +
                 (if (filter.asKnown().isPresent) 1 else 0) +
                 (if (grouping.asKnown().isPresent) 1 else 0) +
-                (maximum.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (maximumAmount.asKnown().isPresent) 1 else 0) +
-                (minimum.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (minimumAmount.asKnown().isPresent) 1 else 0) +
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (partiallyInvoicedAmount.asKnown().isPresent) 1 else 0) +
                 (price.asKnown().getOrNull()?.validity() ?: 0) +
@@ -5574,10 +5328,16 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Adjustment && usageDiscount == other.usageDiscount && amountDiscount == other.amountDiscount && percentageDiscount == other.percentageDiscount && minimum == other.minimum && maximum == other.maximum /* spotless:on */
+                return other is Adjustment &&
+                    usageDiscount == other.usageDiscount &&
+                    amountDiscount == other.amountDiscount &&
+                    percentageDiscount == other.percentageDiscount &&
+                    minimum == other.minimum &&
+                    maximum == other.maximum
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(usageDiscount, amountDiscount, percentageDiscount, minimum, maximum) /* spotless:on */
+            override fun hashCode(): Int =
+                Objects.hash(usageDiscount, amountDiscount, percentageDiscount, minimum, maximum)
 
             override fun toString(): String =
                 when {
@@ -5810,10 +5570,13 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is SubLineItem && matrix == other.matrix && tier == other.tier && null_ == other.null_ /* spotless:on */
+                return other is SubLineItem &&
+                    matrix == other.matrix &&
+                    tier == other.tier &&
+                    null_ == other.null_
             }
 
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(matrix, tier, null_) /* spotless:on */
+            override fun hashCode(): Int = Objects.hash(matrix, tier, null_)
 
             override fun toString(): String =
                 when {
@@ -5911,17 +5674,54 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is LineItem && id == other.id && adjustedSubtotal == other.adjustedSubtotal && adjustments == other.adjustments && amount == other.amount && creditsApplied == other.creditsApplied && discount == other.discount && endDate == other.endDate && filter == other.filter && grouping == other.grouping && maximum == other.maximum && maximumAmount == other.maximumAmount && minimum == other.minimum && minimumAmount == other.minimumAmount && name == other.name && partiallyInvoicedAmount == other.partiallyInvoicedAmount && price == other.price && quantity == other.quantity && startDate == other.startDate && subLineItems == other.subLineItems && subtotal == other.subtotal && taxAmounts == other.taxAmounts && usageCustomerIds == other.usageCustomerIds && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is LineItem &&
+                id == other.id &&
+                adjustedSubtotal == other.adjustedSubtotal &&
+                adjustments == other.adjustments &&
+                amount == other.amount &&
+                creditsApplied == other.creditsApplied &&
+                endDate == other.endDate &&
+                filter == other.filter &&
+                grouping == other.grouping &&
+                name == other.name &&
+                partiallyInvoicedAmount == other.partiallyInvoicedAmount &&
+                price == other.price &&
+                quantity == other.quantity &&
+                startDate == other.startDate &&
+                subLineItems == other.subLineItems &&
+                subtotal == other.subtotal &&
+                taxAmounts == other.taxAmounts &&
+                usageCustomerIds == other.usageCustomerIds &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, adjustedSubtotal, adjustments, amount, creditsApplied, discount, endDate, filter, grouping, maximum, maximumAmount, minimum, minimumAmount, name, partiallyInvoicedAmount, price, quantity, startDate, subLineItems, subtotal, taxAmounts, usageCustomerIds, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                adjustedSubtotal,
+                adjustments,
+                amount,
+                creditsApplied,
+                endDate,
+                filter,
+                grouping,
+                name,
+                partiallyInvoicedAmount,
+                price,
+                quantity,
+                startDate,
+                subLineItems,
+                subtotal,
+                taxAmounts,
+                usageCustomerIds,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "LineItem{id=$id, adjustedSubtotal=$adjustedSubtotal, adjustments=$adjustments, amount=$amount, creditsApplied=$creditsApplied, discount=$discount, endDate=$endDate, filter=$filter, grouping=$grouping, maximum=$maximum, maximumAmount=$maximumAmount, minimum=$minimum, minimumAmount=$minimumAmount, name=$name, partiallyInvoicedAmount=$partiallyInvoicedAmount, price=$price, quantity=$quantity, startDate=$startDate, subLineItems=$subLineItems, subtotal=$subtotal, taxAmounts=$taxAmounts, usageCustomerIds=$usageCustomerIds, additionalProperties=$additionalProperties}"
+            "LineItem{id=$id, adjustedSubtotal=$adjustedSubtotal, adjustments=$adjustments, amount=$amount, creditsApplied=$creditsApplied, endDate=$endDate, filter=$filter, grouping=$grouping, name=$name, partiallyInvoicedAmount=$partiallyInvoicedAmount, price=$price, quantity=$quantity, startDate=$startDate, subLineItems=$subLineItems, subtotal=$subtotal, taxAmounts=$taxAmounts, usageCustomerIds=$usageCustomerIds, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -6018,12 +5818,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Metadata && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -6031,12 +5829,14 @@ private constructor(
     }
 
     class PaymentAttempt
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val amount: JsonField<String>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val paymentProvider: JsonField<PaymentProvider>,
         private val paymentProviderId: JsonField<String>,
+        private val receiptPdf: JsonField<String>,
         private val succeeded: JsonField<Boolean>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -6054,6 +5854,9 @@ private constructor(
             @JsonProperty("payment_provider_id")
             @ExcludeMissing
             paymentProviderId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("receipt_pdf")
+            @ExcludeMissing
+            receiptPdf: JsonField<String> = JsonMissing.of(),
             @JsonProperty("succeeded")
             @ExcludeMissing
             succeeded: JsonField<Boolean> = JsonMissing.of(),
@@ -6063,6 +5866,7 @@ private constructor(
             createdAt,
             paymentProvider,
             paymentProviderId,
+            receiptPdf,
             succeeded,
             mutableMapOf(),
         )
@@ -6108,6 +5912,15 @@ private constructor(
          */
         fun paymentProviderId(): Optional<String> =
             paymentProviderId.getOptional("payment_provider_id")
+
+        /**
+         * URL to the downloadable PDF version of the receipt. This field will be `null` for payment
+         * attempts that did not succeed.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun receiptPdf(): Optional<String> = receiptPdf.getOptional("receipt_pdf")
 
         /**
          * Whether the payment attempt succeeded.
@@ -6161,6 +5974,15 @@ private constructor(
         fun _paymentProviderId(): JsonField<String> = paymentProviderId
 
         /**
+         * Returns the raw JSON value of [receiptPdf].
+         *
+         * Unlike [receiptPdf], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("receipt_pdf")
+        @ExcludeMissing
+        fun _receiptPdf(): JsonField<String> = receiptPdf
+
+        /**
          * Returns the raw JSON value of [succeeded].
          *
          * Unlike [succeeded], this method doesn't throw if the JSON field has an unexpected type.
@@ -6191,6 +6013,7 @@ private constructor(
              * .createdAt()
              * .paymentProvider()
              * .paymentProviderId()
+             * .receiptPdf()
              * .succeeded()
              * ```
              */
@@ -6205,6 +6028,7 @@ private constructor(
             private var createdAt: JsonField<OffsetDateTime>? = null
             private var paymentProvider: JsonField<PaymentProvider>? = null
             private var paymentProviderId: JsonField<String>? = null
+            private var receiptPdf: JsonField<String>? = null
             private var succeeded: JsonField<Boolean>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -6215,6 +6039,7 @@ private constructor(
                 createdAt = paymentAttempt.createdAt
                 paymentProvider = paymentAttempt.paymentProvider
                 paymentProviderId = paymentAttempt.paymentProviderId
+                receiptPdf = paymentAttempt.receiptPdf
                 succeeded = paymentAttempt.succeeded
                 additionalProperties = paymentAttempt.additionalProperties.toMutableMap()
             }
@@ -6297,6 +6122,24 @@ private constructor(
                 this.paymentProviderId = paymentProviderId
             }
 
+            /**
+             * URL to the downloadable PDF version of the receipt. This field will be `null` for
+             * payment attempts that did not succeed.
+             */
+            fun receiptPdf(receiptPdf: String?) = receiptPdf(JsonField.ofNullable(receiptPdf))
+
+            /** Alias for calling [Builder.receiptPdf] with `receiptPdf.orElse(null)`. */
+            fun receiptPdf(receiptPdf: Optional<String>) = receiptPdf(receiptPdf.getOrNull())
+
+            /**
+             * Sets [Builder.receiptPdf] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.receiptPdf] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun receiptPdf(receiptPdf: JsonField<String>) = apply { this.receiptPdf = receiptPdf }
+
             /** Whether the payment attempt succeeded. */
             fun succeeded(succeeded: Boolean) = succeeded(JsonField.of(succeeded))
 
@@ -6340,6 +6183,7 @@ private constructor(
              * .createdAt()
              * .paymentProvider()
              * .paymentProviderId()
+             * .receiptPdf()
              * .succeeded()
              * ```
              *
@@ -6352,6 +6196,7 @@ private constructor(
                     checkRequired("createdAt", createdAt),
                     checkRequired("paymentProvider", paymentProvider),
                     checkRequired("paymentProviderId", paymentProviderId),
+                    checkRequired("receiptPdf", receiptPdf),
                     checkRequired("succeeded", succeeded),
                     additionalProperties.toMutableMap(),
                 )
@@ -6369,6 +6214,7 @@ private constructor(
             createdAt()
             paymentProvider().ifPresent { it.validate() }
             paymentProviderId()
+            receiptPdf()
             succeeded()
             validated = true
         }
@@ -6394,6 +6240,7 @@ private constructor(
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
                 (paymentProvider.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (paymentProviderId.asKnown().isPresent) 1 else 0) +
+                (if (receiptPdf.asKnown().isPresent) 1 else 0) +
                 (if (succeeded.asKnown().isPresent) 1 else 0)
 
         /** The payment provider that attempted to collect the payment. */
@@ -6513,7 +6360,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is PaymentProvider && value == other.value /* spotless:on */
+                return other is PaymentProvider && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -6526,17 +6373,34 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is PaymentAttempt && id == other.id && amount == other.amount && createdAt == other.createdAt && paymentProvider == other.paymentProvider && paymentProviderId == other.paymentProviderId && succeeded == other.succeeded && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is PaymentAttempt &&
+                id == other.id &&
+                amount == other.amount &&
+                createdAt == other.createdAt &&
+                paymentProvider == other.paymentProvider &&
+                paymentProviderId == other.paymentProviderId &&
+                receiptPdf == other.receiptPdf &&
+                succeeded == other.succeeded &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, amount, createdAt, paymentProvider, paymentProviderId, succeeded, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                amount,
+                createdAt,
+                paymentProvider,
+                paymentProviderId,
+                receiptPdf,
+                succeeded,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "PaymentAttempt{id=$id, amount=$amount, createdAt=$createdAt, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, succeeded=$succeeded, additionalProperties=$additionalProperties}"
+            "PaymentAttempt{id=$id, amount=$amount, createdAt=$createdAt, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, receiptPdf=$receiptPdf, succeeded=$succeeded, additionalProperties=$additionalProperties}"
     }
 
     class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
@@ -6673,7 +6537,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
+            return other is Status && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -6686,12 +6550,97 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Invoice && id == other.id && amountDue == other.amountDue && autoCollection == other.autoCollection && billingAddress == other.billingAddress && createdAt == other.createdAt && creditNotes == other.creditNotes && currency == other.currency && customer == other.customer && customerBalanceTransactions == other.customerBalanceTransactions && customerTaxId == other.customerTaxId && discount == other.discount && discounts == other.discounts && dueDate == other.dueDate && eligibleToIssueAt == other.eligibleToIssueAt && hostedInvoiceUrl == other.hostedInvoiceUrl && invoiceDate == other.invoiceDate && invoiceNumber == other.invoiceNumber && invoicePdf == other.invoicePdf && invoiceSource == other.invoiceSource && issueFailedAt == other.issueFailedAt && issuedAt == other.issuedAt && lineItems == other.lineItems && maximum == other.maximum && maximumAmount == other.maximumAmount && memo == other.memo && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && paidAt == other.paidAt && paymentAttempts == other.paymentAttempts && paymentFailedAt == other.paymentFailedAt && paymentStartedAt == other.paymentStartedAt && scheduledIssueAt == other.scheduledIssueAt && shippingAddress == other.shippingAddress && status == other.status && subscription == other.subscription && subtotal == other.subtotal && syncFailedAt == other.syncFailedAt && total == other.total && voidedAt == other.voidedAt && willAutoIssue == other.willAutoIssue && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is Invoice &&
+            id == other.id &&
+            amountDue == other.amountDue &&
+            autoCollection == other.autoCollection &&
+            billingAddress == other.billingAddress &&
+            createdAt == other.createdAt &&
+            creditNotes == other.creditNotes &&
+            currency == other.currency &&
+            customer == other.customer &&
+            customerBalanceTransactions == other.customerBalanceTransactions &&
+            customerTaxId == other.customerTaxId &&
+            discount == other.discount &&
+            discounts == other.discounts &&
+            dueDate == other.dueDate &&
+            eligibleToIssueAt == other.eligibleToIssueAt &&
+            hostedInvoiceUrl == other.hostedInvoiceUrl &&
+            invoiceDate == other.invoiceDate &&
+            invoiceNumber == other.invoiceNumber &&
+            invoicePdf == other.invoicePdf &&
+            invoiceSource == other.invoiceSource &&
+            issueFailedAt == other.issueFailedAt &&
+            issuedAt == other.issuedAt &&
+            lineItems == other.lineItems &&
+            maximum == other.maximum &&
+            maximumAmount == other.maximumAmount &&
+            memo == other.memo &&
+            metadata == other.metadata &&
+            minimum == other.minimum &&
+            minimumAmount == other.minimumAmount &&
+            paidAt == other.paidAt &&
+            paymentAttempts == other.paymentAttempts &&
+            paymentFailedAt == other.paymentFailedAt &&
+            paymentStartedAt == other.paymentStartedAt &&
+            scheduledIssueAt == other.scheduledIssueAt &&
+            shippingAddress == other.shippingAddress &&
+            status == other.status &&
+            subscription == other.subscription &&
+            subtotal == other.subtotal &&
+            syncFailedAt == other.syncFailedAt &&
+            total == other.total &&
+            voidedAt == other.voidedAt &&
+            willAutoIssue == other.willAutoIssue &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, amountDue, autoCollection, billingAddress, createdAt, creditNotes, currency, customer, customerBalanceTransactions, customerTaxId, discount, discounts, dueDate, eligibleToIssueAt, hostedInvoiceUrl, invoiceDate, invoiceNumber, invoicePdf, invoiceSource, issueFailedAt, issuedAt, lineItems, maximum, maximumAmount, memo, metadata, minimum, minimumAmount, paidAt, paymentAttempts, paymentFailedAt, paymentStartedAt, scheduledIssueAt, shippingAddress, status, subscription, subtotal, syncFailedAt, total, voidedAt, willAutoIssue, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            amountDue,
+            autoCollection,
+            billingAddress,
+            createdAt,
+            creditNotes,
+            currency,
+            customer,
+            customerBalanceTransactions,
+            customerTaxId,
+            discount,
+            discounts,
+            dueDate,
+            eligibleToIssueAt,
+            hostedInvoiceUrl,
+            invoiceDate,
+            invoiceNumber,
+            invoicePdf,
+            invoiceSource,
+            issueFailedAt,
+            issuedAt,
+            lineItems,
+            maximum,
+            maximumAmount,
+            memo,
+            metadata,
+            minimum,
+            minimumAmount,
+            paidAt,
+            paymentAttempts,
+            paymentFailedAt,
+            paymentStartedAt,
+            scheduledIssueAt,
+            shippingAddress,
+            status,
+            subscription,
+            subtotal,
+            syncFailedAt,
+            total,
+            voidedAt,
+            willAutoIssue,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

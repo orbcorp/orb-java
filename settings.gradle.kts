@@ -1,6 +1,14 @@
 rootProject.name = "orb-java-root"
 
-include("orb-java")
-include("orb-java-client-okhttp")
-include("orb-java-core")
-include("orb-java-example")
+val projectNames = rootDir.listFiles()
+    ?.asSequence()
+    .orEmpty()
+    .filter { file ->
+        file.isDirectory &&
+        file.name.startsWith("orb-java") &&
+        file.listFiles()?.asSequence().orEmpty().any { it.name == "build.gradle.kts" }
+    }
+    .map { it.name }
+    .toList()
+println("projects: $projectNames")
+projectNames.forEach { include(it) }

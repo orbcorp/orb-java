@@ -27,12 +27,7 @@ interface ExternalPlanIdServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): ExternalPlanIdServiceAsync
 
-    /**
-     * This API endpoint is in beta and its interface may change. It is recommended for use only in
-     * test mode.
-     *
-     * This endpoint allows the creation of a new plan version for an existing plan.
-     */
+    /** This endpoint allows the creation of a new plan version for an existing plan. */
     fun createPlanVersion(
         externalPlanId: String,
         params: BetaExternalPlanIdCreatePlanVersionParams,
@@ -59,9 +54,6 @@ interface ExternalPlanIdServiceAsync {
     ): CompletableFuture<PlanVersion>
 
     /**
-     * This API endpoint is in beta and its interface may change. It is recommended for use only in
-     * test mode.
-     *
      * This endpoint is used to fetch a plan version. It returns the phases, prices, and adjustments
      * present on this version of the plan.
      */
@@ -89,12 +81,7 @@ interface ExternalPlanIdServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<PlanVersion>
 
-    /**
-     * This API endpoint is in beta and its interface may change. It is recommended for use only in
-     * test mode.
-     *
-     * This endpoint allows setting the default version of a plan.
-     */
+    /** This endpoint allows setting the default version of a plan. */
     fun setDefaultPlanVersion(
         externalPlanId: String,
         params: BetaExternalPlanIdSetDefaultPlanVersionParams,

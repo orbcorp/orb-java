@@ -48,6 +48,7 @@ internal class CustomerServiceAsyncTest {
                     )
                     .addAdditionalEmail("dev@stainless.com")
                     .autoCollection(true)
+                    .autoIssuance(true)
                     .billingAddress(
                         AddressInput.builder()
                             .city("city")
@@ -72,6 +73,20 @@ internal class CustomerServiceAsyncTest {
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
+                    .paymentConfiguration(
+                        CustomerCreateParams.PaymentConfiguration.builder()
+                            .addPaymentProvider(
+                                CustomerCreateParams.PaymentConfiguration.PaymentProvider.builder()
+                                    .providerType(
+                                        CustomerCreateParams.PaymentConfiguration.PaymentProvider
+                                            .ProviderType
+                                            .STRIPE
+                                    )
+                                    .addExcludedPaymentMethodType("string")
+                                    .build()
+                            )
+                            .build()
+                    )
                     .paymentProvider(CustomerCreateParams.PaymentProvider.QUICKBOOKS)
                     .paymentProviderId("payment_provider_id")
                     .reportingConfiguration(
@@ -91,6 +106,7 @@ internal class CustomerServiceAsyncTest {
                         NewAvalaraTaxConfiguration.builder()
                             .taxExempt(true)
                             .taxProvider(NewAvalaraTaxConfiguration.TaxProvider.AVALARA)
+                            .automaticTaxEnabled(true)
                             .taxExemptionCode("tax_exemption_code")
                             .build()
                     )
@@ -135,6 +151,7 @@ internal class CustomerServiceAsyncTest {
                     )
                     .addAdditionalEmail("string")
                     .autoCollection(true)
+                    .autoIssuance(true)
                     .billingAddress(
                         AddressInput.builder()
                             .city("city")
@@ -161,6 +178,20 @@ internal class CustomerServiceAsyncTest {
                             .build()
                     )
                     .name("name")
+                    .paymentConfiguration(
+                        CustomerUpdateParams.PaymentConfiguration.builder()
+                            .addPaymentProvider(
+                                CustomerUpdateParams.PaymentConfiguration.PaymentProvider.builder()
+                                    .providerType(
+                                        CustomerUpdateParams.PaymentConfiguration.PaymentProvider
+                                            .ProviderType
+                                            .STRIPE
+                                    )
+                                    .addExcludedPaymentMethodType("string")
+                                    .build()
+                            )
+                            .build()
+                    )
                     .paymentProvider(CustomerUpdateParams.PaymentProvider.QUICKBOOKS)
                     .paymentProviderId("payment_provider_id")
                     .reportingConfiguration(
@@ -180,6 +211,7 @@ internal class CustomerServiceAsyncTest {
                         NewAvalaraTaxConfiguration.builder()
                             .taxExempt(true)
                             .taxProvider(NewAvalaraTaxConfiguration.TaxProvider.AVALARA)
+                            .automaticTaxEnabled(true)
                             .taxExemptionCode("tax_exemption_code")
                             .build()
                     )
@@ -313,6 +345,7 @@ internal class CustomerServiceAsyncTest {
                     )
                     .addAdditionalEmail("string")
                     .autoCollection(true)
+                    .autoIssuance(true)
                     .billingAddress(
                         AddressInput.builder()
                             .city("city")
@@ -339,6 +372,23 @@ internal class CustomerServiceAsyncTest {
                             .build()
                     )
                     .name("name")
+                    .paymentConfiguration(
+                        CustomerUpdateByExternalIdParams.PaymentConfiguration.builder()
+                            .addPaymentProvider(
+                                CustomerUpdateByExternalIdParams.PaymentConfiguration
+                                    .PaymentProvider
+                                    .builder()
+                                    .providerType(
+                                        CustomerUpdateByExternalIdParams.PaymentConfiguration
+                                            .PaymentProvider
+                                            .ProviderType
+                                            .STRIPE
+                                    )
+                                    .addExcludedPaymentMethodType("string")
+                                    .build()
+                            )
+                            .build()
+                    )
                     .paymentProvider(CustomerUpdateByExternalIdParams.PaymentProvider.QUICKBOOKS)
                     .paymentProviderId("payment_provider_id")
                     .reportingConfiguration(
@@ -358,6 +408,7 @@ internal class CustomerServiceAsyncTest {
                         NewAvalaraTaxConfiguration.builder()
                             .taxExempt(true)
                             .taxProvider(NewAvalaraTaxConfiguration.TaxProvider.AVALARA)
+                            .automaticTaxEnabled(true)
                             .taxExemptionCode("tax_exemption_code")
                             .build()
                     )

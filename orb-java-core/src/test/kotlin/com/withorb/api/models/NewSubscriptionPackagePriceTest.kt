@@ -19,7 +19,7 @@ internal class NewSubscriptionPackagePriceTest {
                 .modelType(NewSubscriptionPackagePrice.ModelType.PACKAGE)
                 .name("Annual fee")
                 .packageConfig(
-                    PackageConfig.builder().packageAmount("package_amount").packageSize(0L).build()
+                    PackageConfig.builder().packageAmount("package_amount").packageSize(1L).build()
                 )
                 .billableMetricId("billable_metric_id")
                 .billedInAdvance(true)
@@ -66,7 +66,7 @@ internal class NewSubscriptionPackagePriceTest {
         assertThat(newSubscriptionPackagePrice.name()).isEqualTo("Annual fee")
         assertThat(newSubscriptionPackagePrice.packageConfig())
             .isEqualTo(
-                PackageConfig.builder().packageAmount("package_amount").packageSize(0L).build()
+                PackageConfig.builder().packageAmount("package_amount").packageSize(1L).build()
             )
         assertThat(newSubscriptionPackagePrice.billableMetricId()).contains("billable_metric_id")
         assertThat(newSubscriptionPackagePrice.billedInAdvance()).contains(true)
@@ -80,7 +80,7 @@ internal class NewSubscriptionPackagePriceTest {
         assertThat(newSubscriptionPackagePrice.conversionRate()).contains(0.0)
         assertThat(newSubscriptionPackagePrice.conversionRateConfig())
             .contains(
-                NewSubscriptionPackagePrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(
@@ -127,7 +127,7 @@ internal class NewSubscriptionPackagePriceTest {
                 .modelType(NewSubscriptionPackagePrice.ModelType.PACKAGE)
                 .name("Annual fee")
                 .packageConfig(
-                    PackageConfig.builder().packageAmount("package_amount").packageSize(0L).build()
+                    PackageConfig.builder().packageAmount("package_amount").packageSize(1L).build()
                 )
                 .billableMetricId("billable_metric_id")
                 .billedInAdvance(true)

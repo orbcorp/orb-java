@@ -35,6 +35,7 @@ import kotlin.jvm.optionals.getOrNull
  * long it remains available for use by end users.
  */
 class Coupon
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val archivedAt: JsonField<OffsetDateTime>,
@@ -589,10 +590,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Discount && percentage == other.percentage && amount == other.amount /* spotless:on */
+            return other is Discount && percentage == other.percentage && amount == other.amount
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(percentage, amount) /* spotless:on */
+        override fun hashCode(): Int = Objects.hash(percentage, amount)
 
         override fun toString(): String =
             when {
@@ -680,12 +681,29 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Coupon && id == other.id && archivedAt == other.archivedAt && discount == other.discount && durationInMonths == other.durationInMonths && maxRedemptions == other.maxRedemptions && redemptionCode == other.redemptionCode && timesRedeemed == other.timesRedeemed && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is Coupon &&
+            id == other.id &&
+            archivedAt == other.archivedAt &&
+            discount == other.discount &&
+            durationInMonths == other.durationInMonths &&
+            maxRedemptions == other.maxRedemptions &&
+            redemptionCode == other.redemptionCode &&
+            timesRedeemed == other.timesRedeemed &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, archivedAt, discount, durationInMonths, maxRedemptions, redemptionCode, timesRedeemed, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            archivedAt,
+            discount,
+            durationInMonths,
+            maxRedemptions,
+            redemptionCode,
+            timesRedeemed,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

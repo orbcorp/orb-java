@@ -6,12 +6,12 @@ import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
 import com.withorb.api.core.JsonValue
 import com.withorb.api.models.InvoiceCreateParams
+import com.withorb.api.models.InvoiceDeleteLineItemParams
 import com.withorb.api.models.InvoiceFetchUpcomingParams
 import com.withorb.api.models.InvoiceIssueParams
 import com.withorb.api.models.InvoiceMarkPaidParams
 import com.withorb.api.models.InvoiceUpdateParams
 import com.withorb.api.models.PercentageDiscount
-import com.withorb.api.models.TransformPriceFilter
 import com.withorb.api.models.UnitConfig
 import java.time.LocalDate
 import java.time.OffsetDateTime
@@ -43,7 +43,12 @@ internal class InvoiceServiceAsyncTest {
                             .name("Line Item Name")
                             .quantity(1.0)
                             .startDate(LocalDate.parse("2023-09-22"))
-                            .unitConfig(UnitConfig.builder().unitAmount("unit_amount").build())
+                            .unitConfig(
+                                UnitConfig.builder()
+                                    .unitAmount("unit_amount")
+                                    .prorated(true)
+                                    .build()
+                            )
                             .build()
                     )
                     .customerId("4khy3nwzktxv7")
@@ -54,15 +59,16 @@ internal class InvoiceServiceAsyncTest {
                             .addAppliesToPriceId("h74gfhdjvn7ujokd")
                             .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
                             .addFilter(
-                                TransformPriceFilter.builder()
-                                    .field(TransformPriceFilter.Field.PRICE_ID)
-                                    .operator(TransformPriceFilter.Operator.INCLUDES)
+                                PercentageDiscount.Filter.builder()
+                                    .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                                    .operator(PercentageDiscount.Filter.Operator.INCLUDES)
                                     .addValue("string")
                                     .build()
                             )
                             .reason("reason")
                             .build()
                     )
+                    .dueDate(LocalDate.parse("2023-09-22"))
                     .externalCustomerId("external-customer-id")
                     .memo("An optional memo for my invoice.")
                     .metadata(
@@ -92,11 +98,14 @@ internal class InvoiceServiceAsyncTest {
             invoiceServiceAsync.update(
                 InvoiceUpdateParams.builder()
                     .invoiceId("invoice_id")
+                    .dueDate(LocalDate.parse("2023-09-22"))
+                    .invoiceDate(LocalDate.parse("2023-09-22"))
                     .metadata(
                         InvoiceUpdateParams.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
+                    .netTerms(0L)
                     .build()
             )
 
@@ -117,6 +126,26 @@ internal class InvoiceServiceAsyncTest {
 
         val page = pageFuture.get()
         page.response().validate()
+    }
+
+    @Test
+    fun deleteLineItem() {
+        val client =
+            OrbOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val invoiceServiceAsync = client.invoices()
+
+        val future =
+            invoiceServiceAsync.deleteLineItem(
+                InvoiceDeleteLineItemParams.builder()
+                    .invoiceId("invoice_id")
+                    .lineItemId("line_item_id")
+                    .build()
+            )
+
+        val response = future.get()
     }
 
     @Test
@@ -168,6 +197,21 @@ internal class InvoiceServiceAsyncTest {
 
         val invoice = invoiceFuture.get()
         invoice.validate()
+    }
+
+    @Test
+    fun listSummary() {
+        val client =
+            OrbOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val invoiceServiceAsync = client.invoices()
+
+        val pageFuture = invoiceServiceAsync.listSummary()
+
+        val page = pageFuture.get()
+        page.response().validate()
     }
 
     @Test

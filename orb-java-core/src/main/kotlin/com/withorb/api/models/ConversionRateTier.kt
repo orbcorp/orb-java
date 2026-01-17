@@ -18,6 +18,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class ConversionRateTier
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val firstUnit: JsonField<Double>,
     private val unitAmount: JsonField<String>,
@@ -244,12 +245,16 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ConversionRateTier && firstUnit == other.firstUnit && unitAmount == other.unitAmount && lastUnit == other.lastUnit && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is ConversionRateTier &&
+            firstUnit == other.firstUnit &&
+            unitAmount == other.unitAmount &&
+            lastUnit == other.lastUnit &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(firstUnit, unitAmount, lastUnit, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(firstUnit, unitAmount, lastUnit, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

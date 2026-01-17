@@ -20,12 +20,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * This API endpoint is in beta and its interface may change. It is recommended for use only in test
- * mode.
- *
- * This endpoint allows setting the default version of a plan.
- */
+/** This endpoint allows setting the default version of a plan. */
 class BetaExternalPlanIdSetDefaultPlanVersionParams
 private constructor(
     private val externalPlanId: String?,
@@ -273,6 +268,7 @@ private constructor(
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val version: JsonField<Long>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -414,12 +410,12 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && version == other.version && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Body &&
+                version == other.version &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(version, additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -432,10 +428,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is BetaExternalPlanIdSetDefaultPlanVersionParams && externalPlanId == other.externalPlanId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is BetaExternalPlanIdSetDefaultPlanVersionParams &&
+            externalPlanId == other.externalPlanId &&
+            body == other.body &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalPlanId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(externalPlanId, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "BetaExternalPlanIdSetDefaultPlanVersionParams{externalPlanId=$externalPlanId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

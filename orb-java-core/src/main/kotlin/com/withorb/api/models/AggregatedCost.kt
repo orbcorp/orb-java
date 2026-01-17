@@ -20,6 +20,7 @@ import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 class AggregatedCost
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val perPriceCosts: JsonField<List<PerPriceCost>>,
     private val subtotal: JsonField<String>,
@@ -330,12 +331,25 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is AggregatedCost && perPriceCosts == other.perPriceCosts && subtotal == other.subtotal && timeframeEnd == other.timeframeEnd && timeframeStart == other.timeframeStart && total == other.total && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is AggregatedCost &&
+            perPriceCosts == other.perPriceCosts &&
+            subtotal == other.subtotal &&
+            timeframeEnd == other.timeframeEnd &&
+            timeframeStart == other.timeframeStart &&
+            total == other.total &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(perPriceCosts, subtotal, timeframeEnd, timeframeStart, total, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            perPriceCosts,
+            subtotal,
+            timeframeEnd,
+            timeframeStart,
+            total,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

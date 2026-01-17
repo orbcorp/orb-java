@@ -80,7 +80,6 @@ import kotlin.jvm.optionals.getOrNull
  * ```
  *
  * ## Required fields
- *
  * Because events streamed to Orb are meant to be as flexible as possible, there are only a few
  * required fields in every event.
  * - We recommend that `idempotency_key` are unique strings that you generated with V4 UUIDs, but
@@ -110,7 +109,6 @@ import kotlin.jvm.optionals.getOrNull
  * numeric type in the event.
  *
  * ## Determining event timestamp
- *
  * For cases where usage is being reported in real time as it is occurring, timestamp should
  * correspond to the time that usage occurred.
  *
@@ -164,7 +162,6 @@ import kotlin.jvm.optionals.getOrNull
  *   should be retried in their entirety.
  *
  * ## API usage and limits
- *
  * The ingestion API is designed made for real-time streaming ingestion and architected for high
  * throughput. Even if events are later deemed unnecessary or filtered out, we encourage you to log
  * them to Orb if they may be relevant to billing calculations in the future.
@@ -178,7 +175,6 @@ import kotlin.jvm.optionals.getOrNull
  * from initial setup.
  *
  * ## Testing in debug mode
- *
  * The ingestion API supports a debug mode, which returns additional verbose output to indicate
  * which event idempotency keys were newly ingested or duplicates from previous requests. To enable
  * this mode, mark `debug=true` as a query parameter.
@@ -197,7 +193,11 @@ import kotlin.jvm.optionals.getOrNull
  * {
  *   "debug": {
  *     "duplicate": [],
- *     "ingested": ["B7E83HDMfJPAunXW", "SJs5DQJ3TnwSqEZE", "8SivfDsNKwCeAXim"]
+ *     "ingested": [
+ *       "B7E83HDMfJPAunXW",
+ *       "SJs5DQJ3TnwSqEZE",
+ *       "8SivfDsNKwCeAXim"
+ *     ]
  *   },
  *   "validation_failed": []
  * }
@@ -485,6 +485,7 @@ private constructor(
             .build()
 
     class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val events: JsonField<List<Event>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -644,12 +645,12 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && events == other.events && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Body &&
+                events == other.events &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(events, additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -657,6 +658,7 @@ private constructor(
     }
 
     class Event
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val eventName: JsonField<String>,
         private val idempotencyKey: JsonField<String>,
@@ -1141,12 +1143,10 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Properties && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Properties && additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -1158,12 +1158,27 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Event && eventName == other.eventName && idempotencyKey == other.idempotencyKey && properties == other.properties && timestamp == other.timestamp && customerId == other.customerId && externalCustomerId == other.externalCustomerId && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Event &&
+                eventName == other.eventName &&
+                idempotencyKey == other.idempotencyKey &&
+                properties == other.properties &&
+                timestamp == other.timestamp &&
+                customerId == other.customerId &&
+                externalCustomerId == other.externalCustomerId &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(eventName, idempotencyKey, properties, timestamp, customerId, externalCustomerId, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                eventName,
+                idempotencyKey,
+                properties,
+                timestamp,
+                customerId,
+                externalCustomerId,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -1176,10 +1191,16 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is EventIngestParams && backfillId == other.backfillId && debug == other.debug && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is EventIngestParams &&
+            backfillId == other.backfillId &&
+            debug == other.debug &&
+            body == other.body &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(backfillId, debug, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(backfillId, debug, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "EventIngestParams{backfillId=$backfillId, debug=$debug, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

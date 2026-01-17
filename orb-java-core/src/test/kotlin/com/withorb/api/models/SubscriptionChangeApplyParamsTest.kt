@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import java.time.LocalDate
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -12,6 +13,10 @@ internal class SubscriptionChangeApplyParamsTest {
         SubscriptionChangeApplyParams.builder()
             .subscriptionChangeId("subscription_change_id")
             .description("description")
+            .markAsPaid(true)
+            .paymentExternalId("payment_external_id")
+            .paymentNotes("payment_notes")
+            .paymentReceivedDate(LocalDate.parse("2019-12-27"))
             .previouslyCollectedAmount("previously_collected_amount")
             .build()
     }
@@ -34,12 +39,20 @@ internal class SubscriptionChangeApplyParamsTest {
             SubscriptionChangeApplyParams.builder()
                 .subscriptionChangeId("subscription_change_id")
                 .description("description")
+                .markAsPaid(true)
+                .paymentExternalId("payment_external_id")
+                .paymentNotes("payment_notes")
+                .paymentReceivedDate(LocalDate.parse("2019-12-27"))
                 .previouslyCollectedAmount("previously_collected_amount")
                 .build()
 
         val body = params._body()
 
         assertThat(body.description()).contains("description")
+        assertThat(body.markAsPaid()).contains(true)
+        assertThat(body.paymentExternalId()).contains("payment_external_id")
+        assertThat(body.paymentNotes()).contains("payment_notes")
+        assertThat(body.paymentReceivedDate()).contains(LocalDate.parse("2019-12-27"))
         assertThat(body.previouslyCollectedAmount()).contains("previously_collected_amount")
     }
 

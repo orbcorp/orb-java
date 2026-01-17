@@ -98,7 +98,7 @@ internal class NewSubscriptionMatrixPriceTest {
         assertThat(newSubscriptionMatrixPrice.conversionRate()).contains(0.0)
         assertThat(newSubscriptionMatrixPrice.conversionRateConfig())
             .contains(
-                NewSubscriptionMatrixPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(

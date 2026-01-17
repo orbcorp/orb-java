@@ -28,6 +28,7 @@ internal class NewFloatingTieredPriceTest {
                                 .lastUnit(0.0)
                                 .build()
                         )
+                        .prorated(true)
                         .build()
                 )
                 .billableMetricId("billable_metric_id")
@@ -82,6 +83,7 @@ internal class NewFloatingTieredPriceTest {
                             .lastUnit(0.0)
                             .build()
                     )
+                    .prorated(true)
                     .build()
             )
         assertThat(newFloatingTieredPrice.billableMetricId()).contains("billable_metric_id")
@@ -96,7 +98,7 @@ internal class NewFloatingTieredPriceTest {
         assertThat(newFloatingTieredPrice.conversionRate()).contains(0.0)
         assertThat(newFloatingTieredPrice.conversionRateConfig())
             .contains(
-                NewFloatingTieredPrice.ConversionRateConfig.ofUnit(
+                ConversionRateConfig.ofUnit(
                     UnitConversionRateConfig.builder()
                         .conversionRateType(UnitConversionRateConfig.ConversionRateType.UNIT)
                         .unitConfig(
@@ -150,6 +152,7 @@ internal class NewFloatingTieredPriceTest {
                                 .lastUnit(0.0)
                                 .build()
                         )
+                        .prorated(true)
                         .build()
                 )
                 .billableMetricId("billable_metric_id")

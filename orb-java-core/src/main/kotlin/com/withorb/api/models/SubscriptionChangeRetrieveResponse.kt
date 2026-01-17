@@ -25,19 +25,28 @@ import kotlin.jvm.optionals.getOrNull
  * changes/creation of invoices (see `subscription.changed_resources`).
  */
 class SubscriptionChangeRetrieveResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
+    private val changeType: JsonField<String>,
     private val expirationTime: JsonField<OffsetDateTime>,
     private val status: JsonField<Status>,
     private val subscription: JsonField<MutatedSubscription>,
     private val appliedAt: JsonField<OffsetDateTime>,
+    private val billingCycleAlignment: JsonField<String>,
     private val cancelledAt: JsonField<OffsetDateTime>,
+    private val changeOption: JsonField<String>,
+    private val effectiveDate: JsonField<OffsetDateTime>,
+    private val planId: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("change_type")
+        @ExcludeMissing
+        changeType: JsonField<String> = JsonMissing.of(),
         @JsonProperty("expiration_time")
         @ExcludeMissing
         expirationTime: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -48,16 +57,47 @@ private constructor(
         @JsonProperty("applied_at")
         @ExcludeMissing
         appliedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("billing_cycle_alignment")
+        @ExcludeMissing
+        billingCycleAlignment: JsonField<String> = JsonMissing.of(),
         @JsonProperty("cancelled_at")
         @ExcludeMissing
         cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    ) : this(id, expirationTime, status, subscription, appliedAt, cancelledAt, mutableMapOf())
+        @JsonProperty("change_option")
+        @ExcludeMissing
+        changeOption: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("effective_date")
+        @ExcludeMissing
+        effectiveDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("plan_id") @ExcludeMissing planId: JsonField<String> = JsonMissing.of(),
+    ) : this(
+        id,
+        changeType,
+        expirationTime,
+        status,
+        subscription,
+        appliedAt,
+        billingCycleAlignment,
+        cancelledAt,
+        changeOption,
+        effectiveDate,
+        planId,
+        mutableMapOf(),
+    )
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
+
+    /**
+     * The type of change (e.g., 'schedule_plan_change', 'create_subscription').
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun changeType(): String = changeType.getRequired("change_type")
 
     /**
      * Subscription change will be cancelled at this time and can no longer be applied.
@@ -88,6 +128,15 @@ private constructor(
     fun appliedAt(): Optional<OffsetDateTime> = appliedAt.getOptional("applied_at")
 
     /**
+     * Billing cycle alignment for plan changes.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun billingCycleAlignment(): Optional<String> =
+        billingCycleAlignment.getOptional("billing_cycle_alignment")
+
+    /**
      * When this change was cancelled.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
@@ -96,11 +145,43 @@ private constructor(
     fun cancelledAt(): Optional<OffsetDateTime> = cancelledAt.getOptional("cancelled_at")
 
     /**
+     * How the change is scheduled (e.g., 'immediate', 'end_of_subscription_term',
+     * 'requested_date').
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun changeOption(): Optional<String> = changeOption.getOptional("change_option")
+
+    /**
+     * When this change will take effect.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun effectiveDate(): Optional<OffsetDateTime> = effectiveDate.getOptional("effective_date")
+
+    /**
+     * The target plan ID for plan changes.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun planId(): Optional<String> = planId.getOptional("plan_id")
+
+    /**
      * Returns the raw JSON value of [id].
      *
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+    /**
+     * Returns the raw JSON value of [changeType].
+     *
+     * Unlike [changeType], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("change_type") @ExcludeMissing fun _changeType(): JsonField<String> = changeType
 
     /**
      * Returns the raw JSON value of [expirationTime].
@@ -137,6 +218,16 @@ private constructor(
     fun _appliedAt(): JsonField<OffsetDateTime> = appliedAt
 
     /**
+     * Returns the raw JSON value of [billingCycleAlignment].
+     *
+     * Unlike [billingCycleAlignment], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("billing_cycle_alignment")
+    @ExcludeMissing
+    fun _billingCycleAlignment(): JsonField<String> = billingCycleAlignment
+
+    /**
      * Returns the raw JSON value of [cancelledAt].
      *
      * Unlike [cancelledAt], this method doesn't throw if the JSON field has an unexpected type.
@@ -144,6 +235,31 @@ private constructor(
     @JsonProperty("cancelled_at")
     @ExcludeMissing
     fun _cancelledAt(): JsonField<OffsetDateTime> = cancelledAt
+
+    /**
+     * Returns the raw JSON value of [changeOption].
+     *
+     * Unlike [changeOption], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("change_option")
+    @ExcludeMissing
+    fun _changeOption(): JsonField<String> = changeOption
+
+    /**
+     * Returns the raw JSON value of [effectiveDate].
+     *
+     * Unlike [effectiveDate], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("effective_date")
+    @ExcludeMissing
+    fun _effectiveDate(): JsonField<OffsetDateTime> = effectiveDate
+
+    /**
+     * Returns the raw JSON value of [planId].
+     *
+     * Unlike [planId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("plan_id") @ExcludeMissing fun _planId(): JsonField<String> = planId
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -166,6 +282,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .id()
+         * .changeType()
          * .expirationTime()
          * .status()
          * .subscription()
@@ -178,22 +295,32 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
+        private var changeType: JsonField<String>? = null
         private var expirationTime: JsonField<OffsetDateTime>? = null
         private var status: JsonField<Status>? = null
         private var subscription: JsonField<MutatedSubscription>? = null
         private var appliedAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var billingCycleAlignment: JsonField<String> = JsonMissing.of()
         private var cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var changeOption: JsonField<String> = JsonMissing.of()
+        private var effectiveDate: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var planId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(subscriptionChangeRetrieveResponse: SubscriptionChangeRetrieveResponse) =
             apply {
                 id = subscriptionChangeRetrieveResponse.id
+                changeType = subscriptionChangeRetrieveResponse.changeType
                 expirationTime = subscriptionChangeRetrieveResponse.expirationTime
                 status = subscriptionChangeRetrieveResponse.status
                 subscription = subscriptionChangeRetrieveResponse.subscription
                 appliedAt = subscriptionChangeRetrieveResponse.appliedAt
+                billingCycleAlignment = subscriptionChangeRetrieveResponse.billingCycleAlignment
                 cancelledAt = subscriptionChangeRetrieveResponse.cancelledAt
+                changeOption = subscriptionChangeRetrieveResponse.changeOption
+                effectiveDate = subscriptionChangeRetrieveResponse.effectiveDate
+                planId = subscriptionChangeRetrieveResponse.planId
                 additionalProperties =
                     subscriptionChangeRetrieveResponse.additionalProperties.toMutableMap()
             }
@@ -207,6 +334,18 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
+
+        /** The type of change (e.g., 'schedule_plan_change', 'create_subscription'). */
+        fun changeType(changeType: String) = changeType(JsonField.of(changeType))
+
+        /**
+         * Sets [Builder.changeType] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.changeType] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun changeType(changeType: JsonField<String>) = apply { this.changeType = changeType }
 
         /** Subscription change will be cancelled at this time and can no longer be applied. */
         fun expirationTime(expirationTime: OffsetDateTime) =
@@ -266,6 +405,28 @@ private constructor(
          */
         fun appliedAt(appliedAt: JsonField<OffsetDateTime>) = apply { this.appliedAt = appliedAt }
 
+        /** Billing cycle alignment for plan changes. */
+        fun billingCycleAlignment(billingCycleAlignment: String?) =
+            billingCycleAlignment(JsonField.ofNullable(billingCycleAlignment))
+
+        /**
+         * Alias for calling [Builder.billingCycleAlignment] with
+         * `billingCycleAlignment.orElse(null)`.
+         */
+        fun billingCycleAlignment(billingCycleAlignment: Optional<String>) =
+            billingCycleAlignment(billingCycleAlignment.getOrNull())
+
+        /**
+         * Sets [Builder.billingCycleAlignment] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.billingCycleAlignment] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun billingCycleAlignment(billingCycleAlignment: JsonField<String>) = apply {
+            this.billingCycleAlignment = billingCycleAlignment
+        }
+
         /** When this change was cancelled. */
         fun cancelledAt(cancelledAt: OffsetDateTime?) =
             cancelledAt(JsonField.ofNullable(cancelledAt))
@@ -284,6 +445,59 @@ private constructor(
         fun cancelledAt(cancelledAt: JsonField<OffsetDateTime>) = apply {
             this.cancelledAt = cancelledAt
         }
+
+        /**
+         * How the change is scheduled (e.g., 'immediate', 'end_of_subscription_term',
+         * 'requested_date').
+         */
+        fun changeOption(changeOption: String?) = changeOption(JsonField.ofNullable(changeOption))
+
+        /** Alias for calling [Builder.changeOption] with `changeOption.orElse(null)`. */
+        fun changeOption(changeOption: Optional<String>) = changeOption(changeOption.getOrNull())
+
+        /**
+         * Sets [Builder.changeOption] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.changeOption] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun changeOption(changeOption: JsonField<String>) = apply {
+            this.changeOption = changeOption
+        }
+
+        /** When this change will take effect. */
+        fun effectiveDate(effectiveDate: OffsetDateTime?) =
+            effectiveDate(JsonField.ofNullable(effectiveDate))
+
+        /** Alias for calling [Builder.effectiveDate] with `effectiveDate.orElse(null)`. */
+        fun effectiveDate(effectiveDate: Optional<OffsetDateTime>) =
+            effectiveDate(effectiveDate.getOrNull())
+
+        /**
+         * Sets [Builder.effectiveDate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.effectiveDate] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun effectiveDate(effectiveDate: JsonField<OffsetDateTime>) = apply {
+            this.effectiveDate = effectiveDate
+        }
+
+        /** The target plan ID for plan changes. */
+        fun planId(planId: String?) = planId(JsonField.ofNullable(planId))
+
+        /** Alias for calling [Builder.planId] with `planId.orElse(null)`. */
+        fun planId(planId: Optional<String>) = planId(planId.getOrNull())
+
+        /**
+         * Sets [Builder.planId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.planId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun planId(planId: JsonField<String>) = apply { this.planId = planId }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -312,6 +526,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .id()
+         * .changeType()
          * .expirationTime()
          * .status()
          * .subscription()
@@ -322,11 +537,16 @@ private constructor(
         fun build(): SubscriptionChangeRetrieveResponse =
             SubscriptionChangeRetrieveResponse(
                 checkRequired("id", id),
+                checkRequired("changeType", changeType),
                 checkRequired("expirationTime", expirationTime),
                 checkRequired("status", status),
                 checkRequired("subscription", subscription),
                 appliedAt,
+                billingCycleAlignment,
                 cancelledAt,
+                changeOption,
+                effectiveDate,
+                planId,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -339,11 +559,16 @@ private constructor(
         }
 
         id()
+        changeType()
         expirationTime()
         status().validate()
         subscription().ifPresent { it.validate() }
         appliedAt()
+        billingCycleAlignment()
         cancelledAt()
+        changeOption()
+        effectiveDate()
+        planId()
         validated = true
     }
 
@@ -363,11 +588,16 @@ private constructor(
     @JvmSynthetic
     internal fun validity(): Int =
         (if (id.asKnown().isPresent) 1 else 0) +
+            (if (changeType.asKnown().isPresent) 1 else 0) +
             (if (expirationTime.asKnown().isPresent) 1 else 0) +
             (status.asKnown().getOrNull()?.validity() ?: 0) +
             (subscription.asKnown().getOrNull()?.validity() ?: 0) +
             (if (appliedAt.asKnown().isPresent) 1 else 0) +
-            (if (cancelledAt.asKnown().isPresent) 1 else 0)
+            (if (billingCycleAlignment.asKnown().isPresent) 1 else 0) +
+            (if (cancelledAt.asKnown().isPresent) 1 else 0) +
+            (if (changeOption.asKnown().isPresent) 1 else 0) +
+            (if (effectiveDate.asKnown().isPresent) 1 else 0) +
+            (if (planId.asKnown().isPresent) 1 else 0)
 
     class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
@@ -491,7 +721,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
+            return other is Status && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -504,15 +734,40 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionChangeRetrieveResponse && id == other.id && expirationTime == other.expirationTime && status == other.status && subscription == other.subscription && appliedAt == other.appliedAt && cancelledAt == other.cancelledAt && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is SubscriptionChangeRetrieveResponse &&
+            id == other.id &&
+            changeType == other.changeType &&
+            expirationTime == other.expirationTime &&
+            status == other.status &&
+            subscription == other.subscription &&
+            appliedAt == other.appliedAt &&
+            billingCycleAlignment == other.billingCycleAlignment &&
+            cancelledAt == other.cancelledAt &&
+            changeOption == other.changeOption &&
+            effectiveDate == other.effectiveDate &&
+            planId == other.planId &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, expirationTime, status, subscription, appliedAt, cancelledAt, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            changeType,
+            expirationTime,
+            status,
+            subscription,
+            appliedAt,
+            billingCycleAlignment,
+            cancelledAt,
+            changeOption,
+            effectiveDate,
+            planId,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "SubscriptionChangeRetrieveResponse{id=$id, expirationTime=$expirationTime, status=$status, subscription=$subscription, appliedAt=$appliedAt, cancelledAt=$cancelledAt, additionalProperties=$additionalProperties}"
+        "SubscriptionChangeRetrieveResponse{id=$id, changeType=$changeType, expirationTime=$expirationTime, status=$status, subscription=$subscription, appliedAt=$appliedAt, billingCycleAlignment=$billingCycleAlignment, cancelledAt=$cancelledAt, changeOption=$changeOption, effectiveDate=$effectiveDate, planId=$planId, additionalProperties=$additionalProperties}"
 }

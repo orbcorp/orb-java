@@ -18,6 +18,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class TopUpInvoiceSettings
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val autoCollection: JsonField<Boolean>,
     private val netTerms: JsonField<Long>,
@@ -297,12 +298,17 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is TopUpInvoiceSettings && autoCollection == other.autoCollection && netTerms == other.netTerms && memo == other.memo && requireSuccessfulPayment == other.requireSuccessfulPayment && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is TopUpInvoiceSettings &&
+            autoCollection == other.autoCollection &&
+            netTerms == other.netTerms &&
+            memo == other.memo &&
+            requireSuccessfulPayment == other.requireSuccessfulPayment &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(autoCollection, netTerms, memo, requireSuccessfulPayment, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(autoCollection, netTerms, memo, requireSuccessfulPayment, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

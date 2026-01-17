@@ -20,6 +20,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class CustomerBalanceTransactionListResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val action: JsonField<Action>,
@@ -557,6 +558,8 @@ private constructor(
 
             @JvmField val EXTERNAL_PAYMENT = of("external_payment")
 
+            @JvmField val SMALL_INVOICE_CARRYOVER = of("small_invoice_carryover")
+
             @JvmStatic fun of(value: String) = Action(JsonField.of(value))
         }
 
@@ -571,6 +574,7 @@ private constructor(
             CREDIT_NOTE_VOIDED,
             OVERPAYMENT_REFUND,
             EXTERNAL_PAYMENT,
+            SMALL_INVOICE_CARRYOVER,
         }
 
         /**
@@ -592,6 +596,7 @@ private constructor(
             CREDIT_NOTE_VOIDED,
             OVERPAYMENT_REFUND,
             EXTERNAL_PAYMENT,
+            SMALL_INVOICE_CARRYOVER,
             /** An enum member indicating that [Action] was instantiated with an unknown value. */
             _UNKNOWN,
         }
@@ -614,6 +619,7 @@ private constructor(
                 CREDIT_NOTE_VOIDED -> Value.CREDIT_NOTE_VOIDED
                 OVERPAYMENT_REFUND -> Value.OVERPAYMENT_REFUND
                 EXTERNAL_PAYMENT -> Value.EXTERNAL_PAYMENT
+                SMALL_INVOICE_CARRYOVER -> Value.SMALL_INVOICE_CARRYOVER
                 else -> Value._UNKNOWN
             }
 
@@ -636,6 +642,7 @@ private constructor(
                 CREDIT_NOTE_VOIDED -> Known.CREDIT_NOTE_VOIDED
                 OVERPAYMENT_REFUND -> Known.OVERPAYMENT_REFUND
                 EXTERNAL_PAYMENT -> Known.EXTERNAL_PAYMENT
+                SMALL_INVOICE_CARRYOVER -> Known.SMALL_INVOICE_CARRYOVER
                 else -> throw OrbInvalidDataException("Unknown Action: $value")
             }
 
@@ -683,7 +690,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Action && value == other.value /* spotless:on */
+            return other is Action && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -807,7 +814,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Type && value == other.value /* spotless:on */
+            return other is Type && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -820,12 +827,35 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerBalanceTransactionListResponse && id == other.id && action == other.action && amount == other.amount && createdAt == other.createdAt && creditNote == other.creditNote && description == other.description && endingBalance == other.endingBalance && invoice == other.invoice && startingBalance == other.startingBalance && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is CustomerBalanceTransactionListResponse &&
+            id == other.id &&
+            action == other.action &&
+            amount == other.amount &&
+            createdAt == other.createdAt &&
+            creditNote == other.creditNote &&
+            description == other.description &&
+            endingBalance == other.endingBalance &&
+            invoice == other.invoice &&
+            startingBalance == other.startingBalance &&
+            type == other.type &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, action, amount, createdAt, creditNote, description, endingBalance, invoice, startingBalance, type, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            action,
+            amount,
+            createdAt,
+            creditNote,
+            description,
+            endingBalance,
+            invoice,
+            startingBalance,
+            type,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

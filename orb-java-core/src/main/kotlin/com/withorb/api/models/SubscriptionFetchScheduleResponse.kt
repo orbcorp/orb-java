@@ -19,6 +19,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class SubscriptionFetchScheduleResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val createdAt: JsonField<OffsetDateTime>,
     private val endDate: JsonField<OffsetDateTime>,
@@ -274,6 +275,7 @@ private constructor(
             (if (startDate.asKnown().isPresent) 1 else 0)
 
     class Plan
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val externalPlanId: JsonField<String>,
@@ -510,12 +512,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Plan && id == other.id && externalPlanId == other.externalPlanId && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Plan &&
+                id == other.id &&
+                externalPlanId == other.externalPlanId &&
+                name == other.name &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, externalPlanId, name, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(id, externalPlanId, name, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -528,12 +534,17 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionFetchScheduleResponse && createdAt == other.createdAt && endDate == other.endDate && plan == other.plan && startDate == other.startDate && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is SubscriptionFetchScheduleResponse &&
+            createdAt == other.createdAt &&
+            endDate == other.endDate &&
+            plan == other.plan &&
+            startDate == other.startDate &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(createdAt, endDate, plan, startDate, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(createdAt, endDate, plan, startDate, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

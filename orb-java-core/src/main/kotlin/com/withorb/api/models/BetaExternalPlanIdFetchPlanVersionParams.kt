@@ -11,9 +11,6 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * This API endpoint is in beta and its interface may change. It is recommended for use only in test
- * mode.
- *
  * This endpoint is used to fetch a plan version. It returns the phases, prices, and adjustments
  * present on this version of the plan.
  */
@@ -213,10 +210,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is BetaExternalPlanIdFetchPlanVersionParams && externalPlanId == other.externalPlanId && version == other.version && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is BetaExternalPlanIdFetchPlanVersionParams &&
+            externalPlanId == other.externalPlanId &&
+            version == other.version &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(externalPlanId, version, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(externalPlanId, version, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "BetaExternalPlanIdFetchPlanVersionParams{externalPlanId=$externalPlanId, version=$version, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

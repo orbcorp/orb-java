@@ -13,6 +13,7 @@ import com.withorb.api.models.PlanListPage
 import com.withorb.api.models.PlanListParams
 import com.withorb.api.models.PlanUpdateParams
 import com.withorb.api.services.blocking.plans.ExternalPlanIdService
+import com.withorb.api.services.blocking.plans.MigrationService
 import java.util.function.Consumer
 
 interface PlanService {
@@ -30,6 +31,8 @@ interface PlanService {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): PlanService
 
     fun externalPlanId(): ExternalPlanIdService
+
+    fun migrations(): MigrationService
 
     /** This endpoint allows creation of plans including their prices. */
     fun create(params: PlanCreateParams): Plan = create(params, RequestOptions.none())
@@ -100,7 +103,6 @@ interface PlanService {
      * configuration, as well as the product that the plan is attached to.
      *
      * ## Serialized prices
-     *
      * Orb supports a few different pricing models out of the box. Each of these models is
      * serialized differently in a given [Price](/core-concepts#plan-and-price) object. The
      * `model_type` field determines the key for the configuration object that is present. A
@@ -108,7 +110,6 @@ interface PlanService {
      * [Price schema](/core-concepts#plan-and-price).
      *
      * ## Phases
-     *
      * Orb supports plan phases, also known as contract ramps. For plans with phases, the serialized
      * prices refer to all prices across all phases.
      */
@@ -146,6 +147,8 @@ interface PlanService {
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): PlanService.WithRawResponse
 
         fun externalPlanId(): ExternalPlanIdService.WithRawResponse
+
+        fun migrations(): MigrationService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /plans`, but is otherwise the same as

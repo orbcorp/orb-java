@@ -25,9 +25,11 @@ import kotlin.jvm.optionals.getOrNull
  * subscription. A subscription’s price intervals define its billing behavior.
  */
 class PriceInterval
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val billingCycleDay: JsonField<Long>,
+    private val canDeferBilling: JsonField<Boolean>,
     private val currentBillingPeriodEndDate: JsonField<OffsetDateTime>,
     private val currentBillingPeriodStartDate: JsonField<OffsetDateTime>,
     private val endDate: JsonField<OffsetDateTime>,
@@ -45,6 +47,9 @@ private constructor(
         @JsonProperty("billing_cycle_day")
         @ExcludeMissing
         billingCycleDay: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("can_defer_billing")
+        @ExcludeMissing
+        canDeferBilling: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("current_billing_period_end_date")
         @ExcludeMissing
         currentBillingPeriodEndDate: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -68,6 +73,7 @@ private constructor(
     ) : this(
         id,
         billingCycleDay,
+        canDeferBilling,
         currentBillingPeriodEndDate,
         currentBillingPeriodStartDate,
         endDate,
@@ -92,6 +98,15 @@ private constructor(
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun billingCycleDay(): Long = billingCycleDay.getRequired("billing_cycle_day")
+
+    /**
+     * For in-arrears prices. If true, and the price interval ends mid-cycle, the final line item
+     * will be deferred to the next scheduled invoice instead of being billed mid-cycle.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun canDeferBilling(): Boolean = canDeferBilling.getRequired("can_defer_billing")
 
     /**
      * The end of the current billing period. This is an exclusive timestamp, such that the instant
@@ -194,6 +209,15 @@ private constructor(
     fun _billingCycleDay(): JsonField<Long> = billingCycleDay
 
     /**
+     * Returns the raw JSON value of [canDeferBilling].
+     *
+     * Unlike [canDeferBilling], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("can_defer_billing")
+    @ExcludeMissing
+    fun _canDeferBilling(): JsonField<Boolean> = canDeferBilling
+
+    /**
      * Returns the raw JSON value of [currentBillingPeriodEndDate].
      *
      * Unlike [currentBillingPeriodEndDate], this method doesn't throw if the JSON field has an
@@ -285,6 +309,7 @@ private constructor(
          * ```java
          * .id()
          * .billingCycleDay()
+         * .canDeferBilling()
          * .currentBillingPeriodEndDate()
          * .currentBillingPeriodStartDate()
          * .endDate()
@@ -303,6 +328,7 @@ private constructor(
 
         private var id: JsonField<String>? = null
         private var billingCycleDay: JsonField<Long>? = null
+        private var canDeferBilling: JsonField<Boolean>? = null
         private var currentBillingPeriodEndDate: JsonField<OffsetDateTime>? = null
         private var currentBillingPeriodStartDate: JsonField<OffsetDateTime>? = null
         private var endDate: JsonField<OffsetDateTime>? = null
@@ -319,6 +345,7 @@ private constructor(
         internal fun from(priceInterval: PriceInterval) = apply {
             id = priceInterval.id
             billingCycleDay = priceInterval.billingCycleDay
+            canDeferBilling = priceInterval.canDeferBilling
             currentBillingPeriodEndDate = priceInterval.currentBillingPeriodEndDate
             currentBillingPeriodStartDate = priceInterval.currentBillingPeriodStartDate
             endDate = priceInterval.endDate
@@ -353,6 +380,24 @@ private constructor(
          */
         fun billingCycleDay(billingCycleDay: JsonField<Long>) = apply {
             this.billingCycleDay = billingCycleDay
+        }
+
+        /**
+         * For in-arrears prices. If true, and the price interval ends mid-cycle, the final line
+         * item will be deferred to the next scheduled invoice instead of being billed mid-cycle.
+         */
+        fun canDeferBilling(canDeferBilling: Boolean) =
+            canDeferBilling(JsonField.of(canDeferBilling))
+
+        /**
+         * Sets [Builder.canDeferBilling] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.canDeferBilling] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun canDeferBilling(canDeferBilling: JsonField<Boolean>) = apply {
+            this.canDeferBilling = canDeferBilling
         }
 
         /**
@@ -507,28 +552,23 @@ private constructor(
         fun price(price: JsonField<Price>) = apply { this.price = price }
 
         /** Alias for calling [price] with `Price.ofUnit(unit)`. */
-        fun price(unit: Price.Unit) = price(Price.ofUnit(unit))
+        fun price(unit: Price.UnitPrice) = price(Price.ofUnit(unit))
+
+        /** Alias for calling [price] with `Price.ofTiered(tiered)`. */
+        fun price(tiered: Price.Tiered) = price(Price.ofTiered(tiered))
+
+        /** Alias for calling [price] with `Price.ofBulk(bulk)`. */
+        fun price(bulk: Price.Bulk) = price(Price.ofBulk(bulk))
+
+        /** Alias for calling [price] with `Price.ofBulkWithFilters(bulkWithFilters)`. */
+        fun price(bulkWithFilters: Price.BulkWithFilters) =
+            price(Price.ofBulkWithFilters(bulkWithFilters))
 
         /** Alias for calling [price] with `Price.ofPackage(package_)`. */
         fun price(package_: Price.Package) = price(Price.ofPackage(package_))
 
         /** Alias for calling [price] with `Price.ofMatrix(matrix)`. */
         fun price(matrix: Price.Matrix) = price(Price.ofMatrix(matrix))
-
-        /** Alias for calling [price] with `Price.ofTiered(tiered)`. */
-        fun price(tiered: Price.Tiered) = price(Price.ofTiered(tiered))
-
-        /** Alias for calling [price] with `Price.ofTieredBps(tieredBps)`. */
-        fun price(tieredBps: Price.TieredBps) = price(Price.ofTieredBps(tieredBps))
-
-        /** Alias for calling [price] with `Price.ofBps(bps)`. */
-        fun price(bps: Price.Bps) = price(Price.ofBps(bps))
-
-        /** Alias for calling [price] with `Price.ofBulkBps(bulkBps)`. */
-        fun price(bulkBps: Price.BulkBps) = price(Price.ofBulkBps(bulkBps))
-
-        /** Alias for calling [price] with `Price.ofBulk(bulk)`. */
-        fun price(bulk: Price.Bulk) = price(Price.ofBulk(bulk))
 
         /** Alias for calling [price] with `Price.ofThresholdTotalAmount(thresholdTotalAmount)`. */
         fun price(thresholdTotalAmount: Price.ThresholdTotalAmount) =
@@ -537,12 +577,12 @@ private constructor(
         /** Alias for calling [price] with `Price.ofTieredPackage(tieredPackage)`. */
         fun price(tieredPackage: Price.TieredPackage) = price(Price.ofTieredPackage(tieredPackage))
 
-        /** Alias for calling [price] with `Price.ofGroupedTiered(groupedTiered)`. */
-        fun price(groupedTiered: Price.GroupedTiered) = price(Price.ofGroupedTiered(groupedTiered))
-
         /** Alias for calling [price] with `Price.ofTieredWithMinimum(tieredWithMinimum)`. */
         fun price(tieredWithMinimum: Price.TieredWithMinimum) =
             price(Price.ofTieredWithMinimum(tieredWithMinimum))
+
+        /** Alias for calling [price] with `Price.ofGroupedTiered(groupedTiered)`. */
+        fun price(groupedTiered: Price.GroupedTiered) = price(Price.ofGroupedTiered(groupedTiered))
 
         /**
          * Alias for calling [price] with
@@ -577,6 +617,10 @@ private constructor(
         fun price(groupedAllocation: Price.GroupedAllocation) =
             price(Price.ofGroupedAllocation(groupedAllocation))
 
+        /** Alias for calling [price] with `Price.ofBulkWithProration(bulkWithProration)`. */
+        fun price(bulkWithProration: Price.BulkWithProration) =
+            price(Price.ofBulkWithProration(bulkWithProration))
+
         /**
          * Alias for calling [price] with
          * `Price.ofGroupedWithProratedMinimum(groupedWithProratedMinimum)`.
@@ -592,14 +636,17 @@ private constructor(
             price(Price.ofGroupedWithMeteredMinimum(groupedWithMeteredMinimum))
 
         /**
+         * Alias for calling [price] with
+         * `Price.ofGroupedWithMinMaxThresholds(groupedWithMinMaxThresholds)`.
+         */
+        fun price(groupedWithMinMaxThresholds: Price.GroupedWithMinMaxThresholds) =
+            price(Price.ofGroupedWithMinMaxThresholds(groupedWithMinMaxThresholds))
+
+        /**
          * Alias for calling [price] with `Price.ofMatrixWithDisplayName(matrixWithDisplayName)`.
          */
         fun price(matrixWithDisplayName: Price.MatrixWithDisplayName) =
             price(Price.ofMatrixWithDisplayName(matrixWithDisplayName))
-
-        /** Alias for calling [price] with `Price.ofBulkWithProration(bulkWithProration)`. */
-        fun price(bulkWithProration: Price.BulkWithProration) =
-            price(Price.ofBulkWithProration(bulkWithProration))
 
         /** Alias for calling [price] with `Price.ofGroupedTieredPackage(groupedTieredPackage)`. */
         fun price(groupedTieredPackage: Price.GroupedTieredPackage) =
@@ -633,10 +680,20 @@ private constructor(
 
         /**
          * Alias for calling [price] with
-         * `Price.ofGroupedWithMinMaxThresholds(groupedWithMinMaxThresholds)`.
+         * `Price.ofCumulativeGroupedAllocation(cumulativeGroupedAllocation)`.
          */
-        fun price(groupedWithMinMaxThresholds: Price.GroupedWithMinMaxThresholds) =
-            price(Price.ofGroupedWithMinMaxThresholds(groupedWithMinMaxThresholds))
+        fun price(cumulativeGroupedAllocation: Price.CumulativeGroupedAllocation) =
+            price(Price.ofCumulativeGroupedAllocation(cumulativeGroupedAllocation))
+
+        /** Alias for calling [price] with `Price.ofMinimumComposite(minimumComposite)`. */
+        fun price(minimumComposite: Price.MinimumComposite) =
+            price(Price.ofMinimumComposite(minimumComposite))
+
+        /** Alias for calling [price] with `Price.ofPercent(percent)`. */
+        fun price(percent: Price.Percent) = price(Price.ofPercent(percent))
+
+        /** Alias for calling [price] with `Price.ofEventOutput(eventOutput)`. */
+        fun price(eventOutput: Price.EventOutput) = price(Price.ofEventOutput(eventOutput))
 
         /**
          * The start date of the price interval. This is the date that Orb starts billing for this
@@ -715,6 +772,7 @@ private constructor(
          * ```java
          * .id()
          * .billingCycleDay()
+         * .canDeferBilling()
          * .currentBillingPeriodEndDate()
          * .currentBillingPeriodStartDate()
          * .endDate()
@@ -731,6 +789,7 @@ private constructor(
             PriceInterval(
                 checkRequired("id", id),
                 checkRequired("billingCycleDay", billingCycleDay),
+                checkRequired("canDeferBilling", canDeferBilling),
                 checkRequired("currentBillingPeriodEndDate", currentBillingPeriodEndDate),
                 checkRequired("currentBillingPeriodStartDate", currentBillingPeriodStartDate),
                 checkRequired("endDate", endDate),
@@ -754,6 +813,7 @@ private constructor(
 
         id()
         billingCycleDay()
+        canDeferBilling()
         currentBillingPeriodEndDate()
         currentBillingPeriodStartDate()
         endDate()
@@ -782,6 +842,7 @@ private constructor(
     internal fun validity(): Int =
         (if (id.asKnown().isPresent) 1 else 0) +
             (if (billingCycleDay.asKnown().isPresent) 1 else 0) +
+            (if (canDeferBilling.asKnown().isPresent) 1 else 0) +
             (if (currentBillingPeriodEndDate.asKnown().isPresent) 1 else 0) +
             (if (currentBillingPeriodStartDate.asKnown().isPresent) 1 else 0) +
             (if (endDate.asKnown().isPresent) 1 else 0) +
@@ -797,15 +858,40 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is PriceInterval && id == other.id && billingCycleDay == other.billingCycleDay && currentBillingPeriodEndDate == other.currentBillingPeriodEndDate && currentBillingPeriodStartDate == other.currentBillingPeriodStartDate && endDate == other.endDate && filter == other.filter && fixedFeeQuantityTransitions == other.fixedFeeQuantityTransitions && price == other.price && startDate == other.startDate && usageCustomerIds == other.usageCustomerIds && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is PriceInterval &&
+            id == other.id &&
+            billingCycleDay == other.billingCycleDay &&
+            canDeferBilling == other.canDeferBilling &&
+            currentBillingPeriodEndDate == other.currentBillingPeriodEndDate &&
+            currentBillingPeriodStartDate == other.currentBillingPeriodStartDate &&
+            endDate == other.endDate &&
+            filter == other.filter &&
+            fixedFeeQuantityTransitions == other.fixedFeeQuantityTransitions &&
+            price == other.price &&
+            startDate == other.startDate &&
+            usageCustomerIds == other.usageCustomerIds &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, billingCycleDay, currentBillingPeriodEndDate, currentBillingPeriodStartDate, endDate, filter, fixedFeeQuantityTransitions, price, startDate, usageCustomerIds, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            billingCycleDay,
+            canDeferBilling,
+            currentBillingPeriodEndDate,
+            currentBillingPeriodStartDate,
+            endDate,
+            filter,
+            fixedFeeQuantityTransitions,
+            price,
+            startDate,
+            usageCustomerIds,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "PriceInterval{id=$id, billingCycleDay=$billingCycleDay, currentBillingPeriodEndDate=$currentBillingPeriodEndDate, currentBillingPeriodStartDate=$currentBillingPeriodStartDate, endDate=$endDate, filter=$filter, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, price=$price, startDate=$startDate, usageCustomerIds=$usageCustomerIds, additionalProperties=$additionalProperties}"
+        "PriceInterval{id=$id, billingCycleDay=$billingCycleDay, canDeferBilling=$canDeferBilling, currentBillingPeriodEndDate=$currentBillingPeriodEndDate, currentBillingPeriodStartDate=$currentBillingPeriodStartDate, endDate=$endDate, filter=$filter, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, price=$price, startDate=$startDate, usageCustomerIds=$usageCustomerIds, additionalProperties=$additionalProperties}"
 }

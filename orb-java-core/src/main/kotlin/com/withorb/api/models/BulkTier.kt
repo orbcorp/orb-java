@@ -17,7 +17,9 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** Configuration for a single bulk pricing tier */
 class BulkTier
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val unitAmount: JsonField<String>,
     private val maximumUnits: JsonField<Double>,
@@ -215,12 +217,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is BulkTier && unitAmount == other.unitAmount && maximumUnits == other.maximumUnits && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is BulkTier &&
+            unitAmount == other.unitAmount &&
+            maximumUnits == other.maximumUnits &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(unitAmount, maximumUnits, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(unitAmount, maximumUnits, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

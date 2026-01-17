@@ -20,6 +20,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class NewDimensionalPriceConfiguration
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val dimensionValues: JsonField<List<String>>,
     private val dimensionalPriceGroupId: JsonField<String>,
@@ -295,12 +296,21 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is NewDimensionalPriceConfiguration && dimensionValues == other.dimensionValues && dimensionalPriceGroupId == other.dimensionalPriceGroupId && externalDimensionalPriceGroupId == other.externalDimensionalPriceGroupId && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is NewDimensionalPriceConfiguration &&
+            dimensionValues == other.dimensionValues &&
+            dimensionalPriceGroupId == other.dimensionalPriceGroupId &&
+            externalDimensionalPriceGroupId == other.externalDimensionalPriceGroupId &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(dimensionValues, dimensionalPriceGroupId, externalDimensionalPriceGroupId, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            dimensionValues,
+            dimensionalPriceGroupId,
+            externalDimensionalPriceGroupId,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

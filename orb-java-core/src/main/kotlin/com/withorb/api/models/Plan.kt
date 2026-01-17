@@ -37,6 +37,7 @@ import kotlin.jvm.optionals.getOrNull
  * configure prices in the [Price resource](/reference/price).
  */
 class Plan
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val adjustments: JsonField<List<Adjustment>>,
@@ -157,18 +158,22 @@ private constructor(
     fun adjustments(): List<Adjustment> = adjustments.getRequired("adjustments")
 
     /**
-     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
-     *   responded with an unexpected value).
-     */
-    fun basePlan(): Optional<BasePlan> = basePlan.getOptional("base_plan")
-
-    /**
-     * The parent plan id if the given plan was created by overriding one or more of the parent's
-     * prices
+     * Legacy field representing the parent plan if the current plan is a 'child plan', overriding
+     * prices from the parent.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
+    @Deprecated("deprecated") fun basePlan(): Optional<BasePlan> = basePlan.getOptional("base_plan")
+
+    /**
+     * Legacy field representing the parent plan ID if the current plan is a 'child plan',
+     * overriding prices from the parent.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    @Deprecated("deprecated")
     fun basePlanId(): Optional<String> = basePlanId.getOptional("base_plan_id")
 
     /**
@@ -338,14 +343,20 @@ private constructor(
      *
      * Unlike [basePlan], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("base_plan") @ExcludeMissing fun _basePlan(): JsonField<BasePlan> = basePlan
+    @Deprecated("deprecated")
+    @JsonProperty("base_plan")
+    @ExcludeMissing
+    fun _basePlan(): JsonField<BasePlan> = basePlan
 
     /**
      * Returns the raw JSON value of [basePlanId].
      *
      * Unlike [basePlanId], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("base_plan_id") @ExcludeMissing fun _basePlanId(): JsonField<String> = basePlanId
+    @Deprecated("deprecated")
+    @JsonProperty("base_plan_id")
+    @ExcludeMissing
+    fun _basePlanId(): JsonField<String> = basePlanId
 
     /**
      * Returns the raw JSON value of [createdAt].
@@ -687,9 +698,15 @@ private constructor(
         fun addAdjustment(maximum: PlanPhaseMaximumAdjustment) =
             addAdjustment(Adjustment.ofMaximum(maximum))
 
+        /**
+         * Legacy field representing the parent plan if the current plan is a 'child plan',
+         * overriding prices from the parent.
+         */
+        @Deprecated("deprecated")
         fun basePlan(basePlan: BasePlan?) = basePlan(JsonField.ofNullable(basePlan))
 
         /** Alias for calling [Builder.basePlan] with `basePlan.orElse(null)`. */
+        @Deprecated("deprecated")
         fun basePlan(basePlan: Optional<BasePlan>) = basePlan(basePlan.getOrNull())
 
         /**
@@ -699,15 +716,18 @@ private constructor(
          * This method is primarily for setting the field to an undocumented or not yet supported
          * value.
          */
+        @Deprecated("deprecated")
         fun basePlan(basePlan: JsonField<BasePlan>) = apply { this.basePlan = basePlan }
 
         /**
-         * The parent plan id if the given plan was created by overriding one or more of the
-         * parent's prices
+         * Legacy field representing the parent plan ID if the current plan is a 'child plan',
+         * overriding prices from the parent.
          */
+        @Deprecated("deprecated")
         fun basePlanId(basePlanId: String?) = basePlanId(JsonField.ofNullable(basePlanId))
 
         /** Alias for calling [Builder.basePlanId] with `basePlanId.orElse(null)`. */
+        @Deprecated("deprecated")
         fun basePlanId(basePlanId: Optional<String>) = basePlanId(basePlanId.getOrNull())
 
         /**
@@ -717,6 +737,7 @@ private constructor(
          * This method is primarily for setting the field to an undocumented or not yet supported
          * value.
          */
+        @Deprecated("deprecated")
         fun basePlanId(basePlanId: JsonField<String>) = apply { this.basePlanId = basePlanId }
 
         fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
@@ -1091,28 +1112,23 @@ private constructor(
         }
 
         /** Alias for calling [addPrice] with `Price.ofUnit(unit)`. */
-        fun addPrice(unit: Price.Unit) = addPrice(Price.ofUnit(unit))
+        fun addPrice(unit: Price.UnitPrice) = addPrice(Price.ofUnit(unit))
+
+        /** Alias for calling [addPrice] with `Price.ofTiered(tiered)`. */
+        fun addPrice(tiered: Price.Tiered) = addPrice(Price.ofTiered(tiered))
+
+        /** Alias for calling [addPrice] with `Price.ofBulk(bulk)`. */
+        fun addPrice(bulk: Price.Bulk) = addPrice(Price.ofBulk(bulk))
+
+        /** Alias for calling [addPrice] with `Price.ofBulkWithFilters(bulkWithFilters)`. */
+        fun addPrice(bulkWithFilters: Price.BulkWithFilters) =
+            addPrice(Price.ofBulkWithFilters(bulkWithFilters))
 
         /** Alias for calling [addPrice] with `Price.ofPackage(package_)`. */
         fun addPrice(package_: Price.Package) = addPrice(Price.ofPackage(package_))
 
         /** Alias for calling [addPrice] with `Price.ofMatrix(matrix)`. */
         fun addPrice(matrix: Price.Matrix) = addPrice(Price.ofMatrix(matrix))
-
-        /** Alias for calling [addPrice] with `Price.ofTiered(tiered)`. */
-        fun addPrice(tiered: Price.Tiered) = addPrice(Price.ofTiered(tiered))
-
-        /** Alias for calling [addPrice] with `Price.ofTieredBps(tieredBps)`. */
-        fun addPrice(tieredBps: Price.TieredBps) = addPrice(Price.ofTieredBps(tieredBps))
-
-        /** Alias for calling [addPrice] with `Price.ofBps(bps)`. */
-        fun addPrice(bps: Price.Bps) = addPrice(Price.ofBps(bps))
-
-        /** Alias for calling [addPrice] with `Price.ofBulkBps(bulkBps)`. */
-        fun addPrice(bulkBps: Price.BulkBps) = addPrice(Price.ofBulkBps(bulkBps))
-
-        /** Alias for calling [addPrice] with `Price.ofBulk(bulk)`. */
-        fun addPrice(bulk: Price.Bulk) = addPrice(Price.ofBulk(bulk))
 
         /**
          * Alias for calling [addPrice] with `Price.ofThresholdTotalAmount(thresholdTotalAmount)`.
@@ -1124,13 +1140,13 @@ private constructor(
         fun addPrice(tieredPackage: Price.TieredPackage) =
             addPrice(Price.ofTieredPackage(tieredPackage))
 
-        /** Alias for calling [addPrice] with `Price.ofGroupedTiered(groupedTiered)`. */
-        fun addPrice(groupedTiered: Price.GroupedTiered) =
-            addPrice(Price.ofGroupedTiered(groupedTiered))
-
         /** Alias for calling [addPrice] with `Price.ofTieredWithMinimum(tieredWithMinimum)`. */
         fun addPrice(tieredWithMinimum: Price.TieredWithMinimum) =
             addPrice(Price.ofTieredWithMinimum(tieredWithMinimum))
+
+        /** Alias for calling [addPrice] with `Price.ofGroupedTiered(groupedTiered)`. */
+        fun addPrice(groupedTiered: Price.GroupedTiered) =
+            addPrice(Price.ofGroupedTiered(groupedTiered))
 
         /**
          * Alias for calling [addPrice] with
@@ -1167,6 +1183,10 @@ private constructor(
         fun addPrice(groupedAllocation: Price.GroupedAllocation) =
             addPrice(Price.ofGroupedAllocation(groupedAllocation))
 
+        /** Alias for calling [addPrice] with `Price.ofBulkWithProration(bulkWithProration)`. */
+        fun addPrice(bulkWithProration: Price.BulkWithProration) =
+            addPrice(Price.ofBulkWithProration(bulkWithProration))
+
         /**
          * Alias for calling [addPrice] with
          * `Price.ofGroupedWithProratedMinimum(groupedWithProratedMinimum)`.
@@ -1182,14 +1202,17 @@ private constructor(
             addPrice(Price.ofGroupedWithMeteredMinimum(groupedWithMeteredMinimum))
 
         /**
+         * Alias for calling [addPrice] with
+         * `Price.ofGroupedWithMinMaxThresholds(groupedWithMinMaxThresholds)`.
+         */
+        fun addPrice(groupedWithMinMaxThresholds: Price.GroupedWithMinMaxThresholds) =
+            addPrice(Price.ofGroupedWithMinMaxThresholds(groupedWithMinMaxThresholds))
+
+        /**
          * Alias for calling [addPrice] with `Price.ofMatrixWithDisplayName(matrixWithDisplayName)`.
          */
         fun addPrice(matrixWithDisplayName: Price.MatrixWithDisplayName) =
             addPrice(Price.ofMatrixWithDisplayName(matrixWithDisplayName))
-
-        /** Alias for calling [addPrice] with `Price.ofBulkWithProration(bulkWithProration)`. */
-        fun addPrice(bulkWithProration: Price.BulkWithProration) =
-            addPrice(Price.ofBulkWithProration(bulkWithProration))
 
         /**
          * Alias for calling [addPrice] with `Price.ofGroupedTieredPackage(groupedTieredPackage)`.
@@ -1225,10 +1248,20 @@ private constructor(
 
         /**
          * Alias for calling [addPrice] with
-         * `Price.ofGroupedWithMinMaxThresholds(groupedWithMinMaxThresholds)`.
+         * `Price.ofCumulativeGroupedAllocation(cumulativeGroupedAllocation)`.
          */
-        fun addPrice(groupedWithMinMaxThresholds: Price.GroupedWithMinMaxThresholds) =
-            addPrice(Price.ofGroupedWithMinMaxThresholds(groupedWithMinMaxThresholds))
+        fun addPrice(cumulativeGroupedAllocation: Price.CumulativeGroupedAllocation) =
+            addPrice(Price.ofCumulativeGroupedAllocation(cumulativeGroupedAllocation))
+
+        /** Alias for calling [addPrice] with `Price.ofMinimumComposite(minimumComposite)`. */
+        fun addPrice(minimumComposite: Price.MinimumComposite) =
+            addPrice(Price.ofMinimumComposite(minimumComposite))
+
+        /** Alias for calling [addPrice] with `Price.ofPercent(percent)`. */
+        fun addPrice(percent: Price.Percent) = addPrice(Price.ofPercent(percent))
+
+        /** Alias for calling [addPrice] with `Price.ofEventOutput(eventOutput)`. */
+        fun addPrice(eventOutput: Price.EventOutput) = addPrice(Price.ofEventOutput(eventOutput))
 
         fun product(product: Product) = product(JsonField.of(product))
 
@@ -1575,10 +1608,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Adjustment && usageDiscount == other.usageDiscount && amountDiscount == other.amountDiscount && percentageDiscount == other.percentageDiscount && minimum == other.minimum && maximum == other.maximum /* spotless:on */
+            return other is Adjustment &&
+                usageDiscount == other.usageDiscount &&
+                amountDiscount == other.amountDiscount &&
+                percentageDiscount == other.percentageDiscount &&
+                minimum == other.minimum &&
+                maximum == other.maximum
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(usageDiscount, amountDiscount, percentageDiscount, minimum, maximum) /* spotless:on */
+        override fun hashCode(): Int =
+            Objects.hash(usageDiscount, amountDiscount, percentageDiscount, minimum, maximum)
 
         override fun toString(): String =
             when {
@@ -1713,7 +1752,13 @@ private constructor(
         }
     }
 
+    /**
+     * Legacy field representing the parent plan if the current plan is a 'child plan', overriding
+     * prices from the parent.
+     */
+    @Deprecated("deprecated")
     class BasePlan
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val externalPlanId: JsonField<String>,
@@ -1950,12 +1995,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is BasePlan && id == other.id && externalPlanId == other.externalPlanId && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is BasePlan &&
+                id == other.id &&
+                externalPlanId == other.externalPlanId &&
+                name == other.name &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, externalPlanId, name, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(id, externalPlanId, name, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -2057,12 +2106,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Metadata && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -2070,6 +2117,7 @@ private constructor(
     }
 
     class PlanPhase
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val description: JsonField<String>,
@@ -2830,7 +2878,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is DurationUnit && value == other.value /* spotless:on */
+                return other is DurationUnit && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -2843,12 +2891,37 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is PlanPhase && id == other.id && description == other.description && discount == other.discount && duration == other.duration && durationUnit == other.durationUnit && maximum == other.maximum && maximumAmount == other.maximumAmount && minimum == other.minimum && minimumAmount == other.minimumAmount && name == other.name && order == other.order && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is PlanPhase &&
+                id == other.id &&
+                description == other.description &&
+                discount == other.discount &&
+                duration == other.duration &&
+                durationUnit == other.durationUnit &&
+                maximum == other.maximum &&
+                maximumAmount == other.maximumAmount &&
+                minimum == other.minimum &&
+                minimumAmount == other.minimumAmount &&
+                name == other.name &&
+                order == other.order &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, description, discount, duration, durationUnit, maximum, maximumAmount, minimum, minimumAmount, name, order, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                description,
+                discount,
+                duration,
+                durationUnit,
+                maximum,
+                maximumAmount,
+                minimum,
+                minimumAmount,
+                name,
+                order,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -2857,6 +2930,7 @@ private constructor(
     }
 
     class Product
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -3072,12 +3146,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Product && id == other.id && createdAt == other.createdAt && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Product &&
+                id == other.id &&
+                createdAt == other.createdAt &&
+                name == other.name &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, createdAt, name, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(id, createdAt, name, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -3207,7 +3285,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
+            return other is Status && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -3216,6 +3294,7 @@ private constructor(
     }
 
     class TrialConfig
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val trialPeriod: JsonField<Long>,
         private val trialPeriodUnit: JsonField<TrialPeriodUnit>,
@@ -3525,7 +3604,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is TrialPeriodUnit && value == other.value /* spotless:on */
+                return other is TrialPeriodUnit && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -3538,12 +3617,15 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is TrialConfig && trialPeriod == other.trialPeriod && trialPeriodUnit == other.trialPeriodUnit && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is TrialConfig &&
+                trialPeriod == other.trialPeriod &&
+                trialPeriodUnit == other.trialPeriodUnit &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(trialPeriod, trialPeriodUnit, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(trialPeriod, trialPeriodUnit, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -3556,12 +3638,63 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Plan && id == other.id && adjustments == other.adjustments && basePlan == other.basePlan && basePlanId == other.basePlanId && createdAt == other.createdAt && currency == other.currency && defaultInvoiceMemo == other.defaultInvoiceMemo && description == other.description && discount == other.discount && externalPlanId == other.externalPlanId && invoicingCurrency == other.invoicingCurrency && maximum == other.maximum && maximumAmount == other.maximumAmount && metadata == other.metadata && minimum == other.minimum && minimumAmount == other.minimumAmount && name == other.name && netTerms == other.netTerms && planPhases == other.planPhases && prices == other.prices && product == other.product && status == other.status && trialConfig == other.trialConfig && version == other.version && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is Plan &&
+            id == other.id &&
+            adjustments == other.adjustments &&
+            basePlan == other.basePlan &&
+            basePlanId == other.basePlanId &&
+            createdAt == other.createdAt &&
+            currency == other.currency &&
+            defaultInvoiceMemo == other.defaultInvoiceMemo &&
+            description == other.description &&
+            discount == other.discount &&
+            externalPlanId == other.externalPlanId &&
+            invoicingCurrency == other.invoicingCurrency &&
+            maximum == other.maximum &&
+            maximumAmount == other.maximumAmount &&
+            metadata == other.metadata &&
+            minimum == other.minimum &&
+            minimumAmount == other.minimumAmount &&
+            name == other.name &&
+            netTerms == other.netTerms &&
+            planPhases == other.planPhases &&
+            prices == other.prices &&
+            product == other.product &&
+            status == other.status &&
+            trialConfig == other.trialConfig &&
+            version == other.version &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, adjustments, basePlan, basePlanId, createdAt, currency, defaultInvoiceMemo, description, discount, externalPlanId, invoicingCurrency, maximum, maximumAmount, metadata, minimum, minimumAmount, name, netTerms, planPhases, prices, product, status, trialConfig, version, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            adjustments,
+            basePlan,
+            basePlanId,
+            createdAt,
+            currency,
+            defaultInvoiceMemo,
+            description,
+            discount,
+            externalPlanId,
+            invoicingCurrency,
+            maximum,
+            maximumAmount,
+            metadata,
+            minimum,
+            minimumAmount,
+            name,
+            netTerms,
+            planPhases,
+            prices,
+            product,
+            status,
+            trialConfig,
+            version,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

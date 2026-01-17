@@ -26,7 +26,6 @@ import kotlin.jvm.optionals.getOrNull
  * customer's billing period.
  *
  * ### Default response shape
- *
  * Orb returns a `data` array with an object corresponding to each billable metric. Nested within
  * this object is a `usage` array which has a `quantity` value and a corresponding `timeframe_start`
  * and `timeframe_end`. The `quantity` value represents the calculated usage value for the billable
@@ -43,7 +42,6 @@ import kotlin.jvm.optionals.getOrNull
  * with each other, e.g. to display grouped usage on a custom timeframe.
  *
  * ## Custom timeframe
- *
  * In order to view usage for a custom timeframe rather than the current billing period, specify a
  * `timeframe_start` and `timeframe_end`. This will calculate quantities for usage incurred between
  * timeframe_start (inclusive) and timeframe_end (exclusive), i.e. `[timeframe_start,
@@ -55,7 +53,6 @@ import kotlin.jvm.optionals.getOrNull
  * - Both parameters must be specified if either is specified.
  *
  * ## Grouping by custom attributes
- *
  * In order to view a single metric grouped by a specific _attribute_ that each event is tagged with
  * (e.g. `cluster`), you must additionally specify a `billable_metric_id` and a `group_by` key. The
  * `group_by` key denotes the event property on which to group.
@@ -104,7 +101,6 @@ import kotlin.jvm.optionals.getOrNull
  * ```
  *
  * ## Windowed usage
- *
  * The `granularity` parameter can be used to _window_ the usage `quantity` value into periods. When
  * not specified, usage is returned for the entirety of the time range.
  *
@@ -159,7 +155,6 @@ import kotlin.jvm.optionals.getOrNull
  * ```
  *
  * ## Decomposable vs. non-decomposable metrics
- *
  * Billable metrics fall into one of two categories: decomposable and non-decomposable. A
  * decomposable billable metric, such as a sum or a count, can be displayed and aggregated across
  * arbitrary timescales. On the other hand, a non-decomposable metric is not meaningful when only a
@@ -178,7 +173,6 @@ import kotlin.jvm.optionals.getOrNull
  *   If no invoice grouping key is present, the metric does not support `group_by`.
  *
  * ## Matrix prices
- *
  * When a billable metric is attached to a price that uses matrix pricing, it's important to view
  * usage grouped by those matrix dimensions. In this case, use the query parameters
  * `first_dimension_key`, `first_dimension_value` and `second_dimension_key`,
@@ -656,7 +650,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Granularity && value == other.value /* spotless:on */
+            return other is Granularity && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -785,7 +779,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ViewMode && value == other.value /* spotless:on */
+            return other is ViewMode && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -798,10 +792,38 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionFetchUsageParams && subscriptionId == other.subscriptionId && billableMetricId == other.billableMetricId && firstDimensionKey == other.firstDimensionKey && firstDimensionValue == other.firstDimensionValue && granularity == other.granularity && groupBy == other.groupBy && secondDimensionKey == other.secondDimensionKey && secondDimensionValue == other.secondDimensionValue && timeframeEnd == other.timeframeEnd && timeframeStart == other.timeframeStart && viewMode == other.viewMode && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is SubscriptionFetchUsageParams &&
+            subscriptionId == other.subscriptionId &&
+            billableMetricId == other.billableMetricId &&
+            firstDimensionKey == other.firstDimensionKey &&
+            firstDimensionValue == other.firstDimensionValue &&
+            granularity == other.granularity &&
+            groupBy == other.groupBy &&
+            secondDimensionKey == other.secondDimensionKey &&
+            secondDimensionValue == other.secondDimensionValue &&
+            timeframeEnd == other.timeframeEnd &&
+            timeframeStart == other.timeframeStart &&
+            viewMode == other.viewMode &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, billableMetricId, firstDimensionKey, firstDimensionValue, granularity, groupBy, secondDimensionKey, secondDimensionValue, timeframeEnd, timeframeStart, viewMode, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(
+            subscriptionId,
+            billableMetricId,
+            firstDimensionKey,
+            firstDimensionValue,
+            granularity,
+            groupBy,
+            secondDimensionKey,
+            secondDimensionValue,
+            timeframeEnd,
+            timeframeStart,
+            viewMode,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
         "SubscriptionFetchUsageParams{subscriptionId=$subscriptionId, billableMetricId=$billableMetricId, firstDimensionKey=$firstDimensionKey, firstDimensionValue=$firstDimensionValue, granularity=$granularity, groupBy=$groupBy, secondDimensionKey=$secondDimensionKey, secondDimensionValue=$secondDimensionValue, timeframeEnd=$timeframeEnd, timeframeStart=$timeframeStart, viewMode=$viewMode, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

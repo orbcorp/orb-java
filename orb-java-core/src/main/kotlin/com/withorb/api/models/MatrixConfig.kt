@@ -18,7 +18,9 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
+/** Configuration for matrix pricing */
 class MatrixConfig
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val defaultUnitAmount: JsonField<String>,
     private val dimensions: JsonField<List<String?>>,
@@ -56,7 +58,7 @@ private constructor(
     fun dimensions(): List<String?> = dimensions.getRequired("dimensions")
 
     /**
-     * Matrix values for specified matrix grouping keys
+     * Matrix values configuration
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -175,7 +177,7 @@ private constructor(
                 }
         }
 
-        /** Matrix values for specified matrix grouping keys */
+        /** Matrix values configuration */
         fun matrixValues(matrixValues: List<MatrixValue>) = matrixValues(JsonField.of(matrixValues))
 
         /**
@@ -280,12 +282,16 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is MatrixConfig && defaultUnitAmount == other.defaultUnitAmount && dimensions == other.dimensions && matrixValues == other.matrixValues && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is MatrixConfig &&
+            defaultUnitAmount == other.defaultUnitAmount &&
+            dimensions == other.dimensions &&
+            matrixValues == other.matrixValues &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(defaultUnitAmount, dimensions, matrixValues, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(defaultUnitAmount, dimensions, matrixValues, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

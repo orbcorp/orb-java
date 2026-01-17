@@ -1,5 +1,103 @@
 # Changelog
 
+## 1.10.0 (2026-01-17)
+
+Full Changelog: [v1.9.0...v1.10.0](https://github.com/orbcorp/orb-java/compare/v1.9.0...v1.10.0)
+
+### ⚠ BREAKING CHANGES
+
+* **api:** define shared model ConversionRateConfig
+
+### Features
+
+* add retryable exception ([cf6742e](https://github.com/orbcorp/orb-java/commit/cf6742e0ace7ef26c53fdf1c6ead9f742a326094))
+* **api:** api update ([4e4f486](https://github.com/orbcorp/orb-java/commit/4e4f4861b24afdab118d61cb562b5e861b45b5b0))
+* **api:** api update ([5595866](https://github.com/orbcorp/orb-java/commit/5595866282ebb1b7208f89adf770136592f7ffc8))
+* **api:** api update ([ca80943](https://github.com/orbcorp/orb-java/commit/ca8094381764d01bf6861d4016969d41a30c4442))
+* **api:** api update ([66b024c](https://github.com/orbcorp/orb-java/commit/66b024cd9d56108719ffedb0ef91b94178dd5149))
+* **api:** api update ([f14a0b8](https://github.com/orbcorp/orb-java/commit/f14a0b818473f9fe09e299e43c72992dc99cf628))
+* **api:** api update ([a321e4c](https://github.com/orbcorp/orb-java/commit/a321e4cb1023069885ecc43f02f35a1ca580d51a))
+* **api:** api update ([16c09ab](https://github.com/orbcorp/orb-java/commit/16c09abc0bd756cb2c7c65b5dd987ed135d95fc6))
+* **api:** api update ([42a3bf2](https://github.com/orbcorp/orb-java/commit/42a3bf2b3f92450fea64d1fd308c8aef4f705dc4))
+* **api:** api update ([8d40c66](https://github.com/orbcorp/orb-java/commit/8d40c665b040c93811cb04523986254db90251c1))
+* **api:** api update ([340aeb5](https://github.com/orbcorp/orb-java/commit/340aeb58fff2c96c29b18055963db7e6186fc098))
+* **api:** api update ([8c81c68](https://github.com/orbcorp/orb-java/commit/8c81c68e0cc2ec1de0d1bf25f438eb4eb7513e7b))
+* **api:** api update ([bf19834](https://github.com/orbcorp/orb-java/commit/bf19834416fab1b4facb56b5bb480a98b4046871))
+* **api:** api update ([db21295](https://github.com/orbcorp/orb-java/commit/db212951f87170757554823c153c63723f1919bb))
+* **api:** api update ([8d0120a](https://github.com/orbcorp/orb-java/commit/8d0120a97c6c732106ca1f18823e0bcb3a2c3ae3))
+* **api:** api update ([dfd1f8b](https://github.com/orbcorp/orb-java/commit/dfd1f8bd061995e3f09660f24d638356ffabbeca))
+* **api:** api update ([2c02d15](https://github.com/orbcorp/orb-java/commit/2c02d1554141dfc72791f2c0a9e6801e24ded3e8))
+* **api:** api update ([c7d3dda](https://github.com/orbcorp/orb-java/commit/c7d3dda3503f7d9a359f439d8388212a710a2e14))
+* **api:** api update ([5f65069](https://github.com/orbcorp/orb-java/commit/5f650699507a73427410d4e30a7694eebabb3376))
+* **api:** api update ([f28bee7](https://github.com/orbcorp/orb-java/commit/f28bee7981fa0077a0d93b9061640c6bbdb05098))
+* **api:** api update ([b6f5318](https://github.com/orbcorp/orb-java/commit/b6f5318aed1e4b03e46f911ad3f9b199fd6c95bd))
+* **api:** api update ([1a45d5d](https://github.com/orbcorp/orb-java/commit/1a45d5d0090f3afda47a434ed4fc2e4d62060e50))
+* **api:** api update ([108cdfc](https://github.com/orbcorp/orb-java/commit/108cdfc98f5d0d46721aa7515634c42846eba1ee))
+* **api:** api update ([f101f63](https://github.com/orbcorp/orb-java/commit/f101f63b19cda34ea15fe08aba62a8706cc5a8fc))
+* **api:** api update ([6c895f2](https://github.com/orbcorp/orb-java/commit/6c895f2348474af8319b87e51db26a28891b7a9c))
+* **api:** api update ([84cc66c](https://github.com/orbcorp/orb-java/commit/84cc66cec7668f2de52760b458f5c732914d0995))
+* **api:** api update ([ab79480](https://github.com/orbcorp/orb-java/commit/ab794808febc46a53d5baf1e41f0ad7b1ab8d1df))
+* **api:** api update ([0f4e585](https://github.com/orbcorp/orb-java/commit/0f4e5853aab9546952e9d80b4c2e50688a8caf6d))
+* **api:** api update ([617892e](https://github.com/orbcorp/orb-java/commit/617892e6526e1717415bfa630529ffce50a70b96))
+* **api:** api update ([bf412bc](https://github.com/orbcorp/orb-java/commit/bf412bca3a157a0e41fef19a5d915c095b09eda1))
+* **api:** api update ([6aa1d53](https://github.com/orbcorp/orb-java/commit/6aa1d5370247b08c937ca7faa9fcacf5b21ed081))
+* **api:** api update ([321aa41](https://github.com/orbcorp/orb-java/commit/321aa4197ce9dbc8601ec7578d0f70017e37c2f6))
+* **api:** api update ([cf6fd19](https://github.com/orbcorp/orb-java/commit/cf6fd1990dc2781ebc0ab860b135ce4b90a58fa2))
+* **api:** api update ([9c8977c](https://github.com/orbcorp/orb-java/commit/9c8977c14697c4907f13e29189a62c2aea441924))
+* **api:** api update ([247937e](https://github.com/orbcorp/orb-java/commit/247937ebe3dba64b53c180a9a58460e10cde4a8c))
+* **api:** api update ([5d00bf2](https://github.com/orbcorp/orb-java/commit/5d00bf2a8be3610043bbd620eb724d13788fc89a))
+* **api:** api update ([05b6a4e](https://github.com/orbcorp/orb-java/commit/05b6a4e2d2e551b8b09168d2a8d6e34851fcd784))
+* **api:** api update ([3b2489b](https://github.com/orbcorp/orb-java/commit/3b2489bdb730033a389ec76cc824df8eb351c678))
+* **api:** api update ([e90f837](https://github.com/orbcorp/orb-java/commit/e90f837c716a2fe6955df54c844b4320a1a26d8b))
+* **api:** define shared model ConversionRateConfig ([13fc2ef](https://github.com/orbcorp/orb-java/commit/13fc2efb464953fc534dbd09ed34b003c17a3d0d))
+* **api:** manual updates ([268bca0](https://github.com/orbcorp/orb-java/commit/268bca007ebb53c0199c2d8337f002a4ecff6267))
+* **client:** add `HttpRequest#url()` method ([cad2dc0](https://github.com/orbcorp/orb-java/commit/cad2dc068abcfd1b38305c0209ce2db59519e3e9))
+* **client:** allow configuring dispatcher executor service ([14307ff](https://github.com/orbcorp/orb-java/commit/14307fffffefb0aa6b8b7f040501160d375fb793))
+* **client:** ensure compat with proguard ([83ddd55](https://github.com/orbcorp/orb-java/commit/83ddd55a2e265b3f2426f47868bc5a596509e3a8))
+* **client:** expose sleeper option ([427df35](https://github.com/orbcorp/orb-java/commit/427df355df00bafcdb972fbfb758f7cb0646aab6))
+* extract minimum composite to type ([3e25650](https://github.com/orbcorp/orb-java/commit/3e256505b03e771aef66c8a435f27a6ec3b9e237))
+
+
+### Bug Fixes
+
+* **ci:** use java-version 21 for publish step ([b290b3a](https://github.com/orbcorp/orb-java/commit/b290b3a558d6f1b4419975855a22c0f0b8b055e2))
+* **client:** cancel okhttp call when future cancelled ([c9b8382](https://github.com/orbcorp/orb-java/commit/c9b8382a9741380a090469881eb5bf242c463a7d))
+* **client:** deserialization of empty objects ([1764089](https://github.com/orbcorp/orb-java/commit/1764089476594bd942efe77f15d4744e6c0a01dd))
+* **client:** disallow coercion from float to int ([03a24de](https://github.com/orbcorp/orb-java/commit/03a24dedef31965bfd676e73780852caaa273241))
+* **client:** ensure single timer is created per client ([427df35](https://github.com/orbcorp/orb-java/commit/427df355df00bafcdb972fbfb758f7cb0646aab6))
+* **client:** fully respect max retries ([032e2e6](https://github.com/orbcorp/orb-java/commit/032e2e68088130cf33a04cbb1fb385f13c4aaead))
+* **client:** incorrect `getPackageVersion` impl ([9bc6ac9](https://github.com/orbcorp/orb-java/commit/9bc6ac99cc3a432ddc30f43dda41d076f4197883))
+* **client:** multi-value header serialization ([bf4d413](https://github.com/orbcorp/orb-java/commit/bf4d413ad8025a208cb99ff68f989b7988d906b0))
+* **client:** r8 support ([27da721](https://github.com/orbcorp/orb-java/commit/27da7219bb085292eba8cf247a8574689f922300))
+* **client:** send retry count header for max retries 0 ([032e2e6](https://github.com/orbcorp/orb-java/commit/032e2e68088130cf33a04cbb1fb385f13c4aaead))
+* date time deserialization leniency ([bc5e9be](https://github.com/orbcorp/orb-java/commit/bc5e9bec4c257781ea40ba15390fa810c6ce6509))
+* **schema:** Rename unit price type to avoid naming conflict ([7738ed4](https://github.com/orbcorp/orb-java/commit/7738ed44d3ba2df61adb5ef1b7a933b55ab4d5bd))
+
+
+### Chores
+
+* **ci:** upgrade `actions/setup-java` ([023c1ff](https://github.com/orbcorp/orb-java/commit/023c1ffe400dc9acd73d37ecf358f8de4129dc76))
+* fix formatting ([a6e527f](https://github.com/orbcorp/orb-java/commit/a6e527f946e40ebbfebc97c4eaeec1900845197a))
+* improve formatter performance ([5d37bc1](https://github.com/orbcorp/orb-java/commit/5d37bc171ae17fbfb70c63743afde6b04e29ff1c))
+* **internal:** bump ci test timeout ([0e68dd4](https://github.com/orbcorp/orb-java/commit/0e68dd443b79c48810c94749f88cfc2d9286a725))
+* **internal:** change some comment formatting ([7e80bfe](https://github.com/orbcorp/orb-java/commit/7e80bfeb93b40dc060dd5947e8e37d4fb68a4955))
+* **internal:** clean up maven repo artifact script and add html documentation to repo root ([c79bf46](https://github.com/orbcorp/orb-java/commit/c79bf46a7a09781c2eac0149160906dc8e16d690))
+* **internal:** codegen related update ([97bd293](https://github.com/orbcorp/orb-java/commit/97bd293da263a5259bac93d2f9d9aeb0f10d5c65))
+* **internal:** codegen related update ([3a4300a](https://github.com/orbcorp/orb-java/commit/3a4300ae19b4ad4c9f82056658d88013a35c992e))
+* **internal:** codegen related update ([185acb8](https://github.com/orbcorp/orb-java/commit/185acb801fe845d8b33f741e1e1f1e07550fd92f))
+* **internal:** codegen related update ([76d269d](https://github.com/orbcorp/orb-java/commit/76d269d0cba09f1150af878d603292b92e003241))
+* **internal:** depend on packages directly in example ([032e2e6](https://github.com/orbcorp/orb-java/commit/032e2e68088130cf33a04cbb1fb385f13c4aaead))
+* **internal:** improve maven repo docs ([f8215cc](https://github.com/orbcorp/orb-java/commit/f8215cc9dd21aa0417ce588566180ee8890c1c2e))
+* **internal:** reduce proguard ci logging ([9b4d208](https://github.com/orbcorp/orb-java/commit/9b4d20849c0af2b5945f155aad5a91c338020f56))
+* **internal:** support uploading Maven repo artifacts to stainless package server ([24af903](https://github.com/orbcorp/orb-java/commit/24af903bcfb5a70a728670d7dc976664aa317760))
+* **internal:** update `actions/checkout` version ([f9c0414](https://github.com/orbcorp/orb-java/commit/f9c0414522777624fe33d0e6de6397634105678a))
+* test on Jackson 2.14.0 to avoid encountering FasterXML/jackson-databind[#3240](https://github.com/orbcorp/orb-java/issues/3240) in tests ([bc5e9be](https://github.com/orbcorp/orb-java/commit/bc5e9bec4c257781ea40ba15390fa810c6ce6509))
+
+
+### Documentation
+
+* remove `$` for better copy-pasteabality ([c20680a](https://github.com/orbcorp/orb-java/commit/c20680a232316989527ab7da435b6c0baf7885af))
+
 ## 1.9.0 (2025-07-26)
 
 Full Changelog: [v1.8.0...v1.9.0](https://github.com/orbcorp/orb-java/compare/v1.8.0...v1.9.0)

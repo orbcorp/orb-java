@@ -30,12 +30,7 @@ interface BetaService {
 
     fun externalPlanId(): ExternalPlanIdService
 
-    /**
-     * This API endpoint is in beta and its interface may change. It is recommended for use only in
-     * test mode.
-     *
-     * This endpoint allows the creation of a new plan version for an existing plan.
-     */
+    /** This endpoint allows the creation of a new plan version for an existing plan. */
     fun createPlanVersion(planId: String, params: BetaCreatePlanVersionParams): PlanVersion =
         createPlanVersion(planId, params, RequestOptions.none())
 
@@ -57,9 +52,6 @@ interface BetaService {
     ): PlanVersion
 
     /**
-     * This API endpoint is in beta and its interface may change. It is recommended for use only in
-     * test mode.
-     *
      * This endpoint is used to fetch a plan version. It returns the phases, prices, and adjustments
      * present on this version of the plan.
      */
@@ -83,12 +75,7 @@ interface BetaService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PlanVersion
 
-    /**
-     * This API endpoint is in beta and its interface may change. It is recommended for use only in
-     * test mode.
-     *
-     * This endpoint allows setting the default version of a plan.
-     */
+    /** This endpoint allows setting the default version of a plan. */
     fun setDefaultPlanVersion(planId: String, params: BetaSetDefaultPlanVersionParams): Plan =
         setDefaultPlanVersion(planId, params, RequestOptions.none())
 

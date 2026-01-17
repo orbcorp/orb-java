@@ -18,7 +18,9 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
+/** Configuration for bulk pricing */
 class BulkConfig
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val tiers: JsonField<List<BulkTier>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -176,12 +178,12 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is BulkConfig && tiers == other.tiers && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is BulkConfig &&
+            tiers == other.tiers &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(tiers, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 

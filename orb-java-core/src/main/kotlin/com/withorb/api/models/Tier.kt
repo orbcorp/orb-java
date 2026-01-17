@@ -17,7 +17,9 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** Configuration for a single tier */
 class Tier
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val firstUnit: JsonField<Double>,
     private val unitAmount: JsonField<String>,
@@ -51,7 +53,7 @@ private constructor(
     fun unitAmount(): String = unitAmount.getRequired("unit_amount")
 
     /**
-     * Inclusive tier ending value. If null, this is treated as the last tier
+     * Inclusive tier ending value. This value is null if and only if this is the last tier.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
@@ -145,7 +147,7 @@ private constructor(
          */
         fun unitAmount(unitAmount: JsonField<String>) = apply { this.unitAmount = unitAmount }
 
-        /** Inclusive tier ending value. If null, this is treated as the last tier */
+        /** Inclusive tier ending value. This value is null if and only if this is the last tier. */
         fun lastUnit(lastUnit: Double?) = lastUnit(JsonField.ofNullable(lastUnit))
 
         /**
@@ -244,12 +246,16 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Tier && firstUnit == other.firstUnit && unitAmount == other.unitAmount && lastUnit == other.lastUnit && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is Tier &&
+            firstUnit == other.firstUnit &&
+            unitAmount == other.unitAmount &&
+            lastUnit == other.lastUnit &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(firstUnit, unitAmount, lastUnit, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(firstUnit, unitAmount, lastUnit, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 
