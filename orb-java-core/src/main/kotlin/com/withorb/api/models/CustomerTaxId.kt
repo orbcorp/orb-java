@@ -123,6 +123,7 @@ import kotlin.jvm.optionals.getOrNull
  * |Peru                  |`pe_ruc`    |Peruvian RUC Number                                                                                    |
  * |Philippines           |`ph_tin`    |Philippines Tax Identification Number                                                                  |
  * |Poland                |`eu_vat`    |European VAT Number                                                                                    |
+ * |Poland                |`pl_nip`    |Polish Tax ID Number                                                                                   |
  * |Portugal              |`eu_vat`    |European VAT Number                                                                                    |
  * |Romania               |`eu_vat`    |European VAT Number                                                                                    |
  * |Romania               |`ro_tin`    |Romanian Tax ID Number                                                                                 |
@@ -1328,6 +1329,8 @@ private constructor(
 
             @JvmField val PH_TIN = of("ph_tin")
 
+            @JvmField val PL_NIP = of("pl_nip")
+
             @JvmField val RO_TIN = of("ro_tin")
 
             @JvmField val RS_PIB = of("rs_pib")
@@ -1470,6 +1473,7 @@ private constructor(
             OM_VAT,
             PE_RUC,
             PH_TIN,
+            PL_NIP,
             RO_TIN,
             RS_PIB,
             RU_INN,
@@ -1592,6 +1596,7 @@ private constructor(
             OM_VAT,
             PE_RUC,
             PH_TIN,
+            PL_NIP,
             RO_TIN,
             RS_PIB,
             RU_INN,
@@ -1715,6 +1720,7 @@ private constructor(
                 OM_VAT -> Value.OM_VAT
                 PE_RUC -> Value.PE_RUC
                 PH_TIN -> Value.PH_TIN
+                PL_NIP -> Value.PL_NIP
                 RO_TIN -> Value.RO_TIN
                 RS_PIB -> Value.RS_PIB
                 RU_INN -> Value.RU_INN
@@ -1838,6 +1844,7 @@ private constructor(
                 OM_VAT -> Known.OM_VAT
                 PE_RUC -> Known.PE_RUC
                 PH_TIN -> Known.PH_TIN
+                PL_NIP -> Known.PL_NIP
                 RO_TIN -> Known.RO_TIN
                 RS_PIB -> Known.RS_PIB
                 RU_INN -> Known.RU_INN
