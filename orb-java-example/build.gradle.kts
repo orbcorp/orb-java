@@ -8,7 +8,8 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":orb-java"))
+    implementation(project(":orb-java-core"))
+    implementation(project(":orb-java-client-okhttp"))
 }
 
 tasks.withType<JavaCompile>().configureEach {
