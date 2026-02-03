@@ -41,6 +41,7 @@ private constructor(
     private val thresholds: JsonField<List<Threshold>>,
     private val type: JsonField<Type>,
     private val balanceAlertStatus: JsonField<List<BalanceAlertStatus>>,
+    private val licenseType: JsonField<LicenseType>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -67,6 +68,9 @@ private constructor(
         @JsonProperty("balance_alert_status")
         @ExcludeMissing
         balanceAlertStatus: JsonField<List<BalanceAlertStatus>> = JsonMissing.of(),
+        @JsonProperty("license_type")
+        @ExcludeMissing
+        licenseType: JsonField<LicenseType> = JsonMissing.of(),
     ) : this(
         id,
         createdAt,
@@ -79,6 +83,7 @@ private constructor(
         thresholds,
         type,
         balanceAlertStatus,
+        licenseType,
         mutableMapOf(),
     )
 
@@ -172,6 +177,14 @@ private constructor(
         balanceAlertStatus.getOptional("balance_alert_status")
 
     /**
+     * Minified license type for alert serialization.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun licenseType(): Optional<LicenseType> = licenseType.getOptional("license_type")
+
+    /**
      * Returns the raw JSON value of [id].
      *
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
@@ -259,6 +272,15 @@ private constructor(
     @ExcludeMissing
     fun _balanceAlertStatus(): JsonField<List<BalanceAlertStatus>> = balanceAlertStatus
 
+    /**
+     * Returns the raw JSON value of [licenseType].
+     *
+     * Unlike [licenseType], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("license_type")
+    @ExcludeMissing
+    fun _licenseType(): JsonField<LicenseType> = licenseType
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -307,6 +329,7 @@ private constructor(
         private var thresholds: JsonField<MutableList<Threshold>>? = null
         private var type: JsonField<Type>? = null
         private var balanceAlertStatus: JsonField<MutableList<BalanceAlertStatus>>? = null
+        private var licenseType: JsonField<LicenseType> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -322,6 +345,7 @@ private constructor(
             thresholds = alert.thresholds.map { it.toMutableList() }
             type = alert.type
             balanceAlertStatus = alert.balanceAlertStatus.map { it.toMutableList() }
+            licenseType = alert.licenseType
             additionalProperties = alert.additionalProperties.toMutableMap()
         }
 
@@ -510,6 +534,23 @@ private constructor(
                 }
         }
 
+        /** Minified license type for alert serialization. */
+        fun licenseType(licenseType: LicenseType?) = licenseType(JsonField.ofNullable(licenseType))
+
+        /** Alias for calling [Builder.licenseType] with `licenseType.orElse(null)`. */
+        fun licenseType(licenseType: Optional<LicenseType>) = licenseType(licenseType.getOrNull())
+
+        /**
+         * Sets [Builder.licenseType] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.licenseType] with a well-typed [LicenseType] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun licenseType(licenseType: JsonField<LicenseType>) = apply {
+            this.licenseType = licenseType
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -563,6 +604,7 @@ private constructor(
                 checkRequired("thresholds", thresholds).map { it.toImmutable() },
                 checkRequired("type", type),
                 (balanceAlertStatus ?: JsonMissing.of()).map { it.toImmutable() },
+                licenseType,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -585,6 +627,7 @@ private constructor(
         thresholds().ifPresent { it.forEach { it.validate() } }
         type().validate()
         balanceAlertStatus().ifPresent { it.forEach { it.validate() } }
+        licenseType().ifPresent { it.validate() }
         validated = true
     }
 
@@ -613,7 +656,8 @@ private constructor(
             (subscription.asKnown().getOrNull()?.validity() ?: 0) +
             (thresholds.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (type.asKnown().getOrNull()?.validity() ?: 0) +
-            (balanceAlertStatus.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+            (balanceAlertStatus.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (licenseType.asKnown().getOrNull()?.validity() ?: 0)
 
     /** The metric the alert applies to. */
     class Metric
@@ -1089,6 +1133,9 @@ private constructor(
 
             @JvmField val COST_EXCEEDED = of("cost_exceeded")
 
+            @JvmField
+            val LICENSE_BALANCE_THRESHOLD_REACHED = of("license_balance_threshold_reached")
+
             @JvmStatic fun of(value: String) = Type(JsonField.of(value))
         }
 
@@ -1099,6 +1146,7 @@ private constructor(
             CREDIT_BALANCE_RECOVERED,
             USAGE_EXCEEDED,
             COST_EXCEEDED,
+            LICENSE_BALANCE_THRESHOLD_REACHED,
         }
 
         /**
@@ -1116,6 +1164,7 @@ private constructor(
             CREDIT_BALANCE_RECOVERED,
             USAGE_EXCEEDED,
             COST_EXCEEDED,
+            LICENSE_BALANCE_THRESHOLD_REACHED,
             /** An enum member indicating that [Type] was instantiated with an unknown value. */
             _UNKNOWN,
         }
@@ -1134,6 +1183,7 @@ private constructor(
                 CREDIT_BALANCE_RECOVERED -> Value.CREDIT_BALANCE_RECOVERED
                 USAGE_EXCEEDED -> Value.USAGE_EXCEEDED
                 COST_EXCEEDED -> Value.COST_EXCEEDED
+                LICENSE_BALANCE_THRESHOLD_REACHED -> Value.LICENSE_BALANCE_THRESHOLD_REACHED
                 else -> Value._UNKNOWN
             }
 
@@ -1152,6 +1202,7 @@ private constructor(
                 CREDIT_BALANCE_RECOVERED -> Known.CREDIT_BALANCE_RECOVERED
                 USAGE_EXCEEDED -> Known.USAGE_EXCEEDED
                 COST_EXCEEDED -> Known.COST_EXCEEDED
+                LICENSE_BALANCE_THRESHOLD_REACHED -> Known.LICENSE_BALANCE_THRESHOLD_REACHED
                 else -> throw OrbInvalidDataException("Unknown Type: $value")
             }
 
@@ -1418,6 +1469,159 @@ private constructor(
             "BalanceAlertStatus{inAlert=$inAlert, thresholdValue=$thresholdValue, additionalProperties=$additionalProperties}"
     }
 
+    /** Minified license type for alert serialization. */
+    class LicenseType
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val id: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of()
+        ) : this(id, mutableMapOf())
+
+        /**
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun id(): String = id.getRequired("id")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [LicenseType].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [LicenseType]. */
+        class Builder internal constructor() {
+
+            private var id: JsonField<String>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(licenseType: LicenseType) = apply {
+                id = licenseType.id
+                additionalProperties = licenseType.additionalProperties.toMutableMap()
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [LicenseType].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): LicenseType =
+                LicenseType(checkRequired("id", id), additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): LicenseType = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = (if (id.asKnown().isPresent) 1 else 0)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is LicenseType &&
+                id == other.id &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy { Objects.hash(id, additionalProperties) }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "LicenseType{id=$id, additionalProperties=$additionalProperties}"
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
@@ -1435,6 +1639,7 @@ private constructor(
             thresholds == other.thresholds &&
             type == other.type &&
             balanceAlertStatus == other.balanceAlertStatus &&
+            licenseType == other.licenseType &&
             additionalProperties == other.additionalProperties
     }
 
@@ -1451,6 +1656,7 @@ private constructor(
             thresholds,
             type,
             balanceAlertStatus,
+            licenseType,
             additionalProperties,
         )
     }
@@ -1458,5 +1664,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Alert{id=$id, createdAt=$createdAt, currency=$currency, customer=$customer, enabled=$enabled, metric=$metric, plan=$plan, subscription=$subscription, thresholds=$thresholds, type=$type, balanceAlertStatus=$balanceAlertStatus, additionalProperties=$additionalProperties}"
+        "Alert{id=$id, createdAt=$createdAt, currency=$currency, customer=$customer, enabled=$enabled, metric=$metric, plan=$plan, subscription=$subscription, thresholds=$thresholds, type=$type, balanceAlertStatus=$balanceAlertStatus, licenseType=$licenseType, additionalProperties=$additionalProperties}"
 }
