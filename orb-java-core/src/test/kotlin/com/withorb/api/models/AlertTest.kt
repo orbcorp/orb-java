@@ -40,6 +40,7 @@ internal class AlertTest {
                 .addBalanceAlertStatus(
                     Alert.BalanceAlertStatus.builder().inAlert(true).thresholdValue(0.0).build()
                 )
+                .licenseType(Alert.LicenseType.builder().id("id").build())
                 .build()
 
         assertThat(alert.id()).isEqualTo("XuxCbt7x9L82yyeF")
@@ -72,6 +73,7 @@ internal class AlertTest {
             .containsExactly(
                 Alert.BalanceAlertStatus.builder().inAlert(true).thresholdValue(0.0).build()
             )
+        assertThat(alert.licenseType()).contains(Alert.LicenseType.builder().id("id").build())
     }
 
     @Test
@@ -104,6 +106,7 @@ internal class AlertTest {
                 .addBalanceAlertStatus(
                     Alert.BalanceAlertStatus.builder().inAlert(true).thresholdValue(0.0).build()
                 )
+                .licenseType(Alert.LicenseType.builder().id("id").build())
                 .build()
 
         val roundtrippedAlert =
