@@ -32,6 +32,7 @@ internal class NewAllocationPriceTest {
                         .build()
                 )
                 .itemId("item_id")
+                .licenseTypeId("license_type_id")
                 .perUnitCostBasis("per_unit_cost_basis")
                 .build()
 
@@ -55,6 +56,7 @@ internal class NewAllocationPriceTest {
                     .build()
             )
         assertThat(newAllocationPrice.itemId()).contains("item_id")
+        assertThat(newAllocationPrice.licenseTypeId()).contains("license_type_id")
         assertThat(newAllocationPrice.perUnitCostBasis()).contains("per_unit_cost_basis")
     }
 
@@ -81,6 +83,7 @@ internal class NewAllocationPriceTest {
                         .build()
                 )
                 .itemId("item_id")
+                .licenseTypeId("license_type_id")
                 .perUnitCostBasis("per_unit_cost_basis")
                 .build()
 

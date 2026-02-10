@@ -70,6 +70,7 @@ internal class NewFloatingScalableMatrixWithUnitPricingPriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewFloatingScalableMatrixWithUnitPricingPrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -150,6 +151,8 @@ internal class NewFloatingScalableMatrixWithUnitPricingPriceTest {
                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                     .build()
             )
+        assertThat(newFloatingScalableMatrixWithUnitPricingPrice.licenseTypeId())
+            .contains("license_type_id")
         assertThat(newFloatingScalableMatrixWithUnitPricingPrice.metadata())
             .contains(
                 NewFloatingScalableMatrixWithUnitPricingPrice.Metadata.builder()
@@ -219,6 +222,7 @@ internal class NewFloatingScalableMatrixWithUnitPricingPriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewFloatingScalableMatrixWithUnitPricingPrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

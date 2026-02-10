@@ -60,6 +60,7 @@ internal class NewFloatingMatrixWithAllocationPriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewFloatingMatrixWithAllocationPrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -129,6 +130,7 @@ internal class NewFloatingMatrixWithAllocationPriceTest {
                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                     .build()
             )
+        assertThat(newFloatingMatrixWithAllocationPrice.licenseTypeId()).contains("license_type_id")
         assertThat(newFloatingMatrixWithAllocationPrice.metadata())
             .contains(
                 NewFloatingMatrixWithAllocationPrice.Metadata.builder()
@@ -188,6 +190,7 @@ internal class NewFloatingMatrixWithAllocationPriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewFloatingMatrixWithAllocationPrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

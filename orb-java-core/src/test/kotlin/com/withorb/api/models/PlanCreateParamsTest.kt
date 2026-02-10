@@ -36,6 +36,7 @@ internal class PlanCreateParamsTest {
                                     .build()
                             )
                             .itemId("item_id")
+                            .licenseTypeId("license_type_id")
                             .perUnitCostBasis("per_unit_cost_basis")
                             .build()
                     )
@@ -83,6 +84,7 @@ internal class PlanCreateParamsTest {
                                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                     .build()
                             )
+                            .licenseTypeId("license_type_id")
                             .metadata(
                                 NewPlanUnitPrice.Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -169,6 +171,7 @@ internal class PlanCreateParamsTest {
                                         .build()
                                 )
                                 .itemId("item_id")
+                                .licenseTypeId("license_type_id")
                                 .perUnitCostBasis("per_unit_cost_basis")
                                 .build()
                         )
@@ -218,6 +221,7 @@ internal class PlanCreateParamsTest {
                                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                         .build()
                                 )
+                                .licenseTypeId("license_type_id")
                                 .metadata(
                                     NewPlanUnitPrice.Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -302,6 +306,7 @@ internal class PlanCreateParamsTest {
                                     .build()
                             )
                             .itemId("item_id")
+                            .licenseTypeId("license_type_id")
                             .perUnitCostBasis("per_unit_cost_basis")
                             .build()
                     )
@@ -349,6 +354,7 @@ internal class PlanCreateParamsTest {
                                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                     .build()
                             )
+                            .licenseTypeId("license_type_id")
                             .metadata(
                                 NewPlanUnitPrice.Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))

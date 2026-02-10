@@ -78,6 +78,7 @@ internal class PriceEvaluatePreviewEventsParamsTest {
                                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                     .build()
                             )
+                            .licenseTypeId("license_type_id")
                             .metadata(
                                 NewFloatingUnitPrice.Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -162,6 +163,7 @@ internal class PriceEvaluatePreviewEventsParamsTest {
                                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                         .build()
                                 )
+                                .licenseTypeId("license_type_id")
                                 .metadata(
                                     NewFloatingUnitPrice.Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -244,6 +246,7 @@ internal class PriceEvaluatePreviewEventsParamsTest {
                                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                     .build()
                             )
+                            .licenseTypeId("license_type_id")
                             .metadata(
                                 NewFloatingUnitPrice.Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
