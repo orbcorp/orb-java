@@ -77,6 +77,7 @@ internal class NewSubscriptionGroupedWithMeteredMinimumPriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewSubscriptionGroupedWithMeteredMinimumPrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -163,6 +164,8 @@ internal class NewSubscriptionGroupedWithMeteredMinimumPriceTest {
                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                     .build()
             )
+        assertThat(newSubscriptionGroupedWithMeteredMinimumPrice.licenseTypeId())
+            .contains("license_type_id")
         assertThat(newSubscriptionGroupedWithMeteredMinimumPrice.metadata())
             .contains(
                 NewSubscriptionGroupedWithMeteredMinimumPrice.Metadata.builder()
@@ -241,6 +244,7 @@ internal class NewSubscriptionGroupedWithMeteredMinimumPriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewSubscriptionGroupedWithMeteredMinimumPrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

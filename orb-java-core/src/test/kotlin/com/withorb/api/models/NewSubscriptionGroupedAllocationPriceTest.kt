@@ -54,6 +54,7 @@ internal class NewSubscriptionGroupedAllocationPriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewSubscriptionGroupedAllocationPrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -118,6 +119,8 @@ internal class NewSubscriptionGroupedAllocationPriceTest {
                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                     .build()
             )
+        assertThat(newSubscriptionGroupedAllocationPrice.licenseTypeId())
+            .contains("license_type_id")
         assertThat(newSubscriptionGroupedAllocationPrice.metadata())
             .contains(
                 NewSubscriptionGroupedAllocationPrice.Metadata.builder()
@@ -172,6 +175,7 @@ internal class NewSubscriptionGroupedAllocationPriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewSubscriptionGroupedAllocationPrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

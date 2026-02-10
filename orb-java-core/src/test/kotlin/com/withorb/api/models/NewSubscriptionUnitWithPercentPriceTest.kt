@@ -53,6 +53,7 @@ internal class NewSubscriptionUnitWithPercentPriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewSubscriptionUnitWithPercentPrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -116,6 +117,7 @@ internal class NewSubscriptionUnitWithPercentPriceTest {
                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                     .build()
             )
+        assertThat(newSubscriptionUnitWithPercentPrice.licenseTypeId()).contains("license_type_id")
         assertThat(newSubscriptionUnitWithPercentPrice.metadata())
             .contains(
                 NewSubscriptionUnitWithPercentPrice.Metadata.builder()
@@ -169,6 +171,7 @@ internal class NewSubscriptionUnitWithPercentPriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewSubscriptionUnitWithPercentPrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

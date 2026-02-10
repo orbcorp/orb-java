@@ -30,6 +30,7 @@ private constructor(
     private val expiresAtEndOfCadence: JsonField<Boolean>,
     private val filters: JsonField<List<Filter>>,
     private val itemId: JsonField<String>,
+    private val licenseTypeId: JsonField<String>,
     private val perUnitCostBasis: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -49,6 +50,9 @@ private constructor(
         @ExcludeMissing
         filters: JsonField<List<Filter>> = JsonMissing.of(),
         @JsonProperty("item_id") @ExcludeMissing itemId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("license_type_id")
+        @ExcludeMissing
+        licenseTypeId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("per_unit_cost_basis")
         @ExcludeMissing
         perUnitCostBasis: JsonField<String> = JsonMissing.of(),
@@ -60,6 +64,7 @@ private constructor(
         expiresAtEndOfCadence,
         filters,
         itemId,
+        licenseTypeId,
         perUnitCostBasis,
         mutableMapOf(),
     )
@@ -126,6 +131,14 @@ private constructor(
     fun itemId(): Optional<String> = itemId.getOptional("item_id")
 
     /**
+     * The license type ID to associate the price with license allocation.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun licenseTypeId(): Optional<String> = licenseTypeId.getOptional("license_type_id")
+
+    /**
      * The (per-unit) cost basis of each created block. If non-zero, a customer will be invoiced
      * according to the quantity and per unit cost basis specified for the allocation each cadence.
      *
@@ -190,6 +203,15 @@ private constructor(
     @JsonProperty("item_id") @ExcludeMissing fun _itemId(): JsonField<String> = itemId
 
     /**
+     * Returns the raw JSON value of [licenseTypeId].
+     *
+     * Unlike [licenseTypeId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("license_type_id")
+    @ExcludeMissing
+    fun _licenseTypeId(): JsonField<String> = licenseTypeId
+
+    /**
      * Returns the raw JSON value of [perUnitCostBasis].
      *
      * Unlike [perUnitCostBasis], this method doesn't throw if the JSON field has an unexpected
@@ -236,6 +258,7 @@ private constructor(
         private var expiresAtEndOfCadence: JsonField<Boolean> = JsonMissing.of()
         private var filters: JsonField<MutableList<Filter>>? = null
         private var itemId: JsonField<String> = JsonMissing.of()
+        private var licenseTypeId: JsonField<String> = JsonMissing.of()
         private var perUnitCostBasis: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -248,6 +271,7 @@ private constructor(
             expiresAtEndOfCadence = newAllocationPrice.expiresAtEndOfCadence
             filters = newAllocationPrice.filters.map { it.toMutableList() }
             itemId = newAllocationPrice.itemId
+            licenseTypeId = newAllocationPrice.licenseTypeId
             perUnitCostBasis = newAllocationPrice.perUnitCostBasis
             additionalProperties = newAllocationPrice.additionalProperties.toMutableMap()
         }
@@ -387,6 +411,25 @@ private constructor(
          */
         fun itemId(itemId: JsonField<String>) = apply { this.itemId = itemId }
 
+        /** The license type ID to associate the price with license allocation. */
+        fun licenseTypeId(licenseTypeId: String?) =
+            licenseTypeId(JsonField.ofNullable(licenseTypeId))
+
+        /** Alias for calling [Builder.licenseTypeId] with `licenseTypeId.orElse(null)`. */
+        fun licenseTypeId(licenseTypeId: Optional<String>) =
+            licenseTypeId(licenseTypeId.getOrNull())
+
+        /**
+         * Sets [Builder.licenseTypeId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.licenseTypeId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun licenseTypeId(licenseTypeId: JsonField<String>) = apply {
+            this.licenseTypeId = licenseTypeId
+        }
+
         /**
          * The (per-unit) cost basis of each created block. If non-zero, a customer will be invoiced
          * according to the quantity and per unit cost basis specified for the allocation each
@@ -448,6 +491,7 @@ private constructor(
                 expiresAtEndOfCadence,
                 (filters ?: JsonMissing.of()).map { it.toImmutable() },
                 itemId,
+                licenseTypeId,
                 perUnitCostBasis,
                 additionalProperties.toMutableMap(),
             )
@@ -467,6 +511,7 @@ private constructor(
         expiresAtEndOfCadence()
         filters().ifPresent { it.forEach { it.validate() } }
         itemId()
+        licenseTypeId()
         perUnitCostBasis()
         validated = true
     }
@@ -493,6 +538,7 @@ private constructor(
             (if (expiresAtEndOfCadence.asKnown().isPresent) 1 else 0) +
             (filters.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (itemId.asKnown().isPresent) 1 else 0) +
+            (if (licenseTypeId.asKnown().isPresent) 1 else 0) +
             (if (perUnitCostBasis.asKnown().isPresent) 1 else 0)
 
     /** The cadence at which to allocate the amount to the customer. */
@@ -1158,6 +1204,7 @@ private constructor(
             expiresAtEndOfCadence == other.expiresAtEndOfCadence &&
             filters == other.filters &&
             itemId == other.itemId &&
+            licenseTypeId == other.licenseTypeId &&
             perUnitCostBasis == other.perUnitCostBasis &&
             additionalProperties == other.additionalProperties
     }
@@ -1171,6 +1218,7 @@ private constructor(
             expiresAtEndOfCadence,
             filters,
             itemId,
+            licenseTypeId,
             perUnitCostBasis,
             additionalProperties,
         )
@@ -1179,5 +1227,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "NewAllocationPrice{amount=$amount, cadence=$cadence, currency=$currency, customExpiration=$customExpiration, expiresAtEndOfCadence=$expiresAtEndOfCadence, filters=$filters, itemId=$itemId, perUnitCostBasis=$perUnitCostBasis, additionalProperties=$additionalProperties}"
+        "NewAllocationPrice{amount=$amount, cadence=$cadence, currency=$currency, customExpiration=$customExpiration, expiresAtEndOfCadence=$expiresAtEndOfCadence, filters=$filters, itemId=$itemId, licenseTypeId=$licenseTypeId, perUnitCostBasis=$perUnitCostBasis, additionalProperties=$additionalProperties}"
 }

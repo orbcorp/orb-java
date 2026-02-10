@@ -53,6 +53,7 @@ internal class NewFloatingMinimumCompositePriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewFloatingMinimumCompositePrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -114,6 +115,7 @@ internal class NewFloatingMinimumCompositePriceTest {
                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                     .build()
             )
+        assertThat(newFloatingMinimumCompositePrice.licenseTypeId()).contains("license_type_id")
         assertThat(newFloatingMinimumCompositePrice.metadata())
             .contains(
                 NewFloatingMinimumCompositePrice.Metadata.builder()
@@ -166,6 +168,7 @@ internal class NewFloatingMinimumCompositePriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewFloatingMinimumCompositePrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
