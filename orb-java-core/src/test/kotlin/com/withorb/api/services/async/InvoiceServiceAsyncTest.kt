@@ -9,6 +9,7 @@ import com.withorb.api.models.InvoiceCreateParams
 import com.withorb.api.models.InvoiceDeleteLineItemParams
 import com.withorb.api.models.InvoiceFetchUpcomingParams
 import com.withorb.api.models.InvoiceIssueParams
+import com.withorb.api.models.InvoiceIssueSummaryParams
 import com.withorb.api.models.InvoiceMarkPaidParams
 import com.withorb.api.models.InvoiceUpdateParams
 import com.withorb.api.models.PercentageDiscount
@@ -197,6 +198,27 @@ internal class InvoiceServiceAsyncTest {
 
         val invoice = invoiceFuture.get()
         invoice.validate()
+    }
+
+    @Test
+    fun issueSummary() {
+        val client =
+            OrbOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val invoiceServiceAsync = client.invoices()
+
+        val responseFuture =
+            invoiceServiceAsync.issueSummary(
+                InvoiceIssueSummaryParams.builder()
+                    .invoiceId("invoice_id")
+                    .synchronous(true)
+                    .build()
+            )
+
+        val response = responseFuture.get()
+        response.validate()
     }
 
     @Test
