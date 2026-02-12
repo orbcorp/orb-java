@@ -38,4 +38,19 @@ internal class CreditBlockServiceAsyncTest {
 
         val response = future.get()
     }
+
+    @Test
+    fun listInvoices() {
+        val client =
+            OrbOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val creditBlockServiceAsync = client.creditBlocks()
+
+        val responseFuture = creditBlockServiceAsync.listInvoices("block_id")
+
+        val response = responseFuture.get()
+        response.validate()
+    }
 }
