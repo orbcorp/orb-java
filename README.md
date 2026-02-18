@@ -447,6 +447,25 @@ OrbClient client = OrbOkHttpClient.builder()
     .build();
 ```
 
+### Connection pooling
+
+To customize the underlying OkHttp connection pool, configure the client using the `maxIdleConnections` and `keepAliveDuration` methods:
+
+```java
+import com.withorb.api.client.OrbClient;
+import com.withorb.api.client.okhttp.OrbOkHttpClient;
+import java.time.Duration;
+
+OrbClient client = OrbOkHttpClient.builder()
+    .fromEnv()
+    // If `maxIdleConnections` is set, then `keepAliveDuration` must be set, and vice versa.
+    .maxIdleConnections(10)
+    .keepAliveDuration(Duration.ofMinutes(2))
+    .build();
+```
+
+If both options are unset, OkHttp's default connection pool settings are used.
+
 ### HTTPS
 
 > [!NOTE]
