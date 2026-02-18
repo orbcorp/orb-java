@@ -53,6 +53,11 @@ internal class SubscriptionPriceIntervalsParamsTest {
                             .build()
                     )
                     .maximumAmount(0.0)
+                    .metricParameterOverrides(
+                        SubscriptionPriceIntervalsParams.Add.MetricParameterOverrides.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .minimumAmount(0.0)
                     .price(
                         NewFloatingUnitPrice.builder()
@@ -154,6 +159,11 @@ internal class SubscriptionPriceIntervalsParamsTest {
                             .quantity(5L)
                             .build()
                     )
+                    .metricParameterOverrides(
+                        SubscriptionPriceIntervalsParams.Edit.MetricParameterOverrides.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .addUsageCustomerId("string")
                     .build()
@@ -223,6 +233,11 @@ internal class SubscriptionPriceIntervalsParamsTest {
                                 .build()
                         )
                         .maximumAmount(0.0)
+                        .metricParameterOverrides(
+                            SubscriptionPriceIntervalsParams.Add.MetricParameterOverrides.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
                         .minimumAmount(0.0)
                         .price(
                             NewFloatingUnitPrice.builder()
@@ -327,6 +342,11 @@ internal class SubscriptionPriceIntervalsParamsTest {
                                 .quantity(5L)
                                 .build()
                         )
+                        .metricParameterOverrides(
+                            SubscriptionPriceIntervalsParams.Edit.MetricParameterOverrides.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
                         .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addUsageCustomerId("string")
                         .build()
@@ -382,6 +402,11 @@ internal class SubscriptionPriceIntervalsParamsTest {
                             .build()
                     )
                     .maximumAmount(0.0)
+                    .metricParameterOverrides(
+                        SubscriptionPriceIntervalsParams.Add.MetricParameterOverrides.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .minimumAmount(0.0)
                     .price(
                         NewFloatingUnitPrice.builder()
@@ -483,6 +508,11 @@ internal class SubscriptionPriceIntervalsParamsTest {
                         SubscriptionPriceIntervalsParams.Edit.FixedFeeQuantityTransition.builder()
                             .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .quantity(5L)
+                            .build()
+                    )
+                    .metricParameterOverrides(
+                        SubscriptionPriceIntervalsParams.Edit.MetricParameterOverrides.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
                     .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

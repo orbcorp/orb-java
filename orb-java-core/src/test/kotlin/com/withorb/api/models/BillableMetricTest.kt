@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.jsonMapper
 import java.time.OffsetDateTime
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -45,6 +46,11 @@ internal class BillableMetricTest {
                 )
                 .name("name")
                 .status(BillableMetric.Status.ACTIVE)
+                .addParameterDefinition(
+                    BillableMetric.ParameterDefinition.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
                 .build()
 
         assertThat(billableMetric.id()).isEqualTo("id")
@@ -79,6 +85,12 @@ internal class BillableMetricTest {
             )
         assertThat(billableMetric.name()).isEqualTo("name")
         assertThat(billableMetric.status()).isEqualTo(BillableMetric.Status.ACTIVE)
+        assertThat(billableMetric.parameterDefinitions().getOrNull())
+            .containsExactly(
+                BillableMetric.ParameterDefinition.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .build()
+            )
     }
 
     @Test
@@ -116,6 +128,11 @@ internal class BillableMetricTest {
                 )
                 .name("name")
                 .status(BillableMetric.Status.ACTIVE)
+                .addParameterDefinition(
+                    BillableMetric.ParameterDefinition.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
                 .build()
 
         val roundtrippedBillableMetric =
