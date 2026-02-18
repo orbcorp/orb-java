@@ -5,6 +5,32 @@ package com.withorb.api.services.async
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.models.NewFloatingBulkPrice
+import com.withorb.api.models.NewFloatingBulkWithProrationPrice
+import com.withorb.api.models.NewFloatingCumulativeGroupedBulkPrice
+import com.withorb.api.models.NewFloatingGroupedAllocationPrice
+import com.withorb.api.models.NewFloatingGroupedTieredPackagePrice
+import com.withorb.api.models.NewFloatingGroupedTieredPrice
+import com.withorb.api.models.NewFloatingGroupedWithMeteredMinimumPrice
+import com.withorb.api.models.NewFloatingGroupedWithProratedMinimumPrice
+import com.withorb.api.models.NewFloatingMatrixPrice
+import com.withorb.api.models.NewFloatingMatrixWithAllocationPrice
+import com.withorb.api.models.NewFloatingMatrixWithDisplayNamePrice
+import com.withorb.api.models.NewFloatingMaxGroupTieredPackagePrice
+import com.withorb.api.models.NewFloatingMinimumCompositePrice
+import com.withorb.api.models.NewFloatingPackagePrice
+import com.withorb.api.models.NewFloatingPackageWithAllocationPrice
+import com.withorb.api.models.NewFloatingScalableMatrixWithTieredPricingPrice
+import com.withorb.api.models.NewFloatingScalableMatrixWithUnitPricingPrice
+import com.withorb.api.models.NewFloatingThresholdTotalAmountPrice
+import com.withorb.api.models.NewFloatingTieredPackagePrice
+import com.withorb.api.models.NewFloatingTieredPackageWithMinimumPrice
+import com.withorb.api.models.NewFloatingTieredPrice
+import com.withorb.api.models.NewFloatingTieredWithMinimumPrice
+import com.withorb.api.models.NewFloatingTieredWithProrationPrice
+import com.withorb.api.models.NewFloatingUnitPrice
+import com.withorb.api.models.NewFloatingUnitWithPercentPrice
+import com.withorb.api.models.NewFloatingUnitWithProrationPrice
 import com.withorb.api.models.Price
 import com.withorb.api.models.PriceCreateParams
 import com.withorb.api.models.PriceEvaluateMultipleParams
@@ -57,6 +83,401 @@ interface PriceServiceAsync {
         params: PriceCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Price>
+
+    /** @see create */
+    fun create(
+        body: PriceCreateParams.Body,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.builder().body(body).build(), requestOptions)
+
+    /** @see create */
+    fun create(body: PriceCreateParams.Body): CompletableFuture<Price> =
+        create(body, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        unit: NewFloatingUnitPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> = create(PriceCreateParams.Body.ofUnit(unit), requestOptions)
+
+    /** @see create */
+    fun create(unit: NewFloatingUnitPrice): CompletableFuture<Price> =
+        create(unit, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        tiered: NewFloatingTieredPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> = create(PriceCreateParams.Body.ofTiered(tiered), requestOptions)
+
+    /** @see create */
+    fun create(tiered: NewFloatingTieredPrice): CompletableFuture<Price> =
+        create(tiered, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        bulk: NewFloatingBulkPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> = create(PriceCreateParams.Body.ofBulk(bulk), requestOptions)
+
+    /** @see create */
+    fun create(bulk: NewFloatingBulkPrice): CompletableFuture<Price> =
+        create(bulk, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        bulkWithFilters: PriceCreateParams.Body.BulkWithFilters,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.Body.ofBulkWithFilters(bulkWithFilters), requestOptions)
+
+    /** @see create */
+    fun create(bulkWithFilters: PriceCreateParams.Body.BulkWithFilters): CompletableFuture<Price> =
+        create(bulkWithFilters, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        package_: NewFloatingPackagePrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> = create(PriceCreateParams.Body.ofPackage(package_), requestOptions)
+
+    /** @see create */
+    fun create(package_: NewFloatingPackagePrice): CompletableFuture<Price> =
+        create(package_, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        matrix: NewFloatingMatrixPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> = create(PriceCreateParams.Body.ofMatrix(matrix), requestOptions)
+
+    /** @see create */
+    fun create(matrix: NewFloatingMatrixPrice): CompletableFuture<Price> =
+        create(matrix, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        thresholdTotalAmount: NewFloatingThresholdTotalAmountPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.Body.ofThresholdTotalAmount(thresholdTotalAmount), requestOptions)
+
+    /** @see create */
+    fun create(
+        thresholdTotalAmount: NewFloatingThresholdTotalAmountPrice
+    ): CompletableFuture<Price> = create(thresholdTotalAmount, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        tieredPackage: NewFloatingTieredPackagePrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.Body.ofTieredPackage(tieredPackage), requestOptions)
+
+    /** @see create */
+    fun create(tieredPackage: NewFloatingTieredPackagePrice): CompletableFuture<Price> =
+        create(tieredPackage, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        tieredWithMinimum: NewFloatingTieredWithMinimumPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.Body.ofTieredWithMinimum(tieredWithMinimum), requestOptions)
+
+    /** @see create */
+    fun create(tieredWithMinimum: NewFloatingTieredWithMinimumPrice): CompletableFuture<Price> =
+        create(tieredWithMinimum, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        groupedTiered: NewFloatingGroupedTieredPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.Body.ofGroupedTiered(groupedTiered), requestOptions)
+
+    /** @see create */
+    fun create(groupedTiered: NewFloatingGroupedTieredPrice): CompletableFuture<Price> =
+        create(groupedTiered, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        tieredPackageWithMinimum: NewFloatingTieredPackageWithMinimumPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(
+            PriceCreateParams.Body.ofTieredPackageWithMinimum(tieredPackageWithMinimum),
+            requestOptions,
+        )
+
+    /** @see create */
+    fun create(
+        tieredPackageWithMinimum: NewFloatingTieredPackageWithMinimumPrice
+    ): CompletableFuture<Price> = create(tieredPackageWithMinimum, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        packageWithAllocation: NewFloatingPackageWithAllocationPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(
+            PriceCreateParams.Body.ofPackageWithAllocation(packageWithAllocation),
+            requestOptions,
+        )
+
+    /** @see create */
+    fun create(
+        packageWithAllocation: NewFloatingPackageWithAllocationPrice
+    ): CompletableFuture<Price> = create(packageWithAllocation, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        unitWithPercent: NewFloatingUnitWithPercentPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.Body.ofUnitWithPercent(unitWithPercent), requestOptions)
+
+    /** @see create */
+    fun create(unitWithPercent: NewFloatingUnitWithPercentPrice): CompletableFuture<Price> =
+        create(unitWithPercent, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        matrixWithAllocation: NewFloatingMatrixWithAllocationPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.Body.ofMatrixWithAllocation(matrixWithAllocation), requestOptions)
+
+    /** @see create */
+    fun create(
+        matrixWithAllocation: NewFloatingMatrixWithAllocationPrice
+    ): CompletableFuture<Price> = create(matrixWithAllocation, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        tieredWithProration: NewFloatingTieredWithProrationPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.Body.ofTieredWithProration(tieredWithProration), requestOptions)
+
+    /** @see create */
+    fun create(tieredWithProration: NewFloatingTieredWithProrationPrice): CompletableFuture<Price> =
+        create(tieredWithProration, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        unitWithProration: NewFloatingUnitWithProrationPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.Body.ofUnitWithProration(unitWithProration), requestOptions)
+
+    /** @see create */
+    fun create(unitWithProration: NewFloatingUnitWithProrationPrice): CompletableFuture<Price> =
+        create(unitWithProration, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        groupedAllocation: NewFloatingGroupedAllocationPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.Body.ofGroupedAllocation(groupedAllocation), requestOptions)
+
+    /** @see create */
+    fun create(groupedAllocation: NewFloatingGroupedAllocationPrice): CompletableFuture<Price> =
+        create(groupedAllocation, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        bulkWithProration: NewFloatingBulkWithProrationPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.Body.ofBulkWithProration(bulkWithProration), requestOptions)
+
+    /** @see create */
+    fun create(bulkWithProration: NewFloatingBulkWithProrationPrice): CompletableFuture<Price> =
+        create(bulkWithProration, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        groupedWithProratedMinimum: NewFloatingGroupedWithProratedMinimumPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(
+            PriceCreateParams.Body.ofGroupedWithProratedMinimum(groupedWithProratedMinimum),
+            requestOptions,
+        )
+
+    /** @see create */
+    fun create(
+        groupedWithProratedMinimum: NewFloatingGroupedWithProratedMinimumPrice
+    ): CompletableFuture<Price> = create(groupedWithProratedMinimum, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        groupedWithMeteredMinimum: NewFloatingGroupedWithMeteredMinimumPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(
+            PriceCreateParams.Body.ofGroupedWithMeteredMinimum(groupedWithMeteredMinimum),
+            requestOptions,
+        )
+
+    /** @see create */
+    fun create(
+        groupedWithMeteredMinimum: NewFloatingGroupedWithMeteredMinimumPrice
+    ): CompletableFuture<Price> = create(groupedWithMeteredMinimum, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        groupedWithMinMaxThresholds: PriceCreateParams.Body.GroupedWithMinMaxThresholds,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(
+            PriceCreateParams.Body.ofGroupedWithMinMaxThresholds(groupedWithMinMaxThresholds),
+            requestOptions,
+        )
+
+    /** @see create */
+    fun create(
+        groupedWithMinMaxThresholds: PriceCreateParams.Body.GroupedWithMinMaxThresholds
+    ): CompletableFuture<Price> = create(groupedWithMinMaxThresholds, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        matrixWithDisplayName: NewFloatingMatrixWithDisplayNamePrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(
+            PriceCreateParams.Body.ofMatrixWithDisplayName(matrixWithDisplayName),
+            requestOptions,
+        )
+
+    /** @see create */
+    fun create(
+        matrixWithDisplayName: NewFloatingMatrixWithDisplayNamePrice
+    ): CompletableFuture<Price> = create(matrixWithDisplayName, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        groupedTieredPackage: NewFloatingGroupedTieredPackagePrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.Body.ofGroupedTieredPackage(groupedTieredPackage), requestOptions)
+
+    /** @see create */
+    fun create(
+        groupedTieredPackage: NewFloatingGroupedTieredPackagePrice
+    ): CompletableFuture<Price> = create(groupedTieredPackage, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        maxGroupTieredPackage: NewFloatingMaxGroupTieredPackagePrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(
+            PriceCreateParams.Body.ofMaxGroupTieredPackage(maxGroupTieredPackage),
+            requestOptions,
+        )
+
+    /** @see create */
+    fun create(
+        maxGroupTieredPackage: NewFloatingMaxGroupTieredPackagePrice
+    ): CompletableFuture<Price> = create(maxGroupTieredPackage, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        scalableMatrixWithUnitPricing: NewFloatingScalableMatrixWithUnitPricingPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(
+            PriceCreateParams.Body.ofScalableMatrixWithUnitPricing(scalableMatrixWithUnitPricing),
+            requestOptions,
+        )
+
+    /** @see create */
+    fun create(
+        scalableMatrixWithUnitPricing: NewFloatingScalableMatrixWithUnitPricingPrice
+    ): CompletableFuture<Price> = create(scalableMatrixWithUnitPricing, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        scalableMatrixWithTieredPricing: NewFloatingScalableMatrixWithTieredPricingPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(
+            PriceCreateParams.Body.ofScalableMatrixWithTieredPricing(
+                scalableMatrixWithTieredPricing
+            ),
+            requestOptions,
+        )
+
+    /** @see create */
+    fun create(
+        scalableMatrixWithTieredPricing: NewFloatingScalableMatrixWithTieredPricingPrice
+    ): CompletableFuture<Price> = create(scalableMatrixWithTieredPricing, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        cumulativeGroupedBulk: NewFloatingCumulativeGroupedBulkPrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(
+            PriceCreateParams.Body.ofCumulativeGroupedBulk(cumulativeGroupedBulk),
+            requestOptions,
+        )
+
+    /** @see create */
+    fun create(
+        cumulativeGroupedBulk: NewFloatingCumulativeGroupedBulkPrice
+    ): CompletableFuture<Price> = create(cumulativeGroupedBulk, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        cumulativeGroupedAllocation: PriceCreateParams.Body.CumulativeGroupedAllocation,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(
+            PriceCreateParams.Body.ofCumulativeGroupedAllocation(cumulativeGroupedAllocation),
+            requestOptions,
+        )
+
+    /** @see create */
+    fun create(
+        cumulativeGroupedAllocation: PriceCreateParams.Body.CumulativeGroupedAllocation
+    ): CompletableFuture<Price> = create(cumulativeGroupedAllocation, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        minimumComposite: NewFloatingMinimumCompositePrice,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.Body.ofMinimumComposite(minimumComposite), requestOptions)
+
+    /** @see create */
+    fun create(minimumComposite: NewFloatingMinimumCompositePrice): CompletableFuture<Price> =
+        create(minimumComposite, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        percent: PriceCreateParams.Body.Percent,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> = create(PriceCreateParams.Body.ofPercent(percent), requestOptions)
+
+    /** @see create */
+    fun create(percent: PriceCreateParams.Body.Percent): CompletableFuture<Price> =
+        create(percent, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        eventOutput: PriceCreateParams.Body.EventOutput,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.Body.ofEventOutput(eventOutput), requestOptions)
+
+    /** @see create */
+    fun create(eventOutput: PriceCreateParams.Body.EventOutput): CompletableFuture<Price> =
+        create(eventOutput, RequestOptions.none())
 
     /**
      * This endpoint allows you to update the `metadata` property on a price. If you pass null for
@@ -280,6 +701,455 @@ interface PriceServiceAsync {
             params: PriceCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Price>>
+
+        /** @see create */
+        fun create(
+            body: PriceCreateParams.Body,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.builder().body(body).build(), requestOptions)
+
+        /** @see create */
+        fun create(body: PriceCreateParams.Body): CompletableFuture<HttpResponseFor<Price>> =
+            create(body, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            unit: NewFloatingUnitPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.Body.ofUnit(unit), requestOptions)
+
+        /** @see create */
+        fun create(unit: NewFloatingUnitPrice): CompletableFuture<HttpResponseFor<Price>> =
+            create(unit, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            tiered: NewFloatingTieredPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.Body.ofTiered(tiered), requestOptions)
+
+        /** @see create */
+        fun create(tiered: NewFloatingTieredPrice): CompletableFuture<HttpResponseFor<Price>> =
+            create(tiered, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            bulk: NewFloatingBulkPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.Body.ofBulk(bulk), requestOptions)
+
+        /** @see create */
+        fun create(bulk: NewFloatingBulkPrice): CompletableFuture<HttpResponseFor<Price>> =
+            create(bulk, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            bulkWithFilters: PriceCreateParams.Body.BulkWithFilters,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.Body.ofBulkWithFilters(bulkWithFilters), requestOptions)
+
+        /** @see create */
+        fun create(
+            bulkWithFilters: PriceCreateParams.Body.BulkWithFilters
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(bulkWithFilters, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            package_: NewFloatingPackagePrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.Body.ofPackage(package_), requestOptions)
+
+        /** @see create */
+        fun create(package_: NewFloatingPackagePrice): CompletableFuture<HttpResponseFor<Price>> =
+            create(package_, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            matrix: NewFloatingMatrixPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.Body.ofMatrix(matrix), requestOptions)
+
+        /** @see create */
+        fun create(matrix: NewFloatingMatrixPrice): CompletableFuture<HttpResponseFor<Price>> =
+            create(matrix, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            thresholdTotalAmount: NewFloatingThresholdTotalAmountPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofThresholdTotalAmount(thresholdTotalAmount),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            thresholdTotalAmount: NewFloatingThresholdTotalAmountPrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(thresholdTotalAmount, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            tieredPackage: NewFloatingTieredPackagePrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.Body.ofTieredPackage(tieredPackage), requestOptions)
+
+        /** @see create */
+        fun create(
+            tieredPackage: NewFloatingTieredPackagePrice
+        ): CompletableFuture<HttpResponseFor<Price>> = create(tieredPackage, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            tieredWithMinimum: NewFloatingTieredWithMinimumPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.Body.ofTieredWithMinimum(tieredWithMinimum), requestOptions)
+
+        /** @see create */
+        fun create(
+            tieredWithMinimum: NewFloatingTieredWithMinimumPrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(tieredWithMinimum, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            groupedTiered: NewFloatingGroupedTieredPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.Body.ofGroupedTiered(groupedTiered), requestOptions)
+
+        /** @see create */
+        fun create(
+            groupedTiered: NewFloatingGroupedTieredPrice
+        ): CompletableFuture<HttpResponseFor<Price>> = create(groupedTiered, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            tieredPackageWithMinimum: NewFloatingTieredPackageWithMinimumPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofTieredPackageWithMinimum(tieredPackageWithMinimum),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            tieredPackageWithMinimum: NewFloatingTieredPackageWithMinimumPrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(tieredPackageWithMinimum, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            packageWithAllocation: NewFloatingPackageWithAllocationPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofPackageWithAllocation(packageWithAllocation),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            packageWithAllocation: NewFloatingPackageWithAllocationPrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(packageWithAllocation, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            unitWithPercent: NewFloatingUnitWithPercentPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.Body.ofUnitWithPercent(unitWithPercent), requestOptions)
+
+        /** @see create */
+        fun create(
+            unitWithPercent: NewFloatingUnitWithPercentPrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(unitWithPercent, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            matrixWithAllocation: NewFloatingMatrixWithAllocationPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofMatrixWithAllocation(matrixWithAllocation),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            matrixWithAllocation: NewFloatingMatrixWithAllocationPrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(matrixWithAllocation, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            tieredWithProration: NewFloatingTieredWithProrationPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofTieredWithProration(tieredWithProration),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            tieredWithProration: NewFloatingTieredWithProrationPrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(tieredWithProration, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            unitWithProration: NewFloatingUnitWithProrationPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.Body.ofUnitWithProration(unitWithProration), requestOptions)
+
+        /** @see create */
+        fun create(
+            unitWithProration: NewFloatingUnitWithProrationPrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(unitWithProration, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            groupedAllocation: NewFloatingGroupedAllocationPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.Body.ofGroupedAllocation(groupedAllocation), requestOptions)
+
+        /** @see create */
+        fun create(
+            groupedAllocation: NewFloatingGroupedAllocationPrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(groupedAllocation, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            bulkWithProration: NewFloatingBulkWithProrationPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.Body.ofBulkWithProration(bulkWithProration), requestOptions)
+
+        /** @see create */
+        fun create(
+            bulkWithProration: NewFloatingBulkWithProrationPrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(bulkWithProration, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            groupedWithProratedMinimum: NewFloatingGroupedWithProratedMinimumPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofGroupedWithProratedMinimum(groupedWithProratedMinimum),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            groupedWithProratedMinimum: NewFloatingGroupedWithProratedMinimumPrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(groupedWithProratedMinimum, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            groupedWithMeteredMinimum: NewFloatingGroupedWithMeteredMinimumPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofGroupedWithMeteredMinimum(groupedWithMeteredMinimum),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            groupedWithMeteredMinimum: NewFloatingGroupedWithMeteredMinimumPrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(groupedWithMeteredMinimum, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            groupedWithMinMaxThresholds: PriceCreateParams.Body.GroupedWithMinMaxThresholds,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofGroupedWithMinMaxThresholds(groupedWithMinMaxThresholds),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            groupedWithMinMaxThresholds: PriceCreateParams.Body.GroupedWithMinMaxThresholds
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(groupedWithMinMaxThresholds, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            matrixWithDisplayName: NewFloatingMatrixWithDisplayNamePrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofMatrixWithDisplayName(matrixWithDisplayName),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            matrixWithDisplayName: NewFloatingMatrixWithDisplayNamePrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(matrixWithDisplayName, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            groupedTieredPackage: NewFloatingGroupedTieredPackagePrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofGroupedTieredPackage(groupedTieredPackage),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            groupedTieredPackage: NewFloatingGroupedTieredPackagePrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(groupedTieredPackage, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            maxGroupTieredPackage: NewFloatingMaxGroupTieredPackagePrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofMaxGroupTieredPackage(maxGroupTieredPackage),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            maxGroupTieredPackage: NewFloatingMaxGroupTieredPackagePrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(maxGroupTieredPackage, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            scalableMatrixWithUnitPricing: NewFloatingScalableMatrixWithUnitPricingPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofScalableMatrixWithUnitPricing(
+                    scalableMatrixWithUnitPricing
+                ),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            scalableMatrixWithUnitPricing: NewFloatingScalableMatrixWithUnitPricingPrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(scalableMatrixWithUnitPricing, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            scalableMatrixWithTieredPricing: NewFloatingScalableMatrixWithTieredPricingPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofScalableMatrixWithTieredPricing(
+                    scalableMatrixWithTieredPricing
+                ),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            scalableMatrixWithTieredPricing: NewFloatingScalableMatrixWithTieredPricingPrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(scalableMatrixWithTieredPricing, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            cumulativeGroupedBulk: NewFloatingCumulativeGroupedBulkPrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofCumulativeGroupedBulk(cumulativeGroupedBulk),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            cumulativeGroupedBulk: NewFloatingCumulativeGroupedBulkPrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(cumulativeGroupedBulk, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            cumulativeGroupedAllocation: PriceCreateParams.Body.CumulativeGroupedAllocation,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofCumulativeGroupedAllocation(cumulativeGroupedAllocation),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            cumulativeGroupedAllocation: PriceCreateParams.Body.CumulativeGroupedAllocation
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(cumulativeGroupedAllocation, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            minimumComposite: NewFloatingMinimumCompositePrice,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.Body.ofMinimumComposite(minimumComposite), requestOptions)
+
+        /** @see create */
+        fun create(
+            minimumComposite: NewFloatingMinimumCompositePrice
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(minimumComposite, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            percent: PriceCreateParams.Body.Percent,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.Body.ofPercent(percent), requestOptions)
+
+        /** @see create */
+        fun create(
+            percent: PriceCreateParams.Body.Percent
+        ): CompletableFuture<HttpResponseFor<Price>> = create(percent, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            eventOutput: PriceCreateParams.Body.EventOutput,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.Body.ofEventOutput(eventOutput), requestOptions)
+
+        /** @see create */
+        fun create(
+            eventOutput: PriceCreateParams.Body.EventOutput
+        ): CompletableFuture<HttpResponseFor<Price>> = create(eventOutput, RequestOptions.none())
 
         /**
          * Returns a raw HTTP response for `put /prices/{price_id}`, but is otherwise the same as
