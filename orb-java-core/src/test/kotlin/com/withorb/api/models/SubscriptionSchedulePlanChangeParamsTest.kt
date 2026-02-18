@@ -82,6 +82,12 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                     .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .externalPriceId("external_price_id")
                     .maximumAmount("1.23")
+                    .metricParameterOverrides(
+                        SubscriptionSchedulePlanChangeParams.AddPrice.MetricParameterOverrides
+                            .builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .minimumAmount("1.23")
                     .planPhaseOrder(0L)
                     .price(
@@ -238,6 +244,12 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                     .externalPriceId("external_price_id")
                     .fixedPriceQuantity(2.0)
                     .maximumAmount("1.23")
+                    .metricParameterOverrides(
+                        SubscriptionSchedulePlanChangeParams.ReplacePrice.MetricParameterOverrides
+                            .builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .minimumAmount("1.23")
                     .price(
                         NewSubscriptionUnitPrice.builder()
@@ -385,6 +397,12 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                         .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .externalPriceId("external_price_id")
                         .maximumAmount("1.23")
+                        .metricParameterOverrides(
+                            SubscriptionSchedulePlanChangeParams.AddPrice.MetricParameterOverrides
+                                .builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
                         .minimumAmount("1.23")
                         .planPhaseOrder(0L)
                         .price(
@@ -543,6 +561,13 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                         .externalPriceId("external_price_id")
                         .fixedPriceQuantity(2.0)
                         .maximumAmount("1.23")
+                        .metricParameterOverrides(
+                            SubscriptionSchedulePlanChangeParams.ReplacePrice
+                                .MetricParameterOverrides
+                                .builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
                         .minimumAmount("1.23")
                         .price(
                             NewSubscriptionUnitPrice.builder()
@@ -678,6 +703,12 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                     .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .externalPriceId("external_price_id")
                     .maximumAmount("1.23")
+                    .metricParameterOverrides(
+                        SubscriptionSchedulePlanChangeParams.AddPrice.MetricParameterOverrides
+                            .builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .minimumAmount("1.23")
                     .planPhaseOrder(0L)
                     .price(
@@ -837,6 +868,12 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                     .externalPriceId("external_price_id")
                     .fixedPriceQuantity(2.0)
                     .maximumAmount("1.23")
+                    .metricParameterOverrides(
+                        SubscriptionSchedulePlanChangeParams.ReplacePrice.MetricParameterOverrides
+                            .builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .minimumAmount("1.23")
                     .price(
                         NewSubscriptionUnitPrice.builder()

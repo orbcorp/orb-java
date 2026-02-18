@@ -1027,6 +1027,7 @@ private constructor(
         private val filter: JsonField<String>,
         private val fixedFeeQuantityTransitions: JsonField<List<FixedFeeQuantityTransition>>,
         private val maximumAmount: JsonField<Double>,
+        private val metricParameterOverrides: JsonField<MetricParameterOverrides>,
         private val minimumAmount: JsonField<Double>,
         private val price: JsonField<Price>,
         private val priceId: JsonField<String>,
@@ -1062,6 +1063,9 @@ private constructor(
             @JsonProperty("maximum_amount")
             @ExcludeMissing
             maximumAmount: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("metric_parameter_overrides")
+            @ExcludeMissing
+            metricParameterOverrides: JsonField<MetricParameterOverrides> = JsonMissing.of(),
             @JsonProperty("minimum_amount")
             @ExcludeMissing
             minimumAmount: JsonField<Double> = JsonMissing.of(),
@@ -1080,6 +1084,7 @@ private constructor(
             filter,
             fixedFeeQuantityTransitions,
             maximumAmount,
+            metricParameterOverrides,
             minimumAmount,
             price,
             priceId,
@@ -1166,6 +1171,16 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun maximumAmount(): Optional<Double> = maximumAmount.getOptional("maximum_amount")
+
+        /**
+         * Override values for parameterized billable metric variables. Keys are parameter names,
+         * values are the override values (number or string).
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun metricParameterOverrides(): Optional<MetricParameterOverrides> =
+            metricParameterOverrides.getOptional("metric_parameter_overrides")
 
         /**
          * The minimum amount that will be billed for this price interval for a given billing
@@ -1289,6 +1304,17 @@ private constructor(
         fun _maximumAmount(): JsonField<Double> = maximumAmount
 
         /**
+         * Returns the raw JSON value of [metricParameterOverrides].
+         *
+         * Unlike [metricParameterOverrides], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("metric_parameter_overrides")
+        @ExcludeMissing
+        fun _metricParameterOverrides(): JsonField<MetricParameterOverrides> =
+            metricParameterOverrides
+
+        /**
          * Returns the raw JSON value of [minimumAmount].
          *
          * Unlike [minimumAmount], this method doesn't throw if the JSON field has an unexpected
@@ -1361,6 +1387,8 @@ private constructor(
                 JsonField<MutableList<FixedFeeQuantityTransition>>? =
                 null
             private var maximumAmount: JsonField<Double> = JsonMissing.of()
+            private var metricParameterOverrides: JsonField<MetricParameterOverrides> =
+                JsonMissing.of()
             private var minimumAmount: JsonField<Double> = JsonMissing.of()
             private var price: JsonField<Price> = JsonMissing.of()
             private var priceId: JsonField<String> = JsonMissing.of()
@@ -1379,6 +1407,7 @@ private constructor(
                 fixedFeeQuantityTransitions =
                     add.fixedFeeQuantityTransitions.map { it.toMutableList() }
                 maximumAmount = add.maximumAmount
+                metricParameterOverrides = add.metricParameterOverrides
                 minimumAmount = add.minimumAmount
                 price = add.price
                 priceId = add.priceId
@@ -1671,6 +1700,32 @@ private constructor(
             fun maximumAmount(maximumAmount: JsonField<Double>) = apply {
                 this.maximumAmount = maximumAmount
             }
+
+            /**
+             * Override values for parameterized billable metric variables. Keys are parameter
+             * names, values are the override values (number or string).
+             */
+            fun metricParameterOverrides(metricParameterOverrides: MetricParameterOverrides?) =
+                metricParameterOverrides(JsonField.ofNullable(metricParameterOverrides))
+
+            /**
+             * Alias for calling [Builder.metricParameterOverrides] with
+             * `metricParameterOverrides.orElse(null)`.
+             */
+            fun metricParameterOverrides(
+                metricParameterOverrides: Optional<MetricParameterOverrides>
+            ) = metricParameterOverrides(metricParameterOverrides.getOrNull())
+
+            /**
+             * Sets [Builder.metricParameterOverrides] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metricParameterOverrides] with a well-typed
+             * [MetricParameterOverrides] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun metricParameterOverrides(
+                metricParameterOverrides: JsonField<MetricParameterOverrides>
+            ) = apply { this.metricParameterOverrides = metricParameterOverrides }
 
             /**
              * The minimum amount that will be billed for this price interval for a given billing
@@ -1973,6 +2028,7 @@ private constructor(
                     filter,
                     (fixedFeeQuantityTransitions ?: JsonMissing.of()).map { it.toImmutable() },
                     maximumAmount,
+                    metricParameterOverrides,
                     minimumAmount,
                     price,
                     priceId,
@@ -1997,6 +2053,7 @@ private constructor(
             filter()
             fixedFeeQuantityTransitions().ifPresent { it.forEach { it.validate() } }
             maximumAmount()
+            metricParameterOverrides().ifPresent { it.validate() }
             minimumAmount()
             price().ifPresent { it.validate() }
             priceId()
@@ -2030,6 +2087,7 @@ private constructor(
                 (fixedFeeQuantityTransitions.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
                     ?: 0) +
                 (if (maximumAmount.asKnown().isPresent) 1 else 0) +
+                (metricParameterOverrides.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (minimumAmount.asKnown().isPresent) 1 else 0) +
                 (price.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (priceId.asKnown().isPresent) 1 else 0) +
@@ -3487,6 +3545,119 @@ private constructor(
 
             override fun toString() =
                 "FixedFeeQuantityTransition{effectiveDate=$effectiveDate, quantity=$quantity, additionalProperties=$additionalProperties}"
+        }
+
+        /**
+         * Override values for parameterized billable metric variables. Keys are parameter names,
+         * values are the override values (number or string).
+         */
+        class MetricParameterOverrides
+        @JsonCreator
+        private constructor(
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
+        ) {
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [MetricParameterOverrides].
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [MetricParameterOverrides]. */
+            class Builder internal constructor() {
+
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(metricParameterOverrides: MetricParameterOverrides) = apply {
+                    additionalProperties =
+                        metricParameterOverrides.additionalProperties.toMutableMap()
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [MetricParameterOverrides].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): MetricParameterOverrides =
+                    MetricParameterOverrides(additionalProperties.toImmutable())
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): MetricParameterOverrides = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is MetricParameterOverrides &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "MetricParameterOverrides{additionalProperties=$additionalProperties}"
         }
 
         /** New floating price request body params. */
@@ -13875,6 +14046,7 @@ private constructor(
                 filter == other.filter &&
                 fixedFeeQuantityTransitions == other.fixedFeeQuantityTransitions &&
                 maximumAmount == other.maximumAmount &&
+                metricParameterOverrides == other.metricParameterOverrides &&
                 minimumAmount == other.minimumAmount &&
                 price == other.price &&
                 priceId == other.priceId &&
@@ -13893,6 +14065,7 @@ private constructor(
                 filter,
                 fixedFeeQuantityTransitions,
                 maximumAmount,
+                metricParameterOverrides,
                 minimumAmount,
                 price,
                 priceId,
@@ -13904,7 +14077,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Add{startDate=$startDate, allocationPrice=$allocationPrice, canDeferBilling=$canDeferBilling, discounts=$discounts, endDate=$endDate, externalPriceId=$externalPriceId, filter=$filter, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, maximumAmount=$maximumAmount, minimumAmount=$minimumAmount, price=$price, priceId=$priceId, usageCustomerIds=$usageCustomerIds, additionalProperties=$additionalProperties}"
+            "Add{startDate=$startDate, allocationPrice=$allocationPrice, canDeferBilling=$canDeferBilling, discounts=$discounts, endDate=$endDate, externalPriceId=$externalPriceId, filter=$filter, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, maximumAmount=$maximumAmount, metricParameterOverrides=$metricParameterOverrides, minimumAmount=$minimumAmount, price=$price, priceId=$priceId, usageCustomerIds=$usageCustomerIds, additionalProperties=$additionalProperties}"
     }
 
     class AddAdjustment
@@ -14992,6 +15165,7 @@ private constructor(
         private val endDate: JsonField<EndDate>,
         private val filter: JsonField<String>,
         private val fixedFeeQuantityTransitions: JsonField<List<FixedFeeQuantityTransition>>,
+        private val metricParameterOverrides: JsonField<MetricParameterOverrides>,
         private val startDate: JsonField<StartDate>,
         private val usageCustomerIds: JsonField<List<String>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -15016,6 +15190,9 @@ private constructor(
             @ExcludeMissing
             fixedFeeQuantityTransitions: JsonField<List<FixedFeeQuantityTransition>> =
                 JsonMissing.of(),
+            @JsonProperty("metric_parameter_overrides")
+            @ExcludeMissing
+            metricParameterOverrides: JsonField<MetricParameterOverrides> = JsonMissing.of(),
             @JsonProperty("start_date")
             @ExcludeMissing
             startDate: JsonField<StartDate> = JsonMissing.of(),
@@ -15029,6 +15206,7 @@ private constructor(
             endDate,
             filter,
             fixedFeeQuantityTransitions,
+            metricParameterOverrides,
             startDate,
             usageCustomerIds,
             mutableMapOf(),
@@ -15089,6 +15267,16 @@ private constructor(
          */
         fun fixedFeeQuantityTransitions(): Optional<List<FixedFeeQuantityTransition>> =
             fixedFeeQuantityTransitions.getOptional("fixed_fee_quantity_transitions")
+
+        /**
+         * Override values for parameterized billable metric variables. Keys are parameter names,
+         * values are the override values (number or string).
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun metricParameterOverrides(): Optional<MetricParameterOverrides> =
+            metricParameterOverrides.getOptional("metric_parameter_overrides")
 
         /**
          * The updated start date of this price interval. If not specified, the start date will not
@@ -15168,6 +15356,17 @@ private constructor(
             fixedFeeQuantityTransitions
 
         /**
+         * Returns the raw JSON value of [metricParameterOverrides].
+         *
+         * Unlike [metricParameterOverrides], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("metric_parameter_overrides")
+        @ExcludeMissing
+        fun _metricParameterOverrides(): JsonField<MetricParameterOverrides> =
+            metricParameterOverrides
+
+        /**
          * Returns the raw JSON value of [startDate].
          *
          * Unlike [startDate], this method doesn't throw if the JSON field has an unexpected type.
@@ -15222,6 +15421,8 @@ private constructor(
             private var fixedFeeQuantityTransitions:
                 JsonField<MutableList<FixedFeeQuantityTransition>>? =
                 null
+            private var metricParameterOverrides: JsonField<MetricParameterOverrides> =
+                JsonMissing.of()
             private var startDate: JsonField<StartDate> = JsonMissing.of()
             private var usageCustomerIds: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -15235,6 +15436,7 @@ private constructor(
                 filter = edit.filter
                 fixedFeeQuantityTransitions =
                     edit.fixedFeeQuantityTransitions.map { it.toMutableList() }
+                metricParameterOverrides = edit.metricParameterOverrides
                 startDate = edit.startDate
                 usageCustomerIds = edit.usageCustomerIds.map { it.toMutableList() }
                 additionalProperties = edit.additionalProperties.toMutableMap()
@@ -15410,6 +15612,32 @@ private constructor(
             }
 
             /**
+             * Override values for parameterized billable metric variables. Keys are parameter
+             * names, values are the override values (number or string).
+             */
+            fun metricParameterOverrides(metricParameterOverrides: MetricParameterOverrides?) =
+                metricParameterOverrides(JsonField.ofNullable(metricParameterOverrides))
+
+            /**
+             * Alias for calling [Builder.metricParameterOverrides] with
+             * `metricParameterOverrides.orElse(null)`.
+             */
+            fun metricParameterOverrides(
+                metricParameterOverrides: Optional<MetricParameterOverrides>
+            ) = metricParameterOverrides(metricParameterOverrides.getOrNull())
+
+            /**
+             * Sets [Builder.metricParameterOverrides] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metricParameterOverrides] with a well-typed
+             * [MetricParameterOverrides] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun metricParameterOverrides(
+                metricParameterOverrides: JsonField<MetricParameterOverrides>
+            ) = apply { this.metricParameterOverrides = metricParameterOverrides }
+
+            /**
              * The updated start date of this price interval. If not specified, the start date will
              * not be updated.
              */
@@ -15513,6 +15741,7 @@ private constructor(
                     endDate,
                     filter,
                     (fixedFeeQuantityTransitions ?: JsonMissing.of()).map { it.toImmutable() },
+                    metricParameterOverrides,
                     startDate,
                     (usageCustomerIds ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toMutableMap(),
@@ -15532,6 +15761,7 @@ private constructor(
             endDate().ifPresent { it.validate() }
             filter()
             fixedFeeQuantityTransitions().ifPresent { it.forEach { it.validate() } }
+            metricParameterOverrides().ifPresent { it.validate() }
             startDate().ifPresent { it.validate() }
             usageCustomerIds()
             validated = true
@@ -15560,6 +15790,7 @@ private constructor(
                 (if (filter.asKnown().isPresent) 1 else 0) +
                 (fixedFeeQuantityTransitions.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
                     ?: 0) +
+                (metricParameterOverrides.asKnown().getOrNull()?.validity() ?: 0) +
                 (startDate.asKnown().getOrNull()?.validity() ?: 0) +
                 (usageCustomerIds.asKnown().getOrNull()?.size ?: 0)
 
@@ -15970,6 +16201,119 @@ private constructor(
         }
 
         /**
+         * Override values for parameterized billable metric variables. Keys are parameter names,
+         * values are the override values (number or string).
+         */
+        class MetricParameterOverrides
+        @JsonCreator
+        private constructor(
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
+        ) {
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [MetricParameterOverrides].
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [MetricParameterOverrides]. */
+            class Builder internal constructor() {
+
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(metricParameterOverrides: MetricParameterOverrides) = apply {
+                    additionalProperties =
+                        metricParameterOverrides.additionalProperties.toMutableMap()
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [MetricParameterOverrides].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): MetricParameterOverrides =
+                    MetricParameterOverrides(additionalProperties.toImmutable())
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): MetricParameterOverrides = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is MetricParameterOverrides &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "MetricParameterOverrides{additionalProperties=$additionalProperties}"
+        }
+
+        /**
          * The updated start date of this price interval. If not specified, the start date will not
          * be updated.
          */
@@ -16169,6 +16513,7 @@ private constructor(
                 endDate == other.endDate &&
                 filter == other.filter &&
                 fixedFeeQuantityTransitions == other.fixedFeeQuantityTransitions &&
+                metricParameterOverrides == other.metricParameterOverrides &&
                 startDate == other.startDate &&
                 usageCustomerIds == other.usageCustomerIds &&
                 additionalProperties == other.additionalProperties
@@ -16182,6 +16527,7 @@ private constructor(
                 endDate,
                 filter,
                 fixedFeeQuantityTransitions,
+                metricParameterOverrides,
                 startDate,
                 usageCustomerIds,
                 additionalProperties,
@@ -16191,7 +16537,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Edit{priceIntervalId=$priceIntervalId, billingCycleDay=$billingCycleDay, canDeferBilling=$canDeferBilling, endDate=$endDate, filter=$filter, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, startDate=$startDate, usageCustomerIds=$usageCustomerIds, additionalProperties=$additionalProperties}"
+            "Edit{priceIntervalId=$priceIntervalId, billingCycleDay=$billingCycleDay, canDeferBilling=$canDeferBilling, endDate=$endDate, filter=$filter, fixedFeeQuantityTransitions=$fixedFeeQuantityTransitions, metricParameterOverrides=$metricParameterOverrides, startDate=$startDate, usageCustomerIds=$usageCustomerIds, additionalProperties=$additionalProperties}"
     }
 
     class EditAdjustment

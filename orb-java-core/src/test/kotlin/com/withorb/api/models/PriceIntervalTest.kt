@@ -157,6 +157,11 @@ internal class PriceIntervalTest {
                 )
                 .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addUsageCustomerId("string")
+                .metricParameterOverrides(
+                    PriceInterval.MetricParameterOverrides.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
                 .build()
 
         assertThat(priceInterval.id()).isEqualTo("id")
@@ -308,6 +313,12 @@ internal class PriceIntervalTest {
         assertThat(priceInterval.startDate())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(priceInterval.usageCustomerIds().getOrNull()).containsExactly("string")
+        assertThat(priceInterval.metricParameterOverrides())
+            .contains(
+                PriceInterval.MetricParameterOverrides.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .build()
+            )
     }
 
     @Test
@@ -456,6 +467,11 @@ internal class PriceIntervalTest {
                 )
                 .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addUsageCustomerId("string")
+                .metricParameterOverrides(
+                    PriceInterval.MetricParameterOverrides.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
                 .build()
 
         val roundtrippedPriceInterval =
