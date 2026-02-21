@@ -1373,6 +1373,7 @@ private constructor(
         private val firstDimension: JsonField<String>,
         private val matrixScalingFactors: JsonField<List<MatrixScalingFactor>>,
         private val unitPrice: JsonField<String>,
+        private val groupingKey: JsonField<String>,
         private val prorate: JsonField<Boolean>,
         private val secondDimension: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -1389,6 +1390,9 @@ private constructor(
             @JsonProperty("unit_price")
             @ExcludeMissing
             unitPrice: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("grouping_key")
+            @ExcludeMissing
+            groupingKey: JsonField<String> = JsonMissing.of(),
             @JsonProperty("prorate") @ExcludeMissing prorate: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("second_dimension")
             @ExcludeMissing
@@ -1397,6 +1401,7 @@ private constructor(
             firstDimension,
             matrixScalingFactors,
             unitPrice,
+            groupingKey,
             prorate,
             secondDimension,
             mutableMapOf(),
@@ -1426,6 +1431,14 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun unitPrice(): String = unitPrice.getRequired("unit_price")
+
+        /**
+         * The property used to group this price
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun groupingKey(): Optional<String> = groupingKey.getOptional("grouping_key")
 
         /**
          * If true, the unit price will be prorated to the billing period
@@ -1469,6 +1482,15 @@ private constructor(
          * Unlike [unitPrice], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("unit_price") @ExcludeMissing fun _unitPrice(): JsonField<String> = unitPrice
+
+        /**
+         * Returns the raw JSON value of [groupingKey].
+         *
+         * Unlike [groupingKey], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("grouping_key")
+        @ExcludeMissing
+        fun _groupingKey(): JsonField<String> = groupingKey
 
         /**
          * Returns the raw JSON value of [prorate].
@@ -1521,6 +1543,7 @@ private constructor(
             private var firstDimension: JsonField<String>? = null
             private var matrixScalingFactors: JsonField<MutableList<MatrixScalingFactor>>? = null
             private var unitPrice: JsonField<String>? = null
+            private var groupingKey: JsonField<String> = JsonMissing.of()
             private var prorate: JsonField<Boolean> = JsonMissing.of()
             private var secondDimension: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -1535,6 +1558,7 @@ private constructor(
                         it.toMutableList()
                     }
                 unitPrice = scalableMatrixWithUnitPricingConfig.unitPrice
+                groupingKey = scalableMatrixWithUnitPricingConfig.groupingKey
                 prorate = scalableMatrixWithUnitPricingConfig.prorate
                 secondDimension = scalableMatrixWithUnitPricingConfig.secondDimension
                 additionalProperties =
@@ -1595,6 +1619,23 @@ private constructor(
              * supported value.
              */
             fun unitPrice(unitPrice: JsonField<String>) = apply { this.unitPrice = unitPrice }
+
+            /** The property used to group this price */
+            fun groupingKey(groupingKey: String?) = groupingKey(JsonField.ofNullable(groupingKey))
+
+            /** Alias for calling [Builder.groupingKey] with `groupingKey.orElse(null)`. */
+            fun groupingKey(groupingKey: Optional<String>) = groupingKey(groupingKey.getOrNull())
+
+            /**
+             * Sets [Builder.groupingKey] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.groupingKey] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun groupingKey(groupingKey: JsonField<String>) = apply {
+                this.groupingKey = groupingKey
+            }
 
             /** If true, the unit price will be prorated to the billing period */
             fun prorate(prorate: Boolean?) = prorate(JsonField.ofNullable(prorate))
@@ -1677,6 +1718,7 @@ private constructor(
                         it.toImmutable()
                     },
                     checkRequired("unitPrice", unitPrice),
+                    groupingKey,
                     prorate,
                     secondDimension,
                     additionalProperties.toMutableMap(),
@@ -1693,6 +1735,7 @@ private constructor(
             firstDimension()
             matrixScalingFactors().forEach { it.validate() }
             unitPrice()
+            groupingKey()
             prorate()
             secondDimension()
             validated = true
@@ -1717,6 +1760,7 @@ private constructor(
             (if (firstDimension.asKnown().isPresent) 1 else 0) +
                 (matrixScalingFactors.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (unitPrice.asKnown().isPresent) 1 else 0) +
+                (if (groupingKey.asKnown().isPresent) 1 else 0) +
                 (if (prorate.asKnown().isPresent) 1 else 0) +
                 (if (secondDimension.asKnown().isPresent) 1 else 0)
 
@@ -1999,6 +2043,7 @@ private constructor(
                 firstDimension == other.firstDimension &&
                 matrixScalingFactors == other.matrixScalingFactors &&
                 unitPrice == other.unitPrice &&
+                groupingKey == other.groupingKey &&
                 prorate == other.prorate &&
                 secondDimension == other.secondDimension &&
                 additionalProperties == other.additionalProperties
@@ -2009,6 +2054,7 @@ private constructor(
                 firstDimension,
                 matrixScalingFactors,
                 unitPrice,
+                groupingKey,
                 prorate,
                 secondDimension,
                 additionalProperties,
@@ -2018,7 +2064,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ScalableMatrixWithUnitPricingConfig{firstDimension=$firstDimension, matrixScalingFactors=$matrixScalingFactors, unitPrice=$unitPrice, prorate=$prorate, secondDimension=$secondDimension, additionalProperties=$additionalProperties}"
+            "ScalableMatrixWithUnitPricingConfig{firstDimension=$firstDimension, matrixScalingFactors=$matrixScalingFactors, unitPrice=$unitPrice, groupingKey=$groupingKey, prorate=$prorate, secondDimension=$secondDimension, additionalProperties=$additionalProperties}"
     }
 
     /**
