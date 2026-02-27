@@ -26,6 +26,11 @@ import com.withorb.api.models.PlanMigrationRetrieveResponse
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be subscribed to by
+ * a customer. Plans define the billing behavior of the subscription. You can see more about how to
+ * configure prices in the [Price resource](/reference/price).
+ */
 class MigrationServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     MigrationService {
 

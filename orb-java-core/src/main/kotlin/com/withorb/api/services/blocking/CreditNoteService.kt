@@ -13,6 +13,10 @@ import com.withorb.api.models.CreditNoteListPage
 import com.withorb.api.models.CreditNoteListParams
 import java.util.function.Consumer
 
+/**
+ * The [Credit Note](/invoicing/credit-notes) resource represents a credit that has been applied to
+ * a particular invoice.
+ */
 interface CreditNoteService {
 
     /**

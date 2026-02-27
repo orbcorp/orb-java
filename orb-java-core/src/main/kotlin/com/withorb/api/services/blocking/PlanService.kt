@@ -16,6 +16,11 @@ import com.withorb.api.services.blocking.plans.ExternalPlanIdService
 import com.withorb.api.services.blocking.plans.MigrationService
 import java.util.function.Consumer
 
+/**
+ * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be subscribed to by
+ * a customer. Plans define the billing behavior of the subscription. You can see more about how to
+ * configure prices in the [Price resource](/reference/price).
+ */
 interface PlanService {
 
     /**
@@ -30,8 +35,18 @@ interface PlanService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): PlanService
 
+    /**
+     * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be subscribed
+     * to by a customer. Plans define the billing behavior of the subscription. You can see more
+     * about how to configure prices in the [Price resource](/reference/price).
+     */
     fun externalPlanId(): ExternalPlanIdService
 
+    /**
+     * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be subscribed
+     * to by a customer. Plans define the billing behavior of the subscription. You can see more
+     * about how to configure prices in the [Price resource](/reference/price).
+     */
     fun migrations(): MigrationService
 
     /** This endpoint allows creation of plans including their prices. */
@@ -146,8 +161,18 @@ interface PlanService {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): PlanService.WithRawResponse
 
+        /**
+         * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be
+         * subscribed to by a customer. Plans define the billing behavior of the subscription. You
+         * can see more about how to configure prices in the [Price resource](/reference/price).
+         */
         fun externalPlanId(): ExternalPlanIdService.WithRawResponse
 
+        /**
+         * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be
+         * subscribed to by a customer. Plans define the billing behavior of the subscription. You
+         * can see more about how to configure prices in the [Price resource](/reference/price).
+         */
         fun migrations(): MigrationService.WithRawResponse
 
         /**

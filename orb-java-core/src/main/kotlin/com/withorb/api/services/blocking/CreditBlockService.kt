@@ -14,6 +14,10 @@ import com.withorb.api.models.CreditBlockRetrieveParams
 import com.withorb.api.models.CreditBlockRetrieveResponse
 import java.util.function.Consumer
 
+/**
+ * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits within
+ * Orb.
+ */
 interface CreditBlockService {
 
     /**

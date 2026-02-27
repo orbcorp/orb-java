@@ -27,6 +27,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The LicenseType resource represents a type of license that can be assigned to users. License
+ * types are used during billing by grouping metrics on the configured grouping key.
+ */
 class LicenseTypeServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     LicenseTypeServiceAsync {
 

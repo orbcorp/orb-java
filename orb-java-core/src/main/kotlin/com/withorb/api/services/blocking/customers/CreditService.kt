@@ -14,6 +14,10 @@ import com.withorb.api.services.blocking.customers.credits.LedgerService
 import com.withorb.api.services.blocking.customers.credits.TopUpService
 import java.util.function.Consumer
 
+/**
+ * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits within
+ * Orb.
+ */
 interface CreditService {
 
     /**
@@ -28,8 +32,16 @@ interface CreditService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): CreditService
 
+    /**
+     * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits
+     * within Orb.
+     */
     fun ledger(): LedgerService
 
+    /**
+     * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits
+     * within Orb.
+     */
     fun topUps(): TopUpService
 
     /**
@@ -144,8 +156,16 @@ interface CreditService {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): CreditService.WithRawResponse
 
+        /**
+         * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits
+         * within Orb.
+         */
         fun ledger(): LedgerService.WithRawResponse
 
+        /**
+         * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits
+         * within Orb.
+         */
         fun topUps(): TopUpService.WithRawResponse
 
         /**

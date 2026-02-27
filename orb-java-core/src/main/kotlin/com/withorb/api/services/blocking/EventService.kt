@@ -18,6 +18,11 @@ import com.withorb.api.services.blocking.events.BackfillService
 import com.withorb.api.services.blocking.events.VolumeService
 import java.util.function.Consumer
 
+/**
+ * The [Event](/core-concepts#event) resource represents a usage event that has been created for a
+ * customer. Events are the core of Orb's usage-based billing model, and are used to calculate the
+ * usage charges for a given billing period.
+ */
 interface EventService {
 
     /**
@@ -32,8 +37,18 @@ interface EventService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): EventService
 
+    /**
+     * The [Event](/core-concepts#event) resource represents a usage event that has been created for
+     * a customer. Events are the core of Orb's usage-based billing model, and are used to calculate
+     * the usage charges for a given billing period.
+     */
     fun backfills(): BackfillService
 
+    /**
+     * The [Event](/core-concepts#event) resource represents a usage event that has been created for
+     * a customer. Events are the core of Orb's usage-based billing model, and are used to calculate
+     * the usage charges for a given billing period.
+     */
     fun volume(): VolumeService
 
     /**
@@ -399,8 +414,18 @@ interface EventService {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): EventService.WithRawResponse
 
+        /**
+         * The [Event](/core-concepts#event) resource represents a usage event that has been created
+         * for a customer. Events are the core of Orb's usage-based billing model, and are used to
+         * calculate the usage charges for a given billing period.
+         */
         fun backfills(): BackfillService.WithRawResponse
 
+        /**
+         * The [Event](/core-concepts#event) resource represents a usage event that has been created
+         * for a customer. Events are the core of Orb's usage-based billing model, and are used to
+         * calculate the usage charges for a given billing period.
+         */
         fun volume(): VolumeService.WithRawResponse
 
         /**

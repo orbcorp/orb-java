@@ -10,6 +10,11 @@ import com.withorb.api.models.EventVolumes
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * The [Event](/core-concepts#event) resource represents a usage event that has been created for a
+ * customer. Events are the core of Orb's usage-based billing model, and are used to calculate the
+ * usage charges for a given billing period.
+ */
 interface VolumeServiceAsync {
 
     /**

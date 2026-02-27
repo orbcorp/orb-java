@@ -26,6 +26,11 @@ import com.withorb.api.services.blocking.beta.ExternalPlanIdServiceImpl
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be subscribed to by
+ * a customer. Plans define the billing behavior of the subscription. You can see more about how to
+ * configure prices in the [Price resource](/reference/price).
+ */
 class BetaServiceImpl internal constructor(private val clientOptions: ClientOptions) : BetaService {
 
     private val withRawResponse: BetaService.WithRawResponse by lazy {
@@ -41,6 +46,11 @@ class BetaServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): BetaService =
         BetaServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be subscribed
+     * to by a customer. Plans define the billing behavior of the subscription. You can see more
+     * about how to configure prices in the [Price resource](/reference/price).
+     */
     override fun externalPlanId(): ExternalPlanIdService = externalPlanId
 
     override fun createPlanVersion(
@@ -81,6 +91,11 @@ class BetaServiceImpl internal constructor(private val clientOptions: ClientOpti
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be
+         * subscribed to by a customer. Plans define the billing behavior of the subscription. You
+         * can see more about how to configure prices in the [Price resource](/reference/price).
+         */
         override fun externalPlanId(): ExternalPlanIdService.WithRawResponse = externalPlanId
 
         private val createPlanVersionHandler: Handler<PlanVersion> =
