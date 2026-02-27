@@ -68,6 +68,15 @@ private constructor(
     fun lineItems(): List<LineItem> = body.lineItems()
 
     /**
+     * Determines whether this invoice will automatically attempt to charge a saved payment method,
+     * if any. If not specified, the invoice inherits the customer's auto_collection setting.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun autoCollection(): Optional<Boolean> = body.autoCollection()
+
+    /**
      * The id of the `Customer` to create this invoice for. One of `customer_id` and
      * `external_customer_id` are required.
      *
@@ -162,6 +171,13 @@ private constructor(
      * Unlike [lineItems], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _lineItems(): JsonField<List<LineItem>> = body._lineItems()
+
+    /**
+     * Returns the raw JSON value of [autoCollection].
+     *
+     * Unlike [autoCollection], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _autoCollection(): JsonField<Boolean> = body._autoCollection()
 
     /**
      * Returns the raw JSON value of [customerId].
@@ -267,8 +283,8 @@ private constructor(
          * - [currency]
          * - [invoiceDate]
          * - [lineItems]
+         * - [autoCollection]
          * - [customerId]
-         * - [discount]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -320,6 +336,35 @@ private constructor(
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
         fun addLineItem(lineItem: LineItem) = apply { body.addLineItem(lineItem) }
+
+        /**
+         * Determines whether this invoice will automatically attempt to charge a saved payment
+         * method, if any. If not specified, the invoice inherits the customer's auto_collection
+         * setting.
+         */
+        fun autoCollection(autoCollection: Boolean?) = apply { body.autoCollection(autoCollection) }
+
+        /**
+         * Alias for [Builder.autoCollection].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun autoCollection(autoCollection: Boolean) = autoCollection(autoCollection as Boolean?)
+
+        /** Alias for calling [Builder.autoCollection] with `autoCollection.orElse(null)`. */
+        fun autoCollection(autoCollection: Optional<Boolean>) =
+            autoCollection(autoCollection.getOrNull())
+
+        /**
+         * Sets [Builder.autoCollection] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.autoCollection] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun autoCollection(autoCollection: JsonField<Boolean>) = apply {
+            body.autoCollection(autoCollection)
+        }
 
         /**
          * The id of the `Customer` to create this invoice for. One of `customer_id` and
@@ -680,6 +725,7 @@ private constructor(
         private val currency: JsonField<String>,
         private val invoiceDate: JsonField<OffsetDateTime>,
         private val lineItems: JsonField<List<LineItem>>,
+        private val autoCollection: JsonField<Boolean>,
         private val customerId: JsonField<String>,
         private val discount: JsonField<Discount>,
         private val dueDate: JsonField<DueDate>,
@@ -702,6 +748,9 @@ private constructor(
             @JsonProperty("line_items")
             @ExcludeMissing
             lineItems: JsonField<List<LineItem>> = JsonMissing.of(),
+            @JsonProperty("auto_collection")
+            @ExcludeMissing
+            autoCollection: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("customer_id")
             @ExcludeMissing
             customerId: JsonField<String> = JsonMissing.of(),
@@ -726,6 +775,7 @@ private constructor(
             currency,
             invoiceDate,
             lineItems,
+            autoCollection,
             customerId,
             discount,
             dueDate,
@@ -759,6 +809,16 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun lineItems(): List<LineItem> = lineItems.getRequired("line_items")
+
+        /**
+         * Determines whether this invoice will automatically attempt to charge a saved payment
+         * method, if any. If not specified, the invoice inherits the customer's auto_collection
+         * setting.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun autoCollection(): Optional<Boolean> = autoCollection.getOptional("auto_collection")
 
         /**
          * The id of the `Customer` to create this invoice for. One of `customer_id` and
@@ -862,6 +922,16 @@ private constructor(
         fun _lineItems(): JsonField<List<LineItem>> = lineItems
 
         /**
+         * Returns the raw JSON value of [autoCollection].
+         *
+         * Unlike [autoCollection], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("auto_collection")
+        @ExcludeMissing
+        fun _autoCollection(): JsonField<Boolean> = autoCollection
+
+        /**
          * Returns the raw JSON value of [customerId].
          *
          * Unlike [customerId], this method doesn't throw if the JSON field has an unexpected type.
@@ -958,6 +1028,7 @@ private constructor(
             private var currency: JsonField<String>? = null
             private var invoiceDate: JsonField<OffsetDateTime>? = null
             private var lineItems: JsonField<MutableList<LineItem>>? = null
+            private var autoCollection: JsonField<Boolean> = JsonMissing.of()
             private var customerId: JsonField<String> = JsonMissing.of()
             private var discount: JsonField<Discount> = JsonMissing.of()
             private var dueDate: JsonField<DueDate> = JsonMissing.of()
@@ -973,6 +1044,7 @@ private constructor(
                 currency = body.currency
                 invoiceDate = body.invoiceDate
                 lineItems = body.lineItems.map { it.toMutableList() }
+                autoCollection = body.autoCollection
                 customerId = body.customerId
                 discount = body.discount
                 dueDate = body.dueDate
@@ -1039,6 +1111,36 @@ private constructor(
                     (lineItems ?: JsonField.of(mutableListOf())).also {
                         checkKnown("lineItems", it).add(lineItem)
                     }
+            }
+
+            /**
+             * Determines whether this invoice will automatically attempt to charge a saved payment
+             * method, if any. If not specified, the invoice inherits the customer's auto_collection
+             * setting.
+             */
+            fun autoCollection(autoCollection: Boolean?) =
+                autoCollection(JsonField.ofNullable(autoCollection))
+
+            /**
+             * Alias for [Builder.autoCollection].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun autoCollection(autoCollection: Boolean) = autoCollection(autoCollection as Boolean?)
+
+            /** Alias for calling [Builder.autoCollection] with `autoCollection.orElse(null)`. */
+            fun autoCollection(autoCollection: Optional<Boolean>) =
+                autoCollection(autoCollection.getOrNull())
+
+            /**
+             * Sets [Builder.autoCollection] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.autoCollection] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun autoCollection(autoCollection: JsonField<Boolean>) = apply {
+                this.autoCollection = autoCollection
             }
 
             /**
@@ -1307,6 +1409,7 @@ private constructor(
                     checkRequired("currency", currency),
                     checkRequired("invoiceDate", invoiceDate),
                     checkRequired("lineItems", lineItems).map { it.toImmutable() },
+                    autoCollection,
                     customerId,
                     discount,
                     dueDate,
@@ -1329,6 +1432,7 @@ private constructor(
             currency()
             invoiceDate()
             lineItems().forEach { it.validate() }
+            autoCollection()
             customerId()
             discount().ifPresent { it.validate() }
             dueDate().ifPresent { it.validate() }
@@ -1359,6 +1463,7 @@ private constructor(
             (if (currency.asKnown().isPresent) 1 else 0) +
                 (if (invoiceDate.asKnown().isPresent) 1 else 0) +
                 (lineItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (if (autoCollection.asKnown().isPresent) 1 else 0) +
                 (if (customerId.asKnown().isPresent) 1 else 0) +
                 (discount.asKnown().getOrNull()?.validity() ?: 0) +
                 (dueDate.asKnown().getOrNull()?.validity() ?: 0) +
@@ -1377,6 +1482,7 @@ private constructor(
                 currency == other.currency &&
                 invoiceDate == other.invoiceDate &&
                 lineItems == other.lineItems &&
+                autoCollection == other.autoCollection &&
                 customerId == other.customerId &&
                 discount == other.discount &&
                 dueDate == other.dueDate &&
@@ -1393,6 +1499,7 @@ private constructor(
                 currency,
                 invoiceDate,
                 lineItems,
+                autoCollection,
                 customerId,
                 discount,
                 dueDate,
@@ -1408,7 +1515,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{currency=$currency, invoiceDate=$invoiceDate, lineItems=$lineItems, customerId=$customerId, discount=$discount, dueDate=$dueDate, externalCustomerId=$externalCustomerId, memo=$memo, metadata=$metadata, netTerms=$netTerms, willAutoIssue=$willAutoIssue, additionalProperties=$additionalProperties}"
+            "Body{currency=$currency, invoiceDate=$invoiceDate, lineItems=$lineItems, autoCollection=$autoCollection, customerId=$customerId, discount=$discount, dueDate=$dueDate, externalCustomerId=$externalCustomerId, memo=$memo, metadata=$metadata, netTerms=$netTerms, willAutoIssue=$willAutoIssue, additionalProperties=$additionalProperties}"
     }
 
     class LineItem
