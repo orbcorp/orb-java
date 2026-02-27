@@ -16,6 +16,10 @@ import com.withorb.api.models.CustomerCreditLedgerListPage
 import com.withorb.api.models.CustomerCreditLedgerListParams
 import java.util.function.Consumer
 
+/**
+ * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits within
+ * Orb.
+ */
 interface LedgerService {
 
     /**

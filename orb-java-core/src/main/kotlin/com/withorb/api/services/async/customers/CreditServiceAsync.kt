@@ -14,6 +14,10 @@ import com.withorb.api.services.async.customers.credits.TopUpServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits within
+ * Orb.
+ */
 interface CreditServiceAsync {
 
     /**
@@ -28,8 +32,16 @@ interface CreditServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): CreditServiceAsync
 
+    /**
+     * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits
+     * within Orb.
+     */
     fun ledger(): LedgerServiceAsync
 
+    /**
+     * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits
+     * within Orb.
+     */
     fun topUps(): TopUpServiceAsync
 
     /**
@@ -155,8 +167,16 @@ interface CreditServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): CreditServiceAsync.WithRawResponse
 
+        /**
+         * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits
+         * within Orb.
+         */
         fun ledger(): LedgerServiceAsync.WithRawResponse
 
+        /**
+         * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits
+         * within Orb.
+         */
         fun topUps(): TopUpServiceAsync.WithRawResponse
 
         /**

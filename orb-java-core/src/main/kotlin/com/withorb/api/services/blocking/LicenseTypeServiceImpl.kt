@@ -26,6 +26,10 @@ import com.withorb.api.models.LicenseTypeRetrieveResponse
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The LicenseType resource represents a type of license that can be assigned to users. License
+ * types are used during billing by grouping metrics on the configured grouping key.
+ */
 class LicenseTypeServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     LicenseTypeService {
 

@@ -19,6 +19,10 @@ import com.withorb.api.models.CustomerCreditTopUpListPage
 import com.withorb.api.models.CustomerCreditTopUpListParams
 import java.util.function.Consumer
 
+/**
+ * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits within
+ * Orb.
+ */
 interface TopUpService {
 
     /**

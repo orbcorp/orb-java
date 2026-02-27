@@ -15,6 +15,12 @@ import com.withorb.api.services.async.coupons.SubscriptionServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * A coupon represents a reusable discount configuration that can be applied either as a fixed or
+ * percentage amount to an invoice or subscription. Coupons are activated using a redemption code,
+ * which applies the discount to a subscription or invoice. The duration of a coupon determines how
+ * long it remains available for use by end users.
+ */
 interface CouponServiceAsync {
 
     /**
@@ -29,6 +35,12 @@ interface CouponServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): CouponServiceAsync
 
+    /**
+     * A coupon represents a reusable discount configuration that can be applied either as a fixed
+     * or percentage amount to an invoice or subscription. Coupons are activated using a redemption
+     * code, which applies the discount to a subscription or invoice. The duration of a coupon
+     * determines how long it remains available for use by end users.
+     */
     fun subscriptions(): SubscriptionServiceAsync
 
     /**
@@ -154,6 +166,12 @@ interface CouponServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): CouponServiceAsync.WithRawResponse
 
+        /**
+         * A coupon represents a reusable discount configuration that can be applied either as a
+         * fixed or percentage amount to an invoice or subscription. Coupons are activated using a
+         * redemption code, which applies the discount to a subscription or invoice. The duration of
+         * a coupon determines how long it remains available for use by end users.
+         */
         fun subscriptions(): SubscriptionServiceAsync.WithRawResponse
 
         /**

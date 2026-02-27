@@ -14,6 +14,10 @@ import com.withorb.api.models.MetricUpdateParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * The Metric resource represents a calculation of a quantity based on events. Metrics are defined
+ * by the query that transforms raw usage events into meaningful values for your customers.
+ */
 interface MetricServiceAsync {
 
     /**

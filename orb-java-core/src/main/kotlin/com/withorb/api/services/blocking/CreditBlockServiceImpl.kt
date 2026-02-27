@@ -25,6 +25,10 @@ import com.withorb.api.models.CreditBlockRetrieveResponse
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits within
+ * Orb.
+ */
 class CreditBlockServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     CreditBlockService {
 

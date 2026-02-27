@@ -27,6 +27,11 @@ import com.withorb.api.models.ItemUpdateParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The Item resource represents a sellable product or good. Items are associated with all line
+ * items, billable metrics, and prices and are used for defining external sync behavior for invoices
+ * and tax calculation purposes.
+ */
 class ItemServiceImpl internal constructor(private val clientOptions: ClientOptions) : ItemService {
 
     private val withRawResponse: ItemService.WithRawResponse by lazy {

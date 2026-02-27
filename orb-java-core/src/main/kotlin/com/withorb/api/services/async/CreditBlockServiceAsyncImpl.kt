@@ -26,6 +26,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits within
+ * Orb.
+ */
 class CreditBlockServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     CreditBlockServiceAsync {
 

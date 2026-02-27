@@ -29,6 +29,12 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * A coupon represents a reusable discount configuration that can be applied either as a fixed or
+ * percentage amount to an invoice or subscription. Coupons are activated using a redemption code,
+ * which applies the discount to a subscription or invoice. The duration of a coupon determines how
+ * long it remains available for use by end users.
+ */
 class CouponServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     CouponServiceAsync {
 
@@ -45,6 +51,12 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): CouponServiceAsync =
         CouponServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * A coupon represents a reusable discount configuration that can be applied either as a fixed
+     * or percentage amount to an invoice or subscription. Coupons are activated using a redemption
+     * code, which applies the discount to a subscription or invoice. The duration of a coupon
+     * determines how long it remains available for use by end users.
+     */
     override fun subscriptions(): SubscriptionServiceAsync = subscriptions
 
     override fun create(
@@ -92,6 +104,12 @@ class CouponServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * A coupon represents a reusable discount configuration that can be applied either as a
+         * fixed or percentage amount to an invoice or subscription. Coupons are activated using a
+         * redemption code, which applies the discount to a subscription or invoice. The duration of
+         * a coupon determines how long it remains available for use by end users.
+         */
         override fun subscriptions(): SubscriptionServiceAsync.WithRawResponse = subscriptions
 
         private val createHandler: Handler<Coupon> = jsonHandler<Coupon>(clientOptions.jsonMapper)

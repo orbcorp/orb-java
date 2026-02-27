@@ -26,6 +26,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The [Credit Note](/invoicing/credit-notes) resource represents a credit that has been applied to
+ * a particular invoice.
+ */
 class CreditNoteServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     CreditNoteServiceAsync {
 

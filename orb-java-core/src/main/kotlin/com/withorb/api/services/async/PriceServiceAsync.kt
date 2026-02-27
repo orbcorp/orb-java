@@ -47,6 +47,18 @@ import com.withorb.api.services.async.prices.ExternalPriceIdServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * The Price resource represents a price that can be billed on a subscription, resulting in a charge
+ * on an invoice in the form of an invoice line item. Prices take a quantity and determine an amount
+ * to bill.
+ *
+ * Orb supports a few different pricing models out of the box. Each of these models is serialized
+ * differently in a given Price object. The model_type field determines the key for the
+ * configuration object that is present.
+ *
+ * For more on the types of prices, see
+ * [the core concepts documentation](/core-concepts#plan-and-price)
+ */
 interface PriceServiceAsync {
 
     /**
@@ -61,6 +73,18 @@ interface PriceServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): PriceServiceAsync
 
+    /**
+     * The Price resource represents a price that can be billed on a subscription, resulting in a
+     * charge on an invoice in the form of an invoice line item. Prices take a quantity and
+     * determine an amount to bill.
+     *
+     * Orb supports a few different pricing models out of the box. Each of these models is
+     * serialized differently in a given Price object. The model_type field determines the key for
+     * the configuration object that is present.
+     *
+     * For more on the types of prices, see
+     * [the core concepts documentation](/core-concepts#plan-and-price)
+     */
     fun externalPriceId(): ExternalPriceIdServiceAsync
 
     /**
@@ -687,6 +711,18 @@ interface PriceServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): PriceServiceAsync.WithRawResponse
 
+        /**
+         * The Price resource represents a price that can be billed on a subscription, resulting in
+         * a charge on an invoice in the form of an invoice line item. Prices take a quantity and
+         * determine an amount to bill.
+         *
+         * Orb supports a few different pricing models out of the box. Each of these models is
+         * serialized differently in a given Price object. The model_type field determines the key
+         * for the configuration object that is present.
+         *
+         * For more on the types of prices, see
+         * [the core concepts documentation](/core-concepts#plan-and-price)
+         */
         fun externalPriceId(): ExternalPriceIdServiceAsync.WithRawResponse
 
         /**
