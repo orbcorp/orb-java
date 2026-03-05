@@ -93,8 +93,9 @@ private constructor(
     fun billingAddress(): Optional<AddressInput> = body.billingAddress()
 
     /**
-     * An ISO 4217 currency string used for the customer's invoices and balance. If not set at
-     * creation time, will be set at subscription creation time.
+     * An ISO 4217 currency string used for the customer's invoices and balance. This can only be
+     * set if the customer does not already have a currency configured. If not set at creation or
+     * update time, it will be set at subscription creation time.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
@@ -686,8 +687,9 @@ private constructor(
         }
 
         /**
-         * An ISO 4217 currency string used for the customer's invoices and balance. If not set at
-         * creation time, will be set at subscription creation time.
+         * An ISO 4217 currency string used for the customer's invoices and balance. This can only
+         * be set if the customer does not already have a currency configured. If not set at
+         * creation or update time, it will be set at subscription creation time.
          */
         fun currency(currency: String?) = apply { body.currency(currency) }
 
@@ -1510,8 +1512,9 @@ private constructor(
         fun billingAddress(): Optional<AddressInput> = billingAddress.getOptional("billing_address")
 
         /**
-         * An ISO 4217 currency string used for the customer's invoices and balance. If not set at
-         * creation time, will be set at subscription creation time.
+         * An ISO 4217 currency string used for the customer's invoices and balance. This can only
+         * be set if the customer does not already have a currency configured. If not set at
+         * creation or update time, it will be set at subscription creation time.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -2158,8 +2161,9 @@ private constructor(
             }
 
             /**
-             * An ISO 4217 currency string used for the customer's invoices and balance. If not set
-             * at creation time, will be set at subscription creation time.
+             * An ISO 4217 currency string used for the customer's invoices and balance. This can
+             * only be set if the customer does not already have a currency configured. If not set
+             * at creation or update time, it will be set at subscription creation time.
              */
             fun currency(currency: String?) = currency(JsonField.ofNullable(currency))
 
