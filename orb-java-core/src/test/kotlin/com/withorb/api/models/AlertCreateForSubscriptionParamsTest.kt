@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -13,7 +14,9 @@ internal class AlertCreateForSubscriptionParamsTest {
             .subscriptionId("subscription_id")
             .addThreshold(Threshold.builder().value(0.0).build())
             .type(AlertCreateForSubscriptionParams.Type.USAGE_EXCEEDED)
+            .addGroupingKey("string")
             .metricId("metric_id")
+            .pricingUnitId("pricing_unit_id")
             .build()
     }
 
@@ -38,14 +41,18 @@ internal class AlertCreateForSubscriptionParamsTest {
                 .subscriptionId("subscription_id")
                 .addThreshold(Threshold.builder().value(0.0).build())
                 .type(AlertCreateForSubscriptionParams.Type.USAGE_EXCEEDED)
+                .addGroupingKey("string")
                 .metricId("metric_id")
+                .pricingUnitId("pricing_unit_id")
                 .build()
 
         val body = params._body()
 
         assertThat(body.thresholds()).containsExactly(Threshold.builder().value(0.0).build())
         assertThat(body.type()).isEqualTo(AlertCreateForSubscriptionParams.Type.USAGE_EXCEEDED)
+        assertThat(body.groupingKeys().getOrNull()).containsExactly("string")
         assertThat(body.metricId()).contains("metric_id")
+        assertThat(body.pricingUnitId()).contains("pricing_unit_id")
     }
 
     @Test
