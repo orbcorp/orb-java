@@ -40,6 +40,7 @@ internal class AlertTest {
                 .addBalanceAlertStatus(
                     Alert.BalanceAlertStatus.builder().inAlert(true).thresholdValue(0.0).build()
                 )
+                .addGroupingKey("string")
                 .licenseType(Alert.LicenseType.builder().id("id").build())
                 .build()
 
@@ -73,6 +74,7 @@ internal class AlertTest {
             .containsExactly(
                 Alert.BalanceAlertStatus.builder().inAlert(true).thresholdValue(0.0).build()
             )
+        assertThat(alert.groupingKeys().getOrNull()).containsExactly("string")
         assertThat(alert.licenseType()).contains(Alert.LicenseType.builder().id("id").build())
     }
 
@@ -106,6 +108,7 @@ internal class AlertTest {
                 .addBalanceAlertStatus(
                     Alert.BalanceAlertStatus.builder().inAlert(true).thresholdValue(0.0).build()
                 )
+                .addGroupingKey("string")
                 .licenseType(Alert.LicenseType.builder().id("id").build())
                 .build()
 
