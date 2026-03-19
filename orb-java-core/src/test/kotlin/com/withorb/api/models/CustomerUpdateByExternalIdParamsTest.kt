@@ -64,6 +64,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
                                     .ProviderType
                                     .STRIPE
                             )
+                            .defaultSharedPaymentToken("default_shared_payment_token")
                             .addExcludedPaymentMethodType("string")
                             .build()
                     )
@@ -165,6 +166,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
                                         .ProviderType
                                         .STRIPE
                                 )
+                                .defaultSharedPaymentToken("default_shared_payment_token")
                                 .addExcludedPaymentMethodType("string")
                                 .build()
                         )
@@ -258,6 +260,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
                                     .ProviderType
                                     .STRIPE
                             )
+                            .defaultSharedPaymentToken("default_shared_payment_token")
                             .addExcludedPaymentMethodType("string")
                             .build()
                     )

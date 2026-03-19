@@ -326,34 +326,29 @@ interface InvoiceService {
     ): Invoice
 
     /**
-     * This endpoint collects payment for an invoice using the customer's default payment method.
-     * This action can only be taken on invoices with status "issued".
+     * This endpoint collects payment for an invoice. By default, it uses the customer's default
+     * payment method. Optionally, a shared payment token (SPT) can be provided to pay using
+     * agent-granted credentials instead. This action can only be taken on invoices with status
+     * "issued".
      */
-    fun pay(invoiceId: String): Invoice = pay(invoiceId, InvoicePayParams.none())
+    fun pay(invoiceId: String, params: InvoicePayParams): Invoice =
+        pay(invoiceId, params, RequestOptions.none())
 
     /** @see pay */
     fun pay(
         invoiceId: String,
-        params: InvoicePayParams = InvoicePayParams.none(),
+        params: InvoicePayParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Invoice = pay(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
     /** @see pay */
-    fun pay(invoiceId: String, params: InvoicePayParams = InvoicePayParams.none()): Invoice =
-        pay(invoiceId, params, RequestOptions.none())
+    fun pay(params: InvoicePayParams): Invoice = pay(params, RequestOptions.none())
 
     /** @see pay */
     fun pay(
         params: InvoicePayParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Invoice
-
-    /** @see pay */
-    fun pay(params: InvoicePayParams): Invoice = pay(params, RequestOptions.none())
-
-    /** @see pay */
-    fun pay(invoiceId: String, requestOptions: RequestOptions): Invoice =
-        pay(invoiceId, InvoicePayParams.none(), requestOptions)
 
     /**
      * This endpoint allows an invoice's status to be set to the `void` status. This can only be
@@ -723,31 +718,17 @@ interface InvoiceService {
          * same as [InvoiceService.pay].
          */
         @MustBeClosed
-        fun pay(invoiceId: String): HttpResponseFor<Invoice> =
-            pay(invoiceId, InvoicePayParams.none())
+        fun pay(invoiceId: String, params: InvoicePayParams): HttpResponseFor<Invoice> =
+            pay(invoiceId, params, RequestOptions.none())
 
         /** @see pay */
         @MustBeClosed
         fun pay(
             invoiceId: String,
-            params: InvoicePayParams = InvoicePayParams.none(),
+            params: InvoicePayParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Invoice> =
             pay(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
-
-        /** @see pay */
-        @MustBeClosed
-        fun pay(
-            invoiceId: String,
-            params: InvoicePayParams = InvoicePayParams.none(),
-        ): HttpResponseFor<Invoice> = pay(invoiceId, params, RequestOptions.none())
-
-        /** @see pay */
-        @MustBeClosed
-        fun pay(
-            params: InvoicePayParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Invoice>
 
         /** @see pay */
         @MustBeClosed
@@ -756,8 +737,10 @@ interface InvoiceService {
 
         /** @see pay */
         @MustBeClosed
-        fun pay(invoiceId: String, requestOptions: RequestOptions): HttpResponseFor<Invoice> =
-            pay(invoiceId, InvoicePayParams.none(), requestOptions)
+        fun pay(
+            params: InvoicePayParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Invoice>
 
         /**
          * Returns a raw HTTP response for `post /invoices/{invoice_id}/void`, but is otherwise the

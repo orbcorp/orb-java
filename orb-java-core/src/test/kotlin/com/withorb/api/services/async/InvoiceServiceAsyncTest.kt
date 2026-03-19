@@ -11,6 +11,7 @@ import com.withorb.api.models.InvoiceFetchUpcomingParams
 import com.withorb.api.models.InvoiceIssueParams
 import com.withorb.api.models.InvoiceIssueSummaryParams
 import com.withorb.api.models.InvoiceMarkPaidParams
+import com.withorb.api.models.InvoicePayParams
 import com.withorb.api.models.InvoiceUpdateParams
 import com.withorb.api.models.PercentageDiscount
 import com.withorb.api.models.UnitConfig
@@ -270,7 +271,13 @@ internal class InvoiceServiceAsyncTest {
                 .build()
         val invoiceServiceAsync = client.invoices()
 
-        val invoiceFuture = invoiceServiceAsync.pay("invoice_id")
+        val invoiceFuture =
+            invoiceServiceAsync.pay(
+                InvoicePayParams.builder()
+                    .invoiceId("invoice_id")
+                    .sharedPaymentTokenId("shared_payment_token_id")
+                    .build()
+            )
 
         val invoice = invoiceFuture.get()
         invoice.validate()
