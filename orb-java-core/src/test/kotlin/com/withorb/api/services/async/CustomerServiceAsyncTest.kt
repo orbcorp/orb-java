@@ -82,6 +82,7 @@ internal class CustomerServiceAsyncTest {
                                             .ProviderType
                                             .STRIPE
                                     )
+                                    .defaultSharedPaymentToken("default_shared_payment_token")
                                     .addExcludedPaymentMethodType("string")
                                     .build()
                             )
@@ -187,6 +188,7 @@ internal class CustomerServiceAsyncTest {
                                             .ProviderType
                                             .STRIPE
                                     )
+                                    .defaultSharedPaymentToken("default_shared_payment_token")
                                     .addExcludedPaymentMethodType("string")
                                     .build()
                             )
@@ -384,6 +386,7 @@ internal class CustomerServiceAsyncTest {
                                             .ProviderType
                                             .STRIPE
                                     )
+                                    .defaultSharedPaymentToken("default_shared_payment_token")
                                     .addExcludedPaymentMethodType("string")
                                     .build()
                             )

@@ -353,38 +353,31 @@ interface InvoiceServiceAsync {
     ): CompletableFuture<Invoice>
 
     /**
-     * This endpoint collects payment for an invoice using the customer's default payment method.
-     * This action can only be taken on invoices with status "issued".
+     * This endpoint collects payment for an invoice. By default, it uses the customer's default
+     * payment method. Optionally, a shared payment token (SPT) can be provided to pay using
+     * agent-granted credentials instead. This action can only be taken on invoices with status
+     * "issued".
      */
-    fun pay(invoiceId: String): CompletableFuture<Invoice> = pay(invoiceId, InvoicePayParams.none())
+    fun pay(invoiceId: String, params: InvoicePayParams): CompletableFuture<Invoice> =
+        pay(invoiceId, params, RequestOptions.none())
 
     /** @see pay */
     fun pay(
         invoiceId: String,
-        params: InvoicePayParams = InvoicePayParams.none(),
+        params: InvoicePayParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Invoice> =
         pay(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
-
-    /** @see pay */
-    fun pay(
-        invoiceId: String,
-        params: InvoicePayParams = InvoicePayParams.none(),
-    ): CompletableFuture<Invoice> = pay(invoiceId, params, RequestOptions.none())
-
-    /** @see pay */
-    fun pay(
-        params: InvoicePayParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Invoice>
 
     /** @see pay */
     fun pay(params: InvoicePayParams): CompletableFuture<Invoice> =
         pay(params, RequestOptions.none())
 
     /** @see pay */
-    fun pay(invoiceId: String, requestOptions: RequestOptions): CompletableFuture<Invoice> =
-        pay(invoiceId, InvoicePayParams.none(), requestOptions)
+    fun pay(
+        params: InvoicePayParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Invoice>
 
     /**
      * This endpoint allows an invoice's status to be set to the `void` status. This can only be
@@ -742,29 +735,19 @@ interface InvoiceServiceAsync {
          * Returns a raw HTTP response for `post /invoices/{invoice_id}/pay`, but is otherwise the
          * same as [InvoiceServiceAsync.pay].
          */
-        fun pay(invoiceId: String): CompletableFuture<HttpResponseFor<Invoice>> =
-            pay(invoiceId, InvoicePayParams.none())
-
-        /** @see pay */
         fun pay(
             invoiceId: String,
-            params: InvoicePayParams = InvoicePayParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Invoice>> =
-            pay(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
-
-        /** @see pay */
-        fun pay(
-            invoiceId: String,
-            params: InvoicePayParams = InvoicePayParams.none(),
+            params: InvoicePayParams,
         ): CompletableFuture<HttpResponseFor<Invoice>> =
             pay(invoiceId, params, RequestOptions.none())
 
         /** @see pay */
         fun pay(
+            invoiceId: String,
             params: InvoicePayParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Invoice>>
+        ): CompletableFuture<HttpResponseFor<Invoice>> =
+            pay(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
         /** @see pay */
         fun pay(params: InvoicePayParams): CompletableFuture<HttpResponseFor<Invoice>> =
@@ -772,10 +755,9 @@ interface InvoiceServiceAsync {
 
         /** @see pay */
         fun pay(
-            invoiceId: String,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<Invoice>> =
-            pay(invoiceId, InvoicePayParams.none(), requestOptions)
+            params: InvoicePayParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Invoice>>
 
         /**
          * Returns a raw HTTP response for `post /invoices/{invoice_id}/void`, but is otherwise the
