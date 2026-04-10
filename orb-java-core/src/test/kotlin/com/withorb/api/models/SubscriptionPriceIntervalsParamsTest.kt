@@ -16,7 +16,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
             .subscriptionId("subscription_id")
             .addAdd(
                 SubscriptionPriceIntervalsParams.Add.builder()
-                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .startDate(BillingCycleRelativeDate.START_OF_TERM)
                     .allocationPrice(
                         NewAllocationPrice.builder()
                             .amount("10.00")
@@ -43,7 +43,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
                     )
                     .canDeferBilling(true)
                     .addAmountDiscount(0.0)
-                    .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .endDate(BillingCycleRelativeDate.START_OF_TERM)
                     .externalPriceId("external_price_id")
                     .filter("my_property > 100 AND my_other_property = 'bar'")
                     .addFixedFeeQuantityTransition(
@@ -116,7 +116,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
             )
             .addAddAdjustment(
                 SubscriptionPriceIntervalsParams.AddAdjustment.builder()
-                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .startDate(BillingCycleRelativeDate.START_OF_TERM)
                     .adjustment(
                         NewPercentageDiscount.builder()
                             .adjustmentType(
@@ -141,7 +141,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
                             .build()
                     )
                     .adjustmentId("h74gfhdjvn7ujokd")
-                    .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .endDate(BillingCycleRelativeDate.START_OF_TERM)
                     .build()
             )
             .allowInvoiceCreditOrVoid(true)
@@ -151,7 +151,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
                     .priceIntervalId("sdfs6wdjvn7ujokd")
                     .billingCycleDay(0L)
                     .canDeferBilling(true)
-                    .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .endDate(BillingCycleRelativeDate.START_OF_TERM)
                     .filter("my_property > 100 AND my_other_property = 'bar'")
                     .addFixedFeeQuantityTransition(
                         SubscriptionPriceIntervalsParams.Edit.FixedFeeQuantityTransition.builder()
@@ -164,15 +164,15 @@ internal class SubscriptionPriceIntervalsParamsTest {
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
-                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .startDate(BillingCycleRelativeDate.START_OF_TERM)
                     .addUsageCustomerId("string")
                     .build()
             )
             .addEditAdjustment(
                 SubscriptionPriceIntervalsParams.EditAdjustment.builder()
                     .adjustmentIntervalId("sdfs6wdjvn7ujokd")
-                    .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .endDate(BillingCycleRelativeDate.START_OF_TERM)
+                    .startDate(BillingCycleRelativeDate.START_OF_TERM)
                     .build()
             )
             .build()
@@ -195,7 +195,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
                 .subscriptionId("subscription_id")
                 .addAdd(
                     SubscriptionPriceIntervalsParams.Add.builder()
-                        .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .startDate(BillingCycleRelativeDate.START_OF_TERM)
                         .allocationPrice(
                             NewAllocationPrice.builder()
                                 .amount("10.00")
@@ -222,7 +222,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
                         )
                         .canDeferBilling(true)
                         .addAmountDiscount(0.0)
-                        .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .endDate(BillingCycleRelativeDate.START_OF_TERM)
                         .externalPriceId("external_price_id")
                         .filter("my_property > 100 AND my_other_property = 'bar'")
                         .addFixedFeeQuantityTransition(
@@ -298,7 +298,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
                 )
                 .addAddAdjustment(
                     SubscriptionPriceIntervalsParams.AddAdjustment.builder()
-                        .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .startDate(BillingCycleRelativeDate.START_OF_TERM)
                         .adjustment(
                             NewPercentageDiscount.builder()
                                 .adjustmentType(
@@ -323,7 +323,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
                                 .build()
                         )
                         .adjustmentId("h74gfhdjvn7ujokd")
-                        .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .endDate(BillingCycleRelativeDate.START_OF_TERM)
                         .build()
                 )
                 .allowInvoiceCreditOrVoid(true)
@@ -333,7 +333,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
                         .priceIntervalId("sdfs6wdjvn7ujokd")
                         .billingCycleDay(0L)
                         .canDeferBilling(true)
-                        .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .endDate(BillingCycleRelativeDate.START_OF_TERM)
                         .filter("my_property > 100 AND my_other_property = 'bar'")
                         .addFixedFeeQuantityTransition(
                             SubscriptionPriceIntervalsParams.Edit.FixedFeeQuantityTransition
@@ -347,15 +347,15 @@ internal class SubscriptionPriceIntervalsParamsTest {
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
-                        .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .startDate(BillingCycleRelativeDate.START_OF_TERM)
                         .addUsageCustomerId("string")
                         .build()
                 )
                 .addEditAdjustment(
                     SubscriptionPriceIntervalsParams.EditAdjustment.builder()
                         .adjustmentIntervalId("sdfs6wdjvn7ujokd")
-                        .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .endDate(BillingCycleRelativeDate.START_OF_TERM)
+                        .startDate(BillingCycleRelativeDate.START_OF_TERM)
                         .build()
                 )
                 .build()
@@ -365,7 +365,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
         assertThat(body.add().getOrNull())
             .containsExactly(
                 SubscriptionPriceIntervalsParams.Add.builder()
-                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .startDate(BillingCycleRelativeDate.START_OF_TERM)
                     .allocationPrice(
                         NewAllocationPrice.builder()
                             .amount("10.00")
@@ -392,7 +392,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
                     )
                     .canDeferBilling(true)
                     .addAmountDiscount(0.0)
-                    .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .endDate(BillingCycleRelativeDate.START_OF_TERM)
                     .externalPriceId("external_price_id")
                     .filter("my_property > 100 AND my_other_property = 'bar'")
                     .addFixedFeeQuantityTransition(
@@ -466,7 +466,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
         assertThat(body.addAdjustments().getOrNull())
             .containsExactly(
                 SubscriptionPriceIntervalsParams.AddAdjustment.builder()
-                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .startDate(BillingCycleRelativeDate.START_OF_TERM)
                     .adjustment(
                         NewPercentageDiscount.builder()
                             .adjustmentType(
@@ -491,7 +491,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
                             .build()
                     )
                     .adjustmentId("h74gfhdjvn7ujokd")
-                    .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .endDate(BillingCycleRelativeDate.START_OF_TERM)
                     .build()
             )
         assertThat(body.allowInvoiceCreditOrVoid()).contains(true)
@@ -502,7 +502,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
                     .priceIntervalId("sdfs6wdjvn7ujokd")
                     .billingCycleDay(0L)
                     .canDeferBilling(true)
-                    .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .endDate(BillingCycleRelativeDate.START_OF_TERM)
                     .filter("my_property > 100 AND my_other_property = 'bar'")
                     .addFixedFeeQuantityTransition(
                         SubscriptionPriceIntervalsParams.Edit.FixedFeeQuantityTransition.builder()
@@ -515,7 +515,7 @@ internal class SubscriptionPriceIntervalsParamsTest {
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
-                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .startDate(BillingCycleRelativeDate.START_OF_TERM)
                     .addUsageCustomerId("string")
                     .build()
             )
@@ -523,8 +523,8 @@ internal class SubscriptionPriceIntervalsParamsTest {
             .containsExactly(
                 SubscriptionPriceIntervalsParams.EditAdjustment.builder()
                     .adjustmentIntervalId("sdfs6wdjvn7ujokd")
-                    .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .endDate(BillingCycleRelativeDate.START_OF_TERM)
+                    .startDate(BillingCycleRelativeDate.START_OF_TERM)
                     .build()
             )
     }
