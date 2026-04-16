@@ -12,6 +12,7 @@ internal class PlanUpdateParamsTest {
     fun create() {
         PlanUpdateParams.builder()
             .planId("plan_id")
+            .description("description")
             .externalPlanId("external_plan_id")
             .metadata(
                 PlanUpdateParams.Metadata.builder()
@@ -35,6 +36,7 @@ internal class PlanUpdateParamsTest {
         val params =
             PlanUpdateParams.builder()
                 .planId("plan_id")
+                .description("description")
                 .externalPlanId("external_plan_id")
                 .metadata(
                     PlanUpdateParams.Metadata.builder()
@@ -45,6 +47,7 @@ internal class PlanUpdateParamsTest {
 
         val body = params._body()
 
+        assertThat(body.description()).contains("description")
         assertThat(body.externalPlanId()).contains("external_plan_id")
         assertThat(body.metadata())
             .contains(
