@@ -37,6 +37,11 @@ internal class PlanCreateParamsTest {
                             )
                             .itemId("item_id")
                             .licenseTypeId("license_type_id")
+                            .metadata(
+                                NewAllocationPrice.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .perUnitCostBasis("per_unit_cost_basis")
                             .build()
                     )
@@ -186,6 +191,7 @@ internal class PlanCreateParamsTest {
                     .build()
             )
             .defaultInvoiceMemo("default_invoice_memo")
+            .description("description")
             .externalPlanId("external_plan_id")
             .metadata(
                 PlanCreateParams.Metadata.builder()
@@ -234,6 +240,11 @@ internal class PlanCreateParamsTest {
                                 )
                                 .itemId("item_id")
                                 .licenseTypeId("license_type_id")
+                                .metadata(
+                                    NewAllocationPrice.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .perUnitCostBasis("per_unit_cost_basis")
                                 .build()
                         )
@@ -389,6 +400,7 @@ internal class PlanCreateParamsTest {
                         .build()
                 )
                 .defaultInvoiceMemo("default_invoice_memo")
+                .description("description")
                 .externalPlanId("external_plan_id")
                 .metadata(
                     PlanCreateParams.Metadata.builder()
@@ -435,6 +447,11 @@ internal class PlanCreateParamsTest {
                             )
                             .itemId("item_id")
                             .licenseTypeId("license_type_id")
+                            .metadata(
+                                NewAllocationPrice.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .perUnitCostBasis("per_unit_cost_basis")
                             .build()
                     )
@@ -585,6 +602,7 @@ internal class PlanCreateParamsTest {
                     .build()
             )
         assertThat(body.defaultInvoiceMemo()).contains("default_invoice_memo")
+        assertThat(body.description()).contains("description")
         assertThat(body.externalPlanId()).contains("external_plan_id")
         assertThat(body.metadata())
             .contains(
