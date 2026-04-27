@@ -473,6 +473,18 @@ interface PriceServiceAsync {
 
     /** @see create */
     fun create(
+        dailyCreditAllowance: PriceCreateParams.Body.DailyCreditAllowance,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.Body.ofDailyCreditAllowance(dailyCreditAllowance), requestOptions)
+
+    /** @see create */
+    fun create(
+        dailyCreditAllowance: PriceCreateParams.Body.DailyCreditAllowance
+    ): CompletableFuture<Price> = create(dailyCreditAllowance, RequestOptions.none())
+
+    /** @see create */
+    fun create(
         minimumComposite: NewFloatingMinimumCompositePrice,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Price> =
@@ -1149,6 +1161,22 @@ interface PriceServiceAsync {
             cumulativeGroupedAllocation: PriceCreateParams.Body.CumulativeGroupedAllocation
         ): CompletableFuture<HttpResponseFor<Price>> =
             create(cumulativeGroupedAllocation, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            dailyCreditAllowance: PriceCreateParams.Body.DailyCreditAllowance,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofDailyCreditAllowance(dailyCreditAllowance),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            dailyCreditAllowance: PriceCreateParams.Body.DailyCreditAllowance
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(dailyCreditAllowance, RequestOptions.none())
 
         /** @see create */
         fun create(
