@@ -430,6 +430,35 @@ private constructor(
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
+        /**
+         * Maps this instance's current variant to a value of type [T] using the given [visitor].
+         *
+         * Note that this method is _not_ forwards compatible with new variants from the API, unless
+         * [visitor] overrides [Visitor.unknown]. To handle variants not known to this version of
+         * the SDK gracefully, consider overriding [Visitor.unknown]:
+         * ```java
+         * import com.withorb.api.core.JsonValue;
+         * import java.util.Optional;
+         *
+         * Optional<String> result = body.accept(new Body.Visitor<Optional<String>>() {
+         *     @Override
+         *     public Optional<String> visitIncrement(Increment increment) {
+         *         return Optional.of(increment.toString());
+         *     }
+         *
+         *     // ...
+         *
+         *     @Override
+         *     public Optional<String> unknown(JsonValue json) {
+         *         // Or inspect the `json`.
+         *         return Optional.empty();
+         *     }
+         * });
+         * ```
+         *
+         * @throws OrbInvalidDataException if [Visitor.unknown] is not overridden in [visitor] and
+         *   the current variant is unknown.
+         */
         fun <T> accept(visitor: Visitor<T>): T =
             when {
                 increment != null -> visitor.visitIncrement(increment)
@@ -442,6 +471,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Body = apply {
             if (validated) {
                 return@apply
@@ -1194,6 +1232,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws OrbInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
+             */
             fun validate(): Increment = apply {
                 if (validated) {
                     return@apply
@@ -1463,6 +1511,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws OrbInvalidDataException if any value type in this object doesn't match
+                 *   its expected type.
+                 */
                 fun validate(): Filter = apply {
                     if (validated) {
                         return@apply
@@ -1583,6 +1641,16 @@ private constructor(
 
                     private var validated: Boolean = false
 
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws OrbInvalidDataException if any value type in this object doesn't
+                     *   match its expected type.
+                     */
                     fun validate(): Field = apply {
                         if (validated) {
                             return@apply
@@ -1719,6 +1787,16 @@ private constructor(
 
                     private var validated: Boolean = false
 
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws OrbInvalidDataException if any value type in this object doesn't
+                     *   match its expected type.
+                     */
                     fun validate(): Operator = apply {
                         if (validated) {
                             return@apply
@@ -2267,6 +2345,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws OrbInvalidDataException if any value type in this object doesn't match
+                 *   its expected type.
+                 */
                 fun validate(): InvoiceSettings = apply {
                     if (validated) {
                         return@apply
@@ -2335,6 +2423,37 @@ private constructor(
 
                     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
+                    /**
+                     * Maps this instance's current variant to a value of type [T] using the given
+                     * [visitor].
+                     *
+                     * Note that this method is _not_ forwards compatible with new variants from the
+                     * API, unless [visitor] overrides [Visitor.unknown]. To handle variants not
+                     * known to this version of the SDK gracefully, consider overriding
+                     * [Visitor.unknown]:
+                     * ```java
+                     * import com.withorb.api.core.JsonValue;
+                     * import java.util.Optional;
+                     *
+                     * Optional<String> result = customDueDate.accept(new CustomDueDate.Visitor<Optional<String>>() {
+                     *     @Override
+                     *     public Optional<String> visitDate(LocalDate date) {
+                     *         return Optional.of(date.toString());
+                     *     }
+                     *
+                     *     // ...
+                     *
+                     *     @Override
+                     *     public Optional<String> unknown(JsonValue json) {
+                     *         // Or inspect the `json`.
+                     *         return Optional.empty();
+                     *     }
+                     * });
+                     * ```
+                     *
+                     * @throws OrbInvalidDataException if [Visitor.unknown] is not overridden in
+                     *   [visitor] and the current variant is unknown.
+                     */
                     fun <T> accept(visitor: Visitor<T>): T =
                         when {
                             date != null -> visitor.visitDate(date)
@@ -2344,6 +2463,16 @@ private constructor(
 
                     private var validated: Boolean = false
 
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws OrbInvalidDataException if any value type in this object doesn't
+                     *   match its expected type.
+                     */
                     fun validate(): CustomDueDate = apply {
                         if (validated) {
                             return@apply
@@ -2517,6 +2646,37 @@ private constructor(
 
                     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
+                    /**
+                     * Maps this instance's current variant to a value of type [T] using the given
+                     * [visitor].
+                     *
+                     * Note that this method is _not_ forwards compatible with new variants from the
+                     * API, unless [visitor] overrides [Visitor.unknown]. To handle variants not
+                     * known to this version of the SDK gracefully, consider overriding
+                     * [Visitor.unknown]:
+                     * ```java
+                     * import com.withorb.api.core.JsonValue;
+                     * import java.util.Optional;
+                     *
+                     * Optional<String> result = invoiceDate.accept(new InvoiceDate.Visitor<Optional<String>>() {
+                     *     @Override
+                     *     public Optional<String> visitDate(LocalDate date) {
+                     *         return Optional.of(date.toString());
+                     *     }
+                     *
+                     *     // ...
+                     *
+                     *     @Override
+                     *     public Optional<String> unknown(JsonValue json) {
+                     *         // Or inspect the `json`.
+                     *         return Optional.empty();
+                     *     }
+                     * });
+                     * ```
+                     *
+                     * @throws OrbInvalidDataException if [Visitor.unknown] is not overridden in
+                     *   [visitor] and the current variant is unknown.
+                     */
                     fun <T> accept(visitor: Visitor<T>): T =
                         when {
                             date != null -> visitor.visitDate(date)
@@ -2526,6 +2686,16 @@ private constructor(
 
                     private var validated: Boolean = false
 
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws OrbInvalidDataException if any value type in this object doesn't
+                     *   match its expected type.
+                     */
                     fun validate(): InvoiceDate = apply {
                         if (validated) {
                             return@apply
@@ -2772,6 +2942,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws OrbInvalidDataException if any value type in this object doesn't match
+                 *   its expected type.
+                 */
                 fun validate(): Metadata = apply {
                     if (validated) {
                         return@apply
@@ -3150,6 +3330,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws OrbInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
+             */
             fun validate(): Decrement = apply {
                 if (validated) {
                     return@apply
@@ -3255,6 +3445,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws OrbInvalidDataException if any value type in this object doesn't match
+                 *   its expected type.
+                 */
                 fun validate(): Metadata = apply {
                     if (validated) {
                         return@apply
@@ -3776,6 +3976,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws OrbInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
+             */
             fun validate(): ExpirationChange = apply {
                 if (validated) {
                     return@apply
@@ -3887,6 +4097,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws OrbInvalidDataException if any value type in this object doesn't match
+                 *   its expected type.
+                 */
                 fun validate(): Metadata = apply {
                     if (validated) {
                         return@apply
@@ -4351,6 +4571,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws OrbInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
+             */
             fun validate(): Void = apply {
                 if (validated) {
                     return@apply
@@ -4460,6 +4690,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws OrbInvalidDataException if any value type in this object doesn't match
+                 *   its expected type.
+                 */
                 fun validate(): Metadata = apply {
                     if (validated) {
                         return@apply
@@ -4592,6 +4832,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws OrbInvalidDataException if any value type in this object doesn't match
+                 *   its expected type.
+                 */
                 fun validate(): VoidReason = apply {
                     if (validated) {
                         return@apply
@@ -4996,6 +5246,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws OrbInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
+             */
             fun validate(): Amendment = apply {
                 if (validated) {
                     return@apply
@@ -5103,6 +5363,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws OrbInvalidDataException if any value type in this object doesn't match
+                 *   its expected type.
+                 */
                 fun validate(): Metadata = apply {
                     if (validated) {
                         return@apply
