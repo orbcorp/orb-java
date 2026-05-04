@@ -1020,6 +1020,14 @@ private constructor(
 
     private var validated: Boolean = false
 
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws OrbInvalidDataException if any value type in this object doesn't match its expected
+     *   type.
+     */
     fun validate(): NewSubscriptionMatrixWithDisplayNamePrice = apply {
         if (validated) {
             return@apply
@@ -1193,6 +1201,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Cadence = apply {
             if (validated) {
                 return@apply
@@ -1404,6 +1421,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): MatrixWithDisplayNameConfig = apply {
             if (validated) {
                 return@apply
@@ -1646,6 +1672,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws OrbInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
+             */
             fun validate(): UnitAmount = apply {
                 if (validated) {
                     return@apply
@@ -1803,6 +1839,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): ModelType = apply {
             if (validated) {
                 return@apply
@@ -1904,6 +1949,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Metadata = apply {
             if (validated) {
                 return@apply
