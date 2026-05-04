@@ -5,12 +5,16 @@ package com.withorb.api.errors
 import com.withorb.api.core.JsonValue
 import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
+import com.withorb.api.core.jsonMapper
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class UnprocessableEntityException
 private constructor(private val headers: Headers, private val body: JsonValue, cause: Throwable?) :
-    OrbServiceException("422: $body", cause) {
+    OrbServiceException(
+        "422: ${if (body.isMissing()) "Unknown" else jsonMapper().writeValueAsString(body)}",
+        cause,
+    ) {
 
     override fun statusCode(): Int = 422
 
