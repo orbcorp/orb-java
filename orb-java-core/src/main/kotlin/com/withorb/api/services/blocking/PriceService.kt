@@ -458,6 +458,16 @@ interface PriceService {
 
     /** @see create */
     fun create(
+        meteredAllowance: PriceCreateParams.Body.MeteredAllowance,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Price = create(PriceCreateParams.Body.ofMeteredAllowance(meteredAllowance), requestOptions)
+
+    /** @see create */
+    fun create(meteredAllowance: PriceCreateParams.Body.MeteredAllowance): Price =
+        create(meteredAllowance, RequestOptions.none())
+
+    /** @see create */
+    fun create(
         minimumComposite: NewFloatingMinimumCompositePrice,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Price = create(PriceCreateParams.Body.ofMinimumComposite(minimumComposite), requestOptions)
@@ -1160,6 +1170,20 @@ interface PriceService {
         fun create(
             dailyCreditAllowance: PriceCreateParams.Body.DailyCreditAllowance
         ): HttpResponseFor<Price> = create(dailyCreditAllowance, RequestOptions.none())
+
+        /** @see create */
+        @MustBeClosed
+        fun create(
+            meteredAllowance: PriceCreateParams.Body.MeteredAllowance,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Price> =
+            create(PriceCreateParams.Body.ofMeteredAllowance(meteredAllowance), requestOptions)
+
+        /** @see create */
+        @MustBeClosed
+        fun create(
+            meteredAllowance: PriceCreateParams.Body.MeteredAllowance
+        ): HttpResponseFor<Price> = create(meteredAllowance, RequestOptions.none())
 
         /** @see create */
         @MustBeClosed
