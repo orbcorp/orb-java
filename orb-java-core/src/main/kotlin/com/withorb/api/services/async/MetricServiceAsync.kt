@@ -85,9 +85,8 @@ interface MetricServiceAsync {
         update(metricId, MetricUpdateParams.none(), requestOptions)
 
     /**
-     * This endpoint is used to fetch [metric](/core-concepts##metric) details given a metric
-     * identifier. It returns information about the metrics including its name, description, and
-     * item.
+     * This endpoint is used to list [metrics](/core-concepts#metric). It returns information about
+     * the metrics including its name, description, and item.
      */
     fun list(): CompletableFuture<MetricListPageAsync> = list(MetricListParams.none())
 
@@ -107,8 +106,9 @@ interface MetricServiceAsync {
         list(MetricListParams.none(), requestOptions)
 
     /**
-     * This endpoint is used to list [metrics](/core-concepts#metric). It returns information about
-     * the metrics including its name, description, and item.
+     * This endpoint is used to fetch [metric](/core-concepts#metric) details given a metric
+     * identifier. It returns information about the metrics including its name, description, and
+     * item.
      */
     fun fetch(metricId: String): CompletableFuture<BillableMetric> =
         fetch(metricId, MetricFetchParams.none())
