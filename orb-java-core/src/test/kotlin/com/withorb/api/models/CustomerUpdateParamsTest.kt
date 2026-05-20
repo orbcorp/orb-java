@@ -18,7 +18,7 @@ internal class CustomerUpdateParamsTest {
                     .addAccountingProvider(
                         AccountingProviderConfig.builder()
                             .externalProviderId("external_provider_id")
-                            .providerType("provider_type")
+                            .providerType(AccountingProviderConfig.ProviderType.QUICKBOOKS)
                             .build()
                     )
                     .excluded(true)
@@ -118,7 +118,7 @@ internal class CustomerUpdateParamsTest {
                         .addAccountingProvider(
                             AccountingProviderConfig.builder()
                                 .externalProviderId("external_provider_id")
-                                .providerType("provider_type")
+                                .providerType(AccountingProviderConfig.ProviderType.QUICKBOOKS)
                                 .build()
                         )
                         .excluded(true)
@@ -206,7 +206,7 @@ internal class CustomerUpdateParamsTest {
                     .addAccountingProvider(
                         AccountingProviderConfig.builder()
                             .externalProviderId("external_provider_id")
-                            .providerType("provider_type")
+                            .providerType(AccountingProviderConfig.ProviderType.QUICKBOOKS)
                             .build()
                     )
                     .excluded(true)
