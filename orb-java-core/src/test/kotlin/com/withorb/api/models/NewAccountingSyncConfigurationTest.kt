@@ -17,7 +17,7 @@ internal class NewAccountingSyncConfigurationTest {
                 .addAccountingProvider(
                     AccountingProviderConfig.builder()
                         .externalProviderId("external_provider_id")
-                        .providerType("provider_type")
+                        .providerType(AccountingProviderConfig.ProviderType.QUICKBOOKS)
                         .build()
                 )
                 .excluded(true)
@@ -27,7 +27,7 @@ internal class NewAccountingSyncConfigurationTest {
             .containsExactly(
                 AccountingProviderConfig.builder()
                     .externalProviderId("external_provider_id")
-                    .providerType("provider_type")
+                    .providerType(AccountingProviderConfig.ProviderType.QUICKBOOKS)
                     .build()
             )
         assertThat(newAccountingSyncConfiguration.excluded()).contains(true)
@@ -41,7 +41,7 @@ internal class NewAccountingSyncConfigurationTest {
                 .addAccountingProvider(
                     AccountingProviderConfig.builder()
                         .externalProviderId("external_provider_id")
-                        .providerType("provider_type")
+                        .providerType(AccountingProviderConfig.ProviderType.QUICKBOOKS)
                         .build()
                 )
                 .excluded(true)
