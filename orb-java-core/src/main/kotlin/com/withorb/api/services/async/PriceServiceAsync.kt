@@ -280,6 +280,21 @@ interface PriceServiceAsync {
 
     /** @see create */
     fun create(
+        matrixWithThresholdDiscounts: PriceCreateParams.Body.MatrixWithThresholdDiscounts,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(
+            PriceCreateParams.Body.ofMatrixWithThresholdDiscounts(matrixWithThresholdDiscounts),
+            requestOptions,
+        )
+
+    /** @see create */
+    fun create(
+        matrixWithThresholdDiscounts: PriceCreateParams.Body.MatrixWithThresholdDiscounts
+    ): CompletableFuture<Price> = create(matrixWithThresholdDiscounts, RequestOptions.none())
+
+    /** @see create */
+    fun create(
         tieredWithProration: NewFloatingTieredWithProrationPrice,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Price> =
@@ -954,6 +969,22 @@ interface PriceServiceAsync {
             matrixWithAllocation: NewFloatingMatrixWithAllocationPrice
         ): CompletableFuture<HttpResponseFor<Price>> =
             create(matrixWithAllocation, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            matrixWithThresholdDiscounts: PriceCreateParams.Body.MatrixWithThresholdDiscounts,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofMatrixWithThresholdDiscounts(matrixWithThresholdDiscounts),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            matrixWithThresholdDiscounts: PriceCreateParams.Body.MatrixWithThresholdDiscounts
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(matrixWithThresholdDiscounts, RequestOptions.none())
 
         /** @see create */
         fun create(
