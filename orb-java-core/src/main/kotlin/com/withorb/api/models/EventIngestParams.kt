@@ -174,36 +174,7 @@ import kotlin.jvm.optionals.getOrNull
  * but please give us a heads up if you’re changing either of these factors by an order of magnitude
  * from initial setup.
  *
- * ## Testing in debug mode
- * The ingestion API supports a debug mode, which returns additional verbose output to indicate
- * which event idempotency keys were newly ingested or duplicates from previous requests. To enable
- * this mode, mark `debug=true` as a query parameter.
- *
- * If `debug=true` is not specified, the response will only contain `validation_failed`. Orb will
- * still honor the idempotency guarantees set
- * [here](/events-and-metrics/event-ingestion#event-volume-and-concurrency) in all cases.
- *
- * We strongly recommend that you only use debug mode as part of testing your initial Orb
- * integration. Once you're ready to switch to production, disable debug mode to take advantage of
- * improved performance and maximal throughput.
- *
- * #### Example: ingestion response with `debug=true`
- *
- * ```json
- * {
- *   "debug": {
- *     "duplicate": [],
- *     "ingested": [
- *       "B7E83HDMfJPAunXW",
- *       "SJs5DQJ3TnwSqEZE",
- *       "8SivfDsNKwCeAXim"
- *     ]
- *   },
- *   "validation_failed": []
- * }
- * ```
- *
- * #### Example: ingestion response with `debug=false`
+ * #### Example: ingestion response
  *
  * ```json
  * {
@@ -226,8 +197,8 @@ private constructor(
      */
     fun backfillId(): Optional<String> = Optional.ofNullable(backfillId)
 
-    /** Flag to enable additional debug information in the endpoint response */
-    fun debug(): Optional<Boolean> = Optional.ofNullable(debug)
+    /** Pending Deprecation: Flag to enable additional debug information in the endpoint response */
+    @Deprecated("deprecated") fun debug(): Optional<Boolean> = Optional.ofNullable(debug)
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -292,18 +263,20 @@ private constructor(
         /** Alias for calling [Builder.backfillId] with `backfillId.orElse(null)`. */
         fun backfillId(backfillId: Optional<String>) = backfillId(backfillId.getOrNull())
 
-        /** Flag to enable additional debug information in the endpoint response */
-        fun debug(debug: Boolean?) = apply { this.debug = debug }
+        /**
+         * Pending Deprecation: Flag to enable additional debug information in the endpoint response
+         */
+        @Deprecated("deprecated") fun debug(debug: Boolean?) = apply { this.debug = debug }
 
         /**
          * Alias for [Builder.debug].
          *
          * This unboxed primitive overload exists for backwards compatibility.
          */
-        fun debug(debug: Boolean) = debug(debug as Boolean?)
+        @Deprecated("deprecated") fun debug(debug: Boolean) = debug(debug as Boolean?)
 
         /** Alias for calling [Builder.debug] with `debug.orElse(null)`. */
-        fun debug(debug: Optional<Boolean>) = debug(debug.getOrNull())
+        @Deprecated("deprecated") fun debug(debug: Optional<Boolean>) = debug(debug.getOrNull())
 
         /**
          * Sets the entire request body.
