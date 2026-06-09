@@ -105,6 +105,15 @@ private constructor(
     fun currency(): Optional<String> = body.currency()
 
     /**
+     * The Orb ID of the payment method to set as this customer's default. Pass `null` to clear the
+     * customer's default payment method.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun defaultPaymentMethodId(): Optional<String> = body.defaultPaymentMethodId()
+
+    /**
      * A valid customer email, to be used for invoicing and notifications.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
@@ -406,6 +415,14 @@ private constructor(
     fun _currency(): JsonField<String> = body._currency()
 
     /**
+     * Returns the raw JSON value of [defaultPaymentMethodId].
+     *
+     * Unlike [defaultPaymentMethodId], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    fun _defaultPaymentMethodId(): JsonField<String> = body._defaultPaymentMethodId()
+
+    /**
      * Returns the raw JSON value of [email].
      *
      * Unlike [email], this method doesn't throw if the JSON field has an unexpected type.
@@ -705,6 +722,32 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun currency(currency: JsonField<String>) = apply { body.currency(currency) }
+
+        /**
+         * The Orb ID of the payment method to set as this customer's default. Pass `null` to clear
+         * the customer's default payment method.
+         */
+        fun defaultPaymentMethodId(defaultPaymentMethodId: String?) = apply {
+            body.defaultPaymentMethodId(defaultPaymentMethodId)
+        }
+
+        /**
+         * Alias for calling [Builder.defaultPaymentMethodId] with
+         * `defaultPaymentMethodId.orElse(null)`.
+         */
+        fun defaultPaymentMethodId(defaultPaymentMethodId: Optional<String>) =
+            defaultPaymentMethodId(defaultPaymentMethodId.getOrNull())
+
+        /**
+         * Sets [Builder.defaultPaymentMethodId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.defaultPaymentMethodId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun defaultPaymentMethodId(defaultPaymentMethodId: JsonField<String>) = apply {
+            body.defaultPaymentMethodId(defaultPaymentMethodId)
+        }
 
         /** A valid customer email, to be used for invoicing and notifications. */
         fun email(email: String?) = apply { body.email(email) }
@@ -1378,6 +1421,7 @@ private constructor(
         private val autoIssuance: JsonField<Boolean>,
         private val billingAddress: JsonField<AddressInput>,
         private val currency: JsonField<String>,
+        private val defaultPaymentMethodId: JsonField<String>,
         private val email: JsonField<String>,
         private val emailDelivery: JsonField<Boolean>,
         private val externalCustomerId: JsonField<String>,
@@ -1415,6 +1459,9 @@ private constructor(
             @JsonProperty("currency")
             @ExcludeMissing
             currency: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("default_payment_method_id")
+            @ExcludeMissing
+            defaultPaymentMethodId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("email") @ExcludeMissing email: JsonField<String> = JsonMissing.of(),
             @JsonProperty("email_delivery")
             @ExcludeMissing
@@ -1457,6 +1504,7 @@ private constructor(
             autoIssuance,
             billingAddress,
             currency,
+            defaultPaymentMethodId,
             email,
             emailDelivery,
             externalCustomerId,
@@ -1527,6 +1575,16 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun currency(): Optional<String> = currency.getOptional("currency")
+
+        /**
+         * The Orb ID of the payment method to set as this customer's default. Pass `null` to clear
+         * the customer's default payment method.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun defaultPaymentMethodId(): Optional<String> =
+            defaultPaymentMethodId.getOptional("default_payment_method_id")
 
         /**
          * A valid customer email, to be used for invoicing and notifications.
@@ -1849,6 +1907,16 @@ private constructor(
         @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
 
         /**
+         * Returns the raw JSON value of [defaultPaymentMethodId].
+         *
+         * Unlike [defaultPaymentMethodId], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("default_payment_method_id")
+        @ExcludeMissing
+        fun _defaultPaymentMethodId(): JsonField<String> = defaultPaymentMethodId
+
+        /**
          * Returns the raw JSON value of [email].
          *
          * Unlike [email], this method doesn't throw if the JSON field has an unexpected type.
@@ -1993,6 +2061,7 @@ private constructor(
             private var autoIssuance: JsonField<Boolean> = JsonMissing.of()
             private var billingAddress: JsonField<AddressInput> = JsonMissing.of()
             private var currency: JsonField<String> = JsonMissing.of()
+            private var defaultPaymentMethodId: JsonField<String> = JsonMissing.of()
             private var email: JsonField<String> = JsonMissing.of()
             private var emailDelivery: JsonField<Boolean> = JsonMissing.of()
             private var externalCustomerId: JsonField<String> = JsonMissing.of()
@@ -2017,6 +2086,7 @@ private constructor(
                 autoIssuance = body.autoIssuance
                 billingAddress = body.billingAddress
                 currency = body.currency
+                defaultPaymentMethodId = body.defaultPaymentMethodId
                 email = body.email
                 emailDelivery = body.emailDelivery
                 externalCustomerId = body.externalCustomerId
@@ -2190,6 +2260,31 @@ private constructor(
              * supported value.
              */
             fun currency(currency: JsonField<String>) = apply { this.currency = currency }
+
+            /**
+             * The Orb ID of the payment method to set as this customer's default. Pass `null` to
+             * clear the customer's default payment method.
+             */
+            fun defaultPaymentMethodId(defaultPaymentMethodId: String?) =
+                defaultPaymentMethodId(JsonField.ofNullable(defaultPaymentMethodId))
+
+            /**
+             * Alias for calling [Builder.defaultPaymentMethodId] with
+             * `defaultPaymentMethodId.orElse(null)`.
+             */
+            fun defaultPaymentMethodId(defaultPaymentMethodId: Optional<String>) =
+                defaultPaymentMethodId(defaultPaymentMethodId.getOrNull())
+
+            /**
+             * Sets [Builder.defaultPaymentMethodId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.defaultPaymentMethodId] with a well-typed [String]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun defaultPaymentMethodId(defaultPaymentMethodId: JsonField<String>) = apply {
+                this.defaultPaymentMethodId = defaultPaymentMethodId
+            }
 
             /** A valid customer email, to be used for invoicing and notifications. */
             fun email(email: String?) = email(JsonField.ofNullable(email))
@@ -2752,6 +2847,7 @@ private constructor(
                     autoIssuance,
                     billingAddress,
                     currency,
+                    defaultPaymentMethodId,
                     email,
                     emailDelivery,
                     externalCustomerId,
@@ -2791,6 +2887,7 @@ private constructor(
             autoIssuance()
             billingAddress().ifPresent { it.validate() }
             currency()
+            defaultPaymentMethodId()
             email()
             emailDelivery()
             externalCustomerId()
@@ -2829,6 +2926,7 @@ private constructor(
                 (if (autoIssuance.asKnown().isPresent) 1 else 0) +
                 (billingAddress.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (currency.asKnown().isPresent) 1 else 0) +
+                (if (defaultPaymentMethodId.asKnown().isPresent) 1 else 0) +
                 (if (email.asKnown().isPresent) 1 else 0) +
                 (if (emailDelivery.asKnown().isPresent) 1 else 0) +
                 (if (externalCustomerId.asKnown().isPresent) 1 else 0) +
@@ -2855,6 +2953,7 @@ private constructor(
                 autoIssuance == other.autoIssuance &&
                 billingAddress == other.billingAddress &&
                 currency == other.currency &&
+                defaultPaymentMethodId == other.defaultPaymentMethodId &&
                 email == other.email &&
                 emailDelivery == other.emailDelivery &&
                 externalCustomerId == other.externalCustomerId &&
@@ -2879,6 +2978,7 @@ private constructor(
                 autoIssuance,
                 billingAddress,
                 currency,
+                defaultPaymentMethodId,
                 email,
                 emailDelivery,
                 externalCustomerId,
@@ -2899,7 +2999,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{accountingSyncConfiguration=$accountingSyncConfiguration, additionalEmails=$additionalEmails, autoCollection=$autoCollection, autoIssuance=$autoIssuance, billingAddress=$billingAddress, currency=$currency, email=$email, emailDelivery=$emailDelivery, externalCustomerId=$externalCustomerId, hierarchy=$hierarchy, metadata=$metadata, name=$name, paymentConfiguration=$paymentConfiguration, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, reportingConfiguration=$reportingConfiguration, shippingAddress=$shippingAddress, taxConfiguration=$taxConfiguration, taxId=$taxId, additionalProperties=$additionalProperties}"
+            "Body{accountingSyncConfiguration=$accountingSyncConfiguration, additionalEmails=$additionalEmails, autoCollection=$autoCollection, autoIssuance=$autoIssuance, billingAddress=$billingAddress, currency=$currency, defaultPaymentMethodId=$defaultPaymentMethodId, email=$email, emailDelivery=$emailDelivery, externalCustomerId=$externalCustomerId, hierarchy=$hierarchy, metadata=$metadata, name=$name, paymentConfiguration=$paymentConfiguration, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, reportingConfiguration=$reportingConfiguration, shippingAddress=$shippingAddress, taxConfiguration=$taxConfiguration, taxId=$taxId, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -3690,6 +3790,8 @@ private constructor(
 
             @JvmField val NETSUITE = of("netsuite")
 
+            @JvmField val ADYEN = of("adyen")
+
             @JvmStatic fun of(value: String) = PaymentProvider(JsonField.of(value))
         }
 
@@ -3700,6 +3802,7 @@ private constructor(
             STRIPE_CHARGE,
             STRIPE_INVOICE,
             NETSUITE,
+            ADYEN,
         }
 
         /**
@@ -3717,6 +3820,7 @@ private constructor(
             STRIPE_CHARGE,
             STRIPE_INVOICE,
             NETSUITE,
+            ADYEN,
             /**
              * An enum member indicating that [PaymentProvider] was instantiated with an unknown
              * value.
@@ -3738,6 +3842,7 @@ private constructor(
                 STRIPE_CHARGE -> Value.STRIPE_CHARGE
                 STRIPE_INVOICE -> Value.STRIPE_INVOICE
                 NETSUITE -> Value.NETSUITE
+                ADYEN -> Value.ADYEN
                 else -> Value._UNKNOWN
             }
 
@@ -3756,6 +3861,7 @@ private constructor(
                 STRIPE_CHARGE -> Known.STRIPE_CHARGE
                 STRIPE_INVOICE -> Known.STRIPE_INVOICE
                 NETSUITE -> Known.NETSUITE
+                ADYEN -> Known.ADYEN
                 else -> throw OrbInvalidDataException("Unknown PaymentProvider: $value")
             }
 

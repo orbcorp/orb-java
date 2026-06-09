@@ -62,6 +62,15 @@ private constructor(
     fun type(): Type = body.type()
 
     /**
+     * The case sensitive currency or custom pricing unit to use for grouped cost alerts. Required
+     * when grouping_keys is set.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun currency(): Optional<String> = body.currency()
+
+    /**
      * The property keys to group cost alerts by. Only applicable for cost_exceeded alerts.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
@@ -86,14 +95,6 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun priceFilters(): Optional<List<PriceFilter>> = body.priceFilters()
-
-    /**
-     * The pricing unit to use for grouped cost alerts. Required when grouping_keys is set.
-     *
-     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
-     *   responded with an unexpected value).
-     */
-    fun pricingUnitId(): Optional<String> = body.pricingUnitId()
 
     /**
      * Per-group threshold overrides. Each override maps a specific combination of grouping_keys
@@ -121,6 +122,13 @@ private constructor(
     fun _type(): JsonField<Type> = body._type()
 
     /**
+     * Returns the raw JSON value of [currency].
+     *
+     * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _currency(): JsonField<String> = body._currency()
+
+    /**
      * Returns the raw JSON value of [groupingKeys].
      *
      * Unlike [groupingKeys], this method doesn't throw if the JSON field has an unexpected type.
@@ -140,13 +148,6 @@ private constructor(
      * Unlike [priceFilters], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _priceFilters(): JsonField<List<PriceFilter>> = body._priceFilters()
-
-    /**
-     * Returns the raw JSON value of [pricingUnitId].
-     *
-     * Unlike [pricingUnitId], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _pricingUnitId(): JsonField<String> = body._pricingUnitId()
 
     /**
      * Returns the raw JSON value of [thresholdOverrides].
@@ -212,9 +213,9 @@ private constructor(
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [thresholds]
          * - [type]
+         * - [currency]
          * - [groupingKeys]
          * - [metricId]
-         * - [priceFilters]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -250,6 +251,23 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun type(type: JsonField<Type>) = apply { body.type(type) }
+
+        /**
+         * The case sensitive currency or custom pricing unit to use for grouped cost alerts.
+         * Required when grouping_keys is set.
+         */
+        fun currency(currency: String?) = apply { body.currency(currency) }
+
+        /** Alias for calling [Builder.currency] with `currency.orElse(null)`. */
+        fun currency(currency: Optional<String>) = currency(currency.getOrNull())
+
+        /**
+         * Sets [Builder.currency] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.currency] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun currency(currency: JsonField<String>) = apply { body.currency(currency) }
 
         /** The property keys to group cost alerts by. Only applicable for cost_exceeded alerts. */
         fun groupingKeys(groupingKeys: List<String>?) = apply { body.groupingKeys(groupingKeys) }
@@ -320,24 +338,6 @@ private constructor(
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
         fun addPriceFilter(priceFilter: PriceFilter) = apply { body.addPriceFilter(priceFilter) }
-
-        /** The pricing unit to use for grouped cost alerts. Required when grouping_keys is set. */
-        fun pricingUnitId(pricingUnitId: String?) = apply { body.pricingUnitId(pricingUnitId) }
-
-        /** Alias for calling [Builder.pricingUnitId] with `pricingUnitId.orElse(null)`. */
-        fun pricingUnitId(pricingUnitId: Optional<String>) =
-            pricingUnitId(pricingUnitId.getOrNull())
-
-        /**
-         * Sets [Builder.pricingUnitId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.pricingUnitId] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun pricingUnitId(pricingUnitId: JsonField<String>) = apply {
-            body.pricingUnitId(pricingUnitId)
-        }
 
         /**
          * Per-group threshold overrides. Each override maps a specific combination of grouping_keys
@@ -531,10 +531,10 @@ private constructor(
     private constructor(
         private val thresholds: JsonField<List<Threshold>>,
         private val type: JsonField<Type>,
+        private val currency: JsonField<String>,
         private val groupingKeys: JsonField<List<String>>,
         private val metricId: JsonField<String>,
         private val priceFilters: JsonField<List<PriceFilter>>,
-        private val pricingUnitId: JsonField<String>,
         private val thresholdOverrides: JsonField<List<ThresholdOverride>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -545,6 +545,9 @@ private constructor(
             @ExcludeMissing
             thresholds: JsonField<List<Threshold>> = JsonMissing.of(),
             @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+            @JsonProperty("currency")
+            @ExcludeMissing
+            currency: JsonField<String> = JsonMissing.of(),
             @JsonProperty("grouping_keys")
             @ExcludeMissing
             groupingKeys: JsonField<List<String>> = JsonMissing.of(),
@@ -554,19 +557,16 @@ private constructor(
             @JsonProperty("price_filters")
             @ExcludeMissing
             priceFilters: JsonField<List<PriceFilter>> = JsonMissing.of(),
-            @JsonProperty("pricing_unit_id")
-            @ExcludeMissing
-            pricingUnitId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("threshold_overrides")
             @ExcludeMissing
             thresholdOverrides: JsonField<List<ThresholdOverride>> = JsonMissing.of(),
         ) : this(
             thresholds,
             type,
+            currency,
             groupingKeys,
             metricId,
             priceFilters,
-            pricingUnitId,
             thresholdOverrides,
             mutableMapOf(),
         )
@@ -586,6 +586,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun type(): Type = type.getRequired("type")
+
+        /**
+         * The case sensitive currency or custom pricing unit to use for grouped cost alerts.
+         * Required when grouping_keys is set.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun currency(): Optional<String> = currency.getOptional("currency")
 
         /**
          * The property keys to group cost alerts by. Only applicable for cost_exceeded alerts.
@@ -612,14 +621,6 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun priceFilters(): Optional<List<PriceFilter>> = priceFilters.getOptional("price_filters")
-
-        /**
-         * The pricing unit to use for grouped cost alerts. Required when grouping_keys is set.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun pricingUnitId(): Optional<String> = pricingUnitId.getOptional("pricing_unit_id")
 
         /**
          * Per-group threshold overrides. Each override maps a specific combination of grouping_keys
@@ -650,6 +651,13 @@ private constructor(
         @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
         /**
+         * Returns the raw JSON value of [currency].
+         *
+         * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
+
+        /**
          * Returns the raw JSON value of [groupingKeys].
          *
          * Unlike [groupingKeys], this method doesn't throw if the JSON field has an unexpected
@@ -675,16 +683,6 @@ private constructor(
         @JsonProperty("price_filters")
         @ExcludeMissing
         fun _priceFilters(): JsonField<List<PriceFilter>> = priceFilters
-
-        /**
-         * Returns the raw JSON value of [pricingUnitId].
-         *
-         * Unlike [pricingUnitId], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("pricing_unit_id")
-        @ExcludeMissing
-        fun _pricingUnitId(): JsonField<String> = pricingUnitId
 
         /**
          * Returns the raw JSON value of [thresholdOverrides].
@@ -727,10 +725,10 @@ private constructor(
 
             private var thresholds: JsonField<MutableList<Threshold>>? = null
             private var type: JsonField<Type>? = null
+            private var currency: JsonField<String> = JsonMissing.of()
             private var groupingKeys: JsonField<MutableList<String>>? = null
             private var metricId: JsonField<String> = JsonMissing.of()
             private var priceFilters: JsonField<MutableList<PriceFilter>>? = null
-            private var pricingUnitId: JsonField<String> = JsonMissing.of()
             private var thresholdOverrides: JsonField<MutableList<ThresholdOverride>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -738,10 +736,10 @@ private constructor(
             internal fun from(body: Body) = apply {
                 thresholds = body.thresholds.map { it.toMutableList() }
                 type = body.type
+                currency = body.currency
                 groupingKeys = body.groupingKeys.map { it.toMutableList() }
                 metricId = body.metricId
                 priceFilters = body.priceFilters.map { it.toMutableList() }
-                pricingUnitId = body.pricingUnitId
                 thresholdOverrides = body.thresholdOverrides.map { it.toMutableList() }
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
@@ -783,6 +781,24 @@ private constructor(
              * value.
              */
             fun type(type: JsonField<Type>) = apply { this.type = type }
+
+            /**
+             * The case sensitive currency or custom pricing unit to use for grouped cost alerts.
+             * Required when grouping_keys is set.
+             */
+            fun currency(currency: String?) = currency(JsonField.ofNullable(currency))
+
+            /** Alias for calling [Builder.currency] with `currency.orElse(null)`. */
+            fun currency(currency: Optional<String>) = currency(currency.getOrNull())
+
+            /**
+             * Sets [Builder.currency] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.currency] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
             /**
              * The property keys to group cost alerts by. Only applicable for cost_exceeded alerts.
@@ -868,27 +884,6 @@ private constructor(
             }
 
             /**
-             * The pricing unit to use for grouped cost alerts. Required when grouping_keys is set.
-             */
-            fun pricingUnitId(pricingUnitId: String?) =
-                pricingUnitId(JsonField.ofNullable(pricingUnitId))
-
-            /** Alias for calling [Builder.pricingUnitId] with `pricingUnitId.orElse(null)`. */
-            fun pricingUnitId(pricingUnitId: Optional<String>) =
-                pricingUnitId(pricingUnitId.getOrNull())
-
-            /**
-             * Sets [Builder.pricingUnitId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.pricingUnitId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun pricingUnitId(pricingUnitId: JsonField<String>) = apply {
-                this.pricingUnitId = pricingUnitId
-            }
-
-            /**
              * Per-group threshold overrides. Each override maps a specific combination of
              * grouping_keys values to a list of thresholds that fully replaces the default
              * thresholds for that group. An empty thresholds list silences the group. Groups
@@ -964,10 +959,10 @@ private constructor(
                 Body(
                     checkRequired("thresholds", thresholds).map { it.toImmutable() },
                     checkRequired("type", type),
+                    currency,
                     (groupingKeys ?: JsonMissing.of()).map { it.toImmutable() },
                     metricId,
                     (priceFilters ?: JsonMissing.of()).map { it.toImmutable() },
-                    pricingUnitId,
                     (thresholdOverrides ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toMutableMap(),
                 )
@@ -991,10 +986,10 @@ private constructor(
 
             thresholds().forEach { it.validate() }
             type().validate()
+            currency()
             groupingKeys()
             metricId()
             priceFilters().ifPresent { it.forEach { it.validate() } }
-            pricingUnitId()
             thresholdOverrides().ifPresent { it.forEach { it.validate() } }
             validated = true
         }
@@ -1017,10 +1012,10 @@ private constructor(
         internal fun validity(): Int =
             (thresholds.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (type.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (currency.asKnown().isPresent) 1 else 0) +
                 (groupingKeys.asKnown().getOrNull()?.size ?: 0) +
                 (if (metricId.asKnown().isPresent) 1 else 0) +
                 (priceFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
-                (if (pricingUnitId.asKnown().isPresent) 1 else 0) +
                 (thresholdOverrides.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
         override fun equals(other: Any?): Boolean {
@@ -1031,10 +1026,10 @@ private constructor(
             return other is Body &&
                 thresholds == other.thresholds &&
                 type == other.type &&
+                currency == other.currency &&
                 groupingKeys == other.groupingKeys &&
                 metricId == other.metricId &&
                 priceFilters == other.priceFilters &&
-                pricingUnitId == other.pricingUnitId &&
                 thresholdOverrides == other.thresholdOverrides &&
                 additionalProperties == other.additionalProperties
         }
@@ -1043,10 +1038,10 @@ private constructor(
             Objects.hash(
                 thresholds,
                 type,
+                currency,
                 groupingKeys,
                 metricId,
                 priceFilters,
-                pricingUnitId,
                 thresholdOverrides,
                 additionalProperties,
             )
@@ -1055,7 +1050,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{thresholds=$thresholds, type=$type, groupingKeys=$groupingKeys, metricId=$metricId, priceFilters=$priceFilters, pricingUnitId=$pricingUnitId, thresholdOverrides=$thresholdOverrides, additionalProperties=$additionalProperties}"
+            "Body{thresholds=$thresholds, type=$type, currency=$currency, groupingKeys=$groupingKeys, metricId=$metricId, priceFilters=$priceFilters, thresholdOverrides=$thresholdOverrides, additionalProperties=$additionalProperties}"
     }
 
     /** The type of alert to create. This must be a valid alert type. */
