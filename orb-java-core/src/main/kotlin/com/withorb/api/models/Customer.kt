@@ -65,6 +65,7 @@ private constructor(
     private val timezone: JsonField<String>,
     private val accountingSyncConfiguration: JsonField<AccountingSyncConfiguration>,
     private val automaticTaxEnabled: JsonField<Boolean>,
+    private val defaultPaymentMethod: JsonField<DefaultPaymentMethod>,
     private val paymentConfiguration: JsonField<PaymentConfiguration>,
     private val reportingConfiguration: JsonField<ReportingConfiguration>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -123,6 +124,9 @@ private constructor(
         @JsonProperty("automatic_tax_enabled")
         @ExcludeMissing
         automaticTaxEnabled: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("default_payment_method")
+        @ExcludeMissing
+        defaultPaymentMethod: JsonField<DefaultPaymentMethod> = JsonMissing.of(),
         @JsonProperty("payment_configuration")
         @ExcludeMissing
         paymentConfiguration: JsonField<PaymentConfiguration> = JsonMissing.of(),
@@ -153,6 +157,7 @@ private constructor(
         timezone,
         accountingSyncConfiguration,
         automaticTaxEnabled,
+        defaultPaymentMethod,
         paymentConfiguration,
         reportingConfiguration,
         mutableMapOf(),
@@ -490,6 +495,19 @@ private constructor(
         automaticTaxEnabled.getOptional("automatic_tax_enabled")
 
     /**
+     * A payment method represents a customer's stored payment instrument held with an external
+     * payment provider (such as Adyen or Stripe).
+     *
+     * The serialization is intentionally minimal for now; provider-pulled details (e.g. card
+     * display metadata) will be added over time.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun defaultPaymentMethod(): Optional<DefaultPaymentMethod> =
+        defaultPaymentMethod.getOptional("default_payment_method")
+
+    /**
      * Payment configuration for the customer, applicable when using Orb Invoicing with a supported
      * payment provider such as Stripe.
      *
@@ -701,6 +719,16 @@ private constructor(
     fun _automaticTaxEnabled(): JsonField<Boolean> = automaticTaxEnabled
 
     /**
+     * Returns the raw JSON value of [defaultPaymentMethod].
+     *
+     * Unlike [defaultPaymentMethod], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("default_payment_method")
+    @ExcludeMissing
+    fun _defaultPaymentMethod(): JsonField<DefaultPaymentMethod> = defaultPaymentMethod
+
+    /**
      * Returns the raw JSON value of [paymentConfiguration].
      *
      * Unlike [paymentConfiguration], this method doesn't throw if the JSON field has an unexpected
@@ -792,6 +820,7 @@ private constructor(
         private var accountingSyncConfiguration: JsonField<AccountingSyncConfiguration> =
             JsonMissing.of()
         private var automaticTaxEnabled: JsonField<Boolean> = JsonMissing.of()
+        private var defaultPaymentMethod: JsonField<DefaultPaymentMethod> = JsonMissing.of()
         private var paymentConfiguration: JsonField<PaymentConfiguration> = JsonMissing.of()
         private var reportingConfiguration: JsonField<ReportingConfiguration> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -821,6 +850,7 @@ private constructor(
             timezone = customer.timezone
             accountingSyncConfiguration = customer.accountingSyncConfiguration
             automaticTaxEnabled = customer.automaticTaxEnabled
+            defaultPaymentMethod = customer.defaultPaymentMethod
             paymentConfiguration = customer.paymentConfiguration
             reportingConfiguration = customer.reportingConfiguration
             additionalProperties = customer.additionalProperties.toMutableMap()
@@ -1392,6 +1422,34 @@ private constructor(
         }
 
         /**
+         * A payment method represents a customer's stored payment instrument held with an external
+         * payment provider (such as Adyen or Stripe).
+         *
+         * The serialization is intentionally minimal for now; provider-pulled details (e.g. card
+         * display metadata) will be added over time.
+         */
+        fun defaultPaymentMethod(defaultPaymentMethod: DefaultPaymentMethod?) =
+            defaultPaymentMethod(JsonField.ofNullable(defaultPaymentMethod))
+
+        /**
+         * Alias for calling [Builder.defaultPaymentMethod] with
+         * `defaultPaymentMethod.orElse(null)`.
+         */
+        fun defaultPaymentMethod(defaultPaymentMethod: Optional<DefaultPaymentMethod>) =
+            defaultPaymentMethod(defaultPaymentMethod.getOrNull())
+
+        /**
+         * Sets [Builder.defaultPaymentMethod] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.defaultPaymentMethod] with a well-typed
+         * [DefaultPaymentMethod] value instead. This method is primarily for setting the field to
+         * an undocumented or not yet supported value.
+         */
+        fun defaultPaymentMethod(defaultPaymentMethod: JsonField<DefaultPaymentMethod>) = apply {
+            this.defaultPaymentMethod = defaultPaymentMethod
+        }
+
+        /**
          * Payment configuration for the customer, applicable when using Orb Invoicing with a
          * supported payment provider such as Stripe.
          */
@@ -1514,6 +1572,7 @@ private constructor(
                 checkRequired("timezone", timezone),
                 accountingSyncConfiguration,
                 automaticTaxEnabled,
+                defaultPaymentMethod,
                 paymentConfiguration,
                 reportingConfiguration,
                 additionalProperties.toMutableMap(),
@@ -1558,6 +1617,7 @@ private constructor(
         timezone()
         accountingSyncConfiguration().ifPresent { it.validate() }
         automaticTaxEnabled()
+        defaultPaymentMethod().ifPresent { it.validate() }
         paymentConfiguration().ifPresent { it.validate() }
         reportingConfiguration().ifPresent { it.validate() }
         validated = true
@@ -1601,6 +1661,7 @@ private constructor(
             (if (timezone.asKnown().isPresent) 1 else 0) +
             (accountingSyncConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
             (if (automaticTaxEnabled.asKnown().isPresent) 1 else 0) +
+            (defaultPaymentMethod.asKnown().getOrNull()?.validity() ?: 0) +
             (paymentConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
             (reportingConfiguration.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -1971,6 +2032,8 @@ private constructor(
 
             @JvmField val NETSUITE = of("netsuite")
 
+            @JvmField val ADYEN = of("adyen")
+
             @JvmStatic fun of(value: String) = PaymentProvider(JsonField.of(value))
         }
 
@@ -1981,6 +2044,7 @@ private constructor(
             STRIPE_CHARGE,
             STRIPE_INVOICE,
             NETSUITE,
+            ADYEN,
         }
 
         /**
@@ -1998,6 +2062,7 @@ private constructor(
             STRIPE_CHARGE,
             STRIPE_INVOICE,
             NETSUITE,
+            ADYEN,
             /**
              * An enum member indicating that [PaymentProvider] was instantiated with an unknown
              * value.
@@ -2019,6 +2084,7 @@ private constructor(
                 STRIPE_CHARGE -> Value.STRIPE_CHARGE
                 STRIPE_INVOICE -> Value.STRIPE_INVOICE
                 NETSUITE -> Value.NETSUITE
+                ADYEN -> Value.ADYEN
                 else -> Value._UNKNOWN
             }
 
@@ -2037,6 +2103,7 @@ private constructor(
                 STRIPE_CHARGE -> Known.STRIPE_CHARGE
                 STRIPE_INVOICE -> Known.STRIPE_INVOICE
                 NETSUITE -> Known.NETSUITE
+                ADYEN -> Known.ADYEN
                 else -> throw OrbInvalidDataException("Unknown PaymentProvider: $value")
             }
 
@@ -2706,6 +2773,632 @@ private constructor(
 
         override fun toString() =
             "AccountingSyncConfiguration{accountingProviders=$accountingProviders, excluded=$excluded, additionalProperties=$additionalProperties}"
+    }
+
+    /**
+     * A payment method represents a customer's stored payment instrument held with an external
+     * payment provider (such as Adyen or Stripe).
+     *
+     * The serialization is intentionally minimal for now; provider-pulled details (e.g. card
+     * display metadata) will be added over time.
+     */
+    class DefaultPaymentMethod
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val id: JsonField<String>,
+        private val createdAt: JsonField<OffsetDateTime>,
+        private val customerId: JsonField<String>,
+        private val default_: JsonField<Boolean>,
+        private val externalPaymentMethodId: JsonField<String>,
+        private val paymentMethodType: JsonField<PaymentMethodType>,
+        private val providerType: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("created_at")
+            @ExcludeMissing
+            createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("customer_id")
+            @ExcludeMissing
+            customerId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("default")
+            @ExcludeMissing
+            default_: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("external_payment_method_id")
+            @ExcludeMissing
+            externalPaymentMethodId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("payment_method_type")
+            @ExcludeMissing
+            paymentMethodType: JsonField<PaymentMethodType> = JsonMissing.of(),
+            @JsonProperty("provider_type")
+            @ExcludeMissing
+            providerType: JsonField<String> = JsonMissing.of(),
+        ) : this(
+            id,
+            createdAt,
+            customerId,
+            default_,
+            externalPaymentMethodId,
+            paymentMethodType,
+            providerType,
+            mutableMapOf(),
+        )
+
+        /**
+         * The Orb-assigned unique identifier for the payment method.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun id(): String = id.getRequired("id")
+
+        /**
+         * The time at which the payment method was created.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
+
+        /**
+         * The ID of the Orb customer this payment method is attached to.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun customerId(): String = customerId.getRequired("customer_id")
+
+        /**
+         * Whether this is the customer's default payment method.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun default_(): Boolean = default_.getRequired("default")
+
+        /**
+         * The identifier of this payment method in the external payment provider.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun externalPaymentMethodId(): String =
+            externalPaymentMethodId.getRequired("external_payment_method_id")
+
+        /**
+         * The type of the underlying payment instrument, e.g. `card` or `us_bank_account`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun paymentMethodType(): PaymentMethodType =
+            paymentMethodType.getRequired("payment_method_type")
+
+        /**
+         * The external payment provider this method belongs to, derived from the linked payment
+         * gateway connection (e.g. `adyen` or `stripe`). Null if the connection has been removed.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun providerType(): Optional<String> = providerType.getOptional("provider_type")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [createdAt].
+         *
+         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        fun _createdAt(): JsonField<OffsetDateTime> = createdAt
+
+        /**
+         * Returns the raw JSON value of [customerId].
+         *
+         * Unlike [customerId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
+
+        /**
+         * Returns the raw JSON value of [default_].
+         *
+         * Unlike [default_], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("default") @ExcludeMissing fun _default_(): JsonField<Boolean> = default_
+
+        /**
+         * Returns the raw JSON value of [externalPaymentMethodId].
+         *
+         * Unlike [externalPaymentMethodId], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("external_payment_method_id")
+        @ExcludeMissing
+        fun _externalPaymentMethodId(): JsonField<String> = externalPaymentMethodId
+
+        /**
+         * Returns the raw JSON value of [paymentMethodType].
+         *
+         * Unlike [paymentMethodType], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("payment_method_type")
+        @ExcludeMissing
+        fun _paymentMethodType(): JsonField<PaymentMethodType> = paymentMethodType
+
+        /**
+         * Returns the raw JSON value of [providerType].
+         *
+         * Unlike [providerType], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("provider_type")
+        @ExcludeMissing
+        fun _providerType(): JsonField<String> = providerType
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [DefaultPaymentMethod].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .createdAt()
+             * .customerId()
+             * .default_()
+             * .externalPaymentMethodId()
+             * .paymentMethodType()
+             * .providerType()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [DefaultPaymentMethod]. */
+        class Builder internal constructor() {
+
+            private var id: JsonField<String>? = null
+            private var createdAt: JsonField<OffsetDateTime>? = null
+            private var customerId: JsonField<String>? = null
+            private var default_: JsonField<Boolean>? = null
+            private var externalPaymentMethodId: JsonField<String>? = null
+            private var paymentMethodType: JsonField<PaymentMethodType>? = null
+            private var providerType: JsonField<String>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(defaultPaymentMethod: DefaultPaymentMethod) = apply {
+                id = defaultPaymentMethod.id
+                createdAt = defaultPaymentMethod.createdAt
+                customerId = defaultPaymentMethod.customerId
+                default_ = defaultPaymentMethod.default_
+                externalPaymentMethodId = defaultPaymentMethod.externalPaymentMethodId
+                paymentMethodType = defaultPaymentMethod.paymentMethodType
+                providerType = defaultPaymentMethod.providerType
+                additionalProperties = defaultPaymentMethod.additionalProperties.toMutableMap()
+            }
+
+            /** The Orb-assigned unique identifier for the payment method. */
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            /** The time at which the payment method was created. */
+            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+            /**
+             * Sets [Builder.createdAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
+                this.createdAt = createdAt
+            }
+
+            /** The ID of the Orb customer this payment method is attached to. */
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+            /**
+             * Sets [Builder.customerId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.customerId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
+
+            /** Whether this is the customer's default payment method. */
+            fun default_(default_: Boolean) = default_(JsonField.of(default_))
+
+            /**
+             * Sets [Builder.default_] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.default_] with a well-typed [Boolean] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun default_(default_: JsonField<Boolean>) = apply { this.default_ = default_ }
+
+            /** The identifier of this payment method in the external payment provider. */
+            fun externalPaymentMethodId(externalPaymentMethodId: String) =
+                externalPaymentMethodId(JsonField.of(externalPaymentMethodId))
+
+            /**
+             * Sets [Builder.externalPaymentMethodId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.externalPaymentMethodId] with a well-typed [String]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun externalPaymentMethodId(externalPaymentMethodId: JsonField<String>) = apply {
+                this.externalPaymentMethodId = externalPaymentMethodId
+            }
+
+            /** The type of the underlying payment instrument, e.g. `card` or `us_bank_account`. */
+            fun paymentMethodType(paymentMethodType: PaymentMethodType) =
+                paymentMethodType(JsonField.of(paymentMethodType))
+
+            /**
+             * Sets [Builder.paymentMethodType] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.paymentMethodType] with a well-typed
+             * [PaymentMethodType] value instead. This method is primarily for setting the field to
+             * an undocumented or not yet supported value.
+             */
+            fun paymentMethodType(paymentMethodType: JsonField<PaymentMethodType>) = apply {
+                this.paymentMethodType = paymentMethodType
+            }
+
+            /**
+             * The external payment provider this method belongs to, derived from the linked payment
+             * gateway connection (e.g. `adyen` or `stripe`). Null if the connection has been
+             * removed.
+             */
+            fun providerType(providerType: String?) =
+                providerType(JsonField.ofNullable(providerType))
+
+            /** Alias for calling [Builder.providerType] with `providerType.orElse(null)`. */
+            fun providerType(providerType: Optional<String>) =
+                providerType(providerType.getOrNull())
+
+            /**
+             * Sets [Builder.providerType] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.providerType] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun providerType(providerType: JsonField<String>) = apply {
+                this.providerType = providerType
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [DefaultPaymentMethod].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .createdAt()
+             * .customerId()
+             * .default_()
+             * .externalPaymentMethodId()
+             * .paymentMethodType()
+             * .providerType()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): DefaultPaymentMethod =
+                DefaultPaymentMethod(
+                    checkRequired("id", id),
+                    checkRequired("createdAt", createdAt),
+                    checkRequired("customerId", customerId),
+                    checkRequired("default_", default_),
+                    checkRequired("externalPaymentMethodId", externalPaymentMethodId),
+                    checkRequired("paymentMethodType", paymentMethodType),
+                    checkRequired("providerType", providerType),
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
+        fun validate(): DefaultPaymentMethod = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            createdAt()
+            customerId()
+            default_()
+            externalPaymentMethodId()
+            paymentMethodType().validate()
+            providerType()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: OrbInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (if (createdAt.asKnown().isPresent) 1 else 0) +
+                (if (customerId.asKnown().isPresent) 1 else 0) +
+                (if (default_.asKnown().isPresent) 1 else 0) +
+                (if (externalPaymentMethodId.asKnown().isPresent) 1 else 0) +
+                (paymentMethodType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (providerType.asKnown().isPresent) 1 else 0)
+
+        /** The type of the underlying payment instrument, e.g. `card` or `us_bank_account`. */
+        class PaymentMethodType
+        @JsonCreator
+        private constructor(private val value: JsonField<String>) : Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val CARD = of("card")
+
+                @JvmField val US_BANK_ACCOUNT = of("us_bank_account")
+
+                @JvmField val LINK = of("link")
+
+                @JvmField val AMAZON_PAY = of("amazon_pay")
+
+                @JvmField val CRYPTO = of("crypto")
+
+                @JvmStatic fun of(value: String) = PaymentMethodType(JsonField.of(value))
+            }
+
+            /** An enum containing [PaymentMethodType]'s known values. */
+            enum class Known {
+                CARD,
+                US_BANK_ACCOUNT,
+                LINK,
+                AMAZON_PAY,
+                CRYPTO,
+            }
+
+            /**
+             * An enum containing [PaymentMethodType]'s known values, as well as an [_UNKNOWN]
+             * member.
+             *
+             * An instance of [PaymentMethodType] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                CARD,
+                US_BANK_ACCOUNT,
+                LINK,
+                AMAZON_PAY,
+                CRYPTO,
+                /**
+                 * An enum member indicating that [PaymentMethodType] was instantiated with an
+                 * unknown value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    CARD -> Value.CARD
+                    US_BANK_ACCOUNT -> Value.US_BANK_ACCOUNT
+                    LINK -> Value.LINK
+                    AMAZON_PAY -> Value.AMAZON_PAY
+                    CRYPTO -> Value.CRYPTO
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws OrbInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    CARD -> Known.CARD
+                    US_BANK_ACCOUNT -> Known.US_BANK_ACCOUNT
+                    LINK -> Known.LINK
+                    AMAZON_PAY -> Known.AMAZON_PAY
+                    CRYPTO -> Known.CRYPTO
+                    else -> throw OrbInvalidDataException("Unknown PaymentMethodType: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws OrbInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow { OrbInvalidDataException("Value is not a String") }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws OrbInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
+             */
+            fun validate(): PaymentMethodType = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is PaymentMethodType && value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is DefaultPaymentMethod &&
+                id == other.id &&
+                createdAt == other.createdAt &&
+                customerId == other.customerId &&
+                default_ == other.default_ &&
+                externalPaymentMethodId == other.externalPaymentMethodId &&
+                paymentMethodType == other.paymentMethodType &&
+                providerType == other.providerType &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                createdAt,
+                customerId,
+                default_,
+                externalPaymentMethodId,
+                paymentMethodType,
+                providerType,
+                additionalProperties,
+            )
+        }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "DefaultPaymentMethod{id=$id, createdAt=$createdAt, customerId=$customerId, default_=$default_, externalPaymentMethodId=$externalPaymentMethodId, paymentMethodType=$paymentMethodType, providerType=$providerType, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -3545,6 +4238,7 @@ private constructor(
             timezone == other.timezone &&
             accountingSyncConfiguration == other.accountingSyncConfiguration &&
             automaticTaxEnabled == other.automaticTaxEnabled &&
+            defaultPaymentMethod == other.defaultPaymentMethod &&
             paymentConfiguration == other.paymentConfiguration &&
             reportingConfiguration == other.reportingConfiguration &&
             additionalProperties == other.additionalProperties
@@ -3575,6 +4269,7 @@ private constructor(
             timezone,
             accountingSyncConfiguration,
             automaticTaxEnabled,
+            defaultPaymentMethod,
             paymentConfiguration,
             reportingConfiguration,
             additionalProperties,
@@ -3584,5 +4279,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Customer{id=$id, additionalEmails=$additionalEmails, autoCollection=$autoCollection, autoIssuance=$autoIssuance, balance=$balance, billingAddress=$billingAddress, createdAt=$createdAt, currency=$currency, email=$email, emailDelivery=$emailDelivery, exemptFromAutomatedTax=$exemptFromAutomatedTax, externalCustomerId=$externalCustomerId, hierarchy=$hierarchy, metadata=$metadata, name=$name, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, portalUrl=$portalUrl, shippingAddress=$shippingAddress, taxId=$taxId, timezone=$timezone, accountingSyncConfiguration=$accountingSyncConfiguration, automaticTaxEnabled=$automaticTaxEnabled, paymentConfiguration=$paymentConfiguration, reportingConfiguration=$reportingConfiguration, additionalProperties=$additionalProperties}"
+        "Customer{id=$id, additionalEmails=$additionalEmails, autoCollection=$autoCollection, autoIssuance=$autoIssuance, balance=$balance, billingAddress=$billingAddress, createdAt=$createdAt, currency=$currency, email=$email, emailDelivery=$emailDelivery, exemptFromAutomatedTax=$exemptFromAutomatedTax, externalCustomerId=$externalCustomerId, hierarchy=$hierarchy, metadata=$metadata, name=$name, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, portalUrl=$portalUrl, shippingAddress=$shippingAddress, taxId=$taxId, timezone=$timezone, accountingSyncConfiguration=$accountingSyncConfiguration, automaticTaxEnabled=$automaticTaxEnabled, defaultPaymentMethod=$defaultPaymentMethod, paymentConfiguration=$paymentConfiguration, reportingConfiguration=$reportingConfiguration, additionalProperties=$additionalProperties}"
 }

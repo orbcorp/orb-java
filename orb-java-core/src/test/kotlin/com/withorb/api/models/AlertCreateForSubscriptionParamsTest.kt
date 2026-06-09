@@ -14,6 +14,7 @@ internal class AlertCreateForSubscriptionParamsTest {
             .subscriptionId("subscription_id")
             .addThreshold(Threshold.builder().value(0.0).build())
             .type(AlertCreateForSubscriptionParams.Type.USAGE_EXCEEDED)
+            .currency("currency")
             .addGroupingKey("string")
             .metricId("metric_id")
             .addPriceFilter(
@@ -23,7 +24,6 @@ internal class AlertCreateForSubscriptionParamsTest {
                     .addValue("string")
                     .build()
             )
-            .pricingUnitId("pricing_unit_id")
             .addThresholdOverride(
                 AlertCreateForSubscriptionParams.ThresholdOverride.builder()
                     .addGroupValue("string")
@@ -54,6 +54,7 @@ internal class AlertCreateForSubscriptionParamsTest {
                 .subscriptionId("subscription_id")
                 .addThreshold(Threshold.builder().value(0.0).build())
                 .type(AlertCreateForSubscriptionParams.Type.USAGE_EXCEEDED)
+                .currency("currency")
                 .addGroupingKey("string")
                 .metricId("metric_id")
                 .addPriceFilter(
@@ -63,7 +64,6 @@ internal class AlertCreateForSubscriptionParamsTest {
                         .addValue("string")
                         .build()
                 )
-                .pricingUnitId("pricing_unit_id")
                 .addThresholdOverride(
                     AlertCreateForSubscriptionParams.ThresholdOverride.builder()
                         .addGroupValue("string")
@@ -76,6 +76,7 @@ internal class AlertCreateForSubscriptionParamsTest {
 
         assertThat(body.thresholds()).containsExactly(Threshold.builder().value(0.0).build())
         assertThat(body.type()).isEqualTo(AlertCreateForSubscriptionParams.Type.USAGE_EXCEEDED)
+        assertThat(body.currency()).contains("currency")
         assertThat(body.groupingKeys().getOrNull()).containsExactly("string")
         assertThat(body.metricId()).contains("metric_id")
         assertThat(body.priceFilters().getOrNull())
@@ -86,7 +87,6 @@ internal class AlertCreateForSubscriptionParamsTest {
                     .addValue("string")
                     .build()
             )
-        assertThat(body.pricingUnitId()).contains("pricing_unit_id")
         assertThat(body.thresholdOverrides().getOrNull())
             .containsExactly(
                 AlertCreateForSubscriptionParams.ThresholdOverride.builder()
