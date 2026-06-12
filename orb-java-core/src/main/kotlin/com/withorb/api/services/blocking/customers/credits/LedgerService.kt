@@ -170,8 +170,8 @@ interface LedgerService {
      * }
      * ```
      *
-     * Note that by default, Orb will always first increment any _negative_ balance in existing
-     * blocks before adding the remaining amount to the desired credit block.
+     * Note that an `increment` entry always creates a new credit block (defined by the optional
+     * `effective_date` and `expiry_date`); it never modifies an existing block.
      *
      * ### Invoicing for credits
      * By default, Orb manipulates the credit ledger but does not charge for credits. However, if
@@ -307,8 +307,8 @@ interface LedgerService {
      * }
      * ```
      *
-     * Note that by default, Orb will always first increment any _negative_ balance in existing
-     * blocks before adding the remaining amount to the desired credit block.
+     * Note that an `increment` entry always creates a new credit block (defined by the optional
+     * `effective_date` and `expiry_date`); it never modifies an existing block.
      *
      * ### Invoicing for credits
      * By default, Orb manipulates the credit ledger but does not charge for credits. However, if
