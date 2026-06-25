@@ -2,6 +2,7 @@
 
 package com.withorb.api.models
 
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -12,6 +13,19 @@ internal class AlertUpdateParamsTest {
         AlertUpdateParams.builder()
             .alertConfigurationId("alert_configuration_id")
             .addThreshold(Threshold.builder().value(0.0).build())
+            .addPriceFilter(
+                AlertUpdateParams.PriceFilter.builder()
+                    .field(AlertUpdateParams.PriceFilter.Field.PRICE_ID)
+                    .operator(AlertUpdateParams.PriceFilter.Operator.INCLUDES)
+                    .addValue("string")
+                    .build()
+            )
+            .addThresholdOverride(
+                AlertUpdateParams.ThresholdOverride.builder()
+                    .addGroupValue("string")
+                    .addThreshold(Threshold.builder().value(0.0).build())
+                    .build()
+            )
             .build()
     }
 
@@ -30,6 +44,47 @@ internal class AlertUpdateParamsTest {
 
     @Test
     fun body() {
+        val params =
+            AlertUpdateParams.builder()
+                .alertConfigurationId("alert_configuration_id")
+                .addThreshold(Threshold.builder().value(0.0).build())
+                .addPriceFilter(
+                    AlertUpdateParams.PriceFilter.builder()
+                        .field(AlertUpdateParams.PriceFilter.Field.PRICE_ID)
+                        .operator(AlertUpdateParams.PriceFilter.Operator.INCLUDES)
+                        .addValue("string")
+                        .build()
+                )
+                .addThresholdOverride(
+                    AlertUpdateParams.ThresholdOverride.builder()
+                        .addGroupValue("string")
+                        .addThreshold(Threshold.builder().value(0.0).build())
+                        .build()
+                )
+                .build()
+
+        val body = params._body()
+
+        assertThat(body.thresholds()).containsExactly(Threshold.builder().value(0.0).build())
+        assertThat(body.priceFilters().getOrNull())
+            .containsExactly(
+                AlertUpdateParams.PriceFilter.builder()
+                    .field(AlertUpdateParams.PriceFilter.Field.PRICE_ID)
+                    .operator(AlertUpdateParams.PriceFilter.Operator.INCLUDES)
+                    .addValue("string")
+                    .build()
+            )
+        assertThat(body.thresholdOverrides().getOrNull())
+            .containsExactly(
+                AlertUpdateParams.ThresholdOverride.builder()
+                    .addGroupValue("string")
+                    .addThreshold(Threshold.builder().value(0.0).build())
+                    .build()
+            )
+    }
+
+    @Test
+    fun bodyWithoutOptionalFields() {
         val params =
             AlertUpdateParams.builder()
                 .alertConfigurationId("alert_configuration_id")
