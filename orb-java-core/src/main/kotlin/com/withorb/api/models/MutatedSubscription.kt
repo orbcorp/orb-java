@@ -38,6 +38,7 @@ private constructor(
     private val activePlanPhaseOrder: JsonField<Long>,
     private val adjustmentIntervals: JsonField<List<AdjustmentInterval>>,
     private val autoCollection: JsonField<Boolean>,
+    private val autoIssuance: JsonField<Boolean>,
     private val billingCycleAnchorConfiguration: JsonField<BillingCycleAnchorConfiguration>,
     private val billingCycleDay: JsonField<Long>,
     private val createdAt: JsonField<OffsetDateTime>,
@@ -77,6 +78,9 @@ private constructor(
         @JsonProperty("auto_collection")
         @ExcludeMissing
         autoCollection: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("auto_issuance")
+        @ExcludeMissing
+        autoIssuance: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("billing_cycle_anchor_configuration")
         @ExcludeMissing
         billingCycleAnchorConfiguration: JsonField<BillingCycleAnchorConfiguration> =
@@ -143,6 +147,7 @@ private constructor(
         activePlanPhaseOrder,
         adjustmentIntervals,
         autoCollection,
+        autoIssuance,
         billingCycleAnchorConfiguration,
         billingCycleDay,
         createdAt,
@@ -204,6 +209,16 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun autoCollection(): Optional<Boolean> = autoCollection.getOptional("auto_collection")
+
+    /**
+     * Determines whether invoices for this subscription will be automatically issued. This resolves
+     * the effective setting for the subscription: a subscription-level override if set, otherwise
+     * the customer-level setting, otherwise the account-level default.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun autoIssuance(): Optional<Boolean> = autoIssuance.getOptional("auto_issuance")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -467,6 +482,15 @@ private constructor(
     fun _autoCollection(): JsonField<Boolean> = autoCollection
 
     /**
+     * Returns the raw JSON value of [autoIssuance].
+     *
+     * Unlike [autoIssuance], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("auto_issuance")
+    @ExcludeMissing
+    fun _autoIssuance(): JsonField<Boolean> = autoIssuance
+
+    /**
      * Returns the raw JSON value of [billingCycleAnchorConfiguration].
      *
      * Unlike [billingCycleAnchorConfiguration], this method doesn't throw if the JSON field has an
@@ -708,6 +732,7 @@ private constructor(
          * .activePlanPhaseOrder()
          * .adjustmentIntervals()
          * .autoCollection()
+         * .autoIssuance()
          * .billingCycleAnchorConfiguration()
          * .billingCycleDay()
          * .createdAt()
@@ -743,6 +768,7 @@ private constructor(
         private var activePlanPhaseOrder: JsonField<Long>? = null
         private var adjustmentIntervals: JsonField<MutableList<AdjustmentInterval>>? = null
         private var autoCollection: JsonField<Boolean>? = null
+        private var autoIssuance: JsonField<Boolean>? = null
         private var billingCycleAnchorConfiguration: JsonField<BillingCycleAnchorConfiguration>? =
             null
         private var billingCycleDay: JsonField<Long>? = null
@@ -778,6 +804,7 @@ private constructor(
             activePlanPhaseOrder = mutatedSubscription.activePlanPhaseOrder
             adjustmentIntervals = mutatedSubscription.adjustmentIntervals.map { it.toMutableList() }
             autoCollection = mutatedSubscription.autoCollection
+            autoIssuance = mutatedSubscription.autoIssuance
             billingCycleAnchorConfiguration = mutatedSubscription.billingCycleAnchorConfiguration
             billingCycleDay = mutatedSubscription.billingCycleDay
             createdAt = mutatedSubscription.createdAt
@@ -904,6 +931,34 @@ private constructor(
          */
         fun autoCollection(autoCollection: JsonField<Boolean>) = apply {
             this.autoCollection = autoCollection
+        }
+
+        /**
+         * Determines whether invoices for this subscription will be automatically issued. This
+         * resolves the effective setting for the subscription: a subscription-level override if
+         * set, otherwise the customer-level setting, otherwise the account-level default.
+         */
+        fun autoIssuance(autoIssuance: Boolean?) = autoIssuance(JsonField.ofNullable(autoIssuance))
+
+        /**
+         * Alias for [Builder.autoIssuance].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun autoIssuance(autoIssuance: Boolean) = autoIssuance(autoIssuance as Boolean?)
+
+        /** Alias for calling [Builder.autoIssuance] with `autoIssuance.orElse(null)`. */
+        fun autoIssuance(autoIssuance: Optional<Boolean>) = autoIssuance(autoIssuance.getOrNull())
+
+        /**
+         * Sets [Builder.autoIssuance] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.autoIssuance] with a well-typed [Boolean] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun autoIssuance(autoIssuance: JsonField<Boolean>) = apply {
+            this.autoIssuance = autoIssuance
         }
 
         fun billingCycleAnchorConfiguration(
@@ -1462,6 +1517,7 @@ private constructor(
          * .activePlanPhaseOrder()
          * .adjustmentIntervals()
          * .autoCollection()
+         * .autoIssuance()
          * .billingCycleAnchorConfiguration()
          * .billingCycleDay()
          * .createdAt()
@@ -1495,6 +1551,7 @@ private constructor(
                 checkRequired("activePlanPhaseOrder", activePlanPhaseOrder),
                 checkRequired("adjustmentIntervals", adjustmentIntervals).map { it.toImmutable() },
                 checkRequired("autoCollection", autoCollection),
+                checkRequired("autoIssuance", autoIssuance),
                 checkRequired("billingCycleAnchorConfiguration", billingCycleAnchorConfiguration),
                 checkRequired("billingCycleDay", billingCycleDay),
                 checkRequired("createdAt", createdAt),
@@ -1544,6 +1601,7 @@ private constructor(
         activePlanPhaseOrder()
         adjustmentIntervals().forEach { it.validate() }
         autoCollection()
+        autoIssuance()
         billingCycleAnchorConfiguration().validate()
         billingCycleDay()
         createdAt()
@@ -1590,6 +1648,7 @@ private constructor(
             (if (activePlanPhaseOrder.asKnown().isPresent) 1 else 0) +
             (adjustmentIntervals.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (autoCollection.asKnown().isPresent) 1 else 0) +
+            (if (autoIssuance.asKnown().isPresent) 1 else 0) +
             (billingCycleAnchorConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
             (if (billingCycleDay.asKnown().isPresent) 1 else 0) +
             (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -3494,6 +3553,7 @@ private constructor(
             activePlanPhaseOrder == other.activePlanPhaseOrder &&
             adjustmentIntervals == other.adjustmentIntervals &&
             autoCollection == other.autoCollection &&
+            autoIssuance == other.autoIssuance &&
             billingCycleAnchorConfiguration == other.billingCycleAnchorConfiguration &&
             billingCycleDay == other.billingCycleDay &&
             createdAt == other.createdAt &&
@@ -3527,6 +3587,7 @@ private constructor(
             activePlanPhaseOrder,
             adjustmentIntervals,
             autoCollection,
+            autoIssuance,
             billingCycleAnchorConfiguration,
             billingCycleDay,
             createdAt,
@@ -3558,5 +3619,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "MutatedSubscription{id=$id, activePlanPhaseOrder=$activePlanPhaseOrder, adjustmentIntervals=$adjustmentIntervals, autoCollection=$autoCollection, billingCycleAnchorConfiguration=$billingCycleAnchorConfiguration, billingCycleDay=$billingCycleDay, createdAt=$createdAt, currentBillingPeriodEndDate=$currentBillingPeriodEndDate, currentBillingPeriodStartDate=$currentBillingPeriodStartDate, customer=$customer, defaultInvoiceMemo=$defaultInvoiceMemo, discountIntervals=$discountIntervals, endDate=$endDate, fixedFeeQuantitySchedule=$fixedFeeQuantitySchedule, invoicingThreshold=$invoicingThreshold, maximumIntervals=$maximumIntervals, metadata=$metadata, minimumIntervals=$minimumIntervals, name=$name, netTerms=$netTerms, pendingSubscriptionChange=$pendingSubscriptionChange, plan=$plan, priceIntervals=$priceIntervals, redeemedCoupon=$redeemedCoupon, startDate=$startDate, status=$status, trialInfo=$trialInfo, changedResources=$changedResources, additionalProperties=$additionalProperties}"
+        "MutatedSubscription{id=$id, activePlanPhaseOrder=$activePlanPhaseOrder, adjustmentIntervals=$adjustmentIntervals, autoCollection=$autoCollection, autoIssuance=$autoIssuance, billingCycleAnchorConfiguration=$billingCycleAnchorConfiguration, billingCycleDay=$billingCycleDay, createdAt=$createdAt, currentBillingPeriodEndDate=$currentBillingPeriodEndDate, currentBillingPeriodStartDate=$currentBillingPeriodStartDate, customer=$customer, defaultInvoiceMemo=$defaultInvoiceMemo, discountIntervals=$discountIntervals, endDate=$endDate, fixedFeeQuantitySchedule=$fixedFeeQuantitySchedule, invoicingThreshold=$invoicingThreshold, maximumIntervals=$maximumIntervals, metadata=$metadata, minimumIntervals=$minimumIntervals, name=$name, netTerms=$netTerms, pendingSubscriptionChange=$pendingSubscriptionChange, plan=$plan, priceIntervals=$priceIntervals, redeemedCoupon=$redeemedCoupon, startDate=$startDate, status=$status, trialInfo=$trialInfo, changedResources=$changedResources, additionalProperties=$additionalProperties}"
 }
