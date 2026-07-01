@@ -44,6 +44,16 @@ private constructor(
     fun autoCollection(): Optional<Boolean> = body.autoCollection()
 
     /**
+     * Used to determine if invoices for this subscription will be automatically issued. If true,
+     * invoices will be automatically issued. If false, invoices will require manual approval. If
+     * `null` is specified, this defaults to the behavior configured for this customer.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun autoIssuance(): Optional<Boolean> = body.autoIssuance()
+
+    /**
      * Determines the default memo on this subscription's invoices. Note that if this is not
      * provided, it is determined by the plan configuration.
      *
@@ -88,6 +98,13 @@ private constructor(
      * Unlike [autoCollection], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _autoCollection(): JsonField<Boolean> = body._autoCollection()
+
+    /**
+     * Returns the raw JSON value of [autoIssuance].
+     *
+     * Unlike [autoIssuance], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _autoIssuance(): JsonField<Boolean> = body._autoIssuance()
 
     /**
      * Returns the raw JSON value of [defaultInvoiceMemo].
@@ -165,10 +182,10 @@ private constructor(
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [autoCollection]
+         * - [autoIssuance]
          * - [defaultInvoiceMemo]
          * - [invoicingThreshold]
          * - [metadata]
-         * - [netTerms]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -200,6 +217,35 @@ private constructor(
          */
         fun autoCollection(autoCollection: JsonField<Boolean>) = apply {
             body.autoCollection(autoCollection)
+        }
+
+        /**
+         * Used to determine if invoices for this subscription will be automatically issued. If
+         * true, invoices will be automatically issued. If false, invoices will require manual
+         * approval. If `null` is specified, this defaults to the behavior configured for this
+         * customer.
+         */
+        fun autoIssuance(autoIssuance: Boolean?) = apply { body.autoIssuance(autoIssuance) }
+
+        /**
+         * Alias for [Builder.autoIssuance].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun autoIssuance(autoIssuance: Boolean) = autoIssuance(autoIssuance as Boolean?)
+
+        /** Alias for calling [Builder.autoIssuance] with `autoIssuance.orElse(null)`. */
+        fun autoIssuance(autoIssuance: Optional<Boolean>) = autoIssuance(autoIssuance.getOrNull())
+
+        /**
+         * Sets [Builder.autoIssuance] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.autoIssuance] with a well-typed [Boolean] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun autoIssuance(autoIssuance: JsonField<Boolean>) = apply {
+            body.autoIssuance(autoIssuance)
         }
 
         /**
@@ -444,6 +490,7 @@ private constructor(
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val autoCollection: JsonField<Boolean>,
+        private val autoIssuance: JsonField<Boolean>,
         private val defaultInvoiceMemo: JsonField<String>,
         private val invoicingThreshold: JsonField<String>,
         private val metadata: JsonField<Metadata>,
@@ -456,6 +503,9 @@ private constructor(
             @JsonProperty("auto_collection")
             @ExcludeMissing
             autoCollection: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("auto_issuance")
+            @ExcludeMissing
+            autoIssuance: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("default_invoice_memo")
             @ExcludeMissing
             defaultInvoiceMemo: JsonField<String> = JsonMissing.of(),
@@ -468,6 +518,7 @@ private constructor(
             @JsonProperty("net_terms") @ExcludeMissing netTerms: JsonField<Long> = JsonMissing.of(),
         ) : this(
             autoCollection,
+            autoIssuance,
             defaultInvoiceMemo,
             invoicingThreshold,
             metadata,
@@ -484,6 +535,17 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun autoCollection(): Optional<Boolean> = autoCollection.getOptional("auto_collection")
+
+        /**
+         * Used to determine if invoices for this subscription will be automatically issued. If
+         * true, invoices will be automatically issued. If false, invoices will require manual
+         * approval. If `null` is specified, this defaults to the behavior configured for this
+         * customer.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun autoIssuance(): Optional<Boolean> = autoIssuance.getOptional("auto_issuance")
 
         /**
          * Determines the default memo on this subscription's invoices. Note that if this is not
@@ -535,6 +597,16 @@ private constructor(
         @JsonProperty("auto_collection")
         @ExcludeMissing
         fun _autoCollection(): JsonField<Boolean> = autoCollection
+
+        /**
+         * Returns the raw JSON value of [autoIssuance].
+         *
+         * Unlike [autoIssuance], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("auto_issuance")
+        @ExcludeMissing
+        fun _autoIssuance(): JsonField<Boolean> = autoIssuance
 
         /**
          * Returns the raw JSON value of [defaultInvoiceMemo].
@@ -592,6 +664,7 @@ private constructor(
         class Builder internal constructor() {
 
             private var autoCollection: JsonField<Boolean> = JsonMissing.of()
+            private var autoIssuance: JsonField<Boolean> = JsonMissing.of()
             private var defaultInvoiceMemo: JsonField<String> = JsonMissing.of()
             private var invoicingThreshold: JsonField<String> = JsonMissing.of()
             private var metadata: JsonField<Metadata> = JsonMissing.of()
@@ -601,6 +674,7 @@ private constructor(
             @JvmSynthetic
             internal fun from(body: Body) = apply {
                 autoCollection = body.autoCollection
+                autoIssuance = body.autoIssuance
                 defaultInvoiceMemo = body.defaultInvoiceMemo
                 invoicingThreshold = body.invoicingThreshold
                 metadata = body.metadata
@@ -636,6 +710,37 @@ private constructor(
              */
             fun autoCollection(autoCollection: JsonField<Boolean>) = apply {
                 this.autoCollection = autoCollection
+            }
+
+            /**
+             * Used to determine if invoices for this subscription will be automatically issued. If
+             * true, invoices will be automatically issued. If false, invoices will require manual
+             * approval. If `null` is specified, this defaults to the behavior configured for this
+             * customer.
+             */
+            fun autoIssuance(autoIssuance: Boolean?) =
+                autoIssuance(JsonField.ofNullable(autoIssuance))
+
+            /**
+             * Alias for [Builder.autoIssuance].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun autoIssuance(autoIssuance: Boolean) = autoIssuance(autoIssuance as Boolean?)
+
+            /** Alias for calling [Builder.autoIssuance] with `autoIssuance.orElse(null)`. */
+            fun autoIssuance(autoIssuance: Optional<Boolean>) =
+                autoIssuance(autoIssuance.getOrNull())
+
+            /**
+             * Sets [Builder.autoIssuance] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.autoIssuance] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun autoIssuance(autoIssuance: JsonField<Boolean>) = apply {
+                this.autoIssuance = autoIssuance
             }
 
             /**
@@ -762,6 +867,7 @@ private constructor(
             fun build(): Body =
                 Body(
                     autoCollection,
+                    autoIssuance,
                     defaultInvoiceMemo,
                     invoicingThreshold,
                     metadata,
@@ -787,6 +893,7 @@ private constructor(
             }
 
             autoCollection()
+            autoIssuance()
             defaultInvoiceMemo()
             invoicingThreshold()
             metadata().ifPresent { it.validate() }
@@ -811,6 +918,7 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (if (autoCollection.asKnown().isPresent) 1 else 0) +
+                (if (autoIssuance.asKnown().isPresent) 1 else 0) +
                 (if (defaultInvoiceMemo.asKnown().isPresent) 1 else 0) +
                 (if (invoicingThreshold.asKnown().isPresent) 1 else 0) +
                 (metadata.asKnown().getOrNull()?.validity() ?: 0) +
@@ -823,6 +931,7 @@ private constructor(
 
             return other is Body &&
                 autoCollection == other.autoCollection &&
+                autoIssuance == other.autoIssuance &&
                 defaultInvoiceMemo == other.defaultInvoiceMemo &&
                 invoicingThreshold == other.invoicingThreshold &&
                 metadata == other.metadata &&
@@ -833,6 +942,7 @@ private constructor(
         private val hashCode: Int by lazy {
             Objects.hash(
                 autoCollection,
+                autoIssuance,
                 defaultInvoiceMemo,
                 invoicingThreshold,
                 metadata,
@@ -844,7 +954,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{autoCollection=$autoCollection, defaultInvoiceMemo=$defaultInvoiceMemo, invoicingThreshold=$invoicingThreshold, metadata=$metadata, netTerms=$netTerms, additionalProperties=$additionalProperties}"
+            "Body{autoCollection=$autoCollection, autoIssuance=$autoIssuance, defaultInvoiceMemo=$defaultInvoiceMemo, invoicingThreshold=$invoicingThreshold, metadata=$metadata, netTerms=$netTerms, additionalProperties=$additionalProperties}"
     }
 
     /**
