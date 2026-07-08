@@ -38,10 +38,8 @@ import kotlin.jvm.optionals.getOrNull
  *
  * As usage for a customer is reported into Orb, credits may be deducted according to the customer's
  * plan configuration. An automated deduction of this type will result in a ledger entry, also with
- * a starting and ending balance. In order to provide better tracing capabilities for automatic
- * deductions, Orb always associates each automatic deduction with the `event_id` at the time of
- * ingestion, used to pinpoint _why_ credit deduction took place and to ensure that credits are
- * never deducted without an associated usage event.
+ * a starting and ending balance. Each day's usage for a particular price, invoice, and block will
+ * be grouped into a single entry.
  *
  * By default, Orb uses an algorithm that automatically deducts from the *soonest expiring credit
  * block* first in order to ensure that all credits are utilized appropriately. As an example, if
@@ -508,6 +506,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): EntryStatus = apply {
             if (validated) {
                 return@apply
@@ -664,6 +671,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): EntryType = apply {
             if (validated) {
                 return@apply

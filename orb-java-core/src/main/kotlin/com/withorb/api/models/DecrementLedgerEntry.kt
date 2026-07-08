@@ -181,10 +181,13 @@ private constructor(
     fun startingBalance(): Double = startingBalance.getRequired("starting_balance")
 
     /**
+     * This field is deprecated and will always be null. Decrements are not associated with
+     * individual events.
+     *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
-    fun eventId(): Optional<String> = eventId.getOptional("event_id")
+    @Deprecated("deprecated") fun eventId(): Optional<String> = eventId.getOptional("event_id")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
@@ -309,7 +312,10 @@ private constructor(
      *
      * Unlike [eventId], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("event_id") @ExcludeMissing fun _eventId(): JsonField<String> = eventId
+    @Deprecated("deprecated")
+    @JsonProperty("event_id")
+    @ExcludeMissing
+    fun _eventId(): JsonField<String> = eventId
 
     /**
      * Returns the raw JSON value of [invoiceId].
@@ -564,9 +570,15 @@ private constructor(
             this.startingBalance = startingBalance
         }
 
+        /**
+         * This field is deprecated and will always be null. Decrements are not associated with
+         * individual events.
+         */
+        @Deprecated("deprecated")
         fun eventId(eventId: String?) = eventId(JsonField.ofNullable(eventId))
 
         /** Alias for calling [Builder.eventId] with `eventId.orElse(null)`. */
+        @Deprecated("deprecated")
         fun eventId(eventId: Optional<String>) = eventId(eventId.getOrNull())
 
         /**
@@ -575,6 +587,7 @@ private constructor(
          * You should usually call [Builder.eventId] with a well-typed [String] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
+        @Deprecated("deprecated")
         fun eventId(eventId: JsonField<String>) = apply { this.eventId = eventId }
 
         fun invoiceId(invoiceId: String?) = invoiceId(JsonField.ofNullable(invoiceId))
@@ -671,6 +684,14 @@ private constructor(
 
     private var validated: Boolean = false
 
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws OrbInvalidDataException if any value type in this object doesn't match its expected
+     *   type.
+     */
     fun validate(): DecrementLedgerEntry = apply {
         if (validated) {
             return@apply
@@ -816,6 +837,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): EntryStatus = apply {
             if (validated) {
                 return@apply
@@ -936,6 +966,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): EntryType = apply {
             if (validated) {
                 return@apply
@@ -1037,6 +1076,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Metadata = apply {
             if (validated) {
                 return@apply

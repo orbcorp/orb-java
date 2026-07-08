@@ -93,13 +93,23 @@ private constructor(
     fun billingAddress(): Optional<AddressInput> = body.billingAddress()
 
     /**
-     * An ISO 4217 currency string used for the customer's invoices and balance. If not set at
-     * creation time, will be set at subscription creation time.
+     * An ISO 4217 currency string used for the customer's invoices and balance. This can only be
+     * set if the customer does not already have a currency configured. If not set at creation or
+     * update time, it will be set at subscription creation time.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
     fun currency(): Optional<String> = body.currency()
+
+    /**
+     * The Orb ID of the payment method to set as this customer's default. Pass `null` to clear the
+     * customer's default payment method.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun defaultPaymentMethodId(): Optional<String> = body.defaultPaymentMethodId()
 
     /**
      * A valid customer email, to be used for invoicing and notifications.
@@ -258,11 +268,13 @@ private constructor(
      * |Estonia               |`eu_vat`    |European VAT Number                                                                                    |
      * |Ethiopia              |`et_tin`    |Ethiopia Tax Identification Number                                                                     |
      * |European Union        |`eu_oss_vat`|European One Stop Shop VAT Number for non-Union scheme                                                 |
+     * |Faroe Islands         |`fo_vat`    |Faroe Islands VAT Number                                                                               |
      * |Finland               |`eu_vat`    |European VAT Number                                                                                    |
      * |France                |`eu_vat`    |European VAT Number                                                                                    |
      * |Georgia               |`ge_vat`    |Georgian VAT                                                                                           |
      * |Germany               |`de_stn`    |German Tax Number (Steuernummer)                                                                       |
      * |Germany               |`eu_vat`    |European VAT Number                                                                                    |
+     * |Gibraltar             |`gi_tin`    |Gibraltar Tax Identification Number                                                                    |
      * |Greece                |`eu_vat`    |European VAT Number                                                                                    |
      * |Guinea                |`gn_nif`    |Guinea Tax Identification Number (Número de Identificação Fiscal)                                      |
      * |Hong Kong             |`hk_br`     |Hong Kong BR Number                                                                                    |
@@ -274,6 +286,7 @@ private constructor(
      * |Ireland               |`eu_vat`    |European VAT Number                                                                                    |
      * |Israel                |`il_vat`    |Israel VAT                                                                                             |
      * |Italy                 |`eu_vat`    |European VAT Number                                                                                    |
+     * |Italy                 |`it_cf`     |Italian Codice Fiscale Number                                                                          |
      * |Japan                 |`jp_cn`     |Japanese Corporate Number (*Hōjin Bangō*)                                                              |
      * |Japan                 |`jp_rn`     |Japanese Registered Foreign Businesses' Registration Number (*Tōroku Kokugai Jigyōsha no Tōroku Bangō*)|
      * |Japan                 |`jp_trn`    |Japanese Tax Registration Number (*Tōroku Bangō*)                                                      |
@@ -304,9 +317,11 @@ private constructor(
      * |Norway                |`no_vat`    |Norwegian VAT Number                                                                                   |
      * |Norway                |`no_voec`   |Norwegian VAT on e-commerce Number                                                                     |
      * |Oman                  |`om_vat`    |Omani VAT Number                                                                                       |
+     * |Paraguay              |`py_ruc`    |Paraguayan RUC Number                                                                                  |
      * |Peru                  |`pe_ruc`    |Peruvian RUC Number                                                                                    |
      * |Philippines           |`ph_tin`    |Philippines Tax Identification Number                                                                  |
      * |Poland                |`eu_vat`    |European VAT Number                                                                                    |
+     * |Poland                |`pl_nip`    |Polish Tax ID Number                                                                                   |
      * |Portugal              |`eu_vat`    |European VAT Number                                                                                    |
      * |Romania               |`eu_vat`    |European VAT Number                                                                                    |
      * |Romania               |`ro_tin`    |Romanian Tax ID Number                                                                                 |
@@ -324,6 +339,7 @@ private constructor(
      * |South Korea           |`kr_brn`    |Korean BRN                                                                                             |
      * |Spain                 |`es_cif`    |Spanish NIF Number (previously Spanish CIF Number)                                                     |
      * |Spain                 |`eu_vat`    |European VAT Number                                                                                    |
+     * |Sri Lanka             |`lk_vat`    |Sri Lanka VAT Number                                                                                   |
      * |Suriname              |`sr_fin`    |Suriname FIN Number                                                                                    |
      * |Sweden                |`eu_vat`    |European VAT Number                                                                                    |
      * |Switzerland           |`ch_uid`    |Switzerland UID Number                                                                                 |
@@ -395,6 +411,14 @@ private constructor(
      * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _currency(): JsonField<String> = body._currency()
+
+    /**
+     * Returns the raw JSON value of [defaultPaymentMethodId].
+     *
+     * Unlike [defaultPaymentMethodId], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    fun _defaultPaymentMethodId(): JsonField<String> = body._defaultPaymentMethodId()
 
     /**
      * Returns the raw JSON value of [email].
@@ -685,8 +709,9 @@ private constructor(
         }
 
         /**
-         * An ISO 4217 currency string used for the customer's invoices and balance. If not set at
-         * creation time, will be set at subscription creation time.
+         * An ISO 4217 currency string used for the customer's invoices and balance. This can only
+         * be set if the customer does not already have a currency configured. If not set at
+         * creation or update time, it will be set at subscription creation time.
          */
         fun currency(currency: String?) = apply { body.currency(currency) }
 
@@ -700,6 +725,32 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun currency(currency: JsonField<String>) = apply { body.currency(currency) }
+
+        /**
+         * The Orb ID of the payment method to set as this customer's default. Pass `null` to clear
+         * the customer's default payment method.
+         */
+        fun defaultPaymentMethodId(defaultPaymentMethodId: String?) = apply {
+            body.defaultPaymentMethodId(defaultPaymentMethodId)
+        }
+
+        /**
+         * Alias for calling [Builder.defaultPaymentMethodId] with
+         * `defaultPaymentMethodId.orElse(null)`.
+         */
+        fun defaultPaymentMethodId(defaultPaymentMethodId: Optional<String>) =
+            defaultPaymentMethodId(defaultPaymentMethodId.getOrNull())
+
+        /**
+         * Sets [Builder.defaultPaymentMethodId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.defaultPaymentMethodId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun defaultPaymentMethodId(defaultPaymentMethodId: JsonField<String>) = apply {
+            body.defaultPaymentMethodId(defaultPaymentMethodId)
+        }
 
         /** A valid customer email, to be used for invoicing and notifications. */
         fun email(email: String?) = apply { body.email(email) }
@@ -1113,11 +1164,13 @@ private constructor(
          * |Estonia               |`eu_vat`    |European VAT Number                                                                                    |
          * |Ethiopia              |`et_tin`    |Ethiopia Tax Identification Number                                                                     |
          * |European Union        |`eu_oss_vat`|European One Stop Shop VAT Number for non-Union scheme                                                 |
+         * |Faroe Islands         |`fo_vat`    |Faroe Islands VAT Number                                                                               |
          * |Finland               |`eu_vat`    |European VAT Number                                                                                    |
          * |France                |`eu_vat`    |European VAT Number                                                                                    |
          * |Georgia               |`ge_vat`    |Georgian VAT                                                                                           |
          * |Germany               |`de_stn`    |German Tax Number (Steuernummer)                                                                       |
          * |Germany               |`eu_vat`    |European VAT Number                                                                                    |
+         * |Gibraltar             |`gi_tin`    |Gibraltar Tax Identification Number                                                                    |
          * |Greece                |`eu_vat`    |European VAT Number                                                                                    |
          * |Guinea                |`gn_nif`    |Guinea Tax Identification Number (Número de Identificação Fiscal)                                      |
          * |Hong Kong             |`hk_br`     |Hong Kong BR Number                                                                                    |
@@ -1129,6 +1182,7 @@ private constructor(
          * |Ireland               |`eu_vat`    |European VAT Number                                                                                    |
          * |Israel                |`il_vat`    |Israel VAT                                                                                             |
          * |Italy                 |`eu_vat`    |European VAT Number                                                                                    |
+         * |Italy                 |`it_cf`     |Italian Codice Fiscale Number                                                                          |
          * |Japan                 |`jp_cn`     |Japanese Corporate Number (*Hōjin Bangō*)                                                              |
          * |Japan                 |`jp_rn`     |Japanese Registered Foreign Businesses' Registration Number (*Tōroku Kokugai Jigyōsha no Tōroku Bangō*)|
          * |Japan                 |`jp_trn`    |Japanese Tax Registration Number (*Tōroku Bangō*)                                                      |
@@ -1159,9 +1213,11 @@ private constructor(
          * |Norway                |`no_vat`    |Norwegian VAT Number                                                                                   |
          * |Norway                |`no_voec`   |Norwegian VAT on e-commerce Number                                                                     |
          * |Oman                  |`om_vat`    |Omani VAT Number                                                                                       |
+         * |Paraguay              |`py_ruc`    |Paraguayan RUC Number                                                                                  |
          * |Peru                  |`pe_ruc`    |Peruvian RUC Number                                                                                    |
          * |Philippines           |`ph_tin`    |Philippines Tax Identification Number                                                                  |
          * |Poland                |`eu_vat`    |European VAT Number                                                                                    |
+         * |Poland                |`pl_nip`    |Polish Tax ID Number                                                                                   |
          * |Portugal              |`eu_vat`    |European VAT Number                                                                                    |
          * |Romania               |`eu_vat`    |European VAT Number                                                                                    |
          * |Romania               |`ro_tin`    |Romanian Tax ID Number                                                                                 |
@@ -1179,6 +1235,7 @@ private constructor(
          * |South Korea           |`kr_brn`    |Korean BRN                                                                                             |
          * |Spain                 |`es_cif`    |Spanish NIF Number (previously Spanish CIF Number)                                                     |
          * |Spain                 |`eu_vat`    |European VAT Number                                                                                    |
+         * |Sri Lanka             |`lk_vat`    |Sri Lanka VAT Number                                                                                   |
          * |Suriname              |`sr_fin`    |Suriname FIN Number                                                                                    |
          * |Sweden                |`eu_vat`    |European VAT Number                                                                                    |
          * |Switzerland           |`ch_uid`    |Switzerland UID Number                                                                                 |
@@ -1367,6 +1424,7 @@ private constructor(
         private val autoIssuance: JsonField<Boolean>,
         private val billingAddress: JsonField<AddressInput>,
         private val currency: JsonField<String>,
+        private val defaultPaymentMethodId: JsonField<String>,
         private val email: JsonField<String>,
         private val emailDelivery: JsonField<Boolean>,
         private val externalCustomerId: JsonField<String>,
@@ -1404,6 +1462,9 @@ private constructor(
             @JsonProperty("currency")
             @ExcludeMissing
             currency: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("default_payment_method_id")
+            @ExcludeMissing
+            defaultPaymentMethodId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("email") @ExcludeMissing email: JsonField<String> = JsonMissing.of(),
             @JsonProperty("email_delivery")
             @ExcludeMissing
@@ -1446,6 +1507,7 @@ private constructor(
             autoIssuance,
             billingAddress,
             currency,
+            defaultPaymentMethodId,
             email,
             emailDelivery,
             externalCustomerId,
@@ -1508,13 +1570,24 @@ private constructor(
         fun billingAddress(): Optional<AddressInput> = billingAddress.getOptional("billing_address")
 
         /**
-         * An ISO 4217 currency string used for the customer's invoices and balance. If not set at
-         * creation time, will be set at subscription creation time.
+         * An ISO 4217 currency string used for the customer's invoices and balance. This can only
+         * be set if the customer does not already have a currency configured. If not set at
+         * creation or update time, it will be set at subscription creation time.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun currency(): Optional<String> = currency.getOptional("currency")
+
+        /**
+         * The Orb ID of the payment method to set as this customer's default. Pass `null` to clear
+         * the customer's default payment method.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun defaultPaymentMethodId(): Optional<String> =
+            defaultPaymentMethodId.getOptional("default_payment_method_id")
 
         /**
          * A valid customer email, to be used for invoicing and notifications.
@@ -1679,11 +1752,13 @@ private constructor(
          * |Estonia               |`eu_vat`    |European VAT Number                                                                                    |
          * |Ethiopia              |`et_tin`    |Ethiopia Tax Identification Number                                                                     |
          * |European Union        |`eu_oss_vat`|European One Stop Shop VAT Number for non-Union scheme                                                 |
+         * |Faroe Islands         |`fo_vat`    |Faroe Islands VAT Number                                                                               |
          * |Finland               |`eu_vat`    |European VAT Number                                                                                    |
          * |France                |`eu_vat`    |European VAT Number                                                                                    |
          * |Georgia               |`ge_vat`    |Georgian VAT                                                                                           |
          * |Germany               |`de_stn`    |German Tax Number (Steuernummer)                                                                       |
          * |Germany               |`eu_vat`    |European VAT Number                                                                                    |
+         * |Gibraltar             |`gi_tin`    |Gibraltar Tax Identification Number                                                                    |
          * |Greece                |`eu_vat`    |European VAT Number                                                                                    |
          * |Guinea                |`gn_nif`    |Guinea Tax Identification Number (Número de Identificação Fiscal)                                      |
          * |Hong Kong             |`hk_br`     |Hong Kong BR Number                                                                                    |
@@ -1695,6 +1770,7 @@ private constructor(
          * |Ireland               |`eu_vat`    |European VAT Number                                                                                    |
          * |Israel                |`il_vat`    |Israel VAT                                                                                             |
          * |Italy                 |`eu_vat`    |European VAT Number                                                                                    |
+         * |Italy                 |`it_cf`     |Italian Codice Fiscale Number                                                                          |
          * |Japan                 |`jp_cn`     |Japanese Corporate Number (*Hōjin Bangō*)                                                              |
          * |Japan                 |`jp_rn`     |Japanese Registered Foreign Businesses' Registration Number (*Tōroku Kokugai Jigyōsha no Tōroku Bangō*)|
          * |Japan                 |`jp_trn`    |Japanese Tax Registration Number (*Tōroku Bangō*)                                                      |
@@ -1725,9 +1801,11 @@ private constructor(
          * |Norway                |`no_vat`    |Norwegian VAT Number                                                                                   |
          * |Norway                |`no_voec`   |Norwegian VAT on e-commerce Number                                                                     |
          * |Oman                  |`om_vat`    |Omani VAT Number                                                                                       |
+         * |Paraguay              |`py_ruc`    |Paraguayan RUC Number                                                                                  |
          * |Peru                  |`pe_ruc`    |Peruvian RUC Number                                                                                    |
          * |Philippines           |`ph_tin`    |Philippines Tax Identification Number                                                                  |
          * |Poland                |`eu_vat`    |European VAT Number                                                                                    |
+         * |Poland                |`pl_nip`    |Polish Tax ID Number                                                                                   |
          * |Portugal              |`eu_vat`    |European VAT Number                                                                                    |
          * |Romania               |`eu_vat`    |European VAT Number                                                                                    |
          * |Romania               |`ro_tin`    |Romanian Tax ID Number                                                                                 |
@@ -1745,6 +1823,7 @@ private constructor(
          * |South Korea           |`kr_brn`    |Korean BRN                                                                                             |
          * |Spain                 |`es_cif`    |Spanish NIF Number (previously Spanish CIF Number)                                                     |
          * |Spain                 |`eu_vat`    |European VAT Number                                                                                    |
+         * |Sri Lanka             |`lk_vat`    |Sri Lanka VAT Number                                                                                   |
          * |Suriname              |`sr_fin`    |Suriname FIN Number                                                                                    |
          * |Sweden                |`eu_vat`    |European VAT Number                                                                                    |
          * |Switzerland           |`ch_uid`    |Switzerland UID Number                                                                                 |
@@ -1829,6 +1908,16 @@ private constructor(
          * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
+
+        /**
+         * Returns the raw JSON value of [defaultPaymentMethodId].
+         *
+         * Unlike [defaultPaymentMethodId], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("default_payment_method_id")
+        @ExcludeMissing
+        fun _defaultPaymentMethodId(): JsonField<String> = defaultPaymentMethodId
 
         /**
          * Returns the raw JSON value of [email].
@@ -1975,6 +2064,7 @@ private constructor(
             private var autoIssuance: JsonField<Boolean> = JsonMissing.of()
             private var billingAddress: JsonField<AddressInput> = JsonMissing.of()
             private var currency: JsonField<String> = JsonMissing.of()
+            private var defaultPaymentMethodId: JsonField<String> = JsonMissing.of()
             private var email: JsonField<String> = JsonMissing.of()
             private var emailDelivery: JsonField<Boolean> = JsonMissing.of()
             private var externalCustomerId: JsonField<String> = JsonMissing.of()
@@ -1999,6 +2089,7 @@ private constructor(
                 autoIssuance = body.autoIssuance
                 billingAddress = body.billingAddress
                 currency = body.currency
+                defaultPaymentMethodId = body.defaultPaymentMethodId
                 email = body.email
                 emailDelivery = body.emailDelivery
                 externalCustomerId = body.externalCustomerId
@@ -2155,8 +2246,9 @@ private constructor(
             }
 
             /**
-             * An ISO 4217 currency string used for the customer's invoices and balance. If not set
-             * at creation time, will be set at subscription creation time.
+             * An ISO 4217 currency string used for the customer's invoices and balance. This can
+             * only be set if the customer does not already have a currency configured. If not set
+             * at creation or update time, it will be set at subscription creation time.
              */
             fun currency(currency: String?) = currency(JsonField.ofNullable(currency))
 
@@ -2171,6 +2263,31 @@ private constructor(
              * supported value.
              */
             fun currency(currency: JsonField<String>) = apply { this.currency = currency }
+
+            /**
+             * The Orb ID of the payment method to set as this customer's default. Pass `null` to
+             * clear the customer's default payment method.
+             */
+            fun defaultPaymentMethodId(defaultPaymentMethodId: String?) =
+                defaultPaymentMethodId(JsonField.ofNullable(defaultPaymentMethodId))
+
+            /**
+             * Alias for calling [Builder.defaultPaymentMethodId] with
+             * `defaultPaymentMethodId.orElse(null)`.
+             */
+            fun defaultPaymentMethodId(defaultPaymentMethodId: Optional<String>) =
+                defaultPaymentMethodId(defaultPaymentMethodId.getOrNull())
+
+            /**
+             * Sets [Builder.defaultPaymentMethodId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.defaultPaymentMethodId] with a well-typed [String]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun defaultPaymentMethodId(defaultPaymentMethodId: JsonField<String>) = apply {
+                this.defaultPaymentMethodId = defaultPaymentMethodId
+            }
 
             /** A valid customer email, to be used for invoicing and notifications. */
             fun email(email: String?) = email(JsonField.ofNullable(email))
@@ -2593,11 +2710,13 @@ private constructor(
              * |Estonia               |`eu_vat`    |European VAT Number                                                                                    |
              * |Ethiopia              |`et_tin`    |Ethiopia Tax Identification Number                                                                     |
              * |European Union        |`eu_oss_vat`|European One Stop Shop VAT Number for non-Union scheme                                                 |
+             * |Faroe Islands         |`fo_vat`    |Faroe Islands VAT Number                                                                               |
              * |Finland               |`eu_vat`    |European VAT Number                                                                                    |
              * |France                |`eu_vat`    |European VAT Number                                                                                    |
              * |Georgia               |`ge_vat`    |Georgian VAT                                                                                           |
              * |Germany               |`de_stn`    |German Tax Number (Steuernummer)                                                                       |
              * |Germany               |`eu_vat`    |European VAT Number                                                                                    |
+             * |Gibraltar             |`gi_tin`    |Gibraltar Tax Identification Number                                                                    |
              * |Greece                |`eu_vat`    |European VAT Number                                                                                    |
              * |Guinea                |`gn_nif`    |Guinea Tax Identification Number (Número de Identificação Fiscal)                                      |
              * |Hong Kong             |`hk_br`     |Hong Kong BR Number                                                                                    |
@@ -2609,6 +2728,7 @@ private constructor(
              * |Ireland               |`eu_vat`    |European VAT Number                                                                                    |
              * |Israel                |`il_vat`    |Israel VAT                                                                                             |
              * |Italy                 |`eu_vat`    |European VAT Number                                                                                    |
+             * |Italy                 |`it_cf`     |Italian Codice Fiscale Number                                                                          |
              * |Japan                 |`jp_cn`     |Japanese Corporate Number (*Hōjin Bangō*)                                                              |
              * |Japan                 |`jp_rn`     |Japanese Registered Foreign Businesses' Registration Number (*Tōroku Kokugai Jigyōsha no Tōroku Bangō*)|
              * |Japan                 |`jp_trn`    |Japanese Tax Registration Number (*Tōroku Bangō*)                                                      |
@@ -2639,9 +2759,11 @@ private constructor(
              * |Norway                |`no_vat`    |Norwegian VAT Number                                                                                   |
              * |Norway                |`no_voec`   |Norwegian VAT on e-commerce Number                                                                     |
              * |Oman                  |`om_vat`    |Omani VAT Number                                                                                       |
+             * |Paraguay              |`py_ruc`    |Paraguayan RUC Number                                                                                  |
              * |Peru                  |`pe_ruc`    |Peruvian RUC Number                                                                                    |
              * |Philippines           |`ph_tin`    |Philippines Tax Identification Number                                                                  |
              * |Poland                |`eu_vat`    |European VAT Number                                                                                    |
+             * |Poland                |`pl_nip`    |Polish Tax ID Number                                                                                   |
              * |Portugal              |`eu_vat`    |European VAT Number                                                                                    |
              * |Romania               |`eu_vat`    |European VAT Number                                                                                    |
              * |Romania               |`ro_tin`    |Romanian Tax ID Number                                                                                 |
@@ -2659,6 +2781,7 @@ private constructor(
              * |South Korea           |`kr_brn`    |Korean BRN                                                                                             |
              * |Spain                 |`es_cif`    |Spanish NIF Number (previously Spanish CIF Number)                                                     |
              * |Spain                 |`eu_vat`    |European VAT Number                                                                                    |
+             * |Sri Lanka             |`lk_vat`    |Sri Lanka VAT Number                                                                                   |
              * |Suriname              |`sr_fin`    |Suriname FIN Number                                                                                    |
              * |Sweden                |`eu_vat`    |European VAT Number                                                                                    |
              * |Switzerland           |`ch_uid`    |Switzerland UID Number                                                                                 |
@@ -2727,6 +2850,7 @@ private constructor(
                     autoIssuance,
                     billingAddress,
                     currency,
+                    defaultPaymentMethodId,
                     email,
                     emailDelivery,
                     externalCustomerId,
@@ -2746,6 +2870,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Body = apply {
             if (validated) {
                 return@apply
@@ -2757,6 +2890,7 @@ private constructor(
             autoIssuance()
             billingAddress().ifPresent { it.validate() }
             currency()
+            defaultPaymentMethodId()
             email()
             emailDelivery()
             externalCustomerId()
@@ -2795,6 +2929,7 @@ private constructor(
                 (if (autoIssuance.asKnown().isPresent) 1 else 0) +
                 (billingAddress.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (currency.asKnown().isPresent) 1 else 0) +
+                (if (defaultPaymentMethodId.asKnown().isPresent) 1 else 0) +
                 (if (email.asKnown().isPresent) 1 else 0) +
                 (if (emailDelivery.asKnown().isPresent) 1 else 0) +
                 (if (externalCustomerId.asKnown().isPresent) 1 else 0) +
@@ -2821,6 +2956,7 @@ private constructor(
                 autoIssuance == other.autoIssuance &&
                 billingAddress == other.billingAddress &&
                 currency == other.currency &&
+                defaultPaymentMethodId == other.defaultPaymentMethodId &&
                 email == other.email &&
                 emailDelivery == other.emailDelivery &&
                 externalCustomerId == other.externalCustomerId &&
@@ -2845,6 +2981,7 @@ private constructor(
                 autoIssuance,
                 billingAddress,
                 currency,
+                defaultPaymentMethodId,
                 email,
                 emailDelivery,
                 externalCustomerId,
@@ -2865,7 +3002,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{accountingSyncConfiguration=$accountingSyncConfiguration, additionalEmails=$additionalEmails, autoCollection=$autoCollection, autoIssuance=$autoIssuance, billingAddress=$billingAddress, currency=$currency, email=$email, emailDelivery=$emailDelivery, externalCustomerId=$externalCustomerId, hierarchy=$hierarchy, metadata=$metadata, name=$name, paymentConfiguration=$paymentConfiguration, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, reportingConfiguration=$reportingConfiguration, shippingAddress=$shippingAddress, taxConfiguration=$taxConfiguration, taxId=$taxId, additionalProperties=$additionalProperties}"
+            "Body{accountingSyncConfiguration=$accountingSyncConfiguration, additionalEmails=$additionalEmails, autoCollection=$autoCollection, autoIssuance=$autoIssuance, billingAddress=$billingAddress, currency=$currency, defaultPaymentMethodId=$defaultPaymentMethodId, email=$email, emailDelivery=$emailDelivery, externalCustomerId=$externalCustomerId, hierarchy=$hierarchy, metadata=$metadata, name=$name, paymentConfiguration=$paymentConfiguration, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, reportingConfiguration=$reportingConfiguration, shippingAddress=$shippingAddress, taxConfiguration=$taxConfiguration, taxId=$taxId, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -2931,6 +3068,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Metadata = apply {
             if (validated) {
                 return@apply
@@ -3099,6 +3245,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): PaymentConfiguration = apply {
             if (validated) {
                 return@apply
@@ -3130,6 +3285,7 @@ private constructor(
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val providerType: JsonField<ProviderType>,
+            private val defaultSharedPaymentToken: JsonField<String>,
             private val excludedPaymentMethodTypes: JsonField<List<String>>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
@@ -3139,10 +3295,18 @@ private constructor(
                 @JsonProperty("provider_type")
                 @ExcludeMissing
                 providerType: JsonField<ProviderType> = JsonMissing.of(),
+                @JsonProperty("default_shared_payment_token")
+                @ExcludeMissing
+                defaultSharedPaymentToken: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("excluded_payment_method_types")
                 @ExcludeMissing
                 excludedPaymentMethodTypes: JsonField<List<String>> = JsonMissing.of(),
-            ) : this(providerType, excludedPaymentMethodTypes, mutableMapOf())
+            ) : this(
+                providerType,
+                defaultSharedPaymentToken,
+                excludedPaymentMethodTypes,
+                mutableMapOf(),
+            )
 
             /**
              * The payment provider to configure.
@@ -3152,6 +3316,17 @@ private constructor(
              *   value).
              */
             fun providerType(): ProviderType = providerType.getRequired("provider_type")
+
+            /**
+             * The ID of a shared payment token granted by an agent to use as the default payment
+             * instrument for this customer. When set, auto-collection will use this token instead
+             * of the customer's default payment method.
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
+            fun defaultSharedPaymentToken(): Optional<String> =
+                defaultSharedPaymentToken.getOptional("default_shared_payment_token")
 
             /**
              * List of Stripe payment method types to exclude for this customer. Excluded payment
@@ -3175,6 +3350,16 @@ private constructor(
             @JsonProperty("provider_type")
             @ExcludeMissing
             fun _providerType(): JsonField<ProviderType> = providerType
+
+            /**
+             * Returns the raw JSON value of [defaultSharedPaymentToken].
+             *
+             * Unlike [defaultSharedPaymentToken], this method doesn't throw if the JSON field has
+             * an unexpected type.
+             */
+            @JsonProperty("default_shared_payment_token")
+            @ExcludeMissing
+            fun _defaultSharedPaymentToken(): JsonField<String> = defaultSharedPaymentToken
 
             /**
              * Returns the raw JSON value of [excludedPaymentMethodTypes].
@@ -3215,12 +3400,14 @@ private constructor(
             class Builder internal constructor() {
 
                 private var providerType: JsonField<ProviderType>? = null
+                private var defaultSharedPaymentToken: JsonField<String> = JsonMissing.of()
                 private var excludedPaymentMethodTypes: JsonField<MutableList<String>>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(paymentProvider: PaymentProvider) = apply {
                     providerType = paymentProvider.providerType
+                    defaultSharedPaymentToken = paymentProvider.defaultSharedPaymentToken
                     excludedPaymentMethodTypes =
                         paymentProvider.excludedPaymentMethodTypes.map { it.toMutableList() }
                     additionalProperties = paymentProvider.additionalProperties.toMutableMap()
@@ -3240,6 +3427,33 @@ private constructor(
                 fun providerType(providerType: JsonField<ProviderType>) = apply {
                     this.providerType = providerType
                 }
+
+                /**
+                 * The ID of a shared payment token granted by an agent to use as the default
+                 * payment instrument for this customer. When set, auto-collection will use this
+                 * token instead of the customer's default payment method.
+                 */
+                fun defaultSharedPaymentToken(defaultSharedPaymentToken: String?) =
+                    defaultSharedPaymentToken(JsonField.ofNullable(defaultSharedPaymentToken))
+
+                /**
+                 * Alias for calling [Builder.defaultSharedPaymentToken] with
+                 * `defaultSharedPaymentToken.orElse(null)`.
+                 */
+                fun defaultSharedPaymentToken(defaultSharedPaymentToken: Optional<String>) =
+                    defaultSharedPaymentToken(defaultSharedPaymentToken.getOrNull())
+
+                /**
+                 * Sets [Builder.defaultSharedPaymentToken] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.defaultSharedPaymentToken] with a well-typed
+                 * [String] value instead. This method is primarily for setting the field to an
+                 * undocumented or not yet supported value.
+                 */
+                fun defaultSharedPaymentToken(defaultSharedPaymentToken: JsonField<String>) =
+                    apply {
+                        this.defaultSharedPaymentToken = defaultSharedPaymentToken
+                    }
 
                 /**
                  * List of Stripe payment method types to exclude for this customer. Excluded
@@ -3315,6 +3529,7 @@ private constructor(
                 fun build(): PaymentProvider =
                     PaymentProvider(
                         checkRequired("providerType", providerType),
+                        defaultSharedPaymentToken,
                         (excludedPaymentMethodTypes ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toMutableMap(),
                     )
@@ -3322,12 +3537,23 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws OrbInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
+             */
             fun validate(): PaymentProvider = apply {
                 if (validated) {
                     return@apply
                 }
 
                 providerType().validate()
+                defaultSharedPaymentToken()
                 excludedPaymentMethodTypes()
                 validated = true
             }
@@ -3349,6 +3575,7 @@ private constructor(
             @JvmSynthetic
             internal fun validity(): Int =
                 (providerType.asKnown().getOrNull()?.validity() ?: 0) +
+                    (if (defaultSharedPaymentToken.asKnown().isPresent) 1 else 0) +
                     (excludedPaymentMethodTypes.asKnown().getOrNull()?.size ?: 0)
 
             /** The payment provider to configure. */
@@ -3441,6 +3668,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws OrbInvalidDataException if any value type in this object doesn't match
+                 *   its expected type.
+                 */
                 fun validate(): ProviderType = apply {
                     if (validated) {
                         return@apply
@@ -3486,18 +3723,24 @@ private constructor(
 
                 return other is PaymentProvider &&
                     providerType == other.providerType &&
+                    defaultSharedPaymentToken == other.defaultSharedPaymentToken &&
                     excludedPaymentMethodTypes == other.excludedPaymentMethodTypes &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(providerType, excludedPaymentMethodTypes, additionalProperties)
+                Objects.hash(
+                    providerType,
+                    defaultSharedPaymentToken,
+                    excludedPaymentMethodTypes,
+                    additionalProperties,
+                )
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "PaymentProvider{providerType=$providerType, excludedPaymentMethodTypes=$excludedPaymentMethodTypes, additionalProperties=$additionalProperties}"
+                "PaymentProvider{providerType=$providerType, defaultSharedPaymentToken=$defaultSharedPaymentToken, excludedPaymentMethodTypes=$excludedPaymentMethodTypes, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -3550,6 +3793,8 @@ private constructor(
 
             @JvmField val NETSUITE = of("netsuite")
 
+            @JvmField val ADYEN = of("adyen")
+
             @JvmStatic fun of(value: String) = PaymentProvider(JsonField.of(value))
         }
 
@@ -3560,6 +3805,7 @@ private constructor(
             STRIPE_CHARGE,
             STRIPE_INVOICE,
             NETSUITE,
+            ADYEN,
         }
 
         /**
@@ -3577,6 +3823,7 @@ private constructor(
             STRIPE_CHARGE,
             STRIPE_INVOICE,
             NETSUITE,
+            ADYEN,
             /**
              * An enum member indicating that [PaymentProvider] was instantiated with an unknown
              * value.
@@ -3598,6 +3845,7 @@ private constructor(
                 STRIPE_CHARGE -> Value.STRIPE_CHARGE
                 STRIPE_INVOICE -> Value.STRIPE_INVOICE
                 NETSUITE -> Value.NETSUITE
+                ADYEN -> Value.ADYEN
                 else -> Value._UNKNOWN
             }
 
@@ -3616,6 +3864,7 @@ private constructor(
                 STRIPE_CHARGE -> Known.STRIPE_CHARGE
                 STRIPE_INVOICE -> Known.STRIPE_INVOICE
                 NETSUITE -> Known.NETSUITE
+                ADYEN -> Known.ADYEN
                 else -> throw OrbInvalidDataException("Unknown PaymentProvider: $value")
             }
 
@@ -3633,6 +3882,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): PaymentProvider = apply {
             if (validated) {
                 return@apply
@@ -3722,6 +3980,35 @@ private constructor(
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
+        /**
+         * Maps this instance's current variant to a value of type [T] using the given [visitor].
+         *
+         * Note that this method is _not_ forwards compatible with new variants from the API, unless
+         * [visitor] overrides [Visitor.unknown]. To handle variants not known to this version of
+         * the SDK gracefully, consider overriding [Visitor.unknown]:
+         * ```java
+         * import com.withorb.api.core.JsonValue;
+         * import java.util.Optional;
+         *
+         * Optional<String> result = taxConfiguration.accept(new TaxConfiguration.Visitor<Optional<String>>() {
+         *     @Override
+         *     public Optional<String> visitAvalara(NewAvalaraTaxConfiguration avalara) {
+         *         return Optional.of(avalara.toString());
+         *     }
+         *
+         *     // ...
+         *
+         *     @Override
+         *     public Optional<String> unknown(JsonValue json) {
+         *         // Or inspect the `json`.
+         *         return Optional.empty();
+         *     }
+         * });
+         * ```
+         *
+         * @throws OrbInvalidDataException if [Visitor.unknown] is not overridden in [visitor] and
+         *   the current variant is unknown.
+         */
         fun <T> accept(visitor: Visitor<T>): T =
             when {
                 avalara != null -> visitor.visitAvalara(avalara)
@@ -3735,6 +4022,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): TaxConfiguration = apply {
             if (validated) {
                 return@apply
@@ -4164,6 +4460,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws OrbInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
+             */
             fun validate(): Numeral = apply {
                 if (validated) {
                     return@apply
@@ -4437,6 +4743,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws OrbInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
+             */
             fun validate(): Anrok = apply {
                 if (validated) {
                     return@apply
@@ -4710,6 +5026,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws OrbInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
+             */
             fun validate(): Stripe = apply {
                 if (validated) {
                     return@apply

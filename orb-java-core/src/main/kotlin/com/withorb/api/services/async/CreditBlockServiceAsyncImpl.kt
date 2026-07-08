@@ -18,12 +18,18 @@ import com.withorb.api.core.http.json
 import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepareAsync
 import com.withorb.api.models.CreditBlockDeleteParams
+import com.withorb.api.models.CreditBlockListInvoicesParams
+import com.withorb.api.models.CreditBlockListInvoicesResponse
 import com.withorb.api.models.CreditBlockRetrieveParams
 import com.withorb.api.models.CreditBlockRetrieveResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits within
+ * Orb.
+ */
 class CreditBlockServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     CreditBlockServiceAsync {
 
@@ -49,6 +55,13 @@ class CreditBlockServiceAsyncImpl internal constructor(private val clientOptions
     ): CompletableFuture<Void?> =
         // delete /credit_blocks/{block_id}
         withRawResponse().delete(params, requestOptions).thenAccept {}
+
+    override fun listInvoices(
+        params: CreditBlockListInvoicesParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CreditBlockListInvoicesResponse> =
+        // get /credit_blocks/{block_id}/invoices
+        withRawResponse().listInvoices(params, requestOptions).thenApply { it.parse() }
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         CreditBlockServiceAsync.WithRawResponse {
@@ -119,6 +132,39 @@ class CreditBlockServiceAsyncImpl internal constructor(private val clientOptions
                 .thenApply { response ->
                     errorHandler.handle(response).parseable {
                         response.use { deleteHandler.handle(it) }
+                    }
+                }
+        }
+
+        private val listInvoicesHandler: Handler<CreditBlockListInvoicesResponse> =
+            jsonHandler<CreditBlockListInvoicesResponse>(clientOptions.jsonMapper)
+
+        override fun listInvoices(
+            params: CreditBlockListInvoicesParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CreditBlockListInvoicesResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("blockId", params.blockId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("credit_blocks", params._pathParam(0), "invoices")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { listInvoicesHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }

@@ -9,7 +9,9 @@ import com.withorb.api.models.InvoiceCreateParams
 import com.withorb.api.models.InvoiceDeleteLineItemParams
 import com.withorb.api.models.InvoiceFetchUpcomingParams
 import com.withorb.api.models.InvoiceIssueParams
+import com.withorb.api.models.InvoiceIssueSummaryParams
 import com.withorb.api.models.InvoiceMarkPaidParams
+import com.withorb.api.models.InvoicePayParams
 import com.withorb.api.models.InvoiceUpdateParams
 import com.withorb.api.models.PercentageDiscount
 import com.withorb.api.models.UnitConfig
@@ -51,6 +53,7 @@ internal class InvoiceServiceAsyncTest {
                             )
                             .build()
                     )
+                    .autoCollection(true)
                     .customerId("4khy3nwzktxv7")
                     .discount(
                         PercentageDiscount.builder()
@@ -98,6 +101,7 @@ internal class InvoiceServiceAsyncTest {
             invoiceServiceAsync.update(
                 InvoiceUpdateParams.builder()
                     .invoiceId("invoice_id")
+                    .autoCollection(true)
                     .dueDate(LocalDate.parse("2023-09-22"))
                     .invoiceDate(LocalDate.parse("2023-09-22"))
                     .metadata(
@@ -200,6 +204,27 @@ internal class InvoiceServiceAsyncTest {
     }
 
     @Test
+    fun issueSummary() {
+        val client =
+            OrbOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val invoiceServiceAsync = client.invoices()
+
+        val responseFuture =
+            invoiceServiceAsync.issueSummary(
+                InvoiceIssueSummaryParams.builder()
+                    .invoiceId("invoice_id")
+                    .synchronous(true)
+                    .build()
+            )
+
+        val response = responseFuture.get()
+        response.validate()
+    }
+
+    @Test
     fun listSummary() {
         val client =
             OrbOkHttpClientAsync.builder()
@@ -246,7 +271,13 @@ internal class InvoiceServiceAsyncTest {
                 .build()
         val invoiceServiceAsync = client.invoices()
 
-        val invoiceFuture = invoiceServiceAsync.pay("invoice_id")
+        val invoiceFuture =
+            invoiceServiceAsync.pay(
+                InvoicePayParams.builder()
+                    .invoiceId("invoice_id")
+                    .sharedPaymentTokenId("shared_payment_token_id")
+                    .build()
+            )
 
         val invoice = invoiceFuture.get()
         invoice.validate()

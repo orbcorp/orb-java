@@ -36,6 +36,7 @@ internal class NewPlanScalableMatrixWithUnitPricingPriceTest {
                                 .build()
                         )
                         .unitPrice("unit_price")
+                        .groupingKey("x")
                         .prorate(true)
                         .secondDimension("second_dimension")
                         .build()
@@ -69,6 +70,7 @@ internal class NewPlanScalableMatrixWithUnitPricingPriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewPlanScalableMatrixWithUnitPricingPrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -102,6 +104,7 @@ internal class NewPlanScalableMatrixWithUnitPricingPriceTest {
                             .build()
                     )
                     .unitPrice("unit_price")
+                    .groupingKey("x")
                     .prorate(true)
                     .secondDimension("second_dimension")
                     .build()
@@ -148,6 +151,8 @@ internal class NewPlanScalableMatrixWithUnitPricingPriceTest {
                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                     .build()
             )
+        assertThat(newPlanScalableMatrixWithUnitPricingPrice.licenseTypeId())
+            .contains("license_type_id")
         assertThat(newPlanScalableMatrixWithUnitPricingPrice.metadata())
             .contains(
                 NewPlanScalableMatrixWithUnitPricingPrice.Metadata.builder()
@@ -184,6 +189,7 @@ internal class NewPlanScalableMatrixWithUnitPricingPriceTest {
                                 .build()
                         )
                         .unitPrice("unit_price")
+                        .groupingKey("x")
                         .prorate(true)
                         .secondDimension("second_dimension")
                         .build()
@@ -217,6 +223,7 @@ internal class NewPlanScalableMatrixWithUnitPricingPriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewPlanScalableMatrixWithUnitPricingPrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

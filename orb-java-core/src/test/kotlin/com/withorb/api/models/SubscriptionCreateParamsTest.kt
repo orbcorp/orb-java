@@ -65,6 +65,12 @@ internal class SubscriptionCreateParamsTest {
                                     .build()
                             )
                             .itemId("item_id")
+                            .licenseTypeId("license_type_id")
+                            .metadata(
+                                NewAllocationPrice.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .perUnitCostBasis("per_unit_cost_basis")
                             .build()
                     )
@@ -79,6 +85,11 @@ internal class SubscriptionCreateParamsTest {
                     .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .externalPriceId("external_price_id")
                     .maximumAmount("1.23")
+                    .metricParameterOverrides(
+                        SubscriptionCreateParams.AddPrice.MetricParameterOverrides.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .minimumAmount("1.23")
                     .planPhaseOrder(0L)
                     .price(
@@ -124,6 +135,7 @@ internal class SubscriptionCreateParamsTest {
                                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                     .build()
                             )
+                            .licenseTypeId("license_type_id")
                             .metadata(
                                 NewSubscriptionUnitPrice.Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -138,6 +150,7 @@ internal class SubscriptionCreateParamsTest {
             )
             .alignBillingWithSubscriptionStartDate(true)
             .autoCollection(true)
+            .autoIssuance(true)
             .awsRegion("aws_region")
             .billingCycleAnchorConfiguration(
                 BillingCycleAnchorConfiguration.builder().day(1L).month(1L).year(0L).build()
@@ -228,6 +241,12 @@ internal class SubscriptionCreateParamsTest {
                                     .build()
                             )
                             .itemId("item_id")
+                            .licenseTypeId("license_type_id")
+                            .metadata(
+                                NewAllocationPrice.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .perUnitCostBasis("per_unit_cost_basis")
                             .build()
                     )
@@ -242,6 +261,11 @@ internal class SubscriptionCreateParamsTest {
                     .externalPriceId("external_price_id")
                     .fixedPriceQuantity(2.0)
                     .maximumAmount("1.23")
+                    .metricParameterOverrides(
+                        SubscriptionCreateParams.ReplacePrice.MetricParameterOverrides.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .minimumAmount("1.23")
                     .price(
                         NewSubscriptionUnitPrice.builder()
@@ -286,6 +310,7 @@ internal class SubscriptionCreateParamsTest {
                                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                     .build()
                             )
+                            .licenseTypeId("license_type_id")
                             .metadata(
                                 NewSubscriptionUnitPrice.Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -359,6 +384,12 @@ internal class SubscriptionCreateParamsTest {
                                         .build()
                                 )
                                 .itemId("item_id")
+                                .licenseTypeId("license_type_id")
+                                .metadata(
+                                    NewAllocationPrice.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .perUnitCostBasis("per_unit_cost_basis")
                                 .build()
                         )
@@ -373,6 +404,11 @@ internal class SubscriptionCreateParamsTest {
                         .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .externalPriceId("external_price_id")
                         .maximumAmount("1.23")
+                        .metricParameterOverrides(
+                            SubscriptionCreateParams.AddPrice.MetricParameterOverrides.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
                         .minimumAmount("1.23")
                         .planPhaseOrder(0L)
                         .price(
@@ -420,6 +456,7 @@ internal class SubscriptionCreateParamsTest {
                                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                         .build()
                                 )
+                                .licenseTypeId("license_type_id")
                                 .metadata(
                                     NewSubscriptionUnitPrice.Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -434,6 +471,7 @@ internal class SubscriptionCreateParamsTest {
                 )
                 .alignBillingWithSubscriptionStartDate(true)
                 .autoCollection(true)
+                .autoIssuance(true)
                 .awsRegion("aws_region")
                 .billingCycleAnchorConfiguration(
                     BillingCycleAnchorConfiguration.builder().day(1L).month(1L).year(0L).build()
@@ -524,6 +562,12 @@ internal class SubscriptionCreateParamsTest {
                                         .build()
                                 )
                                 .itemId("item_id")
+                                .licenseTypeId("license_type_id")
+                                .metadata(
+                                    NewAllocationPrice.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .perUnitCostBasis("per_unit_cost_basis")
                                 .build()
                         )
@@ -538,6 +582,11 @@ internal class SubscriptionCreateParamsTest {
                         .externalPriceId("external_price_id")
                         .fixedPriceQuantity(2.0)
                         .maximumAmount("1.23")
+                        .metricParameterOverrides(
+                            SubscriptionCreateParams.ReplacePrice.MetricParameterOverrides.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
                         .minimumAmount("1.23")
                         .price(
                             NewSubscriptionUnitPrice.builder()
@@ -584,6 +633,7 @@ internal class SubscriptionCreateParamsTest {
                                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                         .build()
                                 )
+                                .licenseTypeId("license_type_id")
                                 .metadata(
                                     NewSubscriptionUnitPrice.Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -656,6 +706,12 @@ internal class SubscriptionCreateParamsTest {
                                     .build()
                             )
                             .itemId("item_id")
+                            .licenseTypeId("license_type_id")
+                            .metadata(
+                                NewAllocationPrice.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .perUnitCostBasis("per_unit_cost_basis")
                             .build()
                     )
@@ -670,6 +726,11 @@ internal class SubscriptionCreateParamsTest {
                     .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .externalPriceId("external_price_id")
                     .maximumAmount("1.23")
+                    .metricParameterOverrides(
+                        SubscriptionCreateParams.AddPrice.MetricParameterOverrides.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .minimumAmount("1.23")
                     .planPhaseOrder(0L)
                     .price(
@@ -715,6 +776,7 @@ internal class SubscriptionCreateParamsTest {
                                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                     .build()
                             )
+                            .licenseTypeId("license_type_id")
                             .metadata(
                                 NewSubscriptionUnitPrice.Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -729,6 +791,7 @@ internal class SubscriptionCreateParamsTest {
             )
         assertThat(body.alignBillingWithSubscriptionStartDate()).contains(true)
         assertThat(body.autoCollection()).contains(true)
+        assertThat(body.autoIssuance()).contains(true)
         assertThat(body.awsRegion()).contains("aws_region")
         assertThat(body.billingCycleAnchorConfiguration())
             .contains(BillingCycleAnchorConfiguration.builder().day(1L).month(1L).year(0L).build())
@@ -826,6 +889,12 @@ internal class SubscriptionCreateParamsTest {
                                     .build()
                             )
                             .itemId("item_id")
+                            .licenseTypeId("license_type_id")
+                            .metadata(
+                                NewAllocationPrice.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .perUnitCostBasis("per_unit_cost_basis")
                             .build()
                     )
@@ -840,6 +909,11 @@ internal class SubscriptionCreateParamsTest {
                     .externalPriceId("external_price_id")
                     .fixedPriceQuantity(2.0)
                     .maximumAmount("1.23")
+                    .metricParameterOverrides(
+                        SubscriptionCreateParams.ReplacePrice.MetricParameterOverrides.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .minimumAmount("1.23")
                     .price(
                         NewSubscriptionUnitPrice.builder()
@@ -884,6 +958,7 @@ internal class SubscriptionCreateParamsTest {
                                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                     .build()
                             )
+                            .licenseTypeId("license_type_id")
                             .metadata(
                                 NewSubscriptionUnitPrice.Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))

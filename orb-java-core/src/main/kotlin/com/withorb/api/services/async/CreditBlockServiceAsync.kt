@@ -7,11 +7,17 @@ import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.CreditBlockDeleteParams
+import com.withorb.api.models.CreditBlockListInvoicesParams
+import com.withorb.api.models.CreditBlockListInvoicesResponse
 import com.withorb.api.models.CreditBlockRetrieveParams
 import com.withorb.api.models.CreditBlockRetrieveResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits within
+ * Orb.
+ */
 interface CreditBlockServiceAsync {
 
     /**
@@ -109,6 +115,61 @@ interface CreditBlockServiceAsync {
         delete(blockId, CreditBlockDeleteParams.none(), requestOptions)
 
     /**
+     * This endpoint returns the credit block and its associated purchasing invoices.
+     *
+     * If a credit block was purchased (as opposed to being manually added), this endpoint returns
+     * the invoices that were created to charge the customer for the credit block. For credit blocks
+     * with payment schedules spanning multiple periods (e.g., monthly payments over 12 months),
+     * multiple invoices will be returned.
+     *
+     * For credit blocks created by subscription allocation prices, this endpoint returns the
+     * subscription invoice containing the allocation line item that created the block.
+     *
+     * If the credit block was not purchased (e.g., manual increment), an empty invoices list is
+     * returned.
+     *
+     * **Note: This endpoint is currently experimental and its interface may change in future
+     * releases. Please contact support before building production integrations against this
+     * endpoint.**
+     */
+    fun listInvoices(blockId: String): CompletableFuture<CreditBlockListInvoicesResponse> =
+        listInvoices(blockId, CreditBlockListInvoicesParams.none())
+
+    /** @see listInvoices */
+    fun listInvoices(
+        blockId: String,
+        params: CreditBlockListInvoicesParams = CreditBlockListInvoicesParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CreditBlockListInvoicesResponse> =
+        listInvoices(params.toBuilder().blockId(blockId).build(), requestOptions)
+
+    /** @see listInvoices */
+    fun listInvoices(
+        blockId: String,
+        params: CreditBlockListInvoicesParams = CreditBlockListInvoicesParams.none(),
+    ): CompletableFuture<CreditBlockListInvoicesResponse> =
+        listInvoices(blockId, params, RequestOptions.none())
+
+    /** @see listInvoices */
+    fun listInvoices(
+        params: CreditBlockListInvoicesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CreditBlockListInvoicesResponse>
+
+    /** @see listInvoices */
+    fun listInvoices(
+        params: CreditBlockListInvoicesParams
+    ): CompletableFuture<CreditBlockListInvoicesResponse> =
+        listInvoices(params, RequestOptions.none())
+
+    /** @see listInvoices */
+    fun listInvoices(
+        blockId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CreditBlockListInvoicesResponse> =
+        listInvoices(blockId, CreditBlockListInvoicesParams.none(), requestOptions)
+
+    /**
      * A view of [CreditBlockServiceAsync] that provides access to raw HTTP responses for each
      * method.
      */
@@ -203,5 +264,48 @@ interface CreditBlockServiceAsync {
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponse> =
             delete(blockId, CreditBlockDeleteParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /credit_blocks/{block_id}/invoices`, but is
+         * otherwise the same as [CreditBlockServiceAsync.listInvoices].
+         */
+        fun listInvoices(
+            blockId: String
+        ): CompletableFuture<HttpResponseFor<CreditBlockListInvoicesResponse>> =
+            listInvoices(blockId, CreditBlockListInvoicesParams.none())
+
+        /** @see listInvoices */
+        fun listInvoices(
+            blockId: String,
+            params: CreditBlockListInvoicesParams = CreditBlockListInvoicesParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CreditBlockListInvoicesResponse>> =
+            listInvoices(params.toBuilder().blockId(blockId).build(), requestOptions)
+
+        /** @see listInvoices */
+        fun listInvoices(
+            blockId: String,
+            params: CreditBlockListInvoicesParams = CreditBlockListInvoicesParams.none(),
+        ): CompletableFuture<HttpResponseFor<CreditBlockListInvoicesResponse>> =
+            listInvoices(blockId, params, RequestOptions.none())
+
+        /** @see listInvoices */
+        fun listInvoices(
+            params: CreditBlockListInvoicesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CreditBlockListInvoicesResponse>>
+
+        /** @see listInvoices */
+        fun listInvoices(
+            params: CreditBlockListInvoicesParams
+        ): CompletableFuture<HttpResponseFor<CreditBlockListInvoicesResponse>> =
+            listInvoices(params, RequestOptions.none())
+
+        /** @see listInvoices */
+        fun listInvoices(
+            blockId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CreditBlockListInvoicesResponse>> =
+            listInvoices(blockId, CreditBlockListInvoicesParams.none(), requestOptions)
     }
 }

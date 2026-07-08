@@ -14,6 +14,10 @@ import com.withorb.api.models.MetricListParams
 import com.withorb.api.models.MetricUpdateParams
 import java.util.function.Consumer
 
+/**
+ * The Metric resource represents a calculation of a quantity based on events. Metrics are defined
+ * by the query that transforms raw usage events into meaningful values for your customers.
+ */
 interface MetricService {
 
     /**
@@ -74,9 +78,8 @@ interface MetricService {
         update(metricId, MetricUpdateParams.none(), requestOptions)
 
     /**
-     * This endpoint is used to fetch [metric](/core-concepts##metric) details given a metric
-     * identifier. It returns information about the metrics including its name, description, and
-     * item.
+     * This endpoint is used to list [metrics](/core-concepts#metric). It returns information about
+     * the metrics including its name, description, and item.
      */
     fun list(): MetricListPage = list(MetricListParams.none())
 
@@ -95,8 +98,9 @@ interface MetricService {
         list(MetricListParams.none(), requestOptions)
 
     /**
-     * This endpoint is used to list [metrics](/core-concepts#metric). It returns information about
-     * the metrics including its name, description, and item.
+     * This endpoint is used to fetch [metric](/core-concepts#metric) details given a metric
+     * identifier. It returns information about the metrics including its name, description, and
+     * item.
      */
     fun fetch(metricId: String): BillableMetric = fetch(metricId, MetricFetchParams.none())
 

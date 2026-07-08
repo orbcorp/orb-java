@@ -13,6 +13,8 @@ import com.withorb.api.models.InvoiceFetchParams
 import com.withorb.api.models.InvoiceFetchUpcomingParams
 import com.withorb.api.models.InvoiceFetchUpcomingResponse
 import com.withorb.api.models.InvoiceIssueParams
+import com.withorb.api.models.InvoiceIssueSummaryParams
+import com.withorb.api.models.InvoiceIssueSummaryResponse
 import com.withorb.api.models.InvoiceListPageAsync
 import com.withorb.api.models.InvoiceListParams
 import com.withorb.api.models.InvoiceListSummaryPageAsync
@@ -24,6 +26,13 @@ import com.withorb.api.models.InvoiceVoidInvoiceParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * An [`Invoice`](/core-concepts#invoice) is a fundamental billing entity, representing the request
+ * for payment for a single subscription. This includes a set of line items, which correspond to
+ * prices in the subscription's plan and can represent fixed recurring fees or usage-based fees.
+ * They are generated at the end of a billing period, or as the result of an action, such as a
+ * cancellation.
+ */
 interface InvoiceServiceAsync {
 
     /**
@@ -49,13 +58,13 @@ interface InvoiceServiceAsync {
     ): CompletableFuture<Invoice>
 
     /**
-     * This endpoint allows you to update the `metadata`, `net_terms`, `due_date`, and
-     * `invoice_date` properties on an invoice. If you pass null for the metadata value, it will
-     * clear any existing metadata for that invoice.
+     * This endpoint allows you to update the `metadata`, `net_terms`, `due_date`, `invoice_date`,
+     * and `auto_collection` properties on an invoice. If you pass null for the metadata value, it
+     * will clear any existing metadata for that invoice.
      *
-     * `metadata` can be modified regardless of invoice state. `net_terms`, `due_date`, and
-     * `invoice_date` can only be modified if the invoice is in a `draft` state. `invoice_date` can
-     * only be modified for non-subscription invoices.
+     * `metadata` can be modified regardless of invoice state. `net_terms`, `due_date`,
+     * `invoice_date`, and `auto_collection` can only be modified if the invoice is in a `draft`
+     * state. `invoice_date` can only be modified for non-subscription invoices.
      */
     fun update(invoiceId: String): CompletableFuture<Invoice> =
         update(invoiceId, InvoiceUpdateParams.none())
@@ -101,6 +110,10 @@ interface InvoiceServiceAsync {
      * When fetching any `draft` invoices, this returns the last-computed invoice values for each
      * draft invoice, which may not always be up-to-date since Orb regularly refreshes invoices
      * asynchronously.
+     *
+     * If you don't need line item details, minimums, maximums, or discounts, prefer the
+     * [list invoices summary](/api-reference/invoice/list-invoices-summary) endpoint for better
+     * performance.
      */
     fun list(): CompletableFuture<InvoiceListPageAsync> = list(InvoiceListParams.none())
 
@@ -236,6 +249,52 @@ interface InvoiceServiceAsync {
         issue(invoiceId, InvoiceIssueParams.none(), requestOptions)
 
     /**
+     * This endpoint allows an eligible invoice to be issued manually. This is only possible with
+     * invoices where status is `draft`, `will_auto_issue` is false, and an `eligible_to_issue_at`
+     * is a time in the past. Issuing an invoice could possibly trigger side effects, some of which
+     * could be customer-visible (e.g. sending emails, auto-collecting payment, syncing the invoice
+     * to external providers, etc).
+     *
+     * This is a lighter-weight alternative to the issue invoice endpoint, returning an invoice
+     * summary without any line item details.
+     */
+    fun issueSummary(invoiceId: String): CompletableFuture<InvoiceIssueSummaryResponse> =
+        issueSummary(invoiceId, InvoiceIssueSummaryParams.none())
+
+    /** @see issueSummary */
+    fun issueSummary(
+        invoiceId: String,
+        params: InvoiceIssueSummaryParams = InvoiceIssueSummaryParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<InvoiceIssueSummaryResponse> =
+        issueSummary(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
+
+    /** @see issueSummary */
+    fun issueSummary(
+        invoiceId: String,
+        params: InvoiceIssueSummaryParams = InvoiceIssueSummaryParams.none(),
+    ): CompletableFuture<InvoiceIssueSummaryResponse> =
+        issueSummary(invoiceId, params, RequestOptions.none())
+
+    /** @see issueSummary */
+    fun issueSummary(
+        params: InvoiceIssueSummaryParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<InvoiceIssueSummaryResponse>
+
+    /** @see issueSummary */
+    fun issueSummary(
+        params: InvoiceIssueSummaryParams
+    ): CompletableFuture<InvoiceIssueSummaryResponse> = issueSummary(params, RequestOptions.none())
+
+    /** @see issueSummary */
+    fun issueSummary(
+        invoiceId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<InvoiceIssueSummaryResponse> =
+        issueSummary(invoiceId, InvoiceIssueSummaryParams.none(), requestOptions)
+
+    /**
      * This is a lighter-weight endpoint that returns a list of all
      * [`Invoice`](/core-concepts#invoice) summaries for an account in a list format.
      *
@@ -298,38 +357,31 @@ interface InvoiceServiceAsync {
     ): CompletableFuture<Invoice>
 
     /**
-     * This endpoint collects payment for an invoice using the customer's default payment method.
-     * This action can only be taken on invoices with status "issued".
+     * This endpoint collects payment for an invoice. By default, it uses the customer's default
+     * payment method. Optionally, a shared payment token (SPT) can be provided to pay using
+     * agent-granted credentials instead. This action can only be taken on invoices with status
+     * "issued".
      */
-    fun pay(invoiceId: String): CompletableFuture<Invoice> = pay(invoiceId, InvoicePayParams.none())
+    fun pay(invoiceId: String, params: InvoicePayParams): CompletableFuture<Invoice> =
+        pay(invoiceId, params, RequestOptions.none())
 
     /** @see pay */
     fun pay(
         invoiceId: String,
-        params: InvoicePayParams = InvoicePayParams.none(),
+        params: InvoicePayParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Invoice> =
         pay(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
-
-    /** @see pay */
-    fun pay(
-        invoiceId: String,
-        params: InvoicePayParams = InvoicePayParams.none(),
-    ): CompletableFuture<Invoice> = pay(invoiceId, params, RequestOptions.none())
-
-    /** @see pay */
-    fun pay(
-        params: InvoicePayParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Invoice>
 
     /** @see pay */
     fun pay(params: InvoicePayParams): CompletableFuture<Invoice> =
         pay(params, RequestOptions.none())
 
     /** @see pay */
-    fun pay(invoiceId: String, requestOptions: RequestOptions): CompletableFuture<Invoice> =
-        pay(invoiceId, InvoicePayParams.none(), requestOptions)
+    fun pay(
+        params: InvoicePayParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Invoice>
 
     /**
      * This endpoint allows an invoice's status to be set to the `void` status. This can only be
@@ -588,6 +640,49 @@ interface InvoiceServiceAsync {
             issue(invoiceId, InvoiceIssueParams.none(), requestOptions)
 
         /**
+         * Returns a raw HTTP response for `post /invoices/summary/{invoice_id}/issue`, but is
+         * otherwise the same as [InvoiceServiceAsync.issueSummary].
+         */
+        fun issueSummary(
+            invoiceId: String
+        ): CompletableFuture<HttpResponseFor<InvoiceIssueSummaryResponse>> =
+            issueSummary(invoiceId, InvoiceIssueSummaryParams.none())
+
+        /** @see issueSummary */
+        fun issueSummary(
+            invoiceId: String,
+            params: InvoiceIssueSummaryParams = InvoiceIssueSummaryParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<InvoiceIssueSummaryResponse>> =
+            issueSummary(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
+
+        /** @see issueSummary */
+        fun issueSummary(
+            invoiceId: String,
+            params: InvoiceIssueSummaryParams = InvoiceIssueSummaryParams.none(),
+        ): CompletableFuture<HttpResponseFor<InvoiceIssueSummaryResponse>> =
+            issueSummary(invoiceId, params, RequestOptions.none())
+
+        /** @see issueSummary */
+        fun issueSummary(
+            params: InvoiceIssueSummaryParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<InvoiceIssueSummaryResponse>>
+
+        /** @see issueSummary */
+        fun issueSummary(
+            params: InvoiceIssueSummaryParams
+        ): CompletableFuture<HttpResponseFor<InvoiceIssueSummaryResponse>> =
+            issueSummary(params, RequestOptions.none())
+
+        /** @see issueSummary */
+        fun issueSummary(
+            invoiceId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<InvoiceIssueSummaryResponse>> =
+            issueSummary(invoiceId, InvoiceIssueSummaryParams.none(), requestOptions)
+
+        /**
          * Returns a raw HTTP response for `get /invoices/summary`, but is otherwise the same as
          * [InvoiceServiceAsync.listSummary].
          */
@@ -644,29 +739,19 @@ interface InvoiceServiceAsync {
          * Returns a raw HTTP response for `post /invoices/{invoice_id}/pay`, but is otherwise the
          * same as [InvoiceServiceAsync.pay].
          */
-        fun pay(invoiceId: String): CompletableFuture<HttpResponseFor<Invoice>> =
-            pay(invoiceId, InvoicePayParams.none())
-
-        /** @see pay */
         fun pay(
             invoiceId: String,
-            params: InvoicePayParams = InvoicePayParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Invoice>> =
-            pay(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
-
-        /** @see pay */
-        fun pay(
-            invoiceId: String,
-            params: InvoicePayParams = InvoicePayParams.none(),
+            params: InvoicePayParams,
         ): CompletableFuture<HttpResponseFor<Invoice>> =
             pay(invoiceId, params, RequestOptions.none())
 
         /** @see pay */
         fun pay(
+            invoiceId: String,
             params: InvoicePayParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Invoice>>
+        ): CompletableFuture<HttpResponseFor<Invoice>> =
+            pay(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
         /** @see pay */
         fun pay(params: InvoicePayParams): CompletableFuture<HttpResponseFor<Invoice>> =
@@ -674,10 +759,9 @@ interface InvoiceServiceAsync {
 
         /** @see pay */
         fun pay(
-            invoiceId: String,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<Invoice>> =
-            pay(invoiceId, InvoicePayParams.none(), requestOptions)
+            params: InvoicePayParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Invoice>>
 
         /**
          * Returns a raw HTTP response for `post /invoices/{invoice_id}/void`, but is otherwise the

@@ -24,6 +24,8 @@ import com.withorb.api.models.InvoiceFetchParams
 import com.withorb.api.models.InvoiceFetchUpcomingParams
 import com.withorb.api.models.InvoiceFetchUpcomingResponse
 import com.withorb.api.models.InvoiceIssueParams
+import com.withorb.api.models.InvoiceIssueSummaryParams
+import com.withorb.api.models.InvoiceIssueSummaryResponse
 import com.withorb.api.models.InvoiceListPageAsync
 import com.withorb.api.models.InvoiceListPageResponse
 import com.withorb.api.models.InvoiceListParams
@@ -38,6 +40,13 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * An [`Invoice`](/core-concepts#invoice) is a fundamental billing entity, representing the request
+ * for payment for a single subscription. This includes a set of line items, which correspond to
+ * prices in the subscription's plan and can represent fixed recurring fees or usage-based fees.
+ * They are generated at the end of a billing period, or as the result of an action, such as a
+ * cancellation.
+ */
 class InvoiceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     InvoiceServiceAsync {
 
@@ -98,6 +107,13 @@ class InvoiceServiceAsyncImpl internal constructor(private val clientOptions: Cl
     ): CompletableFuture<Invoice> =
         // post /invoices/{invoice_id}/issue
         withRawResponse().issue(params, requestOptions).thenApply { it.parse() }
+
+    override fun issueSummary(
+        params: InvoiceIssueSummaryParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<InvoiceIssueSummaryResponse> =
+        // post /invoices/summary/{invoice_id}/issue
+        withRawResponse().issueSummary(params, requestOptions).thenApply { it.parse() }
 
     override fun listSummary(
         params: InvoiceListSummaryParams,
@@ -368,6 +384,40 @@ class InvoiceServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
+        private val issueSummaryHandler: Handler<InvoiceIssueSummaryResponse> =
+            jsonHandler<InvoiceIssueSummaryResponse>(clientOptions.jsonMapper)
+
+        override fun issueSummary(
+            params: InvoiceIssueSummaryParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<InvoiceIssueSummaryResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("invoiceId", params.invoiceId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("invoices", "summary", params._pathParam(0), "issue")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { issueSummaryHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
         private val listSummaryHandler: Handler<InvoiceListSummaryPageResponse> =
             jsonHandler<InvoiceListSummaryPageResponse>(clientOptions.jsonMapper)
 
@@ -454,7 +504,7 @@ class InvoiceServiceAsyncImpl internal constructor(private val clientOptions: Cl
                     .method(HttpMethod.POST)
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("invoices", params._pathParam(0), "pay")
-                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))

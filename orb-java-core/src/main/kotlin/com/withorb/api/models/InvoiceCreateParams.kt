@@ -68,6 +68,15 @@ private constructor(
     fun lineItems(): List<LineItem> = body.lineItems()
 
     /**
+     * Determines whether this invoice will automatically attempt to charge a saved payment method,
+     * if any. If not specified, the invoice inherits the customer's auto_collection setting.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun autoCollection(): Optional<Boolean> = body.autoCollection()
+
+    /**
      * The id of the `Customer` to create this invoice for. One of `customer_id` and
      * `external_customer_id` are required.
      *
@@ -162,6 +171,13 @@ private constructor(
      * Unlike [lineItems], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _lineItems(): JsonField<List<LineItem>> = body._lineItems()
+
+    /**
+     * Returns the raw JSON value of [autoCollection].
+     *
+     * Unlike [autoCollection], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _autoCollection(): JsonField<Boolean> = body._autoCollection()
 
     /**
      * Returns the raw JSON value of [customerId].
@@ -267,8 +283,8 @@ private constructor(
          * - [currency]
          * - [invoiceDate]
          * - [lineItems]
+         * - [autoCollection]
          * - [customerId]
-         * - [discount]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -320,6 +336,35 @@ private constructor(
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
         fun addLineItem(lineItem: LineItem) = apply { body.addLineItem(lineItem) }
+
+        /**
+         * Determines whether this invoice will automatically attempt to charge a saved payment
+         * method, if any. If not specified, the invoice inherits the customer's auto_collection
+         * setting.
+         */
+        fun autoCollection(autoCollection: Boolean?) = apply { body.autoCollection(autoCollection) }
+
+        /**
+         * Alias for [Builder.autoCollection].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun autoCollection(autoCollection: Boolean) = autoCollection(autoCollection as Boolean?)
+
+        /** Alias for calling [Builder.autoCollection] with `autoCollection.orElse(null)`. */
+        fun autoCollection(autoCollection: Optional<Boolean>) =
+            autoCollection(autoCollection.getOrNull())
+
+        /**
+         * Sets [Builder.autoCollection] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.autoCollection] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun autoCollection(autoCollection: JsonField<Boolean>) = apply {
+            body.autoCollection(autoCollection)
+        }
 
         /**
          * The id of the `Customer` to create this invoice for. One of `customer_id` and
@@ -400,6 +445,23 @@ private constructor(
          * ```
          */
         fun amountDiscount(amountDiscount: String) = apply { body.amountDiscount(amountDiscount) }
+
+        /** Alias for calling [discount] with `Discount.ofTieredPercentage(tieredPercentage)`. */
+        fun discount(tieredPercentage: Discount.TieredPercentage) = apply {
+            body.discount(tieredPercentage)
+        }
+
+        /**
+         * Alias for calling [discount] with the following:
+         * ```java
+         * Discount.TieredPercentage.builder()
+         *     .tiers(tiers)
+         *     .build()
+         * ```
+         */
+        fun tieredPercentageDiscount(tiers: List<Discount.TieredPercentage.Tier>) = apply {
+            body.tieredPercentageDiscount(tiers)
+        }
 
         /**
          * An optional custom due date for the invoice. If not set, the due date will be calculated
@@ -680,6 +742,7 @@ private constructor(
         private val currency: JsonField<String>,
         private val invoiceDate: JsonField<OffsetDateTime>,
         private val lineItems: JsonField<List<LineItem>>,
+        private val autoCollection: JsonField<Boolean>,
         private val customerId: JsonField<String>,
         private val discount: JsonField<Discount>,
         private val dueDate: JsonField<DueDate>,
@@ -702,6 +765,9 @@ private constructor(
             @JsonProperty("line_items")
             @ExcludeMissing
             lineItems: JsonField<List<LineItem>> = JsonMissing.of(),
+            @JsonProperty("auto_collection")
+            @ExcludeMissing
+            autoCollection: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("customer_id")
             @ExcludeMissing
             customerId: JsonField<String> = JsonMissing.of(),
@@ -726,6 +792,7 @@ private constructor(
             currency,
             invoiceDate,
             lineItems,
+            autoCollection,
             customerId,
             discount,
             dueDate,
@@ -759,6 +826,16 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun lineItems(): List<LineItem> = lineItems.getRequired("line_items")
+
+        /**
+         * Determines whether this invoice will automatically attempt to charge a saved payment
+         * method, if any. If not specified, the invoice inherits the customer's auto_collection
+         * setting.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun autoCollection(): Optional<Boolean> = autoCollection.getOptional("auto_collection")
 
         /**
          * The id of the `Customer` to create this invoice for. One of `customer_id` and
@@ -862,6 +939,16 @@ private constructor(
         fun _lineItems(): JsonField<List<LineItem>> = lineItems
 
         /**
+         * Returns the raw JSON value of [autoCollection].
+         *
+         * Unlike [autoCollection], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("auto_collection")
+        @ExcludeMissing
+        fun _autoCollection(): JsonField<Boolean> = autoCollection
+
+        /**
          * Returns the raw JSON value of [customerId].
          *
          * Unlike [customerId], this method doesn't throw if the JSON field has an unexpected type.
@@ -958,6 +1045,7 @@ private constructor(
             private var currency: JsonField<String>? = null
             private var invoiceDate: JsonField<OffsetDateTime>? = null
             private var lineItems: JsonField<MutableList<LineItem>>? = null
+            private var autoCollection: JsonField<Boolean> = JsonMissing.of()
             private var customerId: JsonField<String> = JsonMissing.of()
             private var discount: JsonField<Discount> = JsonMissing.of()
             private var dueDate: JsonField<DueDate> = JsonMissing.of()
@@ -973,6 +1061,7 @@ private constructor(
                 currency = body.currency
                 invoiceDate = body.invoiceDate
                 lineItems = body.lineItems.map { it.toMutableList() }
+                autoCollection = body.autoCollection
                 customerId = body.customerId
                 discount = body.discount
                 dueDate = body.dueDate
@@ -1039,6 +1128,36 @@ private constructor(
                     (lineItems ?: JsonField.of(mutableListOf())).also {
                         checkKnown("lineItems", it).add(lineItem)
                     }
+            }
+
+            /**
+             * Determines whether this invoice will automatically attempt to charge a saved payment
+             * method, if any. If not specified, the invoice inherits the customer's auto_collection
+             * setting.
+             */
+            fun autoCollection(autoCollection: Boolean?) =
+                autoCollection(JsonField.ofNullable(autoCollection))
+
+            /**
+             * Alias for [Builder.autoCollection].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun autoCollection(autoCollection: Boolean) = autoCollection(autoCollection as Boolean?)
+
+            /** Alias for calling [Builder.autoCollection] with `autoCollection.orElse(null)`. */
+            fun autoCollection(autoCollection: Optional<Boolean>) =
+                autoCollection(autoCollection.getOrNull())
+
+            /**
+             * Sets [Builder.autoCollection] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.autoCollection] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun autoCollection(autoCollection: JsonField<Boolean>) = apply {
+                this.autoCollection = autoCollection
             }
 
             /**
@@ -1137,6 +1256,23 @@ private constructor(
                         .amountDiscount(amountDiscount)
                         .build()
                 )
+
+            /**
+             * Alias for calling [discount] with `Discount.ofTieredPercentage(tieredPercentage)`.
+             */
+            fun discount(tieredPercentage: Discount.TieredPercentage) =
+                discount(Discount.ofTieredPercentage(tieredPercentage))
+
+            /**
+             * Alias for calling [discount] with the following:
+             * ```java
+             * Discount.TieredPercentage.builder()
+             *     .tiers(tiers)
+             *     .build()
+             * ```
+             */
+            fun tieredPercentageDiscount(tiers: List<Discount.TieredPercentage.Tier>) =
+                discount(Discount.TieredPercentage.builder().tiers(tiers).build())
 
             /**
              * An optional custom due date for the invoice. If not set, the due date will be
@@ -1307,6 +1443,7 @@ private constructor(
                     checkRequired("currency", currency),
                     checkRequired("invoiceDate", invoiceDate),
                     checkRequired("lineItems", lineItems).map { it.toImmutable() },
+                    autoCollection,
                     customerId,
                     discount,
                     dueDate,
@@ -1321,6 +1458,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Body = apply {
             if (validated) {
                 return@apply
@@ -1329,6 +1475,7 @@ private constructor(
             currency()
             invoiceDate()
             lineItems().forEach { it.validate() }
+            autoCollection()
             customerId()
             discount().ifPresent { it.validate() }
             dueDate().ifPresent { it.validate() }
@@ -1359,6 +1506,7 @@ private constructor(
             (if (currency.asKnown().isPresent) 1 else 0) +
                 (if (invoiceDate.asKnown().isPresent) 1 else 0) +
                 (lineItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (if (autoCollection.asKnown().isPresent) 1 else 0) +
                 (if (customerId.asKnown().isPresent) 1 else 0) +
                 (discount.asKnown().getOrNull()?.validity() ?: 0) +
                 (dueDate.asKnown().getOrNull()?.validity() ?: 0) +
@@ -1377,6 +1525,7 @@ private constructor(
                 currency == other.currency &&
                 invoiceDate == other.invoiceDate &&
                 lineItems == other.lineItems &&
+                autoCollection == other.autoCollection &&
                 customerId == other.customerId &&
                 discount == other.discount &&
                 dueDate == other.dueDate &&
@@ -1393,6 +1542,7 @@ private constructor(
                 currency,
                 invoiceDate,
                 lineItems,
+                autoCollection,
                 customerId,
                 discount,
                 dueDate,
@@ -1408,7 +1558,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{currency=$currency, invoiceDate=$invoiceDate, lineItems=$lineItems, customerId=$customerId, discount=$discount, dueDate=$dueDate, externalCustomerId=$externalCustomerId, memo=$memo, metadata=$metadata, netTerms=$netTerms, willAutoIssue=$willAutoIssue, additionalProperties=$additionalProperties}"
+            "Body{currency=$currency, invoiceDate=$invoiceDate, lineItems=$lineItems, autoCollection=$autoCollection, customerId=$customerId, discount=$discount, dueDate=$dueDate, externalCustomerId=$externalCustomerId, memo=$memo, metadata=$metadata, netTerms=$netTerms, willAutoIssue=$willAutoIssue, additionalProperties=$additionalProperties}"
     }
 
     class LineItem
@@ -1743,6 +1893,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): LineItem = apply {
             if (validated) {
                 return@apply
@@ -1867,6 +2026,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws OrbInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
+             */
             fun validate(): ModelType = apply {
                 if (validated) {
                     return@apply
@@ -1967,6 +2136,35 @@ private constructor(
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
+        /**
+         * Maps this instance's current variant to a value of type [T] using the given [visitor].
+         *
+         * Note that this method is _not_ forwards compatible with new variants from the API, unless
+         * [visitor] overrides [Visitor.unknown]. To handle variants not known to this version of
+         * the SDK gracefully, consider overriding [Visitor.unknown]:
+         * ```java
+         * import com.withorb.api.core.JsonValue;
+         * import java.util.Optional;
+         *
+         * Optional<String> result = dueDate.accept(new DueDate.Visitor<Optional<String>>() {
+         *     @Override
+         *     public Optional<String> visitDate(LocalDate date) {
+         *         return Optional.of(date.toString());
+         *     }
+         *
+         *     // ...
+         *
+         *     @Override
+         *     public Optional<String> unknown(JsonValue json) {
+         *         // Or inspect the `json`.
+         *         return Optional.empty();
+         *     }
+         * });
+         * ```
+         *
+         * @throws OrbInvalidDataException if [Visitor.unknown] is not overridden in [visitor] and
+         *   the current variant is unknown.
+         */
         fun <T> accept(visitor: Visitor<T>): T =
             when {
                 date != null -> visitor.visitDate(date)
@@ -1976,6 +2174,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): DueDate = apply {
             if (validated) {
                 return@apply
@@ -2176,6 +2383,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Metadata = apply {
             if (validated) {
                 return@apply

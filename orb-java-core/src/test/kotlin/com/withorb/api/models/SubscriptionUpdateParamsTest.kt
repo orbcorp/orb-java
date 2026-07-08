@@ -13,6 +13,7 @@ internal class SubscriptionUpdateParamsTest {
         SubscriptionUpdateParams.builder()
             .subscriptionId("subscription_id")
             .autoCollection(true)
+            .autoIssuance(true)
             .defaultInvoiceMemo("default_invoice_memo")
             .invoicingThreshold("10.00")
             .metadata(
@@ -39,6 +40,7 @@ internal class SubscriptionUpdateParamsTest {
             SubscriptionUpdateParams.builder()
                 .subscriptionId("subscription_id")
                 .autoCollection(true)
+                .autoIssuance(true)
                 .defaultInvoiceMemo("default_invoice_memo")
                 .invoicingThreshold("10.00")
                 .metadata(
@@ -52,6 +54,7 @@ internal class SubscriptionUpdateParamsTest {
         val body = params._body()
 
         assertThat(body.autoCollection()).contains(true)
+        assertThat(body.autoIssuance()).contains(true)
         assertThat(body.defaultInvoiceMemo()).contains("default_invoice_memo")
         assertThat(body.invoicingThreshold()).contains("10.00")
         assertThat(body.metadata())

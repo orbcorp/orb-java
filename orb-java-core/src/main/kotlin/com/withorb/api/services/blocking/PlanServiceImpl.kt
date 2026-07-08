@@ -30,6 +30,11 @@ import com.withorb.api.services.blocking.plans.MigrationServiceImpl
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be subscribed to by
+ * a customer. Plans define the billing behavior of the subscription. You can see more about how to
+ * configure prices in the [Price resource](/reference/price).
+ */
 class PlanServiceImpl internal constructor(private val clientOptions: ClientOptions) : PlanService {
 
     private val withRawResponse: PlanService.WithRawResponse by lazy {
@@ -47,8 +52,18 @@ class PlanServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PlanService =
         PlanServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be subscribed
+     * to by a customer. Plans define the billing behavior of the subscription. You can see more
+     * about how to configure prices in the [Price resource](/reference/price).
+     */
     override fun externalPlanId(): ExternalPlanIdService = externalPlanId
 
+    /**
+     * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be subscribed
+     * to by a customer. Plans define the billing behavior of the subscription. You can see more
+     * about how to configure prices in the [Price resource](/reference/price).
+     */
     override fun migrations(): MigrationService = migrations
 
     override fun create(params: PlanCreateParams, requestOptions: RequestOptions): Plan =
@@ -88,8 +103,18 @@ class PlanServiceImpl internal constructor(private val clientOptions: ClientOpti
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be
+         * subscribed to by a customer. Plans define the billing behavior of the subscription. You
+         * can see more about how to configure prices in the [Price resource](/reference/price).
+         */
         override fun externalPlanId(): ExternalPlanIdService.WithRawResponse = externalPlanId
 
+        /**
+         * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be
+         * subscribed to by a customer. Plans define the billing behavior of the subscription. You
+         * can see more about how to configure prices in the [Price resource](/reference/price).
+         */
         override fun migrations(): MigrationService.WithRawResponse = migrations
 
         private val createHandler: Handler<Plan> = jsonHandler<Plan>(clientOptions.jsonMapper)

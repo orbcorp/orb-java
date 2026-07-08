@@ -67,6 +67,12 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                     .build()
                             )
                             .itemId("item_id")
+                            .licenseTypeId("license_type_id")
+                            .metadata(
+                                NewAllocationPrice.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .perUnitCostBasis("per_unit_cost_basis")
                             .build()
                     )
@@ -81,6 +87,12 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                     .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .externalPriceId("external_price_id")
                     .maximumAmount("1.23")
+                    .metricParameterOverrides(
+                        SubscriptionSchedulePlanChangeParams.AddPrice.MetricParameterOverrides
+                            .builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .minimumAmount("1.23")
                     .planPhaseOrder(0L)
                     .price(
@@ -126,6 +138,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                     .build()
                             )
+                            .licenseTypeId("license_type_id")
                             .metadata(
                                 NewSubscriptionUnitPrice.Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -140,6 +153,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
             )
             .alignBillingWithPlanChangeDate(true)
             .autoCollection(true)
+            .autoIssuance(true)
             .billingCycleAlignment(
                 SubscriptionSchedulePlanChangeParams.BillingCycleAlignment.UNCHANGED
             )
@@ -221,6 +235,12 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                     .build()
                             )
                             .itemId("item_id")
+                            .licenseTypeId("license_type_id")
+                            .metadata(
+                                NewAllocationPrice.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .perUnitCostBasis("per_unit_cost_basis")
                             .build()
                     )
@@ -235,6 +255,12 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                     .externalPriceId("external_price_id")
                     .fixedPriceQuantity(2.0)
                     .maximumAmount("1.23")
+                    .metricParameterOverrides(
+                        SubscriptionSchedulePlanChangeParams.ReplacePrice.MetricParameterOverrides
+                            .builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .minimumAmount("1.23")
                     .price(
                         NewSubscriptionUnitPrice.builder()
@@ -279,6 +305,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                     .build()
                             )
+                            .licenseTypeId("license_type_id")
                             .metadata(
                                 NewSubscriptionUnitPrice.Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -366,6 +393,12 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                         .build()
                                 )
                                 .itemId("item_id")
+                                .licenseTypeId("license_type_id")
+                                .metadata(
+                                    NewAllocationPrice.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .perUnitCostBasis("per_unit_cost_basis")
                                 .build()
                         )
@@ -380,6 +413,12 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                         .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .externalPriceId("external_price_id")
                         .maximumAmount("1.23")
+                        .metricParameterOverrides(
+                            SubscriptionSchedulePlanChangeParams.AddPrice.MetricParameterOverrides
+                                .builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
                         .minimumAmount("1.23")
                         .planPhaseOrder(0L)
                         .price(
@@ -427,6 +466,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                         .build()
                                 )
+                                .licenseTypeId("license_type_id")
                                 .metadata(
                                     NewSubscriptionUnitPrice.Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -441,6 +481,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                 )
                 .alignBillingWithPlanChangeDate(true)
                 .autoCollection(true)
+                .autoIssuance(true)
                 .billingCycleAlignment(
                     SubscriptionSchedulePlanChangeParams.BillingCycleAlignment.UNCHANGED
                 )
@@ -522,6 +563,12 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                         .build()
                                 )
                                 .itemId("item_id")
+                                .licenseTypeId("license_type_id")
+                                .metadata(
+                                    NewAllocationPrice.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .perUnitCostBasis("per_unit_cost_basis")
                                 .build()
                         )
@@ -536,6 +583,13 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                         .externalPriceId("external_price_id")
                         .fixedPriceQuantity(2.0)
                         .maximumAmount("1.23")
+                        .metricParameterOverrides(
+                            SubscriptionSchedulePlanChangeParams.ReplacePrice
+                                .MetricParameterOverrides
+                                .builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
                         .minimumAmount("1.23")
                         .price(
                             NewSubscriptionUnitPrice.builder()
@@ -582,6 +636,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                         .build()
                                 )
+                                .licenseTypeId("license_type_id")
                                 .metadata(
                                     NewSubscriptionUnitPrice.Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -655,6 +710,12 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                     .build()
                             )
                             .itemId("item_id")
+                            .licenseTypeId("license_type_id")
+                            .metadata(
+                                NewAllocationPrice.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .perUnitCostBasis("per_unit_cost_basis")
                             .build()
                     )
@@ -669,6 +730,12 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                     .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .externalPriceId("external_price_id")
                     .maximumAmount("1.23")
+                    .metricParameterOverrides(
+                        SubscriptionSchedulePlanChangeParams.AddPrice.MetricParameterOverrides
+                            .builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .minimumAmount("1.23")
                     .planPhaseOrder(0L)
                     .price(
@@ -714,6 +781,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                     .build()
                             )
+                            .licenseTypeId("license_type_id")
                             .metadata(
                                 NewSubscriptionUnitPrice.Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -728,6 +796,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
             )
         assertThat(body.alignBillingWithPlanChangeDate()).contains(true)
         assertThat(body.autoCollection()).contains(true)
+        assertThat(body.autoIssuance()).contains(true)
         assertThat(body.billingCycleAlignment())
             .contains(SubscriptionSchedulePlanChangeParams.BillingCycleAlignment.UNCHANGED)
         assertThat(body.billingCycleAnchorConfiguration())
@@ -812,6 +881,12 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                     .build()
                             )
                             .itemId("item_id")
+                            .licenseTypeId("license_type_id")
+                            .metadata(
+                                NewAllocationPrice.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .perUnitCostBasis("per_unit_cost_basis")
                             .build()
                     )
@@ -826,6 +901,12 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                     .externalPriceId("external_price_id")
                     .fixedPriceQuantity(2.0)
                     .maximumAmount("1.23")
+                    .metricParameterOverrides(
+                        SubscriptionSchedulePlanChangeParams.ReplacePrice.MetricParameterOverrides
+                            .builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .minimumAmount("1.23")
                     .price(
                         NewSubscriptionUnitPrice.builder()
@@ -870,6 +951,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                                     .build()
                             )
+                            .licenseTypeId("license_type_id")
                             .metadata(
                                 NewSubscriptionUnitPrice.Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))

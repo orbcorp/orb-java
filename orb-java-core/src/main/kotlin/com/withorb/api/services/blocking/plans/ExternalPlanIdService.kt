@@ -11,6 +11,11 @@ import com.withorb.api.models.PlanExternalPlanIdFetchParams
 import com.withorb.api.models.PlanExternalPlanIdUpdateParams
 import java.util.function.Consumer
 
+/**
+ * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be subscribed to by
+ * a customer. Plans define the billing behavior of the subscription. You can see more about how to
+ * configure prices in the [Price resource](/reference/price).
+ */
 interface ExternalPlanIdService {
 
     /**
@@ -26,8 +31,8 @@ interface ExternalPlanIdService {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): ExternalPlanIdService
 
     /**
-     * This endpoint can be used to update the `external_plan_id`, and `metadata` of an existing
-     * plan.
+     * This endpoint can be used to update the `external_plan_id`, `description`, and `metadata` of
+     * an existing plan.
      *
      * Other fields on a plan are currently immutable.
      */

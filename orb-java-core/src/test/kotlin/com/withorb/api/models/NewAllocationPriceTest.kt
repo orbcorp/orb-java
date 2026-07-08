@@ -3,6 +3,7 @@
 package com.withorb.api.models
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.withorb.api.core.JsonValue
 import com.withorb.api.core.jsonMapper
 import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
@@ -32,6 +33,12 @@ internal class NewAllocationPriceTest {
                         .build()
                 )
                 .itemId("item_id")
+                .licenseTypeId("license_type_id")
+                .metadata(
+                    NewAllocationPrice.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .perUnitCostBasis("per_unit_cost_basis")
                 .build()
 
@@ -55,6 +62,13 @@ internal class NewAllocationPriceTest {
                     .build()
             )
         assertThat(newAllocationPrice.itemId()).contains("item_id")
+        assertThat(newAllocationPrice.licenseTypeId()).contains("license_type_id")
+        assertThat(newAllocationPrice.metadata())
+            .contains(
+                NewAllocationPrice.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(newAllocationPrice.perUnitCostBasis()).contains("per_unit_cost_basis")
     }
 
@@ -81,6 +95,12 @@ internal class NewAllocationPriceTest {
                         .build()
                 )
                 .itemId("item_id")
+                .licenseTypeId("license_type_id")
+                .metadata(
+                    NewAllocationPrice.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .perUnitCostBasis("per_unit_cost_basis")
                 .build()
 

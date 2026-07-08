@@ -14,6 +14,8 @@ import com.withorb.api.models.InvoiceFetchParams
 import com.withorb.api.models.InvoiceFetchUpcomingParams
 import com.withorb.api.models.InvoiceFetchUpcomingResponse
 import com.withorb.api.models.InvoiceIssueParams
+import com.withorb.api.models.InvoiceIssueSummaryParams
+import com.withorb.api.models.InvoiceIssueSummaryResponse
 import com.withorb.api.models.InvoiceListPage
 import com.withorb.api.models.InvoiceListParams
 import com.withorb.api.models.InvoiceListSummaryPage
@@ -24,6 +26,13 @@ import com.withorb.api.models.InvoiceUpdateParams
 import com.withorb.api.models.InvoiceVoidInvoiceParams
 import java.util.function.Consumer
 
+/**
+ * An [`Invoice`](/core-concepts#invoice) is a fundamental billing entity, representing the request
+ * for payment for a single subscription. This includes a set of line items, which correspond to
+ * prices in the subscription's plan and can represent fixed recurring fees or usage-based fees.
+ * They are generated at the end of a billing period, or as the result of an action, such as a
+ * cancellation.
+ */
 interface InvoiceService {
 
     /**
@@ -48,13 +57,13 @@ interface InvoiceService {
     ): Invoice
 
     /**
-     * This endpoint allows you to update the `metadata`, `net_terms`, `due_date`, and
-     * `invoice_date` properties on an invoice. If you pass null for the metadata value, it will
-     * clear any existing metadata for that invoice.
+     * This endpoint allows you to update the `metadata`, `net_terms`, `due_date`, `invoice_date`,
+     * and `auto_collection` properties on an invoice. If you pass null for the metadata value, it
+     * will clear any existing metadata for that invoice.
      *
-     * `metadata` can be modified regardless of invoice state. `net_terms`, `due_date`, and
-     * `invoice_date` can only be modified if the invoice is in a `draft` state. `invoice_date` can
-     * only be modified for non-subscription invoices.
+     * `metadata` can be modified regardless of invoice state. `net_terms`, `due_date`,
+     * `invoice_date`, and `auto_collection` can only be modified if the invoice is in a `draft`
+     * state. `invoice_date` can only be modified for non-subscription invoices.
      */
     fun update(invoiceId: String): Invoice = update(invoiceId, InvoiceUpdateParams.none())
 
@@ -97,6 +106,10 @@ interface InvoiceService {
      * When fetching any `draft` invoices, this returns the last-computed invoice values for each
      * draft invoice, which may not always be up-to-date since Orb regularly refreshes invoices
      * asynchronously.
+     *
+     * If you don't need line item details, minimums, maximums, or discounts, prefer the
+     * [list invoices summary](/api-reference/invoice/list-invoices-summary) endpoint for better
+     * performance.
      */
     fun list(): InvoiceListPage = list(InvoiceListParams.none())
 
@@ -216,6 +229,50 @@ interface InvoiceService {
         issue(invoiceId, InvoiceIssueParams.none(), requestOptions)
 
     /**
+     * This endpoint allows an eligible invoice to be issued manually. This is only possible with
+     * invoices where status is `draft`, `will_auto_issue` is false, and an `eligible_to_issue_at`
+     * is a time in the past. Issuing an invoice could possibly trigger side effects, some of which
+     * could be customer-visible (e.g. sending emails, auto-collecting payment, syncing the invoice
+     * to external providers, etc).
+     *
+     * This is a lighter-weight alternative to the issue invoice endpoint, returning an invoice
+     * summary without any line item details.
+     */
+    fun issueSummary(invoiceId: String): InvoiceIssueSummaryResponse =
+        issueSummary(invoiceId, InvoiceIssueSummaryParams.none())
+
+    /** @see issueSummary */
+    fun issueSummary(
+        invoiceId: String,
+        params: InvoiceIssueSummaryParams = InvoiceIssueSummaryParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): InvoiceIssueSummaryResponse =
+        issueSummary(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
+
+    /** @see issueSummary */
+    fun issueSummary(
+        invoiceId: String,
+        params: InvoiceIssueSummaryParams = InvoiceIssueSummaryParams.none(),
+    ): InvoiceIssueSummaryResponse = issueSummary(invoiceId, params, RequestOptions.none())
+
+    /** @see issueSummary */
+    fun issueSummary(
+        params: InvoiceIssueSummaryParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): InvoiceIssueSummaryResponse
+
+    /** @see issueSummary */
+    fun issueSummary(params: InvoiceIssueSummaryParams): InvoiceIssueSummaryResponse =
+        issueSummary(params, RequestOptions.none())
+
+    /** @see issueSummary */
+    fun issueSummary(
+        invoiceId: String,
+        requestOptions: RequestOptions,
+    ): InvoiceIssueSummaryResponse =
+        issueSummary(invoiceId, InvoiceIssueSummaryParams.none(), requestOptions)
+
+    /**
      * This is a lighter-weight endpoint that returns a list of all
      * [`Invoice`](/core-concepts#invoice) summaries for an account in a list format.
      *
@@ -273,34 +330,29 @@ interface InvoiceService {
     ): Invoice
 
     /**
-     * This endpoint collects payment for an invoice using the customer's default payment method.
-     * This action can only be taken on invoices with status "issued".
+     * This endpoint collects payment for an invoice. By default, it uses the customer's default
+     * payment method. Optionally, a shared payment token (SPT) can be provided to pay using
+     * agent-granted credentials instead. This action can only be taken on invoices with status
+     * "issued".
      */
-    fun pay(invoiceId: String): Invoice = pay(invoiceId, InvoicePayParams.none())
+    fun pay(invoiceId: String, params: InvoicePayParams): Invoice =
+        pay(invoiceId, params, RequestOptions.none())
 
     /** @see pay */
     fun pay(
         invoiceId: String,
-        params: InvoicePayParams = InvoicePayParams.none(),
+        params: InvoicePayParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Invoice = pay(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
     /** @see pay */
-    fun pay(invoiceId: String, params: InvoicePayParams = InvoicePayParams.none()): Invoice =
-        pay(invoiceId, params, RequestOptions.none())
+    fun pay(params: InvoicePayParams): Invoice = pay(params, RequestOptions.none())
 
     /** @see pay */
     fun pay(
         params: InvoicePayParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Invoice
-
-    /** @see pay */
-    fun pay(params: InvoicePayParams): Invoice = pay(params, RequestOptions.none())
-
-    /** @see pay */
-    fun pay(invoiceId: String, requestOptions: RequestOptions): Invoice =
-        pay(invoiceId, InvoicePayParams.none(), requestOptions)
 
     /**
      * This endpoint allows an invoice's status to be set to the `void` status. This can only be
@@ -564,6 +616,53 @@ interface InvoiceService {
             issue(invoiceId, InvoiceIssueParams.none(), requestOptions)
 
         /**
+         * Returns a raw HTTP response for `post /invoices/summary/{invoice_id}/issue`, but is
+         * otherwise the same as [InvoiceService.issueSummary].
+         */
+        @MustBeClosed
+        fun issueSummary(invoiceId: String): HttpResponseFor<InvoiceIssueSummaryResponse> =
+            issueSummary(invoiceId, InvoiceIssueSummaryParams.none())
+
+        /** @see issueSummary */
+        @MustBeClosed
+        fun issueSummary(
+            invoiceId: String,
+            params: InvoiceIssueSummaryParams = InvoiceIssueSummaryParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<InvoiceIssueSummaryResponse> =
+            issueSummary(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
+
+        /** @see issueSummary */
+        @MustBeClosed
+        fun issueSummary(
+            invoiceId: String,
+            params: InvoiceIssueSummaryParams = InvoiceIssueSummaryParams.none(),
+        ): HttpResponseFor<InvoiceIssueSummaryResponse> =
+            issueSummary(invoiceId, params, RequestOptions.none())
+
+        /** @see issueSummary */
+        @MustBeClosed
+        fun issueSummary(
+            params: InvoiceIssueSummaryParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<InvoiceIssueSummaryResponse>
+
+        /** @see issueSummary */
+        @MustBeClosed
+        fun issueSummary(
+            params: InvoiceIssueSummaryParams
+        ): HttpResponseFor<InvoiceIssueSummaryResponse> =
+            issueSummary(params, RequestOptions.none())
+
+        /** @see issueSummary */
+        @MustBeClosed
+        fun issueSummary(
+            invoiceId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<InvoiceIssueSummaryResponse> =
+            issueSummary(invoiceId, InvoiceIssueSummaryParams.none(), requestOptions)
+
+        /**
          * Returns a raw HTTP response for `get /invoices/summary`, but is otherwise the same as
          * [InvoiceService.listSummary].
          */
@@ -623,31 +722,17 @@ interface InvoiceService {
          * same as [InvoiceService.pay].
          */
         @MustBeClosed
-        fun pay(invoiceId: String): HttpResponseFor<Invoice> =
-            pay(invoiceId, InvoicePayParams.none())
+        fun pay(invoiceId: String, params: InvoicePayParams): HttpResponseFor<Invoice> =
+            pay(invoiceId, params, RequestOptions.none())
 
         /** @see pay */
         @MustBeClosed
         fun pay(
             invoiceId: String,
-            params: InvoicePayParams = InvoicePayParams.none(),
+            params: InvoicePayParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Invoice> =
             pay(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
-
-        /** @see pay */
-        @MustBeClosed
-        fun pay(
-            invoiceId: String,
-            params: InvoicePayParams = InvoicePayParams.none(),
-        ): HttpResponseFor<Invoice> = pay(invoiceId, params, RequestOptions.none())
-
-        /** @see pay */
-        @MustBeClosed
-        fun pay(
-            params: InvoicePayParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Invoice>
 
         /** @see pay */
         @MustBeClosed
@@ -656,8 +741,10 @@ interface InvoiceService {
 
         /** @see pay */
         @MustBeClosed
-        fun pay(invoiceId: String, requestOptions: RequestOptions): HttpResponseFor<Invoice> =
-            pay(invoiceId, InvoicePayParams.none(), requestOptions)
+        fun pay(
+            params: InvoicePayParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Invoice>
 
         /**
          * Returns a raw HTTP response for `post /invoices/{invoice_id}/void`, but is otherwise the

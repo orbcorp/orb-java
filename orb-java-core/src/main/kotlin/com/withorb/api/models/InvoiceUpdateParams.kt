@@ -34,13 +34,13 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * This endpoint allows you to update the `metadata`, `net_terms`, `due_date`, and `invoice_date`
- * properties on an invoice. If you pass null for the metadata value, it will clear any existing
- * metadata for that invoice.
+ * This endpoint allows you to update the `metadata`, `net_terms`, `due_date`, `invoice_date`, and
+ * `auto_collection` properties on an invoice. If you pass null for the metadata value, it will
+ * clear any existing metadata for that invoice.
  *
- * `metadata` can be modified regardless of invoice state. `net_terms`, `due_date`, and
- * `invoice_date` can only be modified if the invoice is in a `draft` state. `invoice_date` can only
- * be modified for non-subscription invoices.
+ * `metadata` can be modified regardless of invoice state. `net_terms`, `due_date`, `invoice_date`,
+ * and `auto_collection` can only be modified if the invoice is in a `draft` state. `invoice_date`
+ * can only be modified for non-subscription invoices.
  */
 class InvoiceUpdateParams
 private constructor(
@@ -51,6 +51,16 @@ private constructor(
 ) : Params {
 
     fun invoiceId(): Optional<String> = Optional.ofNullable(invoiceId)
+
+    /**
+     * Determines whether this invoice will automatically attempt to charge a saved payment method,
+     * if any. Can only be modified on draft invoices. If not specified, the invoice's existing
+     * setting is unchanged.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun autoCollection(): Optional<Boolean> = body.autoCollection()
 
     /**
      * An optional custom due date for the invoice. If not set, the due date will be calculated
@@ -90,6 +100,13 @@ private constructor(
      *   responded with an unexpected value).
      */
     fun netTerms(): Optional<Long> = body.netTerms()
+
+    /**
+     * Returns the raw JSON value of [autoCollection].
+     *
+     * Unlike [autoCollection], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _autoCollection(): JsonField<Boolean> = body._autoCollection()
 
     /**
      * Returns the raw JSON value of [dueDate].
@@ -163,12 +180,43 @@ private constructor(
          *
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [autoCollection]
          * - [dueDate]
          * - [invoiceDate]
          * - [metadata]
          * - [netTerms]
+         * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /**
+         * Determines whether this invoice will automatically attempt to charge a saved payment
+         * method, if any. Can only be modified on draft invoices. If not specified, the invoice's
+         * existing setting is unchanged.
+         */
+        fun autoCollection(autoCollection: Boolean?) = apply { body.autoCollection(autoCollection) }
+
+        /**
+         * Alias for [Builder.autoCollection].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun autoCollection(autoCollection: Boolean) = autoCollection(autoCollection as Boolean?)
+
+        /** Alias for calling [Builder.autoCollection] with `autoCollection.orElse(null)`. */
+        fun autoCollection(autoCollection: Optional<Boolean>) =
+            autoCollection(autoCollection.getOrNull())
+
+        /**
+         * Sets [Builder.autoCollection] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.autoCollection] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun autoCollection(autoCollection: JsonField<Boolean>) = apply {
+            body.autoCollection(autoCollection)
+        }
 
         /**
          * An optional custom due date for the invoice. If not set, the due date will be calculated
@@ -408,6 +456,7 @@ private constructor(
     class Body
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
+        private val autoCollection: JsonField<Boolean>,
         private val dueDate: JsonField<DueDate>,
         private val invoiceDate: JsonField<InvoiceDate>,
         private val metadata: JsonField<Metadata>,
@@ -417,6 +466,9 @@ private constructor(
 
         @JsonCreator
         private constructor(
+            @JsonProperty("auto_collection")
+            @ExcludeMissing
+            autoCollection: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("due_date")
             @ExcludeMissing
             dueDate: JsonField<DueDate> = JsonMissing.of(),
@@ -427,7 +479,17 @@ private constructor(
             @ExcludeMissing
             metadata: JsonField<Metadata> = JsonMissing.of(),
             @JsonProperty("net_terms") @ExcludeMissing netTerms: JsonField<Long> = JsonMissing.of(),
-        ) : this(dueDate, invoiceDate, metadata, netTerms, mutableMapOf())
+        ) : this(autoCollection, dueDate, invoiceDate, metadata, netTerms, mutableMapOf())
+
+        /**
+         * Determines whether this invoice will automatically attempt to charge a saved payment
+         * method, if any. Can only be modified on draft invoices. If not specified, the invoice's
+         * existing setting is unchanged.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun autoCollection(): Optional<Boolean> = autoCollection.getOptional("auto_collection")
 
         /**
          * An optional custom due date for the invoice. If not set, the due date will be calculated
@@ -467,6 +529,16 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun netTerms(): Optional<Long> = netTerms.getOptional("net_terms")
+
+        /**
+         * Returns the raw JSON value of [autoCollection].
+         *
+         * Unlike [autoCollection], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("auto_collection")
+        @ExcludeMissing
+        fun _autoCollection(): JsonField<Boolean> = autoCollection
 
         /**
          * Returns the raw JSON value of [dueDate].
@@ -519,6 +591,7 @@ private constructor(
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
+            private var autoCollection: JsonField<Boolean> = JsonMissing.of()
             private var dueDate: JsonField<DueDate> = JsonMissing.of()
             private var invoiceDate: JsonField<InvoiceDate> = JsonMissing.of()
             private var metadata: JsonField<Metadata> = JsonMissing.of()
@@ -527,11 +600,42 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(body: Body) = apply {
+                autoCollection = body.autoCollection
                 dueDate = body.dueDate
                 invoiceDate = body.invoiceDate
                 metadata = body.metadata
                 netTerms = body.netTerms
                 additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            /**
+             * Determines whether this invoice will automatically attempt to charge a saved payment
+             * method, if any. Can only be modified on draft invoices. If not specified, the
+             * invoice's existing setting is unchanged.
+             */
+            fun autoCollection(autoCollection: Boolean?) =
+                autoCollection(JsonField.ofNullable(autoCollection))
+
+            /**
+             * Alias for [Builder.autoCollection].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun autoCollection(autoCollection: Boolean) = autoCollection(autoCollection as Boolean?)
+
+            /** Alias for calling [Builder.autoCollection] with `autoCollection.orElse(null)`. */
+            fun autoCollection(autoCollection: Optional<Boolean>) =
+                autoCollection(autoCollection.getOrNull())
+
+            /**
+             * Sets [Builder.autoCollection] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.autoCollection] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun autoCollection(autoCollection: JsonField<Boolean>) = apply {
+                this.autoCollection = autoCollection
             }
 
             /**
@@ -656,16 +760,33 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              */
             fun build(): Body =
-                Body(dueDate, invoiceDate, metadata, netTerms, additionalProperties.toMutableMap())
+                Body(
+                    autoCollection,
+                    dueDate,
+                    invoiceDate,
+                    metadata,
+                    netTerms,
+                    additionalProperties.toMutableMap(),
+                )
         }
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
 
+            autoCollection()
             dueDate().ifPresent { it.validate() }
             invoiceDate().ifPresent { it.validate() }
             metadata().ifPresent { it.validate() }
@@ -689,7 +810,8 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (dueDate.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (autoCollection.asKnown().isPresent) 1 else 0) +
+                (dueDate.asKnown().getOrNull()?.validity() ?: 0) +
                 (invoiceDate.asKnown().getOrNull()?.validity() ?: 0) +
                 (metadata.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (netTerms.asKnown().isPresent) 1 else 0)
@@ -700,6 +822,7 @@ private constructor(
             }
 
             return other is Body &&
+                autoCollection == other.autoCollection &&
                 dueDate == other.dueDate &&
                 invoiceDate == other.invoiceDate &&
                 metadata == other.metadata &&
@@ -708,13 +831,20 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(dueDate, invoiceDate, metadata, netTerms, additionalProperties)
+            Objects.hash(
+                autoCollection,
+                dueDate,
+                invoiceDate,
+                metadata,
+                netTerms,
+                additionalProperties,
+            )
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{dueDate=$dueDate, invoiceDate=$invoiceDate, metadata=$metadata, netTerms=$netTerms, additionalProperties=$additionalProperties}"
+            "Body{autoCollection=$autoCollection, dueDate=$dueDate, invoiceDate=$invoiceDate, metadata=$metadata, netTerms=$netTerms, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -744,6 +874,35 @@ private constructor(
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
+        /**
+         * Maps this instance's current variant to a value of type [T] using the given [visitor].
+         *
+         * Note that this method is _not_ forwards compatible with new variants from the API, unless
+         * [visitor] overrides [Visitor.unknown]. To handle variants not known to this version of
+         * the SDK gracefully, consider overriding [Visitor.unknown]:
+         * ```java
+         * import com.withorb.api.core.JsonValue;
+         * import java.util.Optional;
+         *
+         * Optional<String> result = dueDate.accept(new DueDate.Visitor<Optional<String>>() {
+         *     @Override
+         *     public Optional<String> visitDate(LocalDate date) {
+         *         return Optional.of(date.toString());
+         *     }
+         *
+         *     // ...
+         *
+         *     @Override
+         *     public Optional<String> unknown(JsonValue json) {
+         *         // Or inspect the `json`.
+         *         return Optional.empty();
+         *     }
+         * });
+         * ```
+         *
+         * @throws OrbInvalidDataException if [Visitor.unknown] is not overridden in [visitor] and
+         *   the current variant is unknown.
+         */
         fun <T> accept(visitor: Visitor<T>): T =
             when {
                 date != null -> visitor.visitDate(date)
@@ -753,6 +912,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): DueDate = apply {
             if (validated) {
                 return@apply
@@ -914,6 +1082,35 @@ private constructor(
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
+        /**
+         * Maps this instance's current variant to a value of type [T] using the given [visitor].
+         *
+         * Note that this method is _not_ forwards compatible with new variants from the API, unless
+         * [visitor] overrides [Visitor.unknown]. To handle variants not known to this version of
+         * the SDK gracefully, consider overriding [Visitor.unknown]:
+         * ```java
+         * import com.withorb.api.core.JsonValue;
+         * import java.util.Optional;
+         *
+         * Optional<String> result = invoiceDate.accept(new InvoiceDate.Visitor<Optional<String>>() {
+         *     @Override
+         *     public Optional<String> visitDate(LocalDate date) {
+         *         return Optional.of(date.toString());
+         *     }
+         *
+         *     // ...
+         *
+         *     @Override
+         *     public Optional<String> unknown(JsonValue json) {
+         *         // Or inspect the `json`.
+         *         return Optional.empty();
+         *     }
+         * });
+         * ```
+         *
+         * @throws OrbInvalidDataException if [Visitor.unknown] is not overridden in [visitor] and
+         *   the current variant is unknown.
+         */
         fun <T> accept(visitor: Visitor<T>): T =
             when {
                 date != null -> visitor.visitDate(date)
@@ -923,6 +1120,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): InvoiceDate = apply {
             if (validated) {
                 return@apply
@@ -1124,6 +1330,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws OrbInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Metadata = apply {
             if (validated) {
                 return@apply

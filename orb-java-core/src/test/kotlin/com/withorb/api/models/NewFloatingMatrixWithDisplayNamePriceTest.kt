@@ -61,6 +61,7 @@ internal class NewFloatingMatrixWithDisplayNamePriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewFloatingMatrixWithDisplayNamePrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -130,6 +131,8 @@ internal class NewFloatingMatrixWithDisplayNamePriceTest {
                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                     .build()
             )
+        assertThat(newFloatingMatrixWithDisplayNamePrice.licenseTypeId())
+            .contains("license_type_id")
         assertThat(newFloatingMatrixWithDisplayNamePrice.metadata())
             .contains(
                 NewFloatingMatrixWithDisplayNamePrice.Metadata.builder()
@@ -190,6 +193,7 @@ internal class NewFloatingMatrixWithDisplayNamePriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewFloatingMatrixWithDisplayNamePrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

@@ -32,6 +32,10 @@ import com.withorb.api.models.CustomerCreditTopUpListParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits within
+ * Orb.
+ */
 class TopUpServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     TopUpService {
 

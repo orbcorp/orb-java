@@ -30,6 +30,12 @@ import com.withorb.api.models.AlertUpdateParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * [Alerts within Orb](/product-catalog/configuring-alerts) monitor spending, usage, or credit
+ * balance and trigger webhooks when a threshold is exceeded.
+ *
+ * Alerts created through the API can be scoped to either customers or subscriptions.
+ */
 class AlertServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     AlertService {
 

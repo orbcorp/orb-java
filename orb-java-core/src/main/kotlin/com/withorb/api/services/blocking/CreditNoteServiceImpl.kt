@@ -25,6 +25,10 @@ import com.withorb.api.models.CreditNoteListParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The [Credit Note](/invoicing/credit-notes) resource represents a credit that has been applied to
+ * a particular invoice.
+ */
 class CreditNoteServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     CreditNoteService {
 

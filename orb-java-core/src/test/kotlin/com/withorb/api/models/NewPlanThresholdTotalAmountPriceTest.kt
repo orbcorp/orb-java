@@ -68,6 +68,7 @@ internal class NewPlanThresholdTotalAmountPriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewPlanThresholdTotalAmountPrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -143,6 +144,7 @@ internal class NewPlanThresholdTotalAmountPriceTest {
                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                     .build()
             )
+        assertThat(newPlanThresholdTotalAmountPrice.licenseTypeId()).contains("license_type_id")
         assertThat(newPlanThresholdTotalAmountPrice.metadata())
             .contains(
                 NewPlanThresholdTotalAmountPrice.Metadata.builder()
@@ -211,6 +213,7 @@ internal class NewPlanThresholdTotalAmountPriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewPlanThresholdTotalAmountPrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

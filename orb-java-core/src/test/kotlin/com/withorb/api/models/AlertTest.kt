@@ -40,6 +40,21 @@ internal class AlertTest {
                 .addBalanceAlertStatus(
                     Alert.BalanceAlertStatus.builder().inAlert(true).thresholdValue(0.0).build()
                 )
+                .addGroupingKey("string")
+                .licenseType(Alert.LicenseType.builder().id("id").build())
+                .addPriceFilter(
+                    Alert.PriceFilter.builder()
+                        .field(Alert.PriceFilter.Field.PRICE_ID)
+                        .operator(Alert.PriceFilter.Operator.INCLUDES)
+                        .addValue("string")
+                        .build()
+                )
+                .addThresholdOverride(
+                    Alert.ThresholdOverride.builder()
+                        .addGroupValue("string")
+                        .addThreshold(Threshold.builder().value(0.0).build())
+                        .build()
+                )
                 .build()
 
         assertThat(alert.id()).isEqualTo("XuxCbt7x9L82yyeF")
@@ -72,6 +87,23 @@ internal class AlertTest {
             .containsExactly(
                 Alert.BalanceAlertStatus.builder().inAlert(true).thresholdValue(0.0).build()
             )
+        assertThat(alert.groupingKeys().getOrNull()).containsExactly("string")
+        assertThat(alert.licenseType()).contains(Alert.LicenseType.builder().id("id").build())
+        assertThat(alert.priceFilters().getOrNull())
+            .containsExactly(
+                Alert.PriceFilter.builder()
+                    .field(Alert.PriceFilter.Field.PRICE_ID)
+                    .operator(Alert.PriceFilter.Operator.INCLUDES)
+                    .addValue("string")
+                    .build()
+            )
+        assertThat(alert.thresholdOverrides().getOrNull())
+            .containsExactly(
+                Alert.ThresholdOverride.builder()
+                    .addGroupValue("string")
+                    .addThreshold(Threshold.builder().value(0.0).build())
+                    .build()
+            )
     }
 
     @Test
@@ -103,6 +135,21 @@ internal class AlertTest {
                 .type(Alert.Type.CREDIT_BALANCE_DEPLETED)
                 .addBalanceAlertStatus(
                     Alert.BalanceAlertStatus.builder().inAlert(true).thresholdValue(0.0).build()
+                )
+                .addGroupingKey("string")
+                .licenseType(Alert.LicenseType.builder().id("id").build())
+                .addPriceFilter(
+                    Alert.PriceFilter.builder()
+                        .field(Alert.PriceFilter.Field.PRICE_ID)
+                        .operator(Alert.PriceFilter.Operator.INCLUDES)
+                        .addValue("string")
+                        .build()
+                )
+                .addThresholdOverride(
+                    Alert.ThresholdOverride.builder()
+                        .addGroupValue("string")
+                        .addThreshold(Threshold.builder().value(0.0).build())
+                        .build()
                 )
                 .build()
 

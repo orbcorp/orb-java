@@ -63,6 +63,7 @@ internal class NewSubscriptionCumulativeGroupedBulkPriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewSubscriptionCumulativeGroupedBulkPrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -134,6 +135,8 @@ internal class NewSubscriptionCumulativeGroupedBulkPriceTest {
                     .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                     .build()
             )
+        assertThat(newSubscriptionCumulativeGroupedBulkPrice.licenseTypeId())
+            .contains("license_type_id")
         assertThat(newSubscriptionCumulativeGroupedBulkPrice.metadata())
             .contains(
                 NewSubscriptionCumulativeGroupedBulkPrice.Metadata.builder()
@@ -197,6 +200,7 @@ internal class NewSubscriptionCumulativeGroupedBulkPriceTest {
                         .durationUnit(NewBillingCycleConfiguration.DurationUnit.DAY)
                         .build()
                 )
+                .licenseTypeId("license_type_id")
                 .metadata(
                     NewSubscriptionCumulativeGroupedBulkPrice.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

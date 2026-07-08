@@ -14,6 +14,10 @@ import com.withorb.api.services.async.customers.credits.TopUpServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits within
+ * Orb.
+ */
 interface CreditServiceAsync {
 
     /**
@@ -28,8 +32,16 @@ interface CreditServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): CreditServiceAsync
 
+    /**
+     * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits
+     * within Orb.
+     */
     fun ledger(): LedgerServiceAsync
 
+    /**
+     * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits
+     * within Orb.
+     */
     fun topUps(): TopUpServiceAsync
 
     /**
@@ -40,6 +52,11 @@ interface CreditServiceAsync {
      *
      * Note that `currency` defaults to credits if not specified. To use a real world currency, set
      * `currency` to an ISO 4217 string.
+     *
+     * Results can be filtered by the block's `effective_date` using the `effective_date[gte]`,
+     * `effective_date[gt]`, `effective_date[lt]`, and `effective_date[lte]` query parameters. This
+     * filters on when the credit block becomes effective, which may differ from creation time for
+     * backdated credits.
      */
     fun list(customerId: String): CompletableFuture<CustomerCreditListPageAsync> =
         list(customerId, CustomerCreditListParams.none())
@@ -84,6 +101,11 @@ interface CreditServiceAsync {
      *
      * Note that `currency` defaults to credits if not specified. To use a real world currency, set
      * `currency` to an ISO 4217 string.
+     *
+     * Results can be filtered by the block's `effective_date` using the `effective_date[gte]`,
+     * `effective_date[gt]`, `effective_date[lt]`, and `effective_date[lte]` query parameters. This
+     * filters on when the credit block becomes effective, which may differ from creation time for
+     * backdated credits.
      */
     fun listByExternalId(
         externalCustomerId: String
@@ -145,8 +167,16 @@ interface CreditServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): CreditServiceAsync.WithRawResponse
 
+        /**
+         * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits
+         * within Orb.
+         */
         fun ledger(): LedgerServiceAsync.WithRawResponse
 
+        /**
+         * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits
+         * within Orb.
+         */
         fun topUps(): TopUpServiceAsync.WithRawResponse
 
         /**

@@ -28,6 +28,11 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The Item resource represents a sellable product or good. Items are associated with all line
+ * items, billable metrics, and prices and are used for defining external sync behavior for invoices
+ * and tax calculation purposes.
+ */
 class ItemServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     ItemServiceAsync {
 

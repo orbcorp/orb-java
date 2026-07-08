@@ -26,6 +26,10 @@ import com.withorb.api.models.MetricUpdateParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The Metric resource represents a calculation of a quantity based on events. Metrics are defined
+ * by the query that transforms raw usage events into meaningful values for your customers.
+ */
 class MetricServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     MetricService {
 

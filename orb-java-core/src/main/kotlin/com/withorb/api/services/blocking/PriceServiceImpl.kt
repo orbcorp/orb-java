@@ -34,6 +34,18 @@ import com.withorb.api.services.blocking.prices.ExternalPriceIdServiceImpl
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The Price resource represents a price that can be billed on a subscription, resulting in a charge
+ * on an invoice in the form of an invoice line item. Prices take a quantity and determine an amount
+ * to bill.
+ *
+ * Orb supports a few different pricing models out of the box. Each of these models is serialized
+ * differently in a given Price object. The model_type field determines the key for the
+ * configuration object that is present.
+ *
+ * For more on the types of prices, see
+ * [the core concepts documentation](/core-concepts#plan-and-price)
+ */
 class PriceServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     PriceService {
 
@@ -50,6 +62,18 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PriceService =
         PriceServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * The Price resource represents a price that can be billed on a subscription, resulting in a
+     * charge on an invoice in the form of an invoice line item. Prices take a quantity and
+     * determine an amount to bill.
+     *
+     * Orb supports a few different pricing models out of the box. Each of these models is
+     * serialized differently in a given Price object. The model_type field determines the key for
+     * the configuration object that is present.
+     *
+     * For more on the types of prices, see
+     * [the core concepts documentation](/core-concepts#plan-and-price)
+     */
     override fun externalPriceId(): ExternalPriceIdService = externalPriceId
 
     override fun create(params: PriceCreateParams, requestOptions: RequestOptions): Price =
@@ -106,6 +130,18 @@ class PriceServiceImpl internal constructor(private val clientOptions: ClientOpt
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * The Price resource represents a price that can be billed on a subscription, resulting in
+         * a charge on an invoice in the form of an invoice line item. Prices take a quantity and
+         * determine an amount to bill.
+         *
+         * Orb supports a few different pricing models out of the box. Each of these models is
+         * serialized differently in a given Price object. The model_type field determines the key
+         * for the configuration object that is present.
+         *
+         * For more on the types of prices, see
+         * [the core concepts documentation](/core-concepts#plan-and-price)
+         */
         override fun externalPriceId(): ExternalPriceIdService.WithRawResponse = externalPriceId
 
         private val createHandler: Handler<Price> = jsonHandler<Price>(clientOptions.jsonMapper)

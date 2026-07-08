@@ -14,6 +14,10 @@ import com.withorb.api.services.blocking.customers.credits.LedgerService
 import com.withorb.api.services.blocking.customers.credits.TopUpService
 import java.util.function.Consumer
 
+/**
+ * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits within
+ * Orb.
+ */
 interface CreditService {
 
     /**
@@ -28,8 +32,16 @@ interface CreditService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): CreditService
 
+    /**
+     * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits
+     * within Orb.
+     */
     fun ledger(): LedgerService
 
+    /**
+     * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits
+     * within Orb.
+     */
     fun topUps(): TopUpService
 
     /**
@@ -40,6 +52,11 @@ interface CreditService {
      *
      * Note that `currency` defaults to credits if not specified. To use a real world currency, set
      * `currency` to an ISO 4217 string.
+     *
+     * Results can be filtered by the block's `effective_date` using the `effective_date[gte]`,
+     * `effective_date[gt]`, `effective_date[lt]`, and `effective_date[lte]` query parameters. This
+     * filters on when the credit block becomes effective, which may differ from creation time for
+     * backdated credits.
      */
     fun list(customerId: String): CustomerCreditListPage =
         list(customerId, CustomerCreditListParams.none())
@@ -80,6 +97,11 @@ interface CreditService {
      *
      * Note that `currency` defaults to credits if not specified. To use a real world currency, set
      * `currency` to an ISO 4217 string.
+     *
+     * Results can be filtered by the block's `effective_date` using the `effective_date[gte]`,
+     * `effective_date[gt]`, `effective_date[lt]`, and `effective_date[lte]` query parameters. This
+     * filters on when the credit block becomes effective, which may differ from creation time for
+     * backdated credits.
      */
     fun listByExternalId(externalCustomerId: String): CustomerCreditListByExternalIdPage =
         listByExternalId(externalCustomerId, CustomerCreditListByExternalIdParams.none())
@@ -134,8 +156,16 @@ interface CreditService {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): CreditService.WithRawResponse
 
+        /**
+         * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits
+         * within Orb.
+         */
         fun ledger(): LedgerService.WithRawResponse
 
+        /**
+         * The [Credit Ledger Entry resource](/product-catalog/prepurchase) models prepaid credits
+         * within Orb.
+         */
         fun topUps(): TopUpService.WithRawResponse
 
         /**

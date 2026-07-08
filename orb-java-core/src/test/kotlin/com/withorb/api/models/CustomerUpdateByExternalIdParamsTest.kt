@@ -18,7 +18,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
                     .addAccountingProvider(
                         AccountingProviderConfig.builder()
                             .externalProviderId("external_provider_id")
-                            .providerType("provider_type")
+                            .providerType(AccountingProviderConfig.ProviderType.QUICKBOOKS)
                             .build()
                     )
                     .excluded(true)
@@ -38,6 +38,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
                     .build()
             )
             .currency("currency")
+            .defaultPaymentMethodId("default_payment_method_id")
             .email("dev@stainless.com")
             .emailDelivery(true)
             .externalCustomerId("external_customer_id")
@@ -64,6 +65,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
                                     .ProviderType
                                     .STRIPE
                             )
+                            .defaultSharedPaymentToken("default_shared_payment_token")
                             .addExcludedPaymentMethodType("string")
                             .build()
                     )
@@ -119,7 +121,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
                         .addAccountingProvider(
                             AccountingProviderConfig.builder()
                                 .externalProviderId("external_provider_id")
-                                .providerType("provider_type")
+                                .providerType(AccountingProviderConfig.ProviderType.QUICKBOOKS)
                                 .build()
                         )
                         .excluded(true)
@@ -139,6 +141,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
                         .build()
                 )
                 .currency("currency")
+                .defaultPaymentMethodId("default_payment_method_id")
                 .email("dev@stainless.com")
                 .emailDelivery(true)
                 .externalCustomerId("external_customer_id")
@@ -165,6 +168,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
                                         .ProviderType
                                         .STRIPE
                                 )
+                                .defaultSharedPaymentToken("default_shared_payment_token")
                                 .addExcludedPaymentMethodType("string")
                                 .build()
                         )
@@ -208,7 +212,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
                     .addAccountingProvider(
                         AccountingProviderConfig.builder()
                             .externalProviderId("external_provider_id")
-                            .providerType("provider_type")
+                            .providerType(AccountingProviderConfig.ProviderType.QUICKBOOKS)
                             .build()
                     )
                     .excluded(true)
@@ -229,6 +233,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
                     .build()
             )
         assertThat(body.currency()).contains("currency")
+        assertThat(body.defaultPaymentMethodId()).contains("default_payment_method_id")
         assertThat(body.email()).contains("dev@stainless.com")
         assertThat(body.emailDelivery()).contains(true)
         assertThat(body.externalCustomerId()).contains("external_customer_id")
@@ -258,6 +263,7 @@ internal class CustomerUpdateByExternalIdParamsTest {
                                     .ProviderType
                                     .STRIPE
                             )
+                            .defaultSharedPaymentToken("default_shared_payment_token")
                             .addExcludedPaymentMethodType("string")
                             .build()
                     )
