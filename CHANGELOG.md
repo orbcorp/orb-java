@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/orbcorp/orb-java/compare/v1.10.0...v1.11.0) (2026-07-10)
+
+
+### Features
+
+* **api:** update SDK to the current API surface ([f457322](https://github.com/orbcorp/orb-java/commit/f457322c0e0aa9196f392c897bc484235396b02e))
+
 ## 1.10.0 (2026-01-17)
 
 Full Changelog: [v1.9.0...v1.10.0](https://github.com/orbcorp/orb-java/compare/v1.9.0...v1.10.0)
