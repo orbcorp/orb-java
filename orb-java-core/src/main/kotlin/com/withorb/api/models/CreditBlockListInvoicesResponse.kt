@@ -237,6 +237,7 @@ private constructor(
         private val perUnitCostBasis: JsonField<String>,
         private val status: JsonField<Status>,
         private val creditAllocation: JsonField<CreditAllocation>,
+        private val creditCommitment: JsonField<CreditCommitment>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -269,6 +270,9 @@ private constructor(
             @JsonProperty("credit_allocation")
             @ExcludeMissing
             creditAllocation: JsonField<CreditAllocation> = JsonMissing.of(),
+            @JsonProperty("credit_commitment")
+            @ExcludeMissing
+            creditCommitment: JsonField<CreditCommitment> = JsonMissing.of(),
         ) : this(
             id,
             balance,
@@ -281,6 +285,7 @@ private constructor(
             perUnitCostBasis,
             status,
             creditAllocation,
+            creditCommitment,
             mutableMapOf(),
         )
 
@@ -298,8 +303,9 @@ private constructor(
 
         /**
          * How this credit block was created: `allocation` (a subscription's recurring credit
-         * allocation), `top_up` (an automatic balance-threshold top-up), or `manual` (a manual
-         * credit ledger increment, including credits voided or expired off another block).
+         * allocation), `top_up` (an automatic balance-threshold top-up), `commitment` (a
+         * subscription commitment true-up rolled forward as credit), or `manual` (a manual credit
+         * ledger increment, including credits voided or expired off another block).
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -364,6 +370,16 @@ private constructor(
          */
         fun creditAllocation(): Optional<CreditAllocation> =
             creditAllocation.getOptional("credit_allocation")
+
+        /**
+         * The subscription commitment whose true-up rolled forward into this credit block. Present
+         * only when `credit_block_source` is `commitment`.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun creditCommitment(): Optional<CreditCommitment> =
+            creditCommitment.getOptional("credit_commitment")
 
         /**
          * Returns the raw JSON value of [id].
@@ -459,6 +475,16 @@ private constructor(
         @ExcludeMissing
         fun _creditAllocation(): JsonField<CreditAllocation> = creditAllocation
 
+        /**
+         * Returns the raw JSON value of [creditCommitment].
+         *
+         * Unlike [creditCommitment], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("credit_commitment")
+        @ExcludeMissing
+        fun _creditCommitment(): JsonField<CreditCommitment> = creditCommitment
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -507,6 +533,7 @@ private constructor(
             private var perUnitCostBasis: JsonField<String>? = null
             private var status: JsonField<Status>? = null
             private var creditAllocation: JsonField<CreditAllocation> = JsonMissing.of()
+            private var creditCommitment: JsonField<CreditCommitment> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -522,6 +549,7 @@ private constructor(
                 perUnitCostBasis = block.perUnitCostBasis
                 status = block.status
                 creditAllocation = block.creditAllocation
+                creditCommitment = block.creditCommitment
                 additionalProperties = block.additionalProperties.toMutableMap()
             }
 
@@ -549,7 +577,8 @@ private constructor(
 
             /**
              * How this credit block was created: `allocation` (a subscription's recurring credit
-             * allocation), `top_up` (an automatic balance-threshold top-up), or `manual` (a manual
+             * allocation), `top_up` (an automatic balance-threshold top-up), `commitment` (a
+             * subscription commitment true-up rolled forward as credit), or `manual` (a manual
              * credit ledger increment, including credits voided or expired off another block).
              */
             fun creditBlockSource(creditBlockSource: CreditBlockSource) =
@@ -727,6 +756,30 @@ private constructor(
                 this.creditAllocation = creditAllocation
             }
 
+            /**
+             * The subscription commitment whose true-up rolled forward into this credit block.
+             * Present only when `credit_block_source` is `commitment`.
+             */
+            fun creditCommitment(creditCommitment: CreditCommitment?) =
+                creditCommitment(JsonField.ofNullable(creditCommitment))
+
+            /**
+             * Alias for calling [Builder.creditCommitment] with `creditCommitment.orElse(null)`.
+             */
+            fun creditCommitment(creditCommitment: Optional<CreditCommitment>) =
+                creditCommitment(creditCommitment.getOrNull())
+
+            /**
+             * Sets [Builder.creditCommitment] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.creditCommitment] with a well-typed
+             * [CreditCommitment] value instead. This method is primarily for setting the field to
+             * an undocumented or not yet supported value.
+             */
+            fun creditCommitment(creditCommitment: JsonField<CreditCommitment>) = apply {
+                this.creditCommitment = creditCommitment
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -780,6 +833,7 @@ private constructor(
                     checkRequired("perUnitCostBasis", perUnitCostBasis),
                     checkRequired("status", status),
                     creditAllocation,
+                    creditCommitment,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -811,6 +865,7 @@ private constructor(
             perUnitCostBasis()
             status().validate()
             creditAllocation().ifPresent { it.validate() }
+            creditCommitment().ifPresent { it.validate() }
             validated = true
         }
 
@@ -840,12 +895,14 @@ private constructor(
                 (metadata.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (perUnitCostBasis.asKnown().isPresent) 1 else 0) +
                 (status.asKnown().getOrNull()?.validity() ?: 0) +
-                (creditAllocation.asKnown().getOrNull()?.validity() ?: 0)
+                (creditAllocation.asKnown().getOrNull()?.validity() ?: 0) +
+                (creditCommitment.asKnown().getOrNull()?.validity() ?: 0)
 
         /**
          * How this credit block was created: `allocation` (a subscription's recurring credit
-         * allocation), `top_up` (an automatic balance-threshold top-up), or `manual` (a manual
-         * credit ledger increment, including credits voided or expired off another block).
+         * allocation), `top_up` (an automatic balance-threshold top-up), `commitment` (a
+         * subscription commitment true-up rolled forward as credit), or `manual` (a manual credit
+         * ledger increment, including credits voided or expired off another block).
          */
         class CreditBlockSource
         @JsonCreator
@@ -867,6 +924,8 @@ private constructor(
 
                 @JvmField val TOP_UP = of("top_up")
 
+                @JvmField val COMMITMENT = of("commitment")
+
                 @JvmField val MANUAL = of("manual")
 
                 @JvmStatic fun of(value: String) = CreditBlockSource(JsonField.of(value))
@@ -876,6 +935,7 @@ private constructor(
             enum class Known {
                 ALLOCATION,
                 TOP_UP,
+                COMMITMENT,
                 MANUAL,
             }
 
@@ -892,6 +952,7 @@ private constructor(
             enum class Value {
                 ALLOCATION,
                 TOP_UP,
+                COMMITMENT,
                 MANUAL,
                 /**
                  * An enum member indicating that [CreditBlockSource] was instantiated with an
@@ -911,6 +972,7 @@ private constructor(
                 when (this) {
                     ALLOCATION -> Value.ALLOCATION
                     TOP_UP -> Value.TOP_UP
+                    COMMITMENT -> Value.COMMITMENT
                     MANUAL -> Value.MANUAL
                     else -> Value._UNKNOWN
                 }
@@ -928,6 +990,7 @@ private constructor(
                 when (this) {
                     ALLOCATION -> Known.ALLOCATION
                     TOP_UP -> Known.TOP_UP
+                    COMMITMENT -> Known.COMMITMENT
                     MANUAL -> Known.MANUAL
                     else -> throw OrbInvalidDataException("Unknown CreditBlockSource: $value")
                 }
@@ -2840,6 +2903,236 @@ private constructor(
                 "CreditAllocation{allowsRollover=$allowsRollover, currency=$currency, customExpiration=$customExpiration, itemId=$itemId, filters=$filters, licenseTypeId=$licenseTypeId, additionalProperties=$additionalProperties}"
         }
 
+        /**
+         * The subscription commitment whose true-up rolled forward into this credit block. Present
+         * only when `credit_block_source` is `commitment`.
+         */
+        class CreditCommitment
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val id: JsonField<String>,
+            private val subscriptionId: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("subscription_id")
+                @ExcludeMissing
+                subscriptionId: JsonField<String> = JsonMissing.of(),
+            ) : this(id, subscriptionId, mutableMapOf())
+
+            /**
+             * The ID of the subscription commitment this block was rolled forward from.
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun id(): String = id.getRequired("id")
+
+            /**
+             * The subscription the commitment belongs to.
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
+            fun subscriptionId(): Optional<String> = subscriptionId.getOptional("subscription_id")
+
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+            /**
+             * Returns the raw JSON value of [subscriptionId].
+             *
+             * Unlike [subscriptionId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("subscription_id")
+            @ExcludeMissing
+            fun _subscriptionId(): JsonField<String> = subscriptionId
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [CreditCommitment].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * ```
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [CreditCommitment]. */
+            class Builder internal constructor() {
+
+                private var id: JsonField<String>? = null
+                private var subscriptionId: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(creditCommitment: CreditCommitment) = apply {
+                    id = creditCommitment.id
+                    subscriptionId = creditCommitment.subscriptionId
+                    additionalProperties = creditCommitment.additionalProperties.toMutableMap()
+                }
+
+                /** The ID of the subscription commitment this block was rolled forward from. */
+                fun id(id: String) = id(JsonField.of(id))
+
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun id(id: JsonField<String>) = apply { this.id = id }
+
+                /** The subscription the commitment belongs to. */
+                fun subscriptionId(subscriptionId: String?) =
+                    subscriptionId(JsonField.ofNullable(subscriptionId))
+
+                /**
+                 * Alias for calling [Builder.subscriptionId] with `subscriptionId.orElse(null)`.
+                 */
+                fun subscriptionId(subscriptionId: Optional<String>) =
+                    subscriptionId(subscriptionId.getOrNull())
+
+                /**
+                 * Sets [Builder.subscriptionId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.subscriptionId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun subscriptionId(subscriptionId: JsonField<String>) = apply {
+                    this.subscriptionId = subscriptionId
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [CreditCommitment].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): CreditCommitment =
+                    CreditCommitment(
+                        checkRequired("id", id),
+                        subscriptionId,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws OrbInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
+             */
+            fun validate(): CreditCommitment = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                subscriptionId()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: OrbInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (subscriptionId.asKnown().isPresent) 1 else 0)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is CreditCommitment &&
+                    id == other.id &&
+                    subscriptionId == other.subscriptionId &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(id, subscriptionId, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "CreditCommitment{id=$id, subscriptionId=$subscriptionId, additionalProperties=$additionalProperties}"
+        }
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -2857,6 +3150,7 @@ private constructor(
                 perUnitCostBasis == other.perUnitCostBasis &&
                 status == other.status &&
                 creditAllocation == other.creditAllocation &&
+                creditCommitment == other.creditCommitment &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -2873,6 +3167,7 @@ private constructor(
                 perUnitCostBasis,
                 status,
                 creditAllocation,
+                creditCommitment,
                 additionalProperties,
             )
         }
@@ -2880,7 +3175,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Block{id=$id, balance=$balance, creditBlockSource=$creditBlockSource, effectiveDate=$effectiveDate, expiryDate=$expiryDate, filters=$filters, maximumInitialBalance=$maximumInitialBalance, metadata=$metadata, perUnitCostBasis=$perUnitCostBasis, status=$status, creditAllocation=$creditAllocation, additionalProperties=$additionalProperties}"
+            "Block{id=$id, balance=$balance, creditBlockSource=$creditBlockSource, effectiveDate=$effectiveDate, expiryDate=$expiryDate, filters=$filters, maximumInitialBalance=$maximumInitialBalance, metadata=$metadata, perUnitCostBasis=$perUnitCostBasis, status=$status, creditAllocation=$creditAllocation, creditCommitment=$creditCommitment, additionalProperties=$additionalProperties}"
     }
 
     class Invoice
