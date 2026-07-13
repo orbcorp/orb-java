@@ -45,6 +45,7 @@ internal class BillableMetricTest {
                         .build()
                 )
                 .name("name")
+                .sql("sql")
                 .status(BillableMetric.Status.ACTIVE)
                 .addParameterDefinition(
                     BillableMetric.ParameterDefinition.builder()
@@ -84,6 +85,7 @@ internal class BillableMetricTest {
                     .build()
             )
         assertThat(billableMetric.name()).isEqualTo("name")
+        assertThat(billableMetric.sql()).isEqualTo("sql")
         assertThat(billableMetric.status()).isEqualTo(BillableMetric.Status.ACTIVE)
         assertThat(billableMetric.parameterDefinitions().getOrNull())
             .containsExactly(
@@ -127,6 +129,7 @@ internal class BillableMetricTest {
                         .build()
                 )
                 .name("name")
+                .sql("sql")
                 .status(BillableMetric.Status.ACTIVE)
                 .addParameterDefinition(
                     BillableMetric.ParameterDefinition.builder()
