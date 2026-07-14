@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.12.0](https://github.com/orbcorp/orb-java/compare/v1.11.0...v1.12.0) (2026-07-14)
+
+
+### Features
+
+* **api:** add `commitment` credit block source and `credit_commitment` field ([a9bcd46](https://github.com/orbcorp/orb-java/commit/a9bcd4667809613c47816dabc7d2a0c8dffb7164))
+* **api:** api update ([2a0cbb0](https://github.com/orbcorp/orb-java/commit/2a0cbb03163c596dd178291322ae94f947150771))
+
 ## [1.11.0](https://github.com/orbcorp/orb-java/compare/v1.10.0...v1.11.0) (2026-07-10)
 
 
