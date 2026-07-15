@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.0](https://github.com/orbcorp/orb-java/compare/v1.12.0...v1.13.0) (2026-07-15)
+
+
+### Features
+
+* **api:** deprecate debug mode ingestion response field ([2ab6951](https://github.com/orbcorp/orb-java/commit/2ab695111f1429d9cc888f45ac13736ca830feb7))
+
 ## [1.12.0](https://github.com/orbcorp/orb-java/compare/v1.11.0...v1.12.0) (2026-07-14)
 
 
