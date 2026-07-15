@@ -21,6 +21,8 @@ import com.withorb.api.models.InvoiceListSummaryPageAsync
 import com.withorb.api.models.InvoiceListSummaryParams
 import com.withorb.api.models.InvoiceMarkPaidParams
 import com.withorb.api.models.InvoicePayParams
+import com.withorb.api.models.InvoiceRegenerateInvoicePdfParams
+import com.withorb.api.models.InvoiceRegenerateReceiptPdfParams
 import com.withorb.api.models.InvoiceUpdateParams
 import com.withorb.api.models.InvoiceVoidInvoiceParams
 import java.util.concurrent.CompletableFuture
@@ -382,6 +384,115 @@ interface InvoiceServiceAsync {
         params: InvoicePayParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Invoice>
+
+    /**
+     * This endpoint triggers a regeneration of the PDF for a finalized invoice.
+     *
+     * The invoice must be finalized (`issued`, `paid`, `synced`, or `void`) and must already have
+     * an existing PDF. The original PDF is archived (not permanently deleted) to maintain an audit
+     * trail.
+     *
+     * **Important Legal Considerations:**
+     *
+     * Regenerating invoice PDFs may not be permitted in all jurisdictions. Many tax authorities
+     * require that issued invoices remain unmodified. Before using this endpoint, ensure that:
+     * - Your local tax regulations permit modification of issued billing documents
+     * - You have a legitimate business reason (e.g., fixing template errors, updating branding)
+     * - You maintain proper records of the original PDF (archived automatically by Orb)
+     *
+     * Recommended use cases:
+     * - Correcting template rendering issues
+     * - Applying updated company branding
+     * - Updating customer data that was incorrect at issuance
+     */
+    fun regenerateInvoicePdf(invoiceId: String): CompletableFuture<Invoice> =
+        regenerateInvoicePdf(invoiceId, InvoiceRegenerateInvoicePdfParams.none())
+
+    /** @see regenerateInvoicePdf */
+    fun regenerateInvoicePdf(
+        invoiceId: String,
+        params: InvoiceRegenerateInvoicePdfParams = InvoiceRegenerateInvoicePdfParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Invoice> =
+        regenerateInvoicePdf(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
+
+    /** @see regenerateInvoicePdf */
+    fun regenerateInvoicePdf(
+        invoiceId: String,
+        params: InvoiceRegenerateInvoicePdfParams = InvoiceRegenerateInvoicePdfParams.none(),
+    ): CompletableFuture<Invoice> = regenerateInvoicePdf(invoiceId, params, RequestOptions.none())
+
+    /** @see regenerateInvoicePdf */
+    fun regenerateInvoicePdf(
+        params: InvoiceRegenerateInvoicePdfParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Invoice>
+
+    /** @see regenerateInvoicePdf */
+    fun regenerateInvoicePdf(
+        params: InvoiceRegenerateInvoicePdfParams
+    ): CompletableFuture<Invoice> = regenerateInvoicePdf(params, RequestOptions.none())
+
+    /** @see regenerateInvoicePdf */
+    fun regenerateInvoicePdf(
+        invoiceId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Invoice> =
+        regenerateInvoicePdf(invoiceId, InvoiceRegenerateInvoicePdfParams.none(), requestOptions)
+
+    /**
+     * This endpoint triggers a regeneration of the receipt PDF for a paid invoice.
+     *
+     * The invoice must be in `paid` status and must already have an existing receipt PDF. The
+     * original PDF is archived (not permanently deleted) to maintain an audit trail.
+     *
+     * **Important Legal Considerations:**
+     *
+     * Regenerating receipt PDFs may not be permitted in all jurisdictions. Many tax authorities
+     * require that issued receipts remain unmodified. Before using this endpoint, ensure that:
+     * - Your local tax regulations permit modification of issued billing documents
+     * - You have a legitimate business reason (e.g., fixing template errors, updating branding)
+     * - You maintain proper records of the original PDF (archived automatically by Orb)
+     *
+     * Recommended use cases:
+     * - Correcting template rendering issues
+     * - Applying updated company branding
+     * - Updating customer data that was incorrect at issuance
+     */
+    fun regenerateReceiptPdf(invoiceId: String): CompletableFuture<Invoice> =
+        regenerateReceiptPdf(invoiceId, InvoiceRegenerateReceiptPdfParams.none())
+
+    /** @see regenerateReceiptPdf */
+    fun regenerateReceiptPdf(
+        invoiceId: String,
+        params: InvoiceRegenerateReceiptPdfParams = InvoiceRegenerateReceiptPdfParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Invoice> =
+        regenerateReceiptPdf(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
+
+    /** @see regenerateReceiptPdf */
+    fun regenerateReceiptPdf(
+        invoiceId: String,
+        params: InvoiceRegenerateReceiptPdfParams = InvoiceRegenerateReceiptPdfParams.none(),
+    ): CompletableFuture<Invoice> = regenerateReceiptPdf(invoiceId, params, RequestOptions.none())
+
+    /** @see regenerateReceiptPdf */
+    fun regenerateReceiptPdf(
+        params: InvoiceRegenerateReceiptPdfParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Invoice>
+
+    /** @see regenerateReceiptPdf */
+    fun regenerateReceiptPdf(
+        params: InvoiceRegenerateReceiptPdfParams
+    ): CompletableFuture<Invoice> = regenerateReceiptPdf(params, RequestOptions.none())
+
+    /** @see regenerateReceiptPdf */
+    fun regenerateReceiptPdf(
+        invoiceId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Invoice> =
+        regenerateReceiptPdf(invoiceId, InvoiceRegenerateReceiptPdfParams.none(), requestOptions)
 
     /**
      * This endpoint allows an invoice's status to be set to the `void` status. This can only be
@@ -762,6 +873,96 @@ interface InvoiceServiceAsync {
             params: InvoicePayParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Invoice>>
+
+        /**
+         * Returns a raw HTTP response for `post /invoices/{invoice_id}/regenerate_invoice_pdf`, but
+         * is otherwise the same as [InvoiceServiceAsync.regenerateInvoicePdf].
+         */
+        fun regenerateInvoicePdf(invoiceId: String): CompletableFuture<HttpResponseFor<Invoice>> =
+            regenerateInvoicePdf(invoiceId, InvoiceRegenerateInvoicePdfParams.none())
+
+        /** @see regenerateInvoicePdf */
+        fun regenerateInvoicePdf(
+            invoiceId: String,
+            params: InvoiceRegenerateInvoicePdfParams = InvoiceRegenerateInvoicePdfParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Invoice>> =
+            regenerateInvoicePdf(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
+
+        /** @see regenerateInvoicePdf */
+        fun regenerateInvoicePdf(
+            invoiceId: String,
+            params: InvoiceRegenerateInvoicePdfParams = InvoiceRegenerateInvoicePdfParams.none(),
+        ): CompletableFuture<HttpResponseFor<Invoice>> =
+            regenerateInvoicePdf(invoiceId, params, RequestOptions.none())
+
+        /** @see regenerateInvoicePdf */
+        fun regenerateInvoicePdf(
+            params: InvoiceRegenerateInvoicePdfParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Invoice>>
+
+        /** @see regenerateInvoicePdf */
+        fun regenerateInvoicePdf(
+            params: InvoiceRegenerateInvoicePdfParams
+        ): CompletableFuture<HttpResponseFor<Invoice>> =
+            regenerateInvoicePdf(params, RequestOptions.none())
+
+        /** @see regenerateInvoicePdf */
+        fun regenerateInvoicePdf(
+            invoiceId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Invoice>> =
+            regenerateInvoicePdf(
+                invoiceId,
+                InvoiceRegenerateInvoicePdfParams.none(),
+                requestOptions,
+            )
+
+        /**
+         * Returns a raw HTTP response for `post /invoices/{invoice_id}/regenerate_receipt_pdf`, but
+         * is otherwise the same as [InvoiceServiceAsync.regenerateReceiptPdf].
+         */
+        fun regenerateReceiptPdf(invoiceId: String): CompletableFuture<HttpResponseFor<Invoice>> =
+            regenerateReceiptPdf(invoiceId, InvoiceRegenerateReceiptPdfParams.none())
+
+        /** @see regenerateReceiptPdf */
+        fun regenerateReceiptPdf(
+            invoiceId: String,
+            params: InvoiceRegenerateReceiptPdfParams = InvoiceRegenerateReceiptPdfParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Invoice>> =
+            regenerateReceiptPdf(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
+
+        /** @see regenerateReceiptPdf */
+        fun regenerateReceiptPdf(
+            invoiceId: String,
+            params: InvoiceRegenerateReceiptPdfParams = InvoiceRegenerateReceiptPdfParams.none(),
+        ): CompletableFuture<HttpResponseFor<Invoice>> =
+            regenerateReceiptPdf(invoiceId, params, RequestOptions.none())
+
+        /** @see regenerateReceiptPdf */
+        fun regenerateReceiptPdf(
+            params: InvoiceRegenerateReceiptPdfParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Invoice>>
+
+        /** @see regenerateReceiptPdf */
+        fun regenerateReceiptPdf(
+            params: InvoiceRegenerateReceiptPdfParams
+        ): CompletableFuture<HttpResponseFor<Invoice>> =
+            regenerateReceiptPdf(params, RequestOptions.none())
+
+        /** @see regenerateReceiptPdf */
+        fun regenerateReceiptPdf(
+            invoiceId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Invoice>> =
+            regenerateReceiptPdf(
+                invoiceId,
+                InvoiceRegenerateReceiptPdfParams.none(),
+                requestOptions,
+            )
 
         /**
          * Returns a raw HTTP response for `post /invoices/{invoice_id}/void`, but is otherwise the

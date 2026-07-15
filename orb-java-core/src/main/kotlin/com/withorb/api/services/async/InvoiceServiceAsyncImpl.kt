@@ -34,6 +34,8 @@ import com.withorb.api.models.InvoiceListSummaryPageResponse
 import com.withorb.api.models.InvoiceListSummaryParams
 import com.withorb.api.models.InvoiceMarkPaidParams
 import com.withorb.api.models.InvoicePayParams
+import com.withorb.api.models.InvoiceRegenerateInvoicePdfParams
+import com.withorb.api.models.InvoiceRegenerateReceiptPdfParams
 import com.withorb.api.models.InvoiceUpdateParams
 import com.withorb.api.models.InvoiceVoidInvoiceParams
 import java.util.concurrent.CompletableFuture
@@ -135,6 +137,20 @@ class InvoiceServiceAsyncImpl internal constructor(private val clientOptions: Cl
     ): CompletableFuture<Invoice> =
         // post /invoices/{invoice_id}/pay
         withRawResponse().pay(params, requestOptions).thenApply { it.parse() }
+
+    override fun regenerateInvoicePdf(
+        params: InvoiceRegenerateInvoicePdfParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Invoice> =
+        // post /invoices/{invoice_id}/regenerate_invoice_pdf
+        withRawResponse().regenerateInvoicePdf(params, requestOptions).thenApply { it.parse() }
+
+    override fun regenerateReceiptPdf(
+        params: InvoiceRegenerateReceiptPdfParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Invoice> =
+        // post /invoices/{invoice_id}/regenerate_receipt_pdf
+        withRawResponse().regenerateReceiptPdf(params, requestOptions).thenApply { it.parse() }
 
     override fun voidInvoice(
         params: InvoiceVoidInvoiceParams,
@@ -514,6 +530,74 @@ class InvoiceServiceAsyncImpl internal constructor(private val clientOptions: Cl
                     errorHandler.handle(response).parseable {
                         response
                             .use { payHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val regenerateInvoicePdfHandler: Handler<Invoice> =
+            jsonHandler<Invoice>(clientOptions.jsonMapper)
+
+        override fun regenerateInvoicePdf(
+            params: InvoiceRegenerateInvoicePdfParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Invoice>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("invoiceId", params.invoiceId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("invoices", params._pathParam(0), "regenerate_invoice_pdf")
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { regenerateInvoicePdfHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val regenerateReceiptPdfHandler: Handler<Invoice> =
+            jsonHandler<Invoice>(clientOptions.jsonMapper)
+
+        override fun regenerateReceiptPdf(
+            params: InvoiceRegenerateReceiptPdfParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Invoice>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("invoiceId", params.invoiceId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("invoices", params._pathParam(0), "regenerate_receipt_pdf")
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { regenerateReceiptPdfHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()

@@ -8,6 +8,10 @@ import com.withorb.api.core.http.HttpResponse
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Customer
 import com.withorb.api.models.CustomerCreateParams
+import com.withorb.api.models.CustomerCreatePortalSessionByExternalIdParams
+import com.withorb.api.models.CustomerCreatePortalSessionByExternalIdResponse
+import com.withorb.api.models.CustomerCreatePortalSessionParams
+import com.withorb.api.models.CustomerCreatePortalSessionResponse
 import com.withorb.api.models.CustomerDeleteParams
 import com.withorb.api.models.CustomerFetchByExternalIdParams
 import com.withorb.api.models.CustomerFetchParams
@@ -227,6 +231,110 @@ interface CustomerServiceAsync {
     /** @see delete */
     fun delete(customerId: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
         delete(customerId, CustomerDeleteParams.none(), requestOptions)
+
+    /**
+     * Creates a portal session for the customer, returning a short-lived URL that provides
+     * authenticated access to the customer's billing portal. The session expires after
+     * `expires_in_minutes` (default 60, max 180). By default, creating a new session invalidates
+     * any other active portal sessions for the customer; pass `invalidate_existing=false` to allow
+     * concurrent sessions.
+     */
+    fun createPortalSession(
+        customerId: String
+    ): CompletableFuture<CustomerCreatePortalSessionResponse> =
+        createPortalSession(customerId, CustomerCreatePortalSessionParams.none())
+
+    /** @see createPortalSession */
+    fun createPortalSession(
+        customerId: String,
+        params: CustomerCreatePortalSessionParams = CustomerCreatePortalSessionParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CustomerCreatePortalSessionResponse> =
+        createPortalSession(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+    /** @see createPortalSession */
+    fun createPortalSession(
+        customerId: String,
+        params: CustomerCreatePortalSessionParams = CustomerCreatePortalSessionParams.none(),
+    ): CompletableFuture<CustomerCreatePortalSessionResponse> =
+        createPortalSession(customerId, params, RequestOptions.none())
+
+    /** @see createPortalSession */
+    fun createPortalSession(
+        params: CustomerCreatePortalSessionParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CustomerCreatePortalSessionResponse>
+
+    /** @see createPortalSession */
+    fun createPortalSession(
+        params: CustomerCreatePortalSessionParams
+    ): CompletableFuture<CustomerCreatePortalSessionResponse> =
+        createPortalSession(params, RequestOptions.none())
+
+    /** @see createPortalSession */
+    fun createPortalSession(
+        customerId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CustomerCreatePortalSessionResponse> =
+        createPortalSession(customerId, CustomerCreatePortalSessionParams.none(), requestOptions)
+
+    /**
+     * Creates a portal session for the customer, returning a short-lived URL that provides
+     * authenticated access to the customer's billing portal. The session expires after
+     * `expires_in_minutes` (default 60, max 180). By default, creating a new session invalidates
+     * any other active portal sessions for the customer; pass `invalidate_existing=false` to allow
+     * concurrent sessions.
+     */
+    fun createPortalSessionByExternalId(
+        externalCustomerId: String
+    ): CompletableFuture<CustomerCreatePortalSessionByExternalIdResponse> =
+        createPortalSessionByExternalId(
+            externalCustomerId,
+            CustomerCreatePortalSessionByExternalIdParams.none(),
+        )
+
+    /** @see createPortalSessionByExternalId */
+    fun createPortalSessionByExternalId(
+        externalCustomerId: String,
+        params: CustomerCreatePortalSessionByExternalIdParams =
+            CustomerCreatePortalSessionByExternalIdParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CustomerCreatePortalSessionByExternalIdResponse> =
+        createPortalSessionByExternalId(
+            params.toBuilder().externalCustomerId(externalCustomerId).build(),
+            requestOptions,
+        )
+
+    /** @see createPortalSessionByExternalId */
+    fun createPortalSessionByExternalId(
+        externalCustomerId: String,
+        params: CustomerCreatePortalSessionByExternalIdParams =
+            CustomerCreatePortalSessionByExternalIdParams.none(),
+    ): CompletableFuture<CustomerCreatePortalSessionByExternalIdResponse> =
+        createPortalSessionByExternalId(externalCustomerId, params, RequestOptions.none())
+
+    /** @see createPortalSessionByExternalId */
+    fun createPortalSessionByExternalId(
+        params: CustomerCreatePortalSessionByExternalIdParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CustomerCreatePortalSessionByExternalIdResponse>
+
+    /** @see createPortalSessionByExternalId */
+    fun createPortalSessionByExternalId(
+        params: CustomerCreatePortalSessionByExternalIdParams
+    ): CompletableFuture<CustomerCreatePortalSessionByExternalIdResponse> =
+        createPortalSessionByExternalId(params, RequestOptions.none())
+
+    /** @see createPortalSessionByExternalId */
+    fun createPortalSessionByExternalId(
+        externalCustomerId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CustomerCreatePortalSessionByExternalIdResponse> =
+        createPortalSessionByExternalId(
+            externalCustomerId,
+            CustomerCreatePortalSessionByExternalIdParams.none(),
+            requestOptions,
+        )
 
     /**
      * This endpoint is used to fetch customer details given an identifier. If the `Customer` is in
@@ -647,6 +755,109 @@ interface CustomerServiceAsync {
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponse> =
             delete(customerId, CustomerDeleteParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /customers/{customer_id}/portal_sessions`, but is
+         * otherwise the same as [CustomerServiceAsync.createPortalSession].
+         */
+        fun createPortalSession(
+            customerId: String
+        ): CompletableFuture<HttpResponseFor<CustomerCreatePortalSessionResponse>> =
+            createPortalSession(customerId, CustomerCreatePortalSessionParams.none())
+
+        /** @see createPortalSession */
+        fun createPortalSession(
+            customerId: String,
+            params: CustomerCreatePortalSessionParams = CustomerCreatePortalSessionParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreatePortalSessionResponse>> =
+            createPortalSession(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+        /** @see createPortalSession */
+        fun createPortalSession(
+            customerId: String,
+            params: CustomerCreatePortalSessionParams = CustomerCreatePortalSessionParams.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreatePortalSessionResponse>> =
+            createPortalSession(customerId, params, RequestOptions.none())
+
+        /** @see createPortalSession */
+        fun createPortalSession(
+            params: CustomerCreatePortalSessionParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreatePortalSessionResponse>>
+
+        /** @see createPortalSession */
+        fun createPortalSession(
+            params: CustomerCreatePortalSessionParams
+        ): CompletableFuture<HttpResponseFor<CustomerCreatePortalSessionResponse>> =
+            createPortalSession(params, RequestOptions.none())
+
+        /** @see createPortalSession */
+        fun createPortalSession(
+            customerId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CustomerCreatePortalSessionResponse>> =
+            createPortalSession(
+                customerId,
+                CustomerCreatePortalSessionParams.none(),
+                requestOptions,
+            )
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /customers/external_customer_id/{external_customer_id}/portal_sessions`, but is otherwise
+         * the same as [CustomerServiceAsync.createPortalSessionByExternalId].
+         */
+        fun createPortalSessionByExternalId(
+            externalCustomerId: String
+        ): CompletableFuture<HttpResponseFor<CustomerCreatePortalSessionByExternalIdResponse>> =
+            createPortalSessionByExternalId(
+                externalCustomerId,
+                CustomerCreatePortalSessionByExternalIdParams.none(),
+            )
+
+        /** @see createPortalSessionByExternalId */
+        fun createPortalSessionByExternalId(
+            externalCustomerId: String,
+            params: CustomerCreatePortalSessionByExternalIdParams =
+                CustomerCreatePortalSessionByExternalIdParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreatePortalSessionByExternalIdResponse>> =
+            createPortalSessionByExternalId(
+                params.toBuilder().externalCustomerId(externalCustomerId).build(),
+                requestOptions,
+            )
+
+        /** @see createPortalSessionByExternalId */
+        fun createPortalSessionByExternalId(
+            externalCustomerId: String,
+            params: CustomerCreatePortalSessionByExternalIdParams =
+                CustomerCreatePortalSessionByExternalIdParams.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreatePortalSessionByExternalIdResponse>> =
+            createPortalSessionByExternalId(externalCustomerId, params, RequestOptions.none())
+
+        /** @see createPortalSessionByExternalId */
+        fun createPortalSessionByExternalId(
+            params: CustomerCreatePortalSessionByExternalIdParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreatePortalSessionByExternalIdResponse>>
+
+        /** @see createPortalSessionByExternalId */
+        fun createPortalSessionByExternalId(
+            params: CustomerCreatePortalSessionByExternalIdParams
+        ): CompletableFuture<HttpResponseFor<CustomerCreatePortalSessionByExternalIdResponse>> =
+            createPortalSessionByExternalId(params, RequestOptions.none())
+
+        /** @see createPortalSessionByExternalId */
+        fun createPortalSessionByExternalId(
+            externalCustomerId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CustomerCreatePortalSessionByExternalIdResponse>> =
+            createPortalSessionByExternalId(
+                externalCustomerId,
+                CustomerCreatePortalSessionByExternalIdParams.none(),
+                requestOptions,
+            )
 
         /**
          * Returns a raw HTTP response for `get /customers/{customer_id}`, but is otherwise the same

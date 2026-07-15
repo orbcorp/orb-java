@@ -19,6 +19,10 @@ import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepareAsync
 import com.withorb.api.models.Customer
 import com.withorb.api.models.CustomerCreateParams
+import com.withorb.api.models.CustomerCreatePortalSessionByExternalIdParams
+import com.withorb.api.models.CustomerCreatePortalSessionByExternalIdResponse
+import com.withorb.api.models.CustomerCreatePortalSessionParams
+import com.withorb.api.models.CustomerCreatePortalSessionResponse
 import com.withorb.api.models.CustomerDeleteParams
 import com.withorb.api.models.CustomerFetchByExternalIdParams
 import com.withorb.api.models.CustomerFetchParams
@@ -150,6 +154,22 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
     ): CompletableFuture<Void?> =
         // delete /customers/{customer_id}
         withRawResponse().delete(params, requestOptions).thenAccept {}
+
+    override fun createPortalSession(
+        params: CustomerCreatePortalSessionParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CustomerCreatePortalSessionResponse> =
+        // post /customers/{customer_id}/portal_sessions
+        withRawResponse().createPortalSession(params, requestOptions).thenApply { it.parse() }
+
+    override fun createPortalSessionByExternalId(
+        params: CustomerCreatePortalSessionByExternalIdParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CustomerCreatePortalSessionByExternalIdResponse> =
+        // post /customers/external_customer_id/{external_customer_id}/portal_sessions
+        withRawResponse().createPortalSessionByExternalId(params, requestOptions).thenApply {
+            it.parse()
+        }
 
     override fun fetch(
         params: CustomerFetchParams,
@@ -387,6 +407,80 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
                 .thenApply { response ->
                     errorHandler.handle(response).parseable {
                         response.use { deleteHandler.handle(it) }
+                    }
+                }
+        }
+
+        private val createPortalSessionHandler: Handler<CustomerCreatePortalSessionResponse> =
+            jsonHandler<CustomerCreatePortalSessionResponse>(clientOptions.jsonMapper)
+
+        override fun createPortalSession(
+            params: CustomerCreatePortalSessionParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CustomerCreatePortalSessionResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("customers", params._pathParam(0), "portal_sessions")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { createPortalSessionHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val createPortalSessionByExternalIdHandler:
+            Handler<CustomerCreatePortalSessionByExternalIdResponse> =
+            jsonHandler<CustomerCreatePortalSessionByExternalIdResponse>(clientOptions.jsonMapper)
+
+        override fun createPortalSessionByExternalId(
+            params: CustomerCreatePortalSessionByExternalIdParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CustomerCreatePortalSessionByExternalIdResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("externalCustomerId", params.externalCustomerId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "customers",
+                        "external_customer_id",
+                        params._pathParam(0),
+                        "portal_sessions",
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { createPortalSessionByExternalIdHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }

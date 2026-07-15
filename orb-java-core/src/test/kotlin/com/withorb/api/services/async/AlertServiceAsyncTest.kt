@@ -84,6 +84,20 @@ internal class AlertServiceAsyncTest {
     }
 
     @Test
+    fun delete() {
+        val client =
+            OrbOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val alertServiceAsync = client.alerts()
+
+        val future = alertServiceAsync.delete("alert_configuration_id")
+
+        val response = future.get()
+    }
+
+    @Test
     fun createForCustomer() {
         val client =
             OrbOkHttpClientAsync.builder()
