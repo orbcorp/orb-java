@@ -53,9 +53,9 @@ private constructor(
     fun currency(): String = body.currency()
 
     /**
-     * An ISO 8601 date or timestamp, interpreted in the customer's timezone. Must be in the past.
-     * If a date is set without a time, `invoice_date` is set to midnight on the chosen date in the
-     * customer's timezone.
+     * An ISO 8601 date or timestamp, interpreted in the customer's timezone. If a date is set
+     * without a time, `invoice_date` is set to midnight on the chosen date in the customer's
+     * timezone. `invoice_date` cannot be more than one year in the future.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -144,8 +144,9 @@ private constructor(
     fun netTerms(): Optional<Long> = body.netTerms()
 
     /**
-     * When true, this invoice will be submitted for issuance upon creation. When false, the
-     * resulting invoice will require manual review to issue. Defaulted to false.
+     * When true, auto-issues the invoice on the invoice date. If the invoice date is today's date
+     * or earlier, the invoice will be issued upon creation. When false, the resulting invoice will
+     * require manual review to issue. Defaults to false.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
@@ -304,9 +305,9 @@ private constructor(
         fun currency(currency: JsonField<String>) = apply { body.currency(currency) }
 
         /**
-         * An ISO 8601 date or timestamp, interpreted in the customer's timezone. Must be in the
-         * past. If a date is set without a time, `invoice_date` is set to midnight on the chosen
-         * date in the customer's timezone.
+         * An ISO 8601 date or timestamp, interpreted in the customer's timezone. If a date is set
+         * without a time, `invoice_date` is set to midnight on the chosen date in the customer's
+         * timezone. `invoice_date` cannot be more than one year in the future.
          */
         fun invoiceDate(invoiceDate: OffsetDateTime) = apply { body.invoiceDate(invoiceDate) }
 
@@ -577,8 +578,9 @@ private constructor(
         fun netTerms(netTerms: JsonField<Long>) = apply { body.netTerms(netTerms) }
 
         /**
-         * When true, this invoice will be submitted for issuance upon creation. When false, the
-         * resulting invoice will require manual review to issue. Defaulted to false.
+         * When true, auto-issues the invoice on the invoice date. If the invoice date is today's
+         * date or earlier, the invoice will be issued upon creation. When false, the resulting
+         * invoice will require manual review to issue. Defaults to false.
          */
         fun willAutoIssue(willAutoIssue: Boolean) = apply { body.willAutoIssue(willAutoIssue) }
 
@@ -815,9 +817,9 @@ private constructor(
         fun currency(): String = currency.getRequired("currency")
 
         /**
-         * An ISO 8601 date or timestamp, interpreted in the customer's timezone. Must be in the
-         * past. If a date is set without a time, `invoice_date` is set to midnight on the chosen
-         * date in the customer's timezone.
+         * An ISO 8601 date or timestamp, interpreted in the customer's timezone. If a date is set
+         * without a time, `invoice_date` is set to midnight on the chosen date in the customer's
+         * timezone. `invoice_date` cannot be more than one year in the future.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -908,8 +910,9 @@ private constructor(
         fun netTerms(): Optional<Long> = netTerms.getOptional("net_terms")
 
         /**
-         * When true, this invoice will be submitted for issuance upon creation. When false, the
-         * resulting invoice will require manual review to issue. Defaulted to false.
+         * When true, auto-issues the invoice on the invoice date. If the invoice date is today's
+         * date or earlier, the invoice will be issued upon creation. When false, the resulting
+         * invoice will require manual review to issue. Defaults to false.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -1092,9 +1095,9 @@ private constructor(
             fun currency(currency: JsonField<String>) = apply { this.currency = currency }
 
             /**
-             * An ISO 8601 date or timestamp, interpreted in the customer's timezone. Must be in the
-             * past. If a date is set without a time, `invoice_date` is set to midnight on the
-             * chosen date in the customer's timezone.
+             * An ISO 8601 date or timestamp, interpreted in the customer's timezone. If a date is
+             * set without a time, `invoice_date` is set to midnight on the chosen date in the
+             * customer's timezone. `invoice_date` cannot be more than one year in the future.
              */
             fun invoiceDate(invoiceDate: OffsetDateTime) = invoiceDate(JsonField.of(invoiceDate))
 
@@ -1393,8 +1396,9 @@ private constructor(
             fun netTerms(netTerms: JsonField<Long>) = apply { this.netTerms = netTerms }
 
             /**
-             * When true, this invoice will be submitted for issuance upon creation. When false, the
-             * resulting invoice will require manual review to issue. Defaulted to false.
+             * When true, auto-issues the invoice on the invoice date. If the invoice date is
+             * today's date or earlier, the invoice will be issued upon creation. When false, the
+             * resulting invoice will require manual review to issue. Defaults to false.
              */
             fun willAutoIssue(willAutoIssue: Boolean) = willAutoIssue(JsonField.of(willAutoIssue))
 
