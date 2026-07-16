@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.14.0](https://github.com/orbcorp/orb-java/compare/v1.13.0...v1.14.0) (2026-07-16)
+
+
+### Features
+
+* **api:** add alert deletion, customer portal session, and invoice PDF regeneration endpoints ([52c7a44](https://github.com/orbcorp/orb-java/commit/52c7a4489b96984a0e4e49dd4adefced67e8dd34))
+* **api:** remove deprecated debug field from events backfill endpoints ([37bae4a](https://github.com/orbcorp/orb-java/commit/37bae4a596ec5eff0452dff5c5aac83d50e8a3e5))
+* **api:** remove deprecated debug parameter and field from backfill endpoints ([37bae4a](https://github.com/orbcorp/orb-java/commit/37bae4a596ec5eff0452dff5c5aac83d50e8a3e5))
+* **api:** remove deprecated debug query parameter and field from events API ([37bae4a](https://github.com/orbcorp/orb-java/commit/37bae4a596ec5eff0452dff5c5aac83d50e8a3e5))
+
 ## [1.13.0](https://github.com/orbcorp/orb-java/compare/v1.12.0...v1.13.0) (2026-07-15)
 
 
