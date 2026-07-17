@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.0](https://github.com/orbcorp/orb-java/compare/v1.14.0...v1.15.0) (2026-07-17)
+
+
+### Features
+
+* **api:** allow future invoice dates (up to one year) for one-off invoice creation ([9c60e81](https://github.com/orbcorp/orb-java/commit/9c60e819551583c14f64dbfbcb8c823d9e6b41db))
+
 ## [1.14.0](https://github.com/orbcorp/orb-java/compare/v1.13.0...v1.14.0) (2026-07-16)
 
 
