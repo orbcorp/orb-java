@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.0](https://github.com/orbcorp/orb-java/compare/v1.15.0...v1.16.0) (2026-07-22)
+
+
+### Features
+
+* **api:** support `end_of_invoice` effective time for plan version migrations ([93747fe](https://github.com/orbcorp/orb-java/commit/93747fe19c7c46daa89aae3b89a9bd6be0c95976))
+
 ## [1.15.0](https://github.com/orbcorp/orb-java/compare/v1.14.0...v1.15.0) (2026-07-17)
 
 
