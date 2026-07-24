@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.17.0](https://github.com/orbcorp/orb-java/compare/v1.16.0...v1.17.0) (2026-07-24)
+
+
+### Features
+
+* **api:** increase max page limit for credit ledger endpoints from 500 to 1000 ([d76ddb4](https://github.com/orbcorp/orb-java/commit/d76ddb4b8adc4a85d6b1d50e1e9b4401394bba2b))
+* **api:** support decimal quantities for fixed fee quantity transitions ([af6f53e](https://github.com/orbcorp/orb-java/commit/af6f53e586f9355d91882f581def1012bc35665a))
+
 ## [1.16.0](https://github.com/orbcorp/orb-java/compare/v1.15.0...v1.16.0) (2026-07-22)
 
 
