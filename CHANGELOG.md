@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.18.0](https://github.com/orbcorp/orb-java/compare/v1.17.0...v1.18.0) (2026-07-25)
+
+
+### Features
+
+* **api:** rename "trash alert" endpoint to "delete alert" ([3a83c23](https://github.com/orbcorp/orb-java/commit/3a83c235911dbc6e9a17a8b295e36bb5622ead72))
+
+
+### Bug Fixes
+
+* **api:** rename "trash alert" endpoint to "delete alert" ([3a83c23](https://github.com/orbcorp/orb-java/commit/3a83c235911dbc6e9a17a8b295e36bb5622ead72))
+
 ## [1.17.0](https://github.com/orbcorp/orb-java/compare/v1.16.0...v1.17.0) (2026-07-24)
 
 
