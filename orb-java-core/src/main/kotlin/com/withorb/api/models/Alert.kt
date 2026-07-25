@@ -1347,6 +1347,8 @@ private constructor(
 
             @JvmField val COST_EXCEEDED = of("cost_exceeded")
 
+            @JvmField val SPEND_EXCEEDED = of("spend_exceeded")
+
             @JvmField
             val LICENSE_BALANCE_THRESHOLD_REACHED = of("license_balance_threshold_reached")
 
@@ -1360,6 +1362,7 @@ private constructor(
             CREDIT_BALANCE_RECOVERED,
             USAGE_EXCEEDED,
             COST_EXCEEDED,
+            SPEND_EXCEEDED,
             LICENSE_BALANCE_THRESHOLD_REACHED,
         }
 
@@ -1378,6 +1381,7 @@ private constructor(
             CREDIT_BALANCE_RECOVERED,
             USAGE_EXCEEDED,
             COST_EXCEEDED,
+            SPEND_EXCEEDED,
             LICENSE_BALANCE_THRESHOLD_REACHED,
             /** An enum member indicating that [Type] was instantiated with an unknown value. */
             _UNKNOWN,
@@ -1397,6 +1401,7 @@ private constructor(
                 CREDIT_BALANCE_RECOVERED -> Value.CREDIT_BALANCE_RECOVERED
                 USAGE_EXCEEDED -> Value.USAGE_EXCEEDED
                 COST_EXCEEDED -> Value.COST_EXCEEDED
+                SPEND_EXCEEDED -> Value.SPEND_EXCEEDED
                 LICENSE_BALANCE_THRESHOLD_REACHED -> Value.LICENSE_BALANCE_THRESHOLD_REACHED
                 else -> Value._UNKNOWN
             }
@@ -1416,6 +1421,7 @@ private constructor(
                 CREDIT_BALANCE_RECOVERED -> Known.CREDIT_BALANCE_RECOVERED
                 USAGE_EXCEEDED -> Known.USAGE_EXCEEDED
                 COST_EXCEEDED -> Known.COST_EXCEEDED
+                SPEND_EXCEEDED -> Known.SPEND_EXCEEDED
                 LICENSE_BALANCE_THRESHOLD_REACHED -> Known.LICENSE_BALANCE_THRESHOLD_REACHED
                 else -> throw OrbInvalidDataException("Unknown Type: $value")
             }
