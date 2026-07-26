@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.0](https://github.com/orbcorp/orb-java/compare/v1.18.0...v1.19.0) (2026-07-26)
+
+
+### Features
+
+* **api:** add `spend_exceeded` alert type for subscription-level alerts ([c8cb067](https://github.com/orbcorp/orb-java/commit/c8cb0676d1f5ea4695ef91ee3eb6bfd46039369b))
+
 ## [1.18.0](https://github.com/orbcorp/orb-java/compare/v1.17.0...v1.18.0) (2026-07-25)
 
 
