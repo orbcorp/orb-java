@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.20.0](https://github.com/orbcorp/orb-java/compare/v1.19.0...v1.20.0) (2026-07-31)
+
+
+### Features
+
+* **api:** add endpoint to create plan-level alerts ([c3f50b8](https://github.com/orbcorp/orb-java/commit/c3f50b80936881d08116c6cfb1c6827646aa589a))
+* **api:** add endpoint to create plan-level alerts and allow PUT updates for plan usage alert thresholds ([c3f50b8](https://github.com/orbcorp/orb-java/commit/c3f50b80936881d08116c6cfb1c6827646aa589a))
+
 ## [1.19.0](https://github.com/orbcorp/orb-java/compare/v1.18.0...v1.19.0) (2026-07-26)
 
 
