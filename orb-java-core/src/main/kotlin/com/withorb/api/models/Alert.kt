@@ -209,7 +209,9 @@ private constructor(
     fun licenseType(): Optional<LicenseType> = licenseType.getOptional("license_type")
 
     /**
-     * Filters scoping which prices are included in grouped cost alert evaluation.
+     * Filters scoping which prices are included in spend and grouped cost alert evaluation. Alerts
+     * use the price_id, item_id, and price_type fields only; the alert's pricing unit is reported
+     * by currency.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
@@ -662,7 +664,11 @@ private constructor(
             this.licenseType = licenseType
         }
 
-        /** Filters scoping which prices are included in grouped cost alert evaluation. */
+        /**
+         * Filters scoping which prices are included in spend and grouped cost alert evaluation.
+         * Alerts use the price_id, item_id, and price_type fields only; the alert's pricing unit is
+         * reported by currency.
+         */
         fun priceFilters(priceFilters: List<PriceFilter>?) =
             priceFilters(JsonField.ofNullable(priceFilters))
 

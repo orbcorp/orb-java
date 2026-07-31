@@ -23,7 +23,11 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** This endpoint updates the thresholds of an alert. */
+/**
+ * This endpoint updates the thresholds of an alert. On cost alerts it also updates `price_filters`,
+ * and on subscription-scoped grouped cost alerts `threshold_overrides`; omitting either leaves it
+ * unchanged, and an empty list clears it.
+ */
 class AlertUpdateParams
 private constructor(
     private val alertConfigurationId: String?,
@@ -43,8 +47,9 @@ private constructor(
     fun thresholds(): List<Threshold> = body.thresholds()
 
     /**
-     * Replaces the price filters on a grouped cost alert; an empty list clears them. Only
-     * applicable to cost alerts with grouping_keys. Omit to leave unchanged.
+     * Replaces the price filters on the alert; an empty list clears them. Only applicable to
+     * spend_exceeded alerts and to cost_exceeded alerts with grouping_keys set. Alerts accept the
+     * price_id, item_id, and price_type fields only. Omit to leave unchanged.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
@@ -165,8 +170,9 @@ private constructor(
         fun addThreshold(threshold: Threshold) = apply { body.addThreshold(threshold) }
 
         /**
-         * Replaces the price filters on a grouped cost alert; an empty list clears them. Only
-         * applicable to cost alerts with grouping_keys. Omit to leave unchanged.
+         * Replaces the price filters on the alert; an empty list clears them. Only applicable to
+         * spend_exceeded alerts and to cost_exceeded alerts with grouping_keys set. Alerts accept
+         * the price_id, item_id, and price_type fields only. Omit to leave unchanged.
          */
         fun priceFilters(priceFilters: List<PriceFilter>?) = apply {
             body.priceFilters(priceFilters)
@@ -409,8 +415,9 @@ private constructor(
         fun thresholds(): List<Threshold> = thresholds.getRequired("thresholds")
 
         /**
-         * Replaces the price filters on a grouped cost alert; an empty list clears them. Only
-         * applicable to cost alerts with grouping_keys. Omit to leave unchanged.
+         * Replaces the price filters on the alert; an empty list clears them. Only applicable to
+         * spend_exceeded alerts and to cost_exceeded alerts with grouping_keys set. Alerts accept
+         * the price_id, item_id, and price_type fields only. Omit to leave unchanged.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -524,8 +531,9 @@ private constructor(
             }
 
             /**
-             * Replaces the price filters on a grouped cost alert; an empty list clears them. Only
-             * applicable to cost alerts with grouping_keys. Omit to leave unchanged.
+             * Replaces the price filters on the alert; an empty list clears them. Only applicable
+             * to spend_exceeded alerts and to cost_exceeded alerts with grouping_keys set. Alerts
+             * accept the price_id, item_id, and price_type fields only. Omit to leave unchanged.
              */
             fun priceFilters(priceFilters: List<PriceFilter>?) =
                 priceFilters(JsonField.ofNullable(priceFilters))
