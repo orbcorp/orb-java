@@ -214,6 +214,17 @@ interface PriceService {
 
     /** @see create */
     fun create(
+        groupedTieredMatrix: PriceCreateParams.Body.GroupedTieredMatrix,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Price =
+        create(PriceCreateParams.Body.ofGroupedTieredMatrix(groupedTieredMatrix), requestOptions)
+
+    /** @see create */
+    fun create(groupedTieredMatrix: PriceCreateParams.Body.GroupedTieredMatrix): Price =
+        create(groupedTieredMatrix, RequestOptions.none())
+
+    /** @see create */
+    fun create(
         tieredPackageWithMinimum: NewFloatingTieredPackageWithMinimumPrice,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Price =
@@ -874,6 +885,23 @@ interface PriceService {
         @MustBeClosed
         fun create(groupedTiered: NewFloatingGroupedTieredPrice): HttpResponseFor<Price> =
             create(groupedTiered, RequestOptions.none())
+
+        /** @see create */
+        @MustBeClosed
+        fun create(
+            groupedTieredMatrix: PriceCreateParams.Body.GroupedTieredMatrix,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Price> =
+            create(
+                PriceCreateParams.Body.ofGroupedTieredMatrix(groupedTieredMatrix),
+                requestOptions,
+            )
+
+        /** @see create */
+        @MustBeClosed
+        fun create(
+            groupedTieredMatrix: PriceCreateParams.Body.GroupedTieredMatrix
+        ): HttpResponseFor<Price> = create(groupedTieredMatrix, RequestOptions.none())
 
         /** @see create */
         @MustBeClosed

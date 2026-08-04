@@ -227,6 +227,18 @@ interface PriceServiceAsync {
 
     /** @see create */
     fun create(
+        groupedTieredMatrix: PriceCreateParams.Body.GroupedTieredMatrix,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.Body.ofGroupedTieredMatrix(groupedTieredMatrix), requestOptions)
+
+    /** @see create */
+    fun create(
+        groupedTieredMatrix: PriceCreateParams.Body.GroupedTieredMatrix
+    ): CompletableFuture<Price> = create(groupedTieredMatrix, RequestOptions.none())
+
+    /** @see create */
+    fun create(
         tieredPackageWithMinimum: NewFloatingTieredPackageWithMinimumPrice,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Price> =
@@ -908,6 +920,22 @@ interface PriceServiceAsync {
         fun create(
             groupedTiered: NewFloatingGroupedTieredPrice
         ): CompletableFuture<HttpResponseFor<Price>> = create(groupedTiered, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            groupedTieredMatrix: PriceCreateParams.Body.GroupedTieredMatrix,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(
+                PriceCreateParams.Body.ofGroupedTieredMatrix(groupedTieredMatrix),
+                requestOptions,
+            )
+
+        /** @see create */
+        fun create(
+            groupedTieredMatrix: PriceCreateParams.Body.GroupedTieredMatrix
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(groupedTieredMatrix, RequestOptions.none())
 
         /** @see create */
         fun create(
