@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.22.0](https://github.com/orbcorp/orb-java/compare/v1.21.0...v1.22.0) (2026-08-04)
+
+
+### Features
+
+* **api:** api update ([28dc077](https://github.com/orbcorp/orb-java/commit/28dc0773f60064544608580c42655851513cf59c))
+* **api:** api update ([28dc077](https://github.com/orbcorp/orb-java/commit/28dc0773f60064544608580c42655851513cf59c))
+* **api:** api update ([28dc077](https://github.com/orbcorp/orb-java/commit/28dc0773f60064544608580c42655851513cf59c))
+
+
+### Bug Fixes
+
+* **api:** correct next_attempt_at accuracy in invoice auto-collection response ([28dc077](https://github.com/orbcorp/orb-java/commit/28dc0773f60064544608580c42655851513cf59c))
+
 ## [1.21.0](https://github.com/orbcorp/orb-java/compare/v1.20.0...v1.21.0) (2026-08-01)
 
 
