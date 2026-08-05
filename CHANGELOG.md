@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.0](https://github.com/orbcorp/orb-java/compare/v1.22.0...v1.23.0) (2026-08-05)
+
+
+### Features
+
+* **api:** add `grouped_tiered_matrix` price model for per-dimension tiered rates ([6f2d683](https://github.com/orbcorp/orb-java/commit/6f2d6831aeeb9d5acee6dd35a8b3b624188de971))
+
 ## [1.22.0](https://github.com/orbcorp/orb-java/compare/v1.21.0...v1.22.0) (2026-08-04)
 
 
