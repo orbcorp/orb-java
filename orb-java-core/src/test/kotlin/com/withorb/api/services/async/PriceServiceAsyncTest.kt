@@ -39,7 +39,11 @@ internal class PriceServiceAsyncTest {
                     .modelType(NewFloatingUnitPrice.ModelType.UNIT)
                     .name("Annual fee")
                     .unitConfig(
-                        UnitConfig.builder().unitAmount("unit_amount").prorated(true).build()
+                        UnitConfig.builder()
+                            .unitAmount("unit_amount")
+                            .prorated(true)
+                            .scalingFactor(0.0)
+                            .build()
                     )
                     .billableMetricId("billable_metric_id")
                     .billedInAdvance(true)
@@ -55,7 +59,7 @@ internal class PriceServiceAsyncTest {
                     )
                     .dimensionalPriceConfiguration(
                         NewDimensionalPriceConfiguration.builder()
-                            .addDimensionValue("string")
+                            .addDimensionValue("x")
                             .dimensionalPriceGroupId("dimensional_price_group_id")
                             .externalDimensionalPriceGroupId("external_dimensional_price_group_id")
                             .build()
@@ -193,6 +197,7 @@ internal class PriceServiceAsyncTest {
                                         UnitConfig.builder()
                                             .unitAmount("unit_amount")
                                             .prorated(true)
+                                            .scalingFactor(0.0)
                                             .build()
                                     )
                                     .billableMetricId("billable_metric_id")
@@ -213,7 +218,7 @@ internal class PriceServiceAsyncTest {
                                     )
                                     .dimensionalPriceConfiguration(
                                         NewDimensionalPriceConfiguration.builder()
-                                            .addDimensionValue("string")
+                                            .addDimensionValue("x")
                                             .dimensionalPriceGroupId("dimensional_price_group_id")
                                             .externalDimensionalPriceGroupId(
                                                 "external_dimensional_price_group_id"
@@ -303,6 +308,7 @@ internal class PriceServiceAsyncTest {
                                         UnitConfig.builder()
                                             .unitAmount("unit_amount")
                                             .prorated(true)
+                                            .scalingFactor(0.0)
                                             .build()
                                     )
                                     .billableMetricId("billable_metric_id")
@@ -323,7 +329,7 @@ internal class PriceServiceAsyncTest {
                                     )
                                     .dimensionalPriceConfiguration(
                                         NewDimensionalPriceConfiguration.builder()
-                                            .addDimensionValue("string")
+                                            .addDimensionValue("x")
                                             .dimensionalPriceGroupId("dimensional_price_group_id")
                                             .externalDimensionalPriceGroupId(
                                                 "external_dimensional_price_group_id"

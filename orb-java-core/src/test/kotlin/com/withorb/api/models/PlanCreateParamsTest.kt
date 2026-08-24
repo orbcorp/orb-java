@@ -63,6 +63,7 @@ internal class PlanCreateParamsTest {
                                 UnitConfig.builder()
                                     .unitAmount("unit_amount")
                                     .prorated(true)
+                                    .scalingFactor(0.0)
                                     .build()
                             )
                             .billableMetricId("billable_metric_id")
@@ -80,7 +81,7 @@ internal class PlanCreateParamsTest {
                             .currency("currency")
                             .dimensionalPriceConfiguration(
                                 NewDimensionalPriceConfiguration.builder()
-                                    .addDimensionValue("string")
+                                    .addDimensionValue("x")
                                     .dimensionalPriceGroupId("dimensional_price_group_id")
                                     .externalDimensionalPriceGroupId(
                                         "external_dimensional_price_group_id"
@@ -116,6 +117,7 @@ internal class PlanCreateParamsTest {
                                 UnitConfig.builder()
                                     .unitAmount("unit_amount")
                                     .prorated(true)
+                                    .scalingFactor(0.0)
                                     .build()
                             )
                             .billableMetricId("billable_metric_id")
@@ -133,7 +135,7 @@ internal class PlanCreateParamsTest {
                             .currency("currency")
                             .dimensionalPriceConfiguration(
                                 NewDimensionalPriceConfiguration.builder()
-                                    .addDimensionValue("string")
+                                    .addDimensionValue("x")
                                     .dimensionalPriceGroupId("dimensional_price_group_id")
                                     .externalDimensionalPriceGroupId(
                                         "external_dimensional_price_group_id"
@@ -268,6 +270,7 @@ internal class PlanCreateParamsTest {
                                     UnitConfig.builder()
                                         .unitAmount("unit_amount")
                                         .prorated(true)
+                                        .scalingFactor(0.0)
                                         .build()
                                 )
                                 .billableMetricId("billable_metric_id")
@@ -287,7 +290,7 @@ internal class PlanCreateParamsTest {
                                 .currency("currency")
                                 .dimensionalPriceConfiguration(
                                     NewDimensionalPriceConfiguration.builder()
-                                        .addDimensionValue("string")
+                                        .addDimensionValue("x")
                                         .dimensionalPriceGroupId("dimensional_price_group_id")
                                         .externalDimensionalPriceGroupId(
                                             "external_dimensional_price_group_id"
@@ -323,6 +326,7 @@ internal class PlanCreateParamsTest {
                                     UnitConfig.builder()
                                         .unitAmount("unit_amount")
                                         .prorated(true)
+                                        .scalingFactor(0.0)
                                         .build()
                                 )
                                 .billableMetricId("billable_metric_id")
@@ -342,7 +346,7 @@ internal class PlanCreateParamsTest {
                                 .currency("currency")
                                 .dimensionalPriceConfiguration(
                                     NewDimensionalPriceConfiguration.builder()
-                                        .addDimensionValue("string")
+                                        .addDimensionValue("x")
                                         .dimensionalPriceGroupId("dimensional_price_group_id")
                                         .externalDimensionalPriceGroupId(
                                             "external_dimensional_price_group_id"
@@ -471,6 +475,7 @@ internal class PlanCreateParamsTest {
                                 UnitConfig.builder()
                                     .unitAmount("unit_amount")
                                     .prorated(true)
+                                    .scalingFactor(0.0)
                                     .build()
                             )
                             .billableMetricId("billable_metric_id")
@@ -488,7 +493,7 @@ internal class PlanCreateParamsTest {
                             .currency("currency")
                             .dimensionalPriceConfiguration(
                                 NewDimensionalPriceConfiguration.builder()
-                                    .addDimensionValue("string")
+                                    .addDimensionValue("x")
                                     .dimensionalPriceGroupId("dimensional_price_group_id")
                                     .externalDimensionalPriceGroupId(
                                         "external_dimensional_price_group_id"
@@ -524,6 +529,7 @@ internal class PlanCreateParamsTest {
                                 UnitConfig.builder()
                                     .unitAmount("unit_amount")
                                     .prorated(true)
+                                    .scalingFactor(0.0)
                                     .build()
                             )
                             .billableMetricId("billable_metric_id")
@@ -541,7 +547,7 @@ internal class PlanCreateParamsTest {
                             .currency("currency")
                             .dimensionalPriceConfiguration(
                                 NewDimensionalPriceConfiguration.builder()
-                                    .addDimensionValue("string")
+                                    .addDimensionValue("x")
                                     .dimensionalPriceGroupId("dimensional_price_group_id")
                                     .externalDimensionalPriceGroupId(
                                         "external_dimensional_price_group_id"

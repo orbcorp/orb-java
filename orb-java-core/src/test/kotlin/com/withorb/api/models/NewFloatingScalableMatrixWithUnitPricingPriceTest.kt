@@ -57,7 +57,7 @@ internal class NewFloatingScalableMatrixWithUnitPricingPriceTest {
                 )
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
-                        .addDimensionValue("string")
+                        .addDimensionValue("x")
                         .dimensionalPriceGroupId("dimensional_price_group_id")
                         .externalDimensionalPriceGroupId("external_dimensional_price_group_id")
                         .build()
@@ -137,7 +137,7 @@ internal class NewFloatingScalableMatrixWithUnitPricingPriceTest {
         assertThat(newFloatingScalableMatrixWithUnitPricingPrice.dimensionalPriceConfiguration())
             .contains(
                 NewDimensionalPriceConfiguration.builder()
-                    .addDimensionValue("string")
+                    .addDimensionValue("x")
                     .dimensionalPriceGroupId("dimensional_price_group_id")
                     .externalDimensionalPriceGroupId("external_dimensional_price_group_id")
                     .build()
@@ -211,7 +211,7 @@ internal class NewFloatingScalableMatrixWithUnitPricingPriceTest {
                 )
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
-                        .addDimensionValue("string")
+                        .addDimensionValue("x")
                         .dimensionalPriceGroupId("dimensional_price_group_id")
                         .externalDimensionalPriceGroupId("external_dimensional_price_group_id")
                         .build()

@@ -49,7 +49,7 @@ internal class NewSubscriptionCumulativeGroupedBulkPriceTest {
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
-                        .addDimensionValue("string")
+                        .addDimensionValue("x")
                         .dimensionalPriceGroupId("dimensional_price_group_id")
                         .externalDimensionalPriceGroupId("external_dimensional_price_group_id")
                         .build()
@@ -119,7 +119,7 @@ internal class NewSubscriptionCumulativeGroupedBulkPriceTest {
         assertThat(newSubscriptionCumulativeGroupedBulkPrice.dimensionalPriceConfiguration())
             .contains(
                 NewDimensionalPriceConfiguration.builder()
-                    .addDimensionValue("string")
+                    .addDimensionValue("x")
                     .dimensionalPriceGroupId("dimensional_price_group_id")
                     .externalDimensionalPriceGroupId("external_dimensional_price_group_id")
                     .build()
@@ -186,7 +186,7 @@ internal class NewSubscriptionCumulativeGroupedBulkPriceTest {
                 .currency("currency")
                 .dimensionalPriceConfiguration(
                     NewDimensionalPriceConfiguration.builder()
-                        .addDimensionValue("string")
+                        .addDimensionValue("x")
                         .dimensionalPriceGroupId("dimensional_price_group_id")
                         .externalDimensionalPriceGroupId("external_dimensional_price_group_id")
                         .build()
