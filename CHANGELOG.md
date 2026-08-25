@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.26.0](https://github.com/orbcorp/orb-java/compare/v1.25.0...v1.26.0) (2026-08-25)
+
+
+### Features
+
+* **api:** restore deprecated `scaling_factor` field on unit and matrix price configs ([2888fd2](https://github.com/orbcorp/orb-java/commit/2888fd2aeeccca6feae3d5fa905115ec85f5c584))
+
+
+### Bug Fixes
+
+* **api:** reject empty or missing dimension values in dimensional price configuration ([2888fd2](https://github.com/orbcorp/orb-java/commit/2888fd2aeeccca6feae3d5fa905115ec85f5c584))
+
 ## [1.25.0](https://github.com/orbcorp/orb-java/compare/v1.24.0...v1.25.0) (2026-08-19)
 
 
