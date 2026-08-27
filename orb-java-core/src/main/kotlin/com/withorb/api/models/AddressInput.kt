@@ -10,6 +10,7 @@ import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
+import com.withorb.api.core.checkRequired
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Collections
 import java.util.Objects
@@ -19,8 +20,8 @@ import kotlin.jvm.optionals.getOrNull
 class AddressInput
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val city: JsonField<String>,
     private val country: JsonField<String>,
+    private val city: JsonField<String>,
     private val line1: JsonField<String>,
     private val line2: JsonField<String>,
     private val postalCode: JsonField<String>,
@@ -30,27 +31,27 @@ private constructor(
 
     @JsonCreator
     private constructor(
-        @JsonProperty("city") @ExcludeMissing city: JsonField<String> = JsonMissing.of(),
         @JsonProperty("country") @ExcludeMissing country: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("city") @ExcludeMissing city: JsonField<String> = JsonMissing.of(),
         @JsonProperty("line1") @ExcludeMissing line1: JsonField<String> = JsonMissing.of(),
         @JsonProperty("line2") @ExcludeMissing line2: JsonField<String> = JsonMissing.of(),
         @JsonProperty("postal_code")
         @ExcludeMissing
         postalCode: JsonField<String> = JsonMissing.of(),
         @JsonProperty("state") @ExcludeMissing state: JsonField<String> = JsonMissing.of(),
-    ) : this(city, country, line1, line2, postalCode, state, mutableMapOf())
+    ) : this(country, city, line1, line2, postalCode, state, mutableMapOf())
+
+    /**
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun country(): String = country.getRequired("country")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
      */
     fun city(): Optional<String> = city.getOptional("city")
-
-    /**
-     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
-     *   responded with an unexpected value).
-     */
-    fun country(): Optional<String> = country.getOptional("country")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
@@ -77,18 +78,18 @@ private constructor(
     fun state(): Optional<String> = state.getOptional("state")
 
     /**
-     * Returns the raw JSON value of [city].
-     *
-     * Unlike [city], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("city") @ExcludeMissing fun _city(): JsonField<String> = city
-
-    /**
      * Returns the raw JSON value of [country].
      *
      * Unlike [country], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("country") @ExcludeMissing fun _country(): JsonField<String> = country
+
+    /**
+     * Returns the raw JSON value of [city].
+     *
+     * Unlike [city], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("city") @ExcludeMissing fun _city(): JsonField<String> = city
 
     /**
      * Returns the raw JSON value of [line1].
@@ -132,15 +133,22 @@ private constructor(
 
     companion object {
 
-        /** Returns a mutable builder for constructing an instance of [AddressInput]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [AddressInput].
+         *
+         * The following fields are required:
+         * ```java
+         * .country()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [AddressInput]. */
     class Builder internal constructor() {
 
+        private var country: JsonField<String>? = null
         private var city: JsonField<String> = JsonMissing.of()
-        private var country: JsonField<String> = JsonMissing.of()
         private var line1: JsonField<String> = JsonMissing.of()
         private var line2: JsonField<String> = JsonMissing.of()
         private var postalCode: JsonField<String> = JsonMissing.of()
@@ -149,14 +157,24 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(addressInput: AddressInput) = apply {
-            city = addressInput.city
             country = addressInput.country
+            city = addressInput.city
             line1 = addressInput.line1
             line2 = addressInput.line2
             postalCode = addressInput.postalCode
             state = addressInput.state
             additionalProperties = addressInput.additionalProperties.toMutableMap()
         }
+
+        fun country(country: String) = country(JsonField.of(country))
+
+        /**
+         * Sets [Builder.country] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.country] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun country(country: JsonField<String>) = apply { this.country = country }
 
         fun city(city: String?) = city(JsonField.ofNullable(city))
 
@@ -170,19 +188,6 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun city(city: JsonField<String>) = apply { this.city = city }
-
-        fun country(country: String?) = country(JsonField.ofNullable(country))
-
-        /** Alias for calling [Builder.country] with `country.orElse(null)`. */
-        fun country(country: Optional<String>) = country(country.getOrNull())
-
-        /**
-         * Sets [Builder.country] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.country] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun country(country: JsonField<String>) = apply { this.country = country }
 
         fun line1(line1: String?) = line1(JsonField.ofNullable(line1))
 
@@ -260,11 +265,18 @@ private constructor(
          * Returns an immutable instance of [AddressInput].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .country()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): AddressInput =
             AddressInput(
+                checkRequired("country", country),
                 city,
-                country,
                 line1,
                 line2,
                 postalCode,
@@ -288,8 +300,8 @@ private constructor(
             return@apply
         }
 
-        city()
         country()
+        city()
         line1()
         line2()
         postalCode()
@@ -312,8 +324,8 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (if (city.asKnown().isPresent) 1 else 0) +
-            (if (country.asKnown().isPresent) 1 else 0) +
+        (if (country.asKnown().isPresent) 1 else 0) +
+            (if (city.asKnown().isPresent) 1 else 0) +
             (if (line1.asKnown().isPresent) 1 else 0) +
             (if (line2.asKnown().isPresent) 1 else 0) +
             (if (postalCode.asKnown().isPresent) 1 else 0) +
@@ -325,8 +337,8 @@ private constructor(
         }
 
         return other is AddressInput &&
-            city == other.city &&
             country == other.country &&
+            city == other.city &&
             line1 == other.line1 &&
             line2 == other.line2 &&
             postalCode == other.postalCode &&
@@ -335,11 +347,11 @@ private constructor(
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(city, country, line1, line2, postalCode, state, additionalProperties)
+        Objects.hash(country, city, line1, line2, postalCode, state, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "AddressInput{city=$city, country=$country, line1=$line1, line2=$line2, postalCode=$postalCode, state=$state, additionalProperties=$additionalProperties}"
+        "AddressInput{country=$country, city=$city, line1=$line1, line2=$line2, postalCode=$postalCode, state=$state, additionalProperties=$additionalProperties}"
 }

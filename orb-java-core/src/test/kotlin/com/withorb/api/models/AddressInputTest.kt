@@ -13,16 +13,16 @@ internal class AddressInputTest {
     fun create() {
         val addressInput =
             AddressInput.builder()
+                .country("x")
                 .city("city")
-                .country("country")
                 .line1("line1")
                 .line2("line2")
                 .postalCode("postal_code")
                 .state("state")
                 .build()
 
+        assertThat(addressInput.country()).isEqualTo("x")
         assertThat(addressInput.city()).contains("city")
-        assertThat(addressInput.country()).contains("country")
         assertThat(addressInput.line1()).contains("line1")
         assertThat(addressInput.line2()).contains("line2")
         assertThat(addressInput.postalCode()).contains("postal_code")
@@ -34,8 +34,8 @@ internal class AddressInputTest {
         val jsonMapper = jsonMapper()
         val addressInput =
             AddressInput.builder()
+                .country("x")
                 .city("city")
-                .country("country")
                 .line1("line1")
                 .line2("line2")
                 .postalCode("postal_code")
