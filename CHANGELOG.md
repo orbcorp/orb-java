@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.1](https://github.com/orbcorp/orb-java/compare/v1.26.0...v1.26.1) (2026-08-28)
+
+
+### Bug Fixes
+
+* **api:** require non-empty `country` in customer address input ([b1e3d47](https://github.com/orbcorp/orb-java/commit/b1e3d47a38342d2e77e58ab0936257342dc63974))
+
 ## [1.26.0](https://github.com/orbcorp/orb-java/compare/v1.25.0...v1.26.0) (2026-08-25)
 
 
