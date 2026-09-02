@@ -24,6 +24,7 @@ internal class AlertUpdateParamsTest {
                 AlertUpdateParams.ThresholdOverride.builder()
                     .addGroupValue("string")
                     .addThreshold(Threshold.builder().value(0.0).build())
+                    .addGroupKey("string")
                     .build()
             )
             .build()
@@ -59,6 +60,7 @@ internal class AlertUpdateParamsTest {
                     AlertUpdateParams.ThresholdOverride.builder()
                         .addGroupValue("string")
                         .addThreshold(Threshold.builder().value(0.0).build())
+                        .addGroupKey("string")
                         .build()
                 )
                 .build()
@@ -79,6 +81,7 @@ internal class AlertUpdateParamsTest {
                 AlertUpdateParams.ThresholdOverride.builder()
                     .addGroupValue("string")
                     .addThreshold(Threshold.builder().value(0.0).build())
+                    .addGroupKey("string")
                     .build()
             )
     }

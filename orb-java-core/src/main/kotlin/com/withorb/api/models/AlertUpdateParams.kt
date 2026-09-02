@@ -1276,6 +1276,7 @@ private constructor(
     private constructor(
         private val groupValues: JsonField<List<String>>,
         private val thresholds: JsonField<List<Threshold>>,
+        private val groupKeys: JsonField<List<String>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -1287,11 +1288,15 @@ private constructor(
             @JsonProperty("thresholds")
             @ExcludeMissing
             thresholds: JsonField<List<Threshold>> = JsonMissing.of(),
-        ) : this(groupValues, thresholds, mutableMapOf())
+            @JsonProperty("group_keys")
+            @ExcludeMissing
+            groupKeys: JsonField<List<String>> = JsonMissing.of(),
+        ) : this(groupValues, thresholds, groupKeys, mutableMapOf())
 
         /**
-         * The values of the grouping keys that identify this group. The list length must match the
-         * alert's grouping_keys, and values appear in the same order as grouping_keys.
+         * The values of the grouping keys that identify this group. The list length must match
+         * group_keys when it is set, and the alert's grouping_keys otherwise, with values in the
+         * same order as whichever applies.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -1306,6 +1311,16 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun thresholds(): List<Threshold> = thresholds.getRequired("thresholds")
+
+        /**
+         * The subset of the alert's grouping_keys that this override binds. Any grouping key not
+         * named is unconstrained, so the override applies to every group matching the named values.
+         * When omitted, group_values must cover every grouping key in order.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun groupKeys(): Optional<List<String>> = groupKeys.getOptional("group_keys")
 
         /**
          * Returns the raw JSON value of [groupValues].
@@ -1324,6 +1339,15 @@ private constructor(
         @JsonProperty("thresholds")
         @ExcludeMissing
         fun _thresholds(): JsonField<List<Threshold>> = thresholds
+
+        /**
+         * Returns the raw JSON value of [groupKeys].
+         *
+         * Unlike [groupKeys], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("group_keys")
+        @ExcludeMissing
+        fun _groupKeys(): JsonField<List<String>> = groupKeys
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -1356,18 +1380,21 @@ private constructor(
 
             private var groupValues: JsonField<MutableList<String>>? = null
             private var thresholds: JsonField<MutableList<Threshold>>? = null
+            private var groupKeys: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(thresholdOverride: ThresholdOverride) = apply {
                 groupValues = thresholdOverride.groupValues.map { it.toMutableList() }
                 thresholds = thresholdOverride.thresholds.map { it.toMutableList() }
+                groupKeys = thresholdOverride.groupKeys.map { it.toMutableList() }
                 additionalProperties = thresholdOverride.additionalProperties.toMutableMap()
             }
 
             /**
              * The values of the grouping keys that identify this group. The list length must match
-             * the alert's grouping_keys, and values appear in the same order as grouping_keys.
+             * group_keys when it is set, and the alert's grouping_keys otherwise, with values in
+             * the same order as whichever applies.
              */
             fun groupValues(groupValues: List<String>) = groupValues(JsonField.of(groupValues))
 
@@ -1423,6 +1450,39 @@ private constructor(
                     }
             }
 
+            /**
+             * The subset of the alert's grouping_keys that this override binds. Any grouping key
+             * not named is unconstrained, so the override applies to every group matching the named
+             * values. When omitted, group_values must cover every grouping key in order.
+             */
+            fun groupKeys(groupKeys: List<String>?) = groupKeys(JsonField.ofNullable(groupKeys))
+
+            /** Alias for calling [Builder.groupKeys] with `groupKeys.orElse(null)`. */
+            fun groupKeys(groupKeys: Optional<List<String>>) = groupKeys(groupKeys.getOrNull())
+
+            /**
+             * Sets [Builder.groupKeys] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.groupKeys] with a well-typed `List<String>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun groupKeys(groupKeys: JsonField<List<String>>) = apply {
+                this.groupKeys = groupKeys.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [String] to [groupKeys].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addGroupKey(groupKey: String) = apply {
+                groupKeys =
+                    (groupKeys ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("groupKeys", it).add(groupKey)
+                    }
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -1459,6 +1519,7 @@ private constructor(
                 ThresholdOverride(
                     checkRequired("groupValues", groupValues).map { it.toImmutable() },
                     checkRequired("thresholds", thresholds).map { it.toImmutable() },
+                    (groupKeys ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -1481,6 +1542,7 @@ private constructor(
 
             groupValues()
             thresholds().forEach { it.validate() }
+            groupKeys()
             validated = true
         }
 
@@ -1501,7 +1563,8 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (groupValues.asKnown().getOrNull()?.size ?: 0) +
-                (thresholds.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+                (thresholds.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (groupKeys.asKnown().getOrNull()?.size ?: 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1511,17 +1574,18 @@ private constructor(
             return other is ThresholdOverride &&
                 groupValues == other.groupValues &&
                 thresholds == other.thresholds &&
+                groupKeys == other.groupKeys &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(groupValues, thresholds, additionalProperties)
+            Objects.hash(groupValues, thresholds, groupKeys, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ThresholdOverride{groupValues=$groupValues, thresholds=$thresholds, additionalProperties=$additionalProperties}"
+            "ThresholdOverride{groupValues=$groupValues, thresholds=$thresholds, groupKeys=$groupKeys, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
