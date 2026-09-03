@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.27.0](https://github.com/orbcorp/orb-java/compare/v1.26.1...v1.27.0) (2026-09-03)
+
+
+### Features
+
+* **api:** support partial grouping key targeting in alert threshold overrides ([0a7041d](https://github.com/orbcorp/orb-java/commit/0a7041d59d7ab0f02dfbcdbe4e8d4b4d7d609051))
+
 ## [1.26.1](https://github.com/orbcorp/orb-java/compare/v1.26.0...v1.26.1) (2026-08-28)
 
 
