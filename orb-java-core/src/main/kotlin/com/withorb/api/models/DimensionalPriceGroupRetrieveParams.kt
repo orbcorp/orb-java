@@ -9,7 +9,11 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Fetch dimensional price group */
+/**
+ * This endpoint returns a dimensional price group identified by its ID. A dimensional price group
+ * partitions the result of a billable metric by a set of dimensions, and the prices in the group
+ * specify which partition their usage is derived from.
+ */
 class DimensionalPriceGroupRetrieveParams
 private constructor(
     private val dimensionalPriceGroupId: String?,

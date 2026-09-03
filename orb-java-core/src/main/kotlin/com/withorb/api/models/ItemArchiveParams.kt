@@ -11,7 +11,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Archive item */
+/**
+ * This endpoint archives an item, and cascades to archive every price for that item that is still
+ * active. An item that is already archived cannot be archived again.
+ */
 class ItemArchiveParams
 private constructor(
     private val itemId: String?,

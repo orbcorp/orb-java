@@ -91,7 +91,10 @@ interface ItemServiceAsync {
     fun list(requestOptions: RequestOptions): CompletableFuture<ItemListPageAsync> =
         list(ItemListParams.none(), requestOptions)
 
-    /** Archive item */
+    /**
+     * This endpoint archives an item, and cascades to archive every price for that item that is
+     * still active. An item that is already archived cannot be archived again.
+     */
     fun archive(itemId: String): CompletableFuture<Item> = archive(itemId, ItemArchiveParams.none())
 
     /** @see archive */
