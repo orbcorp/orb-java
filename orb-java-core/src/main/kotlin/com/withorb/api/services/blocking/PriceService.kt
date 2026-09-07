@@ -274,6 +274,21 @@ interface PriceService {
 
     /** @see create */
     fun create(
+        tieredMatrixWithAllocation: PriceCreateParams.Body.TieredMatrixWithAllocation,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Price =
+        create(
+            PriceCreateParams.Body.ofTieredMatrixWithAllocation(tieredMatrixWithAllocation),
+            requestOptions,
+        )
+
+    /** @see create */
+    fun create(
+        tieredMatrixWithAllocation: PriceCreateParams.Body.TieredMatrixWithAllocation
+    ): Price = create(tieredMatrixWithAllocation, RequestOptions.none())
+
+    /** @see create */
+    fun create(
         matrixWithThresholdDiscounts: PriceCreateParams.Body.MatrixWithThresholdDiscounts,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Price =
@@ -966,6 +981,23 @@ interface PriceService {
         fun create(
             matrixWithAllocation: NewFloatingMatrixWithAllocationPrice
         ): HttpResponseFor<Price> = create(matrixWithAllocation, RequestOptions.none())
+
+        /** @see create */
+        @MustBeClosed
+        fun create(
+            tieredMatrixWithAllocation: PriceCreateParams.Body.TieredMatrixWithAllocation,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Price> =
+            create(
+                PriceCreateParams.Body.ofTieredMatrixWithAllocation(tieredMatrixWithAllocation),
+                requestOptions,
+            )
+
+        /** @see create */
+        @MustBeClosed
+        fun create(
+            tieredMatrixWithAllocation: PriceCreateParams.Body.TieredMatrixWithAllocation
+        ): HttpResponseFor<Price> = create(tieredMatrixWithAllocation, RequestOptions.none())
 
         /** @see create */
         @MustBeClosed

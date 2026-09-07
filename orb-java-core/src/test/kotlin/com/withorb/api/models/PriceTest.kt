@@ -164,6 +164,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -481,6 +482,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -798,6 +800,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -1128,6 +1131,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -1451,6 +1455,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -1769,6 +1774,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -2100,6 +2106,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -2438,6 +2445,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -2773,6 +2781,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -3110,6 +3119,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -3438,6 +3448,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -3774,6 +3785,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -4107,6 +4119,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).contains(packageWithAllocation)
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -4420,6 +4433,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).contains(unitWithPercent)
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -4739,6 +4753,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).contains(matrixWithAllocation)
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -4898,6 +4913,343 @@ internal class PriceTest {
                     )
                     .licenseType(
                         Price.MatrixWithAllocation.LicenseType.builder()
+                            .id("id")
+                            .groupingKey("grouping_key")
+                            .name("name")
+                            .build()
+                    )
+                    .build()
+            )
+
+        val roundtrippedPrice =
+            jsonMapper.readValue(jsonMapper.writeValueAsString(price), jacksonTypeRef<Price>())
+
+        assertThat(roundtrippedPrice).isEqualTo(price)
+    }
+
+    @Test
+    fun ofTieredMatrixWithAllocation() {
+        val tieredMatrixWithAllocation =
+            Price.TieredMatrixWithAllocation.builder()
+                .id("id")
+                .billableMetric(BillableMetricTiny.builder().id("id").build())
+                .billingCycleConfiguration(
+                    BillingCycleConfiguration.builder()
+                        .duration(0L)
+                        .durationUnit(BillingCycleConfiguration.DurationUnit.DAY)
+                        .build()
+                )
+                .billingMode(Price.TieredMatrixWithAllocation.BillingMode.IN_ADVANCE)
+                .cadence(Price.TieredMatrixWithAllocation.Cadence.ONE_TIME)
+                .addCompositePriceFilter(
+                    Price.TieredMatrixWithAllocation.CompositePriceFilter.builder()
+                        .field(Price.TieredMatrixWithAllocation.CompositePriceFilter.Field.PRICE_ID)
+                        .operator(
+                            Price.TieredMatrixWithAllocation.CompositePriceFilter.Operator.INCLUDES
+                        )
+                        .addValue("string")
+                        .build()
+                )
+                .conversionRate(0.0)
+                .unitConversionRateConfig(
+                    ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                )
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .creditAllocation(
+                    Allocation.builder()
+                        .allowsRollover(true)
+                        .currency("currency")
+                        .customExpiration(
+                            CustomExpiration.builder()
+                                .duration(0L)
+                                .durationUnit(CustomExpiration.DurationUnit.DAY)
+                                .build()
+                        )
+                        .addFilter(
+                            Allocation.Filter.builder()
+                                .field(Allocation.Filter.Field.PRICE_ID)
+                                .operator(Allocation.Filter.Operator.INCLUDES)
+                                .addValue("string")
+                                .build()
+                        )
+                        .licenseTypeId("license_type_id")
+                        .build()
+                )
+                .currency("currency")
+                .discount(
+                    PercentageDiscount.builder()
+                        .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                        .percentageDiscount(0.15)
+                        .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                        .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                        .addFilter(
+                            PercentageDiscount.Filter.builder()
+                                .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                                .operator(PercentageDiscount.Filter.Operator.INCLUDES)
+                                .addValue("string")
+                                .build()
+                        )
+                        .reason("reason")
+                        .build()
+                )
+                .externalPriceId("external_price_id")
+                .fixedPriceQuantity(0.0)
+                .invoiceGroupingKey("invoice_grouping_key")
+                .invoicingCycleConfiguration(
+                    BillingCycleConfiguration.builder()
+                        .duration(0L)
+                        .durationUnit(BillingCycleConfiguration.DurationUnit.DAY)
+                        .build()
+                )
+                .item(ItemSlim.builder().id("id").name("name").build())
+                .maximum(
+                    Maximum.builder()
+                        .addAppliesToPriceId("string")
+                        .addFilter(
+                            Maximum.Filter.builder()
+                                .field(Maximum.Filter.Field.PRICE_ID)
+                                .operator(Maximum.Filter.Operator.INCLUDES)
+                                .addValue("string")
+                                .build()
+                        )
+                        .maximumAmount("maximum_amount")
+                        .build()
+                )
+                .maximumAmount("maximum_amount")
+                .metadata(
+                    Price.TieredMatrixWithAllocation.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
+                .minimum(
+                    Minimum.builder()
+                        .addAppliesToPriceId("string")
+                        .addFilter(
+                            Minimum.Filter.builder()
+                                .field(Minimum.Filter.Field.PRICE_ID)
+                                .operator(Minimum.Filter.Operator.INCLUDES)
+                                .addValue("string")
+                                .build()
+                        )
+                        .minimumAmount("minimum_amount")
+                        .build()
+                )
+                .minimumAmount("minimum_amount")
+                .name("name")
+                .planPhaseOrder(0L)
+                .priceType(Price.TieredMatrixWithAllocation.PriceType.USAGE_PRICE)
+                .replacesPriceId("replaces_price_id")
+                .tieredMatrixWithAllocationConfig(
+                    Price.TieredMatrixWithAllocation.TieredMatrixWithAllocationConfig.builder()
+                        .allocation("allocation")
+                        .defaultUnitAmount("default_unit_amount")
+                        .addDimension("x")
+                        .addTier(
+                            Price.TieredMatrixWithAllocation.TieredMatrixWithAllocationConfig.Tier
+                                .builder()
+                                .addDimensionValue("x")
+                                .tierLowerBound("tier_lower_bound")
+                                .unitAmount("unit_amount")
+                                .build()
+                        )
+                        .build()
+                )
+                .dimensionalPriceConfiguration(
+                    DimensionalPriceConfiguration.builder()
+                        .addDimensionValue("string")
+                        .dimensionalPriceGroupId("dimensional_price_group_id")
+                        .build()
+                )
+                .licenseType(
+                    Price.TieredMatrixWithAllocation.LicenseType.builder()
+                        .id("id")
+                        .groupingKey("grouping_key")
+                        .name("name")
+                        .build()
+                )
+                .build()
+
+        val price = Price.ofTieredMatrixWithAllocation(tieredMatrixWithAllocation)
+
+        assertThat(price.unit()).isEmpty
+        assertThat(price.tiered()).isEmpty
+        assertThat(price.bulk()).isEmpty
+        assertThat(price.bulkWithFilters()).isEmpty
+        assertThat(price.package_()).isEmpty
+        assertThat(price.matrix()).isEmpty
+        assertThat(price.thresholdTotalAmount()).isEmpty
+        assertThat(price.tieredPackage()).isEmpty
+        assertThat(price.tieredWithMinimum()).isEmpty
+        assertThat(price.groupedTiered()).isEmpty
+        assertThat(price.groupedTieredMatrix()).isEmpty
+        assertThat(price.tieredPackageWithMinimum()).isEmpty
+        assertThat(price.packageWithAllocation()).isEmpty
+        assertThat(price.unitWithPercent()).isEmpty
+        assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).contains(tieredMatrixWithAllocation)
+        assertThat(price.matrixWithThresholdDiscounts()).isEmpty
+        assertThat(price.tieredWithProration()).isEmpty
+        assertThat(price.unitWithProration()).isEmpty
+        assertThat(price.groupedAllocation()).isEmpty
+        assertThat(price.bulkWithProration()).isEmpty
+        assertThat(price.groupedWithProratedMinimum()).isEmpty
+        assertThat(price.groupedWithMeteredMinimum()).isEmpty
+        assertThat(price.groupedWithMinMaxThresholds()).isEmpty
+        assertThat(price.matrixWithDisplayName()).isEmpty
+        assertThat(price.groupedTieredPackage()).isEmpty
+        assertThat(price.maxGroupTieredPackage()).isEmpty
+        assertThat(price.scalableMatrixWithUnitPricing()).isEmpty
+        assertThat(price.scalableMatrixWithTieredPricing()).isEmpty
+        assertThat(price.cumulativeGroupedBulk()).isEmpty
+        assertThat(price.cumulativeGroupedAllocation()).isEmpty
+        assertThat(price.dailyCreditAllowance()).isEmpty
+        assertThat(price.meteredAllowance()).isEmpty
+        assertThat(price.minimumComposite()).isEmpty
+        assertThat(price.percent()).isEmpty
+        assertThat(price.eventOutput()).isEmpty
+    }
+
+    @Test
+    fun ofTieredMatrixWithAllocationRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val price =
+            Price.ofTieredMatrixWithAllocation(
+                Price.TieredMatrixWithAllocation.builder()
+                    .id("id")
+                    .billableMetric(BillableMetricTiny.builder().id("id").build())
+                    .billingCycleConfiguration(
+                        BillingCycleConfiguration.builder()
+                            .duration(0L)
+                            .durationUnit(BillingCycleConfiguration.DurationUnit.DAY)
+                            .build()
+                    )
+                    .billingMode(Price.TieredMatrixWithAllocation.BillingMode.IN_ADVANCE)
+                    .cadence(Price.TieredMatrixWithAllocation.Cadence.ONE_TIME)
+                    .addCompositePriceFilter(
+                        Price.TieredMatrixWithAllocation.CompositePriceFilter.builder()
+                            .field(
+                                Price.TieredMatrixWithAllocation.CompositePriceFilter.Field.PRICE_ID
+                            )
+                            .operator(
+                                Price.TieredMatrixWithAllocation.CompositePriceFilter.Operator
+                                    .INCLUDES
+                            )
+                            .addValue("string")
+                            .build()
+                    )
+                    .conversionRate(0.0)
+                    .unitConversionRateConfig(
+                        ConversionRateUnitConfig.builder().unitAmount("unit_amount").build()
+                    )
+                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .creditAllocation(
+                        Allocation.builder()
+                            .allowsRollover(true)
+                            .currency("currency")
+                            .customExpiration(
+                                CustomExpiration.builder()
+                                    .duration(0L)
+                                    .durationUnit(CustomExpiration.DurationUnit.DAY)
+                                    .build()
+                            )
+                            .addFilter(
+                                Allocation.Filter.builder()
+                                    .field(Allocation.Filter.Field.PRICE_ID)
+                                    .operator(Allocation.Filter.Operator.INCLUDES)
+                                    .addValue("string")
+                                    .build()
+                            )
+                            .licenseTypeId("license_type_id")
+                            .build()
+                    )
+                    .currency("currency")
+                    .discount(
+                        PercentageDiscount.builder()
+                            .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                            .percentageDiscount(0.15)
+                            .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                            .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                            .addFilter(
+                                PercentageDiscount.Filter.builder()
+                                    .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                                    .operator(PercentageDiscount.Filter.Operator.INCLUDES)
+                                    .addValue("string")
+                                    .build()
+                            )
+                            .reason("reason")
+                            .build()
+                    )
+                    .externalPriceId("external_price_id")
+                    .fixedPriceQuantity(0.0)
+                    .invoiceGroupingKey("invoice_grouping_key")
+                    .invoicingCycleConfiguration(
+                        BillingCycleConfiguration.builder()
+                            .duration(0L)
+                            .durationUnit(BillingCycleConfiguration.DurationUnit.DAY)
+                            .build()
+                    )
+                    .item(ItemSlim.builder().id("id").name("name").build())
+                    .maximum(
+                        Maximum.builder()
+                            .addAppliesToPriceId("string")
+                            .addFilter(
+                                Maximum.Filter.builder()
+                                    .field(Maximum.Filter.Field.PRICE_ID)
+                                    .operator(Maximum.Filter.Operator.INCLUDES)
+                                    .addValue("string")
+                                    .build()
+                            )
+                            .maximumAmount("maximum_amount")
+                            .build()
+                    )
+                    .maximumAmount("maximum_amount")
+                    .metadata(
+                        Price.TieredMatrixWithAllocation.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .minimum(
+                        Minimum.builder()
+                            .addAppliesToPriceId("string")
+                            .addFilter(
+                                Minimum.Filter.builder()
+                                    .field(Minimum.Filter.Field.PRICE_ID)
+                                    .operator(Minimum.Filter.Operator.INCLUDES)
+                                    .addValue("string")
+                                    .build()
+                            )
+                            .minimumAmount("minimum_amount")
+                            .build()
+                    )
+                    .minimumAmount("minimum_amount")
+                    .name("name")
+                    .planPhaseOrder(0L)
+                    .priceType(Price.TieredMatrixWithAllocation.PriceType.USAGE_PRICE)
+                    .replacesPriceId("replaces_price_id")
+                    .tieredMatrixWithAllocationConfig(
+                        Price.TieredMatrixWithAllocation.TieredMatrixWithAllocationConfig.builder()
+                            .allocation("allocation")
+                            .defaultUnitAmount("default_unit_amount")
+                            .addDimension("x")
+                            .addTier(
+                                Price.TieredMatrixWithAllocation.TieredMatrixWithAllocationConfig
+                                    .Tier
+                                    .builder()
+                                    .addDimensionValue("x")
+                                    .tierLowerBound("tier_lower_bound")
+                                    .unitAmount("unit_amount")
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .dimensionalPriceConfiguration(
+                        DimensionalPriceConfiguration.builder()
+                            .addDimensionValue("string")
+                            .dimensionalPriceGroupId("dimensional_price_group_id")
+                            .build()
+                    )
+                    .licenseType(
+                        Price.TieredMatrixWithAllocation.LicenseType.builder()
                             .id("id")
                             .groupingKey("grouping_key")
                             .name("name")
@@ -5090,6 +5442,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).contains(matrixWithThresholdDiscounts)
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -5438,6 +5791,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).contains(tieredWithProration)
         assertThat(price.unitWithProration()).isEmpty
@@ -5753,6 +6107,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).contains(unitWithProration)
@@ -6065,6 +6420,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -6388,6 +6744,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -6713,6 +7070,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -7049,6 +7407,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -7388,6 +7747,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -7716,6 +8076,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -8047,6 +8408,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -8385,6 +8747,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -8729,6 +9092,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -9094,6 +9458,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -9449,6 +9814,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -9775,6 +10141,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -10103,6 +10470,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -10428,6 +10796,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -10742,6 +11111,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -11054,6 +11424,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
@@ -11367,6 +11738,7 @@ internal class PriceTest {
         assertThat(price.packageWithAllocation()).isEmpty
         assertThat(price.unitWithPercent()).isEmpty
         assertThat(price.matrixWithAllocation()).isEmpty
+        assertThat(price.tieredMatrixWithAllocation()).isEmpty
         assertThat(price.matrixWithThresholdDiscounts()).isEmpty
         assertThat(price.tieredWithProration()).isEmpty
         assertThat(price.unitWithProration()).isEmpty
