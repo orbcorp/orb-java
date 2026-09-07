@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.0](https://github.com/orbcorp/orb-java/compare/v1.28.0...v1.29.0) (2026-09-07)
+
+
+### Features
+
+* **api:** add `tiered_matrix_with_allocation` price model ([4dd644a](https://github.com/orbcorp/orb-java/commit/4dd644adbc5a2fb9ee04cfb7f3dcca807c464cb8))
+
 ## [1.28.0](https://github.com/orbcorp/orb-java/compare/v1.27.0...v1.28.0) (2026-09-04)
 
 
