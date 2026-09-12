@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.31.0](https://github.com/orbcorp/orb-java/compare/v1.30.0...v1.31.0) (2026-09-12)
+
+
+### Features
+
+* **api:** remove deprecated debug parameter and response details from ingestion ([c153186](https://github.com/orbcorp/orb-java/commit/c15318692993d63e3c01ebfecddb46f13582c69b))
+
 ## [1.30.0](https://github.com/orbcorp/orb-java/compare/v1.29.0...v1.30.0) (2026-09-10)
 
 
