@@ -7,6 +7,8 @@ import com.withorb.api.core.checkRequired
 import com.withorb.api.core.http.Headers
 import com.withorb.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * This endpoint can be used to fetch the upcoming [invoice](/core-concepts#invoice) for the current
@@ -15,11 +17,20 @@ import java.util.Objects
 class InvoiceFetchUpcomingParams
 private constructor(
     private val subscriptionId: String,
+    private val includeZeroQuantityLineItems: Boolean?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun subscriptionId(): String = subscriptionId
+
+    /**
+     * Whether to return line items with a quantity of zero. When omitted, Orb returns every line
+     * item. A line item that is grouped as part of a line item minimum is always returned; an
+     * invoice-level minimum does not exempt it.
+     */
+    fun includeZeroQuantityLineItems(): Optional<Boolean> =
+        Optional.ofNullable(includeZeroQuantityLineItems)
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -46,17 +57,43 @@ private constructor(
     class Builder internal constructor() {
 
         private var subscriptionId: String? = null
+        private var includeZeroQuantityLineItems: Boolean? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(invoiceFetchUpcomingParams: InvoiceFetchUpcomingParams) = apply {
             subscriptionId = invoiceFetchUpcomingParams.subscriptionId
+            includeZeroQuantityLineItems = invoiceFetchUpcomingParams.includeZeroQuantityLineItems
             additionalHeaders = invoiceFetchUpcomingParams.additionalHeaders.toBuilder()
             additionalQueryParams = invoiceFetchUpcomingParams.additionalQueryParams.toBuilder()
         }
 
         fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
+
+        /**
+         * Whether to return line items with a quantity of zero. When omitted, Orb returns every
+         * line item. A line item that is grouped as part of a line item minimum is always returned;
+         * an invoice-level minimum does not exempt it.
+         */
+        fun includeZeroQuantityLineItems(includeZeroQuantityLineItems: Boolean?) = apply {
+            this.includeZeroQuantityLineItems = includeZeroQuantityLineItems
+        }
+
+        /**
+         * Alias for [Builder.includeZeroQuantityLineItems].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun includeZeroQuantityLineItems(includeZeroQuantityLineItems: Boolean) =
+            includeZeroQuantityLineItems(includeZeroQuantityLineItems as Boolean?)
+
+        /**
+         * Alias for calling [Builder.includeZeroQuantityLineItems] with
+         * `includeZeroQuantityLineItems.orElse(null)`.
+         */
+        fun includeZeroQuantityLineItems(includeZeroQuantityLineItems: Optional<Boolean>) =
+            includeZeroQuantityLineItems(includeZeroQuantityLineItems.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -171,6 +208,7 @@ private constructor(
         fun build(): InvoiceFetchUpcomingParams =
             InvoiceFetchUpcomingParams(
                 checkRequired("subscriptionId", subscriptionId),
+                includeZeroQuantityLineItems,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -182,6 +220,9 @@ private constructor(
         QueryParams.builder()
             .apply {
                 put("subscription_id", subscriptionId)
+                includeZeroQuantityLineItems?.let {
+                    put("include_zero_quantity_line_items", it.toString())
+                }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -193,13 +234,19 @@ private constructor(
 
         return other is InvoiceFetchUpcomingParams &&
             subscriptionId == other.subscriptionId &&
+            includeZeroQuantityLineItems == other.includeZeroQuantityLineItems &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(subscriptionId, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            subscriptionId,
+            includeZeroQuantityLineItems,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "InvoiceFetchUpcomingParams{subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "InvoiceFetchUpcomingParams{subscriptionId=$subscriptionId, includeZeroQuantityLineItems=$includeZeroQuantityLineItems, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

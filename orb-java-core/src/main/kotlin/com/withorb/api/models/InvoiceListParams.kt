@@ -48,6 +48,7 @@ private constructor(
     private val dueDateGt: LocalDate?,
     private val dueDateLt: LocalDate?,
     private val externalCustomerId: String?,
+    private val includeZeroQuantityLineItems: Boolean?,
     private val invoiceDateGt: OffsetDateTime?,
     private val invoiceDateGte: OffsetDateTime?,
     private val invoiceDateLt: OffsetDateTime?,
@@ -90,6 +91,14 @@ private constructor(
     fun dueDateLt(): Optional<LocalDate> = Optional.ofNullable(dueDateLt)
 
     fun externalCustomerId(): Optional<String> = Optional.ofNullable(externalCustomerId)
+
+    /**
+     * Whether to return line items with a quantity of zero. When omitted, Orb returns every line
+     * item. A line item that is grouped as part of a line item minimum is always returned; an
+     * invoice-level minimum does not exempt it.
+     */
+    fun includeZeroQuantityLineItems(): Optional<Boolean> =
+        Optional.ofNullable(includeZeroQuantityLineItems)
 
     fun invoiceDateGt(): Optional<OffsetDateTime> = Optional.ofNullable(invoiceDateGt)
 
@@ -138,6 +147,7 @@ private constructor(
         private var dueDateGt: LocalDate? = null
         private var dueDateLt: LocalDate? = null
         private var externalCustomerId: String? = null
+        private var includeZeroQuantityLineItems: Boolean? = null
         private var invoiceDateGt: OffsetDateTime? = null
         private var invoiceDateGte: OffsetDateTime? = null
         private var invoiceDateLt: OffsetDateTime? = null
@@ -162,6 +172,7 @@ private constructor(
             dueDateGt = invoiceListParams.dueDateGt
             dueDateLt = invoiceListParams.dueDateLt
             externalCustomerId = invoiceListParams.externalCustomerId
+            includeZeroQuantityLineItems = invoiceListParams.includeZeroQuantityLineItems
             invoiceDateGt = invoiceListParams.invoiceDateGt
             invoiceDateGte = invoiceListParams.invoiceDateGte
             invoiceDateLt = invoiceListParams.invoiceDateLt
@@ -243,6 +254,30 @@ private constructor(
          */
         fun externalCustomerId(externalCustomerId: Optional<String>) =
             externalCustomerId(externalCustomerId.getOrNull())
+
+        /**
+         * Whether to return line items with a quantity of zero. When omitted, Orb returns every
+         * line item. A line item that is grouped as part of a line item minimum is always returned;
+         * an invoice-level minimum does not exempt it.
+         */
+        fun includeZeroQuantityLineItems(includeZeroQuantityLineItems: Boolean?) = apply {
+            this.includeZeroQuantityLineItems = includeZeroQuantityLineItems
+        }
+
+        /**
+         * Alias for [Builder.includeZeroQuantityLineItems].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun includeZeroQuantityLineItems(includeZeroQuantityLineItems: Boolean) =
+            includeZeroQuantityLineItems(includeZeroQuantityLineItems as Boolean?)
+
+        /**
+         * Alias for calling [Builder.includeZeroQuantityLineItems] with
+         * `includeZeroQuantityLineItems.orElse(null)`.
+         */
+        fun includeZeroQuantityLineItems(includeZeroQuantityLineItems: Optional<Boolean>) =
+            includeZeroQuantityLineItems(includeZeroQuantityLineItems.getOrNull())
 
         fun invoiceDateGt(invoiceDateGt: OffsetDateTime?) = apply {
             this.invoiceDateGt = invoiceDateGt
@@ -437,6 +472,7 @@ private constructor(
                 dueDateGt,
                 dueDateLt,
                 externalCustomerId,
+                includeZeroQuantityLineItems,
                 invoiceDateGt,
                 invoiceDateGte,
                 invoiceDateLt,
@@ -466,6 +502,9 @@ private constructor(
                 dueDateGt?.let { put("due_date[gt]", it.toString()) }
                 dueDateLt?.let { put("due_date[lt]", it.toString()) }
                 externalCustomerId?.let { put("external_customer_id", it) }
+                includeZeroQuantityLineItems?.let {
+                    put("include_zero_quantity_line_items", it.toString())
+                }
                 invoiceDateGt?.let {
                     put("invoice_date[gt]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
                 }
@@ -787,6 +826,7 @@ private constructor(
             dueDateGt == other.dueDateGt &&
             dueDateLt == other.dueDateLt &&
             externalCustomerId == other.externalCustomerId &&
+            includeZeroQuantityLineItems == other.includeZeroQuantityLineItems &&
             invoiceDateGt == other.invoiceDateGt &&
             invoiceDateGte == other.invoiceDateGte &&
             invoiceDateLt == other.invoiceDateLt &&
@@ -812,6 +852,7 @@ private constructor(
             dueDateGt,
             dueDateLt,
             externalCustomerId,
+            includeZeroQuantityLineItems,
             invoiceDateGt,
             invoiceDateGte,
             invoiceDateLt,
@@ -825,5 +866,5 @@ private constructor(
         )
 
     override fun toString() =
-        "InvoiceListParams{amount=$amount, amountGt=$amountGt, amountLt=$amountLt, cursor=$cursor, customerId=$customerId, dateType=$dateType, dueDate=$dueDate, dueDateWindow=$dueDateWindow, dueDateGt=$dueDateGt, dueDateLt=$dueDateLt, externalCustomerId=$externalCustomerId, invoiceDateGt=$invoiceDateGt, invoiceDateGte=$invoiceDateGte, invoiceDateLt=$invoiceDateLt, invoiceDateLte=$invoiceDateLte, isRecurring=$isRecurring, limit=$limit, status=$status, subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "InvoiceListParams{amount=$amount, amountGt=$amountGt, amountLt=$amountLt, cursor=$cursor, customerId=$customerId, dateType=$dateType, dueDate=$dueDate, dueDateWindow=$dueDateWindow, dueDateGt=$dueDateGt, dueDateLt=$dueDateLt, externalCustomerId=$externalCustomerId, includeZeroQuantityLineItems=$includeZeroQuantityLineItems, invoiceDateGt=$invoiceDateGt, invoiceDateGte=$invoiceDateGte, invoiceDateLt=$invoiceDateLt, invoiceDateLte=$invoiceDateLte, isRecurring=$isRecurring, limit=$limit, status=$status, subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -388,6 +388,7 @@ private constructor(
         private val discounts: JsonField<List<InvoiceLevelDiscount>>,
         private val dueDate: JsonField<OffsetDateTime>,
         private val eligibleToIssueAt: JsonField<OffsetDateTime>,
+        private val hiddenLineItemCount: JsonField<Long>,
         private val hostedInvoiceUrl: JsonField<String>,
         private val invoiceDate: JsonField<OffsetDateTime>,
         private val invoiceNumber: JsonField<String>,
@@ -460,6 +461,9 @@ private constructor(
             @JsonProperty("eligible_to_issue_at")
             @ExcludeMissing
             eligibleToIssueAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("hidden_line_item_count")
+            @ExcludeMissing
+            hiddenLineItemCount: JsonField<Long> = JsonMissing.of(),
             @JsonProperty("hosted_invoice_url")
             @ExcludeMissing
             hostedInvoiceUrl: JsonField<String> = JsonMissing.of(),
@@ -549,6 +553,7 @@ private constructor(
             discounts,
             dueDate,
             eligibleToIssueAt,
+            hiddenLineItemCount,
             hostedInvoiceUrl,
             invoiceDate,
             invoiceNumber,
@@ -840,6 +845,17 @@ private constructor(
          */
         fun eligibleToIssueAt(): Optional<OffsetDateTime> =
             eligibleToIssueAt.getOptional("eligible_to_issue_at")
+
+        /**
+         * The number of line items omitted from `line_items` because they have zero quantity.
+         * Amounts such as `subtotal` and `total` are computed over every line item on the invoice,
+         * including the omitted ones. In rare circumstances, hidden line items may still contribute
+         * to these amounts.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun hiddenLineItemCount(): Long = hiddenLineItemCount.getRequired("hidden_line_item_count")
 
         /**
          * A URL for the customer-facing invoice portal. This URL expires 60 days after the link is
@@ -1186,6 +1202,16 @@ private constructor(
         fun _eligibleToIssueAt(): JsonField<OffsetDateTime> = eligibleToIssueAt
 
         /**
+         * Returns the raw JSON value of [hiddenLineItemCount].
+         *
+         * Unlike [hiddenLineItemCount], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("hidden_line_item_count")
+        @ExcludeMissing
+        fun _hiddenLineItemCount(): JsonField<Long> = hiddenLineItemCount
+
+        /**
          * Returns the raw JSON value of [hostedInvoiceUrl].
          *
          * Unlike [hostedInvoiceUrl], this method doesn't throw if the JSON field has an unexpected
@@ -1469,6 +1495,7 @@ private constructor(
              * .discounts()
              * .dueDate()
              * .eligibleToIssueAt()
+             * .hiddenLineItemCount()
              * .hostedInvoiceUrl()
              * .invoiceDate()
              * .invoiceNumber()
@@ -1521,6 +1548,7 @@ private constructor(
             private var discounts: JsonField<MutableList<InvoiceLevelDiscount>>? = null
             private var dueDate: JsonField<OffsetDateTime>? = null
             private var eligibleToIssueAt: JsonField<OffsetDateTime>? = null
+            private var hiddenLineItemCount: JsonField<Long>? = null
             private var hostedInvoiceUrl: JsonField<String>? = null
             private var invoiceDate: JsonField<OffsetDateTime>? = null
             private var invoiceNumber: JsonField<String>? = null
@@ -1568,6 +1596,7 @@ private constructor(
                 discounts = createdInvoice.discounts.map { it.toMutableList() }
                 dueDate = createdInvoice.dueDate
                 eligibleToIssueAt = createdInvoice.eligibleToIssueAt
+                hiddenLineItemCount = createdInvoice.hiddenLineItemCount
                 hostedInvoiceUrl = createdInvoice.hostedInvoiceUrl
                 invoiceDate = createdInvoice.invoiceDate
                 invoiceNumber = createdInvoice.invoiceNumber
@@ -2063,6 +2092,26 @@ private constructor(
              */
             fun eligibleToIssueAt(eligibleToIssueAt: JsonField<OffsetDateTime>) = apply {
                 this.eligibleToIssueAt = eligibleToIssueAt
+            }
+
+            /**
+             * The number of line items omitted from `line_items` because they have zero quantity.
+             * Amounts such as `subtotal` and `total` are computed over every line item on the
+             * invoice, including the omitted ones. In rare circumstances, hidden line items may
+             * still contribute to these amounts.
+             */
+            fun hiddenLineItemCount(hiddenLineItemCount: Long) =
+                hiddenLineItemCount(JsonField.of(hiddenLineItemCount))
+
+            /**
+             * Sets [Builder.hiddenLineItemCount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.hiddenLineItemCount] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun hiddenLineItemCount(hiddenLineItemCount: JsonField<Long>) = apply {
+                this.hiddenLineItemCount = hiddenLineItemCount
             }
 
             /**
@@ -2610,6 +2659,7 @@ private constructor(
              * .discounts()
              * .dueDate()
              * .eligibleToIssueAt()
+             * .hiddenLineItemCount()
              * .hostedInvoiceUrl()
              * .invoiceDate()
              * .invoiceNumber()
@@ -2660,6 +2710,7 @@ private constructor(
                     checkRequired("discounts", discounts).map { it.toImmutable() },
                     checkRequired("dueDate", dueDate),
                     checkRequired("eligibleToIssueAt", eligibleToIssueAt),
+                    checkRequired("hiddenLineItemCount", hiddenLineItemCount),
                     checkRequired("hostedInvoiceUrl", hostedInvoiceUrl),
                     checkRequired("invoiceDate", invoiceDate),
                     checkRequired("invoiceNumber", invoiceNumber),
@@ -2721,6 +2772,7 @@ private constructor(
             discounts().forEach { it.validate() }
             dueDate()
             eligibleToIssueAt()
+            hiddenLineItemCount()
             hostedInvoiceUrl()
             invoiceDate()
             invoiceNumber()
@@ -2782,6 +2834,7 @@ private constructor(
                 (discounts.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (dueDate.asKnown().isPresent) 1 else 0) +
                 (if (eligibleToIssueAt.asKnown().isPresent) 1 else 0) +
+                (if (hiddenLineItemCount.asKnown().isPresent) 1 else 0) +
                 (if (hostedInvoiceUrl.asKnown().isPresent) 1 else 0) +
                 (if (invoiceDate.asKnown().isPresent) 1 else 0) +
                 (if (invoiceNumber.asKnown().isPresent) 1 else 0) +
@@ -9039,6 +9092,7 @@ private constructor(
                 discounts == other.discounts &&
                 dueDate == other.dueDate &&
                 eligibleToIssueAt == other.eligibleToIssueAt &&
+                hiddenLineItemCount == other.hiddenLineItemCount &&
                 hostedInvoiceUrl == other.hostedInvoiceUrl &&
                 invoiceDate == other.invoiceDate &&
                 invoiceNumber == other.invoiceNumber &&
@@ -9086,6 +9140,7 @@ private constructor(
                 discounts,
                 dueDate,
                 eligibleToIssueAt,
+                hiddenLineItemCount,
                 hostedInvoiceUrl,
                 invoiceDate,
                 invoiceNumber,
@@ -9121,7 +9176,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CreatedInvoice{id=$id, amountDue=$amountDue, autoCollection=$autoCollection, billingAddress=$billingAddress, createdAt=$createdAt, creditNotes=$creditNotes, currency=$currency, customer=$customer, customerBalanceTransactions=$customerBalanceTransactions, customerTaxId=$customerTaxId, discount=$discount, discounts=$discounts, dueDate=$dueDate, eligibleToIssueAt=$eligibleToIssueAt, hostedInvoiceUrl=$hostedInvoiceUrl, invoiceDate=$invoiceDate, invoiceNumber=$invoiceNumber, invoicePdf=$invoicePdf, invoiceSource=$invoiceSource, isPayableNow=$isPayableNow, issueFailedAt=$issueFailedAt, issuedAt=$issuedAt, lineItems=$lineItems, maximum=$maximum, maximumAmount=$maximumAmount, memo=$memo, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, paidAt=$paidAt, paymentAttempts=$paymentAttempts, paymentFailedAt=$paymentFailedAt, paymentStartedAt=$paymentStartedAt, scheduledIssueAt=$scheduledIssueAt, shippingAddress=$shippingAddress, status=$status, subscription=$subscription, subtotal=$subtotal, syncFailedAt=$syncFailedAt, total=$total, voidedAt=$voidedAt, willAutoIssue=$willAutoIssue, additionalProperties=$additionalProperties}"
+            "CreatedInvoice{id=$id, amountDue=$amountDue, autoCollection=$autoCollection, billingAddress=$billingAddress, createdAt=$createdAt, creditNotes=$creditNotes, currency=$currency, customer=$customer, customerBalanceTransactions=$customerBalanceTransactions, customerTaxId=$customerTaxId, discount=$discount, discounts=$discounts, dueDate=$dueDate, eligibleToIssueAt=$eligibleToIssueAt, hiddenLineItemCount=$hiddenLineItemCount, hostedInvoiceUrl=$hostedInvoiceUrl, invoiceDate=$invoiceDate, invoiceNumber=$invoiceNumber, invoicePdf=$invoicePdf, invoiceSource=$invoiceSource, isPayableNow=$isPayableNow, issueFailedAt=$issueFailedAt, issuedAt=$issuedAt, lineItems=$lineItems, maximum=$maximum, maximumAmount=$maximumAmount, memo=$memo, metadata=$metadata, minimum=$minimum, minimumAmount=$minimumAmount, paidAt=$paidAt, paymentAttempts=$paymentAttempts, paymentFailedAt=$paymentFailedAt, paymentStartedAt=$paymentStartedAt, scheduledIssueAt=$scheduledIssueAt, shippingAddress=$shippingAddress, status=$status, subscription=$subscription, subtotal=$subtotal, syncFailedAt=$syncFailedAt, total=$total, voidedAt=$voidedAt, willAutoIssue=$willAutoIssue, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
