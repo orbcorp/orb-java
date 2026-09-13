@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.32.0](https://github.com/orbcorp/orb-java/compare/v1.31.0...v1.32.0) (2026-09-13)
+
+
+### Features
+
+* **api:** add `include_zero_quantity_line_items` param and `hidden_line_item_count` to invoice endpoints ([49db66a](https://github.com/orbcorp/orb-java/commit/49db66a9c4c84111e0062c310263d2d20ab77ab3))
+
 ## [1.31.0](https://github.com/orbcorp/orb-java/compare/v1.30.0...v1.31.0) (2026-09-12)
 
 
