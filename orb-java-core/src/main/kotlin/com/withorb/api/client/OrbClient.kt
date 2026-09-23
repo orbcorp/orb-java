@@ -61,6 +61,8 @@ interface OrbClient {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): OrbClient
 
+    fun webhooks(): WebhookService
+
     fun topLevel(): TopLevelService
 
     /**
@@ -166,8 +168,6 @@ interface OrbClient {
 
     fun subscriptions(): SubscriptionService
 
-    fun webhooks(): WebhookService
-
     /**
      * [Alerts within Orb](/product-catalog/configuring-alerts) monitor spending, usage, or credit
      * balance and trigger webhooks when a threshold is exceeded.
@@ -216,6 +216,8 @@ interface OrbClient {
          * The original service is not modified.
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): OrbClient.WithRawResponse
+
+        fun webhooks(): WebhookService.WithRawResponse
 
         fun topLevel(): TopLevelService.WithRawResponse
 

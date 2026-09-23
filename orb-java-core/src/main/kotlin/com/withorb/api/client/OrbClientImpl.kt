@@ -63,6 +63,8 @@ class OrbClientImpl(private val clientOptions: ClientOptions) : OrbClient {
         WithRawResponseImpl(clientOptions)
     }
 
+    private val webhooks: WebhookService by lazy { WebhookServiceImpl(clientOptionsWithUserAgent) }
+
     private val topLevel: TopLevelService by lazy {
         TopLevelServiceImpl(clientOptionsWithUserAgent)
     }
@@ -105,8 +107,6 @@ class OrbClientImpl(private val clientOptions: ClientOptions) : OrbClient {
         DimensionalPriceGroupServiceImpl(clientOptionsWithUserAgent)
     }
 
-    private val webhooks: WebhookService by lazy { WebhookServiceImpl(clientOptions) }
-
     private val subscriptionChanges: SubscriptionChangeService by lazy {
         SubscriptionChangeServiceImpl(clientOptionsWithUserAgent)
     }
@@ -127,6 +127,8 @@ class OrbClientImpl(private val clientOptions: ClientOptions) : OrbClient {
 
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): OrbClient =
         OrbClientImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
+    override fun webhooks(): WebhookService = webhooks
 
     override fun topLevel(): TopLevelService = topLevel
 
@@ -233,8 +235,6 @@ class OrbClientImpl(private val clientOptions: ClientOptions) : OrbClient {
 
     override fun subscriptions(): SubscriptionService = subscriptions
 
-    override fun webhooks(): WebhookService = webhooks
-
     /**
      * [Alerts within Orb](/product-catalog/configuring-alerts) monitor spending, usage, or credit
      * balance and trigger webhooks when a threshold is exceeded.
@@ -265,6 +265,10 @@ class OrbClientImpl(private val clientOptions: ClientOptions) : OrbClient {
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         OrbClient.WithRawResponse {
+
+        private val webhooks: WebhookService.WithRawResponse by lazy {
+            WebhookServiceImpl.WithRawResponseImpl(clientOptions)
+        }
 
         private val topLevel: TopLevelService.WithRawResponse by lazy {
             TopLevelServiceImpl.WithRawResponseImpl(clientOptions)
@@ -348,6 +352,8 @@ class OrbClientImpl(private val clientOptions: ClientOptions) : OrbClient {
             OrbClientImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
+
+        override fun webhooks(): WebhookService.WithRawResponse = webhooks
 
         override fun topLevel(): TopLevelService.WithRawResponse = topLevel
 
