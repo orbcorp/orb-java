@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.34.0](https://github.com/orbcorp/orb-java/compare/v1.33.0...v1.34.0) (2026-09-23)
+
+
+### Features
+
+* **api:** api update ([7947c1a](https://github.com/orbcorp/orb-java/commit/7947c1a66c2a22e680aceb88d7a8b137bc7bba74))
+* **api:** api update ([7947c1a](https://github.com/orbcorp/orb-java/commit/7947c1a66c2a22e680aceb88d7a8b137bc7bba74))
+* **api:** api update ([7947c1a](https://github.com/orbcorp/orb-java/commit/7947c1a66c2a22e680aceb88d7a8b137bc7bba74))
+* **api:** api update ([65849ab](https://github.com/orbcorp/orb-java/commit/65849abe34247a76a2d5c1ee680d4ee091587c5b))
+* **api:** api update ([65849ab](https://github.com/orbcorp/orb-java/commit/65849abe34247a76a2d5c1ee680d4ee091587c5b))
+* **api:** api update ([65849ab](https://github.com/orbcorp/orb-java/commit/65849abe34247a76a2d5c1ee680d4ee091587c5b))
+* **api:** api update ([65849ab](https://github.com/orbcorp/orb-java/commit/65849abe34247a76a2d5c1ee680d4ee091587c5b))
+
+
+### Bug Fixes
+
+* **api:** correctly apply plan name when updating a draft plan ([7947c1a](https://github.com/orbcorp/orb-java/commit/7947c1a66c2a22e680aceb88d7a8b137bc7bba74))
+
 ## [1.33.0](https://github.com/orbcorp/orb-java/compare/v1.32.0...v1.33.0) (2026-09-21)
 
 
