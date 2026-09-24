@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.35.0](https://github.com/orbcorp/orb-java/compare/v1.34.0...v1.35.0) (2026-09-24)
+
+
+### Features
+
+* **api:** api update ([da7b535](https://github.com/orbcorp/orb-java/commit/da7b535fa87d604ff559b071973c4c6e4e1b7c72))
+* **api:** api update ([da7b535](https://github.com/orbcorp/orb-java/commit/da7b535fa87d604ff559b071973c4c6e4e1b7c72))
+* **api:** api update ([da7b535](https://github.com/orbcorp/orb-java/commit/da7b535fa87d604ff559b071973c4c6e4e1b7c72))
+* **api:** hide internal webapp-api endpoints from public API reference ([9c8e391](https://github.com/orbcorp/orb-java/commit/9c8e391b1af049ba3be1dc4eea100402f0ae32e3))
+
+
+### Bug Fixes
+
+* **api:** allow exact one-year timeframes for subscription usage/costs endpoints ([9c8e391](https://github.com/orbcorp/orb-java/commit/9c8e391b1af049ba3be1dc4eea100402f0ae32e3))
+* **api:** fix Java SDK build error caused by empty webhook event properties marker ([9c8e391](https://github.com/orbcorp/orb-java/commit/9c8e391b1af049ba3be1dc4eea100402f0ae32e3))
+* **api:** no functional change, only schema ordering reshuffled ([9c8e391](https://github.com/orbcorp/orb-java/commit/9c8e391b1af049ba3be1dc4eea100402f0ae32e3))
+
 ## [1.34.0](https://github.com/orbcorp/orb-java/compare/v1.33.0...v1.34.0) (2026-09-23)
 
 
