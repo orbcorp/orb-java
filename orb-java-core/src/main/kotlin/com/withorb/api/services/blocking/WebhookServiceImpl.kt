@@ -9,8 +9,6 @@ import com.withorb.api.core.http.Headers
 import com.withorb.api.errors.OrbException
 import com.withorb.api.errors.OrbInvalidDataException
 import com.withorb.api.models.UnwrapWebhookEvent
-import com.withorb.api.services.blocking.WebhookService
-import com.withorb.api.services.blocking.WebhookServiceImpl
 import java.security.MessageDigest
 import java.time.Duration
 import java.time.Instant
