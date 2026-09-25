@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.36.0](https://github.com/orbcorp/orb-java/compare/v1.35.0...v1.36.0) (2026-09-25)
+
+
+### Features
+
+* **api:** api update ([eac6123](https://github.com/orbcorp/orb-java/commit/eac6123b07fbb8b623f5fadac5304f0b9d1c41be))
+* **api:** label webhook event operations by event name and category tag ([eac6123](https://github.com/orbcorp/orb-java/commit/eac6123b07fbb8b623f5fadac5304f0b9d1c41be))
+
 ## [1.35.0](https://github.com/orbcorp/orb-java/compare/v1.34.0...v1.35.0) (2026-09-24)
 
 
