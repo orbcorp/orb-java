@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.37.0](https://github.com/orbcorp/orb-java/compare/v1.36.0...v1.37.0) (2026-10-01)
+
+
+### Features
+
+* **api:** add `customer_id` and `status` filters to list backfills endpoint ([da53eaa](https://github.com/orbcorp/orb-java/commit/da53eaaa09e1fbe2017a9936e43e658039ccad4a))
+* **api:** add `payment_received_at` field to invoice responses ([015ed00](https://github.com/orbcorp/orb-java/commit/015ed00bc4f916f49aefba9341b503e0653c82c3))
+
+
+### Bug Fixes
+
+* **api:** correct webhook doc page titles and remove inapplicable auth section ([015ed00](https://github.com/orbcorp/orb-java/commit/015ed00bc4f916f49aefba9341b503e0653c82c3))
+
 ## [1.36.0](https://github.com/orbcorp/orb-java/compare/v1.35.0...v1.36.0) (2026-09-25)
 
 
