@@ -43,7 +43,7 @@ internal class PriceEvaluatePreviewEventsParamsTest {
                     )
                     .price(
                         NewFloatingUnitPrice.builder()
-                            .cadence(NewFloatingUnitPrice.Cadence.ANNUAL)
+                            .cadence(NewFloatingUnitPrice.Cadence.ONE_TIME)
                             .currency("currency")
                             .itemId("item_id")
                             .modelType(NewFloatingUnitPrice.ModelType.UNIT)
@@ -134,7 +134,7 @@ internal class PriceEvaluatePreviewEventsParamsTest {
                         )
                         .price(
                             NewFloatingUnitPrice.builder()
-                                .cadence(NewFloatingUnitPrice.Cadence.ANNUAL)
+                                .cadence(NewFloatingUnitPrice.Cadence.ONE_TIME)
                                 .currency("currency")
                                 .itemId("item_id")
                                 .modelType(NewFloatingUnitPrice.ModelType.UNIT)
@@ -226,7 +226,7 @@ internal class PriceEvaluatePreviewEventsParamsTest {
                     )
                     .price(
                         NewFloatingUnitPrice.builder()
-                            .cadence(NewFloatingUnitPrice.Cadence.ANNUAL)
+                            .cadence(NewFloatingUnitPrice.Cadence.ONE_TIME)
                             .currency("currency")
                             .itemId("item_id")
                             .modelType(NewFloatingUnitPrice.ModelType.UNIT)

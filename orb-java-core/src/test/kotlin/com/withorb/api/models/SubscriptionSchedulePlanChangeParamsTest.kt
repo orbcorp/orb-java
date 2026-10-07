@@ -97,7 +97,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                     .planPhaseOrder(0L)
                     .price(
                         NewSubscriptionUnitPrice.builder()
-                            .cadence(NewSubscriptionUnitPrice.Cadence.ANNUAL)
+                            .cadence(NewSubscriptionUnitPrice.Cadence.ONE_TIME)
                             .itemId("item_id")
                             .modelType(NewSubscriptionUnitPrice.ModelType.UNIT)
                             .name("Annual fee")
@@ -265,7 +265,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                     .minimumAmount("1.23")
                     .price(
                         NewSubscriptionUnitPrice.builder()
-                            .cadence(NewSubscriptionUnitPrice.Cadence.ANNUAL)
+                            .cadence(NewSubscriptionUnitPrice.Cadence.ONE_TIME)
                             .itemId("item_id")
                             .modelType(NewSubscriptionUnitPrice.ModelType.UNIT)
                             .name("Annual fee")
@@ -425,7 +425,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                         .planPhaseOrder(0L)
                         .price(
                             NewSubscriptionUnitPrice.builder()
-                                .cadence(NewSubscriptionUnitPrice.Cadence.ANNUAL)
+                                .cadence(NewSubscriptionUnitPrice.Cadence.ONE_TIME)
                                 .itemId("item_id")
                                 .modelType(NewSubscriptionUnitPrice.ModelType.UNIT)
                                 .name("Annual fee")
@@ -596,7 +596,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                         .minimumAmount("1.23")
                         .price(
                             NewSubscriptionUnitPrice.builder()
-                                .cadence(NewSubscriptionUnitPrice.Cadence.ANNUAL)
+                                .cadence(NewSubscriptionUnitPrice.Cadence.ONE_TIME)
                                 .itemId("item_id")
                                 .modelType(NewSubscriptionUnitPrice.ModelType.UNIT)
                                 .name("Annual fee")
@@ -744,7 +744,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                     .planPhaseOrder(0L)
                     .price(
                         NewSubscriptionUnitPrice.builder()
-                            .cadence(NewSubscriptionUnitPrice.Cadence.ANNUAL)
+                            .cadence(NewSubscriptionUnitPrice.Cadence.ONE_TIME)
                             .itemId("item_id")
                             .modelType(NewSubscriptionUnitPrice.ModelType.UNIT)
                             .name("Annual fee")
@@ -915,7 +915,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                     .minimumAmount("1.23")
                     .price(
                         NewSubscriptionUnitPrice.builder()
-                            .cadence(NewSubscriptionUnitPrice.Cadence.ANNUAL)
+                            .cadence(NewSubscriptionUnitPrice.Cadence.ONE_TIME)
                             .itemId("item_id")
                             .modelType(NewSubscriptionUnitPrice.ModelType.UNIT)
                             .name("Annual fee")

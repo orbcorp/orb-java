@@ -1049,15 +1049,15 @@ private constructor(
 
         companion object {
 
-            @JvmField val ANNUAL = of("annual")
-
-            @JvmField val SEMI_ANNUAL = of("semi_annual")
+            @JvmField val ONE_TIME = of("one_time")
 
             @JvmField val MONTHLY = of("monthly")
 
             @JvmField val QUARTERLY = of("quarterly")
 
-            @JvmField val ONE_TIME = of("one_time")
+            @JvmField val SEMI_ANNUAL = of("semi_annual")
+
+            @JvmField val ANNUAL = of("annual")
 
             @JvmField val CUSTOM = of("custom")
 
@@ -1066,11 +1066,11 @@ private constructor(
 
         /** An enum containing [Cadence]'s known values. */
         enum class Known {
-            ANNUAL,
-            SEMI_ANNUAL,
+            ONE_TIME,
             MONTHLY,
             QUARTERLY,
-            ONE_TIME,
+            SEMI_ANNUAL,
+            ANNUAL,
             CUSTOM,
         }
 
@@ -1084,11 +1084,11 @@ private constructor(
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
-            ANNUAL,
-            SEMI_ANNUAL,
+            ONE_TIME,
             MONTHLY,
             QUARTERLY,
-            ONE_TIME,
+            SEMI_ANNUAL,
+            ANNUAL,
             CUSTOM,
             /** An enum member indicating that [Cadence] was instantiated with an unknown value. */
             _UNKNOWN,
@@ -1103,11 +1103,11 @@ private constructor(
          */
         fun value(): Value =
             when (this) {
-                ANNUAL -> Value.ANNUAL
-                SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                ONE_TIME -> Value.ONE_TIME
                 MONTHLY -> Value.MONTHLY
                 QUARTERLY -> Value.QUARTERLY
-                ONE_TIME -> Value.ONE_TIME
+                SEMI_ANNUAL -> Value.SEMI_ANNUAL
+                ANNUAL -> Value.ANNUAL
                 CUSTOM -> Value.CUSTOM
                 else -> Value._UNKNOWN
             }
@@ -1122,11 +1122,11 @@ private constructor(
          */
         fun known(): Known =
             when (this) {
-                ANNUAL -> Known.ANNUAL
-                SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                ONE_TIME -> Known.ONE_TIME
                 MONTHLY -> Known.MONTHLY
                 QUARTERLY -> Known.QUARTERLY
-                ONE_TIME -> Known.ONE_TIME
+                SEMI_ANNUAL -> Known.SEMI_ANNUAL
+                ANNUAL -> Known.ANNUAL
                 CUSTOM -> Known.CUSTOM
                 else -> throw OrbInvalidDataException("Unknown Cadence: $value")
             }

@@ -77,7 +77,7 @@ internal class BetaCreatePlanVersionParamsTest {
                         BetaCreatePlanVersionParams.AddPrice.LicenseAllocationPrice.builder()
                             .cadence(
                                 BetaCreatePlanVersionParams.AddPrice.LicenseAllocationPrice.Cadence
-                                    .ANNUAL
+                                    .ONE_TIME
                             )
                             .itemId("item_id")
                             .addLicenseAllocation(
@@ -146,7 +146,7 @@ internal class BetaCreatePlanVersionParamsTest {
                     .planPhaseOrder(0L)
                     .price(
                         NewPlanUnitPrice.builder()
-                            .cadence(NewPlanUnitPrice.Cadence.ANNUAL)
+                            .cadence(NewPlanUnitPrice.Cadence.ONE_TIME)
                             .itemId("item_id")
                             .modelType(NewPlanUnitPrice.ModelType.UNIT)
                             .name("Annual fee")
@@ -277,7 +277,7 @@ internal class BetaCreatePlanVersionParamsTest {
                             .cadence(
                                 BetaCreatePlanVersionParams.ReplacePrice.LicenseAllocationPrice
                                     .Cadence
-                                    .ANNUAL
+                                    .ONE_TIME
                             )
                             .itemId("item_id")
                             .addLicenseAllocation(
@@ -347,7 +347,7 @@ internal class BetaCreatePlanVersionParamsTest {
                     .planPhaseOrder(0L)
                     .price(
                         NewPlanUnitPrice.builder()
-                            .cadence(NewPlanUnitPrice.Cadence.ANNUAL)
+                            .cadence(NewPlanUnitPrice.Cadence.ONE_TIME)
                             .itemId("item_id")
                             .modelType(NewPlanUnitPrice.ModelType.UNIT)
                             .name("Annual fee")
@@ -483,7 +483,7 @@ internal class BetaCreatePlanVersionParamsTest {
                                 .cadence(
                                     BetaCreatePlanVersionParams.AddPrice.LicenseAllocationPrice
                                         .Cadence
-                                        .ANNUAL
+                                        .ONE_TIME
                                 )
                                 .itemId("item_id")
                                 .addLicenseAllocation(
@@ -555,7 +555,7 @@ internal class BetaCreatePlanVersionParamsTest {
                         .planPhaseOrder(0L)
                         .price(
                             NewPlanUnitPrice.builder()
-                                .cadence(NewPlanUnitPrice.Cadence.ANNUAL)
+                                .cadence(NewPlanUnitPrice.Cadence.ONE_TIME)
                                 .itemId("item_id")
                                 .modelType(NewPlanUnitPrice.ModelType.UNIT)
                                 .name("Annual fee")
@@ -689,7 +689,7 @@ internal class BetaCreatePlanVersionParamsTest {
                                 .cadence(
                                     BetaCreatePlanVersionParams.ReplacePrice.LicenseAllocationPrice
                                         .Cadence
-                                        .ANNUAL
+                                        .ONE_TIME
                                 )
                                 .itemId("item_id")
                                 .addLicenseAllocation(
@@ -761,7 +761,7 @@ internal class BetaCreatePlanVersionParamsTest {
                         .planPhaseOrder(0L)
                         .price(
                             NewPlanUnitPrice.builder()
-                                .cadence(NewPlanUnitPrice.Cadence.ANNUAL)
+                                .cadence(NewPlanUnitPrice.Cadence.ONE_TIME)
                                 .itemId("item_id")
                                 .modelType(NewPlanUnitPrice.ModelType.UNIT)
                                 .name("Annual fee")
@@ -887,7 +887,7 @@ internal class BetaCreatePlanVersionParamsTest {
                         BetaCreatePlanVersionParams.AddPrice.LicenseAllocationPrice.builder()
                             .cadence(
                                 BetaCreatePlanVersionParams.AddPrice.LicenseAllocationPrice.Cadence
-                                    .ANNUAL
+                                    .ONE_TIME
                             )
                             .itemId("item_id")
                             .addLicenseAllocation(
@@ -956,7 +956,7 @@ internal class BetaCreatePlanVersionParamsTest {
                     .planPhaseOrder(0L)
                     .price(
                         NewPlanUnitPrice.builder()
-                            .cadence(NewPlanUnitPrice.Cadence.ANNUAL)
+                            .cadence(NewPlanUnitPrice.Cadence.ONE_TIME)
                             .itemId("item_id")
                             .modelType(NewPlanUnitPrice.ModelType.UNIT)
                             .name("Annual fee")
@@ -1091,7 +1091,7 @@ internal class BetaCreatePlanVersionParamsTest {
                             .cadence(
                                 BetaCreatePlanVersionParams.ReplacePrice.LicenseAllocationPrice
                                     .Cadence
-                                    .ANNUAL
+                                    .ONE_TIME
                             )
                             .itemId("item_id")
                             .addLicenseAllocation(
@@ -1161,7 +1161,7 @@ internal class BetaCreatePlanVersionParamsTest {
                     .planPhaseOrder(0L)
                     .price(
                         NewPlanUnitPrice.builder()
-                            .cadence(NewPlanUnitPrice.Cadence.ANNUAL)
+                            .cadence(NewPlanUnitPrice.Cadence.ONE_TIME)
                             .itemId("item_id")
                             .modelType(NewPlanUnitPrice.ModelType.UNIT)
                             .name("Annual fee")

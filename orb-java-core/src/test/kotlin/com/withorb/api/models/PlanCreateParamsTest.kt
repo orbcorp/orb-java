@@ -47,7 +47,7 @@ internal class PlanCreateParamsTest {
                     )
                     .licenseAllocationPrice(
                         PlanCreateParams.Price.LicenseAllocationPrice.builder()
-                            .cadence(PlanCreateParams.Price.LicenseAllocationPrice.Cadence.ANNUAL)
+                            .cadence(PlanCreateParams.Price.LicenseAllocationPrice.Cadence.ONE_TIME)
                             .itemId("item_id")
                             .addLicenseAllocation(
                                 PlanCreateParams.Price.LicenseAllocationPrice.LicenseAllocation
@@ -109,7 +109,7 @@ internal class PlanCreateParamsTest {
                     .planPhaseOrder(0L)
                     .price(
                         NewPlanUnitPrice.builder()
-                            .cadence(NewPlanUnitPrice.Cadence.ANNUAL)
+                            .cadence(NewPlanUnitPrice.Cadence.ONE_TIME)
                             .itemId("item_id")
                             .modelType(NewPlanUnitPrice.ModelType.UNIT)
                             .name("Annual fee")
@@ -251,7 +251,7 @@ internal class PlanCreateParamsTest {
                         .licenseAllocationPrice(
                             PlanCreateParams.Price.LicenseAllocationPrice.builder()
                                 .cadence(
-                                    PlanCreateParams.Price.LicenseAllocationPrice.Cadence.ANNUAL
+                                    PlanCreateParams.Price.LicenseAllocationPrice.Cadence.ONE_TIME
                                 )
                                 .itemId("item_id")
                                 .addLicenseAllocation(
@@ -318,7 +318,7 @@ internal class PlanCreateParamsTest {
                         .planPhaseOrder(0L)
                         .price(
                             NewPlanUnitPrice.builder()
-                                .cadence(NewPlanUnitPrice.Cadence.ANNUAL)
+                                .cadence(NewPlanUnitPrice.Cadence.ONE_TIME)
                                 .itemId("item_id")
                                 .modelType(NewPlanUnitPrice.ModelType.UNIT)
                                 .name("Annual fee")
@@ -459,7 +459,7 @@ internal class PlanCreateParamsTest {
                     )
                     .licenseAllocationPrice(
                         PlanCreateParams.Price.LicenseAllocationPrice.builder()
-                            .cadence(PlanCreateParams.Price.LicenseAllocationPrice.Cadence.ANNUAL)
+                            .cadence(PlanCreateParams.Price.LicenseAllocationPrice.Cadence.ONE_TIME)
                             .itemId("item_id")
                             .addLicenseAllocation(
                                 PlanCreateParams.Price.LicenseAllocationPrice.LicenseAllocation
@@ -521,7 +521,7 @@ internal class PlanCreateParamsTest {
                     .planPhaseOrder(0L)
                     .price(
                         NewPlanUnitPrice.builder()
-                            .cadence(NewPlanUnitPrice.Cadence.ANNUAL)
+                            .cadence(NewPlanUnitPrice.Cadence.ONE_TIME)
                             .itemId("item_id")
                             .modelType(NewPlanUnitPrice.ModelType.UNIT)
                             .name("Annual fee")
