@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.38.0](https://github.com/orbcorp/orb-java/compare/v1.37.0...v1.38.0) (2026-10-07)
+
+
+### Features
+
+* **api:** add billable_metric_id filter, price_count, and prices list endpoint for dimensional price groups ([bbce444](https://github.com/orbcorp/orb-java/commit/bbce4440b543653413473702b50282881c497d5e))
+
 ## [1.37.0](https://github.com/orbcorp/orb-java/compare/v1.36.0...v1.37.0) (2026-10-01)
 
 
