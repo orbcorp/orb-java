@@ -17,11 +17,7 @@ internal class InvoicePayParamsTest {
 
     @Test
     fun pathParams() {
-        val params =
-            InvoicePayParams.builder()
-                .invoiceId("invoice_id")
-                .sharedPaymentTokenId("shared_payment_token_id")
-                .build()
+        val params = InvoicePayParams.builder().invoiceId("invoice_id").build()
 
         assertThat(params._pathParam(0)).isEqualTo("invoice_id")
         // out-of-bound path param
@@ -38,6 +34,13 @@ internal class InvoicePayParamsTest {
 
         val body = params._body()
 
-        assertThat(body.sharedPaymentTokenId()).isEqualTo("shared_payment_token_id")
+        assertThat(body.sharedPaymentTokenId()).contains("shared_payment_token_id")
+    }
+
+    @Test
+    fun bodyWithoutOptionalFields() {
+        val params = InvoicePayParams.builder().invoiceId("invoice_id").build()
+
+        val body = params._body()
     }
 }

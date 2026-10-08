@@ -364,26 +364,35 @@ interface InvoiceServiceAsync {
      * agent-granted credentials instead. This action can only be taken on invoices with status
      * "issued".
      */
-    fun pay(invoiceId: String, params: InvoicePayParams): CompletableFuture<Invoice> =
-        pay(invoiceId, params, RequestOptions.none())
+    fun pay(invoiceId: String): CompletableFuture<Invoice> = pay(invoiceId, InvoicePayParams.none())
 
     /** @see pay */
     fun pay(
         invoiceId: String,
-        params: InvoicePayParams,
+        params: InvoicePayParams = InvoicePayParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Invoice> =
         pay(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
     /** @see pay */
-    fun pay(params: InvoicePayParams): CompletableFuture<Invoice> =
-        pay(params, RequestOptions.none())
+    fun pay(
+        invoiceId: String,
+        params: InvoicePayParams = InvoicePayParams.none(),
+    ): CompletableFuture<Invoice> = pay(invoiceId, params, RequestOptions.none())
 
     /** @see pay */
     fun pay(
         params: InvoicePayParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Invoice>
+
+    /** @see pay */
+    fun pay(params: InvoicePayParams): CompletableFuture<Invoice> =
+        pay(params, RequestOptions.none())
+
+    /** @see pay */
+    fun pay(invoiceId: String, requestOptions: RequestOptions): CompletableFuture<Invoice> =
+        pay(invoiceId, InvoicePayParams.none(), requestOptions)
 
     /**
      * This endpoint triggers a regeneration of the PDF for a finalized invoice.
@@ -850,19 +859,29 @@ interface InvoiceServiceAsync {
          * Returns a raw HTTP response for `post /invoices/{invoice_id}/pay`, but is otherwise the
          * same as [InvoiceServiceAsync.pay].
          */
+        fun pay(invoiceId: String): CompletableFuture<HttpResponseFor<Invoice>> =
+            pay(invoiceId, InvoicePayParams.none())
+
+        /** @see pay */
         fun pay(
             invoiceId: String,
-            params: InvoicePayParams,
+            params: InvoicePayParams = InvoicePayParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Invoice>> =
+            pay(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
+
+        /** @see pay */
+        fun pay(
+            invoiceId: String,
+            params: InvoicePayParams = InvoicePayParams.none(),
         ): CompletableFuture<HttpResponseFor<Invoice>> =
             pay(invoiceId, params, RequestOptions.none())
 
         /** @see pay */
         fun pay(
-            invoiceId: String,
             params: InvoicePayParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Invoice>> =
-            pay(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
+        ): CompletableFuture<HttpResponseFor<Invoice>>
 
         /** @see pay */
         fun pay(params: InvoicePayParams): CompletableFuture<HttpResponseFor<Invoice>> =
@@ -870,9 +889,10 @@ interface InvoiceServiceAsync {
 
         /** @see pay */
         fun pay(
-            params: InvoicePayParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Invoice>>
+            invoiceId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Invoice>> =
+            pay(invoiceId, InvoicePayParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /invoices/{invoice_id}/regenerate_invoice_pdf`, but
