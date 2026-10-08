@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.39.0](https://github.com/orbcorp/orb-java/compare/v1.38.0...v1.39.0) (2026-10-08)
+
+
+### Features
+
+* **api:** add endpoint to bulk create dimensional price group prices ([fbd07c2](https://github.com/orbcorp/orb-java/commit/fbd07c2241851644fc50b2db07ac42f88fe07923))
+
+
+### Bug Fixes
+
+* **api:** clarify grouped subscription usage returns all groups in one response, no pagination ([fbd07c2](https://github.com/orbcorp/orb-java/commit/fbd07c2241851644fc50b2db07ac42f88fe07923))
+
 ## [1.38.0](https://github.com/orbcorp/orb-java/compare/v1.37.0...v1.38.0) (2026-10-07)
 
 
