@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.40.0](https://github.com/orbcorp/orb-java/compare/v1.39.0...v1.40.0) (2026-10-09)
+
+
+### Features
+
+* **api:** api update ([19f5235](https://github.com/orbcorp/orb-java/commit/19f52356a94c88f95abac4d19fc25aa60a085eb4))
+* **api:** support listing pricebook prices and filtering by product_id in GET /v1/prices ([19f5235](https://github.com/orbcorp/orb-java/commit/19f52356a94c88f95abac4d19fc25aa60a085eb4))
+
+
+### Bug Fixes
+
+* **api:** make shared_payment_token_id optional when paying an invoice ([19f5235](https://github.com/orbcorp/orb-java/commit/19f52356a94c88f95abac4d19fc25aa60a085eb4))
+
 ## [1.39.0](https://github.com/orbcorp/orb-java/compare/v1.38.0...v1.39.0) (2026-10-08)
 
 
