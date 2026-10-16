@@ -20,6 +20,7 @@ import com.withorb.api.core.prepareAsync
 import com.withorb.api.models.Alert
 import com.withorb.api.models.AlertCreateForCustomerParams
 import com.withorb.api.models.AlertCreateForExternalCustomerParams
+import com.withorb.api.models.AlertCreateForPlanParams
 import com.withorb.api.models.AlertCreateForSubscriptionParams
 import com.withorb.api.models.AlertDeleteParams
 import com.withorb.api.models.AlertDisableParams
@@ -92,6 +93,13 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
     ): CompletableFuture<Alert> =
         // post /alerts/external_customer_id/{external_customer_id}
         withRawResponse().createForExternalCustomer(params, requestOptions).thenApply { it.parse() }
+
+    override fun createForPlan(
+        params: AlertCreateForPlanParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Alert> =
+        // post /alerts/plan_id/{plan_id}
+        withRawResponse().createForPlan(params, requestOptions).thenApply { it.parse() }
 
     override fun createForSubscription(
         params: AlertCreateForSubscriptionParams,
@@ -316,6 +324,40 @@ class AlertServiceAsyncImpl internal constructor(private val clientOptions: Clie
                     errorHandler.handle(response).parseable {
                         response
                             .use { createForExternalCustomerHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val createForPlanHandler: Handler<Alert> =
+            jsonHandler<Alert>(clientOptions.jsonMapper)
+
+        override fun createForPlan(
+            params: AlertCreateForPlanParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Alert>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("planId", params.planId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("alerts", "plan_id", params._pathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { createForPlanHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()

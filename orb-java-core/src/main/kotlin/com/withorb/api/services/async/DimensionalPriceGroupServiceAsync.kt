@@ -12,6 +12,7 @@ import com.withorb.api.models.DimensionalPriceGroupListParams
 import com.withorb.api.models.DimensionalPriceGroupRetrieveParams
 import com.withorb.api.models.DimensionalPriceGroupUpdateParams
 import com.withorb.api.services.async.dimensionalPriceGroups.ExternalDimensionalPriceGroupIdServiceAsync
+import com.withorb.api.services.async.dimensionalPriceGroups.PriceServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -30,6 +31,8 @@ interface DimensionalPriceGroupServiceAsync {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): DimensionalPriceGroupServiceAsync
 
     fun externalDimensionalPriceGroupId(): ExternalDimensionalPriceGroupIdServiceAsync
+
+    fun prices(): PriceServiceAsync
 
     /**
      * A dimensional price group is used to partition the result of a billable metric by a set of
@@ -190,6 +193,8 @@ interface DimensionalPriceGroupServiceAsync {
 
         fun externalDimensionalPriceGroupId():
             ExternalDimensionalPriceGroupIdServiceAsync.WithRawResponse
+
+        fun prices(): PriceServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /dimensional_price_groups`, but is otherwise the

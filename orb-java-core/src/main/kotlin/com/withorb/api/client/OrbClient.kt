@@ -22,6 +22,7 @@ import com.withorb.api.services.blocking.PriceService
 import com.withorb.api.services.blocking.SubscriptionChangeService
 import com.withorb.api.services.blocking.SubscriptionService
 import com.withorb.api.services.blocking.TopLevelService
+import com.withorb.api.services.blocking.WebhookEndpointService
 import com.withorb.api.services.blocking.WebhookService
 import java.util.function.Consumer
 
@@ -137,6 +138,12 @@ interface OrbClient {
      * invoices and tax calculation purposes.
      */
     fun items(): ItemService
+
+    /**
+     * A webhook endpoint is an HTTPS URL that Orb sends
+     * [webhook events](/integrations-and-exports/webhooks) to.
+     */
+    fun webhookEndpoints(): WebhookEndpointService
 
     /**
      * The Metric resource represents a calculation of a quantity based on events. Metrics are
@@ -293,6 +300,12 @@ interface OrbClient {
          * for invoices and tax calculation purposes.
          */
         fun items(): ItemService.WithRawResponse
+
+        /**
+         * A webhook endpoint is an HTTPS URL that Orb sends
+         * [webhook events](/integrations-and-exports/webhooks) to.
+         */
+        fun webhookEndpoints(): WebhookEndpointService.WithRawResponse
 
         /**
          * The Metric resource represents a calculation of a quantity based on events. Metrics are

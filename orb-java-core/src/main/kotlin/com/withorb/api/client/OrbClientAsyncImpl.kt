@@ -42,6 +42,8 @@ import com.withorb.api.services.async.SubscriptionServiceAsync
 import com.withorb.api.services.async.SubscriptionServiceAsyncImpl
 import com.withorb.api.services.async.TopLevelServiceAsync
 import com.withorb.api.services.async.TopLevelServiceAsyncImpl
+import com.withorb.api.services.async.WebhookEndpointServiceAsync
+import com.withorb.api.services.async.WebhookEndpointServiceAsyncImpl
 import com.withorb.api.services.async.WebhookServiceAsync
 import com.withorb.api.services.async.WebhookServiceAsyncImpl
 import java.util.function.Consumer
@@ -98,6 +100,10 @@ class OrbClientAsyncImpl(private val clientOptions: ClientOptions) : OrbClientAs
     }
 
     private val items: ItemServiceAsync by lazy { ItemServiceAsyncImpl(clientOptionsWithUserAgent) }
+
+    private val webhookEndpoints: WebhookEndpointServiceAsync by lazy {
+        WebhookEndpointServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
 
     private val metrics: MetricServiceAsync by lazy {
         MetricServiceAsyncImpl(clientOptionsWithUserAgent)
@@ -222,6 +228,12 @@ class OrbClientAsyncImpl(private val clientOptions: ClientOptions) : OrbClientAs
     override fun items(): ItemServiceAsync = items
 
     /**
+     * A webhook endpoint is an HTTPS URL that Orb sends
+     * [webhook events](/integrations-and-exports/webhooks) to.
+     */
+    override fun webhookEndpoints(): WebhookEndpointServiceAsync = webhookEndpoints
+
+    /**
      * The Metric resource represents a calculation of a quantity based on events. Metrics are
      * defined by the query that transforms raw usage events into meaningful values for your
      * customers.
@@ -321,6 +333,10 @@ class OrbClientAsyncImpl(private val clientOptions: ClientOptions) : OrbClientAs
 
         private val items: ItemServiceAsync.WithRawResponse by lazy {
             ItemServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val webhookEndpoints: WebhookEndpointServiceAsync.WithRawResponse by lazy {
+            WebhookEndpointServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val metrics: MetricServiceAsync.WithRawResponse by lazy {
@@ -448,6 +464,13 @@ class OrbClientAsyncImpl(private val clientOptions: ClientOptions) : OrbClientAs
          * for invoices and tax calculation purposes.
          */
         override fun items(): ItemServiceAsync.WithRawResponse = items
+
+        /**
+         * A webhook endpoint is an HTTPS URL that Orb sends
+         * [webhook events](/integrations-and-exports/webhooks) to.
+         */
+        override fun webhookEndpoints(): WebhookEndpointServiceAsync.WithRawResponse =
+            webhookEndpoints
 
         /**
          * The Metric resource represents a calculation of a quantity based on events. Metrics are

@@ -6,6 +6,7 @@ import com.withorb.api.TestServerExtension
 import com.withorb.api.client.okhttp.OrbOkHttpClientAsync
 import com.withorb.api.models.AlertCreateForCustomerParams
 import com.withorb.api.models.AlertCreateForExternalCustomerParams
+import com.withorb.api.models.AlertCreateForPlanParams
 import com.withorb.api.models.AlertCreateForSubscriptionParams
 import com.withorb.api.models.AlertDisableParams
 import com.withorb.api.models.AlertEnableParams
@@ -137,6 +138,39 @@ internal class AlertServiceAsyncTest {
                     .currency("currency")
                     .type(AlertCreateForExternalCustomerParams.Type.CREDIT_BALANCE_DEPLETED)
                     .addThreshold(Threshold.builder().value(0.0).build())
+                    .build()
+            )
+
+        val alert = alertFuture.get()
+        alert.validate()
+    }
+
+    @Test
+    fun createForPlan() {
+        val client =
+            OrbOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val alertServiceAsync = client.alerts()
+
+        val alertFuture =
+            alertServiceAsync.createForPlan(
+                AlertCreateForPlanParams.builder()
+                    .planId("plan_id")
+                    .addThreshold(Threshold.builder().value(0.0).build())
+                    .type(AlertCreateForPlanParams.Type.USAGE_EXCEEDED)
+                    .currency("currency")
+                    .addGroupingKey("string")
+                    .metricId("metric_id")
+                    .planVersion(0L)
+                    .addPriceFilter(
+                        AlertCreateForPlanParams.PriceFilter.builder()
+                            .field(AlertCreateForPlanParams.PriceFilter.Field.PRICE_ID)
+                            .operator(AlertCreateForPlanParams.PriceFilter.Operator.INCLUDES)
+                            .addValue("string")
+                            .build()
+                    )
                     .build()
             )
 
