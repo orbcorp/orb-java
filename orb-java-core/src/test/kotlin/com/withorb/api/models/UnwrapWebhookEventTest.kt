@@ -94,7 +94,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -243,7 +245,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -431,7 +435,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -716,7 +722,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -1054,7 +1062,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -1404,7 +1414,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -1756,7 +1768,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -2074,7 +2088,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -2363,7 +2379,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -2709,7 +2727,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -3118,7 +3138,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -3532,7 +3554,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -3914,7 +3938,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -4389,7 +4415,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -4990,7 +5018,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -5594,7 +5624,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -6190,7 +6222,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -6707,7 +6741,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -7001,7 +7037,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -7137,7 +7175,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -7279,7 +7319,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -7421,7 +7463,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -7969,7 +8013,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -8951,7 +8997,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -9554,7 +9602,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -9723,7 +9773,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -10277,7 +10329,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -11264,7 +11318,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -12246,7 +12302,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -13224,7 +13282,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -14490,7 +14550,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -15387,7 +15449,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -15922,7 +15986,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -16850,7 +16916,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -17516,7 +17584,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -18177,7 +18247,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -19109,7 +19181,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -20039,7 +20113,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -20973,7 +21049,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -21908,7 +21986,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -22842,7 +22922,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -23774,7 +23856,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -24701,7 +24785,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -25237,7 +25323,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -25372,7 +25460,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -25506,7 +25596,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -25641,7 +25733,9 @@ internal class UnwrapWebhookEventTest {
             .contains(metricEventsDroppedByWatermark)
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -25780,7 +25874,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).contains(paymentMethodCreated)
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -25922,7 +26018,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).contains(paymentMethodDeleted)
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -25978,6 +26076,137 @@ internal class UnwrapWebhookEventTest {
                     )
                     .properties(JsonValue.from(mapOf<String, Any>()))
                     .type(PaymentMethodDeletedWebhookEvent.Type.PAYMENT_METHOD_DELETED)
+                    .build()
+            )
+
+        val roundtrippedUnwrapWebhookEvent =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(unwrapWebhookEvent),
+                jacksonTypeRef<UnwrapWebhookEvent>(),
+            )
+
+        assertThat(roundtrippedUnwrapWebhookEvent).isEqualTo(unwrapWebhookEvent)
+    }
+
+    @Test
+    fun ofPlanCreated() {
+        val planCreated =
+            PlanCreatedWebhookEvent.builder()
+                .id("id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .plan(
+                    PlanCreatedWebhookEvent.Plan.builder()
+                        .id("m2t5akQeh2obwxeU")
+                        .externalPlanId("m2t5akQeh2obwxeU")
+                        .name("Example plan")
+                        .build()
+                )
+                .properties(JsonValue.from(mapOf<String, Any>()))
+                .type(PlanCreatedWebhookEvent.Type.PLAN_CREATED)
+                .build()
+
+        val unwrapWebhookEvent = UnwrapWebhookEvent.ofPlanCreated(planCreated)
+
+        assertThat(unwrapWebhookEvent.backfillReflected()).isEmpty
+        assertThat(unwrapWebhookEvent.backfillReverted()).isEmpty
+        assertThat(unwrapWebhookEvent.billableMetricEdited()).isEmpty
+        assertThat(unwrapWebhookEvent.creditBlockAccountingSyncFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.creditBlockAccountingSyncSucceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.creditNoteAccountingSyncFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.creditNoteAccountingSyncSucceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.creditNoteIssued()).isEmpty
+        assertThat(unwrapWebhookEvent.creditNoteMarkedAsVoid()).isEmpty
+        assertThat(unwrapWebhookEvent.customerAccountingSyncFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.customerAccountingSyncSucceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.customerBalanceTransactionCreated()).isEmpty
+        assertThat(unwrapWebhookEvent.customerCreated()).isEmpty
+        assertThat(unwrapWebhookEvent.customerCreditBalanceDepleted()).isEmpty
+        assertThat(unwrapWebhookEvent.customerCreditBalanceDropped()).isEmpty
+        assertThat(unwrapWebhookEvent.customerCreditBalanceRecovered()).isEmpty
+        assertThat(unwrapWebhookEvent.customerCreditLedgerIncremented()).isEmpty
+        assertThat(unwrapWebhookEvent.customerEdited()).isEmpty
+        assertThat(unwrapWebhookEvent.dataExportsTransferError()).isEmpty
+        assertThat(unwrapWebhookEvent.dataExportsTransferSuccess()).isEmpty
+        assertThat(unwrapWebhookEvent.eventUnmatchedEvent()).isEmpty
+        assertThat(unwrapWebhookEvent.ingestionUnmatchedCustomerIds()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceAccountingSyncFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceAccountingSyncSucceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceAutomationScheduleStepExecuted()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceCostDataExported()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceDunningScheduleCreated()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceDunningScheduleEnded()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceDunningScheduleReset()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceDunningScheduleStepExecuted()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceEdited()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceInvoiceDateElapsed()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceIssueFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceIssued()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceIssuedSummary()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceManuallyMarkedAsPaid()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceManuallyMarkedAsVoid()).isEmpty
+        assertThat(unwrapWebhookEvent.invoicePaymentFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.invoicePaymentProcessing()).isEmpty
+        assertThat(unwrapWebhookEvent.invoicePaymentSucceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceSyncFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceSyncSucceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceUndoMarkAsPaid()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceDueDateRecalculationCanceled()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceDueDateRecalculationCompleted()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceDueDateRecalculationStarted()).isEmpty
+        assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
+        assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
+        assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).contains(planCreated)
+        assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
+        assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
+        assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
+        assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
+        assertThat(unwrapWebhookEvent.salesOrderAccountingSyncFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.salesOrderAccountingSyncSucceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionAccountingSyncFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionAccountingSyncSucceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionAlertDisabled()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionCancellationScheduled()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionCancellationUnscheduled()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionCostExceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionCreated()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionEdited()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionEnded()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionFixedFeeQuantityUpdated()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionGroupedCostExceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionInvoicingThresholdExceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionLicenseAllocationReset()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionLicenseBalanceThresholdReached()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionPlanChangeScheduled()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionPlanVersionChangeScheduled()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionPlanVersionChanged()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionSpendExceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionStarted()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionTrialEnded()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionUsageExceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.transactionAccountingSyncFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.transactionAccountingSyncSucceeded()).isEmpty
+    }
+
+    @Test
+    fun ofPlanCreatedRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val unwrapWebhookEvent =
+            UnwrapWebhookEvent.ofPlanCreated(
+                PlanCreatedWebhookEvent.builder()
+                    .id("id")
+                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .plan(
+                        PlanCreatedWebhookEvent.Plan.builder()
+                            .id("m2t5akQeh2obwxeU")
+                            .externalPlanId("m2t5akQeh2obwxeU")
+                            .name("Example plan")
+                            .build()
+                    )
+                    .properties(JsonValue.from(mapOf<String, Any>()))
+                    .type(PlanCreatedWebhookEvent.Type.PLAN_CREATED)
                     .build()
             )
 
@@ -26063,7 +26292,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).contains(planDefaultVersionSet)
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -26117,6 +26348,783 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .type(PlanDefaultVersionSetWebhookEvent.Type.PLAN_DEFAULT_VERSION_SET)
+                    .build()
+            )
+
+        val roundtrippedUnwrapWebhookEvent =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(unwrapWebhookEvent),
+                jacksonTypeRef<UnwrapWebhookEvent>(),
+            )
+
+        assertThat(roundtrippedUnwrapWebhookEvent).isEqualTo(unwrapWebhookEvent)
+    }
+
+    @Test
+    fun ofPlanEdited() {
+        val planEdited =
+            PlanEditedWebhookEvent.builder()
+                .id("id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .plan(
+                    Plan.builder()
+                        .id("id")
+                        .addAdjustment(
+                            PlanPhaseUsageDiscountAdjustment.builder()
+                                .id("id")
+                                .adjustmentType(
+                                    PlanPhaseUsageDiscountAdjustment.AdjustmentType.USAGE_DISCOUNT
+                                )
+                                .addAppliesToPriceId("string")
+                                .addFilter(
+                                    PlanPhaseUsageDiscountAdjustment.Filter.builder()
+                                        .field(
+                                            PlanPhaseUsageDiscountAdjustment.Filter.Field.PRICE_ID
+                                        )
+                                        .operator(
+                                            PlanPhaseUsageDiscountAdjustment.Filter.Operator
+                                                .INCLUDES
+                                        )
+                                        .addValue("string")
+                                        .build()
+                                )
+                                .isInvoiceLevel(true)
+                                .planPhaseOrder(0L)
+                                .reason("reason")
+                                .replacesAdjustmentId("replaces_adjustment_id")
+                                .usageDiscount(0.0)
+                                .build()
+                        )
+                        .basePlan(
+                            Plan.BasePlan.builder()
+                                .id("m2t5akQeh2obwxeU")
+                                .externalPlanId("m2t5akQeh2obwxeU")
+                                .name("Example plan")
+                                .build()
+                        )
+                        .basePlanId("base_plan_id")
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .currency("currency")
+                        .defaultInvoiceMemo("default_invoice_memo")
+                        .description("description")
+                        .discount(
+                            PercentageDiscount.builder()
+                                .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                                .percentageDiscount(0.15)
+                                .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                                .addFilter(
+                                    PercentageDiscount.Filter.builder()
+                                        .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                                        .operator(PercentageDiscount.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
+                                .reason("reason")
+                                .build()
+                        )
+                        .externalPlanId("external_plan_id")
+                        .invoicingCurrency("invoicing_currency")
+                        .maximum(
+                            Maximum.builder()
+                                .addAppliesToPriceId("string")
+                                .addFilter(
+                                    Maximum.Filter.builder()
+                                        .field(Maximum.Filter.Field.PRICE_ID)
+                                        .operator(Maximum.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
+                                .maximumAmount("maximum_amount")
+                                .build()
+                        )
+                        .maximumAmount("maximum_amount")
+                        .metadata(
+                            Plan.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .minimum(
+                            Minimum.builder()
+                                .addAppliesToPriceId("string")
+                                .addFilter(
+                                    Minimum.Filter.builder()
+                                        .field(Minimum.Filter.Field.PRICE_ID)
+                                        .operator(Minimum.Filter.Operator.INCLUDES)
+                                        .addValue("string")
+                                        .build()
+                                )
+                                .minimumAmount("minimum_amount")
+                                .build()
+                        )
+                        .minimumAmount("minimum_amount")
+                        .name("name")
+                        .netTerms(0L)
+                        .addPlanPhase(
+                            Plan.PlanPhase.builder()
+                                .id("id")
+                                .description("description")
+                                .discount(
+                                    PercentageDiscount.builder()
+                                        .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                                        .percentageDiscount(0.15)
+                                        .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                        .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                                        .addFilter(
+                                            PercentageDiscount.Filter.builder()
+                                                .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                                                .operator(
+                                                    PercentageDiscount.Filter.Operator.INCLUDES
+                                                )
+                                                .addValue("string")
+                                                .build()
+                                        )
+                                        .reason("reason")
+                                        .build()
+                                )
+                                .duration(0L)
+                                .durationUnit(Plan.PlanPhase.DurationUnit.DAILY)
+                                .maximum(
+                                    Maximum.builder()
+                                        .addAppliesToPriceId("string")
+                                        .addFilter(
+                                            Maximum.Filter.builder()
+                                                .field(Maximum.Filter.Field.PRICE_ID)
+                                                .operator(Maximum.Filter.Operator.INCLUDES)
+                                                .addValue("string")
+                                                .build()
+                                        )
+                                        .maximumAmount("maximum_amount")
+                                        .build()
+                                )
+                                .maximumAmount("maximum_amount")
+                                .minimum(
+                                    Minimum.builder()
+                                        .addAppliesToPriceId("string")
+                                        .addFilter(
+                                            Minimum.Filter.builder()
+                                                .field(Minimum.Filter.Field.PRICE_ID)
+                                                .operator(Minimum.Filter.Operator.INCLUDES)
+                                                .addValue("string")
+                                                .build()
+                                        )
+                                        .minimumAmount("minimum_amount")
+                                        .build()
+                                )
+                                .minimumAmount("minimum_amount")
+                                .name("name")
+                                .order(0L)
+                                .build()
+                        )
+                        .addPrice(
+                            Price.UnitPrice.builder()
+                                .id("id")
+                                .billableMetric(BillableMetricTiny.builder().id("id").build())
+                                .billingCycleConfiguration(
+                                    BillingCycleConfiguration.builder()
+                                        .duration(0L)
+                                        .durationUnit(BillingCycleConfiguration.DurationUnit.DAY)
+                                        .build()
+                                )
+                                .billingMode(Price.UnitPrice.BillingMode.IN_ADVANCE)
+                                .cadence(Price.UnitPrice.Cadence.ONE_TIME)
+                                .addCompositePriceFilter(
+                                    Price.UnitPrice.CompositePriceFilter.builder()
+                                        .field(Price.UnitPrice.CompositePriceFilter.Field.PRICE_ID)
+                                        .operator(
+                                            Price.UnitPrice.CompositePriceFilter.Operator.INCLUDES
+                                        )
+                                        .addValue("string")
+                                        .build()
+                                )
+                                .conversionRate(0.0)
+                                .unitConversionRateConfig(
+                                    ConversionRateUnitConfig.builder()
+                                        .unitAmount("unit_amount")
+                                        .build()
+                                )
+                                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .creditAllocation(
+                                    Allocation.builder()
+                                        .allowsRollover(true)
+                                        .currency("currency")
+                                        .customExpiration(
+                                            CustomExpiration.builder()
+                                                .duration(0L)
+                                                .durationUnit(CustomExpiration.DurationUnit.DAY)
+                                                .build()
+                                        )
+                                        .addFilter(
+                                            Allocation.Filter.builder()
+                                                .field(Allocation.Filter.Field.PRICE_ID)
+                                                .operator(Allocation.Filter.Operator.INCLUDES)
+                                                .addValue("string")
+                                                .build()
+                                        )
+                                        .licenseTypeId("license_type_id")
+                                        .build()
+                                )
+                                .currency("currency")
+                                .discount(
+                                    PercentageDiscount.builder()
+                                        .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                                        .percentageDiscount(0.15)
+                                        .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                        .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                                        .addFilter(
+                                            PercentageDiscount.Filter.builder()
+                                                .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                                                .operator(
+                                                    PercentageDiscount.Filter.Operator.INCLUDES
+                                                )
+                                                .addValue("string")
+                                                .build()
+                                        )
+                                        .reason("reason")
+                                        .build()
+                                )
+                                .externalPriceId("external_price_id")
+                                .fixedPriceQuantity(0.0)
+                                .invoiceGroupingKey("invoice_grouping_key")
+                                .invoicingCycleConfiguration(
+                                    BillingCycleConfiguration.builder()
+                                        .duration(0L)
+                                        .durationUnit(BillingCycleConfiguration.DurationUnit.DAY)
+                                        .build()
+                                )
+                                .item(ItemSlim.builder().id("id").name("name").build())
+                                .maximum(
+                                    Maximum.builder()
+                                        .addAppliesToPriceId("string")
+                                        .addFilter(
+                                            Maximum.Filter.builder()
+                                                .field(Maximum.Filter.Field.PRICE_ID)
+                                                .operator(Maximum.Filter.Operator.INCLUDES)
+                                                .addValue("string")
+                                                .build()
+                                        )
+                                        .maximumAmount("maximum_amount")
+                                        .build()
+                                )
+                                .maximumAmount("maximum_amount")
+                                .metadata(
+                                    Price.UnitPrice.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .minimum(
+                                    Minimum.builder()
+                                        .addAppliesToPriceId("string")
+                                        .addFilter(
+                                            Minimum.Filter.builder()
+                                                .field(Minimum.Filter.Field.PRICE_ID)
+                                                .operator(Minimum.Filter.Operator.INCLUDES)
+                                                .addValue("string")
+                                                .build()
+                                        )
+                                        .minimumAmount("minimum_amount")
+                                        .build()
+                                )
+                                .minimumAmount("minimum_amount")
+                                .name("name")
+                                .planPhaseOrder(0L)
+                                .priceType(Price.UnitPrice.PriceType.USAGE_PRICE)
+                                .replacesPriceId("replaces_price_id")
+                                .unitConfig(
+                                    UnitConfig.builder()
+                                        .unitAmount("unit_amount")
+                                        .prorated(true)
+                                        .scalingFactor(0.0)
+                                        .build()
+                                )
+                                .dimensionalPriceConfiguration(
+                                    DimensionalPriceConfiguration.builder()
+                                        .addDimensionValue("string")
+                                        .dimensionalPriceGroupId("dimensional_price_group_id")
+                                        .build()
+                                )
+                                .licenseType(
+                                    Price.UnitPrice.LicenseType.builder()
+                                        .id("id")
+                                        .groupingKey("grouping_key")
+                                        .name("name")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .product(
+                            Plan.Product.builder()
+                                .id("id")
+                                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .name("name")
+                                .build()
+                        )
+                        .status(Plan.Status.ACTIVE)
+                        .trialConfig(
+                            Plan.TrialConfig.builder()
+                                .trialPeriod(0L)
+                                .trialPeriodUnit(Plan.TrialConfig.TrialPeriodUnit.DAYS)
+                                .build()
+                        )
+                        .version(0L)
+                        .build()
+                )
+                .properties(
+                    PlanEditedWebhookEvent.Properties.builder()
+                        .previousAttributes(
+                            PlanEditedWebhookEvent.Properties.PreviousAttributes.builder()
+                                .description("description")
+                                .externalPlanId("external_plan_id")
+                                .metadata(
+                                    PlanEditedWebhookEvent.Properties.PreviousAttributes.Metadata
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .name("name")
+                                .status(
+                                    PlanEditedWebhookEvent.Properties.PreviousAttributes.Status
+                                        .ACTIVE
+                                )
+                                .build()
+                        )
+                        .build()
+                )
+                .type(PlanEditedWebhookEvent.Type.PLAN_EDITED)
+                .build()
+
+        val unwrapWebhookEvent = UnwrapWebhookEvent.ofPlanEdited(planEdited)
+
+        assertThat(unwrapWebhookEvent.backfillReflected()).isEmpty
+        assertThat(unwrapWebhookEvent.backfillReverted()).isEmpty
+        assertThat(unwrapWebhookEvent.billableMetricEdited()).isEmpty
+        assertThat(unwrapWebhookEvent.creditBlockAccountingSyncFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.creditBlockAccountingSyncSucceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.creditNoteAccountingSyncFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.creditNoteAccountingSyncSucceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.creditNoteIssued()).isEmpty
+        assertThat(unwrapWebhookEvent.creditNoteMarkedAsVoid()).isEmpty
+        assertThat(unwrapWebhookEvent.customerAccountingSyncFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.customerAccountingSyncSucceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.customerBalanceTransactionCreated()).isEmpty
+        assertThat(unwrapWebhookEvent.customerCreated()).isEmpty
+        assertThat(unwrapWebhookEvent.customerCreditBalanceDepleted()).isEmpty
+        assertThat(unwrapWebhookEvent.customerCreditBalanceDropped()).isEmpty
+        assertThat(unwrapWebhookEvent.customerCreditBalanceRecovered()).isEmpty
+        assertThat(unwrapWebhookEvent.customerCreditLedgerIncremented()).isEmpty
+        assertThat(unwrapWebhookEvent.customerEdited()).isEmpty
+        assertThat(unwrapWebhookEvent.dataExportsTransferError()).isEmpty
+        assertThat(unwrapWebhookEvent.dataExportsTransferSuccess()).isEmpty
+        assertThat(unwrapWebhookEvent.eventUnmatchedEvent()).isEmpty
+        assertThat(unwrapWebhookEvent.ingestionUnmatchedCustomerIds()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceAccountingSyncFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceAccountingSyncSucceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceAutomationScheduleStepExecuted()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceCostDataExported()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceDunningScheduleCreated()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceDunningScheduleEnded()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceDunningScheduleReset()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceDunningScheduleStepExecuted()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceEdited()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceInvoiceDateElapsed()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceIssueFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceIssued()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceIssuedSummary()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceManuallyMarkedAsPaid()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceManuallyMarkedAsVoid()).isEmpty
+        assertThat(unwrapWebhookEvent.invoicePaymentFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.invoicePaymentProcessing()).isEmpty
+        assertThat(unwrapWebhookEvent.invoicePaymentSucceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceSyncFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceSyncSucceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceUndoMarkAsPaid()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceDueDateRecalculationCanceled()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceDueDateRecalculationCompleted()).isEmpty
+        assertThat(unwrapWebhookEvent.invoiceDueDateRecalculationStarted()).isEmpty
+        assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
+        assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
+        assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
+        assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).contains(planEdited)
+        assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
+        assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
+        assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
+        assertThat(unwrapWebhookEvent.salesOrderAccountingSyncFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.salesOrderAccountingSyncSucceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionAccountingSyncFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionAccountingSyncSucceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionAlertDisabled()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionCancellationScheduled()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionCancellationUnscheduled()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionCostExceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionCreated()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionEdited()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionEnded()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionFixedFeeQuantityUpdated()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionGroupedCostExceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionInvoicingThresholdExceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionLicenseAllocationReset()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionLicenseBalanceThresholdReached()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionPlanChangeScheduled()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionPlanVersionChangeScheduled()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionPlanVersionChanged()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionSpendExceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionStarted()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionTrialEnded()).isEmpty
+        assertThat(unwrapWebhookEvent.subscriptionUsageExceeded()).isEmpty
+        assertThat(unwrapWebhookEvent.transactionAccountingSyncFailed()).isEmpty
+        assertThat(unwrapWebhookEvent.transactionAccountingSyncSucceeded()).isEmpty
+    }
+
+    @Test
+    fun ofPlanEditedRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val unwrapWebhookEvent =
+            UnwrapWebhookEvent.ofPlanEdited(
+                PlanEditedWebhookEvent.builder()
+                    .id("id")
+                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .plan(
+                        Plan.builder()
+                            .id("id")
+                            .addAdjustment(
+                                PlanPhaseUsageDiscountAdjustment.builder()
+                                    .id("id")
+                                    .adjustmentType(
+                                        PlanPhaseUsageDiscountAdjustment.AdjustmentType
+                                            .USAGE_DISCOUNT
+                                    )
+                                    .addAppliesToPriceId("string")
+                                    .addFilter(
+                                        PlanPhaseUsageDiscountAdjustment.Filter.builder()
+                                            .field(
+                                                PlanPhaseUsageDiscountAdjustment.Filter.Field
+                                                    .PRICE_ID
+                                            )
+                                            .operator(
+                                                PlanPhaseUsageDiscountAdjustment.Filter.Operator
+                                                    .INCLUDES
+                                            )
+                                            .addValue("string")
+                                            .build()
+                                    )
+                                    .isInvoiceLevel(true)
+                                    .planPhaseOrder(0L)
+                                    .reason("reason")
+                                    .replacesAdjustmentId("replaces_adjustment_id")
+                                    .usageDiscount(0.0)
+                                    .build()
+                            )
+                            .basePlan(
+                                Plan.BasePlan.builder()
+                                    .id("m2t5akQeh2obwxeU")
+                                    .externalPlanId("m2t5akQeh2obwxeU")
+                                    .name("Example plan")
+                                    .build()
+                            )
+                            .basePlanId("base_plan_id")
+                            .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .currency("currency")
+                            .defaultInvoiceMemo("default_invoice_memo")
+                            .description("description")
+                            .discount(
+                                PercentageDiscount.builder()
+                                    .discountType(PercentageDiscount.DiscountType.PERCENTAGE)
+                                    .percentageDiscount(0.15)
+                                    .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                    .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                                    .addFilter(
+                                        PercentageDiscount.Filter.builder()
+                                            .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                                            .operator(PercentageDiscount.Filter.Operator.INCLUDES)
+                                            .addValue("string")
+                                            .build()
+                                    )
+                                    .reason("reason")
+                                    .build()
+                            )
+                            .externalPlanId("external_plan_id")
+                            .invoicingCurrency("invoicing_currency")
+                            .maximum(
+                                Maximum.builder()
+                                    .addAppliesToPriceId("string")
+                                    .addFilter(
+                                        Maximum.Filter.builder()
+                                            .field(Maximum.Filter.Field.PRICE_ID)
+                                            .operator(Maximum.Filter.Operator.INCLUDES)
+                                            .addValue("string")
+                                            .build()
+                                    )
+                                    .maximumAmount("maximum_amount")
+                                    .build()
+                            )
+                            .maximumAmount("maximum_amount")
+                            .metadata(
+                                Plan.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
+                            .minimum(
+                                Minimum.builder()
+                                    .addAppliesToPriceId("string")
+                                    .addFilter(
+                                        Minimum.Filter.builder()
+                                            .field(Minimum.Filter.Field.PRICE_ID)
+                                            .operator(Minimum.Filter.Operator.INCLUDES)
+                                            .addValue("string")
+                                            .build()
+                                    )
+                                    .minimumAmount("minimum_amount")
+                                    .build()
+                            )
+                            .minimumAmount("minimum_amount")
+                            .name("name")
+                            .netTerms(0L)
+                            .addPlanPhase(
+                                Plan.PlanPhase.builder()
+                                    .id("id")
+                                    .description("description")
+                                    .discount(
+                                        PercentageDiscount.builder()
+                                            .discountType(
+                                                PercentageDiscount.DiscountType.PERCENTAGE
+                                            )
+                                            .percentageDiscount(0.15)
+                                            .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                            .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                                            .addFilter(
+                                                PercentageDiscount.Filter.builder()
+                                                    .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                                                    .operator(
+                                                        PercentageDiscount.Filter.Operator.INCLUDES
+                                                    )
+                                                    .addValue("string")
+                                                    .build()
+                                            )
+                                            .reason("reason")
+                                            .build()
+                                    )
+                                    .duration(0L)
+                                    .durationUnit(Plan.PlanPhase.DurationUnit.DAILY)
+                                    .maximum(
+                                        Maximum.builder()
+                                            .addAppliesToPriceId("string")
+                                            .addFilter(
+                                                Maximum.Filter.builder()
+                                                    .field(Maximum.Filter.Field.PRICE_ID)
+                                                    .operator(Maximum.Filter.Operator.INCLUDES)
+                                                    .addValue("string")
+                                                    .build()
+                                            )
+                                            .maximumAmount("maximum_amount")
+                                            .build()
+                                    )
+                                    .maximumAmount("maximum_amount")
+                                    .minimum(
+                                        Minimum.builder()
+                                            .addAppliesToPriceId("string")
+                                            .addFilter(
+                                                Minimum.Filter.builder()
+                                                    .field(Minimum.Filter.Field.PRICE_ID)
+                                                    .operator(Minimum.Filter.Operator.INCLUDES)
+                                                    .addValue("string")
+                                                    .build()
+                                            )
+                                            .minimumAmount("minimum_amount")
+                                            .build()
+                                    )
+                                    .minimumAmount("minimum_amount")
+                                    .name("name")
+                                    .order(0L)
+                                    .build()
+                            )
+                            .addPrice(
+                                Price.UnitPrice.builder()
+                                    .id("id")
+                                    .billableMetric(BillableMetricTiny.builder().id("id").build())
+                                    .billingCycleConfiguration(
+                                        BillingCycleConfiguration.builder()
+                                            .duration(0L)
+                                            .durationUnit(
+                                                BillingCycleConfiguration.DurationUnit.DAY
+                                            )
+                                            .build()
+                                    )
+                                    .billingMode(Price.UnitPrice.BillingMode.IN_ADVANCE)
+                                    .cadence(Price.UnitPrice.Cadence.ONE_TIME)
+                                    .addCompositePriceFilter(
+                                        Price.UnitPrice.CompositePriceFilter.builder()
+                                            .field(
+                                                Price.UnitPrice.CompositePriceFilter.Field.PRICE_ID
+                                            )
+                                            .operator(
+                                                Price.UnitPrice.CompositePriceFilter.Operator
+                                                    .INCLUDES
+                                            )
+                                            .addValue("string")
+                                            .build()
+                                    )
+                                    .conversionRate(0.0)
+                                    .unitConversionRateConfig(
+                                        ConversionRateUnitConfig.builder()
+                                            .unitAmount("unit_amount")
+                                            .build()
+                                    )
+                                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .creditAllocation(
+                                        Allocation.builder()
+                                            .allowsRollover(true)
+                                            .currency("currency")
+                                            .customExpiration(
+                                                CustomExpiration.builder()
+                                                    .duration(0L)
+                                                    .durationUnit(CustomExpiration.DurationUnit.DAY)
+                                                    .build()
+                                            )
+                                            .addFilter(
+                                                Allocation.Filter.builder()
+                                                    .field(Allocation.Filter.Field.PRICE_ID)
+                                                    .operator(Allocation.Filter.Operator.INCLUDES)
+                                                    .addValue("string")
+                                                    .build()
+                                            )
+                                            .licenseTypeId("license_type_id")
+                                            .build()
+                                    )
+                                    .currency("currency")
+                                    .discount(
+                                        PercentageDiscount.builder()
+                                            .discountType(
+                                                PercentageDiscount.DiscountType.PERCENTAGE
+                                            )
+                                            .percentageDiscount(0.15)
+                                            .addAppliesToPriceId("h74gfhdjvn7ujokd")
+                                            .addAppliesToPriceId("7hfgtgjnbvc3ujkl")
+                                            .addFilter(
+                                                PercentageDiscount.Filter.builder()
+                                                    .field(PercentageDiscount.Filter.Field.PRICE_ID)
+                                                    .operator(
+                                                        PercentageDiscount.Filter.Operator.INCLUDES
+                                                    )
+                                                    .addValue("string")
+                                                    .build()
+                                            )
+                                            .reason("reason")
+                                            .build()
+                                    )
+                                    .externalPriceId("external_price_id")
+                                    .fixedPriceQuantity(0.0)
+                                    .invoiceGroupingKey("invoice_grouping_key")
+                                    .invoicingCycleConfiguration(
+                                        BillingCycleConfiguration.builder()
+                                            .duration(0L)
+                                            .durationUnit(
+                                                BillingCycleConfiguration.DurationUnit.DAY
+                                            )
+                                            .build()
+                                    )
+                                    .item(ItemSlim.builder().id("id").name("name").build())
+                                    .maximum(
+                                        Maximum.builder()
+                                            .addAppliesToPriceId("string")
+                                            .addFilter(
+                                                Maximum.Filter.builder()
+                                                    .field(Maximum.Filter.Field.PRICE_ID)
+                                                    .operator(Maximum.Filter.Operator.INCLUDES)
+                                                    .addValue("string")
+                                                    .build()
+                                            )
+                                            .maximumAmount("maximum_amount")
+                                            .build()
+                                    )
+                                    .maximumAmount("maximum_amount")
+                                    .metadata(
+                                        Price.UnitPrice.Metadata.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
+                                    .minimum(
+                                        Minimum.builder()
+                                            .addAppliesToPriceId("string")
+                                            .addFilter(
+                                                Minimum.Filter.builder()
+                                                    .field(Minimum.Filter.Field.PRICE_ID)
+                                                    .operator(Minimum.Filter.Operator.INCLUDES)
+                                                    .addValue("string")
+                                                    .build()
+                                            )
+                                            .minimumAmount("minimum_amount")
+                                            .build()
+                                    )
+                                    .minimumAmount("minimum_amount")
+                                    .name("name")
+                                    .planPhaseOrder(0L)
+                                    .priceType(Price.UnitPrice.PriceType.USAGE_PRICE)
+                                    .replacesPriceId("replaces_price_id")
+                                    .unitConfig(
+                                        UnitConfig.builder()
+                                            .unitAmount("unit_amount")
+                                            .prorated(true)
+                                            .scalingFactor(0.0)
+                                            .build()
+                                    )
+                                    .dimensionalPriceConfiguration(
+                                        DimensionalPriceConfiguration.builder()
+                                            .addDimensionValue("string")
+                                            .dimensionalPriceGroupId("dimensional_price_group_id")
+                                            .build()
+                                    )
+                                    .licenseType(
+                                        Price.UnitPrice.LicenseType.builder()
+                                            .id("id")
+                                            .groupingKey("grouping_key")
+                                            .name("name")
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .product(
+                                Plan.Product.builder()
+                                    .id("id")
+                                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .name("name")
+                                    .build()
+                            )
+                            .status(Plan.Status.ACTIVE)
+                            .trialConfig(
+                                Plan.TrialConfig.builder()
+                                    .trialPeriod(0L)
+                                    .trialPeriodUnit(Plan.TrialConfig.TrialPeriodUnit.DAYS)
+                                    .build()
+                            )
+                            .version(0L)
+                            .build()
+                    )
+                    .properties(
+                        PlanEditedWebhookEvent.Properties.builder()
+                            .previousAttributes(
+                                PlanEditedWebhookEvent.Properties.PreviousAttributes.builder()
+                                    .description("description")
+                                    .externalPlanId("external_plan_id")
+                                    .metadata(
+                                        PlanEditedWebhookEvent.Properties.PreviousAttributes
+                                            .Metadata
+                                            .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
+                                    .name("name")
+                                    .status(
+                                        PlanEditedWebhookEvent.Properties.PreviousAttributes.Status
+                                            .ACTIVE
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .type(PlanEditedWebhookEvent.Type.PLAN_EDITED)
                     .build()
             )
 
@@ -26202,7 +27210,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).contains(planVersionCreated)
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -26472,7 +27482,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).contains(priceEdited)
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -26735,7 +27747,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).contains(resourceEventTest)
@@ -27283,7 +28297,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -28268,7 +29284,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -29639,7 +30657,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -31427,7 +32447,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -32534,7 +33556,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -33586,7 +34610,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -35329,7 +36355,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -37179,7 +38207,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -39022,7 +40052,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -40766,7 +41798,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -42511,7 +43545,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -44249,7 +45285,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -45349,7 +46387,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -45660,7 +46700,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -45857,7 +46899,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -46182,7 +47226,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -47262,7 +48308,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -49002,7 +50050,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -50743,7 +51793,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -52488,7 +53540,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -54340,7 +55394,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -56184,7 +57240,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -57909,7 +58967,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -59752,7 +60812,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -60858,7 +61920,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty
@@ -61070,7 +62134,9 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.metricEventsDroppedByWatermark()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodCreated()).isEmpty
         assertThat(unwrapWebhookEvent.paymentMethodDeleted()).isEmpty
+        assertThat(unwrapWebhookEvent.planCreated()).isEmpty
         assertThat(unwrapWebhookEvent.planDefaultVersionSet()).isEmpty
+        assertThat(unwrapWebhookEvent.planEdited()).isEmpty
         assertThat(unwrapWebhookEvent.planVersionCreated()).isEmpty
         assertThat(unwrapWebhookEvent.priceEdited()).isEmpty
         assertThat(unwrapWebhookEvent.resourceEventTest()).isEmpty

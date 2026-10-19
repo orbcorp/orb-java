@@ -89,7 +89,9 @@ private constructor(
     private val metricEventsDroppedByWatermark: MetricEventsDroppedByWatermarkWebhookEvent? = null,
     private val paymentMethodCreated: PaymentMethodCreatedWebhookEvent? = null,
     private val paymentMethodDeleted: PaymentMethodDeletedWebhookEvent? = null,
+    private val planCreated: PlanCreatedWebhookEvent? = null,
     private val planDefaultVersionSet: PlanDefaultVersionSetWebhookEvent? = null,
+    private val planEdited: PlanEditedWebhookEvent? = null,
     private val planVersionCreated: PlanVersionCreatedWebhookEvent? = null,
     private val priceEdited: PriceEditedWebhookEvent? = null,
     private val resourceEventTest: ResourceEventTestWebhookEvent? = null,
@@ -354,9 +356,15 @@ private constructor(
     fun paymentMethodDeleted(): Optional<PaymentMethodDeletedWebhookEvent> =
         Optional.ofNullable(paymentMethodDeleted)
 
+    /** Issued when a plan is created, or when a draft plan is published. */
+    fun planCreated(): Optional<PlanCreatedWebhookEvent> = Optional.ofNullable(planCreated)
+
     /** Issued when a plan's default version is set. */
     fun planDefaultVersionSet(): Optional<PlanDefaultVersionSetWebhookEvent> =
         Optional.ofNullable(planDefaultVersionSet)
+
+    /** Issued when a plan's name, description, external plan ID, metadata or status is edited. */
+    fun planEdited(): Optional<PlanEditedWebhookEvent> = Optional.ofNullable(planEdited)
 
     /** Issued when a new plan version is created. */
     fun planVersionCreated(): Optional<PlanVersionCreatedWebhookEvent> =
@@ -591,7 +599,11 @@ private constructor(
 
     fun isPaymentMethodDeleted(): Boolean = paymentMethodDeleted != null
 
+    fun isPlanCreated(): Boolean = planCreated != null
+
     fun isPlanDefaultVersionSet(): Boolean = planDefaultVersionSet != null
+
+    fun isPlanEdited(): Boolean = planEdited != null
 
     fun isPlanVersionCreated(): Boolean = planVersionCreated != null
 
@@ -860,9 +872,15 @@ private constructor(
     fun asPaymentMethodDeleted(): PaymentMethodDeletedWebhookEvent =
         paymentMethodDeleted.getOrThrow("paymentMethodDeleted")
 
+    /** Issued when a plan is created, or when a draft plan is published. */
+    fun asPlanCreated(): PlanCreatedWebhookEvent = planCreated.getOrThrow("planCreated")
+
     /** Issued when a plan's default version is set. */
     fun asPlanDefaultVersionSet(): PlanDefaultVersionSetWebhookEvent =
         planDefaultVersionSet.getOrThrow("planDefaultVersionSet")
+
+    /** Issued when a plan's name, description, external plan ID, metadata or status is edited. */
+    fun asPlanEdited(): PlanEditedWebhookEvent = planEdited.getOrThrow("planEdited")
 
     /** Issued when a new plan version is created. */
     fun asPlanVersionCreated(): PlanVersionCreatedWebhookEvent =
@@ -1112,8 +1130,10 @@ private constructor(
                 visitor.visitMetricEventsDroppedByWatermark(metricEventsDroppedByWatermark)
             paymentMethodCreated != null -> visitor.visitPaymentMethodCreated(paymentMethodCreated)
             paymentMethodDeleted != null -> visitor.visitPaymentMethodDeleted(paymentMethodDeleted)
+            planCreated != null -> visitor.visitPlanCreated(planCreated)
             planDefaultVersionSet != null ->
                 visitor.visitPlanDefaultVersionSet(planDefaultVersionSet)
+            planEdited != null -> visitor.visitPlanEdited(planEdited)
             planVersionCreated != null -> visitor.visitPlanVersionCreated(planVersionCreated)
             priceEdited != null -> visitor.visitPriceEdited(priceEdited)
             resourceEventTest != null -> visitor.visitResourceEventTest(resourceEventTest)
@@ -1485,10 +1505,18 @@ private constructor(
                     paymentMethodDeleted.validate()
                 }
 
+                override fun visitPlanCreated(planCreated: PlanCreatedWebhookEvent) {
+                    planCreated.validate()
+                }
+
                 override fun visitPlanDefaultVersionSet(
                     planDefaultVersionSet: PlanDefaultVersionSetWebhookEvent
                 ) {
                     planDefaultVersionSet.validate()
+                }
+
+                override fun visitPlanEdited(planEdited: PlanEditedWebhookEvent) {
+                    planEdited.validate()
                 }
 
                 override fun visitPlanVersionCreated(
@@ -1888,9 +1916,15 @@ private constructor(
                     paymentMethodDeleted: PaymentMethodDeletedWebhookEvent
                 ) = paymentMethodDeleted.validity()
 
+                override fun visitPlanCreated(planCreated: PlanCreatedWebhookEvent) =
+                    planCreated.validity()
+
                 override fun visitPlanDefaultVersionSet(
                     planDefaultVersionSet: PlanDefaultVersionSetWebhookEvent
                 ) = planDefaultVersionSet.validity()
+
+                override fun visitPlanEdited(planEdited: PlanEditedWebhookEvent) =
+                    planEdited.validity()
 
                 override fun visitPlanVersionCreated(
                     planVersionCreated: PlanVersionCreatedWebhookEvent
@@ -2074,7 +2108,9 @@ private constructor(
             metricEventsDroppedByWatermark == other.metricEventsDroppedByWatermark &&
             paymentMethodCreated == other.paymentMethodCreated &&
             paymentMethodDeleted == other.paymentMethodDeleted &&
+            planCreated == other.planCreated &&
             planDefaultVersionSet == other.planDefaultVersionSet &&
+            planEdited == other.planEdited &&
             planVersionCreated == other.planVersionCreated &&
             priceEdited == other.priceEdited &&
             resourceEventTest == other.resourceEventTest &&
@@ -2160,7 +2196,9 @@ private constructor(
             metricEventsDroppedByWatermark,
             paymentMethodCreated,
             paymentMethodDeleted,
+            planCreated,
             planDefaultVersionSet,
+            planEdited,
             planVersionCreated,
             priceEdited,
             resourceEventTest,
@@ -2284,8 +2322,10 @@ private constructor(
                 "UnwrapWebhookEvent{paymentMethodCreated=$paymentMethodCreated}"
             paymentMethodDeleted != null ->
                 "UnwrapWebhookEvent{paymentMethodDeleted=$paymentMethodDeleted}"
+            planCreated != null -> "UnwrapWebhookEvent{planCreated=$planCreated}"
             planDefaultVersionSet != null ->
                 "UnwrapWebhookEvent{planDefaultVersionSet=$planDefaultVersionSet}"
+            planEdited != null -> "UnwrapWebhookEvent{planEdited=$planEdited}"
             planVersionCreated != null ->
                 "UnwrapWebhookEvent{planVersionCreated=$planVersionCreated}"
             priceEdited != null -> "UnwrapWebhookEvent{priceEdited=$priceEdited}"
@@ -2658,10 +2698,22 @@ private constructor(
         fun ofPaymentMethodDeleted(paymentMethodDeleted: PaymentMethodDeletedWebhookEvent) =
             UnwrapWebhookEvent(paymentMethodDeleted = paymentMethodDeleted)
 
+        /** Issued when a plan is created, or when a draft plan is published. */
+        @JvmStatic
+        fun ofPlanCreated(planCreated: PlanCreatedWebhookEvent) =
+            UnwrapWebhookEvent(planCreated = planCreated)
+
         /** Issued when a plan's default version is set. */
         @JvmStatic
         fun ofPlanDefaultVersionSet(planDefaultVersionSet: PlanDefaultVersionSetWebhookEvent) =
             UnwrapWebhookEvent(planDefaultVersionSet = planDefaultVersionSet)
+
+        /**
+         * Issued when a plan's name, description, external plan ID, metadata or status is edited.
+         */
+        @JvmStatic
+        fun ofPlanEdited(planEdited: PlanEditedWebhookEvent) =
+            UnwrapWebhookEvent(planEdited = planEdited)
 
         /** Issued when a new plan version is created. */
         @JvmStatic
@@ -3101,8 +3153,16 @@ private constructor(
         /** Issued when a payment method is deleted. */
         fun visitPaymentMethodDeleted(paymentMethodDeleted: PaymentMethodDeletedWebhookEvent): T
 
+        /** Issued when a plan is created, or when a draft plan is published. */
+        fun visitPlanCreated(planCreated: PlanCreatedWebhookEvent): T
+
         /** Issued when a plan's default version is set. */
         fun visitPlanDefaultVersionSet(planDefaultVersionSet: PlanDefaultVersionSetWebhookEvent): T
+
+        /**
+         * Issued when a plan's name, description, external plan ID, metadata or status is edited.
+         */
+        fun visitPlanEdited(planEdited: PlanEditedWebhookEvent): T
 
         /** Issued when a new plan version is created. */
         fun visitPlanVersionCreated(planVersionCreated: PlanVersionCreatedWebhookEvent): T
@@ -3563,8 +3623,14 @@ private constructor(
                             ?.let { UnwrapWebhookEvent(paymentMethodCreated = it, _json = json) },
                         tryDeserialize(node, jacksonTypeRef<PaymentMethodDeletedWebhookEvent>())
                             ?.let { UnwrapWebhookEvent(paymentMethodDeleted = it, _json = json) },
+                        tryDeserialize(node, jacksonTypeRef<PlanCreatedWebhookEvent>())?.let {
+                            UnwrapWebhookEvent(planCreated = it, _json = json)
+                        },
                         tryDeserialize(node, jacksonTypeRef<PlanDefaultVersionSetWebhookEvent>())
                             ?.let { UnwrapWebhookEvent(planDefaultVersionSet = it, _json = json) },
+                        tryDeserialize(node, jacksonTypeRef<PlanEditedWebhookEvent>())?.let {
+                            UnwrapWebhookEvent(planEdited = it, _json = json)
+                        },
                         tryDeserialize(node, jacksonTypeRef<PlanVersionCreatedWebhookEvent>())
                             ?.let { UnwrapWebhookEvent(planVersionCreated = it, _json = json) },
                         tryDeserialize(node, jacksonTypeRef<PriceEditedWebhookEvent>())?.let {
@@ -3888,8 +3954,10 @@ private constructor(
                     generator.writeObject(value.paymentMethodCreated)
                 value.paymentMethodDeleted != null ->
                     generator.writeObject(value.paymentMethodDeleted)
+                value.planCreated != null -> generator.writeObject(value.planCreated)
                 value.planDefaultVersionSet != null ->
                     generator.writeObject(value.planDefaultVersionSet)
+                value.planEdited != null -> generator.writeObject(value.planEdited)
                 value.planVersionCreated != null -> generator.writeObject(value.planVersionCreated)
                 value.priceEdited != null -> generator.writeObject(value.priceEdited)
                 value.resourceEventTest != null -> generator.writeObject(value.resourceEventTest)
