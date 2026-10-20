@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.42.0](https://github.com/orbcorp/orb-java/compare/v1.41.0...v1.42.0) (2026-10-20)
+
+
+### Features
+
+* **api:** add `plan.created` and `plan.edited` webhook events ([a59bee6](https://github.com/orbcorp/orb-java/commit/a59bee67bd9a43ec44ada07a6b8c10f6e9fdb195))
+* **api:** add `tax_reason` field to tax amount entries ([b97c460](https://github.com/orbcorp/orb-java/commit/b97c4600fccbad0ff89541abf113c3fb43b30579))
+
 ## [1.41.0](https://github.com/orbcorp/orb-java/compare/v1.40.0...v1.41.0) (2026-10-16)
 
 
