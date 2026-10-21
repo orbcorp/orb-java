@@ -39,6 +39,7 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(BackfillReflectedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(JsonValue.from(mapOf<String, Any>()))
                 .type(BackfillReflectedWebhookEvent.Type.BACKFILL_REFLECTED)
                 .build()
@@ -153,6 +154,7 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(BackfillReflectedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(JsonValue.from(mapOf<String, Any>()))
                     .type(BackfillReflectedWebhookEvent.Type.BACKFILL_REFLECTED)
                     .build()
@@ -190,6 +192,7 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(BackfillRevertedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(JsonValue.from(mapOf<String, Any>()))
                 .type(BackfillRevertedWebhookEvent.Type.BACKFILL_REVERTED)
                 .build()
@@ -304,6 +307,7 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(BackfillRevertedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(JsonValue.from(mapOf<String, Any>()))
                     .type(BackfillRevertedWebhookEvent.Type.BACKFILL_REVERTED)
                     .build()
@@ -364,6 +368,7 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(BillableMetricEditedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     BillableMetricEditedWebhookEvent.Properties.builder()
                         .previousAttributes(
@@ -518,6 +523,7 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(BillableMetricEditedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         BillableMetricEditedWebhookEvent.Properties.builder()
                             .previousAttributes(
@@ -657,6 +663,7 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(CreditBlockAccountingSyncFailedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     CreditBlockAccountingSyncFailedWebhookEvent.Properties.builder()
                         .connectionType("connection_type")
@@ -866,6 +873,7 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(CreditBlockAccountingSyncFailedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         CreditBlockAccountingSyncFailedWebhookEvent.Properties.builder()
                             .connectionType("connection_type")
@@ -996,6 +1004,7 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(CreditBlockAccountingSyncSucceededWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     CreditBlockAccountingSyncSucceededWebhookEvent.Properties.builder()
                         .connectionType("connection_type")
@@ -1214,6 +1223,9 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(
+                        CreditBlockAccountingSyncSucceededWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         CreditBlockAccountingSyncSucceededWebhookEvent.Properties.builder()
                             .connectionType("connection_type")
@@ -1350,6 +1362,7 @@ internal class UnwrapWebhookEventTest {
                         )
                         .build()
                 )
+                .payloadStyle(CreditNoteAccountingSyncFailedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     CreditNoteAccountingSyncFailedWebhookEvent.Properties.builder()
                         .connectionType("connection_type")
@@ -1568,6 +1581,7 @@ internal class UnwrapWebhookEventTest {
                             )
                             .build()
                     )
+                    .payloadStyle(CreditNoteAccountingSyncFailedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         CreditNoteAccountingSyncFailedWebhookEvent.Properties.builder()
                             .connectionType("connection_type")
@@ -1705,6 +1719,7 @@ internal class UnwrapWebhookEventTest {
                         )
                         .build()
                 )
+                .payloadStyle(CreditNoteAccountingSyncSucceededWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     CreditNoteAccountingSyncSucceededWebhookEvent.Properties.builder()
                         .connectionType("connection_type")
@@ -1924,6 +1939,9 @@ internal class UnwrapWebhookEventTest {
                             )
                             .build()
                     )
+                    .payloadStyle(
+                        CreditNoteAccountingSyncSucceededWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         CreditNoteAccountingSyncSucceededWebhookEvent.Properties.builder()
                             .connectionType("connection_type")
@@ -2038,6 +2056,7 @@ internal class UnwrapWebhookEventTest {
                         )
                         .build()
                 )
+                .payloadStyle(CreditNoteIssuedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(JsonValue.from(mapOf<String, Any>()))
                 .type(CreditNoteIssuedWebhookEvent.Type.CREDIT_NOTE_ISSUED)
                 .build()
@@ -2224,6 +2243,7 @@ internal class UnwrapWebhookEventTest {
                             )
                             .build()
                     )
+                    .payloadStyle(CreditNoteIssuedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(JsonValue.from(mapOf<String, Any>()))
                     .type(CreditNoteIssuedWebhookEvent.Type.CREDIT_NOTE_ISSUED)
                     .build()
@@ -2331,6 +2351,7 @@ internal class UnwrapWebhookEventTest {
                         )
                         .build()
                 )
+                .payloadStyle(CreditNoteMarkedAsVoidWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(JsonValue.from(mapOf<String, Any>()))
                 .type(CreditNoteMarkedAsVoidWebhookEvent.Type.CREDIT_NOTE_MARKED_AS_VOID)
                 .build()
@@ -2517,6 +2538,7 @@ internal class UnwrapWebhookEventTest {
                             )
                             .build()
                     )
+                    .payloadStyle(CreditNoteMarkedAsVoidWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(JsonValue.from(mapOf<String, Any>()))
                     .type(CreditNoteMarkedAsVoidWebhookEvent.Type.CREDIT_NOTE_MARKED_AS_VOID)
                     .build()
@@ -2673,6 +2695,7 @@ internal class UnwrapWebhookEventTest {
                         )
                         .build()
                 )
+                .payloadStyle(CustomerAccountingSyncFailedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     CustomerAccountingSyncFailedWebhookEvent.Properties.builder()
                         .connectionType("connection_type")
@@ -2917,6 +2940,7 @@ internal class UnwrapWebhookEventTest {
                             )
                             .build()
                     )
+                    .payloadStyle(CustomerAccountingSyncFailedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         CustomerAccountingSyncFailedWebhookEvent.Properties.builder()
                             .connectionType("connection_type")
@@ -3082,6 +3106,7 @@ internal class UnwrapWebhookEventTest {
                         )
                         .build()
                 )
+                .payloadStyle(CustomerAccountingSyncSucceededWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     CustomerAccountingSyncSucceededWebhookEvent.Properties.builder()
                         .connectionType("connection_type")
@@ -3328,6 +3353,7 @@ internal class UnwrapWebhookEventTest {
                             )
                             .build()
                     )
+                    .payloadStyle(CustomerAccountingSyncSucceededWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         CustomerAccountingSyncSucceededWebhookEvent.Properties.builder()
                             .connectionType("connection_type")
@@ -3471,6 +3497,7 @@ internal class UnwrapWebhookEventTest {
                         )
                         .build()
                 )
+                .payloadStyle(CustomerBalanceTransactionCreatedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     CustomerBalanceTransactionCreatedWebhookEvent.Properties.builder()
                         .balanceTransaction(
@@ -3723,6 +3750,9 @@ internal class UnwrapWebhookEventTest {
                             )
                             .build()
                     )
+                    .payloadStyle(
+                        CustomerBalanceTransactionCreatedWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         CustomerBalanceTransactionCreatedWebhookEvent.Properties.builder()
                             .balanceTransaction(
@@ -3891,6 +3921,7 @@ internal class UnwrapWebhookEventTest {
                         )
                         .build()
                 )
+                .payloadStyle(CustomerCreatedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(JsonValue.from(mapOf<String, Any>()))
                 .type(CustomerCreatedWebhookEvent.Type.CUSTOMER_CREATED)
                 .build()
@@ -4107,6 +4138,7 @@ internal class UnwrapWebhookEventTest {
                             )
                             .build()
                     )
+                    .payloadStyle(CustomerCreatedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(JsonValue.from(mapOf<String, Any>()))
                     .type(CustomerCreatedWebhookEvent.Type.CUSTOMER_CREATED)
                     .build()
@@ -4243,6 +4275,7 @@ internal class UnwrapWebhookEventTest {
                         )
                         .build()
                 )
+                .payloadStyle(CustomerCreditBalanceDepletedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     CustomerCreditBalanceDepletedWebhookEvent.Properties.builder()
                         .alertConfiguration(
@@ -4584,6 +4617,7 @@ internal class UnwrapWebhookEventTest {
                             )
                             .build()
                     )
+                    .payloadStyle(CustomerCreditBalanceDepletedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         CustomerCreditBalanceDepletedWebhookEvent.Properties.builder()
                             .alertConfiguration(
@@ -4847,6 +4881,7 @@ internal class UnwrapWebhookEventTest {
                         )
                         .build()
                 )
+                .payloadStyle(CustomerCreditBalanceDroppedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     CustomerCreditBalanceDroppedWebhookEvent.Properties.builder()
                         .alertConfiguration(
@@ -5187,6 +5222,7 @@ internal class UnwrapWebhookEventTest {
                             )
                             .build()
                     )
+                    .payloadStyle(CustomerCreditBalanceDroppedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         CustomerCreditBalanceDroppedWebhookEvent.Properties.builder()
                             .alertConfiguration(
@@ -5451,6 +5487,7 @@ internal class UnwrapWebhookEventTest {
                         )
                         .build()
                 )
+                .payloadStyle(CustomerCreditBalanceRecoveredWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     CustomerCreditBalanceRecoveredWebhookEvent.Properties.builder()
                         .alertConfiguration(
@@ -5793,6 +5830,7 @@ internal class UnwrapWebhookEventTest {
                             )
                             .build()
                     )
+                    .payloadStyle(CustomerCreditBalanceRecoveredWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         CustomerCreditBalanceRecoveredWebhookEvent.Properties.builder()
                             .alertConfiguration(
@@ -6059,6 +6097,7 @@ internal class UnwrapWebhookEventTest {
                         )
                         .build()
                 )
+                .payloadStyle(CustomerCreditLedgerIncrementedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     CustomerCreditLedgerIncrementedWebhookEvent.Properties.builder()
                         .block(
@@ -6391,6 +6430,7 @@ internal class UnwrapWebhookEventTest {
                             )
                             .build()
                     )
+                    .payloadStyle(CustomerCreditLedgerIncrementedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         CustomerCreditLedgerIncrementedWebhookEvent.Properties.builder()
                             .block(
@@ -6645,6 +6685,7 @@ internal class UnwrapWebhookEventTest {
                         )
                         .build()
                 )
+                .payloadStyle(CustomerEditedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     CustomerEditedWebhookEvent.Properties.builder()
                         .previousAttributes(
@@ -6910,6 +6951,7 @@ internal class UnwrapWebhookEventTest {
                             )
                             .build()
                     )
+                    .payloadStyle(CustomerEditedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         CustomerEditedWebhookEvent.Properties.builder()
                             .previousAttributes(
@@ -6979,6 +7021,7 @@ internal class UnwrapWebhookEventTest {
             DataExportsTransferErrorWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(DataExportsTransferErrorWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     DataExportsTransferErrorWebhookEvent.Properties.builder()
                         .description("description")
@@ -7087,6 +7130,7 @@ internal class UnwrapWebhookEventTest {
                 DataExportsTransferErrorWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(DataExportsTransferErrorWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         DataExportsTransferErrorWebhookEvent.Properties.builder()
                             .description("description")
@@ -7117,6 +7161,7 @@ internal class UnwrapWebhookEventTest {
             DataExportsTransferSuccessWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(DataExportsTransferSuccessWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     DataExportsTransferSuccessWebhookEvent.Properties.builder()
                         .description("description")
@@ -7225,6 +7270,7 @@ internal class UnwrapWebhookEventTest {
                 DataExportsTransferSuccessWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(DataExportsTransferSuccessWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         DataExportsTransferSuccessWebhookEvent.Properties.builder()
                             .description("description")
@@ -7254,6 +7300,7 @@ internal class UnwrapWebhookEventTest {
             EventUnmatchedEventWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(EventUnmatchedEventWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     EventUnmatchedEventWebhookEvent.Properties.builder()
                         .event(
@@ -7369,6 +7416,7 @@ internal class UnwrapWebhookEventTest {
                 EventUnmatchedEventWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(EventUnmatchedEventWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         EventUnmatchedEventWebhookEvent.Properties.builder()
                             .event(
@@ -7408,6 +7456,7 @@ internal class UnwrapWebhookEventTest {
             IngestionUnmatchedCustomerIdsWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(IngestionUnmatchedCustomerIdsWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     IngestionUnmatchedCustomerIdsWebhookEvent.Properties.builder()
                         .addExternalCustomerId("string")
@@ -7513,6 +7562,7 @@ internal class UnwrapWebhookEventTest {
                 IngestionUnmatchedCustomerIdsWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(IngestionUnmatchedCustomerIdsWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         IngestionUnmatchedCustomerIdsWebhookEvent.Properties.builder()
                             .addExternalCustomerId("string")
@@ -7960,6 +8010,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoiceAccountingSyncFailedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoiceAccountingSyncFailedWebhookEvent.Properties.builder()
                         .connectionType("connection_type")
@@ -8496,6 +8547,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(InvoiceAccountingSyncFailedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         InvoiceAccountingSyncFailedWebhookEvent.Properties.builder()
                             .connectionType("connection_type")
@@ -8944,6 +8996,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoiceAccountingSyncSucceededWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoiceAccountingSyncSucceededWebhookEvent.Properties.builder()
                         .connectionType("connection_type")
@@ -9482,6 +9535,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(InvoiceAccountingSyncSucceededWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         InvoiceAccountingSyncSucceededWebhookEvent.Properties.builder()
                             .connectionType("connection_type")
@@ -9527,6 +9581,9 @@ internal class UnwrapWebhookEventTest {
                         .status("status")
                         .subscriptionId("subscription_id")
                         .build()
+                )
+                .payloadStyle(
+                    InvoiceAutomationScheduleStepExecutedWebhookEvent.PayloadStyle.EXPANDED
                 )
                 .properties(
                     InvoiceAutomationScheduleStepExecutedWebhookEvent.Properties.builder()
@@ -9675,6 +9732,9 @@ internal class UnwrapWebhookEventTest {
                             .subscriptionId("subscription_id")
                             .build()
                     )
+                    .payloadStyle(
+                        InvoiceAutomationScheduleStepExecutedWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         InvoiceAutomationScheduleStepExecutedWebhookEvent.Properties.builder()
                             .addAction(
@@ -9723,6 +9783,7 @@ internal class UnwrapWebhookEventTest {
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .invoice("invoice")
+                .payloadStyle(InvoiceCostDataExportedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoiceCostDataExportedWebhookEvent.Properties.builder()
                         .exportedDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -9828,6 +9889,7 @@ internal class UnwrapWebhookEventTest {
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .invoice("invoice")
+                    .payloadStyle(InvoiceCostDataExportedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         InvoiceCostDataExportedWebhookEvent.Properties.builder()
                             .exportedDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -10253,6 +10315,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoiceDunningScheduleCreatedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoiceDunningScheduleCreatedWebhookEvent.Properties.builder()
                         .dunningSchedule(
@@ -10794,6 +10857,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(InvoiceDunningScheduleCreatedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         InvoiceDunningScheduleCreatedWebhookEvent.Properties.builder()
                             .dunningSchedule(
@@ -11248,6 +11312,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoiceDunningScheduleEndedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoiceDunningScheduleEndedWebhookEvent.Properties.builder()
                         .dunningSchedule(
@@ -11785,6 +11850,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(InvoiceDunningScheduleEndedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         InvoiceDunningScheduleEndedWebhookEvent.Properties.builder()
                             .dunningSchedule(
@@ -12237,6 +12303,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoiceDunningScheduleResetWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoiceDunningScheduleResetWebhookEvent.Properties.builder()
                         .dunningSchedule(
@@ -12771,6 +12838,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(InvoiceDunningScheduleResetWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         InvoiceDunningScheduleResetWebhookEvent.Properties.builder()
                             .dunningSchedule(
@@ -13221,6 +13289,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoiceDunningScheduleStepExecutedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoiceDunningScheduleStepExecutedWebhookEvent.Properties.builder()
                         .dunningStep(
@@ -13753,6 +13822,9 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(
+                        InvoiceDunningScheduleStepExecutedWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         InvoiceDunningScheduleStepExecutedWebhookEvent.Properties.builder()
                             .dunningStep(
@@ -14194,6 +14266,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoiceEditedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoiceEditedWebhookEvent.Properties.builder()
                         .previousAttributes(
@@ -15024,6 +15097,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(InvoiceEditedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         InvoiceEditedWebhookEvent.Properties.builder()
                             .previousAttributes(
@@ -15412,6 +15486,7 @@ internal class UnwrapWebhookEventTest {
                         .subscription(SubscriptionMinified.builder().id("VDGsT23osdLb84KD").build())
                         .build()
                 )
+                .payloadStyle(InvoiceInvoiceDateElapsedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoiceInvoiceDateElapsedWebhookEvent.Properties.builder()
                         .invoiceDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -15531,6 +15606,7 @@ internal class UnwrapWebhookEventTest {
                             )
                             .build()
                     )
+                    .payloadStyle(InvoiceInvoiceDateElapsedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         InvoiceInvoiceDateElapsedWebhookEvent.Properties.builder()
                             .invoiceDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -15954,6 +16030,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoiceIssueFailedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoiceIssueFailedWebhookEvent.Properties.builder().reason("reason").build()
                 )
@@ -16463,6 +16540,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(InvoiceIssueFailedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         InvoiceIssueFailedWebhookEvent.Properties.builder().reason("reason").build()
                     )
@@ -16884,6 +16962,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoiceIssuedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoiceIssuedWebhookEvent.Properties.builder()
                         .automaticallyMarkedAsPaid(true)
@@ -17395,6 +17474,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(InvoiceIssuedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         InvoiceIssuedWebhookEvent.Properties.builder()
                             .automaticallyMarkedAsPaid(true)
@@ -17553,6 +17633,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoiceIssuedSummaryWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoiceIssuedSummaryWebhookEvent.Properties.builder()
                         .automaticallyMarkedAsPaid(true)
@@ -17790,6 +17871,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(InvoiceIssuedSummaryWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         InvoiceIssuedSummaryWebhookEvent.Properties.builder()
                             .automaticallyMarkedAsPaid(true)
@@ -18213,6 +18295,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoiceManuallyMarkedAsPaidWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoiceManuallyMarkedAsPaidWebhookEvent.Properties.builder()
                         .externalId("external_id")
@@ -18728,6 +18811,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(InvoiceManuallyMarkedAsPaidWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         InvoiceManuallyMarkedAsPaidWebhookEvent.Properties.builder()
                             .externalId("external_id")
@@ -19155,6 +19239,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoiceManuallyMarkedAsVoidWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(JsonValue.from(mapOf<String, Any>()))
                 .type(InvoiceManuallyMarkedAsVoidWebhookEvent.Type.INVOICE_MANUALLY_MARKED_AS_VOID)
                 .build()
@@ -19664,6 +19749,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(InvoiceManuallyMarkedAsVoidWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(JsonValue.from(mapOf<String, Any>()))
                     .type(
                         InvoiceManuallyMarkedAsVoidWebhookEvent.Type.INVOICE_MANUALLY_MARKED_AS_VOID
@@ -20085,6 +20171,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoicePaymentFailedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoicePaymentFailedWebhookEvent.Properties.builder()
                         .paymentProvider("payment_provider")
@@ -20598,6 +20685,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(InvoicePaymentFailedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         InvoicePaymentFailedWebhookEvent.Properties.builder()
                             .paymentProvider("payment_provider")
@@ -21023,6 +21111,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoicePaymentProcessingWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoicePaymentProcessingWebhookEvent.Properties.builder()
                         .paymentProviderId("payment_provider_id")
@@ -21536,6 +21625,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(InvoicePaymentProcessingWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         InvoicePaymentProcessingWebhookEvent.Properties.builder()
                             .paymentProviderId("payment_provider_id")
@@ -21960,6 +22050,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoicePaymentSucceededWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoicePaymentSucceededWebhookEvent.Properties.builder()
                         .paymentProvider("payment_provider")
@@ -22475,6 +22566,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(InvoicePaymentSucceededWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         InvoicePaymentSucceededWebhookEvent.Properties.builder()
                             .paymentProvider("payment_provider")
@@ -22901,6 +22993,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoiceSyncFailedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoiceSyncFailedWebhookEvent.Properties.builder()
                         .paymentProvider("payment_provider")
@@ -23413,6 +23506,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(InvoiceSyncFailedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         InvoiceSyncFailedWebhookEvent.Properties.builder()
                             .paymentProvider("payment_provider")
@@ -23837,6 +23931,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoiceSyncSucceededWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoiceSyncSucceededWebhookEvent.Properties.builder()
                         .paymentProvider("payment_provider")
@@ -24349,6 +24444,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(InvoiceSyncSucceededWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         InvoiceSyncSucceededWebhookEvent.Properties.builder()
                             .paymentProvider("payment_provider")
@@ -24773,6 +24869,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(InvoiceUndoMarkAsPaidWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(JsonValue.from(mapOf<String, Any>()))
                 .type(InvoiceUndoMarkAsPaidWebhookEvent.Type.INVOICE_UNDO_MARK_AS_PAID)
                 .build()
@@ -25280,6 +25377,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(InvoiceUndoMarkAsPaidWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(JsonValue.from(mapOf<String, Any>()))
                     .type(InvoiceUndoMarkAsPaidWebhookEvent.Type.INVOICE_UNDO_MARK_AS_PAID)
                     .build()
@@ -25300,6 +25398,7 @@ internal class UnwrapWebhookEventTest {
             InvoiceDueDateRecalculationCanceledWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(InvoiceDueDateRecalculationCanceledWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoiceDueDateRecalculationCanceledWebhookEvent.Properties.builder()
                         .canceledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -25409,6 +25508,9 @@ internal class UnwrapWebhookEventTest {
                 InvoiceDueDateRecalculationCanceledWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(
+                        InvoiceDueDateRecalculationCanceledWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         InvoiceDueDateRecalculationCanceledWebhookEvent.Properties.builder()
                             .canceledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -25437,6 +25539,9 @@ internal class UnwrapWebhookEventTest {
             InvoiceDueDateRecalculationCompletedWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(
+                    InvoiceDueDateRecalculationCompletedWebhookEvent.PayloadStyle.EXPANDED
+                )
                 .properties(
                     InvoiceDueDateRecalculationCompletedWebhookEvent.Properties.builder()
                         .completedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -25546,6 +25651,9 @@ internal class UnwrapWebhookEventTest {
                 InvoiceDueDateRecalculationCompletedWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(
+                        InvoiceDueDateRecalculationCompletedWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         InvoiceDueDateRecalculationCompletedWebhookEvent.Properties.builder()
                             .completedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -25574,6 +25682,7 @@ internal class UnwrapWebhookEventTest {
             InvoiceDueDateRecalculationStartedWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(InvoiceDueDateRecalculationStartedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     InvoiceDueDateRecalculationStartedWebhookEvent.Properties.builder()
                         .startedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -25682,6 +25791,9 @@ internal class UnwrapWebhookEventTest {
                 InvoiceDueDateRecalculationStartedWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(
+                        InvoiceDueDateRecalculationStartedWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         InvoiceDueDateRecalculationStartedWebhookEvent.Properties.builder()
                             .startedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -25709,6 +25821,7 @@ internal class UnwrapWebhookEventTest {
             MetricEventsDroppedByWatermarkWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(MetricEventsDroppedByWatermarkWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     MetricEventsDroppedByWatermarkWebhookEvent.Properties.builder()
                         .dropped(0L)
@@ -25819,6 +25932,7 @@ internal class UnwrapWebhookEventTest {
                 MetricEventsDroppedByWatermarkWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(MetricEventsDroppedByWatermarkWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         MetricEventsDroppedByWatermarkWebhookEvent.Properties.builder()
                             .dropped(0L)
@@ -25850,6 +25964,7 @@ internal class UnwrapWebhookEventTest {
             PaymentMethodCreatedWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(PaymentMethodCreatedWebhookEvent.PayloadStyle.EXPANDED)
                 .paymentMethod(
                     PaymentMethodCreatedWebhookEvent.PaymentMethod.builder()
                         .id("id")
@@ -25960,6 +26075,7 @@ internal class UnwrapWebhookEventTest {
                 PaymentMethodCreatedWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(PaymentMethodCreatedWebhookEvent.PayloadStyle.EXPANDED)
                     .paymentMethod(
                         PaymentMethodCreatedWebhookEvent.PaymentMethod.builder()
                             .id("id")
@@ -25994,6 +26110,7 @@ internal class UnwrapWebhookEventTest {
             PaymentMethodDeletedWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(PaymentMethodDeletedWebhookEvent.PayloadStyle.EXPANDED)
                 .paymentMethod(
                     PaymentMethodDeletedWebhookEvent.PaymentMethod.builder()
                         .id("id")
@@ -26104,6 +26221,7 @@ internal class UnwrapWebhookEventTest {
                 PaymentMethodDeletedWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(PaymentMethodDeletedWebhookEvent.PayloadStyle.EXPANDED)
                     .paymentMethod(
                         PaymentMethodDeletedWebhookEvent.PaymentMethod.builder()
                             .id("id")
@@ -26138,6 +26256,7 @@ internal class UnwrapWebhookEventTest {
             PlanCreatedWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(PlanCreatedWebhookEvent.PayloadStyle.EXPANDED)
                 .plan(
                     PlanCreatedWebhookEvent.Plan.builder()
                         .id("m2t5akQeh2obwxeU")
@@ -26242,6 +26361,7 @@ internal class UnwrapWebhookEventTest {
                 PlanCreatedWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(PlanCreatedWebhookEvent.PayloadStyle.EXPANDED)
                     .plan(
                         PlanCreatedWebhookEvent.Plan.builder()
                             .id("m2t5akQeh2obwxeU")
@@ -26269,6 +26389,7 @@ internal class UnwrapWebhookEventTest {
             PlanDefaultVersionSetWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(PlanDefaultVersionSetWebhookEvent.PayloadStyle.EXPANDED)
                 .plan(
                     PlanDefaultVersionSetWebhookEvent.Plan.builder()
                         .id("m2t5akQeh2obwxeU")
@@ -26378,6 +26499,7 @@ internal class UnwrapWebhookEventTest {
                 PlanDefaultVersionSetWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(PlanDefaultVersionSetWebhookEvent.PayloadStyle.EXPANDED)
                     .plan(
                         PlanDefaultVersionSetWebhookEvent.Plan.builder()
                             .id("m2t5akQeh2obwxeU")
@@ -26410,6 +26532,7 @@ internal class UnwrapWebhookEventTest {
             PlanEditedWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(PlanEditedWebhookEvent.PayloadStyle.EXPANDED)
                 .plan(
                     Plan.builder()
                         .id("id")
@@ -26830,6 +26953,7 @@ internal class UnwrapWebhookEventTest {
                 PlanEditedWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(PlanEditedWebhookEvent.PayloadStyle.EXPANDED)
                     .plan(
                         Plan.builder()
                             .id("id")
@@ -27187,6 +27311,7 @@ internal class UnwrapWebhookEventTest {
             PlanVersionCreatedWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(PlanVersionCreatedWebhookEvent.PayloadStyle.EXPANDED)
                 .plan(
                     PlanVersionCreatedWebhookEvent.Plan.builder()
                         .id("m2t5akQeh2obwxeU")
@@ -27296,6 +27421,7 @@ internal class UnwrapWebhookEventTest {
                 PlanVersionCreatedWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(PlanVersionCreatedWebhookEvent.PayloadStyle.EXPANDED)
                     .plan(
                         PlanVersionCreatedWebhookEvent.Plan.builder()
                             .id("m2t5akQeh2obwxeU")
@@ -27328,6 +27454,7 @@ internal class UnwrapWebhookEventTest {
             PriceEditedWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(PriceEditedWebhookEvent.PayloadStyle.EXPANDED)
                 .price(
                     Price.UnitPrice.builder()
                         .id("id")
@@ -27568,6 +27695,7 @@ internal class UnwrapWebhookEventTest {
                 PriceEditedWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(PriceEditedWebhookEvent.PayloadStyle.EXPANDED)
                     .price(
                         Price.UnitPrice.builder()
                             .id("id")
@@ -27734,6 +27862,7 @@ internal class UnwrapWebhookEventTest {
             ResourceEventTestWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(ResourceEventTestWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     ResourceEventTestWebhookEvent.Properties.builder().message("message").build()
                 )
@@ -27833,6 +27962,7 @@ internal class UnwrapWebhookEventTest {
                 ResourceEventTestWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(ResourceEventTestWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         ResourceEventTestWebhookEvent.Properties.builder()
                             .message("message")
@@ -28278,6 +28408,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(SalesOrderAccountingSyncFailedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     SalesOrderAccountingSyncFailedWebhookEvent.Properties.builder()
                         .connectionType("connection_type")
@@ -28817,6 +28948,7 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(SalesOrderAccountingSyncFailedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         SalesOrderAccountingSyncFailedWebhookEvent.Properties.builder()
                             .connectionType("connection_type")
@@ -29266,6 +29398,7 @@ internal class UnwrapWebhookEventTest {
                         .willAutoIssue(true)
                         .build()
                 )
+                .payloadStyle(SalesOrderAccountingSyncSucceededWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     SalesOrderAccountingSyncSucceededWebhookEvent.Properties.builder()
                         .connectionType("connection_type")
@@ -29806,6 +29939,9 @@ internal class UnwrapWebhookEventTest {
                             .willAutoIssue(true)
                             .build()
                     )
+                    .payloadStyle(
+                        SalesOrderAccountingSyncSucceededWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         SalesOrderAccountingSyncSucceededWebhookEvent.Properties.builder()
                             .connectionType("connection_type")
@@ -29855,6 +29991,7 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionAccountingSyncFailedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     SubscriptionAccountingSyncFailedWebhookEvent.Properties.builder()
                         .connectionType("connection_type")
@@ -30770,6 +30907,9 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(
+                        SubscriptionAccountingSyncFailedWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         SubscriptionAccountingSyncFailedWebhookEvent.Properties.builder()
                             .connectionType("connection_type")
@@ -31644,6 +31784,7 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionAccountingSyncSucceededWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     SubscriptionAccountingSyncSucceededWebhookEvent.Properties.builder()
                         .connectionType("connection_type")
@@ -32561,6 +32702,9 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(
+                        SubscriptionAccountingSyncSucceededWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         SubscriptionAccountingSyncSucceededWebhookEvent.Properties.builder()
                             .connectionType("connection_type")
@@ -33412,6 +33556,7 @@ internal class UnwrapWebhookEventTest {
             SubscriptionAlertDisabledWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionAlertDisabledWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     SubscriptionAlertDisabledWebhookEvent.Properties.builder()
                         .alertConfiguration(
@@ -33647,6 +33792,7 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionAlertDisabledWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(SubscriptionAlertDisabledWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         SubscriptionAlertDisabledWebhookEvent.Properties.builder()
                             .alertConfiguration(
@@ -33807,6 +33953,7 @@ internal class UnwrapWebhookEventTest {
             SubscriptionCancellationScheduledWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionCancellationScheduledWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     SubscriptionCancellationScheduledWebhookEvent.Properties.builder()
                         .cancellationDate("cancellation_date")
@@ -34701,6 +34848,9 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionCancellationScheduledWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(
+                        SubscriptionCancellationScheduledWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         SubscriptionCancellationScheduledWebhookEvent.Properties.builder()
                             .cancellationDate("cancellation_date")
@@ -35552,6 +35702,7 @@ internal class UnwrapWebhookEventTest {
             SubscriptionCancellationUnscheduledWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionCancellationUnscheduledWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     SubscriptionCancellationUnscheduledWebhookEvent.Properties.builder()
                         .originalCancellationDate("original_cancellation_date")
@@ -36446,6 +36597,9 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionCancellationUnscheduledWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(
+                        SubscriptionCancellationUnscheduledWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         SubscriptionCancellationUnscheduledWebhookEvent.Properties.builder()
                             .originalCancellationDate("original_cancellation_date")
@@ -37297,6 +37451,7 @@ internal class UnwrapWebhookEventTest {
             SubscriptionCostExceededWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionCostExceededWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     SubscriptionCostExceededWebhookEvent.Properties.builder()
                         .alertConfiguration(
@@ -38297,6 +38452,7 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionCostExceededWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(SubscriptionCostExceededWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         SubscriptionCostExceededWebhookEvent.Properties.builder()
                             .alertConfiguration(
@@ -39259,6 +39415,7 @@ internal class UnwrapWebhookEventTest {
             SubscriptionCreatedWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionCreatedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(JsonValue.from(mapOf<String, Any>()))
                 .subscription(
                     Subscription.builder()
@@ -40142,6 +40299,7 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionCreatedWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(SubscriptionCreatedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(JsonValue.from(mapOf<String, Any>()))
                     .subscription(
                         Subscription.builder()
@@ -40986,6 +41144,7 @@ internal class UnwrapWebhookEventTest {
             SubscriptionEditedWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionEditedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     SubscriptionEditedWebhookEvent.Properties.builder()
                         .previousAttributes(
@@ -41888,6 +42047,7 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionEditedWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(SubscriptionEditedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         SubscriptionEditedWebhookEvent.Properties.builder()
                             .previousAttributes(
@@ -42752,6 +42912,7 @@ internal class UnwrapWebhookEventTest {
             SubscriptionEndedWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionEndedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(JsonValue.from(mapOf<String, Any>()))
                 .subscription(
                     Subscription.builder()
@@ -43635,6 +43796,7 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionEndedWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(SubscriptionEndedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(JsonValue.from(mapOf<String, Any>()))
                     .subscription(
                         Subscription.builder()
@@ -44479,6 +44641,7 @@ internal class UnwrapWebhookEventTest {
             SubscriptionFixedFeeQuantityUpdatedWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionFixedFeeQuantityUpdatedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     SubscriptionFixedFeeQuantityUpdatedWebhookEvent.Properties.builder()
                         .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -45376,6 +45539,9 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionFixedFeeQuantityUpdatedWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(
+                        SubscriptionFixedFeeQuantityUpdatedWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         SubscriptionFixedFeeQuantityUpdatedWebhookEvent.Properties.builder()
                             .effectiveDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -46230,6 +46396,7 @@ internal class UnwrapWebhookEventTest {
             SubscriptionGroupedCostExceededWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionGroupedCostExceededWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     SubscriptionGroupedCostExceededWebhookEvent.Properties.builder()
                         .alertConfiguration(
@@ -46478,6 +46645,7 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionGroupedCostExceededWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(SubscriptionGroupedCostExceededWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         SubscriptionGroupedCostExceededWebhookEvent.Properties.builder()
                             .alertConfiguration(
@@ -46655,6 +46823,9 @@ internal class UnwrapWebhookEventTest {
             SubscriptionInvoicingThresholdExceededWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(
+                    SubscriptionInvoicingThresholdExceededWebhookEvent.PayloadStyle.EXPANDED
+                )
                 .properties(
                     SubscriptionInvoicingThresholdExceededWebhookEvent.Properties.builder()
                         .evaluatedAmount("evaluated_amount")
@@ -46791,6 +46962,9 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionInvoicingThresholdExceededWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(
+                        SubscriptionInvoicingThresholdExceededWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         SubscriptionInvoicingThresholdExceededWebhookEvent.Properties.builder()
                             .evaluatedAmount("evaluated_amount")
@@ -46847,6 +47021,7 @@ internal class UnwrapWebhookEventTest {
             SubscriptionLicenseAllocationResetWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionLicenseAllocationResetWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     SubscriptionLicenseAllocationResetWebhookEvent.Properties.builder()
                         .addResetAllocation(
@@ -46990,6 +47165,9 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionLicenseAllocationResetWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(
+                        SubscriptionLicenseAllocationResetWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         SubscriptionLicenseAllocationResetWebhookEvent.Properties.builder()
                             .addResetAllocation(
@@ -47052,6 +47230,9 @@ internal class UnwrapWebhookEventTest {
             SubscriptionLicenseBalanceThresholdReachedWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(
+                    SubscriptionLicenseBalanceThresholdReachedWebhookEvent.PayloadStyle.EXPANDED
+                )
                 .properties(
                     SubscriptionLicenseBalanceThresholdReachedWebhookEvent.Properties.builder()
                         .alertConfiguration(
@@ -47317,6 +47498,9 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionLicenseBalanceThresholdReachedWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(
+                        SubscriptionLicenseBalanceThresholdReachedWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         SubscriptionLicenseBalanceThresholdReachedWebhookEvent.Properties.builder()
                             .alertConfiguration(
@@ -47505,6 +47689,7 @@ internal class UnwrapWebhookEventTest {
             SubscriptionPlanChangeScheduledWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionPlanChangeScheduledWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     SubscriptionPlanChangeScheduledWebhookEvent.Properties.builder()
                         .changeDate("change_date")
@@ -48399,6 +48584,7 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionPlanChangeScheduledWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(SubscriptionPlanChangeScheduledWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         SubscriptionPlanChangeScheduledWebhookEvent.Properties.builder()
                             .changeDate("change_date")
@@ -49252,6 +49438,7 @@ internal class UnwrapWebhookEventTest {
             SubscriptionPlanChangedWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionPlanChangedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     SubscriptionPlanChangedWebhookEvent.Properties.builder()
                         .previousPlanId("previous_plan_id")
@@ -50140,6 +50327,7 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionPlanChangedWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(SubscriptionPlanChangedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         SubscriptionPlanChangedWebhookEvent.Properties.builder()
                             .previousPlanId("previous_plan_id")
@@ -50988,6 +51176,9 @@ internal class UnwrapWebhookEventTest {
             SubscriptionPlanVersionChangeScheduledWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(
+                    SubscriptionPlanVersionChangeScheduledWebhookEvent.PayloadStyle.EXPANDED
+                )
                 .properties(
                     SubscriptionPlanVersionChangeScheduledWebhookEvent.Properties.builder()
                         .effectiveDate("effective_date")
@@ -51884,6 +52075,9 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionPlanVersionChangeScheduledWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(
+                        SubscriptionPlanVersionChangeScheduledWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         SubscriptionPlanVersionChangeScheduledWebhookEvent.Properties.builder()
                             .effectiveDate("effective_date")
@@ -52737,6 +52931,7 @@ internal class UnwrapWebhookEventTest {
             SubscriptionPlanVersionChangedWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionPlanVersionChangedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     SubscriptionPlanVersionChangedWebhookEvent.Properties.builder()
                         .effectiveDate("effective_date")
@@ -53631,6 +53826,7 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionPlanVersionChangedWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(SubscriptionPlanVersionChangedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         SubscriptionPlanVersionChangedWebhookEvent.Properties.builder()
                             .effectiveDate("effective_date")
@@ -54484,6 +54680,7 @@ internal class UnwrapWebhookEventTest {
             SubscriptionSpendExceededWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionSpendExceededWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     SubscriptionSpendExceededWebhookEvent.Properties.builder()
                         .alertConfiguration(
@@ -55485,6 +55682,7 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionSpendExceededWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(SubscriptionSpendExceededWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         SubscriptionSpendExceededWebhookEvent.Properties.builder()
                             .alertConfiguration(
@@ -56447,6 +56645,7 @@ internal class UnwrapWebhookEventTest {
             SubscriptionStartedWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionStartedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(JsonValue.from(mapOf<String, Any>()))
                 .subscription(
                     Subscription.builder()
@@ -57330,6 +57529,7 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionStartedWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(SubscriptionStartedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(JsonValue.from(mapOf<String, Any>()))
                     .subscription(
                         Subscription.builder()
@@ -58174,6 +58374,7 @@ internal class UnwrapWebhookEventTest {
             SubscriptionTrialEndedWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionTrialEndedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(JsonValue.from(mapOf<String, Any>()))
                 .subscription(
                     Subscription.builder()
@@ -59057,6 +59258,7 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionTrialEndedWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(SubscriptionTrialEndedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(JsonValue.from(mapOf<String, Any>()))
                     .subscription(
                         Subscription.builder()
@@ -59901,6 +60103,7 @@ internal class UnwrapWebhookEventTest {
             SubscriptionUsageExceededWebhookEvent.builder()
                 .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(SubscriptionUsageExceededWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     SubscriptionUsageExceededWebhookEvent.Properties.builder()
                         .alertConfiguration(
@@ -60903,6 +61106,7 @@ internal class UnwrapWebhookEventTest {
                 SubscriptionUsageExceededWebhookEvent.builder()
                     .id("id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(SubscriptionUsageExceededWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         SubscriptionUsageExceededWebhookEvent.Properties.builder()
                             .alertConfiguration(
@@ -61888,6 +62092,7 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(TransactionAccountingSyncFailedWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     TransactionAccountingSyncFailedWebhookEvent.Properties.builder()
                         .connectionType("connection_type")
@@ -62033,6 +62238,7 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(TransactionAccountingSyncFailedWebhookEvent.PayloadStyle.EXPANDED)
                     .properties(
                         TransactionAccountingSyncFailedWebhookEvent.Properties.builder()
                             .connectionType("connection_type")
@@ -62100,6 +62306,7 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .payloadStyle(TransactionAccountingSyncSucceededWebhookEvent.PayloadStyle.EXPANDED)
                 .properties(
                     TransactionAccountingSyncSucceededWebhookEvent.Properties.builder()
                         .connectionType("connection_type")
@@ -62248,6 +62455,9 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .payloadStyle(
+                        TransactionAccountingSyncSucceededWebhookEvent.PayloadStyle.EXPANDED
+                    )
                     .properties(
                         TransactionAccountingSyncSucceededWebhookEvent.Properties.builder()
                             .connectionType("connection_type")
