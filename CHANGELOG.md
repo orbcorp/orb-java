@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.43.0](https://github.com/orbcorp/orb-java/compare/v1.42.0...v1.43.0) (2026-10-21)
+
+
+### Features
+
+* **api:** api update ([7863a4d](https://github.com/orbcorp/orb-java/commit/7863a4d70d65a9dc5898071cb32fc43517708eb4))
+
 ## [1.42.0](https://github.com/orbcorp/orb-java/compare/v1.41.0...v1.42.0) (2026-10-20)
 
 
