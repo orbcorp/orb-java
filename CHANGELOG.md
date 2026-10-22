@@ -5,7 +5,7 @@
 
 ### Features
 
-* **api:** api update ([2aa4b0a](https://github.com/orbcorp/orb-java/commit/2aa4b0a98c0da6b36eb38d6755d2ed9f495d4569))
+* **api:** add `webhooks().standard().unwrapStandard(payload, headers, secret)`, aliased as `webhooks().unwrapStandard`, which verifies and parses standard webhook payloads; the verifying `webhooks().unwrap` throws on a standard payload ([2aa4b0a](https://github.com/orbcorp/orb-java/commit/2aa4b0a98c0da6b36eb38d6755d2ed9f495d4569))
 
 
 ### Chores
