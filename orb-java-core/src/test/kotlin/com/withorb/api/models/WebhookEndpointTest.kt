@@ -19,6 +19,7 @@ internal class WebhookEndpointTest {
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .enabled(true)
                 .addEnabledEventType("string")
+                .payloadStyle(WebhookEndpoint.PayloadStyle.EXPANDED)
                 .url("url")
                 .build()
 
@@ -27,6 +28,7 @@ internal class WebhookEndpointTest {
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(webhookEndpoint.enabled()).isEqualTo(true)
         assertThat(webhookEndpoint.enabledEventTypes().getOrNull()).containsExactly("string")
+        assertThat(webhookEndpoint.payloadStyle()).isEqualTo(WebhookEndpoint.PayloadStyle.EXPANDED)
         assertThat(webhookEndpoint.url()).isEqualTo("url")
     }
 
@@ -39,6 +41,7 @@ internal class WebhookEndpointTest {
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .enabled(true)
                 .addEnabledEventType("string")
+                .payloadStyle(WebhookEndpoint.PayloadStyle.EXPANDED)
                 .url("url")
                 .build()
 

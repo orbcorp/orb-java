@@ -13,6 +13,7 @@ internal class WebhookEndpointUpdateParamsTest {
         WebhookEndpointUpdateParams.builder()
             .webhookEndpointId("webhook_endpoint_id")
             .addEnabledEventType("string")
+            .payloadStyle(WebhookEndpointUpdateParams.PayloadStyle.EXPANDED)
             .url("url")
             .build()
     }
@@ -33,12 +34,14 @@ internal class WebhookEndpointUpdateParamsTest {
             WebhookEndpointUpdateParams.builder()
                 .webhookEndpointId("webhook_endpoint_id")
                 .addEnabledEventType("string")
+                .payloadStyle(WebhookEndpointUpdateParams.PayloadStyle.EXPANDED)
                 .url("url")
                 .build()
 
         val body = params._body()
 
         assertThat(body.enabledEventTypes().getOrNull()).containsExactly("string")
+        assertThat(body.payloadStyle()).contains(WebhookEndpointUpdateParams.PayloadStyle.EXPANDED)
         assertThat(body.url()).contains("url")
     }
 

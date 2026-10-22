@@ -21,7 +21,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** #InvoiceApiResourceWithoutLineItems */
+/**
+ * An invoice without its line items, subtotal, discounts, minimums or maximums. Fetch the invoice
+ * for those.
+ */
 class InvoiceIssueSummaryResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

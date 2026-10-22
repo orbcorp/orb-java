@@ -67,7 +67,8 @@ private constructor(
     fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
     /**
-     * #InvoiceApiResourceWithoutLineItems
+     * An invoice without its line items, subtotal, discounts, minimums or maximums. Fetch the
+     * invoice for those.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -223,7 +224,10 @@ private constructor(
          */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
-        /** #InvoiceApiResourceWithoutLineItems */
+        /**
+         * An invoice without its line items, subtotal, discounts, minimums or maximums. Fetch the
+         * invoice for those.
+         */
         fun invoice(invoice: Invoice) = invoice(JsonField.of(invoice))
 
         /**
@@ -364,7 +368,10 @@ private constructor(
             (properties.asKnown().getOrNull()?.validity() ?: 0) +
             (type.asKnown().getOrNull()?.validity() ?: 0)
 
-    /** #InvoiceApiResourceWithoutLineItems */
+    /**
+     * An invoice without its line items, subtotal, discounts, minimums or maximums. Fetch the
+     * invoice for those.
+     */
     class Invoice
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
