@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.45.0](https://github.com/orbcorp/orb-java/compare/v1.44.0...v1.45.0) (2026-10-23)
+
+
+### Features
+
+* **api:** Add customer credit balance summary endpoints ([52d3047](https://github.com/orbcorp/orb-java/commit/52d30470b167ff9f400a4af5e213eb3cb7c1543b))
+* **api:** Add endpoint to update credit block metadata ([595a113](https://github.com/orbcorp/orb-java/commit/595a113674edfdec8c99c120b51e649c55a13be9))
+* **api:** api update ([595a113](https://github.com/orbcorp/orb-java/commit/595a113674edfdec8c99c120b51e649c55a13be9))
+* **api:** api update ([595a113](https://github.com/orbcorp/orb-java/commit/595a113674edfdec8c99c120b51e649c55a13be9))
+* **api:** api update ([595a113](https://github.com/orbcorp/orb-java/commit/595a113674edfdec8c99c120b51e649c55a13be9))
+
+
+### Chores
+
+* correct the standard webhook unwrap changelog entry ([#4](https://github.com/orbcorp/orb-java/issues/4)) ([52d7faf](https://github.com/orbcorp/orb-java/commit/52d7fafbc139b39b1d8d68cbc0a59b05823a9935))
+
 ## [1.44.0](https://github.com/orbcorp/orb-java/compare/v1.43.0...v1.44.0) (2026-10-22)
 
 
