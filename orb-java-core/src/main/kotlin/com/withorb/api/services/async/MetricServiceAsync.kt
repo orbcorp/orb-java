@@ -6,10 +6,12 @@ import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.BillableMetric
+import com.withorb.api.models.MetricArchiveParams
 import com.withorb.api.models.MetricCreateParams
 import com.withorb.api.models.MetricFetchParams
 import com.withorb.api.models.MetricListPageAsync
 import com.withorb.api.models.MetricListParams
+import com.withorb.api.models.MetricUnarchiveParams
 import com.withorb.api.models.MetricUpdateParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
@@ -110,6 +112,49 @@ interface MetricServiceAsync {
         list(MetricListParams.none(), requestOptions)
 
     /**
+     * This endpoint archives a [metric](/core-concepts#metric). Archived metrics are left out of
+     * `GET /v1/metrics` when filtering with `status=active`, and can't be chosen when creating new
+     * plans in the Orb dashboard.
+     *
+     * Archiving does not change existing prices, plans, or subscriptions that use the metric, and
+     * usage on those prices continues to be billed. A metric that is already archived cannot be
+     * archived again.
+     */
+    fun archive(metricId: String): CompletableFuture<BillableMetric> =
+        archive(metricId, MetricArchiveParams.none())
+
+    /** @see archive */
+    fun archive(
+        metricId: String,
+        params: MetricArchiveParams = MetricArchiveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<BillableMetric> =
+        archive(params.toBuilder().metricId(metricId).build(), requestOptions)
+
+    /** @see archive */
+    fun archive(
+        metricId: String,
+        params: MetricArchiveParams = MetricArchiveParams.none(),
+    ): CompletableFuture<BillableMetric> = archive(metricId, params, RequestOptions.none())
+
+    /** @see archive */
+    fun archive(
+        params: MetricArchiveParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<BillableMetric>
+
+    /** @see archive */
+    fun archive(params: MetricArchiveParams): CompletableFuture<BillableMetric> =
+        archive(params, RequestOptions.none())
+
+    /** @see archive */
+    fun archive(
+        metricId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<BillableMetric> =
+        archive(metricId, MetricArchiveParams.none(), requestOptions)
+
+    /**
      * This endpoint is used to fetch [metric](/core-concepts#metric) details given a metric
      * identifier. It returns information about the metrics including its name, description, and
      * item.
@@ -144,6 +189,44 @@ interface MetricServiceAsync {
     /** @see fetch */
     fun fetch(metricId: String, requestOptions: RequestOptions): CompletableFuture<BillableMetric> =
         fetch(metricId, MetricFetchParams.none(), requestOptions)
+
+    /**
+     * This endpoint restores an archived [metric](/core-concepts#metric) to `active`, so it can be
+     * chosen for new plans again. Only archived metrics can be unarchived.
+     */
+    fun unarchive(metricId: String): CompletableFuture<BillableMetric> =
+        unarchive(metricId, MetricUnarchiveParams.none())
+
+    /** @see unarchive */
+    fun unarchive(
+        metricId: String,
+        params: MetricUnarchiveParams = MetricUnarchiveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<BillableMetric> =
+        unarchive(params.toBuilder().metricId(metricId).build(), requestOptions)
+
+    /** @see unarchive */
+    fun unarchive(
+        metricId: String,
+        params: MetricUnarchiveParams = MetricUnarchiveParams.none(),
+    ): CompletableFuture<BillableMetric> = unarchive(metricId, params, RequestOptions.none())
+
+    /** @see unarchive */
+    fun unarchive(
+        params: MetricUnarchiveParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<BillableMetric>
+
+    /** @see unarchive */
+    fun unarchive(params: MetricUnarchiveParams): CompletableFuture<BillableMetric> =
+        unarchive(params, RequestOptions.none())
+
+    /** @see unarchive */
+    fun unarchive(
+        metricId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<BillableMetric> =
+        unarchive(metricId, MetricUnarchiveParams.none(), requestOptions)
 
     /**
      * A view of [MetricServiceAsync] that provides access to raw HTTP responses for each method.
@@ -237,6 +320,47 @@ interface MetricServiceAsync {
             list(MetricListParams.none(), requestOptions)
 
         /**
+         * Returns a raw HTTP response for `post /metrics/{metric_id}/archive`, but is otherwise the
+         * same as [MetricServiceAsync.archive].
+         */
+        fun archive(metricId: String): CompletableFuture<HttpResponseFor<BillableMetric>> =
+            archive(metricId, MetricArchiveParams.none())
+
+        /** @see archive */
+        fun archive(
+            metricId: String,
+            params: MetricArchiveParams = MetricArchiveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<BillableMetric>> =
+            archive(params.toBuilder().metricId(metricId).build(), requestOptions)
+
+        /** @see archive */
+        fun archive(
+            metricId: String,
+            params: MetricArchiveParams = MetricArchiveParams.none(),
+        ): CompletableFuture<HttpResponseFor<BillableMetric>> =
+            archive(metricId, params, RequestOptions.none())
+
+        /** @see archive */
+        fun archive(
+            params: MetricArchiveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<BillableMetric>>
+
+        /** @see archive */
+        fun archive(
+            params: MetricArchiveParams
+        ): CompletableFuture<HttpResponseFor<BillableMetric>> =
+            archive(params, RequestOptions.none())
+
+        /** @see archive */
+        fun archive(
+            metricId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<BillableMetric>> =
+            archive(metricId, MetricArchiveParams.none(), requestOptions)
+
+        /**
          * Returns a raw HTTP response for `get /metrics/{metric_id}`, but is otherwise the same as
          * [MetricServiceAsync.fetch].
          */
@@ -274,5 +398,46 @@ interface MetricServiceAsync {
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<BillableMetric>> =
             fetch(metricId, MetricFetchParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /metrics/{metric_id}/unarchive`, but is otherwise
+         * the same as [MetricServiceAsync.unarchive].
+         */
+        fun unarchive(metricId: String): CompletableFuture<HttpResponseFor<BillableMetric>> =
+            unarchive(metricId, MetricUnarchiveParams.none())
+
+        /** @see unarchive */
+        fun unarchive(
+            metricId: String,
+            params: MetricUnarchiveParams = MetricUnarchiveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<BillableMetric>> =
+            unarchive(params.toBuilder().metricId(metricId).build(), requestOptions)
+
+        /** @see unarchive */
+        fun unarchive(
+            metricId: String,
+            params: MetricUnarchiveParams = MetricUnarchiveParams.none(),
+        ): CompletableFuture<HttpResponseFor<BillableMetric>> =
+            unarchive(metricId, params, RequestOptions.none())
+
+        /** @see unarchive */
+        fun unarchive(
+            params: MetricUnarchiveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<BillableMetric>>
+
+        /** @see unarchive */
+        fun unarchive(
+            params: MetricUnarchiveParams
+        ): CompletableFuture<HttpResponseFor<BillableMetric>> =
+            unarchive(params, RequestOptions.none())
+
+        /** @see unarchive */
+        fun unarchive(
+            metricId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<BillableMetric>> =
+            unarchive(metricId, MetricUnarchiveParams.none(), requestOptions)
     }
 }

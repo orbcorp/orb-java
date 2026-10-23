@@ -11,6 +11,8 @@ import com.withorb.api.models.CreditBlockListInvoicesParams
 import com.withorb.api.models.CreditBlockListInvoicesResponse
 import com.withorb.api.models.CreditBlockRetrieveParams
 import com.withorb.api.models.CreditBlockRetrieveResponse
+import com.withorb.api.models.CreditBlockUpdateParams
+import com.withorb.api.models.CreditBlockUpdateResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -68,6 +70,50 @@ interface CreditBlockServiceAsync {
         requestOptions: RequestOptions,
     ): CompletableFuture<CreditBlockRetrieveResponse> =
         retrieve(blockId, CreditBlockRetrieveParams.none(), requestOptions)
+
+    /**
+     * This endpoint updates the `metadata` of a credit block. Keys you pass are added to the
+     * block's existing metadata or overwrite the value already stored for that key, and setting a
+     * key to `null` removes it. Passing `null` for `metadata` clears all of the block's metadata.
+     * The block's `increment` entry in the [credits ledger](fetch-customer-credits-ledger) reports
+     * the block's metadata, so it shows the update too.
+     *
+     * Other fields on a credit block cannot be changed through this endpoint. Deleted credit blocks
+     * return a 404.
+     */
+    fun update(blockId: String): CompletableFuture<CreditBlockUpdateResponse> =
+        update(blockId, CreditBlockUpdateParams.none())
+
+    /** @see update */
+    fun update(
+        blockId: String,
+        params: CreditBlockUpdateParams = CreditBlockUpdateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CreditBlockUpdateResponse> =
+        update(params.toBuilder().blockId(blockId).build(), requestOptions)
+
+    /** @see update */
+    fun update(
+        blockId: String,
+        params: CreditBlockUpdateParams = CreditBlockUpdateParams.none(),
+    ): CompletableFuture<CreditBlockUpdateResponse> = update(blockId, params, RequestOptions.none())
+
+    /** @see update */
+    fun update(
+        params: CreditBlockUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CreditBlockUpdateResponse>
+
+    /** @see update */
+    fun update(params: CreditBlockUpdateParams): CompletableFuture<CreditBlockUpdateResponse> =
+        update(params, RequestOptions.none())
+
+    /** @see update */
+    fun update(
+        blockId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CreditBlockUpdateResponse> =
+        update(blockId, CreditBlockUpdateParams.none(), requestOptions)
 
     /**
      * This endpoint deletes a credit block by its ID.
@@ -226,6 +272,47 @@ interface CreditBlockServiceAsync {
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<CreditBlockRetrieveResponse>> =
             retrieve(blockId, CreditBlockRetrieveParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `put /credit_blocks/{block_id}`, but is otherwise the
+         * same as [CreditBlockServiceAsync.update].
+         */
+        fun update(blockId: String): CompletableFuture<HttpResponseFor<CreditBlockUpdateResponse>> =
+            update(blockId, CreditBlockUpdateParams.none())
+
+        /** @see update */
+        fun update(
+            blockId: String,
+            params: CreditBlockUpdateParams = CreditBlockUpdateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CreditBlockUpdateResponse>> =
+            update(params.toBuilder().blockId(blockId).build(), requestOptions)
+
+        /** @see update */
+        fun update(
+            blockId: String,
+            params: CreditBlockUpdateParams = CreditBlockUpdateParams.none(),
+        ): CompletableFuture<HttpResponseFor<CreditBlockUpdateResponse>> =
+            update(blockId, params, RequestOptions.none())
+
+        /** @see update */
+        fun update(
+            params: CreditBlockUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CreditBlockUpdateResponse>>
+
+        /** @see update */
+        fun update(
+            params: CreditBlockUpdateParams
+        ): CompletableFuture<HttpResponseFor<CreditBlockUpdateResponse>> =
+            update(params, RequestOptions.none())
+
+        /** @see update */
+        fun update(
+            blockId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CreditBlockUpdateResponse>> =
+            update(blockId, CreditBlockUpdateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `delete /credit_blocks/{block_id}`, but is otherwise the
