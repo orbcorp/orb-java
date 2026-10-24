@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.46.0](https://github.com/orbcorp/orb-java/compare/v1.45.0...v1.46.0) (2026-10-24)
+
+
+### Features
+
+* **api:** add list endpoint for lightweight subscription summaries ([62cd1da](https://github.com/orbcorp/orb-java/commit/62cd1da84dd2fc4a67a7fcef5ce4d6640d0347f0))
+
 ## [1.45.0](https://github.com/orbcorp/orb-java/compare/v1.44.0...v1.45.0) (2026-10-23)
 
 
