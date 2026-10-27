@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.47.0](https://github.com/orbcorp/orb-java/compare/v1.46.0...v1.47.0) (2026-10-27)
+
+
+### Features
+
+* **api:** allow up to 50 spend_exceeded alerts per plan or subscription ([018af63](https://github.com/orbcorp/orb-java/commit/018af6343321f7203c312ba867ae02baedfd1796))
+
 ## [1.46.0](https://github.com/orbcorp/orb-java/compare/v1.45.0...v1.46.0) (2026-10-24)
 
 
