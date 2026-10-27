@@ -5,6 +5,10 @@ package com.withorb.api.services.async.customers
 import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
+import com.withorb.api.models.CustomerCreditFetchBalanceByExternalIdParams
+import com.withorb.api.models.CustomerCreditFetchBalanceByExternalIdResponse
+import com.withorb.api.models.CustomerCreditFetchBalanceParams
+import com.withorb.api.models.CustomerCreditFetchBalanceResponse
 import com.withorb.api.models.CustomerCreditListByExternalIdPageAsync
 import com.withorb.api.models.CustomerCreditListByExternalIdParams
 import com.withorb.api.models.CustomerCreditListPageAsync
@@ -92,6 +96,124 @@ interface CreditServiceAsync {
         requestOptions: RequestOptions,
     ): CompletableFuture<CustomerCreditListPageAsync> =
         list(customerId, CustomerCreditListParams.none(), requestOptions)
+
+    /**
+     * This endpoint returns a customer's credit balance in a single currency or custom pricing
+     * unit: the total available balance, the balance waiting on payment, and the next upcoming
+     * expiration.
+     *
+     * `balance` is the sum of `balance` across the customer's `active` credit blocks, as listed by
+     * [Fetch customer credit balance](/api-reference/credit/fetch-customer-credit-balance).
+     * Expired, depleted, and voided blocks are not included. Blocks in `pending_payment` status are
+     * totaled in `pending_payment_balance` instead, and become available once their invoice is
+     * paid.
+     *
+     * Note that `currency` defaults to credits if not specified. To use a real world currency, set
+     * `currency` to an ISO 4217 string. A customer with no credits in that currency returns a
+     * balance of `0`.
+     */
+    fun fetchBalance(customerId: String): CompletableFuture<CustomerCreditFetchBalanceResponse> =
+        fetchBalance(customerId, CustomerCreditFetchBalanceParams.none())
+
+    /** @see fetchBalance */
+    fun fetchBalance(
+        customerId: String,
+        params: CustomerCreditFetchBalanceParams = CustomerCreditFetchBalanceParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CustomerCreditFetchBalanceResponse> =
+        fetchBalance(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+    /** @see fetchBalance */
+    fun fetchBalance(
+        customerId: String,
+        params: CustomerCreditFetchBalanceParams = CustomerCreditFetchBalanceParams.none(),
+    ): CompletableFuture<CustomerCreditFetchBalanceResponse> =
+        fetchBalance(customerId, params, RequestOptions.none())
+
+    /** @see fetchBalance */
+    fun fetchBalance(
+        params: CustomerCreditFetchBalanceParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CustomerCreditFetchBalanceResponse>
+
+    /** @see fetchBalance */
+    fun fetchBalance(
+        params: CustomerCreditFetchBalanceParams
+    ): CompletableFuture<CustomerCreditFetchBalanceResponse> =
+        fetchBalance(params, RequestOptions.none())
+
+    /** @see fetchBalance */
+    fun fetchBalance(
+        customerId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CustomerCreditFetchBalanceResponse> =
+        fetchBalance(customerId, CustomerCreditFetchBalanceParams.none(), requestOptions)
+
+    /**
+     * This endpoint returns a customer's credit balance in a single currency or custom pricing
+     * unit: the total available balance, the balance waiting on payment, and the next upcoming
+     * expiration.
+     *
+     * `balance` is the sum of `balance` across the customer's `active` credit blocks, as listed by
+     * [Fetch customer credit balance](/api-reference/credit/fetch-customer-credit-balance).
+     * Expired, depleted, and voided blocks are not included. Blocks in `pending_payment` status are
+     * totaled in `pending_payment_balance` instead, and become available once their invoice is
+     * paid.
+     *
+     * Note that `currency` defaults to credits if not specified. To use a real world currency, set
+     * `currency` to an ISO 4217 string. A customer with no credits in that currency returns a
+     * balance of `0`.
+     */
+    fun fetchBalanceByExternalId(
+        externalCustomerId: String
+    ): CompletableFuture<CustomerCreditFetchBalanceByExternalIdResponse> =
+        fetchBalanceByExternalId(
+            externalCustomerId,
+            CustomerCreditFetchBalanceByExternalIdParams.none(),
+        )
+
+    /** @see fetchBalanceByExternalId */
+    fun fetchBalanceByExternalId(
+        externalCustomerId: String,
+        params: CustomerCreditFetchBalanceByExternalIdParams =
+            CustomerCreditFetchBalanceByExternalIdParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CustomerCreditFetchBalanceByExternalIdResponse> =
+        fetchBalanceByExternalId(
+            params.toBuilder().externalCustomerId(externalCustomerId).build(),
+            requestOptions,
+        )
+
+    /** @see fetchBalanceByExternalId */
+    fun fetchBalanceByExternalId(
+        externalCustomerId: String,
+        params: CustomerCreditFetchBalanceByExternalIdParams =
+            CustomerCreditFetchBalanceByExternalIdParams.none(),
+    ): CompletableFuture<CustomerCreditFetchBalanceByExternalIdResponse> =
+        fetchBalanceByExternalId(externalCustomerId, params, RequestOptions.none())
+
+    /** @see fetchBalanceByExternalId */
+    fun fetchBalanceByExternalId(
+        params: CustomerCreditFetchBalanceByExternalIdParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CustomerCreditFetchBalanceByExternalIdResponse>
+
+    /** @see fetchBalanceByExternalId */
+    fun fetchBalanceByExternalId(
+        params: CustomerCreditFetchBalanceByExternalIdParams
+    ): CompletableFuture<CustomerCreditFetchBalanceByExternalIdResponse> =
+        fetchBalanceByExternalId(params, RequestOptions.none())
+
+    /** @see fetchBalanceByExternalId */
+    fun fetchBalanceByExternalId(
+        externalCustomerId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CustomerCreditFetchBalanceByExternalIdResponse> =
+        fetchBalanceByExternalId(
+            externalCustomerId,
+            CustomerCreditFetchBalanceByExternalIdParams.none(),
+            requestOptions,
+        )
 
     /**
      * Returns a paginated list of unexpired, non-zero credit blocks for a customer.
@@ -221,6 +343,105 @@ interface CreditServiceAsync {
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<CustomerCreditListPageAsync>> =
             list(customerId, CustomerCreditListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /customers/{customer_id}/credits/balance`, but is
+         * otherwise the same as [CreditServiceAsync.fetchBalance].
+         */
+        fun fetchBalance(
+            customerId: String
+        ): CompletableFuture<HttpResponseFor<CustomerCreditFetchBalanceResponse>> =
+            fetchBalance(customerId, CustomerCreditFetchBalanceParams.none())
+
+        /** @see fetchBalance */
+        fun fetchBalance(
+            customerId: String,
+            params: CustomerCreditFetchBalanceParams = CustomerCreditFetchBalanceParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditFetchBalanceResponse>> =
+            fetchBalance(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+        /** @see fetchBalance */
+        fun fetchBalance(
+            customerId: String,
+            params: CustomerCreditFetchBalanceParams = CustomerCreditFetchBalanceParams.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditFetchBalanceResponse>> =
+            fetchBalance(customerId, params, RequestOptions.none())
+
+        /** @see fetchBalance */
+        fun fetchBalance(
+            params: CustomerCreditFetchBalanceParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditFetchBalanceResponse>>
+
+        /** @see fetchBalance */
+        fun fetchBalance(
+            params: CustomerCreditFetchBalanceParams
+        ): CompletableFuture<HttpResponseFor<CustomerCreditFetchBalanceResponse>> =
+            fetchBalance(params, RequestOptions.none())
+
+        /** @see fetchBalance */
+        fun fetchBalance(
+            customerId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CustomerCreditFetchBalanceResponse>> =
+            fetchBalance(customerId, CustomerCreditFetchBalanceParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get
+         * /customers/external_customer_id/{external_customer_id}/credits/balance`, but is otherwise
+         * the same as [CreditServiceAsync.fetchBalanceByExternalId].
+         */
+        fun fetchBalanceByExternalId(
+            externalCustomerId: String
+        ): CompletableFuture<HttpResponseFor<CustomerCreditFetchBalanceByExternalIdResponse>> =
+            fetchBalanceByExternalId(
+                externalCustomerId,
+                CustomerCreditFetchBalanceByExternalIdParams.none(),
+            )
+
+        /** @see fetchBalanceByExternalId */
+        fun fetchBalanceByExternalId(
+            externalCustomerId: String,
+            params: CustomerCreditFetchBalanceByExternalIdParams =
+                CustomerCreditFetchBalanceByExternalIdParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditFetchBalanceByExternalIdResponse>> =
+            fetchBalanceByExternalId(
+                params.toBuilder().externalCustomerId(externalCustomerId).build(),
+                requestOptions,
+            )
+
+        /** @see fetchBalanceByExternalId */
+        fun fetchBalanceByExternalId(
+            externalCustomerId: String,
+            params: CustomerCreditFetchBalanceByExternalIdParams =
+                CustomerCreditFetchBalanceByExternalIdParams.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditFetchBalanceByExternalIdResponse>> =
+            fetchBalanceByExternalId(externalCustomerId, params, RequestOptions.none())
+
+        /** @see fetchBalanceByExternalId */
+        fun fetchBalanceByExternalId(
+            params: CustomerCreditFetchBalanceByExternalIdParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreditFetchBalanceByExternalIdResponse>>
+
+        /** @see fetchBalanceByExternalId */
+        fun fetchBalanceByExternalId(
+            params: CustomerCreditFetchBalanceByExternalIdParams
+        ): CompletableFuture<HttpResponseFor<CustomerCreditFetchBalanceByExternalIdResponse>> =
+            fetchBalanceByExternalId(params, RequestOptions.none())
+
+        /** @see fetchBalanceByExternalId */
+        fun fetchBalanceByExternalId(
+            externalCustomerId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CustomerCreditFetchBalanceByExternalIdResponse>> =
+            fetchBalanceByExternalId(
+                externalCustomerId,
+                CustomerCreditFetchBalanceByExternalIdParams.none(),
+                requestOptions,
+            )
 
         /**
          * Returns a raw HTTP response for `get

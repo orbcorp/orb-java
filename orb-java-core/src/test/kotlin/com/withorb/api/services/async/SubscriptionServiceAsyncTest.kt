@@ -541,6 +541,21 @@ internal class SubscriptionServiceAsyncTest {
         subscriptionUsage.validate()
     }
 
+    @Test
+    fun listSummary() {
+        val client =
+            OrbOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val subscriptionServiceAsync = client.subscriptions()
+
+        val pageFuture = subscriptionServiceAsync.listSummary()
+
+        val page = pageFuture.get()
+        page.response().validate()
+    }
+
     @Disabled("Incorrect example breaks Prism")
     @Test
     fun priceIntervals() {

@@ -17,6 +17,8 @@ import com.withorb.api.models.SubscriptionFetchScheduleParams
 import com.withorb.api.models.SubscriptionFetchUsageParams
 import com.withorb.api.models.SubscriptionListPageAsync
 import com.withorb.api.models.SubscriptionListParams
+import com.withorb.api.models.SubscriptionListSummaryPageAsync
+import com.withorb.api.models.SubscriptionListSummaryParams
 import com.withorb.api.models.SubscriptionPriceIntervalsParams
 import com.withorb.api.models.SubscriptionRedeemCouponParams
 import com.withorb.api.models.SubscriptionSchedulePlanChangeParams
@@ -780,6 +782,37 @@ interface SubscriptionServiceAsync {
         requestOptions: RequestOptions,
     ): CompletableFuture<SubscriptionUsage> =
         fetchUsage(subscriptionId, SubscriptionFetchUsageParams.none(), requestOptions)
+
+    /**
+     * This is a lighter-weight version of
+     * [List subscriptions](/api-reference/subscription/list-subscriptions), with the same filters,
+     * pagination and order. It returns each subscription's own fields, with its plan and customer
+     * as references, and leaves out price intervals, billing periods, plan phases and other derived
+     * fields, making it faster to respond. Fetch a subscription for those.
+     *
+     * This is the same summary of a subscription that standard
+     * [webhook payloads](/integrations-and-exports/webhook-payload-styles) carry.
+     */
+    fun listSummary(): CompletableFuture<SubscriptionListSummaryPageAsync> =
+        listSummary(SubscriptionListSummaryParams.none())
+
+    /** @see listSummary */
+    fun listSummary(
+        params: SubscriptionListSummaryParams = SubscriptionListSummaryParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<SubscriptionListSummaryPageAsync>
+
+    /** @see listSummary */
+    fun listSummary(
+        params: SubscriptionListSummaryParams = SubscriptionListSummaryParams.none()
+    ): CompletableFuture<SubscriptionListSummaryPageAsync> =
+        listSummary(params, RequestOptions.none())
+
+    /** @see listSummary */
+    fun listSummary(
+        requestOptions: RequestOptions
+    ): CompletableFuture<SubscriptionListSummaryPageAsync> =
+        listSummary(SubscriptionListSummaryParams.none(), requestOptions)
 
     /**
      * This endpoint is used to add and edit subscription
@@ -1719,6 +1752,31 @@ interface SubscriptionServiceAsync {
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<SubscriptionUsage>> =
             fetchUsage(subscriptionId, SubscriptionFetchUsageParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /subscriptions/summary`, but is otherwise the same
+         * as [SubscriptionServiceAsync.listSummary].
+         */
+        fun listSummary(): CompletableFuture<HttpResponseFor<SubscriptionListSummaryPageAsync>> =
+            listSummary(SubscriptionListSummaryParams.none())
+
+        /** @see listSummary */
+        fun listSummary(
+            params: SubscriptionListSummaryParams = SubscriptionListSummaryParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<SubscriptionListSummaryPageAsync>>
+
+        /** @see listSummary */
+        fun listSummary(
+            params: SubscriptionListSummaryParams = SubscriptionListSummaryParams.none()
+        ): CompletableFuture<HttpResponseFor<SubscriptionListSummaryPageAsync>> =
+            listSummary(params, RequestOptions.none())
+
+        /** @see listSummary */
+        fun listSummary(
+            requestOptions: RequestOptions
+        ): CompletableFuture<HttpResponseFor<SubscriptionListSummaryPageAsync>> =
+            listSummary(SubscriptionListSummaryParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/price_intervals`,
