@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.48.0](https://github.com/orbcorp/orb-java/compare/v1.47.0...v1.48.0) (2026-10-28)
+
+
+### Features
+
+* **api:** Restore java custom-code tracking and verify sealed SHAs before seal-back ([#2358](https://github.com/orbcorp/orb-java/issues/2358)) ([bee7932](https://github.com/orbcorp/orb-java/commit/bee7932b58a612bfba0b8af2569dea30d116438d))
+
 ## [1.47.0](https://github.com/orbcorp/orb-java/compare/v1.46.0...v1.47.0) (2026-10-27)
 
 
