@@ -113,6 +113,8 @@ internal class InvoiceListSummaryResponseTest {
                 .paymentReceivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .paymentStartedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .scheduledIssueAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .servicePeriodEnd(OffsetDateTime.parse("2022-06-01T07:00:00+00:00"))
+                .servicePeriodStart(OffsetDateTime.parse("2022-05-01T07:00:00+00:00"))
                 .shippingAddress(
                     Address.builder()
                         .city("city")
@@ -250,6 +252,10 @@ internal class InvoiceListSummaryResponseTest {
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(invoiceListSummaryResponse.scheduledIssueAt())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(invoiceListSummaryResponse.servicePeriodEnd())
+            .contains(OffsetDateTime.parse("2022-06-01T07:00:00+00:00"))
+        assertThat(invoiceListSummaryResponse.servicePeriodStart())
+            .contains(OffsetDateTime.parse("2022-05-01T07:00:00+00:00"))
         assertThat(invoiceListSummaryResponse.shippingAddress())
             .contains(
                 Address.builder()
@@ -376,6 +382,8 @@ internal class InvoiceListSummaryResponseTest {
                 .paymentReceivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .paymentStartedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .scheduledIssueAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .servicePeriodEnd(OffsetDateTime.parse("2022-06-01T07:00:00+00:00"))
+                .servicePeriodStart(OffsetDateTime.parse("2022-05-01T07:00:00+00:00"))
                 .shippingAddress(
                     Address.builder()
                         .city("city")
