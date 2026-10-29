@@ -19,7 +19,7 @@ internal class DimensionalPriceGroupPriceCreateParamsTest {
             .addPrice(
                 DimensionalPriceGroupPriceCreateParams.Price.builder()
                     .addAmount(0.0)
-                    .addDimensionValue("string")
+                    .addDimensionValue("x")
                     .name("name")
                     .build()
             )
@@ -44,7 +44,7 @@ internal class DimensionalPriceGroupPriceCreateParamsTest {
                 .addPrice(
                     DimensionalPriceGroupPriceCreateParams.Price.builder()
                         .addAmount(0.0)
-                        .addDimensionValue("string")
+                        .addDimensionValue("x")
                         .build()
                 )
                 .build()
@@ -66,7 +66,7 @@ internal class DimensionalPriceGroupPriceCreateParamsTest {
                 .addPrice(
                     DimensionalPriceGroupPriceCreateParams.Price.builder()
                         .addAmount(0.0)
-                        .addDimensionValue("string")
+                        .addDimensionValue("x")
                         .name("name")
                         .build()
                 )
@@ -90,7 +90,7 @@ internal class DimensionalPriceGroupPriceCreateParamsTest {
             .containsExactly(
                 DimensionalPriceGroupPriceCreateParams.Price.builder()
                     .addAmount(0.0)
-                    .addDimensionValue("string")
+                    .addDimensionValue("x")
                     .name("name")
                     .build()
             )
@@ -115,7 +115,7 @@ internal class DimensionalPriceGroupPriceCreateParamsTest {
                 .addPrice(
                     DimensionalPriceGroupPriceCreateParams.Price.builder()
                         .addAmount(0.0)
-                        .addDimensionValue("string")
+                        .addDimensionValue("x")
                         .build()
                 )
                 .build()
@@ -132,7 +132,7 @@ internal class DimensionalPriceGroupPriceCreateParamsTest {
             .containsExactly(
                 DimensionalPriceGroupPriceCreateParams.Price.builder()
                     .addAmount(0.0)
-                    .addDimensionValue("string")
+                    .addDimensionValue("x")
                     .build()
             )
     }
