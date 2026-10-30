@@ -34,7 +34,10 @@ interface CreditBlockServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): CreditBlockServiceAsync
 
-    /** This endpoint returns a credit block identified by its block_id. */
+    /**
+     * This endpoint returns a credit block identified by its block_id. A deleted credit block is
+     * returned with a `status` of `void` and a `balance` of 0.
+     */
     fun retrieve(blockId: String): CompletableFuture<CreditBlockRetrieveResponse> =
         retrieve(blockId, CreditBlockRetrieveParams.none())
 
