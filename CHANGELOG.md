@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.51.0](https://github.com/orbcorp/orb-java/compare/v1.50.0...v1.51.0) (2026-10-31)
+
+
+### Features
+
+* **api:** add void status for deleted credit blocks in CreditBlock schema ([687c22b](https://github.com/orbcorp/orb-java/commit/687c22bee2dee7d90f78027ca1a10eb287edddfc))
+
 ## [1.50.0](https://github.com/orbcorp/orb-java/compare/v1.49.0...v1.50.0) (2026-10-30)
 
 
