@@ -307,9 +307,9 @@ private constructor(
 
             @JvmField val ACTIVE = of("active")
 
-            @JvmField val ARCHIVED = of("archived")
-
             @JvmField val DRAFT = of("draft")
+
+            @JvmField val ARCHIVED = of("archived")
 
             @JvmStatic fun of(value: String) = Status(JsonField.of(value))
         }
@@ -317,8 +317,8 @@ private constructor(
         /** An enum containing [Status]'s known values. */
         enum class Known {
             ACTIVE,
-            ARCHIVED,
             DRAFT,
+            ARCHIVED,
         }
 
         /**
@@ -332,8 +332,8 @@ private constructor(
          */
         enum class Value {
             ACTIVE,
-            ARCHIVED,
             DRAFT,
+            ARCHIVED,
             /** An enum member indicating that [Status] was instantiated with an unknown value. */
             _UNKNOWN,
         }
@@ -348,8 +348,8 @@ private constructor(
         fun value(): Value =
             when (this) {
                 ACTIVE -> Value.ACTIVE
-                ARCHIVED -> Value.ARCHIVED
                 DRAFT -> Value.DRAFT
+                ARCHIVED -> Value.ARCHIVED
                 else -> Value._UNKNOWN
             }
 
@@ -364,8 +364,8 @@ private constructor(
         fun known(): Known =
             when (this) {
                 ACTIVE -> Known.ACTIVE
-                ARCHIVED -> Known.ARCHIVED
                 DRAFT -> Known.DRAFT
+                ARCHIVED -> Known.ARCHIVED
                 else -> throw OrbInvalidDataException("Unknown Status: $value")
             }
 
