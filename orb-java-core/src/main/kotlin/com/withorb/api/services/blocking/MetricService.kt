@@ -12,6 +12,7 @@ import com.withorb.api.models.MetricCreateParams
 import com.withorb.api.models.MetricFetchParams
 import com.withorb.api.models.MetricListPage
 import com.withorb.api.models.MetricListParams
+import com.withorb.api.models.MetricPublishParams
 import com.withorb.api.models.MetricUnarchiveParams
 import com.withorb.api.models.MetricUpdateParams
 import java.util.function.Consumer
@@ -176,6 +177,40 @@ interface MetricService {
     /** @see fetch */
     fun fetch(metricId: String, requestOptions: RequestOptions): BillableMetric =
         fetch(metricId, MetricFetchParams.none(), requestOptions)
+
+    /**
+     * This endpoint publishes a [metric](/core-concepts#metric) in `draft` status, making it
+     * `active`. Only draft metrics can be published, and an active metric can't be moved back into
+     * `draft`, so its `sql` and `item_id` can no longer be changed.
+     */
+    fun publish(metricId: String): BillableMetric = publish(metricId, MetricPublishParams.none())
+
+    /** @see publish */
+    fun publish(
+        metricId: String,
+        params: MetricPublishParams = MetricPublishParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BillableMetric = publish(params.toBuilder().metricId(metricId).build(), requestOptions)
+
+    /** @see publish */
+    fun publish(
+        metricId: String,
+        params: MetricPublishParams = MetricPublishParams.none(),
+    ): BillableMetric = publish(metricId, params, RequestOptions.none())
+
+    /** @see publish */
+    fun publish(
+        params: MetricPublishParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BillableMetric
+
+    /** @see publish */
+    fun publish(params: MetricPublishParams): BillableMetric =
+        publish(params, RequestOptions.none())
+
+    /** @see publish */
+    fun publish(metricId: String, requestOptions: RequestOptions): BillableMetric =
+        publish(metricId, MetricPublishParams.none(), requestOptions)
 
     /**
      * This endpoint restores an archived [metric](/core-concepts#metric) to `active`, so it can be
@@ -391,6 +426,50 @@ interface MetricService {
             requestOptions: RequestOptions,
         ): HttpResponseFor<BillableMetric> =
             fetch(metricId, MetricFetchParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /metrics/{metric_id}/publish`, but is otherwise the
+         * same as [MetricService.publish].
+         */
+        @MustBeClosed
+        fun publish(metricId: String): HttpResponseFor<BillableMetric> =
+            publish(metricId, MetricPublishParams.none())
+
+        /** @see publish */
+        @MustBeClosed
+        fun publish(
+            metricId: String,
+            params: MetricPublishParams = MetricPublishParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BillableMetric> =
+            publish(params.toBuilder().metricId(metricId).build(), requestOptions)
+
+        /** @see publish */
+        @MustBeClosed
+        fun publish(
+            metricId: String,
+            params: MetricPublishParams = MetricPublishParams.none(),
+        ): HttpResponseFor<BillableMetric> = publish(metricId, params, RequestOptions.none())
+
+        /** @see publish */
+        @MustBeClosed
+        fun publish(
+            params: MetricPublishParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BillableMetric>
+
+        /** @see publish */
+        @MustBeClosed
+        fun publish(params: MetricPublishParams): HttpResponseFor<BillableMetric> =
+            publish(params, RequestOptions.none())
+
+        /** @see publish */
+        @MustBeClosed
+        fun publish(
+            metricId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BillableMetric> =
+            publish(metricId, MetricPublishParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /metrics/{metric_id}/unarchive`, but is otherwise
