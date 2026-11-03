@@ -11,7 +11,9 @@ import com.withorb.api.core.ExcludeMissing
 import com.withorb.api.core.JsonField
 import com.withorb.api.core.JsonMissing
 import com.withorb.api.core.JsonValue
+import com.withorb.api.core.checkKnown
 import com.withorb.api.core.checkRequired
+import com.withorb.api.core.toImmutable
 import com.withorb.api.errors.OrbInvalidDataException
 import java.util.Collections
 import java.util.Objects
@@ -27,6 +29,7 @@ private constructor(
     private val durationUnit: JsonField<DurationUnit>,
     private val name: JsonField<String>,
     private val order: JsonField<Long>,
+    private val priceIds: JsonField<List<String>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -42,7 +45,10 @@ private constructor(
         durationUnit: JsonField<DurationUnit> = JsonMissing.of(),
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("order") @ExcludeMissing order: JsonField<Long> = JsonMissing.of(),
-    ) : this(id, description, duration, durationUnit, name, order, mutableMapOf())
+        @JsonProperty("price_ids")
+        @ExcludeMissing
+        priceIds: JsonField<List<String>> = JsonMissing.of(),
+    ) : this(id, description, duration, durationUnit, name, order, priceIds, mutableMapOf())
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -84,6 +90,14 @@ private constructor(
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun order(): Long = order.getRequired("order")
+
+    /**
+     * The IDs of the prices active in this phase.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun priceIds(): List<String> = priceIds.getRequired("price_ids")
 
     /**
      * Returns the raw JSON value of [id].
@@ -129,6 +143,13 @@ private constructor(
      */
     @JsonProperty("order") @ExcludeMissing fun _order(): JsonField<Long> = order
 
+    /**
+     * Returns the raw JSON value of [priceIds].
+     *
+     * Unlike [priceIds], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("price_ids") @ExcludeMissing fun _priceIds(): JsonField<List<String>> = priceIds
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -154,6 +175,7 @@ private constructor(
          * .durationUnit()
          * .name()
          * .order()
+         * .priceIds()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -168,6 +190,7 @@ private constructor(
         private var durationUnit: JsonField<DurationUnit>? = null
         private var name: JsonField<String>? = null
         private var order: JsonField<Long>? = null
+        private var priceIds: JsonField<MutableList<String>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -178,6 +201,7 @@ private constructor(
             durationUnit = planVersionPhase.durationUnit
             name = planVersionPhase.name
             order = planVersionPhase.order
+            priceIds = planVersionPhase.priceIds.map { it.toMutableList() }
             additionalProperties = planVersionPhase.additionalProperties.toMutableMap()
         }
 
@@ -268,6 +292,32 @@ private constructor(
          */
         fun order(order: JsonField<Long>) = apply { this.order = order }
 
+        /** The IDs of the prices active in this phase. */
+        fun priceIds(priceIds: List<String>) = priceIds(JsonField.of(priceIds))
+
+        /**
+         * Sets [Builder.priceIds] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.priceIds] with a well-typed `List<String>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun priceIds(priceIds: JsonField<List<String>>) = apply {
+            this.priceIds = priceIds.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [String] to [priceIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addPriceId(priceId: String) = apply {
+            priceIds =
+                (priceIds ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("priceIds", it).add(priceId)
+                }
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -300,6 +350,7 @@ private constructor(
          * .durationUnit()
          * .name()
          * .order()
+         * .priceIds()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -312,6 +363,7 @@ private constructor(
                 checkRequired("durationUnit", durationUnit),
                 checkRequired("name", name),
                 checkRequired("order", order),
+                checkRequired("priceIds", priceIds).map { it.toImmutable() },
                 additionalProperties.toMutableMap(),
             )
     }
@@ -337,6 +389,7 @@ private constructor(
         durationUnit().ifPresent { it.validate() }
         name()
         order()
+        priceIds()
         validated = true
     }
 
@@ -360,7 +413,8 @@ private constructor(
             (if (duration.asKnown().isPresent) 1 else 0) +
             (durationUnit.asKnown().getOrNull()?.validity() ?: 0) +
             (if (name.asKnown().isPresent) 1 else 0) +
-            (if (order.asKnown().isPresent) 1 else 0)
+            (if (order.asKnown().isPresent) 1 else 0) +
+            (priceIds.asKnown().getOrNull()?.size ?: 0)
 
     class DurationUnit @JsonCreator private constructor(private val value: JsonField<String>) :
         Enum {
@@ -528,15 +582,25 @@ private constructor(
             durationUnit == other.durationUnit &&
             name == other.name &&
             order == other.order &&
+            priceIds == other.priceIds &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(id, description, duration, durationUnit, name, order, additionalProperties)
+        Objects.hash(
+            id,
+            description,
+            duration,
+            durationUnit,
+            name,
+            order,
+            priceIds,
+            additionalProperties,
+        )
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "PlanVersionPhase{id=$id, description=$description, duration=$duration, durationUnit=$durationUnit, name=$name, order=$order, additionalProperties=$additionalProperties}"
+        "PlanVersionPhase{id=$id, description=$description, duration=$duration, durationUnit=$durationUnit, name=$name, order=$order, priceIds=$priceIds, additionalProperties=$additionalProperties}"
 }
