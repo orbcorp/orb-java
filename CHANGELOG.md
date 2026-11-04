@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.52.0](https://github.com/orbcorp/orb-java/compare/v1.51.0...v1.52.0) (2026-11-04)
+
+
+### Features
+
+* **api:** add price_ids to plan phases in plan responses ([9aecc79](https://github.com/orbcorp/orb-java/commit/9aecc796ff782ef513b0ab321868f92fc6309fbd))
+* **api:** support draft billable metrics with SQL/item edits and publish ([d5556e1](https://github.com/orbcorp/orb-java/commit/d5556e10f61e2c591139440fbe77a31570763ef0))
+
 ## [1.51.0](https://github.com/orbcorp/orb-java/compare/v1.50.0...v1.51.0) (2026-10-31)
 
 
