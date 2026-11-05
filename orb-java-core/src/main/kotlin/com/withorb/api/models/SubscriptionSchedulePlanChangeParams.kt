@@ -32126,6 +32126,7 @@ private constructor(
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val externalPriceId: JsonField<String>,
+        private val planPhaseOrder: JsonField<Long>,
         private val priceId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -32135,8 +32136,11 @@ private constructor(
             @JsonProperty("external_price_id")
             @ExcludeMissing
             externalPriceId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("plan_phase_order")
+            @ExcludeMissing
+            planPhaseOrder: JsonField<Long> = JsonMissing.of(),
             @JsonProperty("price_id") @ExcludeMissing priceId: JsonField<String> = JsonMissing.of(),
-        ) : this(externalPriceId, priceId, mutableMapOf())
+        ) : this(externalPriceId, planPhaseOrder, priceId, mutableMapOf())
 
         /**
          * The external price id of the price to remove on the subscription.
@@ -32145,6 +32149,14 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun externalPriceId(): Optional<String> = externalPriceId.getOptional("external_price_id")
+
+        /**
+         * The phase to remove this price from.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun planPhaseOrder(): Optional<Long> = planPhaseOrder.getOptional("plan_phase_order")
 
         /**
          * The id of the price to remove on the subscription.
@@ -32163,6 +32175,16 @@ private constructor(
         @JsonProperty("external_price_id")
         @ExcludeMissing
         fun _externalPriceId(): JsonField<String> = externalPriceId
+
+        /**
+         * Returns the raw JSON value of [planPhaseOrder].
+         *
+         * Unlike [planPhaseOrder], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("plan_phase_order")
+        @ExcludeMissing
+        fun _planPhaseOrder(): JsonField<Long> = planPhaseOrder
 
         /**
          * Returns the raw JSON value of [priceId].
@@ -32193,12 +32215,14 @@ private constructor(
         class Builder internal constructor() {
 
             private var externalPriceId: JsonField<String> = JsonMissing.of()
+            private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
             private var priceId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(removePrice: RemovePrice) = apply {
                 externalPriceId = removePrice.externalPriceId
+                planPhaseOrder = removePrice.planPhaseOrder
                 priceId = removePrice.priceId
                 additionalProperties = removePrice.additionalProperties.toMutableMap()
             }
@@ -32220,6 +32244,32 @@ private constructor(
              */
             fun externalPriceId(externalPriceId: JsonField<String>) = apply {
                 this.externalPriceId = externalPriceId
+            }
+
+            /** The phase to remove this price from. */
+            fun planPhaseOrder(planPhaseOrder: Long?) =
+                planPhaseOrder(JsonField.ofNullable(planPhaseOrder))
+
+            /**
+             * Alias for [Builder.planPhaseOrder].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
+
+            /** Alias for calling [Builder.planPhaseOrder] with `planPhaseOrder.orElse(null)`. */
+            fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
+                planPhaseOrder(planPhaseOrder.getOrNull())
+
+            /**
+             * Sets [Builder.planPhaseOrder] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.planPhaseOrder] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
+                this.planPhaseOrder = planPhaseOrder
             }
 
             /** The id of the price to remove on the subscription. */
@@ -32262,7 +32312,12 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              */
             fun build(): RemovePrice =
-                RemovePrice(externalPriceId, priceId, additionalProperties.toMutableMap())
+                RemovePrice(
+                    externalPriceId,
+                    planPhaseOrder,
+                    priceId,
+                    additionalProperties.toMutableMap(),
+                )
         }
 
         private var validated: Boolean = false
@@ -32282,6 +32337,7 @@ private constructor(
             }
 
             externalPriceId()
+            planPhaseOrder()
             priceId()
             validated = true
         }
@@ -32303,6 +32359,7 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (if (externalPriceId.asKnown().isPresent) 1 else 0) +
+                (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (if (priceId.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
@@ -32312,18 +32369,19 @@ private constructor(
 
             return other is RemovePrice &&
                 externalPriceId == other.externalPriceId &&
+                planPhaseOrder == other.planPhaseOrder &&
                 priceId == other.priceId &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(externalPriceId, priceId, additionalProperties)
+            Objects.hash(externalPriceId, planPhaseOrder, priceId, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "RemovePrice{externalPriceId=$externalPriceId, priceId=$priceId, additionalProperties=$additionalProperties}"
+            "RemovePrice{externalPriceId=$externalPriceId, planPhaseOrder=$planPhaseOrder, priceId=$priceId, additionalProperties=$additionalProperties}"
     }
 
     class ReplaceAdjustment
@@ -34853,6 +34911,7 @@ private constructor(
         private val maximumAmount: JsonField<String>,
         private val metricParameterOverrides: JsonField<MetricParameterOverrides>,
         private val minimumAmount: JsonField<String>,
+        private val planPhaseOrder: JsonField<Long>,
         private val price: JsonField<Price>,
         private val priceId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -34884,6 +34943,9 @@ private constructor(
             @JsonProperty("minimum_amount")
             @ExcludeMissing
             minimumAmount: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("plan_phase_order")
+            @ExcludeMissing
+            planPhaseOrder: JsonField<Long> = JsonMissing.of(),
             @JsonProperty("price") @ExcludeMissing price: JsonField<Price> = JsonMissing.of(),
             @JsonProperty("price_id") @ExcludeMissing priceId: JsonField<String> = JsonMissing.of(),
         ) : this(
@@ -34895,6 +34957,7 @@ private constructor(
             maximumAmount,
             metricParameterOverrides,
             minimumAmount,
+            planPhaseOrder,
             price,
             priceId,
             mutableMapOf(),
@@ -34973,6 +35036,14 @@ private constructor(
          */
         @Deprecated("deprecated")
         fun minimumAmount(): Optional<String> = minimumAmount.getOptional("minimum_amount")
+
+        /**
+         * The phase to replace this price in.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun planPhaseOrder(): Optional<Long> = planPhaseOrder.getOptional("plan_phase_order")
 
         /**
          * New subscription price request body params.
@@ -35074,6 +35145,16 @@ private constructor(
         fun _minimumAmount(): JsonField<String> = minimumAmount
 
         /**
+         * Returns the raw JSON value of [planPhaseOrder].
+         *
+         * Unlike [planPhaseOrder], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("plan_phase_order")
+        @ExcludeMissing
+        fun _planPhaseOrder(): JsonField<Long> = planPhaseOrder
+
+        /**
          * Returns the raw JSON value of [price].
          *
          * Unlike [price], this method doesn't throw if the JSON field has an unexpected type.
@@ -35124,6 +35205,7 @@ private constructor(
             private var metricParameterOverrides: JsonField<MetricParameterOverrides> =
                 JsonMissing.of()
             private var minimumAmount: JsonField<String> = JsonMissing.of()
+            private var planPhaseOrder: JsonField<Long> = JsonMissing.of()
             private var price: JsonField<Price> = JsonMissing.of()
             private var priceId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -35138,6 +35220,7 @@ private constructor(
                 maximumAmount = replacePrice.maximumAmount
                 metricParameterOverrides = replacePrice.metricParameterOverrides
                 minimumAmount = replacePrice.minimumAmount
+                planPhaseOrder = replacePrice.planPhaseOrder
                 price = replacePrice.price
                 priceId = replacePrice.priceId
                 additionalProperties = replacePrice.additionalProperties.toMutableMap()
@@ -35338,6 +35421,32 @@ private constructor(
             @Deprecated("deprecated")
             fun minimumAmount(minimumAmount: JsonField<String>) = apply {
                 this.minimumAmount = minimumAmount
+            }
+
+            /** The phase to replace this price in. */
+            fun planPhaseOrder(planPhaseOrder: Long?) =
+                planPhaseOrder(JsonField.ofNullable(planPhaseOrder))
+
+            /**
+             * Alias for [Builder.planPhaseOrder].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun planPhaseOrder(planPhaseOrder: Long) = planPhaseOrder(planPhaseOrder as Long?)
+
+            /** Alias for calling [Builder.planPhaseOrder] with `planPhaseOrder.orElse(null)`. */
+            fun planPhaseOrder(planPhaseOrder: Optional<Long>) =
+                planPhaseOrder(planPhaseOrder.getOrNull())
+
+            /**
+             * Sets [Builder.planPhaseOrder] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.planPhaseOrder] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun planPhaseOrder(planPhaseOrder: JsonField<Long>) = apply {
+                this.planPhaseOrder = planPhaseOrder
             }
 
             /** New subscription price request body params. */
@@ -35601,6 +35710,7 @@ private constructor(
                     maximumAmount,
                     metricParameterOverrides,
                     minimumAmount,
+                    planPhaseOrder,
                     price,
                     priceId,
                     additionalProperties.toMutableMap(),
@@ -35631,6 +35741,7 @@ private constructor(
             maximumAmount()
             metricParameterOverrides().ifPresent { it.validate() }
             minimumAmount()
+            planPhaseOrder()
             price().ifPresent { it.validate() }
             priceId()
             validated = true
@@ -35660,6 +35771,7 @@ private constructor(
                 (if (maximumAmount.asKnown().isPresent) 1 else 0) +
                 (metricParameterOverrides.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (minimumAmount.asKnown().isPresent) 1 else 0) +
+                (if (planPhaseOrder.asKnown().isPresent) 1 else 0) +
                 (price.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (priceId.asKnown().isPresent) 1 else 0)
 
@@ -60424,6 +60536,7 @@ private constructor(
                 maximumAmount == other.maximumAmount &&
                 metricParameterOverrides == other.metricParameterOverrides &&
                 minimumAmount == other.minimumAmount &&
+                planPhaseOrder == other.planPhaseOrder &&
                 price == other.price &&
                 priceId == other.priceId &&
                 additionalProperties == other.additionalProperties
@@ -60439,6 +60552,7 @@ private constructor(
                 maximumAmount,
                 metricParameterOverrides,
                 minimumAmount,
+                planPhaseOrder,
                 price,
                 priceId,
                 additionalProperties,
@@ -60448,7 +60562,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ReplacePrice{replacesPriceId=$replacesPriceId, allocationPrice=$allocationPrice, discounts=$discounts, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, maximumAmount=$maximumAmount, metricParameterOverrides=$metricParameterOverrides, minimumAmount=$minimumAmount, price=$price, priceId=$priceId, additionalProperties=$additionalProperties}"
+            "ReplacePrice{replacesPriceId=$replacesPriceId, allocationPrice=$allocationPrice, discounts=$discounts, externalPriceId=$externalPriceId, fixedPriceQuantity=$fixedPriceQuantity, maximumAmount=$maximumAmount, metricParameterOverrides=$metricParameterOverrides, minimumAmount=$minimumAmount, planPhaseOrder=$planPhaseOrder, price=$price, priceId=$priceId, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

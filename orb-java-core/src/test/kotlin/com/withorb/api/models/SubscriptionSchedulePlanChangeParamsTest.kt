@@ -182,6 +182,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
             .addRemovePrice(
                 SubscriptionSchedulePlanChangeParams.RemovePrice.builder()
                     .externalPriceId("external_price_id")
+                    .planPhaseOrder(0L)
                     .priceId("h74gfhdjvn7ujokd")
                     .build()
             )
@@ -263,6 +264,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                             .build()
                     )
                     .minimumAmount("1.23")
+                    .planPhaseOrder(0L)
                     .price(
                         NewSubscriptionUnitPrice.builder()
                             .cadence(NewSubscriptionUnitPrice.Cadence.ONE_TIME)
@@ -512,6 +514,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                 .addRemovePrice(
                     SubscriptionSchedulePlanChangeParams.RemovePrice.builder()
                         .externalPriceId("external_price_id")
+                        .planPhaseOrder(0L)
                         .priceId("h74gfhdjvn7ujokd")
                         .build()
                 )
@@ -594,6 +597,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                                 .build()
                         )
                         .minimumAmount("1.23")
+                        .planPhaseOrder(0L)
                         .price(
                             NewSubscriptionUnitPrice.builder()
                                 .cadence(NewSubscriptionUnitPrice.Cadence.ONE_TIME)
@@ -830,6 +834,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
             .containsExactly(
                 SubscriptionSchedulePlanChangeParams.RemovePrice.builder()
                     .externalPriceId("external_price_id")
+                    .planPhaseOrder(0L)
                     .priceId("h74gfhdjvn7ujokd")
                     .build()
             )
@@ -913,6 +918,7 @@ internal class SubscriptionSchedulePlanChangeParamsTest {
                             .build()
                     )
                     .minimumAmount("1.23")
+                    .planPhaseOrder(0L)
                     .price(
                         NewSubscriptionUnitPrice.builder()
                             .cadence(NewSubscriptionUnitPrice.Cadence.ONE_TIME)
