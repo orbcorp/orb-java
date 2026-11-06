@@ -569,6 +569,18 @@ interface PriceServiceAsync {
     fun create(eventOutput: PriceCreateParams.Body.EventOutput): CompletableFuture<Price> =
         create(eventOutput, RequestOptions.none())
 
+    /** @see create */
+    fun create(
+        unitWithMultiplier: PriceCreateParams.Body.UnitWithMultiplier,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Price> =
+        create(PriceCreateParams.Body.ofUnitWithMultiplier(unitWithMultiplier), requestOptions)
+
+    /** @see create */
+    fun create(
+        unitWithMultiplier: PriceCreateParams.Body.UnitWithMultiplier
+    ): CompletableFuture<Price> = create(unitWithMultiplier, RequestOptions.none())
+
     /**
      * This endpoint allows you to update the `metadata` property on a price. If you pass null for
      * the metadata value, it will clear any existing metadata for that price.
@@ -1329,6 +1341,19 @@ interface PriceServiceAsync {
         fun create(
             eventOutput: PriceCreateParams.Body.EventOutput
         ): CompletableFuture<HttpResponseFor<Price>> = create(eventOutput, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            unitWithMultiplier: PriceCreateParams.Body.UnitWithMultiplier,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(PriceCreateParams.Body.ofUnitWithMultiplier(unitWithMultiplier), requestOptions)
+
+        /** @see create */
+        fun create(
+            unitWithMultiplier: PriceCreateParams.Body.UnitWithMultiplier
+        ): CompletableFuture<HttpResponseFor<Price>> =
+            create(unitWithMultiplier, RequestOptions.none())
 
         /**
          * Returns a raw HTTP response for `put /prices/{price_id}`, but is otherwise the same as

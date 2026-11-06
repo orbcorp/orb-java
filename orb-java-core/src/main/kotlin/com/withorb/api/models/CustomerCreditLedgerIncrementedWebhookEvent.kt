@@ -872,7 +872,7 @@ private constructor(
                 perUnitCostBasis.getOptional("per_unit_cost_basis")
 
             /**
-             * `void` means the credit block was deleted. A voided block's `balance` is always 0.
+             * A deleted credit block keeps its historical fields, and its `balance` is always 0.
              *
              * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -1242,7 +1242,7 @@ private constructor(
                 }
 
                 /**
-                 * `void` means the credit block was deleted. A voided block's `balance` is
+                 * A deleted credit block keeps its historical fields, and its `balance` is
                  * always 0.
                  */
                 fun status(status: Status) = status(JsonField.of(status))
@@ -2298,7 +2298,7 @@ private constructor(
             }
 
             /**
-             * `void` means the credit block was deleted. A voided block's `balance` is always 0.
+             * A deleted credit block keeps its historical fields, and its `balance` is always 0.
              */
             class Status @JsonCreator private constructor(private val value: JsonField<String>) :
                 Enum {
@@ -2319,7 +2319,7 @@ private constructor(
 
                     @JvmField val PENDING_PAYMENT = of("pending_payment")
 
-                    @JvmField val VOID = of("void")
+                    @JvmField val DELETED = of("deleted")
 
                     @JvmStatic fun of(value: String) = Status(JsonField.of(value))
                 }
@@ -2328,7 +2328,7 @@ private constructor(
                 enum class Known {
                     ACTIVE,
                     PENDING_PAYMENT,
-                    VOID,
+                    DELETED,
                 }
 
                 /**
@@ -2343,7 +2343,7 @@ private constructor(
                 enum class Value {
                     ACTIVE,
                     PENDING_PAYMENT,
-                    VOID,
+                    DELETED,
                     /**
                      * An enum member indicating that [Status] was instantiated with an unknown
                      * value.
@@ -2362,7 +2362,7 @@ private constructor(
                     when (this) {
                         ACTIVE -> Value.ACTIVE
                         PENDING_PAYMENT -> Value.PENDING_PAYMENT
-                        VOID -> Value.VOID
+                        DELETED -> Value.DELETED
                         else -> Value._UNKNOWN
                     }
 
@@ -2379,7 +2379,7 @@ private constructor(
                     when (this) {
                         ACTIVE -> Known.ACTIVE
                         PENDING_PAYMENT -> Known.PENDING_PAYMENT
-                        VOID -> Known.VOID
+                        DELETED -> Known.DELETED
                         else -> throw OrbInvalidDataException("Unknown Status: $value")
                     }
 
