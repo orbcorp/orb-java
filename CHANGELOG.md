@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.53.0](https://github.com/orbcorp/orb-java/compare/v1.52.0...v1.53.0) (2026-11-06)
+
+
+### Features
+
+* **api:** add plan migration started, completed, and canceled webhooks ([3307f2f](https://github.com/orbcorp/orb-java/commit/3307f2f832973d2d8cc815b82936561dc8e962e7))
+* **api:** add started_at and ended_at to plan migration resource ([3307f2f](https://github.com/orbcorp/orb-java/commit/3307f2f832973d2d8cc815b82936561dc8e962e7))
+* **api:** api update ([3307f2f](https://github.com/orbcorp/orb-java/commit/3307f2f832973d2d8cc815b82936561dc8e962e7))
+
 ## [1.52.0](https://github.com/orbcorp/orb-java/compare/v1.51.0...v1.52.0) (2026-11-04)
 
 
