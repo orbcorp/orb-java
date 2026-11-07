@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.54.0](https://github.com/orbcorp/orb-java/compare/v1.53.0...v1.54.0) (2026-11-07)
+
+
+### Features
+
+* **api:** api update ([f256a4f](https://github.com/orbcorp/orb-java/commit/f256a4f75e3ddff9ce785b0115388813a656985a))
+* **api:** credit block status `void` renamed to `deleted` for deleted blocks ([f256a4f](https://github.com/orbcorp/orb-java/commit/f256a4f75e3ddff9ce785b0115388813a656985a))
+
 ## [1.53.0](https://github.com/orbcorp/orb-java/compare/v1.52.0...v1.53.0) (2026-11-06)
 
 
