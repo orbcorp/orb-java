@@ -17,6 +17,7 @@ import com.withorb.api.services.async.ItemServiceAsync
 import com.withorb.api.services.async.LicenseServiceAsync
 import com.withorb.api.services.async.LicenseTypeServiceAsync
 import com.withorb.api.services.async.MetricServiceAsync
+import com.withorb.api.services.async.MigrationServiceAsync
 import com.withorb.api.services.async.PlanServiceAsync
 import com.withorb.api.services.async.PriceServiceAsync
 import com.withorb.api.services.async.SubscriptionChangeServiceAsync
@@ -158,6 +159,8 @@ interface OrbClientAsync {
      * about how to configure prices in the [Price resource](/reference/price).
      */
     fun plans(): PlanServiceAsync
+
+    fun migrations(): MigrationServiceAsync
 
     /**
      * The Price resource represents a price that can be billed on a subscription, resulting in a
@@ -320,6 +323,8 @@ interface OrbClientAsync {
          * can see more about how to configure prices in the [Price resource](/reference/price).
          */
         fun plans(): PlanServiceAsync.WithRawResponse
+
+        fun migrations(): MigrationServiceAsync.WithRawResponse
 
         /**
          * The Price resource represents a price that can be billed on a subscription, resulting in
