@@ -32,9 +32,9 @@ import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be subscribed to by
- * a customer. Plans define the billing behavior of the subscription. You can see more about how to
- * configure prices in the [Price resource](/reference/price).
+ * A migration moves a plan's subscriptions onto one of the plan's versions. Each subscription is
+ * migrated asynchronously, either immediately or at a scheduled time, and the migration reports its
+ * overall status as it progresses.
  */
 class MigrationServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     MigrationServiceAsync {
@@ -53,9 +53,9 @@ class MigrationServiceAsyncImpl internal constructor(private val clientOptions: 
         MigrationServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     /**
-     * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be subscribed
-     * to by a customer. Plans define the billing behavior of the subscription. You can see more
-     * about how to configure prices in the [Price resource](/reference/price).
+     * A migration moves a plan's subscriptions onto one of the plan's versions. Each subscription
+     * is migrated asynchronously, either immediately or at a scheduled time, and the migration
+     * reports its overall status as it progresses.
      */
     override fun subscriptions(): SubscriptionServiceAsync = subscriptions
 
@@ -105,9 +105,9 @@ class MigrationServiceAsyncImpl internal constructor(private val clientOptions: 
             )
 
         /**
-         * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be
-         * subscribed to by a customer. Plans define the billing behavior of the subscription. You
-         * can see more about how to configure prices in the [Price resource](/reference/price).
+         * A migration moves a plan's subscriptions onto one of the plan's versions. Each
+         * subscription is migrated asynchronously, either immediately or at a scheduled time, and
+         * the migration reports its overall status as it progresses.
          */
         override fun subscriptions(): SubscriptionServiceAsync.WithRawResponse = subscriptions
 
