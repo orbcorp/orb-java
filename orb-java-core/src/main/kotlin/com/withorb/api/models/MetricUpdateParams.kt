@@ -21,11 +21,13 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * This endpoint allows you to update the `name`, `description`, and `metadata` properties on a
- * metric. Fields left out of the request are not changed, and `name` cannot be empty. If you pass
- * `null` for the metadata value, it will clear any existing metadata for that metric.
+ * This endpoint allows you to update the `name`, `description`, `item_id`, and `metadata`
+ * properties on a metric. Fields left out of the request are not changed, and `name` cannot be
+ * empty. If you pass `null` for the metadata value, it will clear any existing metadata for that
+ * metric. Changing `item_id` applies to prices created on the metric afterwards; existing prices
+ * keep the item they were created with.
  *
- * While a metric is in `draft` status, its `sql` and `item_id` can also be changed. Use
+ * While a metric is in `draft` status, its `sql` can also be changed. Use
  * [publish metric](/api-reference/metric/publish-metric) to make a draft metric active.
  */
 class MetricUpdateParams
@@ -47,8 +49,8 @@ private constructor(
     fun description(): Optional<String> = body.description()
 
     /**
-     * The id of the item to associate the metric with. Can only be changed while the metric is in
-     * `draft` status.
+     * The id of the item to associate the metric with. Prices created on the metric afterwards use
+     * the new item; existing prices keep the item they were created with.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
@@ -187,8 +189,8 @@ private constructor(
         fun description(description: JsonField<String>) = apply { body.description(description) }
 
         /**
-         * The id of the item to associate the metric with. Can only be changed while the metric is
-         * in `draft` status.
+         * The id of the item to associate the metric with. Prices created on the metric afterwards
+         * use the new item; existing prices keep the item they were created with.
          */
         fun itemId(itemId: String?) = apply { body.itemId(itemId) }
 
@@ -430,8 +432,8 @@ private constructor(
         fun description(): Optional<String> = description.getOptional("description")
 
         /**
-         * The id of the item to associate the metric with. Can only be changed while the metric is
-         * in `draft` status.
+         * The id of the item to associate the metric with. Prices created on the metric afterwards
+         * use the new item; existing prices keep the item they were created with.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -559,8 +561,8 @@ private constructor(
             }
 
             /**
-             * The id of the item to associate the metric with. Can only be changed while the metric
-             * is in `draft` status.
+             * The id of the item to associate the metric with. Prices created on the metric
+             * afterwards use the new item; existing prices keep the item they were created with.
              */
             fun itemId(itemId: String?) = itemId(JsonField.ofNullable(itemId))
 
