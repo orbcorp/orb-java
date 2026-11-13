@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.55.0](https://github.com/orbcorp/orb-java/compare/v1.54.0...v1.55.0) (2026-11-13)
+
+
+### Features
+
+* **api:** allow changing item_id on active metrics ([aedbd48](https://github.com/orbcorp/orb-java/commit/aedbd486f6971bb21fd4649b841b1c9da0445a61))
+* **api:** api update ([a77d69a](https://github.com/orbcorp/orb-java/commit/a77d69a64523736a98f7987218bd56d0c5f3f7ba))
+* **api:** api update ([5b0b1ce](https://github.com/orbcorp/orb-java/commit/5b0b1ce805e6c2e63b77dca8e8ed35b0d90e2187))
+
 ## [1.54.0](https://github.com/orbcorp/orb-java/compare/v1.53.0...v1.54.0) (2026-11-07)
 
 
