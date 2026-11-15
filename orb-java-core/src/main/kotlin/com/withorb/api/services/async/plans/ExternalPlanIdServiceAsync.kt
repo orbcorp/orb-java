@@ -8,6 +8,7 @@ import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Plan
 import com.withorb.api.models.PlanExternalPlanIdFetchParams
 import com.withorb.api.models.PlanExternalPlanIdUpdateParams
+import com.withorb.api.services.async.plans.externalPlanId.DraftServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -29,6 +30,13 @@ interface ExternalPlanIdServiceAsync {
      * The original service is not modified.
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): ExternalPlanIdServiceAsync
+
+    /**
+     * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be subscribed
+     * to by a customer. Plans define the billing behavior of the subscription. You can see more
+     * about how to configure prices in the [Price resource](/reference/price).
+     */
+    fun draft(): DraftServiceAsync
 
     /**
      * This endpoint can be used to update the `name`, `external_plan_id`, `description`, and
@@ -131,6 +139,13 @@ interface ExternalPlanIdServiceAsync {
         fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
         ): ExternalPlanIdServiceAsync.WithRawResponse
+
+        /**
+         * The [Plan](/core-concepts#plan-and-price) resource represents a plan that can be
+         * subscribed to by a customer. Plans define the billing behavior of the subscription. You
+         * can see more about how to configure prices in the [Price resource](/reference/price).
+         */
+        fun draft(): DraftServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `put /plans/external_plan_id/{external_plan_id}`, but is
