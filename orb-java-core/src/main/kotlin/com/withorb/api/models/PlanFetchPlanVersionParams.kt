@@ -14,15 +14,15 @@ import kotlin.jvm.optionals.getOrNull
  * This endpoint is used to fetch a plan version. It returns the phases, prices, and adjustments
  * present on this version of the plan.
  */
-class BetaExternalPlanIdFetchPlanVersionParams
+class PlanFetchPlanVersionParams
 private constructor(
-    private val externalPlanId: String,
+    private val planId: String,
     private val version: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun externalPlanId(): String = externalPlanId
+    fun planId(): String = planId
 
     fun version(): Optional<String> = Optional.ofNullable(version)
 
@@ -37,38 +37,33 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of
-         * [BetaExternalPlanIdFetchPlanVersionParams].
+         * Returns a mutable builder for constructing an instance of [PlanFetchPlanVersionParams].
          *
          * The following fields are required:
          * ```java
-         * .externalPlanId()
+         * .planId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [BetaExternalPlanIdFetchPlanVersionParams]. */
+    /** A builder for [PlanFetchPlanVersionParams]. */
     class Builder internal constructor() {
 
-        private var externalPlanId: String? = null
+        private var planId: String? = null
         private var version: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(
-            betaExternalPlanIdFetchPlanVersionParams: BetaExternalPlanIdFetchPlanVersionParams
-        ) = apply {
-            externalPlanId = betaExternalPlanIdFetchPlanVersionParams.externalPlanId
-            version = betaExternalPlanIdFetchPlanVersionParams.version
-            additionalHeaders =
-                betaExternalPlanIdFetchPlanVersionParams.additionalHeaders.toBuilder()
-            additionalQueryParams =
-                betaExternalPlanIdFetchPlanVersionParams.additionalQueryParams.toBuilder()
+        internal fun from(planFetchPlanVersionParams: PlanFetchPlanVersionParams) = apply {
+            planId = planFetchPlanVersionParams.planId
+            version = planFetchPlanVersionParams.version
+            additionalHeaders = planFetchPlanVersionParams.additionalHeaders.toBuilder()
+            additionalQueryParams = planFetchPlanVersionParams.additionalQueryParams.toBuilder()
         }
 
-        fun externalPlanId(externalPlanId: String) = apply { this.externalPlanId = externalPlanId }
+        fun planId(planId: String) = apply { this.planId = planId }
 
         fun version(version: String?) = apply { this.version = version }
 
@@ -174,20 +169,20 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [BetaExternalPlanIdFetchPlanVersionParams].
+         * Returns an immutable instance of [PlanFetchPlanVersionParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
          * ```java
-         * .externalPlanId()
+         * .planId()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): BetaExternalPlanIdFetchPlanVersionParams =
-            BetaExternalPlanIdFetchPlanVersionParams(
-                checkRequired("externalPlanId", externalPlanId),
+        fun build(): PlanFetchPlanVersionParams =
+            PlanFetchPlanVersionParams(
+                checkRequired("planId", planId),
                 version,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -196,7 +191,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> externalPlanId
+            0 -> planId
             1 -> version ?: ""
             else -> ""
         }
@@ -210,16 +205,16 @@ private constructor(
             return true
         }
 
-        return other is BetaExternalPlanIdFetchPlanVersionParams &&
-            externalPlanId == other.externalPlanId &&
+        return other is PlanFetchPlanVersionParams &&
+            planId == other.planId &&
             version == other.version &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(externalPlanId, version, additionalHeaders, additionalQueryParams)
+        Objects.hash(planId, version, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "BetaExternalPlanIdFetchPlanVersionParams{externalPlanId=$externalPlanId, version=$version, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "PlanFetchPlanVersionParams{planId=$planId, version=$version, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -7,10 +7,14 @@ import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Plan
 import com.withorb.api.models.PlanCreateParams
+import com.withorb.api.models.PlanCreatePlanVersionParams
 import com.withorb.api.models.PlanFetchParams
+import com.withorb.api.models.PlanFetchPlanVersionParams
 import com.withorb.api.models.PlanListPageAsync
 import com.withorb.api.models.PlanListParams
+import com.withorb.api.models.PlanSetDefaultPlanVersionParams
 import com.withorb.api.models.PlanUpdateParams
+import com.withorb.api.models.PlanVersion
 import com.withorb.api.services.async.plans.DraftServiceAsync
 import com.withorb.api.services.async.plans.ExternalPlanIdServiceAsync
 import com.withorb.api.services.async.plans.MigrationServiceAsync
@@ -124,6 +128,30 @@ interface PlanServiceAsync {
     fun list(requestOptions: RequestOptions): CompletableFuture<PlanListPageAsync> =
         list(PlanListParams.none(), requestOptions)
 
+    /** This endpoint allows the creation of a new plan version for an existing plan. */
+    fun createPlanVersion(
+        planId: String,
+        params: PlanCreatePlanVersionParams,
+    ): CompletableFuture<PlanVersion> = createPlanVersion(planId, params, RequestOptions.none())
+
+    /** @see createPlanVersion */
+    fun createPlanVersion(
+        planId: String,
+        params: PlanCreatePlanVersionParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<PlanVersion> =
+        createPlanVersion(params.toBuilder().planId(planId).build(), requestOptions)
+
+    /** @see createPlanVersion */
+    fun createPlanVersion(params: PlanCreatePlanVersionParams): CompletableFuture<PlanVersion> =
+        createPlanVersion(params, RequestOptions.none())
+
+    /** @see createPlanVersion */
+    fun createPlanVersion(
+        params: PlanCreatePlanVersionParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<PlanVersion>
+
     /**
      * This endpoint is used to fetch [plan](/core-concepts#plan-and-price) details given a plan
      * identifier. It returns information about the prices included in the plan and their
@@ -168,6 +196,57 @@ interface PlanServiceAsync {
     /** @see fetch */
     fun fetch(planId: String, requestOptions: RequestOptions): CompletableFuture<Plan> =
         fetch(planId, PlanFetchParams.none(), requestOptions)
+
+    /**
+     * This endpoint is used to fetch a plan version. It returns the phases, prices, and adjustments
+     * present on this version of the plan.
+     */
+    fun fetchPlanVersion(
+        version: String,
+        params: PlanFetchPlanVersionParams,
+    ): CompletableFuture<PlanVersion> = fetchPlanVersion(version, params, RequestOptions.none())
+
+    /** @see fetchPlanVersion */
+    fun fetchPlanVersion(
+        version: String,
+        params: PlanFetchPlanVersionParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<PlanVersion> =
+        fetchPlanVersion(params.toBuilder().version(version).build(), requestOptions)
+
+    /** @see fetchPlanVersion */
+    fun fetchPlanVersion(params: PlanFetchPlanVersionParams): CompletableFuture<PlanVersion> =
+        fetchPlanVersion(params, RequestOptions.none())
+
+    /** @see fetchPlanVersion */
+    fun fetchPlanVersion(
+        params: PlanFetchPlanVersionParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<PlanVersion>
+
+    /** This endpoint allows setting the default version of a plan. */
+    fun setDefaultPlanVersion(
+        planId: String,
+        params: PlanSetDefaultPlanVersionParams,
+    ): CompletableFuture<Plan> = setDefaultPlanVersion(planId, params, RequestOptions.none())
+
+    /** @see setDefaultPlanVersion */
+    fun setDefaultPlanVersion(
+        planId: String,
+        params: PlanSetDefaultPlanVersionParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Plan> =
+        setDefaultPlanVersion(params.toBuilder().planId(planId).build(), requestOptions)
+
+    /** @see setDefaultPlanVersion */
+    fun setDefaultPlanVersion(params: PlanSetDefaultPlanVersionParams): CompletableFuture<Plan> =
+        setDefaultPlanVersion(params, RequestOptions.none())
+
+    /** @see setDefaultPlanVersion */
+    fun setDefaultPlanVersion(
+        params: PlanSetDefaultPlanVersionParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Plan>
 
     /** A view of [PlanServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -277,6 +356,36 @@ interface PlanServiceAsync {
             list(PlanListParams.none(), requestOptions)
 
         /**
+         * Returns a raw HTTP response for `post /plans/{plan_id}/versions`, but is otherwise the
+         * same as [PlanServiceAsync.createPlanVersion].
+         */
+        fun createPlanVersion(
+            planId: String,
+            params: PlanCreatePlanVersionParams,
+        ): CompletableFuture<HttpResponseFor<PlanVersion>> =
+            createPlanVersion(planId, params, RequestOptions.none())
+
+        /** @see createPlanVersion */
+        fun createPlanVersion(
+            planId: String,
+            params: PlanCreatePlanVersionParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PlanVersion>> =
+            createPlanVersion(params.toBuilder().planId(planId).build(), requestOptions)
+
+        /** @see createPlanVersion */
+        fun createPlanVersion(
+            params: PlanCreatePlanVersionParams
+        ): CompletableFuture<HttpResponseFor<PlanVersion>> =
+            createPlanVersion(params, RequestOptions.none())
+
+        /** @see createPlanVersion */
+        fun createPlanVersion(
+            params: PlanCreatePlanVersionParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PlanVersion>>
+
+        /**
          * Returns a raw HTTP response for `get /plans/{plan_id}`, but is otherwise the same as
          * [PlanServiceAsync.fetch].
          */
@@ -313,5 +422,65 @@ interface PlanServiceAsync {
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Plan>> =
             fetch(planId, PlanFetchParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /plans/{plan_id}/versions/{version}`, but is
+         * otherwise the same as [PlanServiceAsync.fetchPlanVersion].
+         */
+        fun fetchPlanVersion(
+            version: String,
+            params: PlanFetchPlanVersionParams,
+        ): CompletableFuture<HttpResponseFor<PlanVersion>> =
+            fetchPlanVersion(version, params, RequestOptions.none())
+
+        /** @see fetchPlanVersion */
+        fun fetchPlanVersion(
+            version: String,
+            params: PlanFetchPlanVersionParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PlanVersion>> =
+            fetchPlanVersion(params.toBuilder().version(version).build(), requestOptions)
+
+        /** @see fetchPlanVersion */
+        fun fetchPlanVersion(
+            params: PlanFetchPlanVersionParams
+        ): CompletableFuture<HttpResponseFor<PlanVersion>> =
+            fetchPlanVersion(params, RequestOptions.none())
+
+        /** @see fetchPlanVersion */
+        fun fetchPlanVersion(
+            params: PlanFetchPlanVersionParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PlanVersion>>
+
+        /**
+         * Returns a raw HTTP response for `post /plans/{plan_id}/set_default_version`, but is
+         * otherwise the same as [PlanServiceAsync.setDefaultPlanVersion].
+         */
+        fun setDefaultPlanVersion(
+            planId: String,
+            params: PlanSetDefaultPlanVersionParams,
+        ): CompletableFuture<HttpResponseFor<Plan>> =
+            setDefaultPlanVersion(planId, params, RequestOptions.none())
+
+        /** @see setDefaultPlanVersion */
+        fun setDefaultPlanVersion(
+            planId: String,
+            params: PlanSetDefaultPlanVersionParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Plan>> =
+            setDefaultPlanVersion(params.toBuilder().planId(planId).build(), requestOptions)
+
+        /** @see setDefaultPlanVersion */
+        fun setDefaultPlanVersion(
+            params: PlanSetDefaultPlanVersionParams
+        ): CompletableFuture<HttpResponseFor<Plan>> =
+            setDefaultPlanVersion(params, RequestOptions.none())
+
+        /** @see setDefaultPlanVersion */
+        fun setDefaultPlanVersion(
+            params: PlanSetDefaultPlanVersionParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Plan>>
     }
 }

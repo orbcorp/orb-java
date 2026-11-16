@@ -34,15 +34,15 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** This endpoint allows the creation of a new plan version for an existing plan. */
-class BetaCreatePlanVersionParams
+class PlanExternalPlanIdCreatePlanVersionParams
 private constructor(
-    private val planId: String?,
+    private val externalPlanId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun planId(): Optional<String> = Optional.ofNullable(planId)
+    fun externalPlanId(): Optional<String> = Optional.ofNullable(externalPlanId)
 
     /**
      * New version number.
@@ -179,7 +179,8 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [BetaCreatePlanVersionParams].
+         * Returns a mutable builder for constructing an instance of
+         * [PlanExternalPlanIdCreatePlanVersionParams].
          *
          * The following fields are required:
          * ```java
@@ -189,26 +190,31 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [BetaCreatePlanVersionParams]. */
+    /** A builder for [PlanExternalPlanIdCreatePlanVersionParams]. */
     class Builder internal constructor() {
 
-        private var planId: String? = null
+        private var externalPlanId: String? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(betaCreatePlanVersionParams: BetaCreatePlanVersionParams) = apply {
-            planId = betaCreatePlanVersionParams.planId
-            body = betaCreatePlanVersionParams.body.toBuilder()
-            additionalHeaders = betaCreatePlanVersionParams.additionalHeaders.toBuilder()
-            additionalQueryParams = betaCreatePlanVersionParams.additionalQueryParams.toBuilder()
+        internal fun from(
+            planExternalPlanIdCreatePlanVersionParams: PlanExternalPlanIdCreatePlanVersionParams
+        ) = apply {
+            externalPlanId = planExternalPlanIdCreatePlanVersionParams.externalPlanId
+            body = planExternalPlanIdCreatePlanVersionParams.body.toBuilder()
+            additionalHeaders =
+                planExternalPlanIdCreatePlanVersionParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
+                planExternalPlanIdCreatePlanVersionParams.additionalQueryParams.toBuilder()
         }
 
-        fun planId(planId: String?) = apply { this.planId = planId }
+        fun externalPlanId(externalPlanId: String?) = apply { this.externalPlanId = externalPlanId }
 
-        /** Alias for calling [Builder.planId] with `planId.orElse(null)`. */
-        fun planId(planId: Optional<String>) = planId(planId.getOrNull())
+        /** Alias for calling [Builder.externalPlanId] with `externalPlanId.orElse(null)`. */
+        fun externalPlanId(externalPlanId: Optional<String>) =
+            externalPlanId(externalPlanId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -544,7 +550,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [BetaCreatePlanVersionParams].
+         * Returns an immutable instance of [PlanExternalPlanIdCreatePlanVersionParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -555,9 +561,9 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): BetaCreatePlanVersionParams =
-            BetaCreatePlanVersionParams(
-                planId,
+        fun build(): PlanExternalPlanIdCreatePlanVersionParams =
+            PlanExternalPlanIdCreatePlanVersionParams(
+                externalPlanId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -568,7 +574,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> planId ?: ""
+            0 -> externalPlanId ?: ""
             else -> ""
         }
 
@@ -64825,16 +64831,16 @@ private constructor(
             return true
         }
 
-        return other is BetaCreatePlanVersionParams &&
-            planId == other.planId &&
+        return other is PlanExternalPlanIdCreatePlanVersionParams &&
+            externalPlanId == other.externalPlanId &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(planId, body, additionalHeaders, additionalQueryParams)
+        Objects.hash(externalPlanId, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "BetaCreatePlanVersionParams{planId=$planId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "PlanExternalPlanIdCreatePlanVersionParams{externalPlanId=$externalPlanId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

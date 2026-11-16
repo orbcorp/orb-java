@@ -6,8 +6,12 @@ import com.withorb.api.core.ClientOptions
 import com.withorb.api.core.RequestOptions
 import com.withorb.api.core.http.HttpResponseFor
 import com.withorb.api.models.Plan
+import com.withorb.api.models.PlanExternalPlanIdCreatePlanVersionParams
 import com.withorb.api.models.PlanExternalPlanIdFetchParams
+import com.withorb.api.models.PlanExternalPlanIdFetchPlanVersionParams
+import com.withorb.api.models.PlanExternalPlanIdSetDefaultPlanVersionParams
 import com.withorb.api.models.PlanExternalPlanIdUpdateParams
+import com.withorb.api.models.PlanVersion
 import com.withorb.api.services.async.plans.externalPlanId.DraftServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
@@ -78,6 +82,32 @@ interface ExternalPlanIdServiceAsync {
     ): CompletableFuture<Plan> =
         update(otherExternalPlanId, PlanExternalPlanIdUpdateParams.none(), requestOptions)
 
+    /** This endpoint allows the creation of a new plan version for an existing plan. */
+    fun createPlanVersion(
+        externalPlanId: String,
+        params: PlanExternalPlanIdCreatePlanVersionParams,
+    ): CompletableFuture<PlanVersion> =
+        createPlanVersion(externalPlanId, params, RequestOptions.none())
+
+    /** @see createPlanVersion */
+    fun createPlanVersion(
+        externalPlanId: String,
+        params: PlanExternalPlanIdCreatePlanVersionParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<PlanVersion> =
+        createPlanVersion(params.toBuilder().externalPlanId(externalPlanId).build(), requestOptions)
+
+    /** @see createPlanVersion */
+    fun createPlanVersion(
+        params: PlanExternalPlanIdCreatePlanVersionParams
+    ): CompletableFuture<PlanVersion> = createPlanVersion(params, RequestOptions.none())
+
+    /** @see createPlanVersion */
+    fun createPlanVersion(
+        params: PlanExternalPlanIdCreatePlanVersionParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<PlanVersion>
+
     /**
      * This endpoint is used to fetch [plan](/core-concepts##plan-and-price) details given an
      * external_plan_id identifier. It returns information about the prices included in the plan and
@@ -124,6 +154,63 @@ interface ExternalPlanIdServiceAsync {
     /** @see fetch */
     fun fetch(externalPlanId: String, requestOptions: RequestOptions): CompletableFuture<Plan> =
         fetch(externalPlanId, PlanExternalPlanIdFetchParams.none(), requestOptions)
+
+    /**
+     * This endpoint is used to fetch a plan version. It returns the phases, prices, and adjustments
+     * present on this version of the plan.
+     */
+    fun fetchPlanVersion(
+        version: String,
+        params: PlanExternalPlanIdFetchPlanVersionParams,
+    ): CompletableFuture<PlanVersion> = fetchPlanVersion(version, params, RequestOptions.none())
+
+    /** @see fetchPlanVersion */
+    fun fetchPlanVersion(
+        version: String,
+        params: PlanExternalPlanIdFetchPlanVersionParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<PlanVersion> =
+        fetchPlanVersion(params.toBuilder().version(version).build(), requestOptions)
+
+    /** @see fetchPlanVersion */
+    fun fetchPlanVersion(
+        params: PlanExternalPlanIdFetchPlanVersionParams
+    ): CompletableFuture<PlanVersion> = fetchPlanVersion(params, RequestOptions.none())
+
+    /** @see fetchPlanVersion */
+    fun fetchPlanVersion(
+        params: PlanExternalPlanIdFetchPlanVersionParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<PlanVersion>
+
+    /** This endpoint allows setting the default version of a plan. */
+    fun setDefaultPlanVersion(
+        externalPlanId: String,
+        params: PlanExternalPlanIdSetDefaultPlanVersionParams,
+    ): CompletableFuture<Plan> =
+        setDefaultPlanVersion(externalPlanId, params, RequestOptions.none())
+
+    /** @see setDefaultPlanVersion */
+    fun setDefaultPlanVersion(
+        externalPlanId: String,
+        params: PlanExternalPlanIdSetDefaultPlanVersionParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Plan> =
+        setDefaultPlanVersion(
+            params.toBuilder().externalPlanId(externalPlanId).build(),
+            requestOptions,
+        )
+
+    /** @see setDefaultPlanVersion */
+    fun setDefaultPlanVersion(
+        params: PlanExternalPlanIdSetDefaultPlanVersionParams
+    ): CompletableFuture<Plan> = setDefaultPlanVersion(params, RequestOptions.none())
+
+    /** @see setDefaultPlanVersion */
+    fun setDefaultPlanVersion(
+        params: PlanExternalPlanIdSetDefaultPlanVersionParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Plan>
 
     /**
      * A view of [ExternalPlanIdServiceAsync] that provides access to raw HTTP responses for each
@@ -191,6 +278,40 @@ interface ExternalPlanIdServiceAsync {
             update(otherExternalPlanId, PlanExternalPlanIdUpdateParams.none(), requestOptions)
 
         /**
+         * Returns a raw HTTP response for `post
+         * /plans/external_plan_id/{external_plan_id}/versions`, but is otherwise the same as
+         * [ExternalPlanIdServiceAsync.createPlanVersion].
+         */
+        fun createPlanVersion(
+            externalPlanId: String,
+            params: PlanExternalPlanIdCreatePlanVersionParams,
+        ): CompletableFuture<HttpResponseFor<PlanVersion>> =
+            createPlanVersion(externalPlanId, params, RequestOptions.none())
+
+        /** @see createPlanVersion */
+        fun createPlanVersion(
+            externalPlanId: String,
+            params: PlanExternalPlanIdCreatePlanVersionParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PlanVersion>> =
+            createPlanVersion(
+                params.toBuilder().externalPlanId(externalPlanId).build(),
+                requestOptions,
+            )
+
+        /** @see createPlanVersion */
+        fun createPlanVersion(
+            params: PlanExternalPlanIdCreatePlanVersionParams
+        ): CompletableFuture<HttpResponseFor<PlanVersion>> =
+            createPlanVersion(params, RequestOptions.none())
+
+        /** @see createPlanVersion */
+        fun createPlanVersion(
+            params: PlanExternalPlanIdCreatePlanVersionParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PlanVersion>>
+
+        /**
          * Returns a raw HTTP response for `get /plans/external_plan_id/{external_plan_id}`, but is
          * otherwise the same as [ExternalPlanIdServiceAsync.fetch].
          */
@@ -228,5 +349,70 @@ interface ExternalPlanIdServiceAsync {
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Plan>> =
             fetch(externalPlanId, PlanExternalPlanIdFetchParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get
+         * /plans/external_plan_id/{external_plan_id}/versions/{version}`, but is otherwise the same
+         * as [ExternalPlanIdServiceAsync.fetchPlanVersion].
+         */
+        fun fetchPlanVersion(
+            version: String,
+            params: PlanExternalPlanIdFetchPlanVersionParams,
+        ): CompletableFuture<HttpResponseFor<PlanVersion>> =
+            fetchPlanVersion(version, params, RequestOptions.none())
+
+        /** @see fetchPlanVersion */
+        fun fetchPlanVersion(
+            version: String,
+            params: PlanExternalPlanIdFetchPlanVersionParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PlanVersion>> =
+            fetchPlanVersion(params.toBuilder().version(version).build(), requestOptions)
+
+        /** @see fetchPlanVersion */
+        fun fetchPlanVersion(
+            params: PlanExternalPlanIdFetchPlanVersionParams
+        ): CompletableFuture<HttpResponseFor<PlanVersion>> =
+            fetchPlanVersion(params, RequestOptions.none())
+
+        /** @see fetchPlanVersion */
+        fun fetchPlanVersion(
+            params: PlanExternalPlanIdFetchPlanVersionParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PlanVersion>>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /plans/external_plan_id/{external_plan_id}/set_default_version`, but is otherwise the
+         * same as [ExternalPlanIdServiceAsync.setDefaultPlanVersion].
+         */
+        fun setDefaultPlanVersion(
+            externalPlanId: String,
+            params: PlanExternalPlanIdSetDefaultPlanVersionParams,
+        ): CompletableFuture<HttpResponseFor<Plan>> =
+            setDefaultPlanVersion(externalPlanId, params, RequestOptions.none())
+
+        /** @see setDefaultPlanVersion */
+        fun setDefaultPlanVersion(
+            externalPlanId: String,
+            params: PlanExternalPlanIdSetDefaultPlanVersionParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Plan>> =
+            setDefaultPlanVersion(
+                params.toBuilder().externalPlanId(externalPlanId).build(),
+                requestOptions,
+            )
+
+        /** @see setDefaultPlanVersion */
+        fun setDefaultPlanVersion(
+            params: PlanExternalPlanIdSetDefaultPlanVersionParams
+        ): CompletableFuture<HttpResponseFor<Plan>> =
+            setDefaultPlanVersion(params, RequestOptions.none())
+
+        /** @see setDefaultPlanVersion */
+        fun setDefaultPlanVersion(
+            params: PlanExternalPlanIdSetDefaultPlanVersionParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Plan>>
     }
 }

@@ -21,7 +21,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** This endpoint allows setting the default version of a plan. */
-class BetaSetDefaultPlanVersionParams
+class PlanSetDefaultPlanVersionParams
 private constructor(
     private val planId: String?,
     private val body: Body,
@@ -60,7 +60,7 @@ private constructor(
 
         /**
          * Returns a mutable builder for constructing an instance of
-         * [BetaSetDefaultPlanVersionParams].
+         * [PlanSetDefaultPlanVersionParams].
          *
          * The following fields are required:
          * ```java
@@ -70,7 +70,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [BetaSetDefaultPlanVersionParams]. */
+    /** A builder for [PlanSetDefaultPlanVersionParams]. */
     class Builder internal constructor() {
 
         private var planId: String? = null
@@ -79,13 +79,13 @@ private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(betaSetDefaultPlanVersionParams: BetaSetDefaultPlanVersionParams) =
+        internal fun from(planSetDefaultPlanVersionParams: PlanSetDefaultPlanVersionParams) =
             apply {
-                planId = betaSetDefaultPlanVersionParams.planId
-                body = betaSetDefaultPlanVersionParams.body.toBuilder()
-                additionalHeaders = betaSetDefaultPlanVersionParams.additionalHeaders.toBuilder()
+                planId = planSetDefaultPlanVersionParams.planId
+                body = planSetDefaultPlanVersionParams.body.toBuilder()
+                additionalHeaders = planSetDefaultPlanVersionParams.additionalHeaders.toBuilder()
                 additionalQueryParams =
-                    betaSetDefaultPlanVersionParams.additionalQueryParams.toBuilder()
+                    planSetDefaultPlanVersionParams.additionalQueryParams.toBuilder()
             }
 
         fun planId(planId: String?) = apply { this.planId = planId }
@@ -231,7 +231,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [BetaSetDefaultPlanVersionParams].
+         * Returns an immutable instance of [PlanSetDefaultPlanVersionParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -242,8 +242,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): BetaSetDefaultPlanVersionParams =
-            BetaSetDefaultPlanVersionParams(
+        fun build(): PlanSetDefaultPlanVersionParams =
+            PlanSetDefaultPlanVersionParams(
                 planId,
                 body.build(),
                 additionalHeaders.build(),
@@ -433,7 +433,7 @@ private constructor(
             return true
         }
 
-        return other is BetaSetDefaultPlanVersionParams &&
+        return other is PlanSetDefaultPlanVersionParams &&
             planId == other.planId &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
@@ -444,5 +444,5 @@ private constructor(
         Objects.hash(planId, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "BetaSetDefaultPlanVersionParams{planId=$planId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "PlanSetDefaultPlanVersionParams{planId=$planId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

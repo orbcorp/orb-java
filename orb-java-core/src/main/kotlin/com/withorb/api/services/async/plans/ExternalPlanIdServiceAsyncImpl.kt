@@ -17,8 +17,12 @@ import com.withorb.api.core.http.json
 import com.withorb.api.core.http.parseable
 import com.withorb.api.core.prepareAsync
 import com.withorb.api.models.Plan
+import com.withorb.api.models.PlanExternalPlanIdCreatePlanVersionParams
 import com.withorb.api.models.PlanExternalPlanIdFetchParams
+import com.withorb.api.models.PlanExternalPlanIdFetchPlanVersionParams
+import com.withorb.api.models.PlanExternalPlanIdSetDefaultPlanVersionParams
 import com.withorb.api.models.PlanExternalPlanIdUpdateParams
+import com.withorb.api.models.PlanVersion
 import com.withorb.api.services.async.plans.externalPlanId.DraftServiceAsync
 import com.withorb.api.services.async.plans.externalPlanId.DraftServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
@@ -60,12 +64,33 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdS
         // put /plans/external_plan_id/{external_plan_id}
         withRawResponse().update(params, requestOptions).thenApply { it.parse() }
 
+    override fun createPlanVersion(
+        params: PlanExternalPlanIdCreatePlanVersionParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<PlanVersion> =
+        // post /plans/external_plan_id/{external_plan_id}/versions
+        withRawResponse().createPlanVersion(params, requestOptions).thenApply { it.parse() }
+
     override fun fetch(
         params: PlanExternalPlanIdFetchParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<Plan> =
         // get /plans/external_plan_id/{external_plan_id}
         withRawResponse().fetch(params, requestOptions).thenApply { it.parse() }
+
+    override fun fetchPlanVersion(
+        params: PlanExternalPlanIdFetchPlanVersionParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<PlanVersion> =
+        // get /plans/external_plan_id/{external_plan_id}/versions/{version}
+        withRawResponse().fetchPlanVersion(params, requestOptions).thenApply { it.parse() }
+
+    override fun setDefaultPlanVersion(
+        params: PlanExternalPlanIdSetDefaultPlanVersionParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Plan> =
+        // post /plans/external_plan_id/{external_plan_id}/set_default_version
+        withRawResponse().setDefaultPlanVersion(params, requestOptions).thenApply { it.parse() }
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ExternalPlanIdServiceAsync.WithRawResponse {
@@ -124,6 +149,40 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdS
                 }
         }
 
+        private val createPlanVersionHandler: Handler<PlanVersion> =
+            jsonHandler<PlanVersion>(clientOptions.jsonMapper)
+
+        override fun createPlanVersion(
+            params: PlanExternalPlanIdCreatePlanVersionParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<PlanVersion>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("externalPlanId", params.externalPlanId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("plans", "external_plan_id", params._pathParam(0), "versions")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { createPlanVersionHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
         private val fetchHandler: Handler<Plan> = jsonHandler<Plan>(clientOptions.jsonMapper)
 
         override fun fetch(
@@ -147,6 +206,84 @@ internal constructor(private val clientOptions: ClientOptions) : ExternalPlanIdS
                     errorHandler.handle(response).parseable {
                         response
                             .use { fetchHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val fetchPlanVersionHandler: Handler<PlanVersion> =
+            jsonHandler<PlanVersion>(clientOptions.jsonMapper)
+
+        override fun fetchPlanVersion(
+            params: PlanExternalPlanIdFetchPlanVersionParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<PlanVersion>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("version", params.version().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "plans",
+                        "external_plan_id",
+                        params._pathParam(0),
+                        "versions",
+                        params._pathParam(1),
+                    )
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { fetchPlanVersionHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val setDefaultPlanVersionHandler: Handler<Plan> =
+            jsonHandler<Plan>(clientOptions.jsonMapper)
+
+        override fun setDefaultPlanVersion(
+            params: PlanExternalPlanIdSetDefaultPlanVersionParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Plan>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("externalPlanId", params.externalPlanId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "plans",
+                        "external_plan_id",
+                        params._pathParam(0),
+                        "set_default_version",
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { setDefaultPlanVersionHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()
