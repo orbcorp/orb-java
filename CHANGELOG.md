@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.57.0](https://github.com/orbcorp/orb-java/compare/v1.56.0...v1.57.0) (2026-11-17)
+
+
+### Features
+
+* **api:** add plan.migration_scheduled webhook when a plan migration is created ([0a6ac42](https://github.com/orbcorp/orb-java/commit/0a6ac42030cf2507f9855d088989f21f80b0d692))
+* **api:** add skip_grace_period option to plan version migrations ([0a6ac42](https://github.com/orbcorp/orb-java/commit/0a6ac42030cf2507f9855d088989f21f80b0d692))
+
 ## [1.56.0](https://github.com/orbcorp/orb-java/compare/v1.55.0...v1.56.0) (2026-11-15)
 
 
