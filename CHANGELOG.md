@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.58.0](https://github.com/orbcorp/orb-java/compare/v1.57.0...v1.58.0) (2026-11-18)
+
+
+### Features
+
+* **api:** api update ([dd76ebb](https://github.com/orbcorp/orb-java/commit/dd76ebb88c666791e19fcadfec34254c634add07))
+* **api:** document currency handling and void examples for ledger entries ([2bb909c](https://github.com/orbcorp/orb-java/commit/2bb909cdb10ac0cdd0c56a7d7c77ba7d50b1e45d))
+
 ## [1.57.0](https://github.com/orbcorp/orb-java/compare/v1.56.0...v1.57.0) (2026-11-17)
 
 
