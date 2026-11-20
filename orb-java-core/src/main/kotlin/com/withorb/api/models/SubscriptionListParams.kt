@@ -29,6 +29,7 @@ import kotlin.jvm.optionals.getOrNull
  */
 class SubscriptionListParams
 private constructor(
+    private val billingEntityId: String?,
     private val createdAtGt: OffsetDateTime?,
     private val createdAtGte: OffsetDateTime?,
     private val createdAtLt: OffsetDateTime?,
@@ -43,6 +44,12 @@ private constructor(
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    /**
+     * Filters to objects issued by this billing entity. Filtering on the account's default billing
+     * entity also matches objects created before the account had billing entities.
+     */
+    fun billingEntityId(): Optional<String> = Optional.ofNullable(billingEntityId)
 
     fun createdAtGt(): Optional<OffsetDateTime> = Optional.ofNullable(createdAtGt)
 
@@ -90,6 +97,7 @@ private constructor(
     /** A builder for [SubscriptionListParams]. */
     class Builder internal constructor() {
 
+        private var billingEntityId: String? = null
         private var createdAtGt: OffsetDateTime? = null
         private var createdAtGte: OffsetDateTime? = null
         private var createdAtLt: OffsetDateTime? = null
@@ -106,6 +114,7 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(subscriptionListParams: SubscriptionListParams) = apply {
+            billingEntityId = subscriptionListParams.billingEntityId
             createdAtGt = subscriptionListParams.createdAtGt
             createdAtGte = subscriptionListParams.createdAtGte
             createdAtLt = subscriptionListParams.createdAtLt
@@ -120,6 +129,18 @@ private constructor(
             additionalHeaders = subscriptionListParams.additionalHeaders.toBuilder()
             additionalQueryParams = subscriptionListParams.additionalQueryParams.toBuilder()
         }
+
+        /**
+         * Filters to objects issued by this billing entity. Filtering on the account's default
+         * billing entity also matches objects created before the account had billing entities.
+         */
+        fun billingEntityId(billingEntityId: String?) = apply {
+            this.billingEntityId = billingEntityId
+        }
+
+        /** Alias for calling [Builder.billingEntityId] with `billingEntityId.orElse(null)`. */
+        fun billingEntityId(billingEntityId: Optional<String>) =
+            billingEntityId(billingEntityId.getOrNull())
 
         fun createdAtGt(createdAtGt: OffsetDateTime?) = apply { this.createdAtGt = createdAtGt }
 
@@ -332,6 +353,7 @@ private constructor(
          */
         fun build(): SubscriptionListParams =
             SubscriptionListParams(
+                billingEntityId,
                 createdAtGt,
                 createdAtGte,
                 createdAtLt,
@@ -353,6 +375,7 @@ private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
+                billingEntityId?.let { put("billing_entity_id", it) }
                 createdAtGt?.let {
                     put("created_at[gt]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
                 }
@@ -625,6 +648,7 @@ private constructor(
         }
 
         return other is SubscriptionListParams &&
+            billingEntityId == other.billingEntityId &&
             createdAtGt == other.createdAtGt &&
             createdAtGte == other.createdAtGte &&
             createdAtLt == other.createdAtLt &&
@@ -642,6 +666,7 @@ private constructor(
 
     override fun hashCode(): Int =
         Objects.hash(
+            billingEntityId,
             createdAtGt,
             createdAtGte,
             createdAtLt,
@@ -658,5 +683,5 @@ private constructor(
         )
 
     override fun toString() =
-        "SubscriptionListParams{createdAtGt=$createdAtGt, createdAtGte=$createdAtGte, createdAtLt=$createdAtLt, createdAtLte=$createdAtLte, cursor=$cursor, customerId=$customerId, externalCustomerId=$externalCustomerId, externalPlanId=$externalPlanId, limit=$limit, planId=$planId, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "SubscriptionListParams{billingEntityId=$billingEntityId, createdAtGt=$createdAtGt, createdAtGte=$createdAtGte, createdAtLt=$createdAtLt, createdAtLte=$createdAtLte, cursor=$cursor, customerId=$customerId, externalCustomerId=$externalCustomerId, externalPlanId=$externalPlanId, limit=$limit, planId=$planId, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

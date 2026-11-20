@@ -668,6 +668,7 @@ private constructor(
         class PreviousAttributes
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
+            private val billingEntityId: JsonField<String>,
             private val description: JsonField<String>,
             private val externalPlanId: JsonField<String>,
             private val metadata: JsonField<Metadata>,
@@ -678,6 +679,9 @@ private constructor(
 
             @JsonCreator
             private constructor(
+                @JsonProperty("billing_entity_id")
+                @ExcludeMissing
+                billingEntityId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("description")
                 @ExcludeMissing
                 description: JsonField<String> = JsonMissing.of(),
@@ -689,7 +693,22 @@ private constructor(
                 metadata: JsonField<Metadata> = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("status") @ExcludeMissing status: JsonField<Status> = JsonMissing.of(),
-            ) : this(description, externalPlanId, metadata, name, status, mutableMapOf())
+            ) : this(
+                billingEntityId,
+                description,
+                externalPlanId,
+                metadata,
+                name,
+                status,
+                mutableMapOf(),
+            )
+
+            /**
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
+            fun billingEntityId(): Optional<String> =
+                billingEntityId.getOptional("billing_entity_id")
 
             /**
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -720,6 +739,16 @@ private constructor(
              *   server responded with an unexpected value).
              */
             fun status(): Optional<Status> = status.getOptional("status")
+
+            /**
+             * Returns the raw JSON value of [billingEntityId].
+             *
+             * Unlike [billingEntityId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("billing_entity_id")
+            @ExcludeMissing
+            fun _billingEntityId(): JsonField<String> = billingEntityId
 
             /**
              * Returns the raw JSON value of [description].
@@ -788,6 +817,7 @@ private constructor(
             /** A builder for [PreviousAttributes]. */
             class Builder internal constructor() {
 
+                private var billingEntityId: JsonField<String> = JsonMissing.of()
                 private var description: JsonField<String> = JsonMissing.of()
                 private var externalPlanId: JsonField<String> = JsonMissing.of()
                 private var metadata: JsonField<Metadata> = JsonMissing.of()
@@ -797,12 +827,33 @@ private constructor(
 
                 @JvmSynthetic
                 internal fun from(previousAttributes: PreviousAttributes) = apply {
+                    billingEntityId = previousAttributes.billingEntityId
                     description = previousAttributes.description
                     externalPlanId = previousAttributes.externalPlanId
                     metadata = previousAttributes.metadata
                     name = previousAttributes.name
                     status = previousAttributes.status
                     additionalProperties = previousAttributes.additionalProperties.toMutableMap()
+                }
+
+                fun billingEntityId(billingEntityId: String?) =
+                    billingEntityId(JsonField.ofNullable(billingEntityId))
+
+                /**
+                 * Alias for calling [Builder.billingEntityId] with `billingEntityId.orElse(null)`.
+                 */
+                fun billingEntityId(billingEntityId: Optional<String>) =
+                    billingEntityId(billingEntityId.getOrNull())
+
+                /**
+                 * Sets [Builder.billingEntityId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.billingEntityId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun billingEntityId(billingEntityId: JsonField<String>) = apply {
+                    this.billingEntityId = billingEntityId
                 }
 
                 fun description(description: String?) =
@@ -914,6 +965,7 @@ private constructor(
                  */
                 fun build(): PreviousAttributes =
                     PreviousAttributes(
+                        billingEntityId,
                         description,
                         externalPlanId,
                         metadata,
@@ -940,6 +992,7 @@ private constructor(
                     return@apply
                 }
 
+                billingEntityId()
                 description()
                 externalPlanId()
                 metadata().ifPresent { it.validate() }
@@ -964,7 +1017,8 @@ private constructor(
              */
             @JvmSynthetic
             internal fun validity(): Int =
-                (if (description.asKnown().isPresent) 1 else 0) +
+                (if (billingEntityId.asKnown().isPresent) 1 else 0) +
+                    (if (description.asKnown().isPresent) 1 else 0) +
                     (if (externalPlanId.asKnown().isPresent) 1 else 0) +
                     (metadata.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (name.asKnown().isPresent) 1 else 0) +
@@ -1237,6 +1291,7 @@ private constructor(
                 }
 
                 return other is PreviousAttributes &&
+                    billingEntityId == other.billingEntityId &&
                     description == other.description &&
                     externalPlanId == other.externalPlanId &&
                     metadata == other.metadata &&
@@ -1247,6 +1302,7 @@ private constructor(
 
             private val hashCode: Int by lazy {
                 Objects.hash(
+                    billingEntityId,
                     description,
                     externalPlanId,
                     metadata,
@@ -1259,7 +1315,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "PreviousAttributes{description=$description, externalPlanId=$externalPlanId, metadata=$metadata, name=$name, status=$status, additionalProperties=$additionalProperties}"
+                "PreviousAttributes{billingEntityId=$billingEntityId, description=$description, externalPlanId=$externalPlanId, metadata=$metadata, name=$name, status=$status, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {

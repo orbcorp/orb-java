@@ -29,6 +29,7 @@ class CreditNote
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
+    private val billingEntityId: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val creditNoteNumber: JsonField<String>,
     private val creditNotePdf: JsonField<String>,
@@ -50,6 +51,9 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("billing_entity_id")
+        @ExcludeMissing
+        billingEntityId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("created_at")
         @ExcludeMissing
         createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -85,6 +89,7 @@ private constructor(
         discounts: JsonField<List<Discount>> = JsonMissing.of(),
     ) : this(
         id,
+        billingEntityId,
         createdAt,
         creditNoteNumber,
         creditNotePdf,
@@ -110,6 +115,14 @@ private constructor(
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
+
+    /**
+     * The id of the billing entity of the credit note's invoice.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun billingEntityId(): Optional<String> = billingEntityId.getOptional("billing_entity_id")
 
     /**
      * The creation time of the resource in Orb.
@@ -233,6 +246,15 @@ private constructor(
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+    /**
+     * Returns the raw JSON value of [billingEntityId].
+     *
+     * Unlike [billingEntityId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("billing_entity_id")
+    @ExcludeMissing
+    fun _billingEntityId(): JsonField<String> = billingEntityId
 
     /**
      * Returns the raw JSON value of [createdAt].
@@ -378,6 +400,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .id()
+         * .billingEntityId()
          * .createdAt()
          * .creditNoteNumber()
          * .creditNotePdf()
@@ -401,6 +424,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
+        private var billingEntityId: JsonField<String>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var creditNoteNumber: JsonField<String>? = null
         private var creditNotePdf: JsonField<String>? = null
@@ -421,6 +445,7 @@ private constructor(
         @JvmSynthetic
         internal fun from(creditNote: CreditNote) = apply {
             id = creditNote.id
+            billingEntityId = creditNote.billingEntityId
             createdAt = creditNote.createdAt
             creditNoteNumber = creditNote.creditNoteNumber
             creditNotePdf = creditNote.creditNotePdf
@@ -449,6 +474,25 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
+
+        /** The id of the billing entity of the credit note's invoice. */
+        fun billingEntityId(billingEntityId: String?) =
+            billingEntityId(JsonField.ofNullable(billingEntityId))
+
+        /** Alias for calling [Builder.billingEntityId] with `billingEntityId.orElse(null)`. */
+        fun billingEntityId(billingEntityId: Optional<String>) =
+            billingEntityId(billingEntityId.getOrNull())
+
+        /**
+         * Sets [Builder.billingEntityId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.billingEntityId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun billingEntityId(billingEntityId: JsonField<String>) = apply {
+            this.billingEntityId = billingEntityId
+        }
 
         /** The creation time of the resource in Orb. */
         fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
@@ -717,6 +761,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .id()
+         * .billingEntityId()
          * .createdAt()
          * .creditNoteNumber()
          * .creditNotePdf()
@@ -738,6 +783,7 @@ private constructor(
         fun build(): CreditNote =
             CreditNote(
                 checkRequired("id", id),
+                checkRequired("billingEntityId", billingEntityId),
                 checkRequired("createdAt", createdAt),
                 checkRequired("creditNoteNumber", creditNoteNumber),
                 checkRequired("creditNotePdf", creditNotePdf),
@@ -773,6 +819,7 @@ private constructor(
         }
 
         id()
+        billingEntityId()
         createdAt()
         creditNoteNumber()
         creditNotePdf()
@@ -807,6 +854,7 @@ private constructor(
     @JvmSynthetic
     internal fun validity(): Int =
         (if (id.asKnown().isPresent) 1 else 0) +
+            (if (billingEntityId.asKnown().isPresent) 1 else 0) +
             (if (createdAt.asKnown().isPresent) 1 else 0) +
             (if (creditNoteNumber.asKnown().isPresent) 1 else 0) +
             (if (creditNotePdf.asKnown().isPresent) 1 else 0) +
@@ -3724,6 +3772,7 @@ private constructor(
 
         return other is CreditNote &&
             id == other.id &&
+            billingEntityId == other.billingEntityId &&
             createdAt == other.createdAt &&
             creditNoteNumber == other.creditNoteNumber &&
             creditNotePdf == other.creditNotePdf &&
@@ -3745,6 +3794,7 @@ private constructor(
     private val hashCode: Int by lazy {
         Objects.hash(
             id,
+            billingEntityId,
             createdAt,
             creditNoteNumber,
             creditNotePdf,
@@ -3767,5 +3817,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CreditNote{id=$id, createdAt=$createdAt, creditNoteNumber=$creditNoteNumber, creditNotePdf=$creditNotePdf, customer=$customer, invoiceId=$invoiceId, lineItems=$lineItems, maximumAmountAdjustment=$maximumAmountAdjustment, memo=$memo, minimumAmountRefunded=$minimumAmountRefunded, reason=$reason, subtotal=$subtotal, total=$total, type=$type, voidedAt=$voidedAt, discounts=$discounts, additionalProperties=$additionalProperties}"
+        "CreditNote{id=$id, billingEntityId=$billingEntityId, createdAt=$createdAt, creditNoteNumber=$creditNoteNumber, creditNotePdf=$creditNotePdf, customer=$customer, invoiceId=$invoiceId, lineItems=$lineItems, maximumAmountAdjustment=$maximumAmountAdjustment, memo=$memo, minimumAmountRefunded=$minimumAmountRefunded, reason=$reason, subtotal=$subtotal, total=$total, type=$type, voidedAt=$voidedAt, discounts=$discounts, additionalProperties=$additionalProperties}"
 }

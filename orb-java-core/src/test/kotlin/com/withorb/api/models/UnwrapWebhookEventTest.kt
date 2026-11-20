@@ -1293,6 +1293,7 @@ internal class UnwrapWebhookEventTest {
                 .creditNote(
                     CreditNote.builder()
                         .id("id")
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .creditNoteNumber("credit_note_number")
                         .creditNotePdf("credit_note_pdf")
@@ -1510,6 +1511,7 @@ internal class UnwrapWebhookEventTest {
                     .creditNote(
                         CreditNote.builder()
                             .id("id")
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .creditNoteNumber("credit_note_number")
                             .creditNotePdf("credit_note_pdf")
@@ -1650,6 +1652,7 @@ internal class UnwrapWebhookEventTest {
                 .creditNote(
                     CreditNote.builder()
                         .id("id")
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .creditNoteNumber("credit_note_number")
                         .creditNotePdf("credit_note_pdf")
@@ -1868,6 +1871,7 @@ internal class UnwrapWebhookEventTest {
                     .creditNote(
                         CreditNote.builder()
                             .id("id")
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .creditNoteNumber("credit_note_number")
                             .creditNotePdf("credit_note_pdf")
@@ -1987,6 +1991,7 @@ internal class UnwrapWebhookEventTest {
                 .creditNote(
                     CreditNote.builder()
                         .id("id")
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .creditNoteNumber("credit_note_number")
                         .creditNotePdf("credit_note_pdf")
@@ -2172,6 +2177,7 @@ internal class UnwrapWebhookEventTest {
                     .creditNote(
                         CreditNote.builder()
                             .id("id")
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .creditNoteNumber("credit_note_number")
                             .creditNotePdf("credit_note_pdf")
@@ -2282,6 +2288,7 @@ internal class UnwrapWebhookEventTest {
                 .creditNote(
                     CreditNote.builder()
                         .id("id")
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .creditNoteNumber("credit_note_number")
                         .creditNotePdf("credit_note_pdf")
@@ -2467,6 +2474,7 @@ internal class UnwrapWebhookEventTest {
                     .creditNote(
                         CreditNote.builder()
                             .id("id")
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .creditNoteNumber("credit_note_number")
                             .creditNotePdf("credit_note_pdf")
@@ -2677,6 +2685,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .automaticTaxEnabled(true)
+                        .billingEntityId("billing_entity_id")
                         .defaultPaymentMethod(
                             Customer.DefaultPaymentMethod.builder()
                                 .id("id")
@@ -2920,6 +2929,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .automaticTaxEnabled(true)
+                            .billingEntityId("billing_entity_id")
                             .defaultPaymentMethod(
                                 Customer.DefaultPaymentMethod.builder()
                                     .id("id")
@@ -3088,6 +3098,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .automaticTaxEnabled(true)
+                        .billingEntityId("billing_entity_id")
                         .defaultPaymentMethod(
                             Customer.DefaultPaymentMethod.builder()
                                 .id("id")
@@ -3333,6 +3344,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .automaticTaxEnabled(true)
+                            .billingEntityId("billing_entity_id")
                             .defaultPaymentMethod(
                                 Customer.DefaultPaymentMethod.builder()
                                     .id("id")
@@ -3479,6 +3491,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .automaticTaxEnabled(true)
+                        .billingEntityId("billing_entity_id")
                         .defaultPaymentMethod(
                             Customer.DefaultPaymentMethod.builder()
                                 .id("id")
@@ -3730,6 +3743,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .automaticTaxEnabled(true)
+                            .billingEntityId("billing_entity_id")
                             .defaultPaymentMethod(
                                 Customer.DefaultPaymentMethod.builder()
                                     .id("id")
@@ -3903,6 +3917,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .automaticTaxEnabled(true)
+                        .billingEntityId("billing_entity_id")
                         .defaultPaymentMethod(
                             Customer.DefaultPaymentMethod.builder()
                                 .id("id")
@@ -4118,6 +4133,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .automaticTaxEnabled(true)
+                            .billingEntityId("billing_entity_id")
                             .defaultPaymentMethod(
                                 Customer.DefaultPaymentMethod.builder()
                                     .id("id")
@@ -4257,6 +4273,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .automaticTaxEnabled(true)
+                        .billingEntityId("billing_entity_id")
                         .defaultPaymentMethod(
                             Customer.DefaultPaymentMethod.builder()
                                 .id("id")
@@ -4323,6 +4340,7 @@ internal class UnwrapWebhookEventTest {
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
                                         .planVersion("plan_version")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .subscription(
@@ -4597,6 +4615,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .automaticTaxEnabled(true)
+                            .billingEntityId("billing_entity_id")
                             .defaultPaymentMethod(
                                 Customer.DefaultPaymentMethod.builder()
                                     .id("id")
@@ -4666,6 +4685,7 @@ internal class UnwrapWebhookEventTest {
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
                                             .planVersion("plan_version")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .subscription(
@@ -4863,6 +4883,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .automaticTaxEnabled(true)
+                        .billingEntityId("billing_entity_id")
                         .defaultPaymentMethod(
                             Customer.DefaultPaymentMethod.builder()
                                 .id("id")
@@ -4929,6 +4950,7 @@ internal class UnwrapWebhookEventTest {
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
                                         .planVersion("plan_version")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .subscription(
@@ -5202,6 +5224,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .automaticTaxEnabled(true)
+                            .billingEntityId("billing_entity_id")
                             .defaultPaymentMethod(
                                 Customer.DefaultPaymentMethod.builder()
                                     .id("id")
@@ -5271,6 +5294,7 @@ internal class UnwrapWebhookEventTest {
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
                                             .planVersion("plan_version")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .subscription(
@@ -5469,6 +5493,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .automaticTaxEnabled(true)
+                        .billingEntityId("billing_entity_id")
                         .defaultPaymentMethod(
                             Customer.DefaultPaymentMethod.builder()
                                 .id("id")
@@ -5535,6 +5560,7 @@ internal class UnwrapWebhookEventTest {
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
                                         .planVersion("plan_version")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .subscription(
@@ -5810,6 +5836,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .automaticTaxEnabled(true)
+                            .billingEntityId("billing_entity_id")
                             .defaultPaymentMethod(
                                 Customer.DefaultPaymentMethod.builder()
                                     .id("id")
@@ -5879,6 +5906,7 @@ internal class UnwrapWebhookEventTest {
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
                                             .planVersion("plan_version")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .subscription(
@@ -6079,6 +6107,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .automaticTaxEnabled(true)
+                        .billingEntityId("billing_entity_id")
                         .defaultPaymentMethod(
                             Customer.DefaultPaymentMethod.builder()
                                 .id("id")
@@ -6410,6 +6439,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .automaticTaxEnabled(true)
+                            .billingEntityId("billing_entity_id")
                             .defaultPaymentMethod(
                                 Customer.DefaultPaymentMethod.builder()
                                     .id("id")
@@ -6667,6 +6697,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .automaticTaxEnabled(true)
+                        .billingEntityId("billing_entity_id")
                         .defaultPaymentMethod(
                             Customer.DefaultPaymentMethod.builder()
                                 .id("id")
@@ -6716,6 +6747,7 @@ internal class UnwrapWebhookEventTest {
                                         .state("state")
                                         .build()
                                 )
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethodId("default_payment_method_id")
                                 .email("email")
                                 .emailDelivery(true)
@@ -6931,6 +6963,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .automaticTaxEnabled(true)
+                            .billingEntityId("billing_entity_id")
                             .defaultPaymentMethod(
                                 Customer.DefaultPaymentMethod.builder()
                                     .id("id")
@@ -6982,6 +7015,7 @@ internal class UnwrapWebhookEventTest {
                                             .state("state")
                                             .build()
                                     )
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethodId("default_payment_method_id")
                                     .email("email")
                                     .emailDelivery(true)
@@ -7650,6 +7684,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -8178,6 +8213,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -8640,6 +8676,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -9170,6 +9207,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -9963,6 +10001,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -10496,6 +10535,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -10964,6 +11004,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -11493,6 +11534,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -11959,6 +12001,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -12485,6 +12528,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -12949,6 +12993,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -13473,6 +13518,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -13930,6 +13976,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -14752,6 +14799,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -15698,6 +15746,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -16199,6 +16248,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -16634,6 +16684,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -17137,6 +17188,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -17574,6 +17626,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             InvoiceIssuedSummaryWebhookEvent.Invoice.CreditNote.builder()
@@ -17812,6 +17865,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 InvoiceIssuedSummaryWebhookEvent.Invoice.CreditNote.builder()
@@ -17975,6 +18029,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -18482,6 +18537,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -18923,6 +18979,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -19424,6 +19481,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -19859,6 +19917,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -20364,6 +20423,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -20803,6 +20863,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -21308,6 +21369,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -21746,6 +21808,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -22253,6 +22316,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -22693,6 +22757,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -23197,6 +23262,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -23635,6 +23701,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -24139,6 +24206,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -24577,6 +24645,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -25076,6 +25145,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -26349,6 +26419,7 @@ internal class UnwrapWebhookEventTest {
                         .id("m2t5akQeh2obwxeU")
                         .externalPlanId("m2t5akQeh2obwxeU")
                         .name("Example plan")
+                        .billingEntityId("billing_entity_id")
                         .build()
                 )
                 .properties(JsonValue.from(mapOf<String, Any>()))
@@ -26454,6 +26525,7 @@ internal class UnwrapWebhookEventTest {
                             .id("m2t5akQeh2obwxeU")
                             .externalPlanId("m2t5akQeh2obwxeU")
                             .name("Example plan")
+                            .billingEntityId("billing_entity_id")
                             .build()
                     )
                     .properties(JsonValue.from(mapOf<String, Any>()))
@@ -26482,6 +26554,7 @@ internal class UnwrapWebhookEventTest {
                         .id("m2t5akQeh2obwxeU")
                         .externalPlanId("m2t5akQeh2obwxeU")
                         .name("Example plan")
+                        .billingEntityId("billing_entity_id")
                         .build()
                 )
                 .properties(
@@ -26592,6 +26665,7 @@ internal class UnwrapWebhookEventTest {
                             .id("m2t5akQeh2obwxeU")
                             .externalPlanId("m2t5akQeh2obwxeU")
                             .name("Example plan")
+                            .billingEntityId("billing_entity_id")
                             .build()
                     )
                     .properties(
@@ -26654,9 +26728,11 @@ internal class UnwrapWebhookEventTest {
                                 .id("m2t5akQeh2obwxeU")
                                 .externalPlanId("m2t5akQeh2obwxeU")
                                 .name("Example plan")
+                                .billingEntityId("billing_entity_id")
                                 .build()
                         )
                         .basePlanId("base_plan_id")
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currency("currency")
                         .defaultInvoiceMemo("default_invoice_memo")
@@ -26929,6 +27005,7 @@ internal class UnwrapWebhookEventTest {
                     PlanEditedWebhookEvent.Properties.builder()
                         .previousAttributes(
                             PlanEditedWebhookEvent.Properties.PreviousAttributes.builder()
+                                .billingEntityId("billing_entity_id")
                                 .description("description")
                                 .externalPlanId("external_plan_id")
                                 .metadata(
@@ -27079,9 +27156,11 @@ internal class UnwrapWebhookEventTest {
                                     .id("m2t5akQeh2obwxeU")
                                     .externalPlanId("m2t5akQeh2obwxeU")
                                     .name("Example plan")
+                                    .billingEntityId("billing_entity_id")
                                     .build()
                             )
                             .basePlanId("base_plan_id")
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currency("currency")
                             .defaultInvoiceMemo("default_invoice_memo")
@@ -27365,6 +27444,7 @@ internal class UnwrapWebhookEventTest {
                         PlanEditedWebhookEvent.Properties.builder()
                             .previousAttributes(
                                 PlanEditedWebhookEvent.Properties.PreviousAttributes.builder()
+                                    .billingEntityId("billing_entity_id")
                                     .description("description")
                                     .externalPlanId("external_plan_id")
                                     .metadata(
@@ -27408,6 +27488,7 @@ internal class UnwrapWebhookEventTest {
                         .id("m2t5akQeh2obwxeU")
                         .externalPlanId("m2t5akQeh2obwxeU")
                         .name("Example plan")
+                        .billingEntityId("billing_entity_id")
                         .build()
                 )
                 .properties(
@@ -27518,6 +27599,7 @@ internal class UnwrapWebhookEventTest {
                             .id("m2t5akQeh2obwxeU")
                             .externalPlanId("m2t5akQeh2obwxeU")
                             .name("Example plan")
+                            .billingEntityId("billing_entity_id")
                             .build()
                     )
                     .properties(
@@ -28124,6 +28206,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -28655,6 +28738,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -29118,6 +29202,7 @@ internal class UnwrapWebhookEventTest {
                                 .state("state")
                                 .build()
                         )
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                         .addCreditNote(
                             Invoice.CreditNote.builder()
@@ -29650,6 +29735,7 @@ internal class UnwrapWebhookEventTest {
                                     .state("state")
                                     .build()
                             )
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2022-05-01T07:01:31+00:00"))
                             .addCreditNote(
                                 Invoice.CreditNote.builder()
@@ -30147,6 +30233,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .billingCycleDay(1L)
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillingPeriodEndDate(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -30238,6 +30325,7 @@ internal class UnwrapWebhookEventTest {
                                         .build()
                                 )
                                 .automaticTaxEnabled(true)
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethod(
                                     Customer.DefaultPaymentMethod.builder()
                                         .id("id")
@@ -30376,9 +30464,11 @@ internal class UnwrapWebhookEventTest {
                                         .id("m2t5akQeh2obwxeU")
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .basePlanId("base_plan_id")
+                                .billingEntityId("billing_entity_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .currency("currency")
                                 .defaultInvoiceMemo("default_invoice_memo")
@@ -31069,6 +31159,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .billingCycleDay(1L)
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currentBillingPeriodEndDate(
                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -31161,6 +31252,7 @@ internal class UnwrapWebhookEventTest {
                                             .build()
                                     )
                                     .automaticTaxEnabled(true)
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethod(
                                         Customer.DefaultPaymentMethod.builder()
                                             .id("id")
@@ -31309,9 +31401,11 @@ internal class UnwrapWebhookEventTest {
                                             .id("m2t5akQeh2obwxeU")
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .basePlanId("base_plan_id")
+                                    .billingEntityId("billing_entity_id")
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .currency("currency")
                                     .defaultInvoiceMemo("default_invoice_memo")
@@ -31943,6 +32037,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .billingCycleDay(1L)
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillingPeriodEndDate(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -32034,6 +32129,7 @@ internal class UnwrapWebhookEventTest {
                                         .build()
                                 )
                                 .automaticTaxEnabled(true)
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethod(
                                     Customer.DefaultPaymentMethod.builder()
                                         .id("id")
@@ -32172,9 +32268,11 @@ internal class UnwrapWebhookEventTest {
                                         .id("m2t5akQeh2obwxeU")
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .basePlanId("base_plan_id")
+                                .billingEntityId("billing_entity_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .currency("currency")
                                 .defaultInvoiceMemo("default_invoice_memo")
@@ -32867,6 +32965,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .billingCycleDay(1L)
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currentBillingPeriodEndDate(
                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -32959,6 +33058,7 @@ internal class UnwrapWebhookEventTest {
                                             .build()
                                     )
                                     .automaticTaxEnabled(true)
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethod(
                                         Customer.DefaultPaymentMethod.builder()
                                             .id("id")
@@ -33107,9 +33207,11 @@ internal class UnwrapWebhookEventTest {
                                             .id("m2t5akQeh2obwxeU")
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .basePlanId("base_plan_id")
+                                    .billingEntityId("billing_entity_id")
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .currency("currency")
                                     .defaultInvoiceMemo("default_invoice_memo")
@@ -33696,6 +33798,7 @@ internal class UnwrapWebhookEventTest {
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
                                         .planVersion("plan_version")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .subscription(
@@ -33795,6 +33898,7 @@ internal class UnwrapWebhookEventTest {
                                 .id("m2t5akQeh2obwxeU")
                                 .externalPlanId("m2t5akQeh2obwxeU")
                                 .name("Example plan")
+                                .billingEntityId("billing_entity_id")
                                 .build()
                         )
                         .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -33932,6 +34036,7 @@ internal class UnwrapWebhookEventTest {
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
                                             .planVersion("plan_version")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .subscription(
@@ -34033,6 +34138,7 @@ internal class UnwrapWebhookEventTest {
                                     .id("m2t5akQeh2obwxeU")
                                     .externalPlanId("m2t5akQeh2obwxeU")
                                     .name("Example plan")
+                                    .billingEntityId("billing_entity_id")
                                     .build()
                             )
                             .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -34116,6 +34222,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .billingCycleDay(1L)
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillingPeriodEndDate(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -34207,6 +34314,7 @@ internal class UnwrapWebhookEventTest {
                                         .build()
                                 )
                                 .automaticTaxEnabled(true)
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethod(
                                     Customer.DefaultPaymentMethod.builder()
                                         .id("id")
@@ -34345,9 +34453,11 @@ internal class UnwrapWebhookEventTest {
                                         .id("m2t5akQeh2obwxeU")
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .basePlanId("base_plan_id")
+                                .billingEntityId("billing_entity_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .currency("currency")
                                 .defaultInvoiceMemo("default_invoice_memo")
@@ -35017,6 +35127,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .billingCycleDay(1L)
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currentBillingPeriodEndDate(
                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -35109,6 +35220,7 @@ internal class UnwrapWebhookEventTest {
                                             .build()
                                     )
                                     .automaticTaxEnabled(true)
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethod(
                                         Customer.DefaultPaymentMethod.builder()
                                             .id("id")
@@ -35257,9 +35369,11 @@ internal class UnwrapWebhookEventTest {
                                             .id("m2t5akQeh2obwxeU")
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .basePlanId("base_plan_id")
+                                    .billingEntityId("billing_entity_id")
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .currency("currency")
                                     .defaultInvoiceMemo("default_invoice_memo")
@@ -35869,6 +35983,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .billingCycleDay(1L)
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillingPeriodEndDate(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -35960,6 +36075,7 @@ internal class UnwrapWebhookEventTest {
                                         .build()
                                 )
                                 .automaticTaxEnabled(true)
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethod(
                                     Customer.DefaultPaymentMethod.builder()
                                         .id("id")
@@ -36098,9 +36214,11 @@ internal class UnwrapWebhookEventTest {
                                         .id("m2t5akQeh2obwxeU")
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .basePlanId("base_plan_id")
+                                .billingEntityId("billing_entity_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .currency("currency")
                                 .defaultInvoiceMemo("default_invoice_memo")
@@ -36770,6 +36888,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .billingCycleDay(1L)
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currentBillingPeriodEndDate(
                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -36862,6 +36981,7 @@ internal class UnwrapWebhookEventTest {
                                             .build()
                                     )
                                     .automaticTaxEnabled(true)
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethod(
                                         Customer.DefaultPaymentMethod.builder()
                                             .id("id")
@@ -37010,9 +37130,11 @@ internal class UnwrapWebhookEventTest {
                                             .id("m2t5akQeh2obwxeU")
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .basePlanId("base_plan_id")
+                                    .billingEntityId("billing_entity_id")
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .currency("currency")
                                     .defaultInvoiceMemo("default_invoice_memo")
@@ -37599,6 +37721,7 @@ internal class UnwrapWebhookEventTest {
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
                                         .planVersion("plan_version")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .subscription(
@@ -37734,6 +37857,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .billingCycleDay(1L)
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillingPeriodEndDate(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -37825,6 +37949,7 @@ internal class UnwrapWebhookEventTest {
                                         .build()
                                 )
                                 .automaticTaxEnabled(true)
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethod(
                                     Customer.DefaultPaymentMethod.builder()
                                         .id("id")
@@ -37963,9 +38088,11 @@ internal class UnwrapWebhookEventTest {
                                         .id("m2t5akQeh2obwxeU")
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .basePlanId("base_plan_id")
+                                .billingEntityId("billing_entity_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .currency("currency")
                                 .defaultInvoiceMemo("default_invoice_memo")
@@ -38602,6 +38729,7 @@ internal class UnwrapWebhookEventTest {
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
                                             .planVersion("plan_version")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .subscription(
@@ -38741,6 +38869,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .billingCycleDay(1L)
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currentBillingPeriodEndDate(
                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -38833,6 +38962,7 @@ internal class UnwrapWebhookEventTest {
                                             .build()
                                     )
                                     .automaticTaxEnabled(true)
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethod(
                                         Customer.DefaultPaymentMethod.builder()
                                             .id("id")
@@ -38981,9 +39111,11 @@ internal class UnwrapWebhookEventTest {
                                             .id("m2t5akQeh2obwxeU")
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .basePlanId("base_plan_id")
+                                    .billingEntityId("billing_entity_id")
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .currency("currency")
                                     .defaultInvoiceMemo("default_invoice_memo")
@@ -39586,6 +39718,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .billingCycleDay(1L)
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillingPeriodEndDate(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -39677,6 +39810,7 @@ internal class UnwrapWebhookEventTest {
                                         .build()
                                 )
                                 .automaticTaxEnabled(true)
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethod(
                                     Customer.DefaultPaymentMethod.builder()
                                         .id("id")
@@ -39815,9 +39949,11 @@ internal class UnwrapWebhookEventTest {
                                         .id("m2t5akQeh2obwxeU")
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .basePlanId("base_plan_id")
+                                .billingEntityId("billing_entity_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .currency("currency")
                                 .defaultInvoiceMemo("default_invoice_memo")
@@ -40474,6 +40610,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .billingCycleDay(1L)
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currentBillingPeriodEndDate(
                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -40566,6 +40703,7 @@ internal class UnwrapWebhookEventTest {
                                             .build()
                                     )
                                     .automaticTaxEnabled(true)
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethod(
                                         Customer.DefaultPaymentMethod.builder()
                                             .id("id")
@@ -40714,9 +40852,11 @@ internal class UnwrapWebhookEventTest {
                                             .id("m2t5akQeh2obwxeU")
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .basePlanId("base_plan_id")
+                                    .billingEntityId("billing_entity_id")
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .currency("currency")
                                     .defaultInvoiceMemo("default_invoice_memo")
@@ -41338,6 +41478,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .billingCycleDay(1L)
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillingPeriodEndDate(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -41429,6 +41570,7 @@ internal class UnwrapWebhookEventTest {
                                         .build()
                                 )
                                 .automaticTaxEnabled(true)
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethod(
                                     Customer.DefaultPaymentMethod.builder()
                                         .id("id")
@@ -41567,9 +41709,11 @@ internal class UnwrapWebhookEventTest {
                                         .id("m2t5akQeh2obwxeU")
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .basePlanId("base_plan_id")
+                                .billingEntityId("billing_entity_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .currency("currency")
                                 .defaultInvoiceMemo("default_invoice_memo")
@@ -42246,6 +42390,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .billingCycleDay(1L)
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currentBillingPeriodEndDate(
                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -42338,6 +42483,7 @@ internal class UnwrapWebhookEventTest {
                                             .build()
                                     )
                                     .automaticTaxEnabled(true)
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethod(
                                         Customer.DefaultPaymentMethod.builder()
                                             .id("id")
@@ -42486,9 +42632,11 @@ internal class UnwrapWebhookEventTest {
                                             .id("m2t5akQeh2obwxeU")
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .basePlanId("base_plan_id")
+                                    .billingEntityId("billing_entity_id")
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .currency("currency")
                                     .defaultInvoiceMemo("default_invoice_memo")
@@ -43091,6 +43239,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .billingCycleDay(1L)
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillingPeriodEndDate(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -43182,6 +43331,7 @@ internal class UnwrapWebhookEventTest {
                                         .build()
                                 )
                                 .automaticTaxEnabled(true)
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethod(
                                     Customer.DefaultPaymentMethod.builder()
                                         .id("id")
@@ -43320,9 +43470,11 @@ internal class UnwrapWebhookEventTest {
                                         .id("m2t5akQeh2obwxeU")
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .basePlanId("base_plan_id")
+                                .billingEntityId("billing_entity_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .currency("currency")
                                 .defaultInvoiceMemo("default_invoice_memo")
@@ -43979,6 +44131,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .billingCycleDay(1L)
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currentBillingPeriodEndDate(
                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -44071,6 +44224,7 @@ internal class UnwrapWebhookEventTest {
                                             .build()
                                     )
                                     .automaticTaxEnabled(true)
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethod(
                                         Customer.DefaultPaymentMethod.builder()
                                             .id("id")
@@ -44219,9 +44373,11 @@ internal class UnwrapWebhookEventTest {
                                             .id("m2t5akQeh2obwxeU")
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .basePlanId("base_plan_id")
+                                    .billingEntityId("billing_entity_id")
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .currency("currency")
                                     .defaultInvoiceMemo("default_invoice_memo")
@@ -44831,6 +44987,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .billingCycleDay(1L)
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillingPeriodEndDate(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -44922,6 +45079,7 @@ internal class UnwrapWebhookEventTest {
                                         .build()
                                 )
                                 .automaticTaxEnabled(true)
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethod(
                                     Customer.DefaultPaymentMethod.builder()
                                         .id("id")
@@ -45060,9 +45218,11 @@ internal class UnwrapWebhookEventTest {
                                         .id("m2t5akQeh2obwxeU")
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .basePlanId("base_plan_id")
+                                .billingEntityId("billing_entity_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .currency("currency")
                                 .defaultInvoiceMemo("default_invoice_memo")
@@ -45735,6 +45895,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .billingCycleDay(1L)
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currentBillingPeriodEndDate(
                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -45827,6 +45988,7 @@ internal class UnwrapWebhookEventTest {
                                             .build()
                                     )
                                     .automaticTaxEnabled(true)
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethod(
                                         Customer.DefaultPaymentMethod.builder()
                                             .id("id")
@@ -45975,9 +46137,11 @@ internal class UnwrapWebhookEventTest {
                                             .id("m2t5akQeh2obwxeU")
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .basePlanId("base_plan_id")
+                                    .billingEntityId("billing_entity_id")
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .currency("currency")
                                     .defaultInvoiceMemo("default_invoice_memo")
@@ -46565,6 +46729,7 @@ internal class UnwrapWebhookEventTest {
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
                                         .planVersion("plan_version")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .subscription(
@@ -46671,6 +46836,7 @@ internal class UnwrapWebhookEventTest {
                                 .id("m2t5akQeh2obwxeU")
                                 .externalPlanId("m2t5akQeh2obwxeU")
                                 .name("Example plan")
+                                .billingEntityId("billing_entity_id")
                                 .build()
                         )
                         .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -46814,6 +46980,7 @@ internal class UnwrapWebhookEventTest {
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
                                             .planVersion("plan_version")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .subscription(
@@ -46927,6 +47094,7 @@ internal class UnwrapWebhookEventTest {
                                     .id("m2t5akQeh2obwxeU")
                                     .externalPlanId("m2t5akQeh2obwxeU")
                                     .name("Example plan")
+                                    .billingEntityId("billing_entity_id")
                                     .build()
                             )
                             .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -46985,6 +47153,7 @@ internal class UnwrapWebhookEventTest {
                                 .id("m2t5akQeh2obwxeU")
                                 .externalPlanId("m2t5akQeh2obwxeU")
                                 .name("Example plan")
+                                .billingEntityId("billing_entity_id")
                                 .build()
                         )
                         .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -47124,6 +47293,7 @@ internal class UnwrapWebhookEventTest {
                                     .id("m2t5akQeh2obwxeU")
                                     .externalPlanId("m2t5akQeh2obwxeU")
                                     .name("Example plan")
+                                    .billingEntityId("billing_entity_id")
                                     .build()
                             )
                             .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -47188,6 +47358,7 @@ internal class UnwrapWebhookEventTest {
                                 .id("m2t5akQeh2obwxeU")
                                 .externalPlanId("m2t5akQeh2obwxeU")
                                 .name("Example plan")
+                                .billingEntityId("billing_entity_id")
                                 .build()
                         )
                         .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -47334,6 +47505,7 @@ internal class UnwrapWebhookEventTest {
                                     .id("m2t5akQeh2obwxeU")
                                     .externalPlanId("m2t5akQeh2obwxeU")
                                     .name("Example plan")
+                                    .billingEntityId("billing_entity_id")
                                     .build()
                             )
                             .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -47403,6 +47575,7 @@ internal class UnwrapWebhookEventTest {
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
                                         .planVersion("plan_version")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .subscription(
@@ -47520,6 +47693,7 @@ internal class UnwrapWebhookEventTest {
                                 .id("m2t5akQeh2obwxeU")
                                 .externalPlanId("m2t5akQeh2obwxeU")
                                 .name("Example plan")
+                                .billingEntityId("billing_entity_id")
                                 .build()
                         )
                         .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -47671,6 +47845,7 @@ internal class UnwrapWebhookEventTest {
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
                                             .planVersion("plan_version")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .subscription(
@@ -47792,6 +47967,7 @@ internal class UnwrapWebhookEventTest {
                                     .id("m2t5akQeh2obwxeU")
                                     .externalPlanId("m2t5akQeh2obwxeU")
                                     .name("Example plan")
+                                    .billingEntityId("billing_entity_id")
                                     .build()
                             )
                             .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -47882,6 +48058,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .billingCycleDay(1L)
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillingPeriodEndDate(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -47973,6 +48150,7 @@ internal class UnwrapWebhookEventTest {
                                         .build()
                                 )
                                 .automaticTaxEnabled(true)
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethod(
                                     Customer.DefaultPaymentMethod.builder()
                                         .id("id")
@@ -48111,9 +48289,11 @@ internal class UnwrapWebhookEventTest {
                                         .id("m2t5akQeh2obwxeU")
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .basePlanId("base_plan_id")
+                                .billingEntityId("billing_entity_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .currency("currency")
                                 .defaultInvoiceMemo("default_invoice_memo")
@@ -48781,6 +48961,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .billingCycleDay(1L)
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currentBillingPeriodEndDate(
                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -48873,6 +49054,7 @@ internal class UnwrapWebhookEventTest {
                                             .build()
                                     )
                                     .automaticTaxEnabled(true)
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethod(
                                         Customer.DefaultPaymentMethod.builder()
                                             .id("id")
@@ -49021,9 +49203,11 @@ internal class UnwrapWebhookEventTest {
                                             .id("m2t5akQeh2obwxeU")
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .basePlanId("base_plan_id")
+                                    .billingEntityId("billing_entity_id")
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .currency("currency")
                                     .defaultInvoiceMemo("default_invoice_memo")
@@ -49633,6 +49817,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .billingCycleDay(1L)
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillingPeriodEndDate(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -49724,6 +49909,7 @@ internal class UnwrapWebhookEventTest {
                                         .build()
                                 )
                                 .automaticTaxEnabled(true)
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethod(
                                     Customer.DefaultPaymentMethod.builder()
                                         .id("id")
@@ -49862,9 +50048,11 @@ internal class UnwrapWebhookEventTest {
                                         .id("m2t5akQeh2obwxeU")
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .basePlanId("base_plan_id")
+                                .billingEntityId("billing_entity_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .currency("currency")
                                 .defaultInvoiceMemo("default_invoice_memo")
@@ -50526,6 +50714,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .billingCycleDay(1L)
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currentBillingPeriodEndDate(
                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -50618,6 +50807,7 @@ internal class UnwrapWebhookEventTest {
                                             .build()
                                     )
                                     .automaticTaxEnabled(true)
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethod(
                                         Customer.DefaultPaymentMethod.builder()
                                             .id("id")
@@ -50766,9 +50956,11 @@ internal class UnwrapWebhookEventTest {
                                             .id("m2t5akQeh2obwxeU")
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .basePlanId("base_plan_id")
+                                    .billingEntityId("billing_entity_id")
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .currency("currency")
                                     .defaultInvoiceMemo("default_invoice_memo")
@@ -51379,6 +51571,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .billingCycleDay(1L)
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillingPeriodEndDate(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -51470,6 +51663,7 @@ internal class UnwrapWebhookEventTest {
                                         .build()
                                 )
                                 .automaticTaxEnabled(true)
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethod(
                                     Customer.DefaultPaymentMethod.builder()
                                         .id("id")
@@ -51608,9 +51802,11 @@ internal class UnwrapWebhookEventTest {
                                         .id("m2t5akQeh2obwxeU")
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .basePlanId("base_plan_id")
+                                .billingEntityId("billing_entity_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .currency("currency")
                                 .defaultInvoiceMemo("default_invoice_memo")
@@ -52282,6 +52478,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .billingCycleDay(1L)
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currentBillingPeriodEndDate(
                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -52374,6 +52571,7 @@ internal class UnwrapWebhookEventTest {
                                             .build()
                                     )
                                     .automaticTaxEnabled(true)
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethod(
                                         Customer.DefaultPaymentMethod.builder()
                                             .id("id")
@@ -52522,9 +52720,11 @@ internal class UnwrapWebhookEventTest {
                                             .id("m2t5akQeh2obwxeU")
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .basePlanId("base_plan_id")
+                                    .billingEntityId("billing_entity_id")
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .currency("currency")
                                     .defaultInvoiceMemo("default_invoice_memo")
@@ -53136,6 +53336,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .billingCycleDay(1L)
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillingPeriodEndDate(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -53227,6 +53428,7 @@ internal class UnwrapWebhookEventTest {
                                         .build()
                                 )
                                 .automaticTaxEnabled(true)
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethod(
                                     Customer.DefaultPaymentMethod.builder()
                                         .id("id")
@@ -53365,9 +53567,11 @@ internal class UnwrapWebhookEventTest {
                                         .id("m2t5akQeh2obwxeU")
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .basePlanId("base_plan_id")
+                                .billingEntityId("billing_entity_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .currency("currency")
                                 .defaultInvoiceMemo("default_invoice_memo")
@@ -54035,6 +54239,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .billingCycleDay(1L)
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currentBillingPeriodEndDate(
                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -54127,6 +54332,7 @@ internal class UnwrapWebhookEventTest {
                                             .build()
                                     )
                                     .automaticTaxEnabled(true)
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethod(
                                         Customer.DefaultPaymentMethod.builder()
                                             .id("id")
@@ -54275,9 +54481,11 @@ internal class UnwrapWebhookEventTest {
                                             .id("m2t5akQeh2obwxeU")
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .basePlanId("base_plan_id")
+                                    .billingEntityId("billing_entity_id")
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .currency("currency")
                                     .defaultInvoiceMemo("default_invoice_memo")
@@ -54864,6 +55072,7 @@ internal class UnwrapWebhookEventTest {
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
                                         .planVersion("plan_version")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .subscription(
@@ -54999,6 +55208,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .billingCycleDay(1L)
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillingPeriodEndDate(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -55090,6 +55300,7 @@ internal class UnwrapWebhookEventTest {
                                         .build()
                                 )
                                 .automaticTaxEnabled(true)
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethod(
                                     Customer.DefaultPaymentMethod.builder()
                                         .id("id")
@@ -55228,9 +55439,11 @@ internal class UnwrapWebhookEventTest {
                                         .id("m2t5akQeh2obwxeU")
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .basePlanId("base_plan_id")
+                                .billingEntityId("billing_entity_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .currency("currency")
                                 .defaultInvoiceMemo("default_invoice_memo")
@@ -55868,6 +56081,7 @@ internal class UnwrapWebhookEventTest {
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
                                             .planVersion("plan_version")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .subscription(
@@ -56007,6 +56221,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .billingCycleDay(1L)
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currentBillingPeriodEndDate(
                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -56099,6 +56314,7 @@ internal class UnwrapWebhookEventTest {
                                             .build()
                                     )
                                     .automaticTaxEnabled(true)
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethod(
                                         Customer.DefaultPaymentMethod.builder()
                                             .id("id")
@@ -56247,9 +56463,11 @@ internal class UnwrapWebhookEventTest {
                                             .id("m2t5akQeh2obwxeU")
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .basePlanId("base_plan_id")
+                                    .billingEntityId("billing_entity_id")
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .currency("currency")
                                     .defaultInvoiceMemo("default_invoice_memo")
@@ -56852,6 +57070,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .billingCycleDay(1L)
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillingPeriodEndDate(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -56943,6 +57162,7 @@ internal class UnwrapWebhookEventTest {
                                         .build()
                                 )
                                 .automaticTaxEnabled(true)
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethod(
                                     Customer.DefaultPaymentMethod.builder()
                                         .id("id")
@@ -57081,9 +57301,11 @@ internal class UnwrapWebhookEventTest {
                                         .id("m2t5akQeh2obwxeU")
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .basePlanId("base_plan_id")
+                                .billingEntityId("billing_entity_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .currency("currency")
                                 .defaultInvoiceMemo("default_invoice_memo")
@@ -57740,6 +57962,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .billingCycleDay(1L)
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currentBillingPeriodEndDate(
                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -57832,6 +58055,7 @@ internal class UnwrapWebhookEventTest {
                                             .build()
                                     )
                                     .automaticTaxEnabled(true)
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethod(
                                         Customer.DefaultPaymentMethod.builder()
                                             .id("id")
@@ -57980,9 +58204,11 @@ internal class UnwrapWebhookEventTest {
                                             .id("m2t5akQeh2obwxeU")
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .basePlanId("base_plan_id")
+                                    .billingEntityId("billing_entity_id")
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .currency("currency")
                                     .defaultInvoiceMemo("default_invoice_memo")
@@ -58585,6 +58811,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .billingCycleDay(1L)
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillingPeriodEndDate(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -58676,6 +58903,7 @@ internal class UnwrapWebhookEventTest {
                                         .build()
                                 )
                                 .automaticTaxEnabled(true)
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethod(
                                     Customer.DefaultPaymentMethod.builder()
                                         .id("id")
@@ -58814,9 +59042,11 @@ internal class UnwrapWebhookEventTest {
                                         .id("m2t5akQeh2obwxeU")
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .basePlanId("base_plan_id")
+                                .billingEntityId("billing_entity_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .currency("currency")
                                 .defaultInvoiceMemo("default_invoice_memo")
@@ -59473,6 +59703,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .billingCycleDay(1L)
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currentBillingPeriodEndDate(
                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -59565,6 +59796,7 @@ internal class UnwrapWebhookEventTest {
                                             .build()
                                     )
                                     .automaticTaxEnabled(true)
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethod(
                                         Customer.DefaultPaymentMethod.builder()
                                             .id("id")
@@ -59713,9 +59945,11 @@ internal class UnwrapWebhookEventTest {
                                             .id("m2t5akQeh2obwxeU")
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .basePlanId("base_plan_id")
+                                    .billingEntityId("billing_entity_id")
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .currency("currency")
                                     .defaultInvoiceMemo("default_invoice_memo")
@@ -60299,6 +60533,7 @@ internal class UnwrapWebhookEventTest {
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
                                         .planVersion("plan_version")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .subscription(
@@ -60435,6 +60670,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .billingCycleDay(1L)
+                        .billingEntityId("billing_entity_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currentBillingPeriodEndDate(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -60526,6 +60762,7 @@ internal class UnwrapWebhookEventTest {
                                         .build()
                                 )
                                 .automaticTaxEnabled(true)
+                                .billingEntityId("billing_entity_id")
                                 .defaultPaymentMethod(
                                     Customer.DefaultPaymentMethod.builder()
                                         .id("id")
@@ -60664,9 +60901,11 @@ internal class UnwrapWebhookEventTest {
                                         .id("m2t5akQeh2obwxeU")
                                         .externalPlanId("m2t5akQeh2obwxeU")
                                         .name("Example plan")
+                                        .billingEntityId("billing_entity_id")
                                         .build()
                                 )
                                 .basePlanId("base_plan_id")
+                                .billingEntityId("billing_entity_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .currency("currency")
                                 .defaultInvoiceMemo("default_invoice_memo")
@@ -61304,6 +61543,7 @@ internal class UnwrapWebhookEventTest {
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
                                             .planVersion("plan_version")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .subscription(
@@ -61444,6 +61684,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .billingCycleDay(1L)
+                            .billingEntityId("billing_entity_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .currentBillingPeriodEndDate(
                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -61536,6 +61777,7 @@ internal class UnwrapWebhookEventTest {
                                             .build()
                                     )
                                     .automaticTaxEnabled(true)
+                                    .billingEntityId("billing_entity_id")
                                     .defaultPaymentMethod(
                                         Customer.DefaultPaymentMethod.builder()
                                             .id("id")
@@ -61684,9 +61926,11 @@ internal class UnwrapWebhookEventTest {
                                             .id("m2t5akQeh2obwxeU")
                                             .externalPlanId("m2t5akQeh2obwxeU")
                                             .name("Example plan")
+                                            .billingEntityId("billing_entity_id")
                                             .build()
                                     )
                                     .basePlanId("base_plan_id")
+                                    .billingEntityId("billing_entity_id")
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .currency("currency")
                                     .defaultInvoiceMemo("default_invoice_memo")

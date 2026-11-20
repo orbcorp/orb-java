@@ -95,6 +95,7 @@ internal class CustomerTest {
                         .build()
                 )
                 .automaticTaxEnabled(true)
+                .billingEntityId("billing_entity_id")
                 .defaultPaymentMethod(
                     Customer.DefaultPaymentMethod.builder()
                         .id("id")
@@ -210,6 +211,7 @@ internal class CustomerTest {
                     .build()
             )
         assertThat(customer.automaticTaxEnabled()).contains(true)
+        assertThat(customer.billingEntityId()).contains("billing_entity_id")
         assertThat(customer.defaultPaymentMethod())
             .contains(
                 Customer.DefaultPaymentMethod.builder()
@@ -325,6 +327,7 @@ internal class CustomerTest {
                         .build()
                 )
                 .automaticTaxEnabled(true)
+                .billingEntityId("billing_entity_id")
                 .defaultPaymentMethod(
                     Customer.DefaultPaymentMethod.builder()
                         .id("id")

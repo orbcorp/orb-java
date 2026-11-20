@@ -1997,6 +1997,7 @@ private constructor(
                 private val externalPlanId: JsonField<String>,
                 private val name: JsonField<String>,
                 private val planVersion: JsonField<String>,
+                private val billingEntityId: JsonField<String>,
                 private val additionalProperties: MutableMap<String, JsonValue>,
             ) {
 
@@ -2012,7 +2013,10 @@ private constructor(
                     @JsonProperty("plan_version")
                     @ExcludeMissing
                     planVersion: JsonField<String> = JsonMissing.of(),
-                ) : this(id, externalPlanId, name, planVersion, mutableMapOf())
+                    @JsonProperty("billing_entity_id")
+                    @ExcludeMissing
+                    billingEntityId: JsonField<String> = JsonMissing.of(),
+                ) : this(id, externalPlanId, name, planVersion, billingEntityId, mutableMapOf())
 
                 /**
                  * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -2043,6 +2047,15 @@ private constructor(
                  *   value).
                  */
                 fun planVersion(): String = planVersion.getRequired("plan_version")
+
+                /**
+                 * The id of the default billing entity of this plan.
+                 *
+                 * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if
+                 *   the server responded with an unexpected value).
+                 */
+                fun billingEntityId(): Optional<String> =
+                    billingEntityId.getOptional("billing_entity_id")
 
                 /**
                  * Returns the raw JSON value of [id].
@@ -2079,6 +2092,16 @@ private constructor(
                 @ExcludeMissing
                 fun _planVersion(): JsonField<String> = planVersion
 
+                /**
+                 * Returns the raw JSON value of [billingEntityId].
+                 *
+                 * Unlike [billingEntityId], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("billing_entity_id")
+                @ExcludeMissing
+                fun _billingEntityId(): JsonField<String> = billingEntityId
+
                 @JsonAnySetter
                 private fun putAdditionalProperty(key: String, value: JsonValue) {
                     additionalProperties.put(key, value)
@@ -2114,6 +2137,7 @@ private constructor(
                     private var externalPlanId: JsonField<String>? = null
                     private var name: JsonField<String>? = null
                     private var planVersion: JsonField<String>? = null
+                    private var billingEntityId: JsonField<String> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
@@ -2122,6 +2146,7 @@ private constructor(
                         externalPlanId = plan.externalPlanId
                         name = plan.name
                         planVersion = plan.planVersion
+                        billingEntityId = plan.billingEntityId
                         additionalProperties = plan.additionalProperties.toMutableMap()
                     }
 
@@ -2192,6 +2217,28 @@ private constructor(
                         this.planVersion = planVersion
                     }
 
+                    /** The id of the default billing entity of this plan. */
+                    fun billingEntityId(billingEntityId: String?) =
+                        billingEntityId(JsonField.ofNullable(billingEntityId))
+
+                    /**
+                     * Alias for calling [Builder.billingEntityId] with
+                     * `billingEntityId.orElse(null)`.
+                     */
+                    fun billingEntityId(billingEntityId: Optional<String>) =
+                        billingEntityId(billingEntityId.getOrNull())
+
+                    /**
+                     * Sets [Builder.billingEntityId] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.billingEntityId] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun billingEntityId(billingEntityId: JsonField<String>) = apply {
+                        this.billingEntityId = billingEntityId
+                    }
+
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
                         putAllAdditionalProperties(additionalProperties)
@@ -2235,6 +2282,7 @@ private constructor(
                             checkRequired("externalPlanId", externalPlanId),
                             checkRequired("name", name),
                             checkRequired("planVersion", planVersion),
+                            billingEntityId,
                             additionalProperties.toMutableMap(),
                         )
                 }
@@ -2260,6 +2308,7 @@ private constructor(
                     externalPlanId()
                     name()
                     planVersion()
+                    billingEntityId()
                     validated = true
                 }
 
@@ -2282,7 +2331,8 @@ private constructor(
                     (if (id.asKnown().isPresent) 1 else 0) +
                         (if (externalPlanId.asKnown().isPresent) 1 else 0) +
                         (if (name.asKnown().isPresent) 1 else 0) +
-                        (if (planVersion.asKnown().isPresent) 1 else 0)
+                        (if (planVersion.asKnown().isPresent) 1 else 0) +
+                        (if (billingEntityId.asKnown().isPresent) 1 else 0)
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -2294,17 +2344,25 @@ private constructor(
                         externalPlanId == other.externalPlanId &&
                         name == other.name &&
                         planVersion == other.planVersion &&
+                        billingEntityId == other.billingEntityId &&
                         additionalProperties == other.additionalProperties
                 }
 
                 private val hashCode: Int by lazy {
-                    Objects.hash(id, externalPlanId, name, planVersion, additionalProperties)
+                    Objects.hash(
+                        id,
+                        externalPlanId,
+                        name,
+                        planVersion,
+                        billingEntityId,
+                        additionalProperties,
+                    )
                 }
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "Plan{id=$id, externalPlanId=$externalPlanId, name=$name, planVersion=$planVersion, additionalProperties=$additionalProperties}"
+                    "Plan{id=$id, externalPlanId=$externalPlanId, name=$name, planVersion=$planVersion, billingEntityId=$billingEntityId, additionalProperties=$additionalProperties}"
             }
 
             /**
@@ -4854,6 +4912,7 @@ private constructor(
             private val id: JsonField<String>,
             private val externalPlanId: JsonField<String>,
             private val name: JsonField<String>,
+            private val billingEntityId: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -4864,7 +4923,10 @@ private constructor(
                 @ExcludeMissing
                 externalPlanId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-            ) : this(id, externalPlanId, name, mutableMapOf())
+                @JsonProperty("billing_entity_id")
+                @ExcludeMissing
+                billingEntityId: JsonField<String> = JsonMissing.of(),
+            ) : this(id, externalPlanId, name, billingEntityId, mutableMapOf())
 
             /**
              * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -4889,6 +4951,15 @@ private constructor(
             fun name(): Optional<String> = name.getOptional("name")
 
             /**
+             * The id of the default billing entity of this plan.
+             *
+             * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+             *   server responded with an unexpected value).
+             */
+            fun billingEntityId(): Optional<String> =
+                billingEntityId.getOptional("billing_entity_id")
+
+            /**
              * Returns the raw JSON value of [id].
              *
              * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
@@ -4911,6 +4982,16 @@ private constructor(
              * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+            /**
+             * Returns the raw JSON value of [billingEntityId].
+             *
+             * Unlike [billingEntityId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("billing_entity_id")
+            @ExcludeMissing
+            fun _billingEntityId(): JsonField<String> = billingEntityId
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -4945,6 +5026,7 @@ private constructor(
                 private var id: JsonField<String>? = null
                 private var externalPlanId: JsonField<String>? = null
                 private var name: JsonField<String>? = null
+                private var billingEntityId: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -4952,6 +5034,7 @@ private constructor(
                     id = plan.id
                     externalPlanId = plan.externalPlanId
                     name = plan.name
+                    billingEntityId = plan.billingEntityId
                     additionalProperties = plan.additionalProperties.toMutableMap()
                 }
 
@@ -5008,6 +5091,27 @@ private constructor(
                  */
                 fun name(name: JsonField<String>) = apply { this.name = name }
 
+                /** The id of the default billing entity of this plan. */
+                fun billingEntityId(billingEntityId: String?) =
+                    billingEntityId(JsonField.ofNullable(billingEntityId))
+
+                /**
+                 * Alias for calling [Builder.billingEntityId] with `billingEntityId.orElse(null)`.
+                 */
+                fun billingEntityId(billingEntityId: Optional<String>) =
+                    billingEntityId(billingEntityId.getOrNull())
+
+                /**
+                 * Sets [Builder.billingEntityId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.billingEntityId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun billingEntityId(billingEntityId: JsonField<String>) = apply {
+                    this.billingEntityId = billingEntityId
+                }
+
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
                     putAllAdditionalProperties(additionalProperties)
@@ -5049,6 +5153,7 @@ private constructor(
                         checkRequired("id", id),
                         checkRequired("externalPlanId", externalPlanId),
                         checkRequired("name", name),
+                        billingEntityId,
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -5073,6 +5178,7 @@ private constructor(
                 id()
                 externalPlanId()
                 name()
+                billingEntityId()
                 validated = true
             }
 
@@ -5094,7 +5200,8 @@ private constructor(
             internal fun validity(): Int =
                 (if (id.asKnown().isPresent) 1 else 0) +
                     (if (externalPlanId.asKnown().isPresent) 1 else 0) +
-                    (if (name.asKnown().isPresent) 1 else 0)
+                    (if (name.asKnown().isPresent) 1 else 0) +
+                    (if (billingEntityId.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -5105,17 +5212,18 @@ private constructor(
                     id == other.id &&
                     externalPlanId == other.externalPlanId &&
                     name == other.name &&
+                    billingEntityId == other.billingEntityId &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(id, externalPlanId, name, additionalProperties)
+                Objects.hash(id, externalPlanId, name, billingEntityId, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Plan{id=$id, externalPlanId=$externalPlanId, name=$name, additionalProperties=$additionalProperties}"
+                "Plan{id=$id, externalPlanId=$externalPlanId, name=$name, billingEntityId=$billingEntityId, additionalProperties=$additionalProperties}"
         }
 
         class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {

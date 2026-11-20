@@ -41,6 +41,7 @@ private constructor(
     private val amount: String?,
     private val amountGt: String?,
     private val amountLt: String?,
+    private val billingEntityId: String?,
     private val cursor: String?,
     private val customerId: String?,
     private val dateType: DateType?,
@@ -67,6 +68,12 @@ private constructor(
     fun amountGt(): Optional<String> = Optional.ofNullable(amountGt)
 
     fun amountLt(): Optional<String> = Optional.ofNullable(amountLt)
+
+    /**
+     * Filters to objects issued by this billing entity. Filtering on the account's default billing
+     * entity also matches objects created before the account had billing entities.
+     */
+    fun billingEntityId(): Optional<String> = Optional.ofNullable(billingEntityId)
 
     /**
      * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
@@ -140,6 +147,7 @@ private constructor(
         private var amount: String? = null
         private var amountGt: String? = null
         private var amountLt: String? = null
+        private var billingEntityId: String? = null
         private var cursor: String? = null
         private var customerId: String? = null
         private var dateType: DateType? = null
@@ -165,6 +173,7 @@ private constructor(
             amount = invoiceListParams.amount
             amountGt = invoiceListParams.amountGt
             amountLt = invoiceListParams.amountLt
+            billingEntityId = invoiceListParams.billingEntityId
             cursor = invoiceListParams.cursor
             customerId = invoiceListParams.customerId
             dateType = invoiceListParams.dateType
@@ -200,6 +209,18 @@ private constructor(
 
         /** Alias for calling [Builder.amountLt] with `amountLt.orElse(null)`. */
         fun amountLt(amountLt: Optional<String>) = amountLt(amountLt.getOrNull())
+
+        /**
+         * Filters to objects issued by this billing entity. Filtering on the account's default
+         * billing entity also matches objects created before the account had billing entities.
+         */
+        fun billingEntityId(billingEntityId: String?) = apply {
+            this.billingEntityId = billingEntityId
+        }
+
+        /** Alias for calling [Builder.billingEntityId] with `billingEntityId.orElse(null)`. */
+        fun billingEntityId(billingEntityId: Optional<String>) =
+            billingEntityId(billingEntityId.getOrNull())
 
         /**
          * Cursor for pagination. This can be populated by the `next_cursor` value returned from the
@@ -466,6 +487,7 @@ private constructor(
                 amount,
                 amountGt,
                 amountLt,
+                billingEntityId,
                 cursor,
                 customerId,
                 dateType,
@@ -496,6 +518,7 @@ private constructor(
                 amount?.let { put("amount", it) }
                 amountGt?.let { put("amount[gt]", it) }
                 amountLt?.let { put("amount[lt]", it) }
+                billingEntityId?.let { put("billing_entity_id", it) }
                 cursor?.let { put("cursor", it) }
                 customerId?.let { put("customer_id", it) }
                 dateType?.let { put("date_type", it.toString()) }
@@ -755,6 +778,7 @@ private constructor(
             amount == other.amount &&
             amountGt == other.amountGt &&
             amountLt == other.amountLt &&
+            billingEntityId == other.billingEntityId &&
             cursor == other.cursor &&
             customerId == other.customerId &&
             dateType == other.dateType &&
@@ -781,6 +805,7 @@ private constructor(
             amount,
             amountGt,
             amountLt,
+            billingEntityId,
             cursor,
             customerId,
             dateType,
@@ -803,5 +828,5 @@ private constructor(
         )
 
     override fun toString() =
-        "InvoiceListParams{amount=$amount, amountGt=$amountGt, amountLt=$amountLt, cursor=$cursor, customerId=$customerId, dateType=$dateType, dueDate=$dueDate, dueDateWindow=$dueDateWindow, dueDateGt=$dueDateGt, dueDateLt=$dueDateLt, externalCustomerId=$externalCustomerId, includeZeroQuantityLineItems=$includeZeroQuantityLineItems, invoiceDateGt=$invoiceDateGt, invoiceDateGte=$invoiceDateGte, invoiceDateLt=$invoiceDateLt, invoiceDateLte=$invoiceDateLte, isRecurring=$isRecurring, limit=$limit, status=$status, subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "InvoiceListParams{amount=$amount, amountGt=$amountGt, amountLt=$amountLt, billingEntityId=$billingEntityId, cursor=$cursor, customerId=$customerId, dateType=$dateType, dueDate=$dueDate, dueDateWindow=$dueDateWindow, dueDateGt=$dueDateGt, dueDateLt=$dueDateLt, externalCustomerId=$externalCustomerId, includeZeroQuantityLineItems=$includeZeroQuantityLineItems, invoiceDateGt=$invoiceDateGt, invoiceDateGte=$invoiceDateGte, invoiceDateLt=$invoiceDateLt, invoiceDateLte=$invoiceDateLte, isRecurring=$isRecurring, limit=$limit, status=$status, subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

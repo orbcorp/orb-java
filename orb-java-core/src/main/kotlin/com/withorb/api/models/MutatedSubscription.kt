@@ -41,6 +41,7 @@ private constructor(
     private val autoIssuance: JsonField<Boolean>,
     private val billingCycleAnchorConfiguration: JsonField<BillingCycleAnchorConfiguration>,
     private val billingCycleDay: JsonField<Long>,
+    private val billingEntityId: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val currentBillingPeriodEndDate: JsonField<OffsetDateTime>,
     private val currentBillingPeriodStartDate: JsonField<OffsetDateTime>,
@@ -88,6 +89,9 @@ private constructor(
         @JsonProperty("billing_cycle_day")
         @ExcludeMissing
         billingCycleDay: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("billing_entity_id")
+        @ExcludeMissing
+        billingEntityId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("created_at")
         @ExcludeMissing
         createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -150,6 +154,7 @@ private constructor(
         autoIssuance,
         billingCycleAnchorConfiguration,
         billingCycleDay,
+        billingEntityId,
         createdAt,
         currentBillingPeriodEndDate,
         currentBillingPeriodStartDate,
@@ -236,6 +241,14 @@ private constructor(
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun billingCycleDay(): Long = billingCycleDay.getRequired("billing_cycle_day")
+
+    /**
+     * The id of the billing entity that issues this subscription's invoices.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun billingEntityId(): Optional<String> = billingEntityId.getOptional("billing_entity_id")
 
     /**
      * @throws OrbInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -513,6 +526,15 @@ private constructor(
     fun _billingCycleDay(): JsonField<Long> = billingCycleDay
 
     /**
+     * Returns the raw JSON value of [billingEntityId].
+     *
+     * Unlike [billingEntityId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("billing_entity_id")
+    @ExcludeMissing
+    fun _billingEntityId(): JsonField<String> = billingEntityId
+
+    /**
      * Returns the raw JSON value of [createdAt].
      *
      * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
@@ -737,6 +759,7 @@ private constructor(
          * .autoIssuance()
          * .billingCycleAnchorConfiguration()
          * .billingCycleDay()
+         * .billingEntityId()
          * .createdAt()
          * .currentBillingPeriodEndDate()
          * .currentBillingPeriodStartDate()
@@ -774,6 +797,7 @@ private constructor(
         private var billingCycleAnchorConfiguration: JsonField<BillingCycleAnchorConfiguration>? =
             null
         private var billingCycleDay: JsonField<Long>? = null
+        private var billingEntityId: JsonField<String>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var currentBillingPeriodEndDate: JsonField<OffsetDateTime>? = null
         private var currentBillingPeriodStartDate: JsonField<OffsetDateTime>? = null
@@ -809,6 +833,7 @@ private constructor(
             autoIssuance = mutatedSubscription.autoIssuance
             billingCycleAnchorConfiguration = mutatedSubscription.billingCycleAnchorConfiguration
             billingCycleDay = mutatedSubscription.billingCycleDay
+            billingEntityId = mutatedSubscription.billingEntityId
             createdAt = mutatedSubscription.createdAt
             currentBillingPeriodEndDate = mutatedSubscription.currentBillingPeriodEndDate
             currentBillingPeriodStartDate = mutatedSubscription.currentBillingPeriodStartDate
@@ -995,6 +1020,25 @@ private constructor(
          */
         fun billingCycleDay(billingCycleDay: JsonField<Long>) = apply {
             this.billingCycleDay = billingCycleDay
+        }
+
+        /** The id of the billing entity that issues this subscription's invoices. */
+        fun billingEntityId(billingEntityId: String?) =
+            billingEntityId(JsonField.ofNullable(billingEntityId))
+
+        /** Alias for calling [Builder.billingEntityId] with `billingEntityId.orElse(null)`. */
+        fun billingEntityId(billingEntityId: Optional<String>) =
+            billingEntityId(billingEntityId.getOrNull())
+
+        /**
+         * Sets [Builder.billingEntityId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.billingEntityId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun billingEntityId(billingEntityId: JsonField<String>) = apply {
+            this.billingEntityId = billingEntityId
         }
 
         fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
@@ -1524,6 +1568,7 @@ private constructor(
          * .autoIssuance()
          * .billingCycleAnchorConfiguration()
          * .billingCycleDay()
+         * .billingEntityId()
          * .createdAt()
          * .currentBillingPeriodEndDate()
          * .currentBillingPeriodStartDate()
@@ -1558,6 +1603,7 @@ private constructor(
                 checkRequired("autoIssuance", autoIssuance),
                 checkRequired("billingCycleAnchorConfiguration", billingCycleAnchorConfiguration),
                 checkRequired("billingCycleDay", billingCycleDay),
+                checkRequired("billingEntityId", billingEntityId),
                 checkRequired("createdAt", createdAt),
                 checkRequired("currentBillingPeriodEndDate", currentBillingPeriodEndDate),
                 checkRequired("currentBillingPeriodStartDate", currentBillingPeriodStartDate),
@@ -1608,6 +1654,7 @@ private constructor(
         autoIssuance()
         billingCycleAnchorConfiguration().validate()
         billingCycleDay()
+        billingEntityId()
         createdAt()
         currentBillingPeriodEndDate()
         currentBillingPeriodStartDate()
@@ -1655,6 +1702,7 @@ private constructor(
             (if (autoIssuance.asKnown().isPresent) 1 else 0) +
             (billingCycleAnchorConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
             (if (billingCycleDay.asKnown().isPresent) 1 else 0) +
+            (if (billingEntityId.asKnown().isPresent) 1 else 0) +
             (if (createdAt.asKnown().isPresent) 1 else 0) +
             (if (currentBillingPeriodEndDate.asKnown().isPresent) 1 else 0) +
             (if (currentBillingPeriodStartDate.asKnown().isPresent) 1 else 0) +
@@ -3560,6 +3608,7 @@ private constructor(
             autoIssuance == other.autoIssuance &&
             billingCycleAnchorConfiguration == other.billingCycleAnchorConfiguration &&
             billingCycleDay == other.billingCycleDay &&
+            billingEntityId == other.billingEntityId &&
             createdAt == other.createdAt &&
             currentBillingPeriodEndDate == other.currentBillingPeriodEndDate &&
             currentBillingPeriodStartDate == other.currentBillingPeriodStartDate &&
@@ -3594,6 +3643,7 @@ private constructor(
             autoIssuance,
             billingCycleAnchorConfiguration,
             billingCycleDay,
+            billingEntityId,
             createdAt,
             currentBillingPeriodEndDate,
             currentBillingPeriodStartDate,
@@ -3623,5 +3673,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "MutatedSubscription{id=$id, activePlanPhaseOrder=$activePlanPhaseOrder, adjustmentIntervals=$adjustmentIntervals, autoCollection=$autoCollection, autoIssuance=$autoIssuance, billingCycleAnchorConfiguration=$billingCycleAnchorConfiguration, billingCycleDay=$billingCycleDay, createdAt=$createdAt, currentBillingPeriodEndDate=$currentBillingPeriodEndDate, currentBillingPeriodStartDate=$currentBillingPeriodStartDate, customer=$customer, defaultInvoiceMemo=$defaultInvoiceMemo, discountIntervals=$discountIntervals, endDate=$endDate, fixedFeeQuantitySchedule=$fixedFeeQuantitySchedule, invoicingThreshold=$invoicingThreshold, maximumIntervals=$maximumIntervals, metadata=$metadata, minimumIntervals=$minimumIntervals, name=$name, netTerms=$netTerms, pendingSubscriptionChange=$pendingSubscriptionChange, plan=$plan, priceIntervals=$priceIntervals, redeemedCoupon=$redeemedCoupon, startDate=$startDate, status=$status, trialInfo=$trialInfo, changedResources=$changedResources, additionalProperties=$additionalProperties}"
+        "MutatedSubscription{id=$id, activePlanPhaseOrder=$activePlanPhaseOrder, adjustmentIntervals=$adjustmentIntervals, autoCollection=$autoCollection, autoIssuance=$autoIssuance, billingCycleAnchorConfiguration=$billingCycleAnchorConfiguration, billingCycleDay=$billingCycleDay, billingEntityId=$billingEntityId, createdAt=$createdAt, currentBillingPeriodEndDate=$currentBillingPeriodEndDate, currentBillingPeriodStartDate=$currentBillingPeriodStartDate, customer=$customer, defaultInvoiceMemo=$defaultInvoiceMemo, discountIntervals=$discountIntervals, endDate=$endDate, fixedFeeQuantitySchedule=$fixedFeeQuantitySchedule, invoicingThreshold=$invoicingThreshold, maximumIntervals=$maximumIntervals, metadata=$metadata, minimumIntervals=$minimumIntervals, name=$name, netTerms=$netTerms, pendingSubscriptionChange=$pendingSubscriptionChange, plan=$plan, priceIntervals=$priceIntervals, redeemedCoupon=$redeemedCoupon, startDate=$startDate, status=$status, trialInfo=$trialInfo, changedResources=$changedResources, additionalProperties=$additionalProperties}"
 }

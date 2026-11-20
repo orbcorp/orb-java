@@ -17,6 +17,7 @@ import kotlin.jvm.optionals.getOrNull
  */
 class CreditNoteListParams
 private constructor(
+    private val billingEntityId: String?,
     private val createdAtGt: OffsetDateTime?,
     private val createdAtGte: OffsetDateTime?,
     private val createdAtLt: OffsetDateTime?,
@@ -26,6 +27,12 @@ private constructor(
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    /**
+     * Filters to objects issued by this billing entity. Filtering on the account's default billing
+     * entity also matches objects created before the account had billing entities.
+     */
+    fun billingEntityId(): Optional<String> = Optional.ofNullable(billingEntityId)
 
     fun createdAtGt(): Optional<OffsetDateTime> = Optional.ofNullable(createdAtGt)
 
@@ -63,6 +70,7 @@ private constructor(
     /** A builder for [CreditNoteListParams]. */
     class Builder internal constructor() {
 
+        private var billingEntityId: String? = null
         private var createdAtGt: OffsetDateTime? = null
         private var createdAtGte: OffsetDateTime? = null
         private var createdAtLt: OffsetDateTime? = null
@@ -74,6 +82,7 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(creditNoteListParams: CreditNoteListParams) = apply {
+            billingEntityId = creditNoteListParams.billingEntityId
             createdAtGt = creditNoteListParams.createdAtGt
             createdAtGte = creditNoteListParams.createdAtGte
             createdAtLt = creditNoteListParams.createdAtLt
@@ -83,6 +92,18 @@ private constructor(
             additionalHeaders = creditNoteListParams.additionalHeaders.toBuilder()
             additionalQueryParams = creditNoteListParams.additionalQueryParams.toBuilder()
         }
+
+        /**
+         * Filters to objects issued by this billing entity. Filtering on the account's default
+         * billing entity also matches objects created before the account had billing entities.
+         */
+        fun billingEntityId(billingEntityId: String?) = apply {
+            this.billingEntityId = billingEntityId
+        }
+
+        /** Alias for calling [Builder.billingEntityId] with `billingEntityId.orElse(null)`. */
+        fun billingEntityId(billingEntityId: Optional<String>) =
+            billingEntityId(billingEntityId.getOrNull())
 
         fun createdAtGt(createdAtGt: OffsetDateTime?) = apply { this.createdAtGt = createdAtGt }
 
@@ -235,6 +256,7 @@ private constructor(
          */
         fun build(): CreditNoteListParams =
             CreditNoteListParams(
+                billingEntityId,
                 createdAtGt,
                 createdAtGte,
                 createdAtLt,
@@ -251,6 +273,7 @@ private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
+                billingEntityId?.let { put("billing_entity_id", it) }
                 createdAtGt?.let {
                     put("created_at[gt]", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
                 }
@@ -275,6 +298,7 @@ private constructor(
         }
 
         return other is CreditNoteListParams &&
+            billingEntityId == other.billingEntityId &&
             createdAtGt == other.createdAtGt &&
             createdAtGte == other.createdAtGte &&
             createdAtLt == other.createdAtLt &&
@@ -287,6 +311,7 @@ private constructor(
 
     override fun hashCode(): Int =
         Objects.hash(
+            billingEntityId,
             createdAtGt,
             createdAtGte,
             createdAtLt,
@@ -298,5 +323,5 @@ private constructor(
         )
 
     override fun toString() =
-        "CreditNoteListParams{createdAtGt=$createdAtGt, createdAtGte=$createdAtGte, createdAtLt=$createdAtLt, createdAtLte=$createdAtLte, cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "CreditNoteListParams{billingEntityId=$billingEntityId, createdAtGt=$createdAtGt, createdAtGte=$createdAtGte, createdAtLt=$createdAtLt, createdAtLte=$createdAtLte, cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

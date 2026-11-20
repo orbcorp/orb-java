@@ -114,6 +114,14 @@ private constructor(
     fun billingAddress(): Optional<AddressInput> = body.billingAddress()
 
     /**
+     * The Orb ID of the active billing entity to set as this customer's default entity.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun billingEntityId(): Optional<String> = body.billingEntityId()
+
+    /**
      * An ISO 4217 currency string used for the customer's invoices and balance. If not set at
      * creation time, will be set at subscription creation time.
      *
@@ -421,6 +429,13 @@ private constructor(
     fun _billingAddress(): JsonField<AddressInput> = body._billingAddress()
 
     /**
+     * Returns the raw JSON value of [billingEntityId].
+     *
+     * Unlike [billingEntityId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _billingEntityId(): JsonField<String> = body._billingEntityId()
+
+    /**
      * Returns the raw JSON value of [currency].
      *
      * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
@@ -725,6 +740,26 @@ private constructor(
          */
         fun billingAddress(billingAddress: JsonField<AddressInput>) = apply {
             body.billingAddress(billingAddress)
+        }
+
+        /** The Orb ID of the active billing entity to set as this customer's default entity. */
+        fun billingEntityId(billingEntityId: String?) = apply {
+            body.billingEntityId(billingEntityId)
+        }
+
+        /** Alias for calling [Builder.billingEntityId] with `billingEntityId.orElse(null)`. */
+        fun billingEntityId(billingEntityId: Optional<String>) =
+            billingEntityId(billingEntityId.getOrNull())
+
+        /**
+         * Sets [Builder.billingEntityId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.billingEntityId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun billingEntityId(billingEntityId: JsonField<String>) = apply {
+            body.billingEntityId(billingEntityId)
         }
 
         /**
@@ -1404,6 +1439,7 @@ private constructor(
         private val autoCollection: JsonField<Boolean>,
         private val autoIssuance: JsonField<Boolean>,
         private val billingAddress: JsonField<AddressInput>,
+        private val billingEntityId: JsonField<String>,
         private val currency: JsonField<String>,
         private val emailDelivery: JsonField<Boolean>,
         private val externalCustomerId: JsonField<String>,
@@ -1440,6 +1476,9 @@ private constructor(
             @JsonProperty("billing_address")
             @ExcludeMissing
             billingAddress: JsonField<AddressInput> = JsonMissing.of(),
+            @JsonProperty("billing_entity_id")
+            @ExcludeMissing
+            billingEntityId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("currency")
             @ExcludeMissing
             currency: JsonField<String> = JsonMissing.of(),
@@ -1485,6 +1524,7 @@ private constructor(
             autoCollection,
             autoIssuance,
             billingAddress,
+            billingEntityId,
             currency,
             emailDelivery,
             externalCustomerId,
@@ -1562,6 +1602,14 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun billingAddress(): Optional<AddressInput> = billingAddress.getOptional("billing_address")
+
+        /**
+         * The Orb ID of the active billing entity to set as this customer's default entity.
+         *
+         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun billingEntityId(): Optional<String> = billingEntityId.getOptional("billing_entity_id")
 
         /**
          * An ISO 4217 currency string used for the customer's invoices and balance. If not set at
@@ -1890,6 +1938,16 @@ private constructor(
         fun _billingAddress(): JsonField<AddressInput> = billingAddress
 
         /**
+         * Returns the raw JSON value of [billingEntityId].
+         *
+         * Unlike [billingEntityId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("billing_entity_id")
+        @ExcludeMissing
+        fun _billingEntityId(): JsonField<String> = billingEntityId
+
+        /**
          * Returns the raw JSON value of [currency].
          *
          * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
@@ -2043,6 +2101,7 @@ private constructor(
             private var autoCollection: JsonField<Boolean> = JsonMissing.of()
             private var autoIssuance: JsonField<Boolean> = JsonMissing.of()
             private var billingAddress: JsonField<AddressInput> = JsonMissing.of()
+            private var billingEntityId: JsonField<String> = JsonMissing.of()
             private var currency: JsonField<String> = JsonMissing.of()
             private var emailDelivery: JsonField<Boolean> = JsonMissing.of()
             private var externalCustomerId: JsonField<String> = JsonMissing.of()
@@ -2068,6 +2127,7 @@ private constructor(
                 autoCollection = body.autoCollection
                 autoIssuance = body.autoIssuance
                 billingAddress = body.billingAddress
+                billingEntityId = body.billingEntityId
                 currency = body.currency
                 emailDelivery = body.emailDelivery
                 externalCustomerId = body.externalCustomerId
@@ -2249,6 +2309,25 @@ private constructor(
              */
             fun billingAddress(billingAddress: JsonField<AddressInput>) = apply {
                 this.billingAddress = billingAddress
+            }
+
+            /** The Orb ID of the active billing entity to set as this customer's default entity. */
+            fun billingEntityId(billingEntityId: String?) =
+                billingEntityId(JsonField.ofNullable(billingEntityId))
+
+            /** Alias for calling [Builder.billingEntityId] with `billingEntityId.orElse(null)`. */
+            fun billingEntityId(billingEntityId: Optional<String>) =
+                billingEntityId(billingEntityId.getOrNull())
+
+            /**
+             * Sets [Builder.billingEntityId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.billingEntityId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun billingEntityId(billingEntityId: JsonField<String>) = apply {
+                this.billingEntityId = billingEntityId
             }
 
             /**
@@ -2823,6 +2902,7 @@ private constructor(
                     autoCollection,
                     autoIssuance,
                     billingAddress,
+                    billingEntityId,
                     currency,
                     emailDelivery,
                     externalCustomerId,
@@ -2863,6 +2943,7 @@ private constructor(
             autoCollection()
             autoIssuance()
             billingAddress().ifPresent { it.validate() }
+            billingEntityId()
             currency()
             emailDelivery()
             externalCustomerId()
@@ -2902,6 +2983,7 @@ private constructor(
                 (if (autoCollection.asKnown().isPresent) 1 else 0) +
                 (if (autoIssuance.asKnown().isPresent) 1 else 0) +
                 (billingAddress.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (billingEntityId.asKnown().isPresent) 1 else 0) +
                 (if (currency.asKnown().isPresent) 1 else 0) +
                 (if (emailDelivery.asKnown().isPresent) 1 else 0) +
                 (if (externalCustomerId.asKnown().isPresent) 1 else 0) +
@@ -2929,6 +3011,7 @@ private constructor(
                 autoCollection == other.autoCollection &&
                 autoIssuance == other.autoIssuance &&
                 billingAddress == other.billingAddress &&
+                billingEntityId == other.billingEntityId &&
                 currency == other.currency &&
                 emailDelivery == other.emailDelivery &&
                 externalCustomerId == other.externalCustomerId &&
@@ -2954,6 +3037,7 @@ private constructor(
                 autoCollection,
                 autoIssuance,
                 billingAddress,
+                billingEntityId,
                 currency,
                 emailDelivery,
                 externalCustomerId,
@@ -2974,7 +3058,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{email=$email, name=$name, accountingSyncConfiguration=$accountingSyncConfiguration, additionalEmails=$additionalEmails, autoCollection=$autoCollection, autoIssuance=$autoIssuance, billingAddress=$billingAddress, currency=$currency, emailDelivery=$emailDelivery, externalCustomerId=$externalCustomerId, hierarchy=$hierarchy, metadata=$metadata, paymentConfiguration=$paymentConfiguration, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, reportingConfiguration=$reportingConfiguration, shippingAddress=$shippingAddress, taxConfiguration=$taxConfiguration, taxId=$taxId, timezone=$timezone, additionalProperties=$additionalProperties}"
+            "Body{email=$email, name=$name, accountingSyncConfiguration=$accountingSyncConfiguration, additionalEmails=$additionalEmails, autoCollection=$autoCollection, autoIssuance=$autoIssuance, billingAddress=$billingAddress, billingEntityId=$billingEntityId, currency=$currency, emailDelivery=$emailDelivery, externalCustomerId=$externalCustomerId, hierarchy=$hierarchy, metadata=$metadata, paymentConfiguration=$paymentConfiguration, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, reportingConfiguration=$reportingConfiguration, shippingAddress=$shippingAddress, taxConfiguration=$taxConfiguration, taxId=$taxId, timezone=$timezone, additionalProperties=$additionalProperties}"
     }
 
     /**

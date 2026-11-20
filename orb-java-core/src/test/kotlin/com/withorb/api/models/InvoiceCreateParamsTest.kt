@@ -33,6 +33,7 @@ internal class InvoiceCreateParamsTest {
                     .build()
             )
             .autoCollection(true)
+            .billingEntityId("billing_entity_id")
             .customerId("4khy3nwzktxv7")
             .discount(
                 PercentageDiscount.builder()
@@ -51,6 +52,7 @@ internal class InvoiceCreateParamsTest {
                     .build()
             )
             .dueDate(LocalDate.parse("2025-09-22"))
+            .externalBillingEntityId("external_billing_entity_id")
             .externalCustomerId("external-customer-id")
             .memo("An optional memo for my invoice.")
             .metadata(
@@ -87,6 +89,7 @@ internal class InvoiceCreateParamsTest {
                         .build()
                 )
                 .autoCollection(true)
+                .billingEntityId("billing_entity_id")
                 .customerId("4khy3nwzktxv7")
                 .discount(
                     PercentageDiscount.builder()
@@ -105,6 +108,7 @@ internal class InvoiceCreateParamsTest {
                         .build()
                 )
                 .dueDate(LocalDate.parse("2025-09-22"))
+                .externalBillingEntityId("external_billing_entity_id")
                 .externalCustomerId("external-customer-id")
                 .memo("An optional memo for my invoice.")
                 .metadata(
@@ -139,6 +143,7 @@ internal class InvoiceCreateParamsTest {
                     .build()
             )
         assertThat(body.autoCollection()).contains(true)
+        assertThat(body.billingEntityId()).contains("billing_entity_id")
         assertThat(body.customerId()).contains("4khy3nwzktxv7")
         assertThat(body.discount())
             .contains(
@@ -161,6 +166,7 @@ internal class InvoiceCreateParamsTest {
             )
         assertThat(body.dueDate())
             .contains(InvoiceCreateParams.DueDate.ofDate(LocalDate.parse("2025-09-22")))
+        assertThat(body.externalBillingEntityId()).contains("external_billing_entity_id")
         assertThat(body.externalCustomerId()).contains("external-customer-id")
         assertThat(body.memo()).contains("An optional memo for my invoice.")
         assertThat(body.metadata())

@@ -65,6 +65,7 @@ private constructor(
     private val timezone: JsonField<String>,
     private val accountingSyncConfiguration: JsonField<AccountingSyncConfiguration>,
     private val automaticTaxEnabled: JsonField<Boolean>,
+    private val billingEntityId: JsonField<String>,
     private val defaultPaymentMethod: JsonField<DefaultPaymentMethod>,
     private val paymentConfiguration: JsonField<PaymentConfiguration>,
     private val reportingConfiguration: JsonField<ReportingConfiguration>,
@@ -124,6 +125,9 @@ private constructor(
         @JsonProperty("automatic_tax_enabled")
         @ExcludeMissing
         automaticTaxEnabled: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("billing_entity_id")
+        @ExcludeMissing
+        billingEntityId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("default_payment_method")
         @ExcludeMissing
         defaultPaymentMethod: JsonField<DefaultPaymentMethod> = JsonMissing.of(),
@@ -157,6 +161,7 @@ private constructor(
         timezone,
         accountingSyncConfiguration,
         automaticTaxEnabled,
+        billingEntityId,
         defaultPaymentMethod,
         paymentConfiguration,
         reportingConfiguration,
@@ -495,6 +500,14 @@ private constructor(
         automaticTaxEnabled.getOptional("automatic_tax_enabled")
 
     /**
+     * The id of the default billing entity of this customer.
+     *
+     * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
+    fun billingEntityId(): Optional<String> = billingEntityId.getOptional("billing_entity_id")
+
+    /**
      * A payment method represents a customer's stored payment instrument held with an external
      * payment provider (such as Adyen or Stripe).
      *
@@ -719,6 +732,15 @@ private constructor(
     fun _automaticTaxEnabled(): JsonField<Boolean> = automaticTaxEnabled
 
     /**
+     * Returns the raw JSON value of [billingEntityId].
+     *
+     * Unlike [billingEntityId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("billing_entity_id")
+    @ExcludeMissing
+    fun _billingEntityId(): JsonField<String> = billingEntityId
+
+    /**
      * Returns the raw JSON value of [defaultPaymentMethod].
      *
      * Unlike [defaultPaymentMethod], this method doesn't throw if the JSON field has an unexpected
@@ -820,6 +842,7 @@ private constructor(
         private var accountingSyncConfiguration: JsonField<AccountingSyncConfiguration> =
             JsonMissing.of()
         private var automaticTaxEnabled: JsonField<Boolean> = JsonMissing.of()
+        private var billingEntityId: JsonField<String> = JsonMissing.of()
         private var defaultPaymentMethod: JsonField<DefaultPaymentMethod> = JsonMissing.of()
         private var paymentConfiguration: JsonField<PaymentConfiguration> = JsonMissing.of()
         private var reportingConfiguration: JsonField<ReportingConfiguration> = JsonMissing.of()
@@ -850,6 +873,7 @@ private constructor(
             timezone = customer.timezone
             accountingSyncConfiguration = customer.accountingSyncConfiguration
             automaticTaxEnabled = customer.automaticTaxEnabled
+            billingEntityId = customer.billingEntityId
             defaultPaymentMethod = customer.defaultPaymentMethod
             paymentConfiguration = customer.paymentConfiguration
             reportingConfiguration = customer.reportingConfiguration
@@ -1421,6 +1445,25 @@ private constructor(
             this.automaticTaxEnabled = automaticTaxEnabled
         }
 
+        /** The id of the default billing entity of this customer. */
+        fun billingEntityId(billingEntityId: String?) =
+            billingEntityId(JsonField.ofNullable(billingEntityId))
+
+        /** Alias for calling [Builder.billingEntityId] with `billingEntityId.orElse(null)`. */
+        fun billingEntityId(billingEntityId: Optional<String>) =
+            billingEntityId(billingEntityId.getOrNull())
+
+        /**
+         * Sets [Builder.billingEntityId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.billingEntityId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun billingEntityId(billingEntityId: JsonField<String>) = apply {
+            this.billingEntityId = billingEntityId
+        }
+
         /**
          * A payment method represents a customer's stored payment instrument held with an external
          * payment provider (such as Adyen or Stripe).
@@ -1572,6 +1615,7 @@ private constructor(
                 checkRequired("timezone", timezone),
                 accountingSyncConfiguration,
                 automaticTaxEnabled,
+                billingEntityId,
                 defaultPaymentMethod,
                 paymentConfiguration,
                 reportingConfiguration,
@@ -1617,6 +1661,7 @@ private constructor(
         timezone()
         accountingSyncConfiguration().ifPresent { it.validate() }
         automaticTaxEnabled()
+        billingEntityId()
         defaultPaymentMethod().ifPresent { it.validate() }
         paymentConfiguration().ifPresent { it.validate() }
         reportingConfiguration().ifPresent { it.validate() }
@@ -1661,6 +1706,7 @@ private constructor(
             (if (timezone.asKnown().isPresent) 1 else 0) +
             (accountingSyncConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
             (if (automaticTaxEnabled.asKnown().isPresent) 1 else 0) +
+            (if (billingEntityId.asKnown().isPresent) 1 else 0) +
             (defaultPaymentMethod.asKnown().getOrNull()?.validity() ?: 0) +
             (paymentConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
             (reportingConfiguration.asKnown().getOrNull()?.validity() ?: 0)
@@ -4241,6 +4287,7 @@ private constructor(
             timezone == other.timezone &&
             accountingSyncConfiguration == other.accountingSyncConfiguration &&
             automaticTaxEnabled == other.automaticTaxEnabled &&
+            billingEntityId == other.billingEntityId &&
             defaultPaymentMethod == other.defaultPaymentMethod &&
             paymentConfiguration == other.paymentConfiguration &&
             reportingConfiguration == other.reportingConfiguration &&
@@ -4272,6 +4319,7 @@ private constructor(
             timezone,
             accountingSyncConfiguration,
             automaticTaxEnabled,
+            billingEntityId,
             defaultPaymentMethod,
             paymentConfiguration,
             reportingConfiguration,
@@ -4282,5 +4330,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Customer{id=$id, additionalEmails=$additionalEmails, autoCollection=$autoCollection, autoIssuance=$autoIssuance, balance=$balance, billingAddress=$billingAddress, createdAt=$createdAt, currency=$currency, email=$email, emailDelivery=$emailDelivery, exemptFromAutomatedTax=$exemptFromAutomatedTax, externalCustomerId=$externalCustomerId, hierarchy=$hierarchy, metadata=$metadata, name=$name, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, portalUrl=$portalUrl, shippingAddress=$shippingAddress, taxId=$taxId, timezone=$timezone, accountingSyncConfiguration=$accountingSyncConfiguration, automaticTaxEnabled=$automaticTaxEnabled, defaultPaymentMethod=$defaultPaymentMethod, paymentConfiguration=$paymentConfiguration, reportingConfiguration=$reportingConfiguration, additionalProperties=$additionalProperties}"
+        "Customer{id=$id, additionalEmails=$additionalEmails, autoCollection=$autoCollection, autoIssuance=$autoIssuance, balance=$balance, billingAddress=$billingAddress, createdAt=$createdAt, currency=$currency, email=$email, emailDelivery=$emailDelivery, exemptFromAutomatedTax=$exemptFromAutomatedTax, externalCustomerId=$externalCustomerId, hierarchy=$hierarchy, metadata=$metadata, name=$name, paymentProvider=$paymentProvider, paymentProviderId=$paymentProviderId, portalUrl=$portalUrl, shippingAddress=$shippingAddress, taxId=$taxId, timezone=$timezone, accountingSyncConfiguration=$accountingSyncConfiguration, automaticTaxEnabled=$automaticTaxEnabled, billingEntityId=$billingEntityId, defaultPaymentMethod=$defaultPaymentMethod, paymentConfiguration=$paymentConfiguration, reportingConfiguration=$reportingConfiguration, additionalProperties=$additionalProperties}"
 }
