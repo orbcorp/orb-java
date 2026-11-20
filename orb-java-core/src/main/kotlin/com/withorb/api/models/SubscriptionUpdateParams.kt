@@ -83,9 +83,11 @@ private constructor(
     fun metadata(): Optional<Metadata> = body.metadata()
 
     /**
-     * Determines the difference between the invoice issue date for subscription invoices as the
-     * date that they are due. A value of `0` here represents that the invoice is due on issue,
-     * whereas a value of `30` represents that the customer has a month to pay the invoice.
+     * The number of days until subscription invoices are due, counting the start date set by the
+     * account's
+     * [due date calculation method](/invoicing/payments#configuring-net-terms-and-collection-behavior)
+     * as day 1. A value of `0` here represents that the invoice is due on issue, whereas a value of
+     * `30` represents that the customer has a month to pay the invoice.
      *
      * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the server
      *   responded with an unexpected value).
@@ -319,9 +321,11 @@ private constructor(
         fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
 
         /**
-         * Determines the difference between the invoice issue date for subscription invoices as the
-         * date that they are due. A value of `0` here represents that the invoice is due on issue,
-         * whereas a value of `30` represents that the customer has a month to pay the invoice.
+         * The number of days until subscription invoices are due, counting the start date set by
+         * the account's
+         * [due date calculation method](/invoicing/payments#configuring-net-terms-and-collection-behavior)
+         * as day 1. A value of `0` here represents that the invoice is due on issue, whereas a
+         * value of `30` represents that the customer has a month to pay the invoice.
          */
         fun netTerms(netTerms: Long?) = apply { body.netTerms(netTerms) }
 
@@ -579,9 +583,11 @@ private constructor(
         fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
         /**
-         * Determines the difference between the invoice issue date for subscription invoices as the
-         * date that they are due. A value of `0` here represents that the invoice is due on issue,
-         * whereas a value of `30` represents that the customer has a month to pay the invoice.
+         * The number of days until subscription invoices are due, counting the start date set by
+         * the account's
+         * [due date calculation method](/invoicing/payments#configuring-net-terms-and-collection-behavior)
+         * as day 1. A value of `0` here represents that the invoice is due on issue, whereas a
+         * value of `30` represents that the customer has a month to pay the invoice.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -814,10 +820,11 @@ private constructor(
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
             /**
-             * Determines the difference between the invoice issue date for subscription invoices as
-             * the date that they are due. A value of `0` here represents that the invoice is due on
-             * issue, whereas a value of `30` represents that the customer has a month to pay the
-             * invoice.
+             * The number of days until subscription invoices are due, counting the start date set
+             * by the account's
+             * [due date calculation method](/invoicing/payments#configuring-net-terms-and-collection-behavior)
+             * as day 1. A value of `0` here represents that the invoice is due on issue, whereas a
+             * value of `30` represents that the customer has a month to pay the invoice.
              */
             fun netTerms(netTerms: Long?) = netTerms(JsonField.ofNullable(netTerms))
 

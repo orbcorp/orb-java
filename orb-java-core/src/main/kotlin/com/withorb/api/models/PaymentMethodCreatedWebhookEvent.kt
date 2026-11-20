@@ -572,7 +572,7 @@ private constructor(
         fun customerId(): String = customerId.getRequired("customer_id")
 
         /**
-         * Whether this is the customer's default payment method.
+         * Whether this is the customer's default payment method on its payment gateway connection.
          *
          * @throws OrbInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -761,7 +761,10 @@ private constructor(
              */
             fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
-            /** Whether this is the customer's default payment method. */
+            /**
+             * Whether this is the customer's default payment method on its payment gateway
+             * connection.
+             */
             fun default_(default_: Boolean) = default_(JsonField.of(default_))
 
             /**
