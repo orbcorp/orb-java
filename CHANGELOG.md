@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.59.0](https://github.com/orbcorp/orb-java/compare/v1.58.0...v1.59.0) (2026-11-21)
+
+
+### Features
+
+* **api:** api update ([d72a6f6](https://github.com/orbcorp/orb-java/commit/d72a6f61034c3863718cf1367fef15857639e778))
+* **api:** api update ([d97fd61](https://github.com/orbcorp/orb-java/commit/d97fd61726a5b082b3a2891ddfc509c778ede2f4))
+* **api:** clarify net_terms day counting, with start date as day 1 ([d97fd61](https://github.com/orbcorp/orb-java/commit/d97fd61726a5b082b3a2891ddfc509c778ede2f4))
+* **api:** Remove unsupported filters from list credit notes description ([605df04](https://github.com/orbcorp/orb-java/commit/605df04db92a875a42510954fee3c31d5176d465))
+
 ## [1.58.0](https://github.com/orbcorp/orb-java/compare/v1.57.0...v1.58.0) (2026-11-18)
 
 
