@@ -696,73 +696,14 @@ private constructor(
     class InvoiceSettings
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        private val autoCollection: JsonField<Boolean>,
-        private val automaticTaxEnabled: JsonField<Boolean>,
-        private val emailDelivery: JsonField<Boolean>,
-        private val manualIssuance: JsonField<Boolean>,
         private val memo: JsonField<String>,
-        private val netTerms: JsonField<Long>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("auto_collection")
-            @ExcludeMissing
-            autoCollection: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("automatic_tax_enabled")
-            @ExcludeMissing
-            automaticTaxEnabled: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("email_delivery")
-            @ExcludeMissing
-            emailDelivery: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("manual_issuance")
-            @ExcludeMissing
-            manualIssuance: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("memo") @ExcludeMissing memo: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("net_terms") @ExcludeMissing netTerms: JsonField<Long> = JsonMissing.of(),
-        ) : this(
-            autoCollection,
-            automaticTaxEnabled,
-            emailDelivery,
-            manualIssuance,
-            memo,
-            netTerms,
-            mutableMapOf(),
-        )
-
-        /**
-         * Whether Orb charges the customer's payment method automatically.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun autoCollection(): Optional<Boolean> = autoCollection.getOptional("auto_collection")
-
-        /**
-         * Whether Orb calculates tax through the tax provider.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun automaticTaxEnabled(): Optional<Boolean> =
-            automaticTaxEnabled.getOptional("automatic_tax_enabled")
-
-        /**
-         * Whether Orb emails invoices to customers.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun emailDelivery(): Optional<Boolean> = emailDelivery.getOptional("email_delivery")
-
-        /**
-         * Whether invoices stay in draft until issued by hand.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun manualIssuance(): Optional<Boolean> = manualIssuance.getOptional("manual_issuance")
+            @JsonProperty("memo") @ExcludeMissing memo: JsonField<String> = JsonMissing.of()
+        ) : this(memo, mutableMapOf())
 
         /**
          * The memo printed on the entity's invoices.
@@ -773,69 +714,11 @@ private constructor(
         fun memo(): Optional<String> = memo.getOptional("memo")
 
         /**
-         * The number of days until payment is due, counting the start date as day 1, so net 30 from
-         * October 1 is due October 30. The account's
-         * [due date calculation method](/invoicing/payments#configuring-net-terms-and-collection-behavior)
-         * sets whether the start date is the invoice date or the issuance date.
-         *
-         * @throws OrbInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun netTerms(): Optional<Long> = netTerms.getOptional("net_terms")
-
-        /**
-         * Returns the raw JSON value of [autoCollection].
-         *
-         * Unlike [autoCollection], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("auto_collection")
-        @ExcludeMissing
-        fun _autoCollection(): JsonField<Boolean> = autoCollection
-
-        /**
-         * Returns the raw JSON value of [automaticTaxEnabled].
-         *
-         * Unlike [automaticTaxEnabled], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("automatic_tax_enabled")
-        @ExcludeMissing
-        fun _automaticTaxEnabled(): JsonField<Boolean> = automaticTaxEnabled
-
-        /**
-         * Returns the raw JSON value of [emailDelivery].
-         *
-         * Unlike [emailDelivery], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("email_delivery")
-        @ExcludeMissing
-        fun _emailDelivery(): JsonField<Boolean> = emailDelivery
-
-        /**
-         * Returns the raw JSON value of [manualIssuance].
-         *
-         * Unlike [manualIssuance], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("manual_issuance")
-        @ExcludeMissing
-        fun _manualIssuance(): JsonField<Boolean> = manualIssuance
-
-        /**
          * Returns the raw JSON value of [memo].
          *
          * Unlike [memo], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("memo") @ExcludeMissing fun _memo(): JsonField<String> = memo
-
-        /**
-         * Returns the raw JSON value of [netTerms].
-         *
-         * Unlike [netTerms], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("net_terms") @ExcludeMissing fun _netTerms(): JsonField<Long> = netTerms
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -856,12 +739,7 @@ private constructor(
              *
              * The following fields are required:
              * ```java
-             * .autoCollection()
-             * .automaticTaxEnabled()
-             * .emailDelivery()
-             * .manualIssuance()
              * .memo()
-             * .netTerms()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -870,131 +748,13 @@ private constructor(
         /** A builder for [InvoiceSettings]. */
         class Builder internal constructor() {
 
-            private var autoCollection: JsonField<Boolean>? = null
-            private var automaticTaxEnabled: JsonField<Boolean>? = null
-            private var emailDelivery: JsonField<Boolean>? = null
-            private var manualIssuance: JsonField<Boolean>? = null
             private var memo: JsonField<String>? = null
-            private var netTerms: JsonField<Long>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(invoiceSettings: InvoiceSettings) = apply {
-                autoCollection = invoiceSettings.autoCollection
-                automaticTaxEnabled = invoiceSettings.automaticTaxEnabled
-                emailDelivery = invoiceSettings.emailDelivery
-                manualIssuance = invoiceSettings.manualIssuance
                 memo = invoiceSettings.memo
-                netTerms = invoiceSettings.netTerms
                 additionalProperties = invoiceSettings.additionalProperties.toMutableMap()
-            }
-
-            /** Whether Orb charges the customer's payment method automatically. */
-            fun autoCollection(autoCollection: Boolean?) =
-                autoCollection(JsonField.ofNullable(autoCollection))
-
-            /**
-             * Alias for [Builder.autoCollection].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun autoCollection(autoCollection: Boolean) = autoCollection(autoCollection as Boolean?)
-
-            /** Alias for calling [Builder.autoCollection] with `autoCollection.orElse(null)`. */
-            fun autoCollection(autoCollection: Optional<Boolean>) =
-                autoCollection(autoCollection.getOrNull())
-
-            /**
-             * Sets [Builder.autoCollection] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.autoCollection] with a well-typed [Boolean] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun autoCollection(autoCollection: JsonField<Boolean>) = apply {
-                this.autoCollection = autoCollection
-            }
-
-            /** Whether Orb calculates tax through the tax provider. */
-            fun automaticTaxEnabled(automaticTaxEnabled: Boolean?) =
-                automaticTaxEnabled(JsonField.ofNullable(automaticTaxEnabled))
-
-            /**
-             * Alias for [Builder.automaticTaxEnabled].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun automaticTaxEnabled(automaticTaxEnabled: Boolean) =
-                automaticTaxEnabled(automaticTaxEnabled as Boolean?)
-
-            /**
-             * Alias for calling [Builder.automaticTaxEnabled] with
-             * `automaticTaxEnabled.orElse(null)`.
-             */
-            fun automaticTaxEnabled(automaticTaxEnabled: Optional<Boolean>) =
-                automaticTaxEnabled(automaticTaxEnabled.getOrNull())
-
-            /**
-             * Sets [Builder.automaticTaxEnabled] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.automaticTaxEnabled] with a well-typed [Boolean]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun automaticTaxEnabled(automaticTaxEnabled: JsonField<Boolean>) = apply {
-                this.automaticTaxEnabled = automaticTaxEnabled
-            }
-
-            /** Whether Orb emails invoices to customers. */
-            fun emailDelivery(emailDelivery: Boolean?) =
-                emailDelivery(JsonField.ofNullable(emailDelivery))
-
-            /**
-             * Alias for [Builder.emailDelivery].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun emailDelivery(emailDelivery: Boolean) = emailDelivery(emailDelivery as Boolean?)
-
-            /** Alias for calling [Builder.emailDelivery] with `emailDelivery.orElse(null)`. */
-            fun emailDelivery(emailDelivery: Optional<Boolean>) =
-                emailDelivery(emailDelivery.getOrNull())
-
-            /**
-             * Sets [Builder.emailDelivery] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.emailDelivery] with a well-typed [Boolean] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun emailDelivery(emailDelivery: JsonField<Boolean>) = apply {
-                this.emailDelivery = emailDelivery
-            }
-
-            /** Whether invoices stay in draft until issued by hand. */
-            fun manualIssuance(manualIssuance: Boolean?) =
-                manualIssuance(JsonField.ofNullable(manualIssuance))
-
-            /**
-             * Alias for [Builder.manualIssuance].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun manualIssuance(manualIssuance: Boolean) = manualIssuance(manualIssuance as Boolean?)
-
-            /** Alias for calling [Builder.manualIssuance] with `manualIssuance.orElse(null)`. */
-            fun manualIssuance(manualIssuance: Optional<Boolean>) =
-                manualIssuance(manualIssuance.getOrNull())
-
-            /**
-             * Sets [Builder.manualIssuance] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.manualIssuance] with a well-typed [Boolean] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun manualIssuance(manualIssuance: JsonField<Boolean>) = apply {
-                this.manualIssuance = manualIssuance
             }
 
             /** The memo printed on the entity's invoices. */
@@ -1011,33 +771,6 @@ private constructor(
              * value.
              */
             fun memo(memo: JsonField<String>) = apply { this.memo = memo }
-
-            /**
-             * The number of days until payment is due, counting the start date as day 1, so net 30
-             * from October 1 is due October 30. The account's
-             * [due date calculation method](/invoicing/payments#configuring-net-terms-and-collection-behavior)
-             * sets whether the start date is the invoice date or the issuance date.
-             */
-            fun netTerms(netTerms: Long?) = netTerms(JsonField.ofNullable(netTerms))
-
-            /**
-             * Alias for [Builder.netTerms].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun netTerms(netTerms: Long) = netTerms(netTerms as Long?)
-
-            /** Alias for calling [Builder.netTerms] with `netTerms.orElse(null)`. */
-            fun netTerms(netTerms: Optional<Long>) = netTerms(netTerms.getOrNull())
-
-            /**
-             * Sets [Builder.netTerms] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.netTerms] with a well-typed [Long] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun netTerms(netTerms: JsonField<Long>) = apply { this.netTerms = netTerms }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1065,26 +798,13 @@ private constructor(
              *
              * The following fields are required:
              * ```java
-             * .autoCollection()
-             * .automaticTaxEnabled()
-             * .emailDelivery()
-             * .manualIssuance()
              * .memo()
-             * .netTerms()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
              */
             fun build(): InvoiceSettings =
-                InvoiceSettings(
-                    checkRequired("autoCollection", autoCollection),
-                    checkRequired("automaticTaxEnabled", automaticTaxEnabled),
-                    checkRequired("emailDelivery", emailDelivery),
-                    checkRequired("manualIssuance", manualIssuance),
-                    checkRequired("memo", memo),
-                    checkRequired("netTerms", netTerms),
-                    additionalProperties.toMutableMap(),
-                )
+                InvoiceSettings(checkRequired("memo", memo), additionalProperties.toMutableMap())
         }
 
         private var validated: Boolean = false
@@ -1103,12 +823,7 @@ private constructor(
                 return@apply
             }
 
-            autoCollection()
-            automaticTaxEnabled()
-            emailDelivery()
-            manualIssuance()
             memo()
-            netTerms()
             validated = true
         }
 
@@ -1126,14 +841,7 @@ private constructor(
          *
          * Used for best match union deserialization.
          */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            (if (autoCollection.asKnown().isPresent) 1 else 0) +
-                (if (automaticTaxEnabled.asKnown().isPresent) 1 else 0) +
-                (if (emailDelivery.asKnown().isPresent) 1 else 0) +
-                (if (manualIssuance.asKnown().isPresent) 1 else 0) +
-                (if (memo.asKnown().isPresent) 1 else 0) +
-                (if (netTerms.asKnown().isPresent) 1 else 0)
+        @JvmSynthetic internal fun validity(): Int = (if (memo.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1141,31 +849,16 @@ private constructor(
             }
 
             return other is InvoiceSettings &&
-                autoCollection == other.autoCollection &&
-                automaticTaxEnabled == other.automaticTaxEnabled &&
-                emailDelivery == other.emailDelivery &&
-                manualIssuance == other.manualIssuance &&
                 memo == other.memo &&
-                netTerms == other.netTerms &&
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy {
-            Objects.hash(
-                autoCollection,
-                automaticTaxEnabled,
-                emailDelivery,
-                manualIssuance,
-                memo,
-                netTerms,
-                additionalProperties,
-            )
-        }
+        private val hashCode: Int by lazy { Objects.hash(memo, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "InvoiceSettings{autoCollection=$autoCollection, automaticTaxEnabled=$automaticTaxEnabled, emailDelivery=$emailDelivery, manualIssuance=$manualIssuance, memo=$memo, netTerms=$netTerms, additionalProperties=$additionalProperties}"
+            "InvoiceSettings{memo=$memo, additionalProperties=$additionalProperties}"
     }
 
     class PaymentGatewayConnection
